@@ -1,0 +1,10 @@
+{
+  "toolchain_pins_repo_path": "candidates/fresh_original_top_recovery_20261028/SOURCE_AND_TOOLCHAIN_PINS.json",
+  "toolchain_pins_sha256": "7c8d4bd1f7a0a080f06161e70361a3c3676ede483703a90986fe9dfcf091d85b",
+  "scala": "2.13.16",
+  "chisel": "6.7.0",
+  "chiseltest": "6.0.0",
+  "firrtl2": "6.0.0",
+  "jdk": "21.0.12.1",
+  "scope": "micro only needs no old compiled production classes; its exact extracted expressions are checked against fixed production source; not full controller regression"
+}

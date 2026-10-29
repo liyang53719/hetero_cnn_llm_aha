@@ -1,0 +1,21 @@
+{
+  "original_evidence_sha256": "af149969079fac87b1c2214c4e788c22accc36dff09b413f7d85550ef0d885ea",
+  "publication_copy": {
+    "status": "PASS_CHISEL_CONTROL_EXPRESSION_ONLY",
+    "cases": 20224,
+    "checks": {
+      "3_bit_output": true,
+      "carry_preserving_add": true,
+      "fourth_policy_used": true,
+      "no_tail_on_count": true
+    },
+    "low_fir": "attention_policy_count_fix_20261029T0054/actual_micro/test_run_dir/chisel_test_1793236071092/AttentionPolicyCountExpressionMicro.lo.fir",
+    "low_fir_sha256": "ae677deeb69370c140c61683e1cd5b4dba990f9fbfaf771a8f47f31ffa9932e1",
+    "micro_result_sha256": "e204d154c60daec46df7872d94591465fcd299e3c6c916849b4caec52e8af50f",
+    "limitations": [
+      "not full controller acceptance/bypass",
+      "not full block numerical regression",
+      "not final frozen RTL replay"
+    ]
+  }
+}

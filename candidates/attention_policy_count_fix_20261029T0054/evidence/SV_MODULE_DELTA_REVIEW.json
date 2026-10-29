@@ -1,0 +1,14 @@
+{
+  "original_evidence_sha256": "129f3942dec1fef52999efeb91e88fcab6be3cc31a8342b8cfd28d668190c942",
+  "publication_copy": {
+    "status": "PASS_ONLY_COMMANDS_SV_MODULE_CHANGED",
+    "old_sha256": "5f9e60ab5993c4cc22b1dc2828d33080e62900a940817c4f400b57007b770dd6",
+    "new_sha256": "c7e9d25c128004bdfc90405171eead8a4441ba20e52e829d95de4bf1122e5d96",
+    "module_definitions": 92,
+    "changed_modules": [
+      "HostBlockCommandsV4"
+    ],
+    "unchanged_module_count": 91,
+    "not_full_numerical_pass": true
+  }
+}

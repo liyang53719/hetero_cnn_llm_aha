@@ -1,0 +1,167 @@
+{
+  "original_evidence_sha256": "1af66c1506b89df8693bec0c70572cd20e93238149a5e7beb6ebd0c4aebbca99",
+  "publication_copy": {
+    "status": "PASS_FIXED_ORIGINAL_SIMULATION_SV_STRUCTURE_ONLY",
+    "artifacts": {
+      "HostBlockTopV4.lo.fir": {
+        "bytes": 221772158,
+        "sha256": "1673eb7d1911e81a6cbcd4765f610844c859766e0d2a33771804f68a9955875f"
+      },
+      "original-high-reference.json": {
+        "bytes": 347,
+        "sha256": "f26e2b9bd812c1dc55568b833ada93f3e0f49095f848a045ea6df34b2a8371ad"
+      },
+      "low-annotations.json": {
+        "bytes": 1680091,
+        "sha256": "375093f8fe2d671eca75acf2cca8f22eba7daa050cb19630d2c7b67487603e15"
+      },
+      "actual_top_ports.tsv": {
+        "bytes": 2548,
+        "sha256": "aa2e19f9818eef5356cdca910c3da3ba388dc552fa4afc558fcb9dd2fc6dceee"
+      },
+      "official-bridge-memory-high.fir": {
+        "bytes": 99241045,
+        "sha256": "ed254973f62dc4c2a245ed6f786f4c74d159743056f3652db3bf13bc2f17380f"
+      },
+      "official-emission-ast.fir": {
+        "bytes": 190856781,
+        "sha256": "b6bf2c56759e66c64c9ab34de4c45cd54c3a931cc8c524fd415e63079590ccf2"
+      },
+      "HostBlockTopV4.sv": {
+        "bytes": 192175561,
+        "sha256": "c7e9d25c128004bdfc90405171eead8a4441ba20e52e829d95de4bf1122e5d96"
+      },
+      "high-annotations.json": {
+        "bytes": 1353382,
+        "sha256": "c91a44019c7fcbe45371a9d0609c8a694fc007da5cbbe903bf8c593ade2a52aa"
+      },
+      "EMITTER_SCOPE.txt": {
+        "bytes": 229,
+        "sha256": "a63aa0a44f831ea7f2603ebdf4db87c63e2f733cd6669247d8e4dcaa258f5a22"
+      },
+      "official-emission-instances.tsv": {
+        "bytes": 12705,
+        "sha256": "570b2d71cf245b2fc90f2ad50c7f62c640186ae1f5c14039c38ec60f4ccf05d6"
+      },
+      "canonical-low-identity.json": {
+        "bytes": 237,
+        "sha256": "d694a02cf6c3cc7704c1a332b3d3fa834b3fd0c7a68e9b8c743ec55263176e0b"
+      },
+      "accepted-original-annotations.json": {
+        "bytes": 1353384,
+        "sha256": "e40aecae9e15a890acd6eacabd6974d9470434cc83b40c847a0d50096b2bdeee"
+      }
+    },
+    "ports": {
+      "total": 85,
+      "inputs": 41,
+      "outputs": 44,
+      "old_exact_equal": true
+    },
+    "expanded_child_instances": 1055,
+    "module_instance_counts": {
+      "HostBlockCommandsV4": 1,
+      "Record128Reader": 1,
+      "TypedTensorReader": 1,
+      "HostMoeWeightScanV4": 1,
+      "QwenOwnerKernel": 1,
+      "FfnResidentCoordinator": 1,
+      "FfnTileSiluBridge": 1,
+      "Public21QkvReductionRouter": 1,
+      "DenseBlockReductionCoordinator": 1,
+      "DenseTileSumBridge": 1,
+      "Qwen2ContinuousBlock": 1,
+      "BlockScalarFloatPolicyV2": 1,
+      "HeteroFP32Alu": 81,
+      "AddRecFN": 81,
+      "AddRawFN": 81,
+      "RoundRawFNToRecFN_e8_s24": 179,
+      "RoundAnyRawFNToRecFN_ie8_is26_oe8_os24": 179,
+      "MulRecFN": 81,
+      "MulRawFN": 81,
+      "MulFullRawFN": 81,
+      "DivSqrtRecFM_small_e8_s24": 17,
+      "DivSqrtRecFMToRaw_small_e8_s24": 17,
+      "DivSqrtRawFN_small_e8_s24": 17,
+      "RecFNToIN_e8_s24_i32": 17,
+      "INToRecFN_i32_e8_s24": 17,
+      "RoundAnyRawFNToRecFN_ie6_is32_oe8_os24": 17,
+      "SharedL2Fabric": 1,
+      "PackedAttentionStreamClient": 1,
+      "ElementwiseMemoryEngine": 1,
+      "SharedL2Fabric_1": 1,
+      "BlockWritebackFence": 1,
+      "TransposedDenseDownOwner": 1,
+      "TransposedDownDenseBanks": 1,
+      "Queue4_MatrixStreamStep": 1,
+      "ScheduledSiluOwner": 1,
+      "VectorSiluOwner": 1,
+      "SiluVectorUnit": 1,
+      "BlockScalarFloat": 16,
+      "MatrixPipelineService": 1,
+      "Queue8_Meta": 1,
+      "MatrixResultFifo": 1,
+      "qwen2_matrix_command_endpoint": 8,
+      "MatrixAccumulatorSeedController": 1,
+      "tc_clk_gating": 8,
+      "LegacyMatrixStreamClient": 1,
+      "GdnRuntimeConv4OwnerRecoveredV7": 1,
+      "GdnRuntimeRawPrepOwnerV7": 1,
+      "GdnRuntimeChunkLeafCollection": 1,
+      "GdnRuntimeChunkCoordinator": 1,
+      "GdnChunkStateTransferOwner": 1,
+      "GdnRuntimeChunkLoadPrepV2Owner": 1,
+      "GdnRuntimeChunkDerivedAndPairV2Owner": 1,
+      "GdnRuntimeChunkTransposeV2Owner": 1,
+      "GdnRuntimeChunkExecuteOwnerV8": 1,
+      "GdnRuntimeGatedNormOwnerV10": 1,
+      "GdnRuntimeRmsNormOwnerV3": 1,
+      "GdnRuntimeElementwiseOwnerV15": 1,
+      "QkNormRuntimeOwnerV11": 1,
+      "PartialRopeRuntimeOwnerV12": 1,
+      "Bf16KvAppendRuntimeOwnerV13": 1,
+      "Bf16CausalGqaRuntimeOwnerV14": 1,
+      "SharedMemoryArbiter": 1,
+      "RRArbiter": 1,
+      "UnifiedMoeRuntimeExpertLoopV4": 1,
+      "UnifiedMoeRouterPipelineBindingV2": 1,
+      "UnifiedMoeRouterDenseFenceV2": 1,
+      "UnifiedMoeRouterLogitReaderV2": 1,
+      "UnifiedMoeRouterNumericalOwnerV2": 1,
+      "UnifiedMoeRouteGroupV2": 1,
+      "UnifiedMoeActivationGatherV2": 1,
+      "UnifiedMoeFfnGroupSequencerV3": 1,
+      "UnifiedMoeDenseWritebackFenceV2": 1,
+      "UnifiedMoeActivationGroupOwnerV3": 1,
+      "UnifiedMoeLogical32SwiGluConsumerV3": 1,
+      "UnifiedMoeSharedGateSigmoidOwnerV5": 1,
+      "UnifiedMoeLogical32SigmoidConsumerV5": 1,
+      "UnifiedMoePhaseMergeOwnerV5": 1,
+      "UnifiedMoeRoutedSelectionReaderV5": 1,
+      "UnifiedMoePhaseTileMergePortsV5": 1,
+      "UnifiedMoeDownTileReaderV5": 1,
+      "UnifiedMoeProducerBindingV5": 1,
+      "HeteroRuntimeMoeMerge": 1,
+      "MoeBf16VectorConsumerV2": 1,
+      "UnifiedMoePhaseResidualOwnerV5": 1,
+      "UnifiedMoeSharedArithmeticAdapterV5": 1,
+      "UnifiedVectorElement32BankV4": 1,
+      "RRArbiter_1": 1,
+      "RRArbiter_2": 1,
+      "HostMoeSelectionServiceV5": 1,
+      "HeteroStreamingTopK": 1,
+      "HostRuntimeOwnerGuardV5": 1,
+      "HostRuntimeMoePhaseAllocatorV5": 1,
+      "RetainedIdmaWeightBurstAdapter": 1,
+      "idma_backend_rw_axi_flat_wrap": 1
+    },
+    "count_policy_sv": [
+      "  wire [2:0] countPolicy = attentionContextSlot + 1'h1; // @[workspace/scratch/f28987e955ed/attention_policy_count_fix_20261029T0054/HostBlockCommandsV4.scala 997:43]",
+      "  wire  used_9_1 = 1'h0 < countPolicy; // @[workspace/scratch/f28987e955ed/attention_policy_count_fix_20261029T0054/HostBlockCommandsV4.scala 999:87]",
+      "  wire  used_10_1 = 1'h1 < countPolicy; // @[workspace/scratch/f28987e955ed/attention_policy_count_fix_20261029T0054/HostBlockCommandsV4.scala 999:87]",
+      "  wire  used_11_1 = 2'h2 < countPolicy; // @[workspace/scratch/f28987e955ed/attention_policy_count_fix_20261029T0054/HostBlockCommandsV4.scala 999:87]",
+      "  wire  used_12 = 2'h3 < countPolicy; // @[workspace/scratch/f28987e955ed/attention_policy_count_fix_20261029T0054/HostBlockCommandsV4.scala 999:87]"
+    ],
+    "scope": "original arithmetic hardware simulation backend SV, not final post-model-pass frozen RTL; no complete numerical execution; physical provider binding still mandatory"
+  }
+}

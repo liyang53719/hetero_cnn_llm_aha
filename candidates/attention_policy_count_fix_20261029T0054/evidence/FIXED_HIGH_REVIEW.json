@@ -1,0 +1,166 @@
+{
+  "original_evidence_sha256": "829a08aa1ffa17a0848777f5d1c60f4f21405d21e91a972a9ccc9048ec53a4ca",
+  "publication_copy": {
+    "status": "PASS_FULL_HIGH_SOURCE_AND_INTERFACE_AUDIT_ONLY",
+    "identities": {
+      "original-high.fir": {
+        "bytes": 98437642,
+        "sha256": "06d3ae6af7be47d4161861a1447a94b4ad2bb5e431eab5b5c29a653d1b6f10b1",
+        "old_equal": false
+      },
+      "high-annotations.json": {
+        "bytes": 1353384,
+        "sha256": "e40aecae9e15a890acd6eacabd6974d9470434cc83b40c847a0d50096b2bdeee",
+        "old_equal": true
+      },
+      "official-low.fir": {
+        "bytes": 252788790,
+        "sha256": "4b7d2020be7c7c7aa377df55fe29569f2ea2497200489883615c845234846edc",
+        "old_equal": false
+      },
+      "low-annotations.json": {
+        "bytes": 1680095,
+        "sha256": "faa6fc32601eeef9e0ac4b9c823d0a8bcea9ab467fda13ed46797b39aa31c7fc",
+        "old_equal": true
+      },
+      "high-top-ports.fir": {
+        "bytes": 1963,
+        "sha256": "e5697be25e9dc5d6dc970b7e3e7cedef8c31f5f518acfa79ed819c43462e7e02",
+        "old_equal": true
+      },
+      "high-extmodules.fir": {
+        "bytes": 17089,
+        "sha256": "b52f2b04fdf98b33f7c38a5cceb3b4d212b16b7ef8179a1a386dd75c94bb1a43",
+        "old_equal": true
+      },
+      "high-summary.txt": {
+        "bytes": 272,
+        "sha256": "0f2b943d47567b38c1df2206ec296d1c6ba5226563f6d6e4ee730b2fee7f8170",
+        "old_equal": true
+      },
+      "low-top-ports.fir": {
+        "bytes": 12234,
+        "sha256": "e6f43bc07cedd81557a10eb89f91099d6dba98d561500d03c7b9ed09b42bfe4b",
+        "old_equal": true
+      },
+      "low-extmodules.fir": {
+        "bytes": 2697,
+        "sha256": "6a104894c8c05f42c6913ce0676a430c77950b45d771cdc442303a7ade6e13fb",
+        "old_equal": true
+      },
+      "low-summary.txt": {
+        "bytes": 270,
+        "sha256": "89d01c813e26060a01ddaf6a9068f61b3d26a1a216ad7adcd0a64bae0d018794",
+        "old_equal": true
+      }
+    },
+    "module_definitions": 1056,
+    "changed_modules": [
+      "HostBlockCommandsV4"
+    ],
+    "high_closures": {
+      "TransposedDenseDownOwner": {
+        "modules": [
+          "Queue4_MatrixStreamStep",
+          "TransposedDenseDownOwner",
+          "TransposedDownDenseBanks"
+        ],
+        "closure_sha256": "9864db40ceb4e32457237cd4c1649a4f8bb93819cd986d9ec2f0f853597ece74",
+        "exact_high_text_equal": true,
+        "NOT_SV_REUSE_AUTHORIZATION": true
+      },
+      "MatrixPipelineService": {
+        "modules": [
+          "MatrixAccumulatorSeedController",
+          "MatrixPipelineService",
+          "MatrixResultFifo",
+          "Queue8_Meta",
+          "qwen2_matrix_command_endpoint",
+          "qwen2_matrix_command_endpoint_1",
+          "qwen2_matrix_command_endpoint_2",
+          "qwen2_matrix_command_endpoint_3",
+          "qwen2_matrix_command_endpoint_4",
+          "qwen2_matrix_command_endpoint_5",
+          "qwen2_matrix_command_endpoint_6",
+          "qwen2_matrix_command_endpoint_7",
+          "tc_clk_gating",
+          "tc_clk_gating_1",
+          "tc_clk_gating_2",
+          "tc_clk_gating_3",
+          "tc_clk_gating_4",
+          "tc_clk_gating_5",
+          "tc_clk_gating_6",
+          "tc_clk_gating_7"
+        ],
+        "closure_sha256": "0c2d82d2ce6cc722a82160b75cb42cf35ca7564e5d883fb6c67e28ac293bd132",
+        "exact_high_text_equal": true,
+        "NOT_SV_REUSE_AUTHORIZATION": true
+      },
+      "qwen2_matrix_command_endpoint": {
+        "modules": [
+          "qwen2_matrix_command_endpoint"
+        ],
+        "closure_sha256": "112fbe0ff5781a5f56989086c6832131285961bf3bfe7ee5110c969cbe6b8f33",
+        "exact_high_text_equal": true,
+        "NOT_SV_REUSE_AUTHORIZATION": true
+      },
+      "qwen2_matrix_command_endpoint_1": {
+        "modules": [
+          "qwen2_matrix_command_endpoint_1"
+        ],
+        "closure_sha256": "60874cecbb89e8be98332827224bbe738fd8df31ea8ec5cb977b2e4246d6f390",
+        "exact_high_text_equal": true,
+        "NOT_SV_REUSE_AUTHORIZATION": true
+      },
+      "qwen2_matrix_command_endpoint_2": {
+        "modules": [
+          "qwen2_matrix_command_endpoint_2"
+        ],
+        "closure_sha256": "37728c48e1802f232600f339e78f53a46ddb7aa8580d18c8a39a4f3ede5d780d",
+        "exact_high_text_equal": true,
+        "NOT_SV_REUSE_AUTHORIZATION": true
+      },
+      "qwen2_matrix_command_endpoint_3": {
+        "modules": [
+          "qwen2_matrix_command_endpoint_3"
+        ],
+        "closure_sha256": "d219aec95b89d7ed1453984d5a3d55683e078a12aca5dbbe487c81bca3fbc284",
+        "exact_high_text_equal": true,
+        "NOT_SV_REUSE_AUTHORIZATION": true
+      },
+      "qwen2_matrix_command_endpoint_4": {
+        "modules": [
+          "qwen2_matrix_command_endpoint_4"
+        ],
+        "closure_sha256": "593cff42587bd20cc99e4edde23f4b55d4f19e9b7ef1523c41b324259cffbcf7",
+        "exact_high_text_equal": true,
+        "NOT_SV_REUSE_AUTHORIZATION": true
+      },
+      "qwen2_matrix_command_endpoint_5": {
+        "modules": [
+          "qwen2_matrix_command_endpoint_5"
+        ],
+        "closure_sha256": "9f7adb79b753345fbc8f39b4566868aede6452c86148eecae9ab189cb23af760",
+        "exact_high_text_equal": true,
+        "NOT_SV_REUSE_AUTHORIZATION": true
+      },
+      "qwen2_matrix_command_endpoint_6": {
+        "modules": [
+          "qwen2_matrix_command_endpoint_6"
+        ],
+        "closure_sha256": "dd8b5432bd4afdfde288d8897fa8bc0883e654fe0282702e638c2087c1f95e5b",
+        "exact_high_text_equal": true,
+        "NOT_SV_REUSE_AUTHORIZATION": true
+      },
+      "qwen2_matrix_command_endpoint_7": {
+        "modules": [
+          "qwen2_matrix_command_endpoint_7"
+        ],
+        "closure_sha256": "7f9a0618b57c0ccf788f6f8740f04f23b3a990d856cb61b36f2dbad6cbde4c09",
+        "exact_high_text_equal": true,
+        "NOT_SV_REUSE_AUTHORIZATION": true
+      }
+    },
+    "limitations": "SV byte identity pending; no generated C++ reuse authorization; no arithmetic execution or full-block PASS"
+  }
+}

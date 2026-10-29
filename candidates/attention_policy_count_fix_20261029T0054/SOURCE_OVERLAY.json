@@ -1,0 +1,1098 @@
+{
+  "base_commit": "b612426636f469a7f10142d343574d2c4f2053f9",
+  "scope": "155 production sources; 154 existing immutable repo blobs plus one carry-preserving source",
+  "source_count": 155,
+  "files": [
+    {
+      "name": "AddRecFN.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/AddRecFN.scala",
+      "bytes": 8776,
+      "sha256": "2746fea3b3291a8db97999a45303878fdeabc0a0c8acb318f4da4f52dda54a85",
+      "git_blob": "e906f95940664ef10cf9d209484f710c48410a78"
+    },
+    {
+      "name": "Bf16CausalGqaOwner.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/Bf16CausalGqaOwner.scala",
+      "bytes": 20617,
+      "sha256": "d4c1047d275fa0b38d9498fdf6c22018f52138b21a49e55866661a4d4e635cd9",
+      "git_blob": "e9fe6a104a06ce6ed2d73b6b0eaf8c2277042927"
+    },
+    {
+      "name": "Bf16CausalGqaRuntimeOwnerV14.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/Bf16CausalGqaRuntimeOwnerV14.scala",
+      "bytes": 33486,
+      "sha256": "d146952bc2dfe3f5d7978662e2c0dca14fdfde3f3f4234a1d54b745bf7aa969f",
+      "git_blob": "7f43bb7c5722e3060d927b21d5a557d489910e0a"
+    },
+    {
+      "name": "Bf16KvAppendOwner.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/Bf16KvAppendOwner.scala",
+      "bytes": 7844,
+      "sha256": "bab2160771bf09755dc072d87bf72940bc62b41f8d5edf70cfe10da90caa5264",
+      "git_blob": "c14694627a299cb5f6da0fee4b45b3971d456aa8"
+    },
+    {
+      "name": "Bf16KvAppendRuntimeOwnerV13.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/Bf16KvAppendRuntimeOwnerV13.scala",
+      "bytes": 11021,
+      "sha256": "a6d436464c65d290a0a803ca4b821b6d6b089ef5fb5ed49a7fac38d9b9a90ca0",
+      "git_blob": "2dcaaadc2b96821257b6039db48c994ad52369ac"
+    },
+    {
+      "name": "BlockAxiAdapter.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/BlockAxiAdapter.scala",
+      "bytes": 4004,
+      "sha256": "52e8b5281f0517c3b08ceefff06c14bf85942a7d913c997548f54e7e804d3421",
+      "git_blob": "56c2565f5d0b8aec0e8b6aa964dbfd0a0d84fdeb"
+    },
+    {
+      "name": "BlockFloat.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/BlockFloat.scala",
+      "bytes": 8313,
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "git_blob": "021c878dcb1106335d8a0cf768fdb862ab00533c"
+    },
+    {
+      "name": "BlockScalarFloatPolicyV2.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/BlockScalarFloatPolicyV2.scala",
+      "bytes": 10944,
+      "sha256": "25b61c42cd0a1b46a7dc68f3ede15a349e4ff2e629ab2dbef34fb4e3c83f8c03",
+      "git_blob": "8c281dcb069fdee54f8e79d93c0bf656d170c9ce"
+    },
+    {
+      "name": "BlockWritebackFence.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/BlockWritebackFence.scala",
+      "bytes": 2436,
+      "sha256": "70e0303640904dd4044d6f5f61231b9766816da68cc71dbd58aa464a00a11054",
+      "git_blob": "d015c51067a474a5fcca7e7af07b5e144769c240"
+    },
+    {
+      "name": "BurstProtocol.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/BurstProtocol.scala",
+      "bytes": 3789,
+      "sha256": "c08502a0d194d6b69ad6911fce4258cfc24423af020d6c4232a120ea18273d91",
+      "git_blob": "71f3baed824729e55df95492177e4956f32257c2"
+    },
+    {
+      "name": "CompareRecFN.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/CompareRecFN.scala",
+      "bytes": 3476,
+      "sha256": "b319e37c7e6c455a0bf39490a250e8b5ad8dbe54e22fa434f4f9ada134fe063d",
+      "git_blob": "246c3680f76a15eed1786bbe743368bfda6424a9"
+    },
+    {
+      "name": "DenseBlockReductionCoordinator.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/DenseBlockReductionCoordinator.scala",
+      "bytes": 11773,
+      "sha256": "2391e522acc2c40f97c75cbed25f7133bf4e8e4dcc9d5ee50840f19f3521bb01",
+      "git_blob": "15c22ca4ff55128eb1a7b8238d271adedf436739"
+    },
+    {
+      "name": "DenseOwnerIO.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/DenseOwnerIO.scala",
+      "bytes": 4717,
+      "sha256": "d806eb973206b9901fffb65d0cab4a9e7a215bac73920737ac3cfe6d9eecf2d1",
+      "git_blob": "20864e00a9877c934dca6d4152bc1b81241051ca"
+    },
+    {
+      "name": "DenseReadPlanner.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/DenseReadPlanner.scala",
+      "bytes": 3017,
+      "sha256": "0f4c981b32170344c316e0b8dfe6296f2f497d4901365e05e0b9d730d1fd1886",
+      "git_blob": "43280842b184e175358348c4d23f16aa8ffa6333"
+    },
+    {
+      "name": "DenseTileSumBridge.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/DenseTileSumBridge.scala",
+      "bytes": 6362,
+      "sha256": "2551ab7858fbb583f24e3709110a1180f3156b7861f9a775211ec88773ba516d",
+      "git_blob": "84ab82c6d64d30f57e42060f930224b1e6e42d24"
+    },
+    {
+      "name": "DiagnoseOriginalHostMoePhaseV5.scala",
+      "repo_path": "candidates/original_host_official_lowering/source/DiagnoseOriginalHostMoePhaseV5.scala",
+      "bytes": 7436,
+      "sha256": "2380c88d136fe7ae981db49b2e578d88e0efdd95a96936e79138cc99b4ff2d03",
+      "git_blob": "3ade66ba9c90bc3cc984ce12351870492502ab16"
+    },
+    {
+      "name": "DivSqrtRecF64.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/DivSqrtRecF64.scala",
+      "bytes": 4428,
+      "sha256": "ce3c19d7433fef9a73044d80b4fbcd79466110fc527f6e40d91d83de2ad1dbd0",
+      "git_blob": "30a06eeb2aaae7a5f9d9ba4589ca295d59d166c8"
+    },
+    {
+      "name": "DivSqrtRecF64_mulAddZ31.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/DivSqrtRecF64_mulAddZ31.scala",
+      "bytes": 33929,
+      "sha256": "9ea19322eafb96006feb9cdee0da451dff59347459c5f4ac6813ea23f2fad776",
+      "git_blob": "391914c872eb8c69321c15a3526e145f70caba49"
+    },
+    {
+      "name": "DivSqrtRecFN_small.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/DivSqrtRecFN_small.scala",
+      "bytes": 20235,
+      "sha256": "905b3c0b4b47286d56b7f7d37a2886add7fd662336f5864df454680021e92da9",
+      "git_blob": "7f65d667a13a0cfb3b2bab15413cb5e71e176f2b"
+    },
+    {
+      "name": "ElementwiseMemoryEngine.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/ElementwiseMemoryEngine.scala",
+      "bytes": 10972,
+      "sha256": "5e5b32a95ba59947330d7e0469a3643925f0f7bd3bd44c101ae3730c9ac51773",
+      "git_blob": "d4623b6d9e8b062c6299d60048909425b58ab3e6"
+    },
+    {
+      "name": "ElementwiseRegisterLoan.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/ElementwiseRegisterLoan.scala",
+      "bytes": 6408,
+      "sha256": "e7a9d577cceb2746a2a7beb0d7fc948b29d6c504a32de0ddfaad2c83b3c9b815",
+      "git_blob": "d7d7e7a00d79dd4e9c5ee83518275dcb8563843f"
+    },
+    {
+      "name": "EmitHeteroBF16Fma.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/EmitHeteroBF16Fma.scala",
+      "bytes": 3572,
+      "sha256": "9df0c5c2b499783dbf471cdf9bed3f1373a34c6713626a1c93d059e70e7a460f",
+      "git_blob": "ceea8307e92777c5fb3e52243a9b778940ce30c8"
+    },
+    {
+      "name": "EmitHeteroFP32Alu.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/EmitHeteroFP32Alu.scala",
+      "bytes": 1130,
+      "sha256": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+      "git_blob": "d7e8191988456d32d6e9e90d58ca19dba2b2427e"
+    },
+    {
+      "name": "FfnResidentCoordinator.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/FfnResidentCoordinator.scala",
+      "bytes": 8141,
+      "sha256": "c2b58a685ec8adedace26a830e93c1e3d2b63093df878cccc4b6020ababdb9db",
+      "git_blob": "de13e825ead588db6caa6ee561780379c65dfb4b"
+    },
+    {
+      "name": "FfnTileSiluBridge.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/FfnTileSiluBridge.scala",
+      "bytes": 5032,
+      "sha256": "efc433714219745a0fa012899a0d1fb16fdc72ab797fcdbbf3674154eb58329b",
+      "git_blob": "59b33a01b7ef0cfb10b663ca4ba0a3269643f743"
+    },
+    {
+      "name": "GdnChunkAddressPlan.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnChunkAddressPlan.scala",
+      "bytes": 9520,
+      "sha256": "f8534849bad082b77de88cf2cef43558a91f045122694640e9f33391f101b943",
+      "git_blob": "bdb64b8b07cb79dd5730d987d9412469642f8893"
+    },
+    {
+      "name": "GdnChunkProtocol.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnChunkProtocol.scala",
+      "bytes": 3420,
+      "sha256": "877bca2b7816b2bff9566edd2dbf9ad55302b8fa6c8bd3ad7447412d9436b85c",
+      "git_blob": "e4f1ce39d41d4722936ca71097436a5fe2cb917d"
+    },
+    {
+      "name": "GdnChunkStateTransferOwner.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnChunkStateTransferOwner.scala",
+      "bytes": 10591,
+      "sha256": "8cdcf2d6a88306844f9a66ab828743e5948ee7b8b739b0933304d84eb85e6b85",
+      "git_blob": "884531df8479edb783d50d0dbf54065ada992bbc"
+    },
+    {
+      "name": "GdnConv4Owner.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnConv4Owner.scala",
+      "bytes": 10423,
+      "sha256": "99b7e4a4cbf2df234fc831cd1a85d44b032f981221f57fde504f3f5aebe6a28a",
+      "git_blob": "923013a155a6ade65e9ac75894942a73226ccbb3"
+    },
+    {
+      "name": "GdnElementwiseOwner.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnElementwiseOwner.scala",
+      "bytes": 9614,
+      "sha256": "01b394526f75b9732c3e605652c64f3968851aca97258a3a640bc056de1f2fe3",
+      "git_blob": "ebc2bcb77b719187a9f4f210ef3072f2e01cb16a"
+    },
+    {
+      "name": "GdnGatedNormOwner.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnGatedNormOwner.scala",
+      "bytes": 10791,
+      "sha256": "00b47be5e72aa580ce9049c2036a23268da859ae7f1728bfea1d348f70a4f2db",
+      "git_blob": "6756e590c9c339f29f8d6ae6e36f45490853de5b"
+    },
+    {
+      "name": "GdnInputPrepOwner.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnInputPrepOwner.scala",
+      "bytes": 13048,
+      "sha256": "86fa350cd87bc140b762db2deb5650c25e3b30bae4fb12cef7fe407e6b4faffe",
+      "git_blob": "cc03dbb7b7392f7107b9486279823f7598856632"
+    },
+    {
+      "name": "GdnOwnerProtocol.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnOwnerProtocol.scala",
+      "bytes": 1854,
+      "sha256": "bb1f8379ec4f8ff05f5b7752c693984ba56324274e9d729cd4527a9b82249e90",
+      "git_blob": "e3903d30bdee7e041e9aa124275c20f6955990e9"
+    },
+    {
+      "name": "GdnRecurrentOwner.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRecurrentOwner.scala",
+      "bytes": 13275,
+      "sha256": "42286b5f9757d7c3b1c349f632bc7d3f7047080bd12e665c8980d9aaec7b4250",
+      "git_blob": "8c7ccd46289b8e608f7c72faba5a35954fc02ce1"
+    },
+    {
+      "name": "GdnRecurrentProtocol.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRecurrentProtocol.scala",
+      "bytes": 1760,
+      "sha256": "39ec02e1377472c6532da0ee36e7d2f1eb8c92f9836251b9ee9efcf3431804f0",
+      "git_blob": "ae55e1e20f88118ab7d033bc8d77479e984b07bf"
+    },
+    {
+      "name": "GdnRmsNormFixedBankOwner.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRmsNormFixedBankOwner.scala",
+      "bytes": 29993,
+      "sha256": "46d7622f7c20416bc86cd7786cfd27ab8fe809911aeda1b3f097fb4c9a8ac915",
+      "git_blob": "5fcbfb4b4923ac6cc8562dbf54ea33884007d694"
+    },
+    {
+      "name": "GdnRmsNormOwner.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRmsNormOwner.scala",
+      "bytes": 9456,
+      "sha256": "77beb04c0646eee8f53b8c44190f641f4efc900f552523ab6b0cc4f7aed8a065",
+      "git_blob": "3e1ecbed87b6743c924c0e2cc7dc01c62c3b11f8"
+    },
+    {
+      "name": "GdnRuntimeChunkCoordinator.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeChunkCoordinator.scala",
+      "bytes": 19158,
+      "sha256": "b1fb9b108a788166b384c224f3f418489272dd886def06e3c0a261d699325877",
+      "git_blob": "8c59929e4403eb19d9dd4371e7fbdf874111bb26"
+    },
+    {
+      "name": "GdnRuntimeChunkDerivedAndPairV2Owner.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeChunkDerivedAndPairV2Owner.scala",
+      "bytes": 20779,
+      "sha256": "684ef64617cd7303905e3efbdcced47ba556812ca6e5882a243c6eacb76796a9",
+      "git_blob": "2fd69a098895fdfb005310db3ff03c59bcfc1ce3"
+    },
+    {
+      "name": "GdnRuntimeChunkExecuteOwner.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeChunkExecuteOwner.scala",
+      "bytes": 16324,
+      "sha256": "77943e63fe0b580192e71be5020f712d4d7234521bd13cce0177fb151b0cfd8c",
+      "git_blob": "cebeeed8ee493696f64b3a7fbe87058309eb2bc7"
+    },
+    {
+      "name": "GdnRuntimeChunkExecuteOwnerV8.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeChunkExecuteOwnerV8.scala",
+      "bytes": 16928,
+      "sha256": "b4bc9397b88bc4542b72213fa14aad5b4df5e428881e96e2fd3893a49af3c15e",
+      "git_blob": "d81ddd295a9dd2b7398e7cf6c0cbc164966b9060"
+    },
+    {
+      "name": "GdnRuntimeChunkLayout.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeChunkLayout.scala",
+      "bytes": 1290,
+      "sha256": "54451d4cf504ca76ed387c23790875828eb966ce1603aa08a2200406023ad346",
+      "git_blob": "e2645c97913fc2667308ae3a3ff712fa266ab793"
+    },
+    {
+      "name": "GdnRuntimeChunkLeafCollection.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeChunkLeafCollection.scala",
+      "bytes": 9706,
+      "sha256": "c8b494a77b32ca89ca5e9e3d7417f36e939a42793b79006574d676c5d2407275",
+      "git_blob": "467d7ee3bc2113a48705c169ecc0639c19656b23"
+    },
+    {
+      "name": "GdnRuntimeChunkLoadPrepOwner.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeChunkLoadPrepOwner.scala",
+      "bytes": 14575,
+      "sha256": "c9805d6ad4f6e5a6c280185d889956b5b92f7e180ec267b8dd89436db68b655b",
+      "git_blob": "a13de971459c79cbf29756bc19ad0f3728ab7628"
+    },
+    {
+      "name": "GdnRuntimeChunkLoadPrepV2Owner.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeChunkLoadPrepV2Owner.scala",
+      "bytes": 17265,
+      "sha256": "bb74af67d6863ce179a34b1cc33bad7693389ae91c628481657995671ee0002e",
+      "git_blob": "7f462a8ee5deb4710f2bda75b245f3268f41b26f"
+    },
+    {
+      "name": "GdnRuntimeChunkNumericPolicy.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeChunkNumericPolicy.scala",
+      "bytes": 639,
+      "sha256": "44b5cc96048f92f712c2164f680a43da061dbf8d376982c69d9bdd71f9d675fc",
+      "git_blob": "571ddc98d7b7b6afda4b28b8b05abe9b366918d9"
+    },
+    {
+      "name": "GdnRuntimeChunkTransposeV2Owner.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeChunkTransposeV2Owner.scala",
+      "bytes": 12462,
+      "sha256": "839de9dba4d3a39670d8e33744dc9beb56399f9e39c3f7ab9f32d1cbca99a38a",
+      "git_blob": "004ac8407922d1bd98498da0ec51c8e3e5766b30"
+    },
+    {
+      "name": "GdnRuntimeConv4OwnerRecoveredV7.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeConv4OwnerRecoveredV7.scala",
+      "bytes": 15708,
+      "sha256": "b80c596ac832ef8140288a0c8a49e01007bff750af4a2eb9a6594e8649d7abf1",
+      "git_blob": "cb8fc36e742c33012b06ebc49eb2913bd1617355"
+    },
+    {
+      "name": "GdnRuntimeElementwiseOwnerV15.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeElementwiseOwnerV15.scala",
+      "bytes": 14301,
+      "sha256": "bbdc76ac5c2b32f4dc111c3031cccbda2e0c7801c00f46342a63230460b5bad9",
+      "git_blob": "5df8fe92a3d6b5174ea61db93e55d23796f94eaf"
+    },
+    {
+      "name": "GdnRuntimeGatedNormOwnerV10.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeGatedNormOwnerV10.scala",
+      "bytes": 12750,
+      "sha256": "266352199366b7a9497e1db6cbe4cb832d94bfb3e2bfc21d01a7eddd10594341",
+      "git_blob": "adc6b5e2161373302dda87ae7ce528280f372660"
+    },
+    {
+      "name": "GdnRuntimeGatedNormProtocolV10.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeGatedNormProtocolV10.scala",
+      "bytes": 1720,
+      "sha256": "b694be32a8480d791650bb4d6a50cc386792d61f44a4b8dcc1e41b6f5ad304b8",
+      "git_blob": "a6d11b5057281962af7d92c40c3a3d00574541e8"
+    },
+    {
+      "name": "GdnRuntimeRawPrepOwnerV7.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeRawPrepOwnerV7.scala",
+      "bytes": 21735,
+      "sha256": "efc06d4f991e2427186b88e18d987fe7341596d2301e4f3c3e7a00fab12cf6fc",
+      "git_blob": "d974f238f0be0a65062a19e64f60c601a658ebff"
+    },
+    {
+      "name": "GdnRuntimeRawPrepProtocolV7.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeRawPrepProtocolV7.scala",
+      "bytes": 2688,
+      "sha256": "e9d035d1c2a60351c4acb2035164b8e8a386d36d9c8c0e9aba746fa719b19903",
+      "git_blob": "188a857c46b45a56bcb7ae194fd6d64fb4d44fe6"
+    },
+    {
+      "name": "GdnRuntimeRawPrepReceiptV8.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeRawPrepReceiptV8.scala",
+      "bytes": 1330,
+      "sha256": "882897d0c8e8e265eb33ccdad7b4d5dc8d29e502bda909816df8b258e77d9a6f",
+      "git_blob": "99e5df46d3e1e5fdef81ff3451e7190846028eb4"
+    },
+    {
+      "name": "GdnRuntimeRmsNormOwnerV3.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeRmsNormOwnerV3.scala",
+      "bytes": 17137,
+      "sha256": "d366a4d3165ab189366f1c9ff8c3f9c596940e15e46c68a0b7c9000931b43df8",
+      "git_blob": "0e1a79b713eff4f8d014bbec1f16115727734068"
+    },
+    {
+      "name": "HeldDecoupledOffer.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HeldDecoupledOffer.scala",
+      "bytes": 912,
+      "sha256": "9654e329f918981a89108b08606e8f284a4c2aac503245ab2ea7d51994467a19",
+      "git_blob": "9781468ad0087432a1791f8315106de1cd2df1be"
+    },
+    {
+      "name": "HeteroOperatorPrimitiveProtocol.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HeteroOperatorPrimitiveProtocol.scala",
+      "bytes": 7073,
+      "sha256": "1190511d8ce0f178f10c6509f320e1cedd105b11687b666d6128400597e2cf9d",
+      "git_blob": "3c34aefd56c0c8d3a529b97bf1d3f8fd3c15b360"
+    },
+    {
+      "name": "HeteroRuntimeMoeMerge.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HeteroRuntimeMoeMerge.scala",
+      "bytes": 6806,
+      "sha256": "7d94ef0fd596c15d46afe661da03b48bfffbc2e72cd97803472c3f199d073489",
+      "git_blob": "7d87c4491db320e25c9c0146e302e061b0251b7a"
+    },
+    {
+      "name": "HeteroSelectionMemoryPrimitives.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HeteroSelectionMemoryPrimitives.scala",
+      "bytes": 33917,
+      "sha256": "9f3744f2a7cc750cabc4ffbc1ba27edac0b38aa6cd91173e51f70acb4d94d05b",
+      "git_blob": "bfca18bf7b3be1e3c18787bf670c8af1eba11aed"
+    },
+    {
+      "name": "HostBlockCommands.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostBlockCommands.scala",
+      "bytes": 106105,
+      "sha256": "94e6198a060044ae58a90328394ec8d11fe3311647fef62c1a1b975f2504ff4a",
+      "git_blob": "3acaf24e6d364a90e29390e9437fab43adff17c1"
+    },
+    {
+      "name": "HostBlockCommandsV4.scala",
+      "repo_path": "candidates/attention_policy_count_fix_20261029T0054/source/HostBlockCommandsV4.scala",
+      "bytes": 190729,
+      "sha256": "8cea5e8863e47ca14978871d23b7f80639e43ae3192c3e6c0ccf372b1c73a20f",
+      "git_blob": "a2020b74140fdcfb152be2001673d9d63b2d47e8"
+    },
+    {
+      "name": "HostBlockTopV4.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostBlockTopV4.scala",
+      "bytes": 26923,
+      "sha256": "588fcba10ff4d55634192513469eeb4d757e81d4693fc9ac64b1143335537f8a",
+      "git_blob": "39a4394d8dfe6d759662d22e0105189ac4ae5527"
+    },
+    {
+      "name": "HostMoeArithmeticLeaseWiringV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostMoeArithmeticLeaseWiringV5.scala",
+      "bytes": 7157,
+      "sha256": "a90b65e5f2a73478a635062262932371b7e2e877365890fcac49f9d3e3a79dec",
+      "git_blob": "1947fc6cb1df098ef5cb2a4e1fa479b44aad403a"
+    },
+    {
+      "name": "HostMoeDenseRoutingV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostMoeDenseRoutingV5.scala",
+      "bytes": 3789,
+      "sha256": "9b2d734137572364a326b44db855eea7751a282093941bed0288658fc7b1db2f",
+      "git_blob": "82e5afa0a2dd88318bb44361ad7fd36a74c3078d"
+    },
+    {
+      "name": "HostMoePhaseContextV4.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostMoePhaseContextV4.scala",
+      "bytes": 3227,
+      "sha256": "e2a93d777dd1b28c80527ec91dd66c34d0b46ddfddbc8039c06f1a649643c0d4",
+      "git_blob": "8f9e92dacd85340c167ab89f2731ab3ff890e3a4"
+    },
+    {
+      "name": "HostMoePhaseControlV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostMoePhaseControlV5.scala",
+      "bytes": 1950,
+      "sha256": "cbd5c6457f5e32ba4202b06c30f3cf53356085e021f4369f97c9509e2c0f040a",
+      "git_blob": "7ac09f2b210fa7405cc5bfba7744b92d9504389c"
+    },
+    {
+      "name": "HostMoePhaseLifetimeWiringV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostMoePhaseLifetimeWiringV5.scala",
+      "bytes": 13952,
+      "sha256": "574aba5b0321e49ecba87e5cbd4958410f1728d38b39bfd377740f55de9d01d8",
+      "git_blob": "b7d51bc73965b4eec7eeed3f657d202459751763"
+    },
+    {
+      "name": "HostMoeRuntimePhaseProtocolV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostMoeRuntimePhaseProtocolV5.scala",
+      "bytes": 4230,
+      "sha256": "4096f77846567ba71fa85b3edff76a3af5c9664000718f5ef199e0f645e38f49",
+      "git_blob": "aeb9c32ed34ed569314bab1b8eadadde648663c4"
+    },
+    {
+      "name": "HostMoeSelectionServiceV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostMoeSelectionServiceV5.scala",
+      "bytes": 4657,
+      "sha256": "c52656763eeb2c1649f99cb7ee4b6bcaf2652dfc0260d07e2dbdd8b50e1b4507",
+      "git_blob": "afa13192bb9723d1e076139479c0bf791712169f"
+    },
+    {
+      "name": "HostMoeSharedGatePlanV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostMoeSharedGatePlanV5.scala",
+      "bytes": 5897,
+      "sha256": "d2bae8a00aa1edcdc366d63122fa2d8cf110ef6a957d2e7ab5b643be7fff09d6",
+      "git_blob": "f2d07f7969b705344f7aee77acdc4791d7425a30"
+    },
+    {
+      "name": "HostMoeWeightScanV4.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostMoeWeightScanV4.scala",
+      "bytes": 10521,
+      "sha256": "f5766b089e833be07013a57471dc01a1d29aeb0276446cbbfe07527eec8245a5",
+      "git_blob": "680b19b57fc550f6a0b1f9c629b90d0610606477"
+    },
+    {
+      "name": "HostResidualCommands.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostResidualCommands.scala",
+      "bytes": 10393,
+      "sha256": "e3a87c3b425a46d876ff58ee2db8a04370ccd74139667b00c415eb515d328a7c",
+      "git_blob": "8f1847b04d77c319bea7f9b8f83b603090acc7b9"
+    },
+    {
+      "name": "HostRuntimeChunkProtocolV9.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostRuntimeChunkProtocolV9.scala",
+      "bytes": 2346,
+      "sha256": "b356dfe90f9e897a10140638d4576eccbaea028134f7ae1c6ee5a156741b18c2",
+      "git_blob": "838cb84ce2642298bf445dc6a1f00146bf466405"
+    },
+    {
+      "name": "HostRuntimeChunkWiringV9.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostRuntimeChunkWiringV9.scala",
+      "bytes": 17968,
+      "sha256": "7590e6c1732b9ae66c77eacabedbd95091f716d8e9861a747ce0af7885c5b183",
+      "git_blob": "9fc00b73573c31ab8266b0e4b0c7b35b7ad0d549"
+    },
+    {
+      "name": "HostRuntimeGatedDependencyV10.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostRuntimeGatedDependencyV10.scala",
+      "bytes": 553,
+      "sha256": "7942dce9ba553e836a47a0cac760e059b5ba224a25c8d8e7a2bb2e8f777987e4",
+      "git_blob": "5a98199bd8f534344505e01b4f309fb361e2b9fa"
+    },
+    {
+      "name": "HostRuntimeLaunchV4.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostRuntimeLaunchV4.scala",
+      "bytes": 2317,
+      "sha256": "4c8762f26f6849aba40a7f06555c275047ea0e23439daf9cb2b5fe38f8fcd6dd",
+      "git_blob": "f9e5cd78c7f5363000dfdd0981549c121e2dc8ab"
+    },
+    {
+      "name": "HostRuntimeMoePhaseAllocatorV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostRuntimeMoePhaseAllocatorV5.scala",
+      "bytes": 12974,
+      "sha256": "c8c5012b3463e64cc0ecd0066d3e0e9ff4df773c2ee40e144d03f0274dbf69c6",
+      "git_blob": "5c3b6bf4c59d67d274c00d0e17eb9499a1705266"
+    },
+    {
+      "name": "HostRuntimeOwnerGuardV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostRuntimeOwnerGuardV5.scala",
+      "bytes": 10809,
+      "sha256": "4680762977b005951751f77b4d3b9fc3ef2dd24143374ee20c7e47c241361e53",
+      "git_blob": "065cff490065d4d5a27ce72e988fc0c7ef4fc719"
+    },
+    {
+      "name": "HostRuntimePrefixLeaseWiringV8.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostRuntimePrefixLeaseWiringV8.scala",
+      "bytes": 79145,
+      "sha256": "2062059293c4928e1983c3790e4a817d2d12705d19826f5ae05d60e9c22f20d3",
+      "git_blob": "49646f5fc02e5cc3cae56b7b3be11a36e1beae50"
+    },
+    {
+      "name": "INToRecFN.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/INToRecFN.scala",
+      "bytes": 3417,
+      "sha256": "92090ded1e774a75811931ea4bd7e23fcb671ffbb5a55d9b2826a04d5c6d83eb",
+      "git_blob": "d45aa9fb25867e64f37863d25b4b6fb38df40738"
+    },
+    {
+      "name": "IdmaWeightBurst.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/IdmaWeightBurst.scala",
+      "bytes": 21460,
+      "sha256": "935365723aba8d79675c84a1e23ce531741707d736d88e40ff2355eeda431ba4",
+      "git_blob": "3782fdc570b97800738a6ce423a533531b2cc7e6"
+    },
+    {
+      "name": "LocalSramConfig.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/LocalSramConfig.scala",
+      "bytes": 583,
+      "sha256": "6d8167530ae045ca038f644a93238731d6f2b645a01cf856d1ab111387de0464",
+      "git_blob": "a4f62492c0a1e74187ba0f9e7b38b1b3db702d94"
+    },
+    {
+      "name": "MatrixAccumulatorSeedController.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/MatrixAccumulatorSeedController.scala",
+      "bytes": 7538,
+      "sha256": "c1bae7fdb444a828b69e7b3b5a8a0b49d93f87fc4173f2a6c3695d6c6793b9c3",
+      "git_blob": "c0bf30e73f1325f96097d90900abdde44735cb84"
+    },
+    {
+      "name": "MatrixAccumulatorSeedProtocol.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/MatrixAccumulatorSeedProtocol.scala",
+      "bytes": 1851,
+      "sha256": "b34d04705f6990298fa78bb15879e76007df1c57ee3a768425c61d4555a9d13e",
+      "git_blob": "8473c31bddd79877b7bb3e0ad563573d3107ae5f"
+    },
+    {
+      "name": "MatrixPipeline.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala",
+      "bytes": 19528,
+      "sha256": "d6bd82725d6b20788080b5bd17ab672a419c84212cfa50d21d175bae0d8c56d8",
+      "git_blob": "cb198eebc1d1a4ac07d9727b3e4746e78076751c"
+    },
+    {
+      "name": "MoeBf16ScalarConsumer.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/MoeBf16ScalarConsumer.scala",
+      "bytes": 7231,
+      "sha256": "281f8a8c0d288ae835de263b484f9aee59f45a0d93a9c40c0b8e78e9e666f9e5",
+      "git_blob": "354c3e5784c25a36e097b446a2d89f2698d30b00"
+    },
+    {
+      "name": "MoeBf16VectorConsumerV2.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/MoeBf16VectorConsumerV2.scala",
+      "bytes": 6500,
+      "sha256": "10d0fcd89cc9a859878377f81702e83a64d437832c2681e84d368f64302e861e",
+      "git_blob": "a94fbc267fdf0d03bb4b087a748b8e1487cfab44"
+    },
+    {
+      "name": "MulAddRecFN.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/MulAddRecFN.scala",
+      "bytes": 15353,
+      "sha256": "3f2ad5acd54ca0b514737779656b98ffb7f829d867c6b245716e2a1d186d630b",
+      "git_blob": "27996b8bb53ad3177b57269795814cdfbd5c9b45"
+    },
+    {
+      "name": "MulRecFN.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/MulRecFN.scala",
+      "bytes": 5706,
+      "sha256": "cf42850379c249a97a073ac436ff6b4c564b56177e868c3e912be2f246243e1d",
+      "git_blob": "ca5fdc6322b080089f411e2d90f63e5c331bb5cc"
+    },
+    {
+      "name": "OverlappedSilu.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/OverlappedSilu.scala",
+      "bytes": 6485,
+      "sha256": "63e3c41a4459a898db7d19a692bfd60c08c5a1b94b4596c0b45ada10378108f1",
+      "git_blob": "6f8373c467bdac32ffac49f8a36a42cf2e76f9d4"
+    },
+    {
+      "name": "PackedAttentionStreamClient.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/PackedAttentionStreamClient.scala",
+      "bytes": 5469,
+      "sha256": "58fb22a6f78a224241b9b0368e3108e5c403a9ea7106527061b140ff5d83b8c0",
+      "git_blob": "2bc8190779eb409a7c9a48f56e4f91eee042c884"
+    },
+    {
+      "name": "PartialRope64Owner.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/PartialRope64Owner.scala",
+      "bytes": 10567,
+      "sha256": "7a3f5bffe06772671f30ac1484065afae9abc895063a2e4769999bf76487c322",
+      "git_blob": "a05e96ffc026b5dca7f3a937824aa4cabdf13ae6"
+    },
+    {
+      "name": "PartialRopeRuntimeOwnerV12.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/PartialRopeRuntimeOwnerV12.scala",
+      "bytes": 14605,
+      "sha256": "d7ba248ab794e409791532b6b4921f3b1d82d2f108130314326e15383b784fbd",
+      "git_blob": "e2a68182894424239b215be908249f9308392dd2"
+    },
+    {
+      "name": "Protocol.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/Protocol.scala",
+      "bytes": 3123,
+      "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+      "git_blob": "4908d7fe3100042341d45abc0e60eca7b7c16726"
+    },
+    {
+      "name": "Public21QkvReductionRouter.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/Public21QkvReductionRouter.scala",
+      "bytes": 9110,
+      "sha256": "bb0f829330f3ce824ffdb73180a09bb90e43826c1aa15f0d10a2187e65b72ae3",
+      "git_blob": "c9db93ed12606ae578bc65f3cd16fa2610ce346b"
+    },
+    {
+      "name": "QkNorm256Owner.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/QkNorm256Owner.scala",
+      "bytes": 16520,
+      "sha256": "c12183ddb29ab3ce66dc59083524c204f55554757218ced438c8f8ae4c7d60b6",
+      "git_blob": "fccc8d3a30fce5baa5634cca817f52c441a2304d"
+    },
+    {
+      "name": "QkNorm256RuntimeOwnerV11.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/QkNorm256RuntimeOwnerV11.scala",
+      "bytes": 26319,
+      "sha256": "0458e7aac6e9abf64e719b197ae9935d8fef3c5a9425160da1c66cd0ec84988d",
+      "git_blob": "ef9573f0e13d7c5b3ad8cf88002813b2e87195da"
+    },
+    {
+      "name": "Qwen2Block.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/Qwen2Block.scala",
+      "bytes": 63652,
+      "sha256": "05248639be78683df68230ad1c4da3fe0449775d70e2fc7c3ff4aef0088567f9",
+      "git_blob": "4bda62e1f7051e6135e7c9969713c11b8cac4939"
+    },
+    {
+      "name": "QwenOwnerProtocol.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/QwenOwnerProtocol.scala",
+      "bytes": 91175,
+      "sha256": "7da3466f9720722a636301b163c72d795c556e75f020efef4b1120be365142d2",
+      "git_blob": "2adafcf29bd8f0b0d60f632bd3d0ae59ff1bda96"
+    },
+    {
+      "name": "RecFNToIN.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/RecFNToIN.scala",
+      "bytes": 6827,
+      "sha256": "e56257592e88614f6be34877a3a9f412fdc09b1c4210ee3dfeaa6c67fdc670f3",
+      "git_blob": "ea86ccfda4967eb3a2735ede00bda959ee0c7aaa"
+    },
+    {
+      "name": "RecFNToRecFN.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/RecFNToRecFN.scala",
+      "bytes": 3958,
+      "sha256": "97042141693cd2e8aaa90f88ee39d2c3c4177fc76c48f9ad46aaea71fee34f09",
+      "git_blob": "8eb625afa47d6369e70167f767d8911f6cb9ecd8"
+    },
+    {
+      "name": "Record128Reader.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/Record128Reader.scala",
+      "bytes": 4229,
+      "sha256": "4b7f33a150dcf3abf15e4ba54b2d1fbdc846d49f966dd7b3bb810ec05f1a9afb",
+      "git_blob": "41cd07dd24b269aa62458b469957100351de2dc1"
+    },
+    {
+      "name": "RetainedIdma.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/RetainedIdma.scala",
+      "bytes": 9977,
+      "sha256": "5d8873911046d0c4202e3f92ccfdc03c2ede3d8db06502473960ae3ed644f91e",
+      "git_blob": "4f003e75a0f9bfb0960acf633f0c3e3201820bce"
+    },
+    {
+      "name": "RetainedMatrix.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/RetainedMatrix.scala",
+      "bytes": 11938,
+      "sha256": "8c475372817104f7eee349a96f589d97dba94b6e7a17b5b88cfb2538f40bf7e9",
+      "git_blob": "835ce0c4fb0db92cb4f9b6d40d156e4d3f680fec"
+    },
+    {
+      "name": "RoundAnyRawFNToRecFN.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/RoundAnyRawFNToRecFN.scala",
+      "bytes": 13901,
+      "sha256": "31cdb3be147471d52e721f14914031c19b915bd7aaffe5c0e333393a0c7fb67d",
+      "git_blob": "34ecf320a4d1372b030a631c6138fa26c141a905"
+    },
+    {
+      "name": "SharedL2Fabric.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/SharedL2Fabric.scala",
+      "bytes": 4816,
+      "sha256": "10372482417b8802fcf494e10af6a8d202e1dc5bb39d1a637d27da259efa30c5",
+      "git_blob": "745ca950ba5e0eebe9f08ffb7b1a6fa04e67a5db"
+    },
+    {
+      "name": "SharedMemoryArbiter.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/SharedMemoryArbiter.scala",
+      "bytes": 3727,
+      "sha256": "c110e660cc3750e2e0ce9dc3e71a40310f7c730ff5d49230f4c6d6b92d45a225",
+      "git_blob": "0b2d8d963e1f099d497b1f942c07cfe0f1713008"
+    },
+    {
+      "name": "StreamingDense.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/StreamingDense.scala",
+      "bytes": 20011,
+      "sha256": "010fbea5d12e952e2083fa1f3f57cb1219f9756946b79dc01482e924c0c21bc5",
+      "git_blob": "9be205bc15fe21e374370576cbd1290767030f65"
+    },
+    {
+      "name": "TensorProgram.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/TensorProgram.scala",
+      "bytes": 6094,
+      "sha256": "b0d926444002c993a238616c15a0611c17d7aacf4561ee8cac1614d2988b2de7",
+      "git_blob": "770fb3842c4dfa0954a7634805fab1564ecf200d"
+    },
+    {
+      "name": "TransposedDenseBanks.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/TransposedDenseBanks.scala",
+      "bytes": 19261,
+      "sha256": "9fb0df82d82084ed7b6f68150c6117276eefd3d045f8d3b527a14486f2d9028d",
+      "git_blob": "9c49b579b7161835b9673058ec001512fb0dcbee"
+    },
+    {
+      "name": "TransposedDenseOwner.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/TransposedDenseOwner.scala",
+      "bytes": 100246,
+      "sha256": "961f4e650b499fc1f15918d2e0f6aa51b4905431ba35ba681a609c98b42c5d14",
+      "git_blob": "a092d43d545a49155d7e081496220438c1191bf8"
+    },
+    {
+      "name": "TypedTensorReader.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/TypedTensorReader.scala",
+      "bytes": 4968,
+      "sha256": "a0641c72360e608238879f3c12f5882a8999ccac3c46d510beff6b0ffb0a1c3c",
+      "git_blob": "0b7132fc7f5b292039ee4aae6185cc9cbd9ecdc2"
+    },
+    {
+      "name": "UnifiedMoeActivationGatherV2.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeActivationGatherV2.scala",
+      "bytes": 9172,
+      "sha256": "259e4a09dd4658ab71f940dddacdf6516f5080094b5e10ed672eba624b0576ce",
+      "git_blob": "5be81cc1a017b3e79a8c596b121b93be70ddcddf"
+    },
+    {
+      "name": "UnifiedMoeActivationGroupOwnerV3.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeActivationGroupOwnerV3.scala",
+      "bytes": 10797,
+      "sha256": "ca59cee0fcd8f9e2d4c86f58011faed6faa90c1d46a3ab3bb8a1550b8e3acf6b",
+      "git_blob": "1b1c38d934e1f5fa458febe29e07c6f94a990fee"
+    },
+    {
+      "name": "UnifiedMoeDenseWritebackV2.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeDenseWritebackV2.scala",
+      "bytes": 6015,
+      "sha256": "cd8606b3769c38e9286557a56a5d0a2db6e31bbdfc2929eead2be65e41177b52",
+      "git_blob": "bb72f3b8b935444f314f9585b54fefb2deeb6ca5"
+    },
+    {
+      "name": "UnifiedMoeDownDescriptorV4.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeDownDescriptorV4.scala",
+      "bytes": 1751,
+      "sha256": "6e364485bc7f0b87369253beb696715a0b4fc8aacb6b1d662479f0272f273624",
+      "git_blob": "f9a5a436cb8597e446b2b70bc695287586c702cf"
+    },
+    {
+      "name": "UnifiedMoeDownTileReaderV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeDownTileReaderV5.scala",
+      "bytes": 8836,
+      "sha256": "20072b6e44f5890e570d1fa8df3da8e567d99558cbd8b28e77ab4c2325999f82",
+      "git_blob": "66e4f90d398c3a9a4423606b132ae9e236ca5f4f"
+    },
+    {
+      "name": "UnifiedMoeFfnGroupSequencerV3.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeFfnGroupSequencerV3.scala",
+      "bytes": 12125,
+      "sha256": "60654e12ae008dbf96515da3dbddaa88b882f588acef916308e3f13118e4a8eb",
+      "git_blob": "3430443d46260b1fb3aeea22386c96a5e6ca8932"
+    },
+    {
+      "name": "UnifiedMoeGatherFfnPlanV3.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeGatherFfnPlanV3.scala",
+      "bytes": 3230,
+      "sha256": "c1a9095b85ce37343c83ce2411ab7699cc4bb03bc932e6a4defb7857eae872ff",
+      "git_blob": "0ca4e44e779ebd600daf014c9c6746e1e68df158"
+    },
+    {
+      "name": "UnifiedMoeLogical32SigmoidConsumerV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeLogical32SigmoidConsumerV5.scala",
+      "bytes": 7398,
+      "sha256": "a0c2dd0f5dfc43ae90911b568737901ca2d7de9f24672c5933d188ad4d954387",
+      "git_blob": "02eaa441535f572c9e6ee9f8c4dfa2f48e71f152"
+    },
+    {
+      "name": "UnifiedMoeLogical32SwiGluConsumerV3.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeLogical32SwiGluConsumerV3.scala",
+      "bytes": 7540,
+      "sha256": "8dae337ad4ce62d1b5031c4ec87e33dcf6f32e7315ac4dc34b1c992a2fb40ac4",
+      "git_blob": "8d357fbb8ca0bf0145bec038e53d71c3afce9d45"
+    },
+    {
+      "name": "UnifiedMoePhaseMergeOwnerV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoePhaseMergeOwnerV5.scala",
+      "bytes": 13995,
+      "sha256": "a92404dab262fbb825a14d8fe769f19b50093374d49b11d7071ccf4cef8d2eeb",
+      "git_blob": "600e12c48fe87197b8ebaf5aaff634ccc9fa3361"
+    },
+    {
+      "name": "UnifiedMoePhaseResidualOwnerV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoePhaseResidualOwnerV5.scala",
+      "bytes": 11003,
+      "sha256": "53faa826ef155850b424b2a111f30d40417970ebfc3bb1d389f843be608af9cf",
+      "git_blob": "6c7f76549db16cd331aea709a0f9f035695dee5c"
+    },
+    {
+      "name": "UnifiedMoePhaseTileMergePortsV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoePhaseTileMergePortsV5.scala",
+      "bytes": 10667,
+      "sha256": "1bb1591268ad185a5de73aef99f7a59d192dc496283f27073d0975c6e929592d",
+      "git_blob": "ec8a81b2e585ca731c390c01a1a27724330a6999"
+    },
+    {
+      "name": "UnifiedMoeProducerBindingV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeProducerBindingV5.scala",
+      "bytes": 7598,
+      "sha256": "ee3474e4139400f1db5b216cfca5b643b8739e1ce8cec40ffdfa231627a7992e",
+      "git_blob": "0b36590e6a6f765d5b4d07427515f24caa930f63"
+    },
+    {
+      "name": "UnifiedMoeRouteGroupV2.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouteGroupV2.scala",
+      "bytes": 11676,
+      "sha256": "e90d5437119274638aedd862885570e9f0f20e1e30e0ad6bbcebad25553199f1",
+      "git_blob": "85ad736bbc667ca7b15577ff6aefb30bc80e799c"
+    },
+    {
+      "name": "UnifiedMoeRoutedSelectionReaderV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRoutedSelectionReaderV5.scala",
+      "bytes": 11377,
+      "sha256": "06f53cb697518983bcab8cc5ee22b24b850176845bb5b71273e1bd9e515a7689",
+      "git_blob": "ab8c7d8295f31eacffd8f1f2c37f4328fddf928d"
+    },
+    {
+      "name": "UnifiedMoeRouterDenseV2.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouterDenseV2.scala",
+      "bytes": 5361,
+      "sha256": "22d1db98ec1d888c35ba0b13d82c338752ddc03fdf3a839721e3d2365bc05081",
+      "git_blob": "c94f8eb8553a5e44e13f8eb3c13634b038ada2f2"
+    },
+    {
+      "name": "UnifiedMoeRouterLogitReaderV2.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouterLogitReaderV2.scala",
+      "bytes": 4675,
+      "sha256": "88b8e9dcc9795ba5b75dcedfd18e855028b55e6c95b4add151d9a9ef0272c50b",
+      "git_blob": "3d0b84786a5f0fe53e758f78b800d277b3d88fcd"
+    },
+    {
+      "name": "UnifiedMoeRouterNumericalOwnerV2.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouterNumericalOwnerV2.scala",
+      "bytes": 13055,
+      "sha256": "04ef8a11a5ec90af7622232dbec2369af9b574a0a1a74eb4f9236a9c8e549316",
+      "git_blob": "dd7bf9955f4921c7b590adaacf6393104fd345b8"
+    },
+    {
+      "name": "UnifiedMoeRouterPipelineBindingV2.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouterPipelineBindingV2.scala",
+      "bytes": 10958,
+      "sha256": "380b5b7b36fe238d2444ca530e92bd1dabb8852e9d42a42f88392dcd194dae0c",
+      "git_blob": "24088f6dc2e1324e31b1b384a296a8176299e630"
+    },
+    {
+      "name": "UnifiedMoeRouterSelectionClientV2.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouterSelectionClientV2.scala",
+      "bytes": 1568,
+      "sha256": "45e1cd72b4f07b436bf469d27d9585c75e463e1f7ee547badf896c43bf211966",
+      "git_blob": "5df86bda4c4ef98bd8ff26770cd183ff42b14d3f"
+    },
+    {
+      "name": "UnifiedMoeRuntimeExpertLoopV4.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRuntimeExpertLoopV4.scala",
+      "bytes": 26467,
+      "sha256": "9a41408d5c846b1046957679731892dad7c06b177201975eeca22213d6eb8c8b",
+      "git_blob": "dcf87b6124e1d876e4301e9ff4641fbf7f78122d"
+    },
+    {
+      "name": "UnifiedMoeSharedArithmeticAdapterV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeSharedArithmeticAdapterV5.scala",
+      "bytes": 23674,
+      "sha256": "58d9fa77f6e29d0ad941573ede551537789626421e12425de30ac10609dc97d6",
+      "git_blob": "f54e84474f30058544508ae14027e4e411004818"
+    },
+    {
+      "name": "UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "bytes": 6876,
+      "sha256": "7ec87dc6e9e8520da7dbb0e4f07143497231c06de9970ced0915a5444c0c0cdc",
+      "git_blob": "2992781b59bf73ef9aef19ab9e32f45ce5b8e460"
+    },
+    {
+      "name": "UnifiedMoeSharedFfnPlanV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeSharedFfnPlanV5.scala",
+      "bytes": 4333,
+      "sha256": "ff45d2870939befe9a11c780b364a498201479a0aaedb8702c93c61466e0186b",
+      "git_blob": "ae5b9ef5981eae61dd6d06559a6083fec5b2c557"
+    },
+    {
+      "name": "UnifiedMoeSharedGateSigmoidOwnerV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeSharedGateSigmoidOwnerV5.scala",
+      "bytes": 12252,
+      "sha256": "9f6e18e36f278b0f063dbd5662ac56205347893791e67316e82bfe38d4070474",
+      "git_blob": "7e8b2605f437f5990ba76b910f2071d42589b749"
+    },
+    {
+      "name": "UnifiedOverlapProtocolV2.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedOverlapProtocolV2.scala",
+      "bytes": 1822,
+      "sha256": "55f3deac3fc4c72cd3cab922cda8f32c7f120f24e420663443993574ac76887f",
+      "git_blob": "9c57a80ebc041a21f96ca33aefc7777f3e87ec09"
+    },
+    {
+      "name": "UnifiedRuntimeProfile.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedRuntimeProfile.scala",
+      "bytes": 4003,
+      "sha256": "c6b31a4802beccee3ddce20d45a8b1ce3ef37123879b55f8177ad409dd786963",
+      "git_blob": "f3f5267da29db59cc09e3021d7ad5fad35cd82d8"
+    },
+    {
+      "name": "UnifiedScalarPolicyV2.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedScalarPolicyV2.scala",
+      "bytes": 858,
+      "sha256": "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7",
+      "git_blob": "90bd0ea5e031c95a34d636206d4f128c405a6e8a"
+    },
+    {
+      "name": "UnifiedSharedFormatProtocolV3.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedSharedFormatProtocolV3.scala",
+      "bytes": 405,
+      "sha256": "d9dcf8bfc5ae93aa87c029d91bbed303cf6b1896830a0b12a0a214250825385b",
+      "git_blob": "d5147ab3e503d7703a9c5349341c3f320a7667e6"
+    },
+    {
+      "name": "UnifiedSharedOperationProtocolV3.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedSharedOperationProtocolV3.scala",
+      "bytes": 4285,
+      "sha256": "e3dd3442eb6465cf35216ceac966580edb27ab6894d128cbc43a18a4de86b063",
+      "git_blob": "e1d0df887f9fd5ef1c08b9f2be6259f948895f84"
+    },
+    {
+      "name": "UnifiedVectorElement32BankV4.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedVectorElement32BankV4.scala",
+      "bytes": 4361,
+      "sha256": "5f2c7a375262104d9f5e081127a8de94421e80f631a96aa1fe5cceefe94d4d28",
+      "git_blob": "1a424de3087e12698cb993dc33e983158fef7f11"
+    },
+    {
+      "name": "UnifiedVectorElement32ProtocolV4.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedVectorElement32ProtocolV4.scala",
+      "bytes": 1682,
+      "sha256": "c8ed3fffbce8417c164cf1dd20999f2186842508953d1b617fda1a4ed6f3db9d",
+      "git_blob": "00de3a0b4f1c3e6ea7d5c7bbfc359075ff7d9cd6"
+    },
+    {
+      "name": "VectorSilu.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/VectorSilu.scala",
+      "bytes": 11873,
+      "sha256": "26fc929be7d68fe0bb3e8396ddcdd79114279745fc18ad14643b6b662f708c26",
+      "git_blob": "f0b752014bad201217bddedf05a2cef7421e2768"
+    },
+    {
+      "name": "WideMatrix.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/WideMatrix.scala",
+      "bytes": 5838,
+      "sha256": "54f4b52aa6cdfb09cad8481bcfff2d395357d980c8cb1d3afabcb97c5fefcb3c",
+      "git_blob": "00665f01e546e5364c471adf254e99c3e9ba1597"
+    },
+    {
+      "name": "classifyRecFN.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/classifyRecFN.scala",
+      "bytes": 2880,
+      "sha256": "787aa923a8b5f7bc13550183339fc5e38b8d3ca505dcdd3bec032dc8bb19bf16",
+      "git_blob": "cf7acfee627dd10595c5300381491798e7e46fce"
+    },
+    {
+      "name": "common.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/common.scala",
+      "bytes": 3925,
+      "sha256": "ea83cdfac50db84f372d624ce4e0d45188207164a6a1eae5d42d8174241925cb",
+      "git_blob": "eeddc6e9a7f46a08f615fb2a7c813e25dac950c5"
+    },
+    {
+      "name": "fNFromRecFN.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/fNFromRecFN.scala",
+      "bytes": 2853,
+      "sha256": "7a114540c32ef9e43152e37d1610dd5bbb68dba6b3bbd1aa5600fa3bc411fa6d",
+      "git_blob": "d5917244009b5ff506ded63b54d5c9f3b1c49008"
+    },
+    {
+      "name": "primitives.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/primitives.scala",
+      "bytes": 5105,
+      "sha256": "134cfae67052244a836aebbae3f9252b0e9bf4800ab5cbcba4b92eb1c56e7c31",
+      "git_blob": "7f5d1a332b22806864d73bd18a75f679b0779f22"
+    },
+    {
+      "name": "rawFloatFromFN.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/rawFloatFromFN.scala",
+      "bytes": 3037,
+      "sha256": "39fb14ae28318821906f68ad63803ca24eecb1115bf24aa4f3df497392357dce",
+      "git_blob": "e6135fc0143d0f9099a15f04c4c1e38bafa1b7ef"
+    },
+    {
+      "name": "rawFloatFromIN.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/rawFloatFromIN.scala",
+      "bytes": 2885,
+      "sha256": "d82c1285d20523fe0bcf7a32e2a2307ea76c3c2581ec0c329f8914004555c1e8",
+      "git_blob": "d1132c7c94335d395ca27078877769610a6c59ca"
+    },
+    {
+      "name": "rawFloatFromRecFN.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/rawFloatFromRecFN.scala",
+      "bytes": 2877,
+      "sha256": "bf7e4b0e453569c91f6a9d8c414feb3a5fed6dc7354ba31cdc8c7c0f1ffd8317",
+      "git_blob": "d11e43f1467d667be51cd65bbc441f1c9e631da1"
+    },
+    {
+      "name": "recFNFromFN.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/recFNFromFN.scala",
+      "bytes": 2352,
+      "sha256": "90060c571a38718330f8781ecc4f555096ac45a0c75abb3fe5219e06dacdbd2d",
+      "git_blob": "a10132fcccf3564a155bfe1783f897a7d453a1b2"
+    },
+    {
+      "name": "resizeRawFloat.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/resizeRawFloat.scala",
+      "bytes": 3237,
+      "sha256": "702084355b5b1d825ed0885ee2e014091d76ba08f07b071cb77bcb4cb392d561",
+      "git_blob": "423beb47e7f88633985a93842566e42998966917"
+    }
+  ],
+  "original_local_manifest_sha256": "bd7e3be79640ecb639665b31f5c8f13b38d27d495a75613f47e2e678d68f689e",
+  "scope_limits": [
+    "Source inventory only, not full numerical pass",
+    "Previous immutable proof packages untouched",
+    "No model-specific elaboration; same fixed production source closure for all five blocks"
+  ]
+}

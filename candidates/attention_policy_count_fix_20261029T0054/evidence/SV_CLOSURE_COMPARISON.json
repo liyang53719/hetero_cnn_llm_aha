@@ -1,0 +1,53 @@
+{
+  "original_evidence_sha256": "e56d85f30dbd97f6793054209a3c8167eb614a67b5fce30bee37a3bfc29816a0",
+  "publication_copy": {
+    "old_sv_sha256": "5f9e60ab5993c4cc22b1dc2828d33080e62900a940817c4f400b57007b770dd6",
+    "new_sv_sha256": "c7e9d25c128004bdfc90405171eead8a4441ba20e52e829d95de4bf1122e5d96",
+    "closures": {
+      "TransposedDenseDownOwner": {
+        "literal_sv_module_hashes": {
+          "Queue4_MatrixStreamStep": {
+            "bytes": 559249,
+            "sha256": "f98c6012f2c3467831a96d91044382c8dfa3423d80930df1ec6e35622f5bf5ae"
+          },
+          "TransposedDenseDownOwner": {
+            "bytes": 64823522,
+            "sha256": "794ebe152065096da9fe452adb4146a1d83165318cf83a0ac910f47a2333508c"
+          },
+          "TransposedDownDenseBanks": {
+            "bytes": 1324573,
+            "sha256": "84146f5c4d70c67b8921608b75ce1b8a932a3c6e217e6003be45f51e52892dd7"
+          }
+        },
+        "external_modules_require_separate_physical_source_pins": [],
+        "status": "PASS_LITERAL_SIMULATION_SV_CLOSURE_ONLY"
+      },
+      "MatrixPipelineService": {
+        "literal_sv_module_hashes": {
+          "MatrixAccumulatorSeedController": {
+            "bytes": 70587,
+            "sha256": "646b31ad96a87647d672187f1f001450484170889a20e409b2bca1592c8a0bb0"
+          },
+          "MatrixPipelineService": {
+            "bytes": 4388719,
+            "sha256": "3f0078d25ae49d70bc62394fba01fdb8af0074ce49dc920ca2dbfb9f7405cdae"
+          },
+          "MatrixResultFifo": {
+            "bytes": 1732523,
+            "sha256": "9a18c2250135b420534ba0d0265569ca56a22cf49a522c21fcfd4b44ca34705d"
+          },
+          "Queue8_Meta": {
+            "bytes": 13148,
+            "sha256": "3058a55ab94e7b3459515969739268081fcd22f4bdf38656717a22fc990f5187"
+          }
+        },
+        "external_modules_require_separate_physical_source_pins": [
+          "qwen2_matrix_command_endpoint",
+          "tc_clk_gating"
+        ],
+        "status": "PASS_LITERAL_SIMULATION_SV_CLOSURE_ONLY"
+      }
+    },
+    "limitations": "C++ reuse additionally requires identical physical provider files, tool/build flags and hierarchy wrapper contracts; not full numerical PASS"
+  }
+}

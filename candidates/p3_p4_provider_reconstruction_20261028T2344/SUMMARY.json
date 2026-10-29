@@ -1,0 +1,39 @@
+{
+  "status": "PASS_INPUT_ONLY_PROVIDER_CPP_BOUNDARIES_AND_NEGATIVE_GUARDS",
+  "profiles": [
+    {
+      "profile": 3,
+      "native_count": 18,
+      "RO_bytes": 1688220352,
+      "probe_records": 2480,
+      "commands": 13,
+      "descriptors": 199,
+      "source_spec_sha256": "46de641f77dec08c11309882214ef21f32b950007411f1853eb133d86941855d"
+    },
+    {
+      "profile": 4,
+      "native_count": 15,
+      "RO_bytes": 1673163776,
+      "probe_records": 2458,
+      "commands": 18,
+      "descriptors": 241,
+      "source_spec_sha256": "10d07e74a5d295ffb65a5ed25e78a4cc356a1baa02f78a81a38b9cba99fc2553"
+    }
+  ],
+  "native_tensors_rehashed": 33,
+  "all_experts_per_profile": 256,
+  "total_probe_records": 4938,
+  "total_probe_bytes": 318277,
+  "cases": 12,
+  "dut_executed": false,
+  "chisel_complete_numerical_pass": false,
+  "rtl_complete_numerical_pass": false,
+  "full_logical_stream_hash_claimed": false,
+  "resource_limits": {
+    "sequential": true,
+    "address_space_bytes": 2684354560,
+    "per_case_cpu_seconds": 60,
+    "per_case_wall_seconds": 90
+  },
+  "temporary_files": "All old attempts, logs, binary probe, actual configs and private probes retained locally; no deletion; no weights/data/probe hex in portable whitelist."
+}

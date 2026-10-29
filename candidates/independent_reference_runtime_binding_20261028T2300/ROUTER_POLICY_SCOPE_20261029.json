@@ -1,0 +1,25 @@
+{
+  "status": "DIAGNOSTIC_NOT_DUT_NOT_ACCEPTANCE",
+  "original_torch_topk_unchanged": true,
+  "small_id_acceptance": "PENDING_USER_DECISION",
+  "profiles": [
+    {
+      "profile": 3,
+      "boundary_ties": 18,
+      "hypothetical_selected_set_difference": 10
+    },
+    {
+      "profile": 4,
+      "boundary_ties": 8,
+      "hypothetical_selected_set_difference": 4
+    }
+  ],
+  "tokens": 128,
+  "actual_dut_mismatches": "NOT_OBSERVED_NO_DUT_RUN",
+  "diagnostic_pins": {
+    "router_actual_P3_20261028T2349/diagnostic.json": "830c20de5dad14fc255b7f6f432be4d81dabe16849784152989180d83edaa614",
+    "router_actual_P4_20261028T2349/diagnostic.json": "3aa6f72bce2344c141dcf55fa145e308c8feb214de084318626a2868691a31b4",
+    "router_hypothetical_P3_20261028T2351/diagnostic.json": "1d598677528e241466f29ed54284d84ae70703a52c7f725f021f994bccfaa5e4",
+    "router_hypothetical_P4_20261028T2351/diagnostic.json": "fd3dcd946013b992a071bf48bbb6d6e9796064a6315c4df53dc86a7d72c37cff"
+  }
+}

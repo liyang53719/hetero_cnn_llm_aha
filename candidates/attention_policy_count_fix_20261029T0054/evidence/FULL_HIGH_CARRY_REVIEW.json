@@ -1,0 +1,17 @@
+{
+  "original_evidence_sha256": "8cec5ed98d266ab91e20a13f75f538ed60e3b32113d5ec45f4ada89c8ece8247",
+  "publication_copy": {
+    "status": "PASS_FULL_PRODUCTION_HIGH_CARRY_STRUCTURE_ONLY",
+    "high_sha256": "06d3ae6af7be47d4161861a1447a94b4ad2bb5e431eab5b5c29a653d1b6f10b1",
+    "lines": [
+      "    node attentionPolicySlot = mux(kv, UInt<1>(\"h0\"), _attentionPolicySlot_T) @[workspace/scratch/f28987e955ed/attention_policy_count_fix_20261029T0054/HostBlockCommandsV4.scala 287:30]",
+      "    node attentionContextSlot = tail(_attentionContextSlot_T, 1) @[workspace/scratch/f28987e955ed/attention_policy_count_fix_20261029T0054/HostBlockCommandsV4.scala 288:47]",
+      "      node countPolicy = add(attentionContextSlot, UInt<1>(\"h1\")) @[workspace/scratch/f28987e955ed/attention_policy_count_fix_20261029T0054/HostBlockCommandsV4.scala 997:43]",
+      "      node used_9_1 = lt(UInt<1>(\"h0\"), countPolicy) @[workspace/scratch/f28987e955ed/attention_policy_count_fix_20261029T0054/HostBlockCommandsV4.scala 999:87]",
+      "      node used_10_1 = lt(UInt<1>(\"h1\"), countPolicy) @[workspace/scratch/f28987e955ed/attention_policy_count_fix_20261029T0054/HostBlockCommandsV4.scala 999:87]",
+      "      node used_11_1 = lt(UInt<2>(\"h2\"), countPolicy) @[workspace/scratch/f28987e955ed/attention_policy_count_fix_20261029T0054/HostBlockCommandsV4.scala 999:87]",
+      "      node used_12 = lt(UInt<2>(\"h3\"), countPolicy) @[workspace/scratch/f28987e955ed/attention_policy_count_fix_20261029T0054/HostBlockCommandsV4.scala 999:87]"
+    ],
+    "limitations": "add retains carry in FIRRTL high; still require low/SV width verification and full hardware numerical regression"
+  }
+}

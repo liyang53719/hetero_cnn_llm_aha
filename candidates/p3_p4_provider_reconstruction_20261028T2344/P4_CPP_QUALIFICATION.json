@@ -1,0 +1,50 @@
+{
+  "status": "PASS_INPUT_ONLY_CPP_BOUNDARIES_AND_NEGATIVE_ADMISSION",
+  "dut_executed": false,
+  "complete_block_numeric_pass": false,
+  "cases": [
+    {
+      "case": "actual",
+      "expected_accept": true,
+      "exit_code": 0,
+      "stdout": "PASS_INPUT_ONLY_PROVIDER_INDEPENDENT_BYTES profile=4 records=2458 bytes=158554 DUT_NOT_EXECUTED",
+      "stderr": ""
+    },
+    {
+      "case": "source_sha_corrupt",
+      "expected_accept": false,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "source SHA256 mismatch"
+    },
+    {
+      "case": "independent_probe_corrupt",
+      "expected_accept": false,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "independent actual byte mismatch"
+    },
+    {
+      "case": "missing_input_view",
+      "expected_accept": false,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "readonly allocation missing views"
+    },
+    {
+      "case": "missing_last_expert",
+      "expected_accept": false,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "unmapped immutable byte"
+    },
+    {
+      "case": "gate_up_half_swap",
+      "expected_accept": false,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "independent actual byte mismatch"
+    }
+  ],
+  "probe_binary_sha256": "3de2b3fc2c7e60c5ed4d214bfb3416e5b673933e7ae38ae31fd39b22f943c5f3"
+}

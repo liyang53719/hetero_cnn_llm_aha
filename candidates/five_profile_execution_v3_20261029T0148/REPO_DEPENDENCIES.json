@@ -1,0 +1,167 @@
+{
+  "base_commit": "b612426636f469a7f10142d343574d2c4f2053f9",
+  "files": [
+    {
+      "source_reference": "fresh_chisel_closure_r2_20261028T2103/staged/GdnRuntimeConv4OwnerRecoveredV7.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeConv4OwnerRecoveredV7.scala",
+      "sha256": "b80c596ac832ef8140288a0c8a49e01007bff750af4a2eb9a6594e8649d7abf1",
+      "git_blob": "cb8fc36e742c33012b06ebc49eb2913bd1617355"
+    },
+    {
+      "source_reference": "fresh_chisel_closure_r2_20261028T2103/staged/GdnRuntimeChunkExecuteOwnerV8.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeChunkExecuteOwnerV8.scala",
+      "sha256": "b4bc9397b88bc4542b72213fa14aad5b4df5e428881e96e2fd3893a49af3c15e",
+      "git_blob": "d81ddd295a9dd2b7398e7cf6c0cbc164966b9060"
+    },
+    {
+      "source_reference": "fresh_chisel_closure_r2_20261028T2103/staged/GdnChunkStateTransferOwner.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnChunkStateTransferOwner.scala",
+      "sha256": "8cdcf2d6a88306844f9a66ab828743e5948ee7b8b739b0933304d84eb85e6b85",
+      "git_blob": "884531df8479edb783d50d0dbf54065ada992bbc"
+    },
+    {
+      "source_reference": "fresh_chisel_closure_r2_20261028T2103/staged/GdnChunkAddressPlan.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnChunkAddressPlan.scala",
+      "sha256": "f8534849bad082b77de88cf2cef43558a91f045122694640e9f33391f101b943",
+      "git_blob": "bdb64b8b07cb79dd5730d987d9412469642f8893"
+    },
+    {
+      "source_reference": "fresh_chisel_closure_r2_20261028T2103/staged/Bf16KvAppendRuntimeOwnerV13.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/Bf16KvAppendRuntimeOwnerV13.scala",
+      "sha256": "a6d436464c65d290a0a803ca4b821b6d6b089ef5fb5ed49a7fac38d9b9a90ca0",
+      "git_blob": "2dcaaadc2b96821257b6039db48c994ad52369ac"
+    },
+    {
+      "source_reference": "fresh_chisel_closure_r2_20261028T2103/assembled_host93/scala/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "repo_path": "development_snapshots/canonical_host_observation_taps_source_20261017/candidate/Qwen2Block.scala",
+      "sha256": "a6e7f781dd46063a7373c712f7d8eda289038e0be51e0f9184f382fe26805491",
+      "git_blob": "859c64dbed45bf48f3b46e53f00580c1e4868070"
+    },
+    {
+      "source_reference": "hetero_verified_recovery_20261028T2035/work/reference_runtime_recovery_20261028T2259/runtime/site-packages/transformers/models/qwen3_5/modeling_qwen3_5.py",
+      "external_module": "transformers.models.qwen3_5.modeling_qwen3_5",
+      "sidecar_repo_path": "candidates/independent_reference_runtime_binding_20261028T2300/QWEN35_08B_SOURCE_SIDECAR.json",
+      "sha256": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+      "framework_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+      "sidecar_module_covered": true,
+      "scope": "STATIC_LAYOUT_AUXILIARY_NOT_COMPLETE_RUNTIME_CLOSURE"
+    },
+    {
+      "source_reference": "hetero_verified_recovery_20261028T2035/candidates/fresh_original_top_recovery_20261028/source/HostRuntimeMoePhaseAllocatorV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostRuntimeMoePhaseAllocatorV5.scala",
+      "sha256": "c8c5012b3463e64cc0ecd0066d3e0e9ff4df773c2ee40e144d03f0274dbf69c6",
+      "git_blob": "5c3b6bf4c59d67d274c00d0e17eb9499a1705266"
+    },
+    {
+      "source_reference": "hetero_verified_recovery_20261028T2035/candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouteGroupV2.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouteGroupV2.scala",
+      "sha256": "e90d5437119274638aedd862885570e9f0f20e1e30e0ad6bbcebad25553199f1",
+      "git_blob": "85ad736bbc667ca7b15577ff6aefb30bc80e799c"
+    },
+    {
+      "source_reference": "hetero_verified_recovery_20261028T2035/candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouterNumericalOwnerV2.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouterNumericalOwnerV2.scala",
+      "sha256": "04ef8a11a5ec90af7622232dbec2369af9b574a0a1a74eb4f9236a9c8e549316",
+      "git_blob": "dd7bf9955f4921c7b590adaacf6393104fd345b8"
+    },
+    {
+      "source_reference": "fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeRouterDenseV2.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouterDenseV2.scala",
+      "sha256": "22d1db98ec1d888c35ba0b13d82c338752ddc03fdf3a839721e3d2365bc05081",
+      "git_blob": "c94f8eb8553a5e44e13f8eb3c13634b038ada2f2"
+    },
+    {
+      "source_reference": "fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeRouterLogitReaderV2.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouterLogitReaderV2.scala",
+      "sha256": "88b8e9dcc9795ba5b75dcedfd18e855028b55e6c95b4add151d9a9ef0272c50b",
+      "git_blob": "3d0b84786a5f0fe53e758f78b800d277b3d88fcd"
+    },
+    {
+      "source_reference": "fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeRuntimeExpertLoopV4.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRuntimeExpertLoopV4.scala",
+      "sha256": "9a41408d5c846b1046957679731892dad7c06b177201975eeca22213d6eb8c8b",
+      "git_blob": "dcf87b6124e1d876e4301e9ff4641fbf7f78122d"
+    },
+    {
+      "source_reference": "fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeDenseWritebackV2.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeDenseWritebackV2.scala",
+      "sha256": "cd8606b3769c38e9286557a56a5d0a2db6e31bbdfc2929eead2be65e41177b52",
+      "git_blob": "bb72f3b8b935444f314f9585b54fefb2deeb6ca5"
+    },
+    {
+      "source_reference": "fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeSharedFfnPlanV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeSharedFfnPlanV5.scala",
+      "sha256": "ff45d2870939befe9a11c780b364a498201479a0aaedb8702c93c61466e0186b",
+      "git_blob": "ae5b9ef5981eae61dd6d06559a6083fec5b2c557"
+    },
+    {
+      "source_reference": "fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeSharedGateSigmoidOwnerV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeSharedGateSigmoidOwnerV5.scala",
+      "sha256": "9f6e18e36f278b0f063dbd5662ac56205347893791e67316e82bfe38d4070474",
+      "git_blob": "7e8b2605f437f5990ba76b910f2071d42589b749"
+    },
+    {
+      "source_reference": "fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoePhaseMergeOwnerV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoePhaseMergeOwnerV5.scala",
+      "sha256": "a92404dab262fbb825a14d8fe769f19b50093374d49b11d7071ccf4cef8d2eeb",
+      "git_blob": "600e12c48fe87197b8ebaf5aaff634ccc9fa3361"
+    },
+    {
+      "source_reference": "fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoePhaseResidualOwnerV5.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoePhaseResidualOwnerV5.scala",
+      "sha256": "53faa826ef155850b424b2a111f30d40417970ebfc3bb1d389f843be608af9cf",
+      "git_blob": "6c7f76549db16cd331aea709a0f9f035695dee5c"
+    },
+    {
+      "source_reference": "fresh_chisel_closure_r2_20261028T2103/staged/HostBlockCommandsV4.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostBlockCommandsV4.scala",
+      "sha256": "d25425714cd0b123a0b5924568311f5faa8c9116a3026d53f3e5ebcfae0df108",
+      "git_blob": "05d38e214febc22c0c6658a3623b74aeee0ff099"
+    },
+    {
+      "source_reference": "fresh_chisel_closure_r2_20261028T2103/staged/TransposedDenseOwner.scala",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/TransposedDenseOwner.scala",
+      "sha256": "961f4e650b499fc1f15918d2e0f6aa51b4905431ba35ba681a609c98b42c5d14",
+      "git_blob": "a092d43d545a49155d7e081496220438c1191bf8"
+    },
+    {
+      "source_reference": "p3_p4_provider_reconstruction_20261028T2344/actual/profile3/manifest.json",
+      "reproduction_receipt": "candidates/p3_p4_provider_reconstruction_20261028T2344/REBUILD_RECEIPT.json",
+      "profile": 3,
+      "sha256": "b6688e1bdb27798bff13ee4a021d8e9399fb1a62fc63e76be0319b11055dcd88",
+      "scope": "LOCAL_REBUILDABLE_PROVIDER_METADATA_NOT_PAYLOAD"
+    },
+    {
+      "source_reference": "p3_p4_provider_reconstruction_20261028T2344/actual/profile4/manifest.json",
+      "reproduction_receipt": "candidates/p3_p4_provider_reconstruction_20261028T2344/REBUILD_RECEIPT.json",
+      "profile": 4,
+      "sha256": "76d250f135093d4bfbc11c641803b9481d3befd4f6dd6d8540d406b88c2b0cdb",
+      "scope": "LOCAL_REBUILDABLE_PROVIDER_METADATA_NOT_PAYLOAD"
+    },
+    {
+      "source_reference": "hetero_verified_recovery_20261028T2035/work/reference_runtime_35b_20261028T2302/runtime/site-packages/transformers/models/qwen3_5_moe/modeling_qwen3_5_moe.py",
+      "external_module": "transformers.models.qwen3_5_moe.modeling_qwen3_5_moe",
+      "sidecar_repo_path": "candidates/independent_reference_runtime_binding_20261028T2300/QWEN35_35B_SOURCE_SIDECAR.json",
+      "sha256": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30",
+      "framework_revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c",
+      "sidecar_module_covered": true,
+      "scope": "STATIC_LAYOUT_AUXILIARY_NOT_COMPLETE_RUNTIME_CLOSURE"
+    }
+  ],
+  "scope": "Source layout only; driver uncompiled and DUT never executed",
+  "compile_headers": {
+    "candidates/host_runtime_non_dpi_backend/source/affine_tsv_loader.hpp": {
+      "bytes": 3481,
+      "sha256": "1578973b0dc612be48ec7562b41993e8085646cf649c6f554308c09442ac7211"
+    },
+    "candidates/host_runtime_non_dpi_backend/source/affine_readonly_memory.hpp": {
+      "bytes": 6362,
+      "sha256": "e98eddb0095a56c6e0a51238d51e222a4ec2aa8d724d898128d70a545def409a"
+    },
+    "candidates/host_runtime_non_dpi_backend/source/sparse_write_memory.hpp": {
+      "bytes": 1979,
+      "sha256": "63206761274600c98352aea72281cee305d33a96e406a74bc51f665484845368"
+    }
+  },
+  "generated_header": "VHostBlockTopV4.h not available; compile explicitly INCOMPLETE"
+}

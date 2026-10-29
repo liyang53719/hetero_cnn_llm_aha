@@ -1,0 +1,26 @@
+{
+  "status": "SOURCE_ONLY_PORTABLE_PACKAGE",
+  "files": [
+    {
+      "path": "AttentionPolicyCountExpressionTest.scala",
+      "bytes": 2450,
+      "sha256": "6b595ef567fc8c9bec0072426081fb616b0988a6cbdf1719de598773e29692b7"
+    },
+    {
+      "path": "reproduce_plan.py",
+      "bytes": 3679,
+      "sha256": "42c6a935078ebf5bd4db40d98ad17b34c93489212da4b9a7d17511bea8b8d3a7"
+    },
+    {
+      "path": "DEPENDENCY_CONTRACT.json",
+      "bytes": 497,
+      "sha256": "49b09aad2233eafae8bf5dcd8ae0fd430200d2d898990ec479dfa8bb39dfe6ca"
+    },
+    {
+      "path": "README_CN.md",
+      "bytes": 2158,
+      "sha256": "aef5a038d18e4f1022fc955698fd219f3d34d84eb1473b922685835e1fc48a1a"
+    }
+  ],
+  "scope": "no new EDA run; actual micro source unchanged; source-check normal/-O identical"
+}

@@ -5,6 +5,22 @@ from frontend_telemetry import typed_metrics
 from safe_diagnostics import stage_diagnostics
 from build_error_samples import full_build_errors,sample
 BUILD=['archive_bf16_context_lane_cluster16_rev8b_b_candidate_d','archive_qwen2_matrix_command_endpoint_0','archive_TransposedDenseDownOwner','host_archive','host_link']
+def bounded_payload_identity(value,expanded,manifest_bytes):
+ """Public hashes/sizes only; no path, bytes, availability or numeric assertion."""
+ keys={'binary','sv','driver','source_manifest','tool_manifest','build_receipt'}
+ if not isinstance(value,dict) or set(value)!=keys:raise ValueError('six identity keys')
+ if type(expanded)is not int or type(manifest_bytes)is not int or not 0<manifest_bytes<=65536 or not manifest_bytes<expanded<=4*1024**3:raise ValueError('identity total bounds')
+ result={}
+ for k in sorted(keys):
+  v=value[k]
+  if not isinstance(v,dict)or set(v)!={'sha256','bytes'}:raise ValueError('hash and size only')
+  h=v['sha256'];n=v['bytes']
+  if not isinstance(h,str)or re.fullmatch('[0-9a-f]{64}',h)is None or type(n)is not int or not 0<n<=4*1024**3:raise ValueError('identity bounded scalars')
+  result[k]={'sha256':h,'bytes':n}
+ if sum(v['bytes']for v in result.values())+manifest_bytes!=expanded:raise ValueError('identity expanded size mismatch')
+ if result['driver']['sha256']!='20df2692d41693491f0da03fa17f21886b9375ca599c83b5b75c0994841dc45e':raise ValueError('driver identity')
+ return result
+
 def build_summary(root,commit):
  result=summarize(root,commit);result['schema']='BUILD_ONLY_SUMMARY_V1';result['completed']=False
  for name,p in [('compile_tools',root/'stage_compile_tools/RESULT.json')]+[(n,root/'frontend'/n/'RESULT.json')for n in BUILD]:
@@ -42,6 +58,13 @@ def build_summary(root,commit):
   if not re.fullmatch('[0-9a-f]{64}',h)or r['status']!='PASS_BINARY_BUILD_AND_FROZEN_ARTIFACT_ONLY_NO_NUMERICS':raise ValueError('build result identity')
   if any(type(a.get(k))is not int or not 0<=a[k]<=4*1024**3 for k in ('files','expanded_bytes'))or type(manifest.get('bytes'))is not int or not 0<=manifest['bytes']<=65536:raise ValueError('artifact bounded scalars')
   result['completed']=True;result['artifact']={'manifest_sha256':h,'manifest_bytes':manifest['bytes'],'files':a['files'],'expanded_bytes':a['expanded_bytes'],'scope':a['scope']}
+  if 'payload_identity' in a:
+   try:
+    result['artifact']['payload_identity']=bounded_payload_identity(a['payload_identity'],a['expanded_bytes'],manifest['bytes'])
+    result['artifact']['payload_identity_status']='EXPORTED_HASHES_ONLY_NOT_DOWNLOADABLE'
+   except ValueError:result['artifact']['payload_identity_status']='INVALID_IDENTITY_METADATA_NOT_EXPORTED'
+  else:result['artifact']['payload_identity_status']='NOT_EXPORTED_IN_ORIGINAL_RESULT'
+
  return result
 def encode_build_summary(result):
  # Never lose termination evidence when optional compiler excerpts fill the cap.

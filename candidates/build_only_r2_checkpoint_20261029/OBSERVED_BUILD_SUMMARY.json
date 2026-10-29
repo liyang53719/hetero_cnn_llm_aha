@@ -1,0 +1,212 @@
+{
+  "schema": "BUILD_ONLY_R2_OBSERVED_SUMMARY_CHECKPOINT_V1",
+  "scope": "PASS_ARCHIVE_LINK_AND_JOB_LOCAL_PACK_ONLY_NOT_DUT_NUMERICS",
+  "run_id": 40862676969,
+  "job_id": 123409571999,
+  "attempt": 1,
+  "url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40862676969",
+  "source_commit": "10a30bcf614af2d11ea9aaf3e61469fafd9801dc",
+  "launch_commit": "ef6a5fcd95ff643c3d6527f91e4a80e5a1c914a6",
+  "run_updated_at": "2026-10-29T11:53:08Z",
+  "summary_artifact_id": 12894603598,
+  "summary_bytes": 48630,
+  "summary_sha256": "dd4d06f325371ff3c9b96fc0ef56e44c43c81dccc7b4745d88b9d6fe61e039cb",
+  "zip_bytes": 8419,
+  "zip_sha256": "96fe87f3c5f86b94f3ae100741e88f476b79ba532265537b82284619dd977aa3",
+  "stages": [
+    {
+      "stage": "jdk",
+      "native_exit": 0,
+      "elapsed_seconds": 13.402162185999998,
+      "peak_rss_bytes": 19689472
+    },
+    {
+      "stage": "jars",
+      "native_exit": 0,
+      "elapsed_seconds": 8.418476270000006,
+      "peak_rss_bytes": 39149568
+    },
+    {
+      "stage": "verilator",
+      "native_exit": 0,
+      "elapsed_seconds": 2.7466285830000032,
+      "peak_rss_bytes": 9830400
+    },
+    {
+      "stage": "idma",
+      "native_exit": 0,
+      "elapsed_seconds": 7.078830326000002,
+      "peak_rss_bytes": 72306688
+    },
+    {
+      "stage": "matrix",
+      "native_exit": 0,
+      "elapsed_seconds": 2.7966980710000087,
+      "peak_rss_bytes": 10199040
+    },
+    {
+      "stage": "binding",
+      "native_exit": 0,
+      "elapsed_seconds": 3.268895733000008,
+      "peak_rss_bytes": 10223616
+    },
+    {
+      "stage": "compile155",
+      "native_exit": 0,
+      "elapsed_seconds": 129.311962648,
+      "peak_rss_bytes": 1524891648
+    },
+    {
+      "stage": "helper_compile",
+      "native_exit": 0,
+      "elapsed_seconds": 21.498882788999992,
+      "peak_rss_bytes": 325931008
+    },
+    {
+      "stage": "original_high",
+      "native_exit": 0,
+      "elapsed_seconds": 187.46589888900002,
+      "peak_rss_bytes": 4047802368
+    },
+    {
+      "stage": "canonical_micro",
+      "native_exit": 0,
+      "elapsed_seconds": 6.040988729999981,
+      "peak_rss_bytes": 24686592
+    },
+    {
+      "stage": "canonical_full",
+      "native_exit": 0,
+      "elapsed_seconds": 28.50314668499999,
+      "peak_rss_bytes": 2244464640
+    },
+    {
+      "stage": "transform_new_toolchain",
+      "native_exit": 0,
+      "elapsed_seconds": 25.212079769000013,
+      "peak_rss_bytes": 2055249920
+    },
+    {
+      "stage": "emit_host",
+      "native_exit": 0,
+      "elapsed_seconds": 237.924672633,
+      "peak_rss_bytes": 4170440704
+    },
+    {
+      "stage": "sv_identity",
+      "native_exit": 0,
+      "elapsed_seconds": 109.76267884900005,
+      "peak_rss_bytes": 17895424
+    },
+    {
+      "stage": "emit_fma",
+      "native_exit": 0,
+      "elapsed_seconds": 10.281398792000005,
+      "peak_rss_bytes": 202481664
+    },
+    {
+      "stage": "subset",
+      "native_exit": 0,
+      "elapsed_seconds": 7.493912211000065,
+      "peak_rss_bytes": 604315648
+    },
+    {
+      "stage": "frontend",
+      "native_exit": 0,
+      "elapsed_seconds": 67.43126080600007,
+      "peak_rss_bytes": 5399818240
+    },
+    {
+      "stage": "frontend_native_Vbf16_context_lane_cluster16_rev8b_b_candidate_d",
+      "native_exit": 0,
+      "elapsed_seconds": 37.81052268999997,
+      "peak_rss_bytes": 4473204736
+    },
+    {
+      "stage": "frontend_native_Vqwen2_matrix_command_endpoint_0",
+      "native_exit": 0,
+      "elapsed_seconds": 78.0446456410001,
+      "peak_rss_bytes": 4521287680
+    },
+    {
+      "stage": "frontend_native_VTransposedDenseDownOwner",
+      "native_exit": 0,
+      "elapsed_seconds": 166.452784908,
+      "peak_rss_bytes": 4784467968
+    },
+    {
+      "stage": "frontend_native_VHostBlockTopV4",
+      "native_exit": 0,
+      "elapsed_seconds": 355.401510228,
+      "peak_rss_bytes": 9592324096
+    },
+    {
+      "stage": "compile_tools",
+      "native_exit": 0,
+      "elapsed_seconds": 28.610619740999994,
+      "peak_rss_bytes": 22261760
+    },
+    {
+      "stage": "archive_bf16_context_lane_cluster16_rev8b_b_candidate_d",
+      "native_exit": 0,
+      "elapsed_seconds": 22.904014491999988,
+      "peak_rss_bytes": 161738752
+    },
+    {
+      "stage": "archive_qwen2_matrix_command_endpoint_0",
+      "native_exit": 0,
+      "elapsed_seconds": 105.51708343500013,
+      "peak_rss_bytes": 166928384
+    },
+    {
+      "stage": "archive_TransposedDenseDownOwner",
+      "native_exit": 0,
+      "elapsed_seconds": 266.129350769,
+      "peak_rss_bytes": 3923709952
+    },
+    {
+      "stage": "host_archive",
+      "native_exit": 0,
+      "elapsed_seconds": 823.9845193869999,
+      "peak_rss_bytes": 1595613184
+    },
+    {
+      "stage": "host_link",
+      "native_exit": 0,
+      "elapsed_seconds": 16.572523361000094,
+      "peak_rss_bytes": 175546368
+    }
+  ],
+  "all_watchdog_reasons_empty": true,
+  "all_cleanup_complete": true,
+  "all_log_EOF_and_join_complete": true,
+  "sv_identity": {
+    "status": "PASS_SV_SOURCEINFO_DIRECTORY_IDENTITY_ONLY_NO_NUMERICS",
+    "expected_normalized_sha256": "6555ede34ba2980a6ebfddb13325ffb14734063d3253fdadd493bfcb4bf67bb5",
+    "actual_normalized_sha256": "6555ede34ba2980a6ebfddb13325ffb14734063d3253fdadd493bfcb4bf67bb5",
+    "raw_sha256": "c8e6b1c8faf26831d46daea019b70347c1ae441621aa6de3ed69c14b38fd2f53",
+    "scanner_sha256": "b49c75780d2bfb295d3e90df6d478475f42c3129dba73c850b4d564e4114965b",
+    "phase": "complete",
+    "error_code": null,
+    "exception_class": null,
+    "bytes": 222202215,
+    "counts": {
+      "recognized_sourceinfo_comments": 871649,
+      "directory_changed_comments": 871649
+    }
+  },
+  "job_local_pack": {
+    "manifest_sha256": "6fbc78a408600d17c081f2fde8b70651499b15d3ff26d354b7ae7480475a7374",
+    "manifest_bytes": 1683,
+    "files": 7,
+    "expanded_bytes": 366163598,
+    "scope": "ONE_SHARED_BINARY_FROZEN_NOT_UPLOADED_NOT_EXECUTED"
+  },
+  "max_observed_aggregate_tree_bytes": 4929358855,
+  "binary_sha256_retained": false,
+  "binary_bytes_retained": false,
+  "full_build_receipt_retained": false,
+  "artifact_download_for_binary_verified": false,
+  "numerical_profiles_passed": 0,
+  "effective_mac_utilization_measured": false
+}

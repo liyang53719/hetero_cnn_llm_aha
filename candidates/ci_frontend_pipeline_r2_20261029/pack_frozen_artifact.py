@@ -1,10 +1,26 @@
 """Flat seven-file frozen binary artifact; no weights, inputs, references or DUT run."""
-import pathlib,json,shutil,hashlib
+import pathlib,json,shutil,hashlib,re
 from build_producer import need,check_pins,artifact_manifest,DRIVER_SHA
 
 def sha(p):
  with pathlib.Path(p).open('rb')as f:return hashlib.file_digest(f,'sha256').hexdigest()
 def pin(p):return dict(path=str(pathlib.Path(p).resolve()),bytes=pathlib.Path(p).stat().st_size,sha256=sha(p))
+def bounded_payload_identity(value,expanded,manifest_bytes):
+ """Public hashes/sizes only; no path, bytes, availability or numeric assertion."""
+ keys={'binary','sv','driver','source_manifest','tool_manifest','build_receipt'}
+ if not isinstance(value,dict) or set(value)!=keys:raise ValueError('six identity keys')
+ if type(expanded)is not int or type(manifest_bytes)is not int or not 0<manifest_bytes<=65536 or not manifest_bytes<expanded<=4*1024**3:raise ValueError('identity total bounds')
+ result={}
+ for k in sorted(keys):
+  v=value[k]
+  if not isinstance(v,dict)or set(v)!={'sha256','bytes'}:raise ValueError('hash and size only')
+  h=v['sha256'];n=v['bytes']
+  if not isinstance(h,str)or re.fullmatch('[0-9a-f]{64}',h)is None or type(n)is not int or not 0<n<=4*1024**3:raise ValueError('identity bounded scalars')
+  result[k]={'sha256':h,'bytes':n}
+ if sum(v['bytes']for v in result.values())+manifest_bytes!=expanded:raise ValueError('identity expanded size mismatch')
+ if result['driver']['sha256']!='20df2692d41693491f0da03fa17f21886b9375ca599c83b5b75c0994841dc45e':raise ValueError('driver identity')
+ return result
+
 def pack(original,b,built,host,overlay,out,budget_check):
  need(built['status']=='BUILT_UNQUALIFIED','actual build result required')
  need(built['scope']=='ARCHIVE_LINK_ONLY_NOT_DUT_PASS','build-only scope')
@@ -38,4 +54,6 @@ def pack(original,b,built,host,overlay,out,budget_check):
  need(mf.stat().st_size<=65536 and len(list(root.iterdir()))==7 and sum(p.stat().st_size for p in root.iterdir())<=4*1024**3,'seven-file whitelist and bounded manifest/expanded artifact')
  check_pins(b['pins']);check_pins(b['admission']['make_closure_pins'])
  budget_check(0)
- return dict(manifest=pin(mf),files=7,expanded_bytes=sum(p.stat().st_size for p in root.iterdir()),scope='ONE_SHARED_BINARY_FROZEN_NOT_UPLOADED_NOT_EXECUTED')
+ expanded=sum(p.stat().st_size for p in root.iterdir())
+ identities=bounded_payload_identity({k:{'sha256':sha(v),'bytes':v.stat().st_size} for k,v in files.items()},expanded,mf.stat().st_size)
+ return dict(manifest=pin(mf),files=7,expanded_bytes=expanded,payload_identity=identities,scope='ONE_SHARED_BINARY_FROZEN_NOT_UPLOADED_NOT_EXECUTED')

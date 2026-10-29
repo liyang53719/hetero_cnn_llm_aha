@@ -1,5 +1,13 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-29 最新实测：共同 binary 构建通过，完整数值仍 INCOMPLETE 0/5
+
+LOCAL_DATA R2 [run40862676969](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40862676969) / source `10a30bcf614af2d11ea9aaf3e61469fafd9801dc` / launch `ef6a5fcd95ff643c3d6527f91e4a80e5a1c914a6` 于 11:53:08 UTC 结束 SUCCESS。**PASS 精确范围：固定完整4096 MAC / Vector32 源码重新生成、SV身份、四原生frontend、真实三子库/Host库编译及Host链接、本job内七文件冻结检查；不是 DUT 执行或数值回归。** 27个记录阶段均native0，watchdog reason为空，cleanup/日志EOF完整。没有缩硬件、替换算术或放宽原资源上限。
+
+只上传受控summary artifact `12894603598`，48630B / SHA `dd4d06f325371ff3c9b96fc0ef56e44c43c81dccc7b4745d88b9d6fe61e039cb`。本job报告七文件366163598B，manifest1683B / SHA `6fbc78a408600d17c081f2fde8b70651499b15d3ff26d354b7ae7480475a7374`；**binary/SV/完整manifest与build receipt未上传，binary独立SHA未导出，不能独立重新核验该临时ELF，也不能声称原binary可供五job下载复用**。源码pack执行了ELF64LE和稳定hash检查；该执行结果不等于目前仍持有二进制。原R1失败与其具体文件UNKNOWN记录保留。
+
+下一步只准备经审同一job内数值执行与受控hash/size摘要方案，避免把跨job不可用产物当可恢复输入；不为补hash而重复构建。未来新增摘要字段不得逆推本轮缺失的binary/tool/build-receipt哈希。公开七文件上传仍未获准，无新launch由本checkpoint触发。五块完整M128原始Chisel及最终RTL数值仍 **INCOMPLETE 0/5**；80%/90%利用率目标未变，无有效MAC RTL实测。详见[构建证据与范围](../candidates/build_only_r2_checkpoint_20261029/README_CN.md)。
+
 ## 2026-10-29 LOCAL_DATA 构建准入失败及源码修复候选（FAIL / TEMP）
 
 原 run [40856253077](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40856253077) / source `3185e082df78a59d42d8eb9a76a1afb5146c4e42` 于 10:41:59 UTC 在 `conditional_admission.py:113` 的后端编译准入处失败。22 个已记录阶段均 native0、watchdog reason 为空且 cleanup 完整；本轮重新通过 SV 目录规范身份 `6555ede3…` 和四个原生 frontend。随后 ValueError `previous compiled/dependency product`（36B，SHA `c7300115137928620cfee0cca32dbde94e706eca5d1f2c0734aa80585b99853a`）阻止 archive/link；**没有 C++ archive/link、binary 或数值通过，原 CI 具体 offending 文件未知**。仅摘要 artifact `12890164804`，summary 40969B / SHA `8fab13a8c67f858799980b3e4ac9e6d13baf9a7d783be38c7436e44e72951951`，无 binary/SV 上传。

@@ -1,0 +1,325 @@
+{
+  "schema": "R4_HELPER_COMPILE_EVIDENCE_V1",
+  "scope": "ALL10_HELPER_COMPILE_ONLY_NO_EMISSION_OR_NUMERICS",
+  "source_sha256": "3f51c68bd82939a1dae46e7d45a5b751a4d5b2638a9ade3f94552f587e31567a",
+  "actual_native_exit": 0,
+  "actual_wall_seconds": 21.262226645001647,
+  "actual_peak_rss_bytes": 292081664,
+  "class_count": 42,
+  "source_families": [
+    "CanonicalHighGate.scala",
+    "CanonicalInfoMicroTest.scala",
+    "NewToolchainTransformGate.scala",
+    "PhysicalFmaStageLibrary.scala",
+    "PortableHostDenseAccMemoryLowering.scala",
+    "PortableHostHighSimulationEmitter.scala",
+    "PortableHostMatrixResultFifoMemoryLowering.scala",
+    "RetainedBackendCircuitGate.scala",
+    "RetainedEndpointPortContract.scala",
+    "RetainedServicePhaseObserver.scala"
+  ],
+  "class_review_sha256": "294f33152558007109f27842da84135caf0b21936fdde5df7296c81f00eeca25",
+  "classes": {
+    "chiseltest/simulator/PortableHostHighSimulationEmitter$$anon$1.class": {
+      "internal_name": "chiseltest/simulator/PortableHostHighSimulationEmitter$$anon$1",
+      "source_file": "PortableHostHighSimulationEmitter.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "66240b947eb3f0234477555f6ce538b4ffea73ea89e39bdd9dfb34c7af0502e7"
+    },
+    "chiseltest/simulator/PortableHostHighSimulationEmitter$.class": {
+      "internal_name": "chiseltest/simulator/PortableHostHighSimulationEmitter$",
+      "source_file": "PortableHostHighSimulationEmitter.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "e0dcea0d042dc6e017e7dc4755f9c37a4c10cb3878fe7adbabf4dee7136c97b6"
+    },
+    "chiseltest/simulator/CanonicalInfoMicroTest$.class": {
+      "internal_name": "chiseltest/simulator/CanonicalInfoMicroTest$",
+      "source_file": "CanonicalInfoMicroTest.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "f84b1566644d28ee04a54e3095e8f9d2574bffa41862a8d717e4dda592ed4e13"
+    },
+    "chiseltest/simulator/CanonicalHighGate.class": {
+      "internal_name": "chiseltest/simulator/CanonicalHighGate",
+      "source_file": "CanonicalHighGate.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "228925a24620a5fb4a4a537cd6eb223665495ec5383b6a4b811e3037302e6239"
+    },
+    "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$main$14.class": {
+      "internal_name": "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$main$14",
+      "source_file": "PortableHostHighSimulationEmitter.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "6781228f0e86e0cf6afd502f32d3402cb6ffc16c58517f02d153ef93cc75ff06"
+    },
+    "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$3.class": {
+      "internal_name": "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$3",
+      "source_file": "PortableHostHighSimulationEmitter.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "6396d508153df3d4e8e9a46634aed9df8cb499b346765264c47d009c2a932d98"
+    },
+    "chiseltest/simulator/EmitPhysicalFmaStageLibrary.class": {
+      "internal_name": "chiseltest/simulator/EmitPhysicalFmaStageLibrary",
+      "source_file": "PhysicalFmaStageLibrary.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "d2ce85fc93a4598473dbe2a7812e2ca1c809417218a6c32c47e3147c7181c49b"
+    },
+    "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$1.class": {
+      "internal_name": "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$1",
+      "source_file": "PortableHostHighSimulationEmitter.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "5d361db5f3f771f8745f758210e9182641e7c1df6430c3843976cf26649f10f8"
+    },
+    "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$9.class": {
+      "internal_name": "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$9",
+      "source_file": "PortableHostHighSimulationEmitter.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "6418fef9865cc2a9012a4594e95ed1509c0ed84e3b13ad90123dfc8e704c7b83"
+    },
+    "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$5.class": {
+      "internal_name": "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$5",
+      "source_file": "PortableHostHighSimulationEmitter.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "4d3a9d44ee8f5c0eb513a67d88405eba08270301489474392f4e8a8389d51962"
+    },
+    "chiseltest/simulator/CanonicalInfoMicroTest.class": {
+      "internal_name": "chiseltest/simulator/CanonicalInfoMicroTest",
+      "source_file": "CanonicalInfoMicroTest.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "552d21a1b5e3ad013c44541e3492104d2170de9518e5d590a11cd274cc27df38"
+    },
+    "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$8.class": {
+      "internal_name": "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$8",
+      "source_file": "PortableHostHighSimulationEmitter.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "07a5c55e444c4f82a5c9f7fbe8e0b5ca2d8300cff306fd92bdeece88f8498ec3"
+    },
+    "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$2.class": {
+      "internal_name": "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$2",
+      "source_file": "PortableHostHighSimulationEmitter.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "81e30297aff359fd89d24cba0c8312021bd815bea9ceaeb3e6bba90d29554189"
+    },
+    "chiseltest/simulator/EmitPhysicalFmaStageLibrary$.class": {
+      "internal_name": "chiseltest/simulator/EmitPhysicalFmaStageLibrary$",
+      "source_file": "PhysicalFmaStageLibrary.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "473a2821e0f322fdff5b56925983898d7fdff93c71625b34b804d8e4fd061e0c"
+    },
+    "chiseltest/simulator/NewToolchainTransformGate$.class": {
+      "internal_name": "chiseltest/simulator/NewToolchainTransformGate$",
+      "source_file": "NewToolchainTransformGate.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "c6c2a62c6af73660161fe8fd18d6a30beec8371a79e68b6f255e976f6e464c88"
+    },
+    "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$7.class": {
+      "internal_name": "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$7",
+      "source_file": "PortableHostHighSimulationEmitter.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "989d5c9b699f14d91bbc48b12cd63c6c5f75d39cc6d8400421b3f44df514dffb"
+    },
+    "chiseltest/simulator/PhysicalFmaStageLibrary.class": {
+      "internal_name": "chiseltest/simulator/PhysicalFmaStageLibrary",
+      "source_file": "PhysicalFmaStageLibrary.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "3e45388dc8707e6a3e3ac4eb1f967cb238d7d34cc3d0ab81a93a9c3e6f3c5685"
+    },
+    "chiseltest/simulator/PortableHostHighSimulationEmitter.class": {
+      "internal_name": "chiseltest/simulator/PortableHostHighSimulationEmitter",
+      "source_file": "PortableHostHighSimulationEmitter.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "90a33fd064f68281b5db55685bc8a296458a5df90c2feedf90dc509f874c8cad"
+    },
+    "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$4.class": {
+      "internal_name": "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$4",
+      "source_file": "PortableHostHighSimulationEmitter.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "edb98b273e78267e2564f3f7d6608dffca63738c7de50c26ad3a0f0c43a7992a"
+    },
+    "chiseltest/simulator/CanonicalHighGate$.class": {
+      "internal_name": "chiseltest/simulator/CanonicalHighGate$",
+      "source_file": "CanonicalHighGate.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "8df9b2bda93a2176a183c900284f5740ef8bc0deeddb6732523effc0ce67b738"
+    },
+    "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$10.class": {
+      "internal_name": "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$10",
+      "source_file": "PortableHostHighSimulationEmitter.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "f7ea7a1242802bcf66c6e362234174118d8753d2cb584541ae55c9d912de1b3e"
+    },
+    "chiseltest/simulator/PortableHostHighSimulationEmitter$$anon$1$$anonfun$$nestedInanonfun$runTransforms$2$1.class": {
+      "internal_name": "chiseltest/simulator/PortableHostHighSimulationEmitter$$anon$1$$anonfun$$nestedInanonfun$runTransforms$2$1",
+      "source_file": "PortableHostHighSimulationEmitter.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "1bf11b683c43e0d852178acd173f5581b96535f498f5fb2d851e3ec36f660e3a"
+    },
+    "chiseltest/simulator/NewToolchainTransformGate.class": {
+      "internal_name": "chiseltest/simulator/NewToolchainTransformGate",
+      "source_file": "NewToolchainTransformGate.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "fd9f111ca875080a24c426a9b735c24ca20955923c171468f97a6c406735f093"
+    },
+    "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$6.class": {
+      "internal_name": "chiseltest/simulator/PortableHostHighSimulationEmitter$$anonfun$6",
+      "source_file": "PortableHostHighSimulationEmitter.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "3a5e39cd2c5da218b3ee42aedb1219c3bb28943edbe7afd5f5a3b73b254f415e"
+    },
+    "heteronpu/continuous/model/PortableHostMatrixResultFifoMemoryLowering$.class": {
+      "internal_name": "heteronpu/continuous/model/PortableHostMatrixResultFifoMemoryLowering$",
+      "source_file": "PortableHostMatrixResultFifoMemoryLowering.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "6797dfea0fb0c34af085f523cbdda7fd44983c4921c68ecdfc854c62be5ad2a8"
+    },
+    "heteronpu/continuous/model/PortableHostDenseAccMemoryLowering$$anonfun$4.class": {
+      "internal_name": "heteronpu/continuous/model/PortableHostDenseAccMemoryLowering$$anonfun$4",
+      "source_file": "PortableHostDenseAccMemoryLowering.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "7a5a8808084f9314a2174dd5de0755ca9d264970c71f4df8deaa5124aeee719f"
+    },
+    "heteronpu/continuous/model/PortableHostDenseAccMemoryLowering$$anonfun$5.class": {
+      "internal_name": "heteronpu/continuous/model/PortableHostDenseAccMemoryLowering$$anonfun$5",
+      "source_file": "PortableHostDenseAccMemoryLowering.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "3ec5504083742c9913d9591bfbcff8103401446c8e5691af3233b005cc73c52d"
+    },
+    "heteronpu/continuous/model/PortableHostDenseAccMemoryLowering$$anonfun$1.class": {
+      "internal_name": "heteronpu/continuous/model/PortableHostDenseAccMemoryLowering$$anonfun$1",
+      "source_file": "PortableHostDenseAccMemoryLowering.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "fa41712181a801bef4dacfdb77b644ba1c123b9cf3c0547772bf4b12b2f18573"
+    },
+    "heteronpu/continuous/model/PortableHostDenseAccMemoryLowering$$anonfun$3.class": {
+      "internal_name": "heteronpu/continuous/model/PortableHostDenseAccMemoryLowering$$anonfun$3",
+      "source_file": "PortableHostDenseAccMemoryLowering.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "abf8e5ae6fb6a3ac7602d521700de8cafe5171a7e6a8292b945c5d775d74771a"
+    },
+    "heteronpu/continuous/model/RetainedEndpointPortContract$.class": {
+      "internal_name": "heteronpu/continuous/model/RetainedEndpointPortContract$",
+      "source_file": "RetainedEndpointPortContract.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "6bf0042cd6a1a3f171c8b72ae29cf5d8578f152d18198b8f487ffd81dbca5292"
+    },
+    "heteronpu/continuous/model/PortableHostMatrixResultFifoMemoryLowering$$anonfun$1.class": {
+      "internal_name": "heteronpu/continuous/model/PortableHostMatrixResultFifoMemoryLowering$$anonfun$1",
+      "source_file": "PortableHostMatrixResultFifoMemoryLowering.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "d75b093c61cceb6af0854b1c7848544752b3801e5d5a02e978d9f92469cf2907"
+    },
+    "heteronpu/continuous/model/RetainedBackendCircuitGate$.class": {
+      "internal_name": "heteronpu/continuous/model/RetainedBackendCircuitGate$",
+      "source_file": "RetainedBackendCircuitGate.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "15ccbdf0f5bb67f280e71eb55614f07e07ac65afaae43ce497eec75744bee004"
+    },
+    "heteronpu/continuous/model/RetainedBackendCircuitGate.class": {
+      "internal_name": "heteronpu/continuous/model/RetainedBackendCircuitGate",
+      "source_file": "RetainedBackendCircuitGate.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "a1e6c7389ad6c69ccd4e833bd285158b71fedde279b5ba43bbdb81f66a8719e8"
+    },
+    "heteronpu/continuous/model/RetainedServicePhaseObserver.class": {
+      "internal_name": "heteronpu/continuous/model/RetainedServicePhaseObserver",
+      "source_file": "RetainedServicePhaseObserver.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "ee2a79ba9d3750eeb22af1c647ea31b456b86cef9db0c09fff9e6ef4ab02cd76"
+    },
+    "heteronpu/continuous/model/PortableHostDenseAccMemoryLowering$.class": {
+      "internal_name": "heteronpu/continuous/model/PortableHostDenseAccMemoryLowering$",
+      "source_file": "PortableHostDenseAccMemoryLowering.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "1c1d899b518e0beba3c8c897c36338cd13f512a6f5dcc4cd7682d2a3cc4e0820"
+    },
+    "heteronpu/continuous/model/PortableHostDenseAccMemoryLowering$$anonfun$6.class": {
+      "internal_name": "heteronpu/continuous/model/PortableHostDenseAccMemoryLowering$$anonfun$6",
+      "source_file": "PortableHostDenseAccMemoryLowering.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "c909f51bf255edb322d369588f731d5f9840a78855119f5f5ecb4cf6e35cf89f"
+    },
+    "heteronpu/continuous/model/PortableHostDenseAccMemoryLowering$$anonfun$2.class": {
+      "internal_name": "heteronpu/continuous/model/PortableHostDenseAccMemoryLowering$$anonfun$2",
+      "source_file": "PortableHostDenseAccMemoryLowering.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "77dc0ae5ea49dc4c6f98eed7beb32e91f9b657d96cadcd479e122f32b529ecd3"
+    },
+    "heteronpu/continuous/model/RetainedServicePhaseObserver$.class": {
+      "internal_name": "heteronpu/continuous/model/RetainedServicePhaseObserver$",
+      "source_file": "RetainedServicePhaseObserver.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "e5c6fa6bed57bb7124dc5d6148254592ac42bea12b0a0b61596c6da1e9686154"
+    },
+    "heteronpu/continuous/model/PortableHostDenseAccMemoryLowering.class": {
+      "internal_name": "heteronpu/continuous/model/PortableHostDenseAccMemoryLowering",
+      "source_file": "PortableHostDenseAccMemoryLowering.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "0535824d401468e06ef19778bfe753fc77a3500fc394dfda60cacf85aa9d5b46"
+    },
+    "heteronpu/continuous/model/RetainedEndpointPortContract.class": {
+      "internal_name": "heteronpu/continuous/model/RetainedEndpointPortContract",
+      "source_file": "RetainedEndpointPortContract.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "9525047ed062300622b94915396ca7d5dceff71e2958417169f2aaa6de5b3e08"
+    },
+    "heteronpu/continuous/model/PortableHostDenseAccMemoryLowering$$anonfun$7.class": {
+      "internal_name": "heteronpu/continuous/model/PortableHostDenseAccMemoryLowering$$anonfun$7",
+      "source_file": "PortableHostDenseAccMemoryLowering.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "dbab2d694284ada02d1192715725bbeb93d813a36b2514a138e13842aee7da77"
+    },
+    "heteronpu/continuous/model/PortableHostMatrixResultFifoMemoryLowering.class": {
+      "internal_name": "heteronpu/continuous/model/PortableHostMatrixResultFifoMemoryLowering",
+      "source_file": "PortableHostMatrixResultFifoMemoryLowering.scala",
+      "major": 52,
+      "minor": 0,
+      "sha256": "cfc27bffc67b71cb18d775577066b66bf626d171b1edff9495d8848fef82d1b2"
+    }
+  },
+  "patch_manifest_sha256": "dcdf252a33005fc61d14af3fda1cc7acbe5fa705aa4e4ea84ddc525028b4fb35",
+  "original_ci_run": 40817880119,
+  "original_ci_failure_stage": "helper_compile",
+  "original_ci_exact_error_text_available": false,
+  "local_reproduction_missing_argument": "expectedCanonical",
+  "full_chisel_numeric": "0/5",
+  "final_rtl_numeric": "0/5"
+}

@@ -95,9 +95,9 @@ def main():
  try:
   stage('compile155',java('2g',cp,'scala.tools.nsc.Main',['-classpath',cp,'-Xplugin:'+plugin,'-language:reflectiveCalls','-d','.']+source_paths),300,3)
   basecp=str(out/'compile155')+':'+cp
-  stage('original_high',java('4g',basecp,'chiseltest.simulator.DiagnoseOriginalHostMoePhaseV5'),600,6)
   stage('helper_compile',java('2g',cp,'scala.tools.nsc.Main',['-classpath',basecp,'-Xplugin:'+plugin,'-d','.']+b['helper_sources']),300,3)
   helpercp=str(out/'helper_compile')+':'+basecp
+  stage('original_high',java('4g',basecp,'chiseltest.simulator.DiagnoseOriginalHostMoePhaseV5'),600,6)
   stage('canonical_micro',java('512m',helpercp,'chiseltest.simulator.CanonicalInfoMicroTest'),120,1)
   high=str(out/'original_high/host-diagnostic/original-high.fir');ann=str(out/'original_high/host-diagnostic/high-annotations.json')
   stage('canonical_full',java('2g',helpercp,'chiseltest.simulator.CanonicalHighGate',['candidate',high,ann,b['canonical_manifest'],b['canonical_manifest_sha256'],'canonical.tsv']),300,3)

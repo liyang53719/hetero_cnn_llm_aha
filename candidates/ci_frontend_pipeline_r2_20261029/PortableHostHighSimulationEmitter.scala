@@ -36,12 +36,12 @@ object PortableHostHighSimulationEmitter {
     }
     require(a.count(_.isInstanceOf[TargetDirAnnotation])==1,"one output directory annotation")
   }
-  private def postHigh(original:Circuit,changed:Circuit):Unit={
+  private def postHigh(original:Circuit,changed:Circuit,expectedCanonical:String):Unit={
     val a=fifo(original);val b=fifo(changed)
     require(a.ports==b.ports,"all FIFO ports unchanged")
     val users=original.modules.collect{case m:Module=>all(m.body).count{case i:DefInstance=>i.module=="MatrixResultFifo";case _=>false}}.sum
     require(users==1,"exact one full-capacity FIFO instance")
-    require(changed==PortableHostMatrixResultFifoMemoryLowering(original),"exact generated substitution, including every connection")
+    require(changed==PortableHostMatrixResultFifoMemoryLowering(original,expectedCanonical),"exact generated substitution, including every connection")
     val stmts=all(b.body);val mems=stmts.collect{case d:DefMemory=>d}
     require(mems.size==17 && mems.map(_.name).distinct.size==17,"exact17 memories")
     val expected=(0 until 16).map(i=>s"sim_storage_row_$i"->8192).toMap+("sim_storage_metadata"->5)
@@ -253,7 +253,7 @@ object PortableHostHighSimulationEmitter {
     val selected=RetainedServicePhaseObserver.measured("host.fifo.transform"){
       annotationGate(high.annotations);initializationGate(high.annotations)
       val fifoChanged=PortableHostMatrixResultFifoMemoryLowering(high.circuit,acceptedModules("MatrixResultFifo"))
-      postHigh(high.circuit,fifoChanged)
+      postHigh(high.circuit,fifoChanged,acceptedModules("MatrixResultFifo"))
       val changed=PortableHostDenseAccMemoryLowering(fifoChanged,acceptedModules("Qwen2ContinuousBlock"))
       memoryGate(changed)
       require(hostBindings(changed,high=true)==highBindings,"same complete17 external bindings")

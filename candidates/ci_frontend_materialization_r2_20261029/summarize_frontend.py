@@ -1,8 +1,8 @@
-"""Exact scalar/hash summary whitelist only. Never uploads logs/env/inputs/SV/C++."""
+"""Typed scalar/hash summary plus bounded source-owned compiler diagnostics. No raw logs/env/inputs/SV/C++."""
 import argparse,json,pathlib,re
-from safe_diagnostics import stage_diagnostics
+from safe_diagnostics import stage_diagnostics,compiler_errors
 STAGES=['jdk','jars','verilator','idma','matrix','binding']
-FRONT=['compile155','original_high','helper_compile','canonical_micro','canonical_full','transform_new_toolchain','emit_host','sv_identity','emit_fma','subset','frontend','frontend_native_Vbf16_context_lane_cluster16_rev8b_b_candidate_d','frontend_native_Vqwen2_matrix_command_endpoint_0','frontend_native_VTransposedDenseDownOwner','frontend_native_VHostBlockTopV4']
+FRONT=['compile155','helper_compile','original_high','canonical_micro','canonical_full','transform_new_toolchain','emit_host','sv_identity','emit_fma','subset','frontend','frontend_native_Vbf16_context_lane_cluster16_rev8b_b_candidate_d','frontend_native_Vqwen2_matrix_command_endpoint_0','frontend_native_VTransposedDenseDownOwner','frontend_native_VHostBlockTopV4']
 def summarize(root,commit):
  if not re.fullmatch('[0-9a-f]{40}',commit):raise ValueError('commit')
  out={'schema':'FRONTEND_ONLY_SUMMARY_V2','source_commit':commit,'scope':'CHISEL_TEST_BACKEND_PREPARATION_NO_NUMERICS_NO_FINAL_RTL_REPLAY','completed':False,'stages':[]}
@@ -15,6 +15,7 @@ def summarize(root,commit):
    if x is not None and (type(x) not in (int,float) or abs(x)>10**15):raise ValueError('scalar receipt type')
    row[k]=x
   row['diagnostics']=stage_diagnostics(r,p.parent/'frontend.log.gz')
+  if name in ('compile155','helper_compile'):row['compiler_errors']=compiler_errors(r,p.parent/'frontend.log.gz')
   row['error_count']=len(r.get('errors',[]));row['cleanup_recorded']=bool(r.get('cleanup_proof'));out['stages'].append(row)
  p=root/'jdk.json'
  if p.is_file() and not p.is_symlink() and p.stat().st_size<=1_000_000:

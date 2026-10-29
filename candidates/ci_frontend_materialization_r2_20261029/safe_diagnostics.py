@@ -40,3 +40,32 @@ def stage_diagnostics(receipt,log):
  d['failure_codes']=codes
  d['root_cause']='NOT_ESTABLISHED' if codes else 'NO_FAILURE_RECORDED'
  return d
+
+def compiler_errors(receipt,log):
+ """Only exact compiler-owned .scala argv paths; no bootstrap/token stage logs.
+ Capture at most 8 error groups / 4KiB. Header path becomes source basename.
+ No traceback, command/environment dump, arbitrary log tail or secret-like text.
+ """
+ import re,json
+ sources={str(x) for x in receipt.get('argv',[]) if isinstance(x,str) and x.endswith('.scala') and pathlib.Path(x).is_absolute()}
+ p=pathlib.Path(log)
+ if not sources or not p.is_file() or p.is_symlink() or p.stat().st_size>64*1024**2:return []
+ try:
+  with gzip.open(p,'rb') as f:raw=f.read(65537)
+ except (OSError,EOFError):return []
+ lines=raw[:65536].decode('utf-8','replace').splitlines();groups=[];budget=4096;i=0
+ forbidden=re.compile(r'(?i)(gh[pousr]_[A-Za-z0-9]|github_pat_|bearer\s|authorization\s*[:=]|(?:token|password|secret)\s*[=:])')
+ while i<len(lines) and len(groups)<8:
+  m=re.fullmatch(r'(.+\.scala):(\d+): error: (.*)',lines[i]);i+=1
+  if not m or m[1] not in sources:continue
+  text=[m[3]]
+  for line in lines[i:i+2]:
+   if re.match(r'.+\.scala:\d+:',line):break
+   text.append(line)
+  body='\n'.join(text)
+  if forbidden.search(body) or re.search(r'(?<![\w])/(?:[\w.-]+/)*[\w.-]+|[A-Za-z]:[\\/]',body) or len(body.encode('utf-8'))>1000 or any(ord(c)<32 and c not in '\n\t' for c in body):continue
+  group={'source_basename':pathlib.Path(m[1]).name,'line':int(m[2]),'compiler_error':body}
+  size=len(json.dumps(group,ensure_ascii=True).encode('utf-8'))+2
+  if size>budget:break
+  groups.append(group);budget-=size
+ return groups

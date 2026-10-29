@@ -1,0 +1,66 @@
+{
+  "status": "PASS_RECOVERY_MANIFEST_LINEAGE_ONLY_NOT_NUMERICS",
+  "erratum_commit": "7a22ccc14d6d269262ecf5756488c81e8e4ccfc4",
+  "old_overlay_sha256": "ff05ebfec21e7c8a8950ed8cee5b0a96b9fcb8bb5b46c2dfd83cd04513bbcda8",
+  "new_overlay_sha256": "f8cb8f64819e7f2dd4f3778cc6066e18d062ec1102832f53ef6eabfbcace4b39",
+  "old_helper": {
+    "name": "DiagnoseOriginalHostMoePhaseV5.scala",
+    "repo_path": "candidates/original_host_official_lowering/source/DiagnoseOriginalHostMoePhaseV5.scala",
+    "bytes": 7436,
+    "sha256": "2380c88d136fe7ae981db49b2e578d88e0efdd95a96936e79138cc99b4ff2d03",
+    "git_blob": "3ade66ba9c90bc3cc984ce12351870492502ab16"
+  },
+  "actual_helper": {
+    "name": "DiagnoseOriginalHostMoePhaseV5.scala",
+    "repo_path": "candidates/fresh_original_top_recovery_20261028/source/DiagnoseOriginalHostMoePhaseV5.scala",
+    "bytes": 7436,
+    "sha256": "8807829a0d018da029b7920dd99045fb28db8ec091a4f9599a65695848e49b57",
+    "git_blob": "a3f34f6a877a5619b6afbca5547c2a16e17302c3"
+  },
+  "source_difference_only": "diagnostic artifact cap 192 MiB to 384 MiB; no hardware expressions changed",
+  "class_lineage": [
+    {
+      "relative_class": "chiseltest/simulator/DiagnoseOriginalHostMoePhaseV5$$anonfun$inventory$33.class",
+      "sha256": "015b5440c2eefc2d19fa61002e679cc90bf32a355e71bb4d4399909a0a2c945f",
+      "bytes": 1940,
+      "actual_helper_compile_equals_fixed_high_class": true
+    },
+    {
+      "relative_class": "chiseltest/simulator/DiagnoseOriginalHostMoePhaseV5$.class",
+      "sha256": "1218a4908a234dc59c307af2d2e5b0288cf94bbf3296c03a3c7f8054ef064a5d",
+      "bytes": 33011,
+      "actual_helper_compile_equals_fixed_high_class": true
+    },
+    {
+      "relative_class": "chiseltest/simulator/DiagnoseOriginalHostMoePhaseV5.class",
+      "sha256": "ffe41dd9fc3378da767bae27ba0b8c858256c33cbdb387cecc4ac9c811e107d0",
+      "bytes": 1754,
+      "actual_helper_compile_equals_fixed_high_class": true
+    }
+  ],
+  "actual_compile": {
+    "status": "PASS_HELPER_BUDGET_TYPECHECK_ONLY",
+    "returncode": 0,
+    "elapsed_seconds": 14.298680189000152,
+    "peak_jvm_rss_bytes": 243978240,
+    "sources": 1
+  },
+  "provenance": {
+    "fresh_diagnostic_helper_budget_20261028T2139/BUILD_PINS.json": "c5824f0d3e4b408b88d8b6746b079c0af66e1e250c1287fc0945675cd8e5bbba",
+    "fresh_diagnostic_helper_budget_20261028T2139/actual/RESULT.json": "5f19da2041c4fee2c3145bfb020f4d0f08e769ab7a3eb19e4d1dc449f6934f77",
+    "attention_policy_count_fix_20261029T0054/HIGH_BINDING.json": "a91bad6895c97e9f53d6a3941501fadd55887c74863931d434a662b1cd0b1ab3",
+    "attention_policy_count_fix_20261029T0054/prepare_merged_high.py": "95df2e1b9ba11956c6063b6264025cc36bb5ca9e5f1704d5cf1020f3b7fae40a"
+  },
+  "source_delta_vs_fresh155": [
+    "HostBlockCommandsV4.scala"
+  ],
+  "source_delta_vs_published_overlay": [
+    "DiagnoseOriginalHostMoePhaseV5.scala"
+  ],
+  "actual_fixed_low_bytes": 252788790,
+  "limitations": [
+    "No compilation, IR parsing, simulation or download performed by this audit.",
+    "Published old manifest retained; actual fixed high used the 384 MiB helper.",
+    "Fresh runner canonical gate and all five numerical executions remain INCOMPLETE."
+  ]
+}

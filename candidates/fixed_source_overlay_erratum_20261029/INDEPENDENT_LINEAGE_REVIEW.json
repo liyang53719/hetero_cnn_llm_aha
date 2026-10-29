@@ -1,0 +1,51 @@
+{
+  "status": "PASS_EXACT_3_CLASS_LINEAGE_AND_CAP_ONLY_SOURCE_DIFF",
+  "old_manifest_source": {
+    "name": "DiagnoseOriginalHostMoePhaseV5.scala",
+    "repo_path": "candidates/original_host_official_lowering/source/DiagnoseOriginalHostMoePhaseV5.scala",
+    "bytes": 7436,
+    "sha256": "2380c88d136fe7ae981db49b2e578d88e0efdd95a96936e79138cc99b4ff2d03",
+    "git_blob": "3ade66ba9c90bc3cc984ce12351870492502ab16"
+  },
+  "corrected_source": {
+    "name": "DiagnoseOriginalHostMoePhaseV5.scala",
+    "repo_path": "candidates/fresh_original_top_recovery_20261028/source/DiagnoseOriginalHostMoePhaseV5.scala",
+    "bytes": 7436,
+    "sha256": "8807829a0d018da029b7920dd99045fb28db8ec091a4f9599a65695848e49b57",
+    "git_blob": "a3f34f6a877a5619b6afbca5547c2a16e17302c3"
+  },
+  "only_source_difference": "192MiB\u2192384MiB diagnostic serialized single-artifact limit, not hardware logic",
+  "classes": [
+    {
+      "path": "chiseltest/simulator/DiagnoseOriginalHostMoePhaseV5$$anonfun$inventory$33.class",
+      "sha256": "015b5440c2eefc2d19fa61002e679cc90bf32a355e71bb4d4399909a0a2c945f",
+      "source_file": "DiagnoseOriginalHostMoePhaseV5.scala"
+    },
+    {
+      "path": "chiseltest/simulator/DiagnoseOriginalHostMoePhaseV5$.class",
+      "sha256": "1218a4908a234dc59c307af2d2e5b0288cf94bbf3296c03a3c7f8054ef064a5d",
+      "source_file": "DiagnoseOriginalHostMoePhaseV5.scala"
+    },
+    {
+      "path": "chiseltest/simulator/DiagnoseOriginalHostMoePhaseV5.class",
+      "sha256": "ffe41dd9fc3378da767bae27ba0b8c858256c33cbdb387cecc4ac9c811e107d0",
+      "source_file": "DiagnoseOriginalHostMoePhaseV5.scala"
+    }
+  ],
+  "hardware_numerical_pass": false,
+  "full_chisel": 0,
+  "final_rtl": 0,
+  "source_delta": [
+    "--- old192MiB\n",
+    "+++ actual384MiB\n",
+    "@@ -27,7 +27,7 @@\n",
+    "   private def phase[A](name:String)(f: => A):A={mark(name+\".begin\");val a=f;mark(name+\".end\");a}",
+    "   private def save(name:String,text:String):Unit={",
+    "     val bytes=text.getBytes(StandardCharsets.UTF_8)",
+    "-    require(bytes.length<=192L*1024*1024,\"single artifact cap\")",
+    "+    require(bytes.length<=384L*1024*1024,\"single artifact cap\")",
+    "     Files.write(out.resolve(name),bytes,StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE)",
+    "     val sha=MessageDigest.getInstance(\"SHA-256\").digest(bytes).map(b=>f\"${b&255}%02x\").mkString",
+    "     println(s\"HOST_ARTIFACT $name bytes=${bytes.length} sha256=$sha\");Console.out.flush()"
+  ]
+}

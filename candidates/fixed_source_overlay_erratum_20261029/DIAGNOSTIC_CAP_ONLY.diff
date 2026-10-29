@@ -1,0 +1,11 @@
+--- candidates/original_host_official_lowering/source/DiagnoseOriginalHostMoePhaseV5.scala
++++ candidates/fresh_original_top_recovery_20261028/source/DiagnoseOriginalHostMoePhaseV5.scala
+@@ -27,7 +27,7 @@
+   private def phase[A](name:String)(f: => A):A={mark(name+".begin");val a=f;mark(name+".end");a}
+   private def save(name:String,text:String):Unit={
+     val bytes=text.getBytes(StandardCharsets.UTF_8)
+-    require(bytes.length<=192L*1024*1024,"single artifact cap")
++    require(bytes.length<=384L*1024*1024,"single artifact cap")
+     Files.write(out.resolve(name),bytes,StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE)
+     val sha=MessageDigest.getInstance("SHA-256").digest(bytes).map(b=>f"${b&255}%02x").mkString
+     println(s"HOST_ARTIFACT $name bytes=${bytes.length} sha256=$sha");Console.out.flush()

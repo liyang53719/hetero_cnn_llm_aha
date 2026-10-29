@@ -1,0 +1,198 @@
+{
+  "status": "SOURCE_BOUND_NOT_DUT_MEASURED",
+  "gdn_phase_counts_per_head_chunk": [
+    {
+      "phase": 5,
+      "read_beats": 35072,
+      "write_beats": 256,
+      "vector_requests": 65792,
+      "min_serial_handshake_cycles": 202240
+    },
+    {
+      "phase": 6,
+      "read_beats": 35072,
+      "write_beats": 256,
+      "vector_requests": 65792,
+      "min_serial_handshake_cycles": 202240
+    },
+    {
+      "phase": 7,
+      "read_beats": 17888,
+      "write_beats": 512,
+      "vector_requests": 32768,
+      "min_serial_handshake_cycles": 102336
+    },
+    {
+      "phase": 8,
+      "read_beats": 17888,
+      "write_beats": 512,
+      "vector_requests": 32768,
+      "min_serial_handshake_cycles": 102336
+    },
+    {
+      "phase": 9,
+      "read_beats": 69632,
+      "write_beats": 512,
+      "vector_requests": 131072,
+      "min_serial_handshake_cycles": 402432
+    },
+    {
+      "phase": 10,
+      "read_beats": 1024,
+      "write_beats": 512,
+      "vector_requests": 512,
+      "min_serial_handshake_cycles": 4096
+    },
+    {
+      "phase": 11,
+      "read_beats": 69632,
+      "write_beats": 512,
+      "vector_requests": 131072,
+      "min_serial_handshake_cycles": 402432
+    },
+    {
+      "phase": 12,
+      "read_beats": 34816,
+      "write_beats": 512,
+      "vector_requests": 65536,
+      "min_serial_handshake_cycles": 201728
+    },
+    {
+      "phase": 13,
+      "read_beats": 1024,
+      "write_beats": 512,
+      "vector_requests": 512,
+      "min_serial_handshake_cycles": 4096
+    },
+    {
+      "phase": 14,
+      "read_beats": 69632,
+      "write_beats": 1024,
+      "vector_requests": 131072,
+      "min_serial_handshake_cycles": 403456
+    },
+    {
+      "phase": 15,
+      "read_beats": 1024,
+      "write_beats": 1024,
+      "vector_requests": 1024,
+      "min_serial_handshake_cycles": 6144
+    },
+    {
+      "phase": 16,
+      "read_beats": 2048,
+      "write_beats": 1024,
+      "vector_requests": 1024,
+      "min_serial_handshake_cycles": 8192
+    },
+    {
+      "phase": 17,
+      "read_beats": 512,
+      "write_beats": 256,
+      "vector_requests": 512,
+      "min_serial_handshake_cycles": 2560
+    }
+  ],
+  "profiles": [
+    {
+      "profile": 0,
+      "projection_macs": 704643072,
+      "dense_ffn_macs": 5284823040,
+      "routed_expert_macs": 0,
+      "shared_ffn_macs": 0,
+      "router_macs": 0,
+      "shared_gate_logical_macs": 0,
+      "attention_rectangular_macs": 50331648,
+      "attention_causal_semantic_macs": 25362432,
+      "total_matrix_macs_rectangular": 6039797760,
+      "padding_wasted_macs": 0,
+      "qk_inactive_physical_capacity_macs": 0,
+      "geometry_only_upper_bound": 1.0,
+      "gdn_execute_5_to_17_only": {}
+    },
+    {
+      "profile": 1,
+      "projection_macs": 1346371584,
+      "dense_ffn_macs": 1409286144,
+      "routed_expert_macs": 0,
+      "shared_ffn_macs": 0,
+      "router_macs": 0,
+      "shared_gate_logical_macs": 0,
+      "attention_rectangular_macs": 0,
+      "attention_causal_semantic_macs": 0,
+      "total_matrix_macs_rectangular": 2755657728,
+      "padding_wasted_macs": 0,
+      "qk_inactive_physical_capacity_macs": 0,
+      "geometry_only_upper_bound": 1.0,
+      "gdn_execute_5_to_17_only": {
+        "read_beats": 11368448,
+        "write_beats": 237568,
+        "vector_requests": 21102592,
+        "min_serial_handshake_cycles": 65417216,
+        "traffic_bytes": 742785024,
+        "seconds_at_100_decimal_GBps": 0.00742785024,
+        "max_clock_hz_for_80pct_at_100GBps_execute_traffic_only": 113217145.31498146,
+        "max_clock_hz_for_90pct_at_100GBps_execute_traffic_only": 100637462.50220574,
+        "exclusive_chunk_only_full_block_util_ceiling": 0.0101795757735393
+      }
+    },
+    {
+      "profile": 2,
+      "projection_macs": 939524096,
+      "dense_ffn_macs": 1409286144,
+      "routed_expert_macs": 0,
+      "shared_ffn_macs": 0,
+      "router_macs": 0,
+      "shared_gate_logical_macs": 0,
+      "attention_rectangular_macs": 67108864,
+      "attention_causal_semantic_macs": 33816576,
+      "total_matrix_macs_rectangular": 2415919104,
+      "padding_wasted_macs": 0,
+      "qk_inactive_physical_capacity_macs": 234881024,
+      "geometry_only_upper_bound": 0.9113924050632911,
+      "gdn_execute_5_to_17_only": {}
+    },
+    {
+      "profile": 3,
+      "projection_macs": 4311744512,
+      "dense_ffn_macs": 0,
+      "routed_expert_macs": 3221225472,
+      "shared_ffn_macs": 402653184,
+      "router_macs": 67108864,
+      "shared_gate_logical_macs": 262144,
+      "attention_rectangular_macs": 0,
+      "attention_causal_semantic_macs": 0,
+      "total_matrix_macs_rectangular": 8002994176,
+      "padding_wasted_macs": 87786520576,
+      "qk_inactive_physical_capacity_macs": 0,
+      "geometry_only_upper_bound": 0.08354770557842194,
+      "gdn_execute_5_to_17_only": {
+        "read_beats": 22736896,
+        "write_beats": 475136,
+        "vector_requests": 42205184,
+        "min_serial_handshake_cycles": 130834432,
+        "traffic_bytes": 1485570048,
+        "seconds_at_100_decimal_GBps": 0.01485570048,
+        "max_clock_hz_for_80pct_at_100GBps_execute_traffic_only": 164402883.81473884,
+        "max_clock_hz_for_90pct_at_100GBps_execute_traffic_only": 146135896.7242123,
+        "exclusive_chunk_only_full_block_util_ceiling": 0.012669232965486103
+      }
+    },
+    {
+      "profile": 4,
+      "projection_macs": 3489660928,
+      "dense_ffn_macs": 0,
+      "routed_expert_macs": 3221225472,
+      "shared_ffn_macs": 402653184,
+      "router_macs": 67108864,
+      "shared_gate_logical_macs": 262144,
+      "attention_rectangular_macs": 134217728,
+      "attention_causal_semantic_macs": 67633152,
+      "total_matrix_macs_rectangular": 7315128320,
+      "padding_wasted_macs": 84565295104,
+      "qk_inactive_physical_capacity_macs": 469762048,
+      "geometry_only_upper_bound": 0.07921075937869017,
+      "gdn_execute_5_to_17_only": {}
+    }
+  ]
+}

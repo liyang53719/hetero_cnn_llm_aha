@@ -1,0 +1,22 @@
+{
+  "status": "PASS_SOURCE_MANIFEST_TESTS_ONLY",
+  "normal": {
+    "tests": 5,
+    "returncode": 0,
+    "seconds": 1.391
+  },
+  "optimized": {
+    "tests": 5,
+    "returncode": 0,
+    "seconds": 1.114
+  },
+  "command": "python3 -B [-O] test_overlay_portable.py --repo EXISTING_CHECKOUT",
+  "coverage": [
+    "corrected155 accepted",
+    "old155 manifest rejected",
+    "wrong published overlay rejected",
+    "manifest tamper rejected",
+    "all155 git source blobs verified and source byte tamper rejected"
+  ],
+  "limits": "No download, compile, elaboration, numerical or CI execution"
+}

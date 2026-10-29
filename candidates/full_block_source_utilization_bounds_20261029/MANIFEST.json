@@ -1,0 +1,62 @@
+{
+  "status": "TEMP_SOURCE_ONLY_STATIC_BOUND_NOT_RTL_MEASUREMENT_NOT_NUMERICAL_PASS",
+  "proposed_repo_directory": "candidates/full_block_source_utilization_bounds_20261029",
+  "whitelist": [
+    {
+      "file": "CRITICAL_RECHECK_CN.md",
+      "bytes": 1506,
+      "sha256": "0f0442b0f8ed6017d6e04ece5448c9d933f1c7a101bd8d74b8c4db42217763cd"
+    },
+    {
+      "file": "FULL_BLOCK_BOUNDS.json",
+      "bytes": 5909,
+      "sha256": "6660b6d512e54c6844fdda0fe1ecc4ffa011911488567ee8a80efe4d92c39cd1"
+    },
+    {
+      "file": "FULL_BLOCK_COUNTS_CN.md",
+      "bytes": 6302,
+      "sha256": "b1d058ab3f2b1125405312966166740de73679fe91f84c447989da0682de4f8f"
+    },
+    {
+      "file": "OCCUPANCY_REFERENCE_SUMMARY.json",
+      "bytes": 2316,
+      "sha256": "a8812f8d5daebe1aedbed4cca991c6d653477fde286a48abe73b5f7179e08296"
+    },
+    {
+      "file": "README_CN.md",
+      "bytes": 965,
+      "sha256": "eef594bdc3c315fd932c54a0e18de4188be06e5707ec0979caccdede5058c3d6"
+    },
+    {
+      "file": "SOURCE_PINS.json",
+      "bytes": 4673,
+      "sha256": "20821757d2c352aa36a2cb2c43229067f28e360bc484aefa89a73050f670b96f"
+    },
+    {
+      "file": "full_block_bounds.py",
+      "bytes": 3116,
+      "sha256": "e84004bdd9405a16967ed8decb7fb3d9a441181a1a617d6f92080d7e3fdf098a"
+    },
+    {
+      "file": "verify_occupancy.py",
+      "bytes": 1276,
+      "sha256": "cbe033605bdc6ad7d97cb791f26cd513c56faf8364ea620fe556a9805e19bff3"
+    }
+  ],
+  "validation": {
+    "portable_bounds_stdout_exact": true,
+    "original_local_p3_p4_hash_and_histogram_revalidated": true,
+    "host_command_changed_lines": [
+      997
+    ]
+  },
+  "excluded": [
+    "IR",
+    "RTL",
+    "class",
+    "weights",
+    "raw_expert_IDs",
+    "reference_binary_tensors"
+  ],
+  "external_write_authorized": false
+}

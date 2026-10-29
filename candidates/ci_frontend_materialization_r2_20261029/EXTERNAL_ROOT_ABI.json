@@ -1,0 +1,291 @@
+{
+  "scope": "Independent actual fresh Chisel extmodule ABI; exact provider source pins; lexical validation not elaboration",
+  "fir_sha256": "b52f2b04fdf98b33f7c38a5cceb3b4d212b16b7ef8179a1a386dd75c94bb1a43",
+  "roots": {
+    "qwen2_matrix_command_endpoint": {
+      "source_sha256": "ea16cf4221b52412a5ba1f3f23efeb198077790e271a6f6a1a51a43e82fad4ac",
+      "ports": {
+        "clk_i": [
+          "input",
+          1
+        ],
+        "rst_ni": [
+          "input",
+          1
+        ],
+        "cmd_valid_i": [
+          "input",
+          1
+        ],
+        "cmd_ready_o": [
+          "output",
+          1
+        ],
+        "cmd_i": [
+          "input",
+          128
+        ],
+        "step_valid_i": [
+          "input",
+          1
+        ],
+        "step_ready_o": [
+          "output",
+          1
+        ],
+        "step_context_i": [
+          "input",
+          3
+        ],
+        "step_clear_i": [
+          "input",
+          1
+        ],
+        "step_last_i": [
+          "input",
+          1
+        ],
+        "command_last_tile_i": [
+          "input",
+          1
+        ],
+        "step_a_i": [
+          "input",
+          256
+        ],
+        "step_b_i": [
+          "input",
+          512
+        ],
+        "out_valid_o": [
+          "output",
+          1
+        ],
+        "out_ready_i": [
+          "input",
+          1
+        ],
+        "out_context_o": [
+          "output",
+          3
+        ],
+        "out_last_o": [
+          "output",
+          1
+        ],
+        "out_acc_o": [
+          "output",
+          16384
+        ],
+        "completion_valid_o": [
+          "output",
+          1
+        ],
+        "completion_ready_i": [
+          "input",
+          1
+        ],
+        "completion_data_o": [
+          "output",
+          56
+        ],
+        "protocol_error_o": [
+          "output",
+          1
+        ],
+        "seed_begin_valid_i": [
+          "input",
+          1
+        ],
+        "seed_begin_ready_o": [
+          "output",
+          1
+        ],
+        "seed_context_i": [
+          "input",
+          3
+        ],
+        "seed_group_tag_i": [
+          "input",
+          32
+        ],
+        "seed_group_sequence_i": [
+          "input",
+          32
+        ],
+        "seed_source_generation_i": [
+          "input",
+          32
+        ],
+        "seed_beat_valid_i": [
+          "input",
+          1
+        ],
+        "seed_beat_ready_o": [
+          "output",
+          1
+        ],
+        "seed_cluster_i": [
+          "input",
+          5
+        ],
+        "seed_data_i": [
+          "input",
+          512
+        ],
+        "seed_commit_valid_i": [
+          "input",
+          1
+        ],
+        "seed_commit_ready_o": [
+          "output",
+          1
+        ],
+        "seed_abort_i": [
+          "input",
+          1
+        ],
+        "seed_ack_valid_o": [
+          "output",
+          1
+        ],
+        "seed_ack_ready_i": [
+          "input",
+          1
+        ],
+        "seed_ack_context_o": [
+          "output",
+          3
+        ],
+        "seed_ack_group_tag_o": [
+          "output",
+          32
+        ],
+        "seed_ack_group_sequence_o": [
+          "output",
+          32
+        ],
+        "seed_ack_source_generation_o": [
+          "output",
+          32
+        ],
+        "seed_ack_error_o": [
+          "output",
+          1
+        ],
+        "seed_reset_required_o": [
+          "output",
+          1
+        ],
+        "arithmetic_busy_o": [
+          "output",
+          5
+        ],
+        "arithmetic_out_valid_o": [
+          "output",
+          1
+        ]
+      },
+      "fresh_extmodule_instances": 8
+    },
+    "tc_clk_gating": {
+      "source_sha256": "93e9747504fa1da6473560341febbfae6c5e917768633a84fc9ef12299293207",
+      "ports": {
+        "clk_i": [
+          "input",
+          1
+        ],
+        "en_i": [
+          "input",
+          1
+        ],
+        "test_en_i": [
+          "input",
+          1
+        ],
+        "clk_o": [
+          "output",
+          1
+        ]
+      },
+      "fresh_extmodule_instances": 8
+    },
+    "idma_backend_rw_axi_flat_wrap": {
+      "source_sha256": "a82bc50fac9b29df3f5f68527361f9dfac4792dfea3178b84eb488428d8d12c0",
+      "ports": {
+        "clk_i": [
+          "input",
+          1
+        ],
+        "rst_ni": [
+          "input",
+          1
+        ],
+        "req_valid_i": [
+          "input",
+          1
+        ],
+        "req_ready_o": [
+          "output",
+          1
+        ],
+        "src_addr_i": [
+          "input",
+          64
+        ],
+        "dst_addr_i": [
+          "input",
+          64
+        ],
+        "length_i": [
+          "input",
+          32
+        ],
+        "rsp_valid_o": [
+          "output",
+          1
+        ],
+        "rsp_ready_i": [
+          "input",
+          1
+        ],
+        "rsp_error_o": [
+          "output",
+          1
+        ],
+        "axi_read_req_o": [
+          "output",
+          785
+        ],
+        "axi_read_rsp_i": [
+          "input",
+          532
+        ],
+        "axi_write_req_o": [
+          "output",
+          785
+        ],
+        "axi_write_rsp_i": [
+          "input",
+          532
+        ],
+        "busy_o": [
+          "output",
+          8
+        ]
+      },
+      "fresh_extmodule_instances": 1
+    }
+  },
+  "fixed_struct_widths": {
+    "axi_req_t": {
+      "bits": 785,
+      "derivation": "AW104 + W578 + AR98 + 5 handshake bits"
+    },
+    "axi_rsp_t": {
+      "bits": 532,
+      "derivation": "B7 + R520 + 5 handshake bits"
+    }
+  },
+  "struct_basis": "Exact wrapper uses addr64/data512/strb64/id4/user1; pinned original AXI typedef.svh and axi_pkg.sv in separately validated artifact manifest. This parser is not a general SV typedef evaluator."
+}

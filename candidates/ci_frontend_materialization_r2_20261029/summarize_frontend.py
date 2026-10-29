@@ -2,6 +2,7 @@
 import argparse,json,pathlib,re
 from frontend_telemetry import typed_metrics,native_options,output_inventory
 from safe_diagnostics import stage_diagnostics,compiler_errors
+from verilator_errors import full_errors
 STAGES=['jdk','jars','verilator','idma','matrix','binding']
 FRONT=['compile155','helper_compile','original_high','canonical_micro','canonical_full','transform_new_toolchain','emit_host','sv_identity','emit_fma','subset','frontend','frontend_native_Vbf16_context_lane_cluster16_rev8b_b_candidate_d','frontend_native_Vqwen2_matrix_command_endpoint_0','frontend_native_VTransposedDenseDownOwner','frontend_native_VHostBlockTopV4']
 def summarize(root,commit):
@@ -17,6 +18,7 @@ def summarize(root,commit):
    row[k]=x
   row['diagnostics']=stage_diagnostics(r,p.parent/'frontend.log.gz')
   row['telemetry']=typed_metrics(r)
+  if name.startswith('frontend_native_') and r.get('native_exit') not in (None,0):row['verilator_errors']=full_errors(r,p.parent/'frontend.log.gz')
   if name in ('compile155','helper_compile'):row['compiler_errors']=compiler_errors(r,p.parent/'frontend.log.gz')
   row['error_count']=len(r.get('errors',[]));row['cleanup_recorded']=bool(r.get('cleanup_proof'));out['stages'].append(row)
  p=root/'frontend/sv_identity/sv-identity.json'

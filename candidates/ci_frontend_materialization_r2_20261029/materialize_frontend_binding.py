@@ -3,6 +3,7 @@ No EDA/download. NEW observed tools must pass actual version/identity qualificat
 source selection is pinned by the checked-out commit and fixed R2/canonical gates.
 """
 import stat,argparse,hashlib,json,pathlib,subprocess,os
+from provider_root_gate import validate_provider_roots,WRAPPER_SHA
 D=pathlib.Path(__file__).parent.resolve()
 def need(x,m):
  if not x:raise ValueError(m)
@@ -51,7 +52,11 @@ def main():
  matrix=json.loads((D/'MATRIX_REPO_SOURCE_MAP.json').read_text())['files']
  for row in matrix:need(sha(M/row['name'])==row['sha256'],'matrix source drift')
  # Original iDMA filelist excludes tc_clk; Matrix closure supplies it exactly once.
- providers=source+[str(M/r['name']) for r in matrix]
+ wrapper=R/'rtl/integration/idma_backend_rw_axi_flat_wrap.sv'
+ need(str(wrapper.relative_to(R)) in tracked and wrapper.is_file() and not wrapper.is_symlink() and sha(wrapper)==WRAPPER_SHA,'exact tracked original iDMA wrapper required')
+ providers=source+[str(M/r['name']) for r in matrix]+[str(wrapper)]
+ provider_root_receipt=validate_provider_roots(providers)
+ need(len(providers)==308,'294 iDMA +13 matrix/clock +1 wrapper required')
  need(sum(pathlib.Path(p).name=='tc_clk.sv' for p in providers)==1,'single tc_clk definition')
  backend=R/'candidates/fresh_non_dpi_backend_recovery_20261028/source'
  driver_headers=R/'candidates/host_runtime_non_dpi_backend/source'
@@ -72,7 +77,7 @@ def main():
   p=original/'cache'/x['maven_path'];need(sha(p)==x['sha256'],'exact JAR/toolchain pin');paths.append(str(p))
  paths += [str((jh/x['path']).resolve(strict=True)) for x in j['files'] if 'sha256' in x]
  pins={p:sha(p) for p in dict.fromkeys(paths)};pins.update(external_pins)
- b=dict(schema='FRESH155_SINGLE_BINARY_M128_V1',mode='FRONTEND_ONLY',jdk_aliases=jdk_aliases,repo=str(R),repo_sha=v.expected_repo_sha,java=str(java),verilator=str(T/'verilator'),make=str(pathlib.Path('/usr/bin/make').resolve()),python=str(pathlib.Path('/usr/bin/python3').resolve()),pins=pins,canonical_manifest=str(v.canonical.resolve()),canonical_manifest_sha256=sha(v.canonical),provider_sources=providers,idma_include_dirs=inc,idma_defines=defs,hierarchy=str(D/'hierarchy_r7.vlt'),driver=str(driver),driver_include=str(driver_headers),helper_sources=list(map(str,helpers)),output=str(v.output.resolve()),fixed_source_overlay=str(D/'FIXED_SOURCE_OVERLAY_R2.json'),fixed_source_validator=str(D/'fixed_sources.py'),sv_identity_script=str(D/'check_fresh_sv.py'),materialized_roots=[str(T),str(I.parent.parent),str(M),str(C),str(D)])
+ b=dict(provider_root_receipt=provider_root_receipt,schema='FRESH155_SINGLE_BINARY_M128_V1',mode='FRONTEND_ONLY',jdk_aliases=jdk_aliases,repo=str(R),repo_sha=v.expected_repo_sha,java=str(java),verilator=str(T/'verilator'),make=str(pathlib.Path('/usr/bin/make').resolve()),python=str(pathlib.Path('/usr/bin/python3').resolve()),pins=pins,canonical_manifest=str(v.canonical.resolve()),canonical_manifest_sha256=sha(v.canonical),provider_sources=providers,idma_include_dirs=inc,idma_defines=defs,hierarchy=str(D/'hierarchy_r7.vlt'),driver=str(driver),driver_include=str(driver_headers),helper_sources=list(map(str,helpers)),output=str(v.output.resolve()),fixed_source_overlay=str(D/'FIXED_SOURCE_OVERLAY_R2.json'),fixed_source_validator=str(D/'fixed_sources.py'),sv_identity_script=str(D/'check_fresh_sv.py'),materialized_roots=[str(T),str(I.parent.parent),str(M),str(C),str(D)])
  v.binding.write_text(json.dumps(b,indent=2)+'\n');v.binding.with_suffix('.sha256').write_text(sha(v.binding)+'\n')
  print('FRONTEND_BINDING_PREPARED_NOT_EXECUTED '+sha(v.binding))
 if __name__=='__main__':main()

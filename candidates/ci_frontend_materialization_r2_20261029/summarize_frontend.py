@@ -23,7 +23,7 @@ def summarize(root,commit):
    public=[]
    for row in j.get('files',[]):
     e=row.get('external_dependency',{})
-    if row.get('path')=='lib/security/cacerts' and e.get('resolved_target')=='/etc/ssl/certs/java/cacerts' and type(e.get('bytes')) is int and 0<=e['bytes']<=4*1024**2 and re.fullmatch('[0-9a-f]{64}',e.get('sha256','')):public.append({'alias_relative':row['path'],'resolved_target':e['resolved_target'],'bytes':e['bytes'],'sha256':e['sha256']})
+    if row.get('path')=='lib/security/cacerts' and e.get('resolved_target')=='/etc/ssl/certs/adoptium/cacerts' and type(e.get('bytes')) is int and 0<=e['bytes']<=4*1024**2 and re.fullmatch('[0-9a-f]{64}',e.get('sha256','')):public.append({'alias_relative':row['path'],'resolved_target':e['resolved_target'],'bytes':e['bytes'],'sha256':e['sha256']})
    out['jdk_public_external_dependencies']=public
   codes={'JDK_UNKNOWN_EXTERNAL_ALIAS','JDK_EXTERNAL_TARGET_NOT_BOUNDED_REGULAR','JDK_RELEASE_IDENTITY_MISMATCH','JDK_ARCH_MISMATCH','RUNNER_IMAGE_MISMATCH','JDK_PROBE_LOG_CAP','JDK_RUNTIME_IDENTITY_MISMATCH','JDK_EXTERNAL_SYMLINK','JDK_TREE_BUDGET','JDK_PROBE_TIMEOUT','JDK_PROBE_NONZERO','JDK_FILESYSTEM_ERROR','JDK_UNCLASSIFIED_FAILURE'}
   if j.get('status')=='FAIL_JDK_INVENTORY' and j.get('failure_code') in codes:out['jdk_failure_code']=j['failure_code']

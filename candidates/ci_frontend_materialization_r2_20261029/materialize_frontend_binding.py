@@ -31,7 +31,7 @@ def main():
    jdk_aliases.append(dict(path=str(p),link=x['symlink'],target=x['resolved_target']))
    if 'external_dependency' in x:
     e=x['external_dependency'];target=pathlib.Path(e['resolved_target'])
-    need(x['path']=='lib/security/cacerts' and str(target)=='/etc/ssl/certs/java/cacerts','only public JDK truststore alias')
+    need(x['path']=='lib/security/cacerts' and str(target)=='/etc/ssl/certs/adoptium/cacerts','only public JDK truststore alias')
     need(stat.S_ISREG(target.stat().st_mode) and not target.is_symlink() and target.stat().st_size==e['bytes'] and 0<=e['bytes']<=4*1024**2 and sha(target)==e['sha256'],'external JDK dependency drift')
     external_pins[str(target)]=e['sha256']
   else:need(p.is_file() and p.stat().st_size==x['bytes'] and sha(p)==x['sha256'],'JDK file drift')

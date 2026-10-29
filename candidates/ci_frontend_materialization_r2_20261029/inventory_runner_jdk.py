@@ -7,7 +7,7 @@ class InventoryFailure(Exception):
  def __init__(self,code,metadata=None):self.code=code;self.metadata=metadata;super().__init__(code)
 def need(ok,code):
  if not ok:raise InventoryFailure(code)
-PUBLIC_EXTERNALS={'lib/security/cacerts':'/etc/ssl/certs/java/cacerts'}
+PUBLIC_EXTERNALS={'lib/security/cacerts':'/etc/ssl/certs/adoptium/cacerts'}
 def external_record(home,p,target):
  alias=str(p.relative_to(home));meta={'alias_relative':alias,'resolved_target':str(target),'bytes':target.stat().st_size if target.is_file() else None}
  if PUBLIC_EXTERNALS.get(alias)!=str(target):raise InventoryFailure('JDK_UNKNOWN_EXTERNAL_ALIAS',meta)

@@ -1,0 +1,29 @@
+{
+  "scope": "R3_EXACT_OBSERVED_ADOPTIUM_ALIAS_READ_HASH_ONLY",
+  "base_source": "cb237e6",
+  "files": [
+    {
+      "path": "inventory_runner_jdk.py",
+      "old_sha256": "9d98439481c1f1b271927b073394cfbaf26ab6ead658c4da57c7937dcb3cb2fb",
+      "sha256": "71a498cebcd1978cebadcadcda1f648f6e945ab1a44ee425dd6665e26b30b59f",
+      "bytes": 4904
+    },
+    {
+      "path": "materialize_frontend_binding.py",
+      "old_sha256": "f1ea23772e9ed70ab9e2ffa0fc5ec78e90e5c935577c38f7b4b94ca331cac180",
+      "sha256": "16bbdc97e410f3c6e622b1bc0a8d8e9c30f0079f475265dea318cae23e2070bd",
+      "bytes": 7270
+    },
+    {
+      "path": "summarize_frontend.py",
+      "old_sha256": "cf03e4e3202b0d1fa17424dead2ef05a59f5979203255f823c648d430d4abf5a",
+      "sha256": "5a3aac96d9246f047488117b234289452cc7c23badf5a267959bc1821acee2fc",
+      "bytes": 3902
+    },
+    {
+      "path": "test_external_alias.py",
+      "sha256": "6d0355459bd578042a6ee70450ab3a38bda75c6878c5a482d8c39a7ba99e0fd5",
+      "bytes": 2970
+    }
+  ]
+}

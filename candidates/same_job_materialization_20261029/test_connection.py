@@ -99,5 +99,25 @@ class T(unittest.TestCase):
   def fs(p):return {n.name:ast.dump(n,include_attributes=False) for n in ast.parse(p.read_text()).body if isinstance(n,ast.FunctionDef)}
   a=BASELINE['prepare']['functions'];b={k:hashlib.sha256(v.encode()).hexdigest()for k,v in fs(here/'prepare.py').items()}
   for name in a:
-   if name!='main':self.assertEqual(a[name],b[name],name)
+   if name not in ('main','materialize'):self.assertEqual(a[name],b[name],name)
+
+  raw=(D/'FFF882_MATERIALIZE_AST.json').read_bytes()
+  self.assertEqual(hashlib.sha256(raw).hexdigest(),'9cca6028d8fd354f579f859e449696611474f1f10523fcb413dd3147c0047cf9')
+  frozen=json.loads(raw)
+  fn=next(n for n in ast.parse((here/'prepare.py').read_text()).body if isinstance(n,ast.FunctionDef) and n.name=='materialize')
+  self.assertEqual([x.arg for x in fn.args.args],['repo','out','runtimes','i','shared_selected'])
+  self.assertEqual([ast.dump(x) for x in fn.args.defaults],[ast.dump(ast.Constant(value=None))])
+  branch=fn.body[1]
+  self.assertIsInstance(branch,ast.If)
+  self.assertEqual(ast.dump(branch.test),ast.dump(ast.parse('shared_selected is None',mode='eval').body))
+  expected=ast.parse("rt=shared_selected;need(set(rt)=={RUNTIME[i]},'shared selected original runtime only');r=rt[RUNTIME[i]]").body
+  self.assertEqual([ast.dump(x) for x in branch.orelse],[ast.dump(x) for x in expected])
+  def body_sha(nodes):return hashlib.sha256('\n'.join(ast.dump(x,include_attributes=False) for x in nodes).encode()).hexdigest()
+  self.assertEqual(body_sha(fn.body[2:]),frozen['payload_to_bundle_ast_sha256'])
+  self.assertEqual(body_sha([fn.body[0],*branch.body]),frozen['original_prelude_ast_sha256'])
+  # Recover the exact original isolated function, not a new permissive whole hash.
+  original=copy.deepcopy(fn);original.args.args.pop();original.args.defaults=[];original.body=[original.body[0],*original.body[1].body,*original.body[2:]]
+  restored=hashlib.sha256(ast.dump(original,include_attributes=False).encode()).hexdigest()
+  self.assertEqual(restored,frozen['original_function_ast_sha256'])
+  self.assertEqual(restored,a['materialize'])
 if __name__=='__main__':unittest.main(argv=['test_connection',*REST],verbosity=2)

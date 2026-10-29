@@ -1,5 +1,13 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-29 五profile共享三runtime接线及provider检查点（TEMP / INCOMPLETE）
+
+原selected materializer新增显式共享runtime lease分支：P0使用Qwen2，P1/P2共享原dense14e738，P3/P4共享原MoE42ca970；不是五模型混用一个framework。三实际安装树adoption核原wrapper/Python/固定侧车和完整import-root快照，lease前后验证且postcheck成功后才发布V3；原孤立安装模式仍保留。reference_command、provider算术/程序/完整权重、原BF16/FP32及Torch路由基线不变。
+
+本轮真实provider复用既有已核参考（不是新reference执行）：7阶段native0，overall363.974s、阶段wall合计249.513s。RSS有缺样，内存峰值资格INCOMPLETE，不能将缺样零值或观察最大值当内存PASS/严格上界；原采样/失败证据保留。仅源码、pin、受控摘要发布，shared owner完整路径及runtime/权重/NPZ/生成payload不公开。
+
+此处是runtime物料复用与provider资格，不是DUT数值通过；P0 gate/up仍REQUIRED_UNOBSERVED，五块完整M128 Chisel/最终RTL均0/5，350分钟全链预算/真实DUT速率及80%/90%MAC目标仍未证明。无新workflow/launch/build或采样重跑。 详见[共享runtime来源](../candidates/same_job_materialization_20261029/SHARED_RUNTIME_CN.md)、[adoption受控身份](../candidates/shared_runtime_checkpoint_20261029/ADOPTION_PUBLIC_SUMMARY.json)及[provider实测范围](../candidates/provider_only_measurement_20261029/README_CN.md)。
+
 ## 2026-10-29 P0 producer真实来源证据接线（SOURCE_ONLY / INCOMPLETE）
 
 直接修改原producer：在真实host_link前拒绝旧driver .o/.d，仅原stage成功且owned cleanup完成后收集实际GCC -MMD依赖、对象/binary pins和原生receipt；pack创建NEW七文件artifact，保留原source manifest，补入真实compile/constructor/driver来源元数据。P0 consumer从同一artifact自动绑定本次provider程序，按实际选中的header依赖验证split-directory，不再依赖用户手工拼接或同目录猜测。

@@ -74,12 +74,15 @@ def reference_command(repo,out,rt,profile,payload):
  runner=repo/C/('independent_reference_p0_cache_arm_20261028T2313' if profile==0 else 'independent_block_reference_prepare_v3_20261028T2312')/'run_reference.py'
  return [sys.executable,HERE/'bounded_reference_owned.py','--site',r['site'],'--sidecar',r['sidecar']['path'],'--sidecar-sha',r['sidecar']['sha256'],'--run-dir',run_dir,'--rss-gib','3','--cpu-seconds','1200','--wall-seconds','1800','--',r['wrapper'],runner,'--profile',str(profile),'--payload',payload,'--config',repo/'config/upstream/weight_headers'/MODEL[profile]/'config.json','--runtime-receipt',r['receipt']['path'],'--runtime-receipt-sha256',r['receipt']['sha256'],'--runtime-source-pins',r['sidecar']['path'],'--runtime-source-pins-sha256',r['sidecar']['sha256'],'--output',run_dir/'reference','--execute-reviewed']
 
-def materialize(repo,out,runtimes,i):
+def materialize(repo,out,runtimes,i,shared_selected=None):
  from acquire_profile import selected_plan
- runtime_document=json.loads(runtimes.read_text());rt=runtime_document['entries'];need(set(rt)=={RUNTIME[i]} and runtime_document['profile']==i and runtime_document['selected_runtime']==RUNTIME[i],'only selected runtime allowed')
- r=rt[RUNTIME[i]];need(runtime_document['provider_python']==r['wrapper'],'selected provider runtime')
- for k in ('wrapper','site'):need(P(r[k]).is_absolute() and P(r[k]).resolve().is_relative_to(out.resolve()),'runtime outside job OUT')
- verify_pin(r['receipt'],out);verify_pin(r['sidecar'],out)
+ if shared_selected is None:
+  runtime_document=json.loads(runtimes.read_text());rt=runtime_document['entries'];need(set(rt)=={RUNTIME[i]} and runtime_document['profile']==i and runtime_document['selected_runtime']==RUNTIME[i],'only selected runtime allowed')
+  r=rt[RUNTIME[i]];need(runtime_document['provider_python']==r['wrapper'],'selected provider runtime')
+  for k in ('wrapper','site'):need(P(r[k]).is_absolute() and P(r[k]).resolve().is_relative_to(out.resolve()),'runtime outside job OUT')
+  verify_pin(r['receipt'],out);verify_pin(r['sidecar'],out)
+ else:
+  rt=shared_selected;need(set(rt)=={RUNTIME[i]},'shared selected original runtime only');r=rt[RUNTIME[i]]
  payload=out/'payload';plan=selected_plan(repo,i)
  run([sys.executable,HERE/'acquire_profile.py','--repo',repo,'--profile',i,'--output',payload,'--execute'],out,'01_acquire',3600)
  summary=json.loads((payload/'SUMMARY.json').read_text());need(summary['profile']==i and summary['tensors']==len(plan['specs']) and summary['tensor_bytes']==sum(t['bytes'] for t in plan['specs']),'complete selected native tensor inventory')
@@ -106,11 +109,22 @@ def materialize(repo,out,runtimes,i):
  for k in ('runtime','views','reference_result','provider_receipt'):verify_pin(profile[k],out)
  save(out/'runtime_bundle.json',dict(schema='SINGLE_PROFILE_RUNTIME_BUNDLE_V1',status='FRESH_SELECTED_REFERENCE_AND_PROVIDER_NOT_DUT',profiles=[profile],limits=dict(address_space_bytes=12*1024**3,cpu_seconds=18000,wall_seconds=20000,file_bytes=64*1024**2,max_active_cycles=1000000000),hardware_executed=False,raw_payloads_upload_allowed=False))
 def main():
- ap=argparse.ArgumentParser();ap.add_argument('--repo',type=P,required=True);ap.add_argument('--output',type=P,required=True);ap.add_argument('--profile',type=int,choices=range(5),required=True);ap.add_argument('--check-sources',action='store_true');import connect_bundle;connect_bundle.add_arguments(ap);a=ap.parse_args();repo=a.repo.resolve();out=a.output.resolve();sources(repo)
+ ap=argparse.ArgumentParser();ap.add_argument('--repo',type=P,required=True);ap.add_argument('--output',type=P,required=True);ap.add_argument('--profile',type=int,choices=range(5),required=True);ap.add_argument('--check-sources',action='store_true');ap.add_argument('--shared-runtime-manifest',type=P);ap.add_argument('--shared-runtime-sha256');ap.add_argument('--owning-job-root',type=P);import connect_bundle;connect_bundle.add_arguments(ap);a=ap.parse_args();repo=a.repo.resolve();out=a.output.resolve();sources(repo)
  if a.check_sources:print('SOURCE_PINS_ONLY_NO_EXECUTION');return
  connect_bundle.preflight(a)
+ shared=(a.shared_runtime_manifest,a.shared_runtime_sha256,a.owning_job_root)
+ need(all(shared) or not any(shared),'shared runtime flags all-or-none')
+ if all(shared):
+  import shared_runtime
+  shared_runtime.preflight_path(*shared,out)
  need(not out.exists(),'fresh job output only');out.mkdir(parents=True)
- run([sys.executable,repo/C/'ci_single_profile_runtime_20261029/prepare_runtimes.py','--repo',repo,'--output',out/'runtimes','--profile',a.profile,'--execute-reviewed'],out,'00_runtimes',3600)
- materialize(repo,out,out/'runtimes/RUNTIMES.json',a.profile)
- connect_bundle.connect(a,out)
+ if all(shared):
+  with shared_runtime.lease(*shared,a.profile,out) as selected:
+   materialize(repo,out,None,a.profile,shared_selected=selected)
+  save(out/'SHARED_RUNTIME_USE.json',dict(manifest=pin(a.shared_runtime_manifest),profile=a.profile,selected_runtime=RUNTIME[a.profile],reference_qualification_transferred=False))
+  connect_bundle.connect(a,out)
+ else:
+  run([sys.executable,repo/C/'ci_single_profile_runtime_20261029/prepare_runtimes.py','--repo',repo,'--output',out/'runtimes','--profile',a.profile,'--execute-reviewed'],out,'00_runtimes',3600)
+  materialize(repo,out,out/'runtimes/RUNTIMES.json',a.profile)
+  connect_bundle.connect(a,out)
 if __name__=='__main__':main()

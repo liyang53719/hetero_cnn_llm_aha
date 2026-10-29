@@ -1,0 +1,9 @@
+# 共享runtime及provider检查点
+
+本次提交直接接线原materializer，五profile复用三个原framework安装树。SHARED_RUNTIME_CN.md及INDEPENDENT_SOURCE_REVIEW_CN.md保留源码冻结时“尚未adoption”的历史叙述；随后真实adoption身份见ADOPTION_PUBLIC_SUMMARY.json。owner完整manifest和安装树仍仅本地，不作为公开可下载产物。
+
+后续provider实际7阶段native0，只复用已核旧reference身份，没有新reference或DUT执行。overall363.974s与stage249.513s不可混用；每stage仅1个RSS样本，内存峰值资格INCOMPLETE，不声称内存通过。安全摘要见../provider_only_measurement_20261029/README_CN.md。
+
+本发布复测normal/-O各44方法：20共享runtime mock+14连接+6原物料+4摘要。初始旧整materialize AST门拒绝新runtime前置分支，失败本地保留；NEW测试恢复isolated原函数逐字AST核原fff882，并分别固定payload尾部/原prelude/新shared分支，未降低算术门。独立历史30方法与本44不合计为数值case。
+
+完整M128 Chisel/最终RTL仍0/5，P0 gate/up未观测、预算及DUT速率未闭合。此提交不含workflow/launch或payload，不重跑安装/adoption/provider/build。

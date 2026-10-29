@@ -1,0 +1,47 @@
+{
+  "schema": "SHARED_RUNTIME_ADOPTION_PUBLIC_SUMMARY_V1",
+  "scope": "INSTALL_AND_SOURCE_IDENTITY_ONLY_NOT_REFERENCE_OR_DUT",
+  "source_candidate_manifest_sha256": "b7e77226d9dad578d8e9b6fe09991d6f4dfff7546846ddc5ef6fcca6859a9da1",
+  "independent_source_review_manifest_sha256": "3772b079793c3f9b5b7d96c9f100d6b2872f6f572f0f04d507966535deb78f68",
+  "actual_process_receipt_sha256": "eaddc56271ea7abf78c9e012697a0a4baf2be180835d30d7478da97f3aa1d20f",
+  "owner_manifest_sha256": "b1956810eae865cc801b306cc86bbb1e80772474c2beac25450b4e5d652fad6f",
+  "owner_manifest_bytes": 9696,
+  "shared_module_sha256": "e853a724acefd26e7b3ef1f6883003376eaf968b808db505793e731ca0b1d302",
+  "native_exit": 0,
+  "errors": [],
+  "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+  "process_scope": "ORIGINAL_PROCESS_GROUP_AND_OBSERVED_DESCENDANTS_ONLY",
+  "elapsed_seconds": 109.27483544500137,
+  "observed_peak_rss_bytes": 60911616,
+  "process_sample_count": 1994,
+  "observed_cpu_seconds": 86.01,
+  "raw_log_eof": true,
+  "mapping": [
+    "qwen2",
+    "qwen35_08b",
+    "qwen35_08b",
+    "qwen35_35b",
+    "qwen35_35b"
+  ],
+  "runtime_revision_and_sidecar": {
+    "qwen2": {
+      "revision": "4.40.1",
+      "sidecar_sha256": "17d159b19e98d6f104bbaba1bd62ea2de96b5bcde8185230135c6a96d445628f",
+      "tree_manifest_sha256": "03e038b9bd8c24e75c2f571a9790d9e9d6c0ca91a19204a2c5a26a8b18f2adee"
+    },
+    "qwen35_08b": {
+      "revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+      "sidecar_sha256": "8a6ba34b3e85bac5427d25a44e97659f6eeaa341392e1bc6d35906434422aada",
+      "tree_manifest_sha256": "653f028cdbe3cf7e6487c9cd0f50c381062e37a874fe742cbdb31ec12002dbc8"
+    },
+    "qwen35_35b": {
+      "revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c",
+      "sidecar_sha256": "79078825f230ffecf33fff9b838d40b155217b025accf26e961927a25a475743",
+      "tree_manifest_sha256": "b15df5a92c5deedeab35a74c429f4f57c5d88a3f282a12c018170ffaf0e34ec2"
+    }
+  },
+  "reference_qualified": false,
+  "installed_tree_snapshot_not_full_transitive_archive_provenance": true,
+  "no_install_or_download_or_framework_import_or_provider_or_DUT_in_adoption": true,
+  "full_original_owner_paths_and_payloads_not_published": true
+}

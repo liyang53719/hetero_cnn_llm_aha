@@ -1,0 +1,28 @@
+{
+  "scope": "SOURCE_WIRING_AND_HISTORICAL_PROVIDER_MAPPING_NOT_NUMERICAL_PASS",
+  "base_commit": "fff882f4694fb9c2eea11b361cf40a33a3577b20",
+  "production_deltas": 5,
+  "candidate_manifest_sha256": "b7e77226d9dad578d8e9b6fe09991d6f4dfff7546846ddc5ef6fcca6859a9da1",
+  "independent_review_manifest_sha256": "3772b079793c3f9b5b7d96c9f100d6b2872f6f572f0f04d507966535deb78f68",
+  "portable_test_revision_sha256": "4d74374a3db02ca0eca03ffcca96e9fc8ac8eab0075ddf7ca63ee10d2cfd1364",
+  "this_review_tests_normal_and_optimized": {
+    "shared_runtime_mock": 20,
+    "connection": 14,
+    "original_materializer_metadata": 6,
+    "provider_summary_export": 4
+  },
+  "initial_failure": "Original full materialize AST expectation rejected approved runtime-prelude change; preserved local log. NEW test restores isolated function against actualfff882 and fixes exact payload-tail/isolated/shared-branch gates, not numerical relaxation.",
+  "independently_unchanged": [
+    "9 original functions AST",
+    "materialize payload-to-bundle tail AST",
+    "all arithmetic/reference/provider statements"
+  ],
+  "source_pins_exact": true,
+  "new_reference_execution": false,
+  "DUT_executed": false,
+  "public_runtime_or_payload_transfer": false,
+  "memory_peak_qualification": "INCOMPLETE_MISSING_SAMPLES",
+  "full_Chisel_RTL_numeric": "0/5",
+  "actual_provider_summary_source_sha256": "17646e6a6b6ec2f50fe550830c3f2184a4261df662ecaa35b92c68d521c541a6",
+  "actual_provider_export_matches_frozen_summary": true
+}

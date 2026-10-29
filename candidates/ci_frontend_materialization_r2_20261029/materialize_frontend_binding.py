@@ -64,6 +64,7 @@ def main():
  driver=R/'candidates/five_profile_execution_v3_20261029T0148/host_axi_driver_non_dpi_final_dump.cpp'
  need(sha(driver)=='20df2692d41693491f0da03fa17f21886b9375ca599c83b5b75c0994841dc45e','V3 driver')
  paths=[str(p) for folder in (C,D) for p in folder.iterdir() if p.is_file() and p.suffix in ('.py','.json','.scala','.vlt','.tsv')]+providers+list(map(str,helpers))+[str(java),str(T/'verilator'),str(pathlib.Path('/usr/bin/make').resolve()),str(pathlib.Path('/usr/bin/python3').resolve()),str(D/'hierarchy_r7.vlt'),str(driver),str(v.canonical.resolve()),str(D/'FIXED_SOURCE_OVERLAY_R2.json'),str(D/'fixed_sources.py'),str(C/'prepare_fma_subset.py'),str(R/'candidates/fresh_original_top_recovery_20261028/SOURCE_AND_TOOLCHAIN_PINS.json')]
+ paths += [str(R/'candidates/same_job_materialization_20261029/consumer/LOCKED_SOURCE_CONTRACT.json'),str(R/'candidates/p0_newboundary_input_provider_20261028/PROGRAM_MANIFEST.json')]
  paths += [str(I/n) for n in im]+[str(driver_headers/n) for n in ['affine_readonly_memory.hpp','affine_tsv_loader.hpp','sparse_write_memory.hpp']]
  vm=json.loads((D/'VERILATOR_MANIFEST.json').read_text())
  for x in vm['files']:

@@ -22,8 +22,18 @@ def validate(m,policy,identity,common,evidence):
  generation=m['generation_input_pins'];sources=m['source_pins'];gates=m['verified_gate_pins'];physical=m['physical_closure']
  need(type(generation)is dict and type(sources)is dict and type(gates)is dict and generation and sources and gates,'existing producer ledgers required')
  need(physical['top_raw_sha256']==common['sv']['sha256'],'physical raw SV identity')
- need(evidence['schema']=='P0_RETAINED_PRODUCER_EVIDENCE_V1','retained evidence schema')
- local=evidence['files'];need(type(local)is dict,'retained evidence file pins')
+ need(evidence['schema']=='P0_RETAINED_PRODUCER_EVIDENCE_V2','retained evidence schema')
+ embedded=m['p0_retained_evidence'];need(embedded['schema']=='P0_EMBEDDED_ACTUAL_BUILD_EVIDENCE_V1','actual producer embedded evidence')
+ import importlib.util
+ dep_path=P(__file__).with_name('driver_dependency_proof.py')
+ need(h(dep_path)=='104326a1630a689f18d6144734fc6142a315c378a42678e41959a27c8a64f278','reviewed actual dependency verifier')
+ spec=importlib.util.spec_from_file_location('actual_driver_dep',dep_path);dep=importlib.util.module_from_spec(spec);spec.loader.exec_module(dep)
+ original=json.loads(dep.check_text(embedded['original_source_manifest'],16*1024**2))
+ need(original=={k:v for k,v in m.items()if k not in ('files','observation_policy_bindings','p0_retained_evidence')},'original prebuild source fields preserved exactly')
+ driver_dependency=json.loads(read_pin(evidence['driver_dependency']))
+ need(driver_dependency==embedded['driver_dependency'],'actual embedded driver dependency record')
+ local=evidence['files'];need(type(local)is dict and set(local)==set(embedded['files']),'exact embedded retained evidence file pins')
+ for original_path,v in local.items():need(v['sha256']==embedded['files'][original_path]['sha256'] and v['bytes']==embedded['files'][original_path]['bytes'],'embedded original receipt/overlay pin')
  overlay_path=absolute(m['fixed_source_overlay'])
  need(generation[overlay_path]==OVERLAY_SHA and local[overlay_path]['sha256']==OVERLAY_SHA,'existing fixed overlay ledger')
  overlay=json.loads(read_pin(local[overlay_path]));rows=overlay['files'];need(overlay['source_count']==len(rows)==155,'exact fixed155')
@@ -64,19 +74,15 @@ def validate(m,policy,identity,common,evidence):
  need(len(drivers)==1,'unique actual driver source role')
  driver=absolute(drivers[0])
  need(argv.count(driver)==1 and generation[driver]==sources[driver]==common['driver']['sha256'],'actual --exe driver consumed')
- # Quoted include searches the including driver's own directory BEFORE -I.
- # A pin dictionary is not an absence inventory: no near entry means unknown,
- # not permission to jump to any convenient farther correct-SHA header.
- sparse=str(P(driver).parent/'sparse_write_memory.hpp')
- need(sparse in generation,'INCOMPLETE: no retained proof for nearest quoted-include candidate; split-directory search unsupported')
- need(generation[sparse]==policy['source_pins']['sparse_memory']['sha256'],'nearest quoted-include header shadow/hash conflict')
- need(sparse not in sources or sources[sparse]==generation[sparse],'nearest header source ledger contradiction')
- need(argv.count('-CFLAGS')==1 and argv[argv.index('-CFLAGS')+1]=='-std=c++17 -I'+str(P(driver).parent),'only reviewed same-directory single-I search contract; other search layouts need retained resolution evidence')
+ # Actual GCC dependency selection replaces the unsupported same-directory shortcut.
+ build=json.loads(P(common['build_receipt']['path']).read_text())
+ sparse=dep.verify(driver_dependency,m,policy,common,build,repo)
+ need(driver_dependency['driver']==driver,'actual --exe dependency role')
  driver_local=P(policy['source_pins']['driver']['path']).read_text()
- need('#include "sparse_write_memory.hpp"' in driver_local,'actual pinned driver directly includes sparse memory header')
+ need('#include "sparse_write_memory.hpp"' in driver_local,'actual direct quoted include')
  # Program anchors are not Scala compilation inputs. Bind only exact runtime
  # program files already independently decoded by the corrector and view pins.
  for name in ('program_manifest','commands','descriptors'):
   need(policy['source_pins'][name]['path'] not in compile_args,'runtime program cannot be Scala compile source')
  sv_paths=[p for p in argv if p.endswith('/HostBlockTopV4.sv')];need(len(sv_paths)==1 and gates[sv_paths[0]]==common['sv']['sha256'],'actual frontend SV bound by existing gate ledger')
- return {'status':'CHECKED_EXISTING_PRODUCER_LEDGERS_AND_PINNED_STAGE_ARGV_NOT_NUMERICAL','fixed155_count':155,'roles':ROLES,'header_resolution_scope':'PINNED_DRIVER_DIRECTORY_FIRST_CANDIDATE_AND_SAME_SINGLE_I_ONLY'}
+ return {'status':'CHECKED_EXISTING_PRODUCER_LEDGERS_AND_PINNED_STAGE_ARGV_NOT_NUMERICAL','fixed155_count':155,'roles':ROLES,'header_resolution_scope':'ACTUAL_FRESH_GCC_NON_SYSTEM_DEPENDENCY_RULE_BOUND_TO_HOST_LINK'}

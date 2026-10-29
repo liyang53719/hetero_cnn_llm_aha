@@ -1,0 +1,32 @@
+{
+  "scope": "TEST_ONLY_METADATA_NO_COMPILER_OR_DUT",
+  "normal_tests": 18,
+  "optimized_tests": 18,
+  "unchanged_method_asts": [
+    "verify",
+    "test_split_dir_actual_rule",
+    "test_grammars",
+    "test_duplicate_sparse",
+    "test_old_producer_cannot_self_assert_new_capture",
+    "test_unrelated_root_code_pins_do_not_authorize_capture",
+    "test_missing_dependency_pin",
+    "test_shadow_hash",
+    "test_binary_drift",
+    "test_receipt_roles",
+    "test_object_target_wrong",
+    "test_compiler_wrong",
+    "test_make_override_injection",
+    "test_missing_link_chain",
+    "test_enrich_retains_original_and_runtime_roles",
+    "test_enrich_depfile_drift_rejected",
+    "test_fresh_host_link_captures_after_actual_stage_return",
+    "test_failed_stage_cannot_capture_dependency",
+    "test_stale_driver_products_pre_stage"
+  ],
+  "changed_fixture_methods": [
+    "setUp",
+    "enrich_fixture"
+  ],
+  "wrong_global_mk_rejected_before_tests": true,
+  "production_modified": false
+}

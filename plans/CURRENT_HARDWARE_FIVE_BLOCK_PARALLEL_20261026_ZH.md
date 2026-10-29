@@ -1,5 +1,15 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-29 P0 producer真实来源证据接线（SOURCE_ONLY / INCOMPLETE）
+
+直接修改原producer：在真实host_link前拒绝旧driver .o/.d，仅原stage成功且owned cleanup完成后收集实际GCC -MMD依赖、对象/binary pins和原生receipt；pack创建NEW七文件artifact，保留原source manifest，补入真实compile/constructor/driver来源元数据。P0 consumer从同一artifact自动绑定本次provider程序，按实际选中的header依赖验证split-directory，不再依赖用户手工拼接或同目录猜测。
+
+本次仅源码与metadata轻测，无新build、loader、DUT、workflow或launch。生产证据尚须未来经批准fresh build实际产生；不能回填run40862676969缺失binary或新来源记录。原20→18观察修正不变，gate/up继续REQUIRED_UNOBSERVED/INCOMPLETE；四个其他profile不得使用P0例外。FP32/BF16、Torch路由基线和4096/32硬件不变。完整五块M128 Chisel/最终RTL数值仍0/5，预算/速率及80%/90%有效MAC未闭合。
+
+独立INSTALL_ONLY采样的四阶段均native0，阶段wall合计152.473s，三runtime与cache最终inode去重3,506,537,745B；未执行Torch/reference/DUT。最大process采样间隔12.176789747s（census12.123572151s），观测峰值不是连续峰值或严格上界；三runtime共根不证明五profile复制/参考/输出策略能满足预算。仅提交[受控安装摘要](../candidates/install_only_measurement_20261029/README_CN.md)与提取器，不含运行库、权重或原始进程信息。
+
+详见[producer补丁及证据边界](../candidates/ci_frontend_pipeline_r2_20261029/P0_SOURCE_EVIDENCE_CN.md)。
+
 ## 2026-10-29 原物料链到 same-job consumer 接线（TEMP / INCOMPLETE）
 
 新候选将原 selected materializer 的 runtime 安装、所选profile完整权重（五profile合计70张）、独立官方128-token参考及provider路径接到同job V3 consumer；保留V1原件，先核共同build身份与startup ABI receipt，再发布独立V3及消费argv。此处仅发布可复现源码，不替换现有生产入口、不新增workflow/launch、不运行loader、Torch或DUT。

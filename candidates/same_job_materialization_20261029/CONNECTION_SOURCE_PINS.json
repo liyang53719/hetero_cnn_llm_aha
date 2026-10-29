@@ -1,14 +1,14 @@
 {
   "consumer/attach_bundle.py": "d7562dbd0b30f6b0ce30eb0321afffdde571cd0c25569b7f323b7a045899fc0b",
-  "consumer/run_compare.py": "a98b10fa086da81929a64aeae51c1fb61a1e799d4d2d0180bbf54ed5e4135b50",
+  "consumer/run_compare.py": "ac89dcfe29283903be42b3da39848a922b3b18ff8468aa2bbf9cd2582348dd60",
   "consumer/local_build_proof.py": "b58ebbff5578e641b58e7f2c4c1366a7c73f3a4861cf21e37cab7a01c46d8b56",
   "consumer/correct_observation_policy.py": "3e205b979194d82fc215a1f8c013eff6e009ef79444d05cb20f857db56de3c1d",
-  "consumer/observation_contract.py": "7086710e79d0f1d93a8b48b26e8a7f5da136296171ec436e4567a9a80b9fa579",
-  "consumer/consumption_proof.py": "b219bb6a6a9c72a4e5645cecbeb78396b1f72b9d7d46002dfcb33d5b99d06cbd",
+  "consumer/observation_contract.py": "9b9c44af0964cdf2213ce649c5e86dff68ceaa492ec46e4d95b780e4460206db",
+  "consumer/consumption_proof.py": "d4b47498bf0d7c50b90761446edb4d33eb7c5e12a645dc6a40ebcef612a61a4c",
   "consumer/runtime_abi.py": "f6826a38f3d479b18a45f8bd2d80ff20a7eb2c77ba1783f77a5abf612308632c",
   "consumer/LOCKED_SOURCE_CONTRACT.json": "9a0a4e8e7acb477b48e90afe0fc545d971f9fbaa87cf6586fe090f6f344c41f0",
   "prepare.py": "b168d9fb931e9572c645ccccab32da264f10aec9e04de8c5a9bc2f72b56bea1f",
-  "connect_bundle.py": "d911f8bf7da9c3ed725951555816fb4fd080d8396042124da360d08d024b4bcf",
+  "connect_bundle.py": "d4aaaeec80b809e19e9d5c4a9163ec4dd7a31b80c3b89a975c4774b9556aed2a",
   "acquire_profile.py": "8cb63392772823ff76dfbe5c2fa0042ec329aaf3d978ce76add79fa8ca235002",
   "bounded_reference_owned.py": "4a3b1bf79e649163b104d3b12a5019720087923278e1981f90d4f78d8056ace6",
   "generate_p0_rope.py": "9e96dec630f02b6aac0b1026172ea3524285ad6a13c6ea2019f73e3ba9aa748a",
@@ -16,5 +16,6 @@
   "provider_p34.py": "28ca0c4afdd345784438239ce1ef2d9f91d3e0a91814ca9b34a91f6eb3b6cb33",
   "REPO_DEPENDENCIES.json": "5193bc82461def8c42023c55caba59054ec02b6302cac00589f51349ccd40c2a",
   "DEPENDENCIES.json": "c81b1d3983e3d3ad1ff1480df5a7db54468e96a571364b099626e1161207445c",
-  "P34_DEPENDENCIES.json": "d70d99cab5bbfb1c3d490bed06b0cd1ea0fd7fa89be5c14b355855b5733fd1f5"
+  "P34_DEPENDENCIES.json": "d70d99cab5bbfb1c3d490bed06b0cd1ea0fd7fa89be5c14b355855b5733fd1f5",
+  "consumer/driver_dependency_proof.py": "104326a1630a689f18d6144734fc6142a315c378a42678e41959a27c8a64f278"
 }

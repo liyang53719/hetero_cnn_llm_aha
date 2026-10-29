@@ -40,10 +40,18 @@ def pack(original,b,built,host,overlay,out,budget_check):
  need(sha(original['driver'])==DRIVER_SHA,'exact original V3 driver')
  root=pathlib.Path(out)/'frozen_artifact';need(not root.exists(),'fresh immutable artifact root')
  copies=[('binary',source,'dut.bin'),('sv',pathlib.Path(host),'hardware.sv'),('driver',pathlib.Path(original['driver']),'driver.cpp'),('tool_manifest',pathlib.Path(b['tool_manifest']),'tool_manifest.json'),('source_manifest',pathlib.Path(b['source_manifest']),'source_manifest.json')]
- projected=sum(path.stat().st_size for _,path,_ in copies)+131072
+ from p0_source_evidence import enrich
+ enriched_raw=(json.dumps(enrich(original,b,built),indent=2)+'\n').encode()
+ need(len(enriched_raw)<=16*1024**2,'bounded source/receipt metadata')
+ projected=sum(path.stat().st_size for key,path,_ in copies if key!='source_manifest')+len(enriched_raw)+131072
  budget_check(projected);root.mkdir();files={}
  for key,path,name in copies:
-  before=pin(path);target=root/name;shutil.copyfile(path,target);need(sha(target)==before['sha256']and pin(path)==before,'stable copy '+key);files[key]=target
+  before=pin(path);target=root/name
+  if key=='source_manifest':
+   target.write_bytes(enriched_raw)
+  else:
+   shutil.copyfile(path,target);need(sha(target)==before['sha256'],'stable copy '+key)
+  need(pin(path)==before,'original source/file unchanged '+key);files[key]=target
  files['binary'].chmod(0o700)
  need(sum(p.stat().st_size for p in root.iterdir())<=4*1024**3,'artifact expanded bound')
  receipt=dict(status='BINARY_BUILD_ONLY_NO_NUMERICS',config_only=False,software_arithmetic_substitution=False,source_commit=original['artifact_identity']['source_commit'],launch_commit=original['artifact_identity']['launch_commit'],tool_manifest_sha256=sha(files['tool_manifest']),**{k+'_sha256':sha(files[k])for k in ('binary','sv','source_manifest','driver')},phases=summaries,admission_method=b['admission']['method'],scope='CHISEL_TEST_BACKEND_NOT_FINAL_RTL_REPLAY')

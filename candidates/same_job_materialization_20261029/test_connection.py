@@ -77,7 +77,12 @@ class T(unittest.TestCase):
   here=ARGS.candidate_dir.resolve()
   def fs(p):return {n.name:ast.dump(n,include_attributes=False) for n in ast.parse(p.read_text()).body if isinstance(n,ast.FunctionDef)}
   a=BASELINE['consumer']['functions'];b={k:hashlib.sha256(v.encode()).hexdigest()for k,v in fs(here/'consumer/run_compare.py').items()}
-  for key in ('records','reference','token_major','expected','compare','router_compare','load_binding','coverage_policy','artifact_identity','verify_frozen'):self.assertEqual(a[key],b[key],key)
+  for key in ('records','reference','token_major','expected','compare','router_compare','load_binding','artifact_identity','verify_frozen'):self.assertEqual(a[key],b[key],key)
+  policy_tree=ast.parse((here/'consumer/run_compare.py').read_text());policy_fn=next(n for n in policy_tree.body if isinstance(n,ast.FunctionDef) and n.name=='coverage_policy')
+  current=hashlib.sha256((here/'consumer/observation_contract.py').read_bytes()).hexdigest()
+  for node in ast.walk(policy_fn):
+   if isinstance(node,ast.Constant) and node.value==current:node.value='7086710e79d0f1d93a8b48b26e8a7f5da136296171ec436e4567a9a80b9fa579'
+  self.assertEqual(a['coverage_policy'],hashlib.sha256(ast.dump(policy_fn,include_attributes=False).encode()).hexdigest())
   # Only intended execute change is explicitly clean startup environment.
   tree=ast.parse((here/'consumer/run_compare.py').read_text());fn=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='execute')
   call=next(n for n in ast.walk(fn) if isinstance(n,ast.Call) and isinstance(n.func,ast.Attribute) and n.func.attr=='Popen')

@@ -16,7 +16,7 @@ def corrector():
  spec=importlib.util.spec_from_file_location('p0_locked_corrector_r2',p);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
 
 def source_links(manifest,policy,identity,common,evidence):
- proof_path=HERE/'consumption_proof.py';need(sha(proof_path)=='b219bb6a6a9c72a4e5645cecbeb78396b1f72b9d7d46002dfcb33d5b99d06cbd','reviewed existing-producer consumption verifier')
+ proof_path=HERE/'consumption_proof.py';need(sha(proof_path)=='d4b47498bf0d7c50b90761446edb4d33eb7c5e12a645dc6a40ebcef612a61a4c','reviewed existing-producer consumption verifier')
  spec=importlib.util.spec_from_file_location('existing_producer_consumption',proof_path);proof=importlib.util.module_from_spec(spec);spec.loader.exec_module(proof)
  proof.validate(manifest,policy,identity,common,evidence)
  need(manifest['source_commit']==identity['source_commit'],'actual shared artifact source commit')
@@ -27,11 +27,21 @@ def source_links(manifest,policy,identity,common,evidence):
   need(not p.is_absolute() and '..' not in p.parts and name not in files,'unique relative source manifest file')
   files[name]=r
  link=manifest['observation_policy_bindings']['P0']
- need(link['schema']=='P0_RESIDENT_OBSERVATION_SOURCE_LINK_V1' and link['contract_sha256']==CONTRACT_SHA and link['corrector_sha256']==CORRECTOR_SHA,'actual source manifest policy binding')
+ need(link['schema']=='P0_RESIDENT_OBSERVATION_SOURCE_LINK_V2' and link['contract_sha256']==CONTRACT_SHA and link['corrector_sha256']==CORRECTOR_SHA,'actual source manifest policy binding')
  anchors=link['anchors'];need(set(anchors)==set(policy['source_pins']),'all 12 actual artifact anchors')
  for name,p in policy['source_pins'].items():
   key=anchors[name];need(key in files,'anchor missing actual source manifest file: '+name)
   r=files[key];need(r['bytes']==p['bytes'] and r['sha256']==p['sha256'],'actual artifact anchor identity: '+name)
+  expected_kind='RUNTIME_EXPECTATION_NOT_BUILD_INPUT' if name in ('commands','descriptors') else ('RUNTIME_ONLY_CONTRACT' if name=='program_manifest' else 'ACTUAL_BUILD_INPUT')
+  need(r['kind']==expected_kind,'actual versus runtime-only role '+name)
+  if name not in ('commands','descriptors','program_manifest'):need(r['origin_path']==p['path'],'actual source role path '+name)
+ program_record=files[anchors['program_manifest']]
+ retained_program=manifest['p0_retained_evidence']['program_contract'];raw=retained_program['text'].encode()
+ need(len(raw)==retained_program['bytes']==program_record['bytes'] and hashlib.sha256(raw).hexdigest()==retained_program['sha256']==program_record['sha256'],'actual retained program bytes/hash')
+ need(retained_program['path']==program_record['origin_path'] and manifest['generation_input_pins'].get(retained_program['path'])==retained_program['sha256'],'actual original program generation pin/path')
+ program=json.loads(raw)
+ for name,filename,lo,hi in [('commands','host_commands.bin','commandBase','commandLimit'),('descriptors','host_descriptors.bin','descriptorBase','descriptorLimit')]:
+  row=files[anchors[name]];need(row['derived_from']==anchors['program_manifest'] and row['sha256']==program['table_sha256'][filename] and row['bytes']==program[hi]-program[lo],'runtime expected tables independently derived from original manifest')
  need(len(set(anchors.values()))==12,'12 distinct source/program anchors')
 
 def validate(profile,common,identity,bundle_root):
@@ -64,5 +74,6 @@ def validate(profile,common,identity,bundle_root):
  need(policy['corrections']==['allocation gate rw -> virtual','allocation up rw -> virtual','omit observe PC16 gate','omit observe PC17 up'],'exact correction declaration')
  source=pin(common['source_manifest']);need(source.stat().st_size<=16*1024**2,'source manifest size cap')
  evidence_path=pin(profile['consumption_evidence']);need(evidence_path.stat().st_size<=65536,'bounded retained evidence index')
- source_links(json.loads(source.read_text()),policy,identity,common,json.loads(evidence_path.read_text()))
+ evidence=json.loads(evidence_path.read_text());need(pin(evidence['driver_dependency']).resolve().is_relative_to(root),'dependency metadata outside selected bundle output')
+ source_links(json.loads(source.read_text()),policy,identity,common,evidence)
  return dict(status='INCOMPLETE_REQUIRED_INTERNAL_GATES_UNOBSERVED',observation_policy=profile['observation_policy'],original_runtime=profile['original_runtime'],declared_ddr_observations=18,required_hidden_gates=required,coverage_acceptance=False,consumption_evidence=profile['consumption_evidence'],program_anchor_role='RUNTIME_ONLY_NOT_ELABORATION_INPUT')

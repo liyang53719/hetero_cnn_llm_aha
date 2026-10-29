@@ -1,0 +1,110 @@
+{
+  "base_commit": "d4476f8e3fac9a28ea3f475e49f6b68abbac2dbd",
+  "files": [
+    {
+      "path": "candidates/ci_frontend_materialization_r2_20261029/materialize_frontend_binding.py",
+      "bytes": 7949,
+      "sha256": "0b07ccf2428485b5b6a2b11b2fe6eeec1eb68972ab117ed88c7658a0b2cc4555",
+      "baseline_sha256": "ce9a1c7431991e28763afcfb17adc379a4c50dd3520cbaffac7f87720c1f9e68",
+      "change": "MODIFIED"
+    },
+    {
+      "path": "candidates/ci_frontend_pipeline_r2_20261029/P0_SOURCE_EVIDENCE_CN.md",
+      "bytes": 6434,
+      "sha256": "f3304b53ca402470e6cb5e3007d02ac6f810032bc013b4b723a74f17aff600f1",
+      "baseline_sha256": null,
+      "change": "NEW"
+    },
+    {
+      "path": "candidates/ci_frontend_pipeline_r2_20261029/build_producer.py",
+      "bytes": 9846,
+      "sha256": "82aef295be117550be5c7c878f6f70b78d6e195c17061bad0ac292593dd80bfe",
+      "baseline_sha256": "37c681ea5554268005fb74e872877baaab3e2ff401d7e2d096b2f0eeda662d34",
+      "change": "MODIFIED"
+    },
+    {
+      "path": "candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py",
+      "bytes": 9808,
+      "sha256": "104326a1630a689f18d6144734fc6142a315c378a42678e41959a27c8a64f278",
+      "baseline_sha256": null,
+      "change": "NEW"
+    },
+    {
+      "path": "candidates/ci_frontend_pipeline_r2_20261029/one_job_build_only.py",
+      "bytes": 14489,
+      "sha256": "be3c652d4f9b074994731c9bf386d8576e05140fee6e9402da79d4fa11181634",
+      "baseline_sha256": "11d51dbc30ac483ae540a78e0f1084d10d8953417e65d18fb3adfd59be1572d1",
+      "change": "MODIFIED"
+    },
+    {
+      "path": "candidates/ci_frontend_pipeline_r2_20261029/p0_source_evidence.py",
+      "bytes": 4284,
+      "sha256": "47a126be32385720fd3b3d94e848609f57c24174ea917110bdb1b221d916b800",
+      "baseline_sha256": null,
+      "change": "NEW"
+    },
+    {
+      "path": "candidates/ci_frontend_pipeline_r2_20261029/pack_frozen_artifact.py",
+      "bytes": 5709,
+      "sha256": "773575951ecf63fca15d5c2082c098a2ca6bd0bc988a3a3df3aaaabba712119c",
+      "baseline_sha256": "9eacb7521eb608d3bc900ed2b8f29ed11ec43553d3ebd8c0c66511271623ffc5",
+      "change": "MODIFIED"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/CONNECTION_SOURCE_PINS.json",
+      "bytes": 1859,
+      "sha256": "f7a9dba9b6a915c1eb9755c695c455d765c5e28c0dee9e93f7c3cf37cd280d13",
+      "baseline_sha256": "66ed830b2bd96c3415b5171253e93426072872c74a095993b3c645740f58ee08",
+      "change": "MODIFIED"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/README_CN.md",
+      "bytes": 6644,
+      "sha256": "a36fb230f0e998be64de2f7f1a04200a43c9c4ccefbd96409f8474e39c7bf33c",
+      "baseline_sha256": "9fcceb6b8c1b06c57a60e9d12b768fba28d0d323c46085e225f2d1556da5a640",
+      "change": "MODIFIED"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/connect_bundle.py",
+      "bytes": 11205,
+      "sha256": "d4aaaeec80b809e19e9d5c4a9163ec4dd7a31b80c3b89a975c4774b9556aed2a",
+      "baseline_sha256": "d911f8bf7da9c3ed725951555816fb4fd080d8396042124da360d08d024b4bcf",
+      "change": "MODIFIED"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/consumer/consumption_proof.py",
+      "bytes": 8208,
+      "sha256": "d4b47498bf0d7c50b90761446edb4d33eb7c5e12a645dc6a40ebcef612a61a4c",
+      "baseline_sha256": "b219bb6a6a9c72a4e5645cecbeb78396b1f72b9d7d46002dfcb33d5b99d06cbd",
+      "change": "MODIFIED"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/consumer/driver_dependency_proof.py",
+      "bytes": 9808,
+      "sha256": "104326a1630a689f18d6144734fc6142a315c378a42678e41959a27c8a64f278",
+      "baseline_sha256": null,
+      "change": "NEW"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/consumer/observation_contract.py",
+      "bytes": 7795,
+      "sha256": "9b9c44af0964cdf2213ce649c5e86dff68ceaa492ec46e4d95b780e4460206db",
+      "baseline_sha256": "7086710e79d0f1d93a8b48b26e8a7f5da136296171ec436e4567a9a80b9fa579",
+      "change": "MODIFIED"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/consumer/run_compare.py",
+      "bytes": 22602,
+      "sha256": "ac89dcfe29283903be42b3da39848a922b3b18ff8468aa2bbf9cd2582348dd60",
+      "baseline_sha256": "a98b10fa086da81929a64aeae51c1fb61a1e799d4d2d0180bbf54ed5e4135b50",
+      "change": "MODIFIED"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/test_connection.py",
+      "bytes": 9945,
+      "sha256": "2db6fc5a50cab0368ace416519cdb4a2c41af0051d8313de3974458b9e810b5b",
+      "baseline_sha256": "23439e7021ac2e32106c5a6bc05b145223077575b1d1d2b11b2c55658aa7be74",
+      "change": "MODIFIED"
+    }
+  ]
+}

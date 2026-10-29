@@ -1,3 +1,5 @@
+> NEW P0 producer evidence integration: old same-dir BLOCKED notes below describe previous baseline. This candidate consumes ACTUAL_FRESH_DRIVER_DEPENDENCY_V1 from the future fresh producer, auto-hydrates P0 metadata, and keeps gate/up REQUIRED_UNOBSERVED. No new numerical PASS; see ../ci_frontend_pipeline_r2_20261029/P0_SOURCE_EVIDENCE_CN.md for exact proof boundary.
+
 # 五 profile 原物料链 → V3 → same-job consumer：NEW 接线候选
 
 状态：源码/轻量 metadata 和 control-flow 回归；未下载、运行 Torch、EDA、DUT、CI 或发布。完整 Chisel/RTL 数值接受不因本候选变化。

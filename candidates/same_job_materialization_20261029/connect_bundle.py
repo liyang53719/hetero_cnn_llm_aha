@@ -18,6 +18,32 @@ def base(old,profile):
  consumer.need(not {'original_runtime','observation_policy','consumption_evidence'}&set(old['profiles'][0]),'no preexisting exception')
  result=copy.deepcopy(old);result['schema']='SINGLE_PROFILE_RUNTIME_BUNDLE_V3';return result
 
+def hydrate_p0(args,out,frozen):
+ """Retain actual producer text metadata; bind regenerated runtime program paths."""
+ source_row=frozen['common']['source_manifest'];source=consumer.pin(dict(source_row,path=str(args.artifact_manifest.resolve().parent/source_row['path'])))
+ m=json.loads(source.read_text());embedded=m['p0_retained_evidence'];consumer.need(embedded['schema']=='P0_EMBEDDED_ACTUAL_BUILD_EVIDENCE_V1','actual producer retained evidence required')
+ rows={r['path']:r for r in m['files']};anchors=m['observation_policy_bindings']['P0']['anchors'];bindings={}
+ for name,key in anchors.items():
+  if name in ('program_manifest','commands','descriptors'):
+   fn={'program_manifest':'manifest.json','commands':'host_commands.bin','descriptors':'host_descriptors.bin'}[name];bindings[name]=str(out/'p0_provider/program'/fn)
+  else:bindings[name]=rows[key]['origin_path']
+ retained=out/'p0_retained_build_evidence';retained.mkdir()
+ files={}
+ for i,(original,v) in enumerate(sorted(embedded['files'].items())):
+  raw=v['text'].encode();consumer.need(len(raw)==v['bytes'] and hashlib.sha256(raw).hexdigest()==v['sha256'],'actual embedded retained text hash')
+  f=retained/(str(i)+'.json')
+  with f.open('xb')as stream:stream.write(raw)
+  files[original]=pin(f)
+ dependency_path=retained/'DRIVER_DEPENDENCY.json';dependency_raw=(json.dumps(embedded['driver_dependency'],indent=2)+'\n').encode()
+ consumer.need(len(dependency_raw)<=2*1024**2,'bounded actual dependency metadata')
+ with dependency_path.open('xb')as stream:stream.write(dependency_raw)
+ evidence=dict(schema='P0_RETAINED_PRODUCER_EVIDENCE_V2',files=files,driver_dependency=pin(dependency_path))
+ bp=retained/'BINDINGS.json';ep=retained/'EVIDENCE.json'
+ for path,doc in ((bp,bindings),(ep,evidence)):
+  raw=(json.dumps(doc,indent=2)+'\n').encode();consumer.need(len(raw)<=65536,'bounded P0 bindings/evidence index')
+  with path.open('xb')as stream:stream.write(raw)
+ args.p0_bindings=bp;args.p0_bindings_sha256=consumer.sha(bp);args.consumption_evidence=ep;args.consumption_evidence_sha256=consumer.sha(ep)
+
 def connect(args,out):
  source_guard();out=P(out).resolve();original=out/'runtime_bundle.json';old_pin=pin(original)
  consumer.need(original.is_file() and not original.is_symlink(),'original fresh bundle required')
@@ -28,6 +54,7 @@ def connect(args,out):
  consumer.verify_runtime_abi(args,frozen)
  p0_fields=('p0_bindings','p0_bindings_sha256','consumption_evidence','consumption_evidence_sha256')
  if args.profile==0:
+  if all(getattr(args,k,None) is None for k in p0_fields):hydrate_p0(args,out,frozen)
   consumer.need(all(getattr(args,k,None) is not None for k in p0_fields),'P0 requires independently pinned bindings and retained consumption evidence')
   consumer.verify_frozen(args.p0_bindings,args.p0_bindings_sha256)
   consumer.verify_frozen(args.consumption_evidence,args.consumption_evidence_sha256)
@@ -90,14 +117,12 @@ def preflight(args):
  consumer.need(frozen['profiles']==list(range(5)) and frozen['matrix_macs']==4096 and frozen['vector_lanes']==32,'same complete five-profile hardware')
  if args.profile!=0:consumer.need(all(getattr(args,k,None) is None for k in ('p0_bindings','p0_bindings_sha256','consumption_evidence','consumption_evidence_sha256')),'P1-P4 cannot request P0 exception BEFORE materialization')
  if args.profile==0:
-  consumer.need(all(getattr(args,k,None) is not None for k in ('p0_bindings','p0_bindings_sha256','consumption_evidence','consumption_evidence_sha256')),'P0 source evidence required BEFORE expensive materialization')
-
-  consumer.verify_frozen(args.p0_bindings,args.p0_bindings_sha256)
-  consumer.verify_frozen(args.consumption_evidence,args.consumption_evidence_sha256)
-  source_pin=frozen['common']['source_manifest'];source=args.artifact_manifest.parent/source_pin['path']
-  consumer.pin(dict(source_pin,path=str(source.resolve())))
-  source_document=json.loads(source.read_text())
-  consumer.need('files' in source_document and 'P0' in source_document.get('observation_policy_bindings',{}),'P0 actual artifact source/program mapping absent; no expensive prep')
+  fields=('p0_bindings','p0_bindings_sha256','consumption_evidence','consumption_evidence_sha256')
+  supplied=[getattr(args,k,None)is not None for k in fields];consumer.need(all(supplied) or not any(supplied),'P0 evidence overrides must be complete')
+  if all(supplied):
+   consumer.verify_frozen(args.p0_bindings,args.p0_bindings_sha256);consumer.verify_frozen(args.consumption_evidence,args.consumption_evidence_sha256)
+  source_pin=frozen['common']['source_manifest'];source=args.artifact_manifest.parent/source_pin['path'];consumer.pin(dict(source_pin,path=str(source.resolve())));m=json.loads(source.read_text())
+  consumer.need('files' in m and 'P0' in m.get('observation_policy_bindings',{}) and 'p0_retained_evidence' in m,'P0 actual producer mapping absent or retained evidence missing; no expensive prep')
 
 def main():
  import argparse

@@ -1,0 +1,141 @@
+{
+  "commit": "d4476f8e3fac9a28ea3f475e49f6b68abbac2dbd",
+  "files": [
+    {
+      "path": "candidates/same_job_materialization_20261029/BASELINE_FUNCTION_AST.json",
+      "sha256": "0f5e5f9ba761329c5dcb9d9ea19c7e1ecf203836daab3fe1076370e26c128bf1"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/CONNECTION_SOURCE_PINS.json",
+      "sha256": "66ed830b2bd96c3415b5171253e93426072872c74a095993b3c645740f58ee08"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/DEPENDENCIES.json",
+      "sha256": "c81b1d3983e3d3ad1ff1480df5a7db54468e96a571364b099626e1161207445c"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/INDEPENDENT_REVIEW_CN.md",
+      "sha256": "7798fbe1c8be1c79bff1ddd747207bec4b0fcf84cb1fe7f4039acc6bfaddf846"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/P34_DEPENDENCIES.json",
+      "sha256": "d70d99cab5bbfb1c3d490bed06b0cd1ea0fd7fa89be5c14b355855b5733fd1f5"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/PORTABLE_LAYOUT_CN.md",
+      "sha256": "96c22237cbbe642c371955ac776b2e0da9b23f97fda5b9c174ebd5ae82100596"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/PORTABLE_TESTS_CN.md",
+      "sha256": "c9f2f09c9b05879e845798f1f4722de0530cf1f5c4a742c64e29407788863fc7"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/PUBLICATION_REVIEW.json",
+      "sha256": "700ad18e5007beb111ff34f5a6e9aecf2824d350ba51335314f5d6f32b135e2c"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/README_CN.md",
+      "sha256": "9fcceb6b8c1b06c57a60e9d12b768fba28d0d323c46085e225f2d1556da5a640"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/REPO_DEPENDENCIES.json",
+      "sha256": "5193bc82461def8c42023c55caba59054ec02b6302cac00589f51349ccd40c2a"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/TEST_RESULT.json",
+      "sha256": "e4040f6c25befc74965a886266d2719f83b897230562c2a36c0cda03b2329849"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/acquire_profile.py",
+      "sha256": "8cb63392772823ff76dfbe5c2fa0042ec329aaf3d978ce76add79fa8ca235002"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/bounded_reference_owned.py",
+      "sha256": "4a3b1bf79e649163b104d3b12a5019720087923278e1981f90d4f78d8056ace6"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/connect_bundle.py",
+      "sha256": "d911f8bf7da9c3ed725951555816fb4fd080d8396042124da360d08d024b4bcf"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/consumer/LOCKED_SOURCE_CONTRACT.json",
+      "sha256": "9a0a4e8e7acb477b48e90afe0fc545d971f9fbaa87cf6586fe090f6f344c41f0"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/consumer/attach_bundle.py",
+      "sha256": "d7562dbd0b30f6b0ce30eb0321afffdde571cd0c25569b7f323b7a045899fc0b"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/consumer/consumption_proof.py",
+      "sha256": "b219bb6a6a9c72a4e5645cecbeb78396b1f72b9d7d46002dfcb33d5b99d06cbd"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/consumer/correct_observation_policy.py",
+      "sha256": "3e205b979194d82fc215a1f8c013eff6e009ef79444d05cb20f857db56de3c1d"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/consumer/local_build_proof.py",
+      "sha256": "b58ebbff5578e641b58e7f2c4c1366a7c73f3a4861cf21e37cab7a01c46d8b56"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/consumer/observation_contract.py",
+      "sha256": "7086710e79d0f1d93a8b48b26e8a7f5da136296171ec436e4567a9a80b9fa579"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/consumer/run_compare.py",
+      "sha256": "a98b10fa086da81929a64aeae51c1fb61a1e799d4d2d0180bbf54ed5e4135b50"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/consumer/runtime_abi.py",
+      "sha256": "f6826a38f3d479b18a45f8bd2d80ff20a7eb2c77ba1783f77a5abf612308632c"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/generate_p0_rope.py",
+      "sha256": "9e96dec630f02b6aac0b1026172ea3524285ad6a13c6ea2019f73e3ba9aa748a"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/prepare.py",
+      "sha256": "b168d9fb931e9572c645ccccab32da264f10aec9e04de8c5a9bc2f72b56bea1f"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/provider_p12.py",
+      "sha256": "2ef4f0b64d73fc51a145cff037123d2852ec8cb25e3c04df86207919e41b8da7"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/provider_p34.py",
+      "sha256": "28ca0c4afdd345784438239ce1ef2d9f91d3e0a91814ca9b34a91f6eb3b6cb33"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/test_abi_receipt.py",
+      "sha256": "28738de309bf81457d8faf649863ac813b4c6e5f39ecdbe45ad80c65b681eb32"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/test_connection.py",
+      "sha256": "23439e7021ac2e32106c5a6bc05b145223077575b1d1d2b11b2c55658aa7be74"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/test_original_prepare.py",
+      "sha256": "38533c753ba0746d17bd8c2936adcfcacf22a24c5dab4715d3fc44416fe3c17b"
+    },
+    {
+      "path": "candidates/same_job_materialization_20261029/test_runtime_abi.py",
+      "sha256": "8215f22d267438d05ffb2cc0e5103dfa80f983f72d8e873ee4e7894dad09e4dd"
+    },
+    {
+      "path": "candidates/ci_frontend_pipeline_r2_20261029/build_producer.py",
+      "sha256": "37c681ea5554268005fb74e872877baaab3e2ff401d7e2d096b2f0eeda662d34"
+    },
+    {
+      "path": "candidates/ci_frontend_pipeline_r2_20261029/pack_frozen_artifact.py",
+      "sha256": "9eacb7521eb608d3bc900ed2b8f29ed11ec43553d3ebd8c0c66511271623ffc5"
+    },
+    {
+      "path": "candidates/ci_frontend_pipeline_r2_20261029/one_job_build_only.py",
+      "sha256": "11d51dbc30ac483ae540a78e0f1084d10d8953417e65d18fb3adfd59be1572d1"
+    },
+    {
+      "path": "candidates/ci_frontend_materialization_r2_20261029/materialize_frontend_binding.py",
+      "sha256": "ce9a1c7431991e28763afcfb17adc379a4c50dd3520cbaffac7f87720c1f9e68"
+    }
+  ]
+}

@@ -91,12 +91,19 @@ def run(b,stage):
   check_aliases(b);check_pins(plan['pins']);check_pins(plan['make_closure_pins'])
   for row in receipts:need(pin(row['output']['path'])==row['output'],'completed archive drift')
   budget=p['budget']
+  if p['name']=='host_link':
+   for ext in ('.o','.d'):
+    product=Path(b['obj'])/(Path(b['driver']).stem+ext);need(not product.exists() and not product.is_symlink(),'driver compile must be fresh in host_link')
   r=stage(p['name'],p['argv'],seconds=budget['seconds'],rss=budget['rss_gib'],tree=budget['tree_bytes'],env_override={'MAKEFLAGS':'','MFLAGS':'','CXXFLAGS':'','CPPFLAGS':'','LDFLAGS':'','LDLIBS':'','OBJCACHE':'','MAKEFILES':'','MAKEOVERRIDES':'','USER_CPPFLAGS':'','USER_LDLIBS':'','COMPILER_PATH':'','LIBRARY_PATH':'','CPATH':'','CPLUS_INCLUDE_PATH':'','C_INCLUDE_PATH':'','LD_PRELOAD':'','LD_LIBRARY_PATH':'','PATH':'/usr/bin:/bin','LC_ALL':'C'},extra_watch_roots=[b['obj']],extra_pins={**plan['pins'],**plan['make_closure_pins']})
   need(r.get('native_exit')==0 and not r.get('errors') and r.get('cleanup_proof',{}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP','build stage incomplete: '+p['name'])
   output=pin(p['output'])
   with open(p['output'],'rb') as f:raw=f.read(20)
   need(raw[:8]==b'!<arch>\n' if p['name']!='host_link' else raw[:6]==b'\x7fELF\x02\x01' and len(raw)==20 and struct.unpack('<H',raw[16:18])[0] in (2,3),'wrong archive/ELF output')
-  receipts.append(dict(phase=p['name'],argv=p['argv'],output=output,supervisor=r))
+  row=dict(phase=p['name'],argv=p['argv'],output=output,supervisor=r)
+  if p['name']=='host_link':
+   from driver_dependency_proof import capture
+   row['driver_dependency']=capture(b,p,r)
+  receipts.append(row)
   (Path(b['build_evidence_dir'])/'completed_build_phases.json').write_text(json.dumps(receipts,indent=2)+'\n')
   check_aliases(b);check_pins(plan['pins']);check_pins(plan['make_closure_pins'])
  return dict(status='BUILT_UNQUALIFIED',scope='ARCHIVE_LINK_ONLY_NOT_DUT_PASS',phases=receipts,binary=receipts[-1]['output'],plan=plan)

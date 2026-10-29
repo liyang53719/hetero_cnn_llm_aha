@@ -1,0 +1,29 @@
+{
+  "scope": "SOURCE_ONLY_REVIEW_NOT_FRESH_BUILD_PROVENANCE_OR_NUMERICAL_PASS",
+  "base_commit": "d4476f8e3fac9a28ea3f475e49f6b68abbac2dbd",
+  "actual_baseline_deltas": 15,
+  "candidate_manifest_sha256": "7d792adfd2d72e4a568787c9d57a721379f8b08a60c89e2b06eedc5a01fa2928",
+  "independent_review_manifest_sha256": "1873906d93f723f862be875b0eacfdaa1d7959267d3b15b27cb09d7b64df0555",
+  "identity_chain": {
+    "producer_four_implementation_hashes_match": true,
+    "producer_consumer_dependency_verifier_bytes_identical": true,
+    "connection_source_pins_match": true,
+    "self_including_fixed_hash_cycle": false,
+    "original_source_manifest_preserved": true,
+    "enriched_source_precedes_build_receipt_then_final_manifest": true
+  },
+  "numeric_status": "INCOMPLETE 0/5",
+  "gate_up": "REQUIRED_UNOBSERVED_INCOMPLETE",
+  "fresh_driver_dependency_record": "NOT_YET_GENERATED",
+  "workflow_launch_changes": false,
+  "historical_author_TEST_RESULT_note": "Original snapshot says15 auto-hydrate methods; final independent1873906d review ran16. Preserve historical evidence; use final16+18=34 methods per mode, not numerical cases.",
+  "publication_light_tests_per_mode": {
+    "driver_dependency_portable": 18,
+    "connection": 14,
+    "original_materializer": 6,
+    "build_source_wiring": 5,
+    "historical_install_summary_export": 3
+  },
+  "portable_test_manifest_sha256": "6efb40eea51d849f766ee45dd849371f585f3e988139c9711e348c8b9d0e60d4",
+  "install_summary_manifest_sha256": "a97adb16b77a37c3c0b0437bab41530a1771dae4a25f700e3dc98b6eac45c0d7"
+}

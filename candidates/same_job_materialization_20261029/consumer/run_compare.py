@@ -155,7 +155,7 @@ def artifact_identity(frozen):
 def coverage_policy(profile,common,identity,bundle_root):
     import importlib.util
     path=pathlib.Path(__file__).resolve().with_name('observation_contract.py')
-    need(sha(path)=='7086710e79d0f1d93a8b48b26e8a7f5da136296171ec436e4567a9a80b9fa579','reviewed observation contract module')
+    need(sha(path)=='9b9c44af0964cdf2213ce649c5e86dff68ceaa492ec46e4d95b780e4460206db','reviewed observation contract module')
     spec=importlib.util.spec_from_file_location('required_observation_policy',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
     return module.validate(profile,common,identity,bundle_root)
 

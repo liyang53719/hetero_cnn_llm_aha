@@ -45,7 +45,7 @@ def main():
  for key in ['java','verilator','make','python','hierarchy','driver']:
   need(b[key] in b['pins'],'required tool/source pin '+key)
  need(all(x in b['pins'] for x in b['provider_sources']+b['helper_sources']),'source closure pin')
- for name in ('conditional_binary_producer.py','conditional_admission.py','build_producer.py','HOST_PORTS.json','pack_frozen_artifact.py'):
+ for name in ('conditional_binary_producer.py','conditional_admission.py','build_producer.py','HOST_PORTS.json','pack_frozen_artifact.py','driver_dependency_proof.py','p0_source_evidence.py'):
   need(str(D/name) in b['pins'],'build helper source pin '+name)
  need(subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()==b['repo_sha'],'exact checked-out source commit')
  original=repo/'candidates/fresh_original_top_recovery_20261028';manifest=original/'SOURCE_AND_TOOLCHAIN_PINS.json';need(str(manifest) in b['pins'],'source manifest itself independently pinned');m=load(manifest);need(len(m['sources'])==155,'155 original sources')

@@ -1,0 +1,20 @@
+{
+  "status": "PASS_SOURCE_METADATA_AND_MOCK_CONTROL_FLOW_ONLY",
+  "tests_per_mode": {
+    "driver_dependency_enrich_stage": 18,
+    "connection": 14,
+    "original_materializer_metadata": 6,
+    "startup_abi_mock_parser": 13
+  },
+  "normal": 51,
+  "optimized": 51,
+  "independent_full_auto_hydrate_methods_per_mode": 15,
+  "real_compiler": false,
+  "real_loader": false,
+  "reference_execution": false,
+  "dut_execution": false,
+  "full_block_numeric_pass": false,
+  "changed_files": 15,
+  "source_pins_rechecked": true,
+  "initial_test_invocation_failure": "missing explicit driver fixture argument; failure logs preserved, rerun correct explicit --driver path"
+}

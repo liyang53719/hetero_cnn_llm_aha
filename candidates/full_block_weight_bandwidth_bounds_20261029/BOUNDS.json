@@ -1,0 +1,222 @@
+{
+  "scope": "SOURCE_ONLY_CONDITIONAL_NECESSARY_BOUNDS_NOT_RTL_MEASUREMENT",
+  "assumptions": {
+    "native_cold": "No required parameter resident; exact uncompressed native BF16/F32 values; each distinct active-expert tensor only once; transfers within the full-block denominator",
+    "hypothetical_bandwidth_bytes_per_second": 100000000000,
+    "hypothetical_clock_hz": 1000000000,
+    "hardware_frequency_or_bandwidth_measured": false,
+    "original_reference_routes_not_hardware_stimulus": true
+  },
+  "profiles": [
+    {
+      "profile": 0,
+      "model": "qwen2_1p5b",
+      "layer": 0,
+      "tokens": 128,
+      "native_tensor_count": 12,
+      "active_experts": 0,
+      "matrix_useful_macs": 6039797760,
+      "native_parameter_bytes": 93595648,
+      "native_matrix_parameter_bytes": 93585408,
+      "native_nonmatrix_parameter_bytes": 10240,
+      "all_256_experts_native_parameter_bytes": 93595648,
+      "active_expert_native_bytes": 0,
+      "current_mapped_unique_parameter_bytes": 93605888,
+      "current_mapped_unique_matrix_weight_bytes": 93585408,
+      "current_weight_only_min_axi_beats": 1462272,
+      "current_single_beat_dma_cycle_lower_bound": 5849087,
+      "current_weight_only_U_upper_from_single_beat_FSM": 0.25210088343702186,
+      "current_native_weight_U_upper_at_one_64B_beat_per_root_cycle": 1,
+      "current_mapped_parameter_min_cycles_at_64B_per_root_cycle": 1462592,
+      "current_mapped_parameter_U_upper_at_64B_per_root_cycle": 1,
+      "ideal_fully_warm_weight_DDR_bytes": 0,
+      "cold_weight_time_ms_at_100GBps": 0.93595648,
+      "cold_U_upper_at_100GBps_1GHz": 1,
+      "raw_weight_roofline_at_100GBps_1GHz": 1.5754578674427255,
+      "required_GBps_at_1GHz": {
+        "0.8": 50.77888888888889,
+        "0.9": 57.12625
+      },
+      "resident_native_bytes_needed_at_100GBps_1GHz": {
+        "0.8": 0,
+        "0.9": 0
+      },
+      "full_block_cycle_budget_at_1GHz": {
+        "0.8": 1843200.0,
+        "0.9": 1638400.0
+      }
+    },
+    {
+      "profile": 1,
+      "model": "qwen3_5_0p8b",
+      "layer": 0,
+      "tokens": 128,
+      "native_tensor_count": 14,
+      "active_experts": 0,
+      "matrix_useful_macs": 2755657728,
+      "native_parameter_bytes": 43111008,
+      "native_matrix_parameter_bytes": 43057152,
+      "native_nonmatrix_parameter_bytes": 53856,
+      "all_256_experts_native_parameter_bytes": 43111008,
+      "active_expert_native_bytes": 0,
+      "current_mapped_unique_parameter_bytes": 43111008,
+      "current_mapped_unique_matrix_weight_bytes": 43057152,
+      "current_weight_only_min_axi_beats": 672768,
+      "current_single_beat_dma_cycle_lower_bound": 2691071,
+      "current_weight_only_U_upper_from_single_beat_FSM": 0.25000009289981573,
+      "current_native_weight_U_upper_at_one_64B_beat_per_root_cycle": 0.9987500185567316,
+      "current_mapped_parameter_min_cycles_at_64B_per_root_cycle": 673610,
+      "current_mapped_parameter_U_upper_at_64B_per_root_cycle": 0.9987500185567316,
+      "ideal_fully_warm_weight_DDR_bytes": 0,
+      "cold_weight_time_ms_at_100GBps": 0.43111008,
+      "cold_U_upper_at_100GBps_1GHz": 1,
+      "raw_weight_roofline_at_100GBps_1GHz": 1.5605480623417574,
+      "required_GBps_at_1GHz": {
+        "0.8": 51.264041095890406,
+        "0.9": 57.67204623287672
+      },
+      "resident_native_bytes_needed_at_100GBps_1GHz": {
+        "0.8": 0,
+        "0.9": 0
+      },
+      "full_block_cycle_budget_at_1GHz": {
+        "0.8": 840960.0,
+        "0.9": 747520.0
+      }
+    },
+    {
+      "profile": 2,
+      "model": "qwen3_5_0p8b",
+      "layer": 3,
+      "tokens": 128,
+      "native_tensor_count": 11,
+      "active_experts": 0,
+      "matrix_useful_macs": 2415919104,
+      "native_parameter_bytes": 36705280,
+      "native_matrix_parameter_bytes": 36700160,
+      "native_nonmatrix_parameter_bytes": 5120,
+      "all_256_experts_native_parameter_bytes": 36705280,
+      "active_expert_native_bytes": 0,
+      "current_mapped_unique_parameter_bytes": 36705280,
+      "current_mapped_unique_matrix_weight_bytes": 36700160,
+      "current_weight_only_min_axi_beats": 573440,
+      "current_single_beat_dma_cycle_lower_bound": 2293759,
+      "current_weight_only_U_upper_from_single_beat_FSM": 0.25714296924829505,
+      "current_native_weight_U_upper_at_one_64B_beat_per_root_cycle": 1,
+      "current_mapped_parameter_min_cycles_at_64B_per_root_cycle": 573520,
+      "current_mapped_parameter_U_upper_at_64B_per_root_cycle": 1,
+      "ideal_fully_warm_weight_DDR_bytes": 0,
+      "cold_weight_time_ms_at_100GBps": 0.3670528,
+      "cold_U_upper_at_100GBps_1GHz": 1,
+      "raw_weight_roofline_at_100GBps_1GHz": 1.606918677639838,
+      "required_GBps_at_1GHz": {
+        "0.8": 49.78472222222222,
+        "0.9": 56.0078125
+      },
+      "resident_native_bytes_needed_at_100GBps_1GHz": {
+        "0.8": 0,
+        "0.9": 0
+      },
+      "full_block_cycle_budget_at_1GHz": {
+        "0.8": 737280.0,
+        "0.9": 655360.0
+      }
+    },
+    {
+      "profile": 3,
+      "model": "qwen3_5_35b_a3b",
+      "layer": 0,
+      "tokens": 128,
+      "native_tensor_count": 18,
+      "active_experts": 226,
+      "matrix_useful_macs": 8002994176,
+      "native_parameter_bytes": 1496658624,
+      "native_matrix_parameter_bytes": 1496584192,
+      "native_nonmatrix_parameter_bytes": 74432,
+      "all_256_experts_native_parameter_bytes": 1685402304,
+      "active_expert_native_bytes": 1421869056,
+      "current_mapped_unique_parameter_bytes": 1496785600,
+      "current_mapped_unique_matrix_weight_bytes": 1496711168,
+      "current_weight_only_min_axi_beats": 23386112,
+      "current_single_beat_dma_cycle_lower_bound": 93544447,
+      "current_weight_only_U_upper_from_single_beat_FSM": 0.020886926617888928,
+      "current_native_weight_U_upper_at_one_64B_beat_per_root_cycle": 0.0835506387326974,
+      "current_mapped_parameter_min_cycles_at_64B_per_root_cycle": 23387275,
+      "current_mapped_parameter_U_upper_at_64B_per_root_cycle": 0.08354355092673259,
+      "ideal_fully_warm_weight_DDR_bytes": 0,
+      "cold_weight_time_ms_at_100GBps": 14.96658624,
+      "cold_U_upper_at_100GBps_1GHz": 0.1305478730198397,
+      "raw_weight_roofline_at_100GBps_1GHz": 0.1305478730198397,
+      "required_GBps_at_1GHz": {
+        "0.8": 612.8020177536114,
+        "0.9": 689.4022699728129
+      },
+      "resident_native_bytes_needed_at_100GBps_1GHz": {
+        "0.8": 1252426624,
+        "0.9": 1279563513
+      },
+      "full_block_cycle_budget_at_1GHz": {
+        "0.8": 2442320.0,
+        "0.9": 2170951.111111111
+      }
+    },
+    {
+      "profile": 4,
+      "model": "qwen3_5_35b_a3b",
+      "layer": 3,
+      "tokens": 128,
+      "native_tensor_count": 15,
+      "active_experts": 218,
+      "matrix_useful_macs": 7315128320,
+      "native_parameter_bytes": 1433416704,
+      "native_matrix_parameter_bytes": 1433407488,
+      "native_nonmatrix_parameter_bytes": 9216,
+      "all_256_experts_native_parameter_bytes": 1672492032,
+      "active_expert_native_bytes": 1371537408,
+      "current_mapped_unique_parameter_bytes": 1433543680,
+      "current_mapped_unique_matrix_weight_bytes": 1433534464,
+      "current_weight_only_min_axi_beats": 22398976,
+      "current_single_beat_dma_cycle_lower_bound": 89595903,
+      "current_weight_only_U_upper_from_single_beat_FSM": 0.019933054304949637,
+      "current_native_weight_U_upper_at_one_64B_beat_per_root_cycle": 0.07973876659944379,
+      "current_mapped_parameter_min_cycles_at_64B_per_root_cycle": 22399120,
+      "current_mapped_parameter_U_upper_at_64B_per_root_cycle": 0.07973170374550428,
+      "ideal_fully_warm_weight_DDR_bytes": 0,
+      "cold_weight_time_ms_at_100GBps": 14.33416704,
+      "cold_U_upper_at_100GBps_1GHz": 0.12459182281163092,
+      "raw_weight_roofline_at_100GBps_1GHz": 0.12459182281163092,
+      "required_GBps_at_1GHz": {
+        "0.8": 642.0967138505645,
+        "0.9": 722.3588030818851
+      },
+      "resident_native_bytes_needed_at_100GBps_1GHz": {
+        "0.8": 1210176704,
+        "0.9": 1234981149
+      },
+      "full_block_cycle_budget_at_1GHz": {
+        "0.8": 2232400.0,
+        "0.9": 1984355.5555555555
+      }
+    }
+  ],
+  "route_evidence": {
+    "3": {
+      "active_experts": 226,
+      "routes": 1024,
+      "min_rows": 1,
+      "max_rows": 40,
+      "result_sha256": "e7e80babead18f8733ff0ba84e68bace54552f944fb607b513eb6e9b8140dc67",
+      "ids_sha256": "d9c4bd8cb7e97d1f5918228eb28b7e14230ef246abc2e479d963d3e8b1a4fc30",
+      "scope": "ORIGINAL_TORCH_REFERENCE_ONLY_NOT_DUT_ROUTING"
+    },
+    "4": {
+      "active_experts": 218,
+      "routes": 1024,
+      "min_rows": 1,
+      "max_rows": 25,
+      "result_sha256": "f247a770cb1daec0625932a066639b103f030ce1a76873a870f9865964ac184b",
+      "ids_sha256": "1cd56003b0bf3caaf3dbcb3b333bd5215dcc63bca3dfb340af460292e7e8d452",
+      "scope": "ORIGINAL_TORCH_REFERENCE_ONLY_NOT_DUT_ROUTING"
+    }
+  }
+}

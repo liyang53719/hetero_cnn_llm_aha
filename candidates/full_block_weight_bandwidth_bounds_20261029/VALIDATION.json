@@ -1,0 +1,138 @@
+{
+  "status": "PASS_PORTABLE_SUMMARY_AND_PINNED_SOURCE_CHECKS_ONLY_NOT_DUT",
+  "summary_mode": {
+    "profiles": 5,
+    "native_summary_entries": 70,
+    "frozen_reference_active_experts": [
+      226,
+      218
+    ],
+    "status": "PASS_SUMMARY_ARITHMETIC_ONLY_NOT_FRESH_SOURCE_OR_HEADER_VALIDATION_NOT_DUT",
+    "fresh_header_validation": false,
+    "weight_payload_read": false,
+    "reference_ids_read": false,
+    "hardware_executed": false
+  },
+  "source_mode": {
+    "profiles": 5,
+    "native_summary_entries": 70,
+    "frozen_reference_active_experts": [
+      226,
+      218
+    ],
+    "status": "PASS_SUMMARY_ARITHMETIC_AND_LOCAL_SOURCE_SHA_ONLY_NOT_HEADER_OR_DUT_VALIDATION",
+    "fresh_header_validation": false,
+    "weight_payload_read": false,
+    "reference_ids_read": false,
+    "hardware_executed": false,
+    "checked_sources": [
+      {
+        "name": "HostBlockTopV4.scala",
+        "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostBlockTopV4.scala",
+        "sha256": "588fcba10ff4d55634192513469eeb4d757e81d4693fc9ac64b1143335537f8a",
+        "explicit_local_override": false
+      },
+      {
+        "name": "IdmaWeightBurst.scala",
+        "repo_path": "candidates/fresh_original_top_recovery_20261028/source/IdmaWeightBurst.scala",
+        "sha256": "935365723aba8d79675c84a1e23ce531741707d736d88e40ff2355eeda431ba4",
+        "explicit_local_override": false
+      },
+      {
+        "name": "RetainedIdma.scala",
+        "repo_path": "candidates/fresh_original_top_recovery_20261028/source/RetainedIdma.scala",
+        "sha256": "5d8873911046d0c4202e3f92ccfdc03c2ede3d8db06502473960ae3ed644f91e",
+        "explicit_local_override": false
+      },
+      {
+        "name": "BlockAxiAdapter.scala",
+        "repo_path": "candidates/fresh_original_top_recovery_20261028/source/BlockAxiAdapter.scala",
+        "sha256": "52e8b5281f0517c3b08ceefff06c14bf85942a7d913c997548f54e7e804d3421",
+        "explicit_local_override": false
+      },
+      {
+        "name": "SharedMemoryArbiter.scala",
+        "repo_path": "candidates/fresh_original_top_recovery_20261028/source/SharedMemoryArbiter.scala",
+        "sha256": "c110e660cc3750e2e0ce9dc3e71a40310f7c730ff5d49230f4c6d6b92d45a225",
+        "explicit_local_override": false
+      },
+      {
+        "name": "QwenOwnerProtocol.scala",
+        "repo_path": "candidates/fresh_original_top_recovery_20261028/source/QwenOwnerProtocol.scala",
+        "sha256": "7da3466f9720722a636301b163c72d795c556e75f020efef4b1120be365142d2",
+        "explicit_local_override": false
+      },
+      {
+        "name": "TransposedDenseOwner.scala",
+        "repo_path": "candidates/fresh_original_top_recovery_20261028/source/TransposedDenseOwner.scala",
+        "sha256": "961f4e650b499fc1f15918d2e0f6aa51b4905431ba35ba681a609c98b42c5d14",
+        "explicit_local_override": false
+      },
+      {
+        "name": "TransposedDenseBanks.scala",
+        "repo_path": "candidates/fresh_original_top_recovery_20261028/source/TransposedDenseBanks.scala",
+        "sha256": "9fb0df82d82084ed7b6f68150c6117276eefd3d045f8d3b527a14486f2d9028d",
+        "explicit_local_override": false
+      },
+      {
+        "name": "UnifiedRuntimeProfile.scala",
+        "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedRuntimeProfile.scala",
+        "sha256": "c6b31a4802beccee3ddce20d45a8b1ce3ef37123879b55f8177ad409dd786963",
+        "explicit_local_override": false
+      },
+      {
+        "name": "UnifiedMoeDenseWritebackV2.scala",
+        "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeDenseWritebackV2.scala",
+        "sha256": "cd8606b3769c38e9286557a56a5d0a2db6e31bbdfc2929eead2be65e41177b52",
+        "explicit_local_override": false
+      },
+      {
+        "name": "UnifiedMoeRuntimeExpertLoopV4.scala",
+        "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRuntimeExpertLoopV4.scala",
+        "sha256": "9a41408d5c846b1046957679731892dad7c06b177201975eeca22213d6eb8c8b",
+        "explicit_local_override": false
+      },
+      {
+        "name": "HostMoeSharedGatePlanV5.scala",
+        "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostMoeSharedGatePlanV5.scala",
+        "sha256": "d2bae8a00aa1edcdc366d63122fa2d8cf110ef6a957d2e7ab5b643be7fff09d6",
+        "explicit_local_override": false
+      },
+      {
+        "name": "MatrixPipeline.scala",
+        "repo_path": "candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala",
+        "sha256": "d6bd82725d6b20788080b5bd17ab672a419c84212cfa50d21d175bae0d8c56d8",
+        "explicit_local_override": false
+      },
+      {
+        "name": "HostBlockCommandsV4.scala",
+        "repo_path": "candidates/attention_policy_count_fix_20261029T0054/source/HostBlockCommandsV4.scala",
+        "sha256": "8cea5e8863e47ca14978871d23b7f80639e43ae3192c3e6c0ccf372b1c73a20f",
+        "explicit_local_override": true
+      },
+      {
+        "name": "constructor_helper",
+        "repo_path": "candidates/fresh_original_top_recovery_20261028/source/DiagnoseOriginalHostMoePhaseV5.scala",
+        "sha256": "8807829a0d018da029b7920dd99045fb28db8ec091a4f9599a65695848e49b57",
+        "explicit_local_override": false
+      }
+    ]
+  },
+  "normal_and_optimized_summary_identical": true,
+  "tests": {
+    "normal": {
+      "passed": 11
+    },
+    "optimized": {
+      "passed": 11
+    }
+  },
+  "max_child_rss_KiB": 17832,
+  "address_space_limit_bytes": 268435456,
+  "hardware_executed": false,
+  "fresh_header_validation_in_portable": false,
+  "raw_weight_or_ID_payload_in_package": false,
+  "publication": "HOLD_NO_PUSH",
+  "existing_fixed_overlay_all_15_source_entries_matched": true,
+  "fixed_overlay_sha256": "f8cb8f64819e7f2dd4f3778cc6066e18d062ec1102832f53ef6eabfbcace4b39"
+}

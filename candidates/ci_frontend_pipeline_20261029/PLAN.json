@@ -1,0 +1,57 @@
+{
+  "status": "TEMP_FRONTEND_ONLY_OPERATIONAL_SOURCE_AWAIT_INDEPENDENT_REVIEW",
+  "matrix_mac": 4096,
+  "vector_lanes": 32,
+  "profiles": [
+    "qwen2_1p5b",
+    "qwen35_0p8b_l0",
+    "qwen35_0p8b_l3",
+    "qwen35_35b_a3b_l0",
+    "qwen35_35b_a3b_l3"
+  ],
+  "tokens": 128,
+  "builds": 1,
+  "profile_concurrency": 1,
+  "timeout_seconds": 21000,
+  "upload_whitelist": [
+    "summary.json",
+    "source_hashes.json",
+    "stage_exits.json",
+    "profile_results.json",
+    "canonical_gate.json",
+    "resource_peak.json"
+  ],
+  "weights_and_reference_bins": "job_local_only",
+  "disk_caps_bytes": {
+    "checkout_and_source": 300000000,
+    "toolchains_and_python_environments": 3000000000,
+    "all70_native_weights": 3531306272,
+    "IR_SV_and_classes": 2000000000,
+    "CXX_build_and_binary": 2000000000,
+    "current_profile_reference_and_stimuli": 1000000000,
+    "compressed_logs_and_summaries": 150000000,
+    "artifact_archive_and_provider_sources": 100000000,
+    "safety_free_reserve": 1500000000
+  },
+  "disk_status": "ARITHMETIC_CAPS_ONLY_NOT_MEASURED_FIT; fail if any category exceeds budget; no deletion authorized by this plan",
+  "main": "REVIEWED_COMMITTED_SHA_SUPPLIED_AT_DISPATCH",
+  "artifact": {
+    "run_id": 39030773068,
+    "id": 12099239717,
+    "bytes": 9926876,
+    "sha256": "a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce",
+    "expires_at": "2026-11-16T12:00:15Z",
+    "on_missing_or_expired": "STOP; require separately audited original source reconstruction, never dispatch old artifact job"
+  },
+  "unresolved": [
+    "CanonicalHighGate Scala uncompiled; pinned parser API test pending",
+    "Canonical baseline must be generated from existing independently pinned local high then reviewed",
+    "New Portable validation-only helpers preserve fresh Info and unchanged transform bodies; need reviewed baseline canonical hashes, complete high/source gate, and actual micro+transform comparison tests",
+    "Exact CI JDK acquisition and full runtime tree pins must match or undergo new audit",
+    "One source-only invocation does not yet assemble all inputs; no executable pipeline",
+    "5/5 reference and P3/P4 provider sources not yet all published at main",
+    "CXX final build/disk peak and complete 5 profile runtime not measured",
+    "Whitelist JSON semantic schemas missing; upload gate fails closed"
+  ],
+  "frontend_execution_scope": "No weights, reference production, C++ build, simulator launch or numerical qualification. Future full-mode budget below is conservative upper allowance, not measured fit."
+}

@@ -1,0 +1,4 @@
+`verilator_config
+hier_block -module "qwen2_matrix_command_endpoint"
+hier_block -module "bf16_context_lane_cluster16_rev8b_b_candidate"
+hier_block -module "TransposedDenseDownOwner"

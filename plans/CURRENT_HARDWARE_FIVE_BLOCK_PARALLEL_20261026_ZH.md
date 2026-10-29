@@ -1,5 +1,14 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-29 BUILD_ONLY_LOCAL_DATA / NO_PAYLOAD_UPLOAD 范围补充（TEMP）
+
+本轮候选只在单个 CI job 内实际 compile/link 并检查本地七文件；只导出 ≤64 KiB 的受控摘要。binary/SV/driver/完整 source/tool receipts 不上传、不缓存、不文本编码输出，job 临时文件不构成后续五 job 可下载产物。identity 的 artifact_name 仅为本地格式字段，不代表 GitHub artifact 存在；不得据此声称同 binary 跨五 job 回放已具备条件。公共七文件上传仍待用户明确决定，原公共提案保持未激活。源码发布与新唯一 LOCAL_DATA 启动提交仍分开审查；本候选不含启动文件。完整五块 M128 数值仍 0/5，编译成功也不冒数值 PASS。
+
+## 2026-10-29 最新执行导航：frontend R8 已完成；下一步实际 BUILD_ONLY
+
+R8 run [40838373693](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40838373693) 的21阶段均 native0，完整4096/Vector32共享硬件的源码→IR/SV→真实物理provider frontend仅生成资格通过；**尚无C++完整compile/link、binary或数值执行，五块M128原始Chisel/最终RTL仍0/5**。实际Host峰值RSS9,596,116,992B，说明不能在本地7GiB上限反复重跑。下一步经审NEW BUILD_ONLY沿同源重新生成后，直接条件审查实际Host.mk/85port、冻结derived闭包，顺序编译三子库/Host库并链接同一binary，不再另起frontend-only资格任务。完整实测身份、失败保留、下一步界限见[交接计划](FRONTEND_R8_BUILD_ONLY_HANDOFF_20261029_ZH.md)。原80/90%目标及先模型数值后最终RTL回放顺序不变；本补充不迁移旧PASS或修改74条todo/ongoing/done账本。
+
+
 ## 当前候选补充：共享 Vector/Element 32-lane（2026-10-27）
 
 **这是用户选择的下一候选方向，不是已实现或已验收的新硬件。** 计划为共享 Vector/Element 32-lane、每周期 issue（32 Add + 32 Mul + 32 RNE）；固定完整 4096-MAC Matrix 不变。五 profile 仍必须共用同一份新硬件、同一接口和同一 RTL hash，旧 16-lane 的有限叶级结果不能自动迁移。

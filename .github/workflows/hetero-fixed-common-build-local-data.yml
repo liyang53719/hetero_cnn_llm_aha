@@ -1,0 +1,66 @@
+name: hetero-fixed-common-build-local-data
+on:
+  push:
+    branches: [main]
+    paths: [ci_launch/fixed_build_local_data_20261029_once.json]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: hetero-exclusive-numeric-bootstrap
+  cancel-in-progress: false
+jobs:
+  build_only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 350
+    env:
+      MAKEFLAGS: -j1
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 2
+      - name: Validate unique launch commit and source identity
+        id: launch
+        run: python3 -B candidates/ci_frontend_materialization_r2_20261029/validate_build_local_data_launch.py
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ steps.launch.outputs.source_sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Bounded fresh source to one common binary build only
+        env:
+          REVIEWED_SHA: ${{ steps.launch.outputs.source_sha }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 -B candidates/ci_frontend_materialization_r2_20261029/bootstrap_build_only.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --pipeline "$GITHUB_WORKSPACE/candidates/ci_frontend_pipeline_r2_20261029" \
+            --work "$RUNNER_TEMP/hetero-build-only" \
+            --reviewed-repo-sha "$REVIEWED_SHA" \
+            --artifact-identity "$RUNNER_TEMP/hetero-build-artifact-identity.json" --execute-reviewed-once
+      - name: Produce bounded summary only
+        if: ${{ always() && steps.launch.outputs.source_sha != '' }}
+        env:
+          REVIEWED_SHA: ${{ steps.launch.outputs.source_sha }}
+        run: |
+          set -euo pipefail
+          python3 -B candidates/ci_frontend_materialization_r2_20261029/summarize_build_only.py \
+            --work "$RUNNER_TEMP/hetero-build-only" --commit "$REVIEWED_SHA" \
+            --output "$RUNNER_TEMP/build-only-summary.json"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ always() && steps.launch.outputs.source_sha != '' }}
+        with:
+          name: build-only-summary-${{ github.run_id }}
+          path: ${{ runner.temp }}/build-only-summary.json
+          if-no-files-found: error
+          retention-days: 14
+          overwrite: false
+# NO_PAYLOAD_UPLOAD: seven generated files stay in this ephemeral job only.
+# Source publication has no launch manifest; separate reviewed activation required.

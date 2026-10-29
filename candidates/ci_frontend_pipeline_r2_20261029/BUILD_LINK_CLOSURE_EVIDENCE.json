@@ -1,0 +1,39 @@
+{
+  "scope": "LOCAL_EXISTING_LINK_INPUT_SOURCE_ONLY_NOT_CI_OR_LINK_EXECUTION",
+  "files": [
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libpthread.a",
+      "bytes": 8,
+      "sha256": "f0a17a43c74d2fe5474fa2fd29c8f14799e777d7d75a2cc4d11c20a6e7b161c5",
+      "magic": "213c617263683e0a"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libdl.a",
+      "bytes": 8,
+      "sha256": "f0a17a43c74d2fe5474fa2fd29c8f14799e777d7d75a2cc4d11c20a6e7b161c5",
+      "magic": "213c617263683e0a"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/librt.a",
+      "bytes": 8,
+      "sha256": "f0a17a43c74d2fe5474fa2fd29c8f14799e777d7d75a2cc4d11c20a6e7b161c5",
+      "magic": "213c617263683e0a"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libm.so",
+      "bytes": 140,
+      "sha256": "55de4a3e12e17c3e2b18eb95ee21b3f46a8893ea6cab68c0a1c3a5caaf32e6cf",
+      "magic": "2f2a20474e55206c"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libmvec.so.1",
+      "bytes": 1018072,
+      "sha256": "cd2f99df70ed0fa44f79bd6322396180d19eaa1fb527b1b6e2aec9cdfc034d9d",
+      "magic": "7f454c4602010103"
+    }
+  ],
+  "libpthread_unversioned_so_exists": false,
+  "libm_link_script": "/* GNU ld script\n*/\nOUTPUT_FORMAT(elf64-x86-64)\nGROUP ( /lib/x86_64-linux-gnu/libm.so.6  AS_NEEDED ( /lib/x86_64-linux-gnu/libmvec.so.1 ) )\n",
+  "official_verilated_make_threads": "CFG_LDLIBS_THREADS = -pthread -lpthread -latomic; LDLIBS += $(CFG_LDLIBS_THREADS)",
+  "interpretation": "libpthread.a exists without libpthread.so; libm linker script explicitly names libmvec.so.1. dl/rt archives are conservative installed link-input closure, not claim current invocation necessarily reads them."
+}

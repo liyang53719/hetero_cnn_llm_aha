@@ -1,0 +1,33 @@
+{
+  "schema": "FIXED_SHARED_BUILD_ONLY_PLAN_V1",
+  "mode": "BUILD_ONLY",
+  "matrix_mac": 4096,
+  "vector_lanes": 32,
+  "profiles": [
+    "qwen2_1p5b",
+    "qwen35_0p8b_l0",
+    "qwen35_0p8b_l3",
+    "qwen35_35b_a3b_l0",
+    "qwen35_35b_a3b_l3"
+  ],
+  "tokens": 128,
+  "builds": 1,
+  "numeric_execution": false,
+  "cpp_compile_link": true,
+  "timeout_seconds": 21000,
+  "owned_tree_cap_bytes": 12081306272,
+  "min_free_reserve_bytes": 1500000000,
+  "artifact_expanded_cap_bytes": 4294967296,
+  "summary_cap_bytes": 65536,
+  "artifact_file_whitelist": [
+    "dut.bin",
+    "hardware.sv",
+    "driver.cpp",
+    "source_manifest.json",
+    "tool_manifest.json",
+    "build_receipt.json",
+    "frozen_artifact.json"
+  ],
+  "weights_and_reference_bins": "NOT_ACQUIRED_OR_EXECUTED_IN_BUILD_ONLY",
+  "scope": "CHISEL_TEST_BACKEND_BUILD_NOT_FINAL_RTL_REPLAY"
+}

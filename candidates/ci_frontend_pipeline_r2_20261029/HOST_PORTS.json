@@ -1,0 +1,342 @@
+{
+  "clock": [
+    "input",
+    1
+  ],
+  "reset": [
+    "input",
+    1
+  ],
+  "io_launch_ready": [
+    "output",
+    1
+  ],
+  "io_launch_valid": [
+    "input",
+    1
+  ],
+  "io_launch_bits_commandBase": [
+    "input",
+    64
+  ],
+  "io_launch_bits_commandLimit": [
+    "input",
+    64
+  ],
+  "io_launch_bits_commands": [
+    "input",
+    16
+  ],
+  "io_launch_bits_descriptorBase": [
+    "input",
+    64
+  ],
+  "io_launch_bits_descriptorLimit": [
+    "input",
+    64
+  ],
+  "io_launch_bits_descriptors": [
+    "input",
+    25
+  ],
+  "io_launch_bits_epoch": [
+    "input",
+    16
+  ],
+  "io_launch_bits_regions_0_base": [
+    "input",
+    64
+  ],
+  "io_launch_bits_regions_0_limit": [
+    "input",
+    64
+  ],
+  "io_launch_bits_regions_0_read": [
+    "input",
+    1
+  ],
+  "io_launch_bits_regions_0_write": [
+    "input",
+    1
+  ],
+  "io_launch_bits_regions_1_base": [
+    "input",
+    64
+  ],
+  "io_launch_bits_regions_1_limit": [
+    "input",
+    64
+  ],
+  "io_launch_bits_regions_1_read": [
+    "input",
+    1
+  ],
+  "io_launch_bits_regions_1_write": [
+    "input",
+    1
+  ],
+  "io_launch_bits_regions_2_base": [
+    "input",
+    64
+  ],
+  "io_launch_bits_regions_2_limit": [
+    "input",
+    64
+  ],
+  "io_launch_bits_regions_2_read": [
+    "input",
+    1
+  ],
+  "io_launch_bits_regions_2_write": [
+    "input",
+    1
+  ],
+  "io_launch_bits_regions_3_base": [
+    "input",
+    64
+  ],
+  "io_launch_bits_regions_3_limit": [
+    "input",
+    64
+  ],
+  "io_launch_bits_regions_3_read": [
+    "input",
+    1
+  ],
+  "io_launch_bits_regions_3_write": [
+    "input",
+    1
+  ],
+  "io_launch_bits_version": [
+    "input",
+    8
+  ],
+  "io_launch_bits_profileId": [
+    "input",
+    3
+  ],
+  "io_result_ready": [
+    "input",
+    1
+  ],
+  "io_result_valid": [
+    "output",
+    1
+  ],
+  "io_result_bits_status": [
+    "output",
+    8
+  ],
+  "io_result_bits_completed": [
+    "output",
+    16
+  ],
+  "io_result_bits_failedPc": [
+    "output",
+    16
+  ],
+  "io_result_bits_epoch": [
+    "output",
+    16
+  ],
+  "io_completion_ready": [
+    "input",
+    1
+  ],
+  "io_completion_valid": [
+    "output",
+    1
+  ],
+  "io_completion_bits": [
+    "output",
+    56
+  ],
+  "io_axi_aw_ready": [
+    "input",
+    1
+  ],
+  "io_axi_aw_valid": [
+    "output",
+    1
+  ],
+  "io_axi_aw_bits_addr": [
+    "output",
+    64
+  ],
+  "io_axi_aw_bits_id": [
+    "output",
+    8
+  ],
+  "io_axi_aw_bits_len": [
+    "output",
+    8
+  ],
+  "io_axi_aw_bits_size": [
+    "output",
+    3
+  ],
+  "io_axi_aw_bits_burst": [
+    "output",
+    2
+  ],
+  "io_axi_w_ready": [
+    "input",
+    1
+  ],
+  "io_axi_w_valid": [
+    "output",
+    1
+  ],
+  "io_axi_w_bits_data": [
+    "output",
+    512
+  ],
+  "io_axi_w_bits_strb": [
+    "output",
+    64
+  ],
+  "io_axi_w_bits_last": [
+    "output",
+    1
+  ],
+  "io_axi_b_ready": [
+    "output",
+    1
+  ],
+  "io_axi_b_valid": [
+    "input",
+    1
+  ],
+  "io_axi_b_bits_id": [
+    "input",
+    8
+  ],
+  "io_axi_b_bits_resp": [
+    "input",
+    2
+  ],
+  "io_axi_ar_ready": [
+    "input",
+    1
+  ],
+  "io_axi_ar_valid": [
+    "output",
+    1
+  ],
+  "io_axi_ar_bits_addr": [
+    "output",
+    64
+  ],
+  "io_axi_ar_bits_id": [
+    "output",
+    8
+  ],
+  "io_axi_ar_bits_len": [
+    "output",
+    8
+  ],
+  "io_axi_ar_bits_size": [
+    "output",
+    3
+  ],
+  "io_axi_ar_bits_burst": [
+    "output",
+    2
+  ],
+  "io_axi_r_ready": [
+    "output",
+    1
+  ],
+  "io_axi_r_valid": [
+    "input",
+    1
+  ],
+  "io_axi_r_bits_id": [
+    "input",
+    8
+  ],
+  "io_axi_r_bits_data": [
+    "input",
+    512
+  ],
+  "io_axi_r_bits_resp": [
+    "input",
+    2
+  ],
+  "io_axi_r_bits_last": [
+    "input",
+    1
+  ],
+  "io_resetRequired": [
+    "output",
+    1
+  ],
+  "io_idmaTransfers": [
+    "output",
+    64
+  ],
+  "io_idmaStreamedWriteBeats": [
+    "output",
+    64
+  ],
+  "io_idmaStreamedBeats": [
+    "output",
+    64
+  ],
+  "io_pipelineIssues": [
+    "output",
+    64
+  ],
+  "io_pipelineStalls": [
+    "output",
+    64
+  ],
+  "io_idmaReadBursts": [
+    "output",
+    64
+  ],
+  "io_idmaReadBeats": [
+    "output",
+    64
+  ],
+  "io_idmaCacheHits": [
+    "output",
+    64
+  ],
+  "io_pc": [
+    "output",
+    16
+  ],
+  "io_issuedJobs": [
+    "output",
+    16
+  ],
+  "io_usefulMacs": [
+    "output",
+    64
+  ],
+  "io_executedMacs": [
+    "output",
+    64
+  ],
+  "io_writeBytes": [
+    "output",
+    64
+  ],
+  "io_memoryAccepted_0": [
+    "output",
+    64
+  ],
+  "io_memoryAccepted_1": [
+    "output",
+    64
+  ],
+  "io_memoryReturned_0": [
+    "output",
+    64
+  ],
+  "io_memoryReturned_1": [
+    "output",
+    64
+  ]
+}

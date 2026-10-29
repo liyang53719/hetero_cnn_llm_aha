@@ -1,5 +1,6 @@
 """Typed scalar/hash summary plus bounded source-owned compiler diagnostics. No raw logs/env/inputs/SV/C++."""
 import argparse,json,pathlib,re
+from frontend_telemetry import typed_metrics,native_options,output_inventory
 from safe_diagnostics import stage_diagnostics,compiler_errors
 STAGES=['jdk','jars','verilator','idma','matrix','binding']
 FRONT=['compile155','helper_compile','original_high','canonical_micro','canonical_full','transform_new_toolchain','emit_host','sv_identity','emit_fma','subset','frontend','frontend_native_Vbf16_context_lane_cluster16_rev8b_b_candidate_d','frontend_native_Vqwen2_matrix_command_endpoint_0','frontend_native_VTransposedDenseDownOwner','frontend_native_VHostBlockTopV4']
@@ -15,6 +16,7 @@ def summarize(root,commit):
    if x is not None and (type(x) not in (int,float) or abs(x)>10**15):raise ValueError('scalar receipt type')
    row[k]=x
   row['diagnostics']=stage_diagnostics(r,p.parent/'frontend.log.gz')
+  row['telemetry']=typed_metrics(r)
   if name in ('compile155','helper_compile'):row['compiler_errors']=compiler_errors(r,p.parent/'frontend.log.gz')
   row['error_count']=len(r.get('errors',[]));row['cleanup_recorded']=bool(r.get('cleanup_proof'));out['stages'].append(row)
  p=root/'frontend/sv_identity/sv-identity.json'
@@ -67,8 +69,37 @@ def summarize(root,commit):
   for k in ['sv_sha256','source_manifest_sha256','driver_sha256','frontend_receipt_sha256']:
    if not re.fullmatch('[0-9a-f]{64}',r[k]):raise ValueError('hash')
    out[k]=r[k]
+ out['native_frontend_plan']=native_options(root/'frontend/frontend/obj')
+ out['generated_output_inventory']=output_inventory(root/'frontend/frontend/obj')
  return out
+def encode_summary(out):
+ # Preserve essential termination evidence even if optional diagnostic detail grows.
+ import copy
+ value=copy.deepcopy(out);value['summary_truncation']=[]
+ def encode():return json.dumps(value,separators=(',',':'))+'\n'
+ raw=encode()
+ if len(raw.encode())<=65536:return raw
+ value['summary_truncation'].append('OPTIONAL_DETAIL_REMOVED_FOR_64KiB_CAP')
+ for row in value.get('stages',[]):
+  row.pop('compiler_errors',None)
+  census=row.get('telemetry',{}).get('capture_census',{})
+  if 'warning_histogram' in census:census['warning_histogram_truncated']=True;census.pop('warning_histogram')
+ md=value.get('sv_identity',{}).get('module_diagnostics',{})
+ if 'first_differences' in md:md.pop('first_differences');md['differences_truncated']=True
+ value['native_frontend_plan']=[{k:r[k] for k in ('prefix','args_sha256','bytes') if k in r} for r in value.get('native_frontend_plan',[])]
+ inv=value.get('generated_output_inventory',{})
+ if 'largest_files' in inv:inv.pop('largest_files');inv['largest_files_truncated']=True
+ raw=encode()
+ if len(raw.encode())<=65536:return raw
+ value['summary_truncation'].append('ESSENTIAL_TERMINATION_ONLY')
+ for row in value.get('stages',[]):
+  row.pop('diagnostics',None)
+  telemetry=row.get('telemetry',{})
+  row['telemetry']={k:telemetry[k] for k in ('observed_cpu_seconds','supervisor_cpu_seconds','cleanup_status','supervisor_reason_codes','reader_join_barrier','capture_census','disk_census_max_seconds','process_sample_max_gap_seconds') if k in telemetry}
+ raw=encode()
+ if len(raw.encode())>65536:raise ValueError('internal bounded schema invariant violated')
+ return raw
 if __name__=='__main__':
- a=argparse.ArgumentParser();a.add_argument('--work',type=pathlib.Path,required=True);a.add_argument('--commit',required=True);a.add_argument('--output',type=pathlib.Path,required=True);v=a.parse_args();r=summarize(v.work,v.commit);raw=json.dumps(r,indent=2)+'\n'
- if len(raw)>32768 or v.output.exists():raise ValueError('new bounded summary')
+ a=argparse.ArgumentParser();a.add_argument('--work',type=pathlib.Path,required=True);a.add_argument('--commit',required=True);a.add_argument('--output',type=pathlib.Path,required=True);v=a.parse_args();r=summarize(v.work,v.commit);raw=encode_summary(r)
+ if len(raw.encode())>65536 or v.output.exists():raise ValueError('new bounded summary')
  v.output.write_text(raw);print(raw)

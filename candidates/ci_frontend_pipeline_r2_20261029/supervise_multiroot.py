@@ -1,5 +1,6 @@
 """Observed descendants + original-group barrier. Not escaped-tree containment."""
 import lossless_log
+import threading,queue
 import fcntl,hashlib,json,os,resource,signal,subprocess,sys,time,types,stat,shutil
 from pathlib import Path
 HELPER_SHA='30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047'
@@ -30,8 +31,29 @@ def execute(argv,run,lock_path,caps,env,pins,inject_monitor_error=False,resource
  lock=os.open(lock_path,os.O_CREAT|os.O_RDWR|os.O_NOFOLLOW,0o600)
  try:fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
  except BaseException:os.close(lock);raise
+ parent_cpu_started=time.process_time()
  started=time.monotonic();work_stop=started+caps['wall_seconds'];stop=work_stop+caps['cleanup_seconds'];owner=None;log=None;telemetry=None;capture=None;leader=None;observed={};pidfds={};report={'status':'IN_PROGRESS','scope':'ORIGINAL_PROCESS_GROUP_AND_OBSERVED_DESCENDANTS_ONLY','argv':argv,'caps':caps,'worker_started':False,'errors':[],'observed_peak_rss':0,'observed_cpu_seconds':0,'peak_tree_bytes':0,'peak_file_bytes':0,'native_exit':None,'cleanup_proof':None};oldmask=signal.pthread_sigmask(signal.SIG_BLOCK,SIGNALS);oldhandlers={s:signal.getsignal(s) for s in SIGNALS};api=strict._Linux()
+ reader=None;reader_stop=threading.Event();reader_done=threading.Event();reader_errors=queue.SimpleQueue();last_process_sample=None
  def fail(e):report['errors'].append(type(e).__name__+': '+str(e))
+ def drain_reader_errors():
+  while not reader_errors.empty():
+   kind,message=reader_errors.get();report['errors'].append('log_reader: '+kind+': '+message)
+ def log_reader():
+  try:
+   while not reader_stop.is_set():
+    got=capture.drain()
+    if capture.eof:return
+    if not got:reader_stop.wait(.002)
+  except BaseException as e:reader_errors.put((type(e).__name__,str(e)))
+  finally:
+   try:capture.finish()
+   except BaseException as e:reader_errors.put((type(e).__name__,str(e)))
+   finally:reader_done.set()
+ def timed_output_sample():
+  t=time.monotonic()
+  try:output_sample()
+  finally:
+   elapsed=time.monotonic()-t;report['disk_census_count']=report.get('disk_census_count',0)+1;report['disk_census_total_seconds']=report.get('disk_census_total_seconds',0)+elapsed;report['disk_census_max_seconds']=max(report.get('disk_census_max_seconds',0),elapsed);report['disk_census_last_seconds']=elapsed
  def interrupted(sig,frame):raise InterruptedError('signal '+str(sig))
  def limits():
   resource.setrlimit(resource.RLIMIT_CORE,(0,0))
@@ -66,6 +88,10 @@ def execute(argv,run,lock_path,caps,env,pins,inject_monitor_error=False,resource
   report['peak_tree_bytes']=max(report['peak_tree_bytes'],total);report['peak_file_bytes']=max(report['peak_file_bytes'],largest)
   need(total<=caps.get('watch_tree_bytes',caps['tree_bytes']),'sampled aggregate writable-root cap');need(stage_total<=caps['tree_bytes'],'sampled stage output tree cap');need(largest<=caps['file_bytes'],'file cap');need(os.fstat(log.fileno()).st_size<=caps['log_bytes'],'sampled log cap')
  def process_sample():
+  nonlocal last_process_sample
+  now=time.monotonic()
+  if last_process_sample is not None:report['process_sample_max_gap_seconds']=max(report.get('process_sample_max_gap_seconds',0),now-last_process_sample)
+  last_process_sample=now;report['process_sample_count']=report.get('process_sample_count',0)+1
   strict._verify_leader(owner,api,leader,boot);snapshot={};rawfields={};names=os.listdir('/proc');need(len(names)<=100000,'proc enumeration cap')
   for name in names:
    if not name.isascii() or not name.isdecimal():continue
@@ -103,11 +129,15 @@ def execute(argv,run,lock_path,caps,env,pins,inject_monitor_error=False,resource
    need(available>=resource_gate['min_available_memory'],'locked memory gate');need(shutil.disk_usage(run.parent).free>=resource_gate['min_disk_free'],'locked disk gate')
   need(time.monotonic()<work_stop,'prelaunch work deadline');run.mkdir();(run/'home').mkdir();(run/'tmp').mkdir();log=(run/'frontend.log.gz').open('xb');telemetry=(run/'rss_samples.jsonl').open('x')
   signal.pthread_sigmask(signal.SIG_BLOCK,SIGNALS)
+  need(threading.active_count()==1,'preexec requires no existing reader/background threads')
   p=subprocess.Popen(argv,cwd=run,env={**env,'HOME':str(run/'home'),'TMPDIR':str(run/'tmp')},stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,start_new_session=True,preexec_fn=limits)
-  owner={'process':p,'identity':None};capture=lossless_log.Capture(p.stdout,log,caps.get('raw_log_bytes',caps['log_bytes']),caps['log_bytes']);boot=api.boot();leader,_=strict._verify_leader(owner,api,None,boot);report['worker_started']=True;report['owner_identity']=dict(owner['identity']);(run/'STARTED.json').write_text(json.dumps({'owner_identity':owner['identity'],'run_started_monotonic':started,'work_stop':work_stop,'cleanup_stop':stop})+'\n');signal.pthread_sigmask(signal.SIG_SETMASK,oldmask-SIGNALS)
+  owner={'process':p,'identity':None};capture=lossless_log.Capture(p.stdout,log,caps.get('raw_log_bytes',caps['log_bytes']),caps['log_bytes']);boot=api.boot();leader,_=strict._verify_leader(owner,api,None,boot);report['worker_started']=True;report['owner_identity']=dict(owner['identity']);(run/'STARTED.json').write_text(json.dumps({'owner_identity':owner['identity'],'run_started_monotonic':started,'work_stop':work_stop,'cleanup_stop':stop})+'\n')
+  # Popen/preexec completed; reader inherits blocked monitor signals.
+  reader=threading.Thread(target=log_reader,name='bounded-lossless-reader',daemon=True);reader.start();report['reader_started_after_popen']=True
+  signal.pthread_sigmask(signal.SIG_SETMASK,oldmask-SIGNALS)
   if inject_monitor_error:raise OSError('injected monitor failure')
   while True:
-   capture.drain();process_sample();output_sample();need(time.monotonic()<work_stop,'wall cap')
+   drain_reader_errors();need(not report['errors'],'log reader failure');process_sample();timed_output_sample();drain_reader_errors();need(not report['errors'],'log reader failure');need(time.monotonic()<work_stop,'wall cap')
    exited=os.waitid(os.P_PID,p.pid,os.WEXITED|os.WNOHANG|os.WNOWAIT)
    if exited is not None and capture.eof:report['native_exit']=exited.si_status if exited.si_code==os.CLD_EXITED else -exited.si_status;break
    time.sleep(.05)
@@ -131,12 +161,9 @@ def execute(argv,run,lock_path,caps,env,pins,inject_monitor_error=False,resource
     report['observed_remaining']=present;need(not present,'observed identities remain after group cleanup')
    need(time.monotonic()<stop,'post-cleanup deadline')
    signal.setitimer(signal.ITIMER_REAL,max(.001,stop-time.monotonic()));signal.pthread_sigmask(signal.SIG_SETMASK,oldmask-SIGNALS)
-   if capture:
-    if not capture.capped:
-     for _ in range(64):
-      if capture.eof or not capture.drain():break
-    capture.finish();report['log_capture']=capture.receipt()
-   if log:output_sample()
+   if reader:
+    need(reader_done.wait(max(0.,stop-time.monotonic())),'reader completion deadline');reader.join(max(0.,stop-time.monotonic()));need(not reader.is_alive(),'reader join deadline');drain_reader_errors();need(capture.eof,'log EOF missing after cleanup');report['log_capture']=capture.receipt()
+   if log:timed_output_sample()
    verify_aliases(caps.get('jdk_aliases',[]))
    for path,digest in pins.items():need(sha(regular(path))==digest,'post-input pin mismatch '+path)
   except BaseException as e:
@@ -146,15 +173,26 @@ def execute(argv,run,lock_path,caps,env,pins,inject_monitor_error=False,resource
    signal.pthread_sigmask(signal.SIG_BLOCK,SIGNALS);signal.setitimer(signal.ITIMER_REAL,0)
    for s in SIGNALS:
     if s in signal.sigpending():signal.sigtimedwait({s},0)
+   reader_stop.set()
+   if reader:
+    reader_done.wait(max(0.,stop-time.monotonic()))
+    if reader_done.is_set():reader.join(max(0.,stop-time.monotonic()))
+   reader_alive=reader is not None and (not reader_done.is_set() or reader.is_alive());report['reader_join_barrier']={'complete':not reader_alive,'alive':reader_alive,'reader_finally_done':reader_done.is_set()};drain_reader_errors()
+   if reader_alive:fail(RuntimeError('reader remains; retaining log/pipe/lock until process exit'))
    for fd in pidfds.values():os.close(fd)
-   if capture:
-    try:capture.finish();report['log_capture']=capture.receipt()
-    except BaseException as e:fail(e)
-    capture.pipe.close()
-   if log:log.close()
+   if capture and not reader_alive:
+    if reader is None:
+     try:capture.finish()
+     except BaseException as e:fail(e)
+    report['log_capture']=capture.receipt();capture.pipe.close()
+    if not capture.eof:fail(RuntimeError('capture missing EOF; no full log claim'))
+   if log and not reader_alive:log.close()
    if telemetry:telemetry.close()
+   if last_process_sample is not None:report['process_sample_terminal_gap_seconds']=time.monotonic()-last_process_sample
+   report['supervisor_cpu_seconds']=time.process_time()-parent_cpu_started;report['supervisor_cpu_scope']='Parent process including logreader; excludes child/DUT observed CPU'
    report['observed_processes']=list(observed.values());report['elapsed_seconds']=time.monotonic()-started;report['status']='PASS_PROCESS_ONLY' if not report['errors'] and report['native_exit']==0 and report['cleanup_proof'] else 'FAIL_OR_INCOMPLETE';report['limitations']=['Unobserved double-fork/setsid escape between samples is not contained.','Aggregate RSS/CPU/output limits are sampled; per-process RLIMIT is not aggregate cgroup containment.','Exited unobserved processes may contribute CPU not counted; reported observed CPU is a lower bound.','Advisory lock only coordinates runners using this same lock; unrelated old launchers are not excluded.','OS-level uninterruptible processes may prevent cleanup proof; this is FAIL_OR_INCOMPLETE, never a successful absence claim.']
    if run.exists():(run/'RESULT.json').write_text(json.dumps(report,indent=2)+'\n')
    for s,h in oldhandlers.items():signal.signal(s,h)
-   signal.pthread_sigmask(signal.SIG_SETMASK,oldmask);fcntl.flock(lock,fcntl.LOCK_UN);os.close(lock)
+   signal.pthread_sigmask(signal.SIG_SETMASK,oldmask)
+   if not reader_alive:fcntl.flock(lock,fcntl.LOCK_UN);os.close(lock)
  return report

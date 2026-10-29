@@ -29,6 +29,13 @@ def build_summary(root,commit):
    if type(n)is int and 0<=n<=1024**2:entry['raw_error_bytes']=n
    if isinstance(message,str)and len(message.encode())<=1024:entry['diagnostic']=sample(message.encode(),0)
   result['build_admission_failure']=entry
+ p=root/'frontend/binary_admission/generated_tree_failure.json'
+ if p.is_file() and not p.is_symlink() and p.stat().st_size<=4096:
+  f=json.loads(p.read_text());rel=f.get('relative_path');code=f.get('code');size=f.get('bytes');h=f.get('sha256');suffix=f.get('suffix')
+  if (f.get('schema')=='GENERATED_TREE_REJECTION_V1' and code in {'COMPILED_PRODUCT','UNEXPECTED_DEPENDENCY_NAME','DEPENDENCY_SIZE','DEPENDENCY_GRAMMAR','DEPENDENCY_PATH','UNBOUND_TARGET','UNBOUND_PREREQUISITE','DEPENDENCY_PIN_DRIFT'}
+      and isinstance(rel,str) and len(rel)<=512 and re.fullmatch(r'[A-Za-z0-9_./+\-]+',rel) and not rel.startswith('/') and '..' not in pathlib.PurePosixPath(rel).parts
+      and suffix in ('.o','.a','.gch','.d') and type(size)is int and 0<=size<=4*1024**3 and isinstance(h,str) and re.fullmatch('[0-9a-f]{64}',h)):
+   result['generated_tree_rejection']={k:f[k] for k in ('code','relative_path','suffix','bytes','sha256')}
  p=root/'frontend/BUILD_ONLY_RESULT.json'
  if p.is_file()and not p.is_symlink()and p.stat().st_size<=65536:
   r=json.loads(p.read_text());a=r['artifact'];manifest=a['manifest'];h=manifest['sha256']

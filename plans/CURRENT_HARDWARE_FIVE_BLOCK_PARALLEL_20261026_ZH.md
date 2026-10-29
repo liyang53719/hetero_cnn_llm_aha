@@ -1,5 +1,11 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-29 LOCAL_DATA 构建准入失败及源码修复候选（FAIL / TEMP）
+
+原 run [40856253077](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40856253077) / source `3185e082df78a59d42d8eb9a76a1afb5146c4e42` 于 10:41:59 UTC 在 `conditional_admission.py:113` 的后端编译准入处失败。22 个已记录阶段均 native0、watchdog reason 为空且 cleanup 完整；本轮重新通过 SV 目录规范身份 `6555ede3…` 和四个原生 frontend。随后 ValueError `previous compiled/dependency product`（36B，SHA `c7300115137928620cfee0cca32dbde94e706eca5d1f2c0734aa80585b99853a`）阻止 archive/link；**没有 C++ archive/link、binary 或数值通过，原 CI 具体 offending 文件未知**。仅摘要 artifact `12890164804`，summary 40969B / SHA `8fab13a8c67f858799980b3e4ac9e6d13baf9a7d783be38c7436e44e72951951`，无 binary/SV 上传。
+
+新源码修正 blanket `.d` 拒绝：仅解析已知 native `__ver.d`/Top `__hierVer.d` 的单行安全 dependency 规则，路径和 prerequisite 绑定已有固定输入，冻结 dependency hash；继续拒绝编译产物、未知 `.d`、recipe/命令/续行/symlink/逃逸路径。保存的真实 native-only Down/层级小样例证明存在合法 `.d`，仅作语法兼容证据，不追认原 CI 文件身份，也不当新完整构建 PASS。新增有界 relative-path/suffix/hash 失败摘要。此提交仅源码及轻测；**不含新启动文件，不重试旧 run**。需后续独立审查新启动身份；公共七文件上传仍未获准，完整五块 M128 数值仍 0/5，硬件/算术/容量/资源上限均不变。
+
 ## 2026-10-29 BUILD_ONLY_LOCAL_DATA / NO_PAYLOAD_UPLOAD 范围补充（TEMP）
 
 本轮候选只在单个 CI job 内实际 compile/link 并检查本地七文件；只导出 ≤64 KiB 的受控摘要。binary/SV/driver/完整 source/tool receipts 不上传、不缓存、不文本编码输出，job 临时文件不构成后续五 job 可下载产物。identity 的 artifact_name 仅为本地格式字段，不代表 GitHub artifact 存在；不得据此声称同 binary 跨五 job 回放已具备条件。公共七文件上传仍待用户明确决定，原公共提案保持未激活。源码发布与新唯一 LOCAL_DATA 启动提交仍分开审查；本候选不含启动文件。完整五块 M128 数值仍 0/5，编译成功也不冒数值 PASS。

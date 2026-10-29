@@ -104,14 +104,12 @@ def admit_build(b,obj,host,frontend_receipt,out):
   overall((cwd/(prefix+'.mk')).read_text(),prefix,root,cwd,b['driver'],b['driver_include'],obj.parent)
   refs+=classes((cwd/(prefix+'_classes.mk')).read_text(),prefix,cwd,root)
  h=obj/(TOP+'_hier.mk');hierarchy(h.read_text());makepins[str(h)]=sha(h)
- # Generated deps makefiles are official optional include targets: reject any
- # preexisting .d/.o/.a/PCH, so no foreign dep recipe enters first build.
- derived={}
- for p in obj.rglob('*'):
-  need(not p.is_symlink(),'generated tree symlink')
-  if p.is_file():
-   need(p.suffix not in ('.o','.a','.gch','.d'),'previous compiled/dependency product')
-   if p.suffix in ('.mk','.cpp','.h','.v','.sv','.dat','.f'):derived[str(p.resolve())]=sha(p)
+ # Native frontend dependency rules are explicit, validated and frozen inputs.
+ from native_dependency_guard import admit_native_dependencies
+ prefixes={TOP:obj,**{'V'+n:obj/('V'+n) for n in CHILDREN}}
+ derived,dependency_pins,dependency_rows=admit_native_dependencies(obj,prefixes,{**b['pins'],**b['verified_gate_pins'],**b['compile_tool_pins']},out)
+ makepins.update(dependency_pins)
+ (out/'native_dependency_admission.json').write_text(json.dumps(dict(schema='NATIVE_DEPENDENCY_ADMISSION_V1',files=dependency_rows),indent=2)+'\n')
  for r in refs:
   need(r in derived or r in b['pins'],'unbound class source')
  # version/config rules included by official verilated.mk also pinned baseline.

@@ -1,0 +1,13 @@
+{
+  "schema": "LOCAL_TRUSTED_JDK_PATH_PARSER_REPRO_V1",
+  "scope": "LOCAL_HOST_PATH_PARSING_ONLY_NOT_ORIGINAL_CI_CAUSE_OR_HOST_QUALIFICATION",
+  "old_helper_sha256": "6d13104c7b4da7457eded991336ac54c3da4fbe486c8502567e7174f3d15c132",
+  "new_helper_sha256": "13dbbf5d605376c89b2ab9387937051c725503d249e8994e1d27050ea0216d0e",
+  "raw_local_ldd_sha256": "57472fb4496b70e8552d02b20de737941ed71cc1b28569573f62d5d116ba21be",
+  "library_spelling_pattern": "bin/../lib/libjli.so",
+  "old_lexical_rule_rejected": true,
+  "canonical_parser_accepts_existing_approved_files": true,
+  "original_ci_rejected_path": "UNKNOWN_NOT_EXPORTED",
+  "resource_caps_changed": false,
+  "numeric_pass": false
+}

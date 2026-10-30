@@ -4,8 +4,8 @@
   "files": [
     {
       "path": ".github/workflows/hetero-five-m128-samejob-calibration-local-data.yml",
-      "bytes": 4216,
-      "sha256": "ee68b38fd4686eb22aa1b1f46cf08217c568374e6306f4811af0dff277b76ef8"
+      "bytes": 4229,
+      "sha256": "4624fb51784b617e52d8240bda200d843b9852cdf0753b6b1e4f245f5eb2394a"
     },
     {
       "path": "candidates/attention_policy_count_fix_20261029T0054/source/HostBlockCommandsV4.scala",
@@ -79,8 +79,8 @@
     },
     {
       "path": "candidates/ci_frontend_materialization_r2_20261029/fresh_host.py",
-      "bytes": 9040,
-      "sha256": "6d13104c7b4da7457eded991336ac54c3da4fbe486c8502567e7174f3d15c132"
+      "bytes": 11911,
+      "sha256": "13dbbf5d605376c89b2ab9387937051c725503d249e8994e1d27050ea0216d0e"
     },
     {
       "path": "candidates/ci_frontend_materialization_r2_20261029/frontend_telemetry.py",
@@ -151,6 +151,11 @@
       "path": "candidates/ci_frontend_materialization_r2_20261029/test_fresh_host.py",
       "bytes": 4274,
       "sha256": "f162beb1c872c6d31135052a3296da6dea2479fb84af634899e377b12a8c9596"
+    },
+    {
+      "path": "candidates/ci_frontend_materialization_r2_20261029/test_fresh_host_canonical_paths.py",
+      "bytes": 4660,
+      "sha256": "7a593652ac09875db5424944199aad310b8755584336d3f86a62934c4dee61dc"
     },
     {
       "path": "candidates/ci_frontend_materialization_r2_20261029/test_fresh_host_r2.py",
@@ -2149,8 +2154,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/summarize_same_job.py",
-      "bytes": 16392,
-      "sha256": "b7f60c94278f8c2bc32667e0e3ae92773992975096656f6f59db1a36a8b25dad"
+      "bytes": 17169,
+      "sha256": "5cdad785679ce0c14e250a6dc277084a8b908840d858104787362846c7a6ff98"
     },
     {
       "path": "candidates/same_job_execution_20261030/test_dedup_summary.py",
@@ -2164,8 +2169,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/test_fresh_host_summary.py",
-      "bytes": 6739,
-      "sha256": "c1da23630128b5895511fc707e36ed934e4563ec88b51178a317afa4c4e3ba0f"
+      "bytes": 7980,
+      "sha256": "25d3b4591abc44878f6d5e0a1ab9123eedb8db70405be36c2fc8ef23927d0d39"
     },
     {
       "path": "candidates/same_job_execution_20261030/test_profile_policy.py",
@@ -2174,8 +2179,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/test_samejob_launch.py",
-      "bytes": 8112,
-      "sha256": "325d1e805a7b1477fbcb38d1e5a58e9bd00d017fadaae670ee81bb75825378e1"
+      "bytes": 8441,
+      "sha256": "d73813d3f6175961cdaa67575ee889bb2080426147a7633bdd9920dd329c1f9f"
     },
     {
       "path": "candidates/same_job_execution_20261030/test_summary_resources.py",
@@ -2184,8 +2189,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/validate_samejob_calibration_launch.py",
-      "bytes": 2433,
-      "sha256": "86d6d336ae865afbf3f4d3daa759f023dfa01d2a114f107fddc37bb2b88bbb16"
+      "bytes": 2459,
+      "sha256": "846d0d8df1c3d2f83dc57898fa5fe40e1712bc10320a6a4712c62fef9c23dbc9"
     },
     {
       "path": "candidates/same_job_materialization_20261029/CONNECTION_SOURCE_PINS.json",

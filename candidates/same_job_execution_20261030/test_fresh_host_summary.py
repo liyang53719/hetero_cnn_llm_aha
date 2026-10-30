@@ -56,4 +56,12 @@ class T(unittest.TestCase):
   self.put('stage_fresh_host/RESULT.json',dict(native_exit=None,errors=['opaque'],cleanup_proof=None,log_capture=None))
   with patch.object(m,'stage_resources',return_value={'bounded':True}):r=self.get()['stage']
   self.assertEqual(r['state'],'OBSERVED_PROCESS_ONLY_NOT_QUALIFIED');self.assertIsNone(r['native_exit']);self.assertFalse(r['cleanup_complete']);self.assertFalse(r['pipe_eof'])
+ def test_canonical_failure_details_are_bounded(self):
+  r=self.native();r.update(reason='ELF_DEPENDENCY_ROOT_REJECTED',query_role='JDK_EXECUTABLE',rejection_kind='CANONICAL_ROOT_REJECTED',had_parent_component=True,private_path='/PRIVATE/value');self.put('FRESH_HOST_NATIVE_FAILURE.json',r);out=self.get()['native_failure']
+  self.assertEqual(out['query_role'],'JDK_EXECUTABLE');self.assertTrue(out['had_parent_component']);self.assertNotIn('PRIVATE',json.dumps(out));self.assertFalse(self.get()['host_qualified'])
+ def test_canonical_failure_details_reject_invalid(self):
+  for update in ({'query_role':'/PRIVATE'},{'query_role':'UNKNOWN','rejection_kind':'/PRIVATE','had_parent_component':True},{'query_role':'UNKNOWN','rejection_kind':'MISSING_TARGET','had_parent_component':1},{'query_role':'UNKNOWN','had_parent_component':True}):
+   r=self.native();r.update(update);self.put('FRESH_HOST_NATIVE_FAILURE.json',r);self.assertEqual(self.get()['native_failure']['state'],'INVALID_NOT_QUALIFIED')
+ def test_legacy_failure_has_no_invented_query_role(self):
+  self.put('FRESH_HOST_NATIVE_FAILURE.json',self.native());r=self.get()['native_failure'];self.assertEqual(r['state'],'OBSERVED_FAILURE_NOT_QUALIFIED');self.assertNotIn('query_role',r)
 if __name__=='__main__':unittest.main(verbosity=2)

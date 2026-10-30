@@ -227,3 +227,11 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 本批发布 candidates/p0_resident_observation_20261030 隔离源码包：从真实 sealed SRAM gate/up 读响应输出 valid-only 观察口，统一 689 bit / 预计 27 port，配套最终 V3 driver collector 和实际 consumer_owned 位比较器。无 ready 反馈，不改算术或 DDR。参考 BF16 位扩展后与 actual 原始 FP32 精确比较，不舍入 actual。该包未替换 active fixed155/backend，原规范化、ABI、RTL 哈希门禁保留。
 - 实际本地 Scala typer：155 份源码、五文件 override；native 0，用时 55.460118529998 秒，观测 RSS 892080128 B，严格 cleanup/EOF/gzip 完整。receipt SHA256 为 81f6b9f1bf1f8243c874d45a9a2d6054e4ca7828f103cb9243960b5f4af3d4ba。Debian Java 21.0.12.1 不同于 CI Adoptium 21.0.13；-Ystop-after:typer 不覆盖插件后置阶段、字节码编译、elaboration、真实 ABI、RTL 或数值。C++ 完整 shape 合成 collector、mock-port 语法及 Python helper/owned 测试只按各自范围通过。
 - 后续需将观察包与新 source overlay、driver/header、owned-helper pin 链、新 ABI 及实际规范化/RTL 身份共同资格化，不能迁移旧 85 port 或旧 canonical PASS。MoE raw scores 观测及其余 required stage 比较仍未补齐。整个设计的物理 Vector32/II=1 未证明。五块完整 Chisel/RTL 各 0/5，无新增利用率实测；原 35B 安装原因仍 UNKNOWN。
+
+## 2026-10-30：修复合法 ELF 相对路径拼写的误拒（TEMP，未激活）
+
+- 原运行 41081287332 的确切拒绝路径仍未导出。对本机可信 Java 的只读 ldd 和两版解析器直接调用，复现了 bin/../lib/libjli.so 被旧词法规则误拒绝；这只证明本地缺陷，不回填原 CI 未观测路径。
+- 新解析先核规范化词法入口，再 strict resolve 并核实际普通文件仍在原系统/toolcache 根族内。合法内部 .. 可通过；真实越界、symlink 逃逸、缺失和目录仍拒绝。保留 raw→canonical alias、实际文件 hash、pin 时重核及原 stage 前后核验。没有扩大根族或资源/版本/硬件/数值合同。
+- 失败投影增加固定 query_role、rejection_kind 和 bool had_parent_component，拒绝任意字符串/路径及错误类型；旧 receipt 不凭空补 query_role。公开只给受限标量/hash，无原始 ldd、机器路径或库存。
+- 新 unique canonical R2 path/nonce 仅是源码接线；schema/profile、eligible P1–P4、P0 原策略延期、两 flags、预算/并发/摘要限制不变。全部已消耗 launch 保留并拒绝重用。source 与之后的单文件 activation 必须分开。
+- PASS 范围：119 项合并 metadata/lifecycle/mock/launch 测试在 normal 和 -O 各通过；本机可信路径解析复现通过。没有新 host inventory、backend、runtime、DUT 或数值通过。下一步必须绑定本源码新身份后做一次独立受限运行；不重试旧 run。

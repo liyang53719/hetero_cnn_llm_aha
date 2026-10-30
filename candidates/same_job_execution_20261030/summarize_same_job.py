@@ -127,7 +127,16 @@ def fresh_host_projection(work,identity):
     if role=='parent_failure':
      if r.get('schema')!='FRESH_HOST_PARENT_FAILURE_V1'or r.get('phase')not in parent or r.get('reason')!=parent[r['phase']]:continue
     elif r.get('schema')!='FRESH_HOST_NATIVE_FAILURE_V1'or r.get('phase')!='BOUNDED_HOST_INVENTORY'or r.get('reason')not in native:continue
-    row.update(state='OBSERVED_FAILURE_NOT_QUALIFIED',receipt_sha256=digest,status='FAILED',phase=r['phase'],reason=r['reason'])
+    details={}
+    if role=='native_failure'and any(k in r for k in ('query_role','rejection_kind','had_parent_component')):
+     query=r.get('query_role')
+     if not isinstance(query,str)or query not in {'SYSTEM_TOOL','JDK_EXECUTABLE','JDK_LIBRARY','VERILATOR_BINARY','PYTHON_EXTENSION','UNKNOWN'}:continue
+     details['query_role']=query
+     if 'rejection_kind'in r or 'had_parent_component'in r:
+      kind=r.get('rejection_kind');parent_component=r.get('had_parent_component')
+      if not isinstance(kind,str)or kind not in {'UNRESOLVED_LIBRARY','EMPTY_DEPENDENCY_LIST','MISSING_TARGET','NONREGULAR_TARGET','CANONICAL_ROOT_REJECTED'}or type(parent_component)is not bool:continue
+      details.update(rejection_kind=kind,had_parent_component=parent_component)
+    row.update(state='OBSERVED_FAILURE_NOT_QUALIFIED',receipt_sha256=digest,status='FAILED',phase=r['phase'],reason=r['reason'],**details)
   except (OSError,ValueError,TypeError,KeyError,AttributeError,ImportError):
    # Partial projection must not accidentally advertise a validated receipt.
    out[role]=dict(state='INVALID_NOT_QUALIFIED')

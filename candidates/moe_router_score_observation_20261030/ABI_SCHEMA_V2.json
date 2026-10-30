@@ -1,0 +1,68 @@
+{
+  "version": 2,
+  "event": "rawScoreObservation",
+  "valid": "selection.in.fire || selection.out.fire",
+  "multiplexing_proof": "in.valid only selectFeed; out.ready only distinct selectRead; assertion rejects simultaneous fires",
+  "fields": {
+    "valid": 1,
+    "transactionId": 64,
+    "ownerSequence": 32,
+    "profile": 32,
+    "token": 32,
+    "expert": 32,
+    "score": 32,
+    "kind": 1,
+    "rank": 32,
+    "last": 1
+  },
+  "flattened_signal_count": 10,
+  "total_signal_bits": 259,
+  "kind0": "actual selection.in.fire; rank0 last0, index0..255",
+  "kind1": "actual selection.out.fire; rank0..7, last iff rank7; direct output score/index",
+  "per_token_event_order": [
+    "256 kind0 expert ascending",
+    "8 kind1 rank ascending"
+  ],
+  "complete_M128_event_counts": {
+    "input": 32768,
+    "selected": 1024,
+    "total": 33792
+  },
+  "input_marker_unchanged": "HOST_ROUTER_RAW_SCORE_V1",
+  "selected_marker": "HOST_ROUTER_SELECTED_SCORE_V2 profile=<p> transaction=<tx> owner=<seq> values=1024 score_bytes=4096 id_bytes=4096 dtype=FP32 index_dtype=UINT32 source=SELECTION_OUTPUT_FIRE terminal=CLEAN coverage=EXACT_ONCE",
+  "files": [
+    {
+      "name": "router_selection_scores.fp32.actual.bin",
+      "shape": [
+        128,
+        256
+      ],
+      "bytes": 131072,
+      "dtype": "LE_FP32_BITS"
+    },
+    {
+      "name": "router_selected_scores.fp32.actual.bin",
+      "shape": [
+        128,
+        8
+      ],
+      "bytes": 4096,
+      "dtype": "LE_FP32_BITS"
+    },
+    {
+      "name": "router_selected_ids.u32.actual.bin",
+      "shape": [
+        128,
+        8
+      ],
+      "bytes": 4096,
+      "dtype": "LE_UINT32"
+    }
+  ],
+  "common_all_profiles": true,
+  "legal_active_profiles": [
+    3,
+    4
+  ],
+  "actual_emitted_top_abi": "NOT_YET_EMITTED_DO_NOT_REUSE_119"
+}

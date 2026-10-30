@@ -1,0 +1,365 @@
+{
+  "status": "PASS_SYNTHETIC_CPP_COLLECTOR_TO_PYTHON_READER_NORMAL_AND_BAD_BITS_ONLY",
+  "actual_hardware_executed": false,
+  "official_reference_executed": false,
+  "collector_sha256": "fc029f28224bf07452b36702b6c81f5cd196fd7870e81fe980efce13bffaf9df",
+  "driver_sha256": "f4f00dffd348e1822e7fcb5ac59602579d693d7a8d04e221cdd3f0255b56b04c",
+  "fixtures": [
+    {
+      "mode": "NORMAL",
+      "cpp_diagnostic_counts": {
+        "input_score_mismatches": 0,
+        "score_order_mismatches": 0,
+        "nonfinite_scores": 0,
+        "negative_scores": 0,
+        "negative_zero_scores": 0,
+        "above_one_scores": 0
+      },
+      "consumer_full_probability_diagnostic": {
+        "status": "BITWISE_MATCH_DIAGNOSTIC",
+        "elements": 32768,
+        "bytes": 131072,
+        "byte_mismatches": 0,
+        "element_mismatches": 0,
+        "first_mismatch_element": null,
+        "finite_pair_count": 32768,
+        "nonfinite_pair_count": 0,
+        "actual_value_counts": {
+          "nan": 0,
+          "positive_infinity": 0,
+          "negative_infinity": 0,
+          "negative_finite": 0,
+          "negative_zero": 0,
+          "above_one_finite": 0
+        },
+        "reference_value_counts": {
+          "nan": 0,
+          "positive_infinity": 0,
+          "negative_infinity": 0,
+          "negative_finite": 0,
+          "negative_zero": 0,
+          "above_one_finite": 0
+        },
+        "max_absolute_error": 0.0,
+        "max_ulp_distance": 0,
+        "ulp_policy": "FINITE_PAIRS_ONLY_IEEE_SIGN_ORDER_PLUS_MINUS_ZERO_DISTANCE_ZERO_NAN_INF_EXCLUDED_AND_COUNTED",
+        "actual_sha256": "79e50d5577356448f33a1bfca88eb106011f726ce15aa57d8129ce3f75f129c9",
+        "reference_sha256": "79e50d5577356448f33a1bfca88eb106011f726ce15aa57d8129ce3f75f129c9",
+        "acceptance": "DIAGNOSTIC_ONLY_NO_APPROVED_RAW_FP32_FAILURE_CONTRACT"
+      },
+      "consumer_actual_output_diagnostic": {
+        "status": "COMPARED_ACTUAL_SELECTION_OUTPUT_DIAGNOSTIC_ONLY",
+        "observation_scope": "ACTUAL_SELECTION_OUTPUT_FIRE_NOT_RECONSTRUCTED",
+        "shape": [
+          128,
+          8
+        ],
+        "score_dtype": "FP32_LE",
+        "id_dtype": "UINT32_LE",
+        "score_bytes": 4096,
+        "id_bytes": 4096,
+        "score_sha256": "ff8824dd468efe5ce53188b4737964ffd35fb8d1d04d766e5eeebfefcbb7ad42",
+        "id_sha256": "44915e711f96b709729edc47dfa239defb2f60f76f29cbfd744c5525a082f58d",
+        "transaction": 0,
+        "observed_owner_sequence": 9,
+        "coverage": "EXACT_ONCE_1024",
+        "input_output_score_consistency": {
+          "status": "BITWISE_MATCH_DIAGNOSTIC",
+          "elements": 1024,
+          "bytes": 4096,
+          "byte_mismatches": 0,
+          "element_mismatches": 0,
+          "first_mismatch_element": null,
+          "finite_pair_count": 1024,
+          "nonfinite_pair_count": 0,
+          "actual_value_counts": {
+            "nan": 0,
+            "positive_infinity": 0,
+            "negative_infinity": 0,
+            "negative_finite": 0,
+            "negative_zero": 0,
+            "above_one_finite": 0
+          },
+          "reference_value_counts": {
+            "nan": 0,
+            "positive_infinity": 0,
+            "negative_infinity": 0,
+            "negative_finite": 0,
+            "negative_zero": 0,
+            "above_one_finite": 0
+          },
+          "max_absolute_error": 0.0,
+          "max_ulp_distance": 0,
+          "ulp_policy": "FINITE_PAIRS_ONLY_IEEE_SIGN_ORDER_PLUS_MINUS_ZERO_DISTANCE_ZERO_NAN_INF_EXCLUDED_AND_COUNTED",
+          "actual_sha256": "ff8824dd468efe5ce53188b4737964ffd35fb8d1d04d766e5eeebfefcbb7ad42",
+          "reference_sha256": "ff8824dd468efe5ce53188b4737964ffd35fb8d1d04d766e5eeebfefcbb7ad42",
+          "acceptance": "DIAGNOSTIC_ONLY_NO_APPROVED_RAW_FP32_FAILURE_CONTRACT"
+        },
+        "official_probability_at_actual_selected_id": {
+          "status": "BITWISE_MATCH_DIAGNOSTIC",
+          "elements": 1024,
+          "bytes": 4096,
+          "byte_mismatches": 0,
+          "element_mismatches": 0,
+          "first_mismatch_element": null,
+          "finite_pair_count": 1024,
+          "nonfinite_pair_count": 0,
+          "actual_value_counts": {
+            "nan": 0,
+            "positive_infinity": 0,
+            "negative_infinity": 0,
+            "negative_finite": 0,
+            "negative_zero": 0,
+            "above_one_finite": 0
+          },
+          "reference_value_counts": {
+            "nan": 0,
+            "positive_infinity": 0,
+            "negative_infinity": 0,
+            "negative_finite": 0,
+            "negative_zero": 0,
+            "above_one_finite": 0
+          },
+          "max_absolute_error": 0.0,
+          "max_ulp_distance": 0,
+          "ulp_policy": "FINITE_PAIRS_ONLY_IEEE_SIGN_ORDER_PLUS_MINUS_ZERO_DISTANCE_ZERO_NAN_INF_EXCLUDED_AND_COUNTED",
+          "actual_sha256": "ff8824dd468efe5ce53188b4737964ffd35fb8d1d04d766e5eeebfefcbb7ad42",
+          "reference_sha256": "ff8824dd468efe5ce53188b4737964ffd35fb8d1d04d766e5eeebfefcbb7ad42",
+          "acceptance": "DIAGNOSTIC_ONLY_NO_APPROVED_RAW_FP32_FAILURE_CONTRACT"
+        },
+        "official_selected_probability_by_rank": {
+          "status": "BITWISE_MATCH_DIAGNOSTIC",
+          "elements": 1024,
+          "bytes": 4096,
+          "byte_mismatches": 0,
+          "element_mismatches": 0,
+          "first_mismatch_element": null,
+          "finite_pair_count": 1024,
+          "nonfinite_pair_count": 0,
+          "actual_value_counts": {
+            "nan": 0,
+            "positive_infinity": 0,
+            "negative_infinity": 0,
+            "negative_finite": 0,
+            "negative_zero": 0,
+            "above_one_finite": 0
+          },
+          "reference_value_counts": {
+            "nan": 0,
+            "positive_infinity": 0,
+            "negative_infinity": 0,
+            "negative_finite": 0,
+            "negative_zero": 0,
+            "above_one_finite": 0
+          },
+          "max_absolute_error": 0.0,
+          "max_ulp_distance": 0,
+          "ulp_policy": "FINITE_PAIRS_ONLY_IEEE_SIGN_ORDER_PLUS_MINUS_ZERO_DISTANCE_ZERO_NAN_INF_EXCLUDED_AND_COUNTED",
+          "actual_sha256": "ff8824dd468efe5ce53188b4737964ffd35fb8d1d04d766e5eeebfefcbb7ad42",
+          "reference_sha256": "ff8824dd468efe5ce53188b4737964ffd35fb8d1d04d766e5eeebfefcbb7ad42",
+          "acceptance": "DIAGNOSTIC_ONLY_NO_APPROVED_RAW_FP32_FAILURE_CONTRACT"
+        },
+        "official_selected_reference_origin": "INDEX_SAME_OFFICIAL_CAPTURED_FULL_FP32_PROBS_BY_UNMODIFIED_OFFICIAL_TOPK_IDS",
+        "selected_vs_route_id_mismatches": 0,
+        "selected_vs_official_id_mismatches": 0,
+        "internal_consistency_is_not_official_reference_pass": true,
+        "numerical_pass": false
+      },
+      "files": [
+        {
+          "name": "router_selected_ids.u32.actual.bin",
+          "bytes": 4096,
+          "sha256": "44915e711f96b709729edc47dfa239defb2f60f76f29cbfd744c5525a082f58d"
+        },
+        {
+          "name": "router_selected_scores.fp32.actual.bin",
+          "bytes": 4096,
+          "sha256": "ff8824dd468efe5ce53188b4737964ffd35fb8d1d04d766e5eeebfefcbb7ad42"
+        },
+        {
+          "name": "router_selection_scores.fp32.actual.bin",
+          "bytes": 131072,
+          "sha256": "79e50d5577356448f33a1bfca88eb106011f726ce15aa57d8129ce3f75f129c9"
+        }
+      ]
+    },
+    {
+      "mode": "BAD_BITS",
+      "cpp_diagnostic_counts": {
+        "input_score_mismatches": 3,
+        "score_order_mismatches": 4,
+        "nonfinite_scores": 6,
+        "negative_scores": 4,
+        "negative_zero_scores": 2,
+        "above_one_scores": 2
+      },
+      "consumer_full_probability_diagnostic": {
+        "status": "BITWISE_MISMATCH_DIAGNOSTIC",
+        "elements": 32768,
+        "bytes": 131072,
+        "byte_mismatches": 10,
+        "element_mismatches": 6,
+        "first_mismatch_element": 0,
+        "finite_pair_count": 32765,
+        "nonfinite_pair_count": 3,
+        "actual_value_counts": {
+          "nan": 1,
+          "positive_infinity": 1,
+          "negative_infinity": 1,
+          "negative_finite": 1,
+          "negative_zero": 1,
+          "above_one_finite": 1
+        },
+        "reference_value_counts": {
+          "nan": 0,
+          "positive_infinity": 0,
+          "negative_infinity": 0,
+          "negative_finite": 0,
+          "negative_zero": 0,
+          "above_one_finite": 0
+        },
+        "max_absolute_error": 1.00390625,
+        "max_ulp_distance": 2063597568,
+        "ulp_policy": "FINITE_PAIRS_ONLY_IEEE_SIGN_ORDER_PLUS_MINUS_ZERO_DISTANCE_ZERO_NAN_INF_EXCLUDED_AND_COUNTED",
+        "actual_sha256": "813bdf1cebee861d64f4ed685690bc0ac84c4c9b189f47585e2e0fd7fa8766e1",
+        "reference_sha256": "79e50d5577356448f33a1bfca88eb106011f726ce15aa57d8129ce3f75f129c9",
+        "acceptance": "DIAGNOSTIC_ONLY_NO_APPROVED_RAW_FP32_FAILURE_CONTRACT"
+      },
+      "consumer_actual_output_diagnostic": {
+        "status": "COMPARED_ACTUAL_SELECTION_OUTPUT_DIAGNOSTIC_ONLY",
+        "observation_scope": "ACTUAL_SELECTION_OUTPUT_FIRE_NOT_RECONSTRUCTED",
+        "shape": [
+          128,
+          8
+        ],
+        "score_dtype": "FP32_LE",
+        "id_dtype": "UINT32_LE",
+        "score_bytes": 4096,
+        "id_bytes": 4096,
+        "score_sha256": "72f5e68469b9f08cdca72ec6e38efeea6d28e81ad902a3b8e51a66057f89eb24",
+        "id_sha256": "44915e711f96b709729edc47dfa239defb2f60f76f29cbfd744c5525a082f58d",
+        "transaction": 0,
+        "observed_owner_sequence": 9,
+        "coverage": "EXACT_ONCE_1024",
+        "input_output_score_consistency": {
+          "status": "BITWISE_MISMATCH_DIAGNOSTIC",
+          "elements": 1024,
+          "bytes": 4096,
+          "byte_mismatches": 4,
+          "element_mismatches": 3,
+          "first_mismatch_element": 0,
+          "finite_pair_count": 1021,
+          "nonfinite_pair_count": 3,
+          "actual_value_counts": {
+            "nan": 1,
+            "positive_infinity": 1,
+            "negative_infinity": 1,
+            "negative_finite": 1,
+            "negative_zero": 1,
+            "above_one_finite": 1
+          },
+          "reference_value_counts": {
+            "nan": 1,
+            "positive_infinity": 1,
+            "negative_infinity": 1,
+            "negative_finite": 1,
+            "negative_zero": 1,
+            "above_one_finite": 1
+          },
+          "max_absolute_error": 0.00390625,
+          "max_ulp_distance": 998244352,
+          "ulp_policy": "FINITE_PAIRS_ONLY_IEEE_SIGN_ORDER_PLUS_MINUS_ZERO_DISTANCE_ZERO_NAN_INF_EXCLUDED_AND_COUNTED",
+          "actual_sha256": "72f5e68469b9f08cdca72ec6e38efeea6d28e81ad902a3b8e51a66057f89eb24",
+          "reference_sha256": "47b28c044884fc3d756310c01beba4da0bf893b0c989b6203f2206c22f0e437b",
+          "acceptance": "DIAGNOSTIC_ONLY_NO_APPROVED_RAW_FP32_FAILURE_CONTRACT"
+        },
+        "official_probability_at_actual_selected_id": {
+          "status": "BITWISE_MISMATCH_DIAGNOSTIC",
+          "elements": 1024,
+          "bytes": 4096,
+          "byte_mismatches": 13,
+          "element_mismatches": 8,
+          "first_mismatch_element": 0,
+          "finite_pair_count": 1021,
+          "nonfinite_pair_count": 3,
+          "actual_value_counts": {
+            "nan": 1,
+            "positive_infinity": 1,
+            "negative_infinity": 1,
+            "negative_finite": 1,
+            "negative_zero": 1,
+            "above_one_finite": 1
+          },
+          "reference_value_counts": {
+            "nan": 0,
+            "positive_infinity": 0,
+            "negative_infinity": 0,
+            "negative_finite": 0,
+            "negative_zero": 0,
+            "above_one_finite": 0
+          },
+          "max_absolute_error": 1.00390625,
+          "max_ulp_distance": 2063597568,
+          "ulp_policy": "FINITE_PAIRS_ONLY_IEEE_SIGN_ORDER_PLUS_MINUS_ZERO_DISTANCE_ZERO_NAN_INF_EXCLUDED_AND_COUNTED",
+          "actual_sha256": "72f5e68469b9f08cdca72ec6e38efeea6d28e81ad902a3b8e51a66057f89eb24",
+          "reference_sha256": "ff8824dd468efe5ce53188b4737964ffd35fb8d1d04d766e5eeebfefcbb7ad42",
+          "acceptance": "DIAGNOSTIC_ONLY_NO_APPROVED_RAW_FP32_FAILURE_CONTRACT"
+        },
+        "official_selected_probability_by_rank": {
+          "status": "BITWISE_MISMATCH_DIAGNOSTIC",
+          "elements": 1024,
+          "bytes": 4096,
+          "byte_mismatches": 13,
+          "element_mismatches": 8,
+          "first_mismatch_element": 0,
+          "finite_pair_count": 1021,
+          "nonfinite_pair_count": 3,
+          "actual_value_counts": {
+            "nan": 1,
+            "positive_infinity": 1,
+            "negative_infinity": 1,
+            "negative_finite": 1,
+            "negative_zero": 1,
+            "above_one_finite": 1
+          },
+          "reference_value_counts": {
+            "nan": 0,
+            "positive_infinity": 0,
+            "negative_infinity": 0,
+            "negative_finite": 0,
+            "negative_zero": 0,
+            "above_one_finite": 0
+          },
+          "max_absolute_error": 1.00390625,
+          "max_ulp_distance": 2063597568,
+          "ulp_policy": "FINITE_PAIRS_ONLY_IEEE_SIGN_ORDER_PLUS_MINUS_ZERO_DISTANCE_ZERO_NAN_INF_EXCLUDED_AND_COUNTED",
+          "actual_sha256": "72f5e68469b9f08cdca72ec6e38efeea6d28e81ad902a3b8e51a66057f89eb24",
+          "reference_sha256": "ff8824dd468efe5ce53188b4737964ffd35fb8d1d04d766e5eeebfefcbb7ad42",
+          "acceptance": "DIAGNOSTIC_ONLY_NO_APPROVED_RAW_FP32_FAILURE_CONTRACT"
+        },
+        "official_selected_reference_origin": "INDEX_SAME_OFFICIAL_CAPTURED_FULL_FP32_PROBS_BY_UNMODIFIED_OFFICIAL_TOPK_IDS",
+        "selected_vs_route_id_mismatches": 0,
+        "selected_vs_official_id_mismatches": 0,
+        "internal_consistency_is_not_official_reference_pass": true,
+        "numerical_pass": false
+      },
+      "files": [
+        {
+          "name": "router_selected_ids.u32.actual.bin",
+          "bytes": 4096,
+          "sha256": "44915e711f96b709729edc47dfa239defb2f60f76f29cbfd744c5525a082f58d"
+        },
+        {
+          "name": "router_selected_scores.fp32.actual.bin",
+          "bytes": 4096,
+          "sha256": "72f5e68469b9f08cdca72ec6e38efeea6d28e81ad902a3b8e51a66057f89eb24"
+        },
+        {
+          "name": "router_selection_scores.fp32.actual.bin",
+          "bytes": 131072,
+          "sha256": "813bdf1cebee861d64f4ed685690bc0ac84c4c9b189f47585e2e0fd7fa8766e1"
+        }
+      ]
+    }
+  ]
+}

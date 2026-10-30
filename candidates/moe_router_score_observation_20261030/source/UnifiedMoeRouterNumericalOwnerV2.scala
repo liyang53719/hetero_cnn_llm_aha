@@ -5,11 +5,13 @@ import chisel3.util._
 import gemmini.HeteroFp32Order
 
 /** Read-only event from the REAL selector input handshake. Never a client.
-  * Fixed common five-profile ABI; profiles0/1/2 produce no events. */
+  * Fixed common five-profile ABI; under accepted legal runtime lease paths
+  * profiles0/1/2 produce no events. kind0=input, kind1=actual selected output. */
 class UnifiedMoeRouterScoreObservationV1 extends Bundle {
   val transactionId=UInt(64.W);val ownerSequence=UInt(32.W)
   val profile=UInt(32.W);val token=UInt(32.W);val expert=UInt(32.W)
   val score=UInt(32.W)
+  val kind=Bool();val rank=UInt(32.W);val last=Bool()
 }
 
 class UnifiedMoeRouterNumericResultV2 extends Bundle {
@@ -96,13 +98,19 @@ class UnifiedMoeRouterNumericalOwnerV2 extends Module {
   io.selection.in.valid:=state===selectFeed // started selector must actually drain
   io.selection.in.bits.score:=row(index);io.selection.in.bits.index:=index
   // No ready, buffering, service request, or control dependence is added.
-  io.rawScoreObservation.valid:=io.selection.in.fire
+  // selectFeed and selectRead are distinct FSM states: input.valid and
+  // output.ready cannot both be true. No multiplexed event may be dropped.
+  assert(!(io.selection.in.fire && io.selection.out.fire))
+  io.rawScoreObservation.valid:=io.selection.in.fire || io.selection.out.fire
+  io.rawScoreObservation.bits.kind:=io.selection.out.fire
+  io.rawScoreObservation.bits.rank:=Mux(io.selection.out.fire,io.selection.out.bits.rank,0.U)
+  io.rawScoreObservation.bits.last:=io.selection.out.fire && io.selection.out.bits.last
   io.rawScoreObservation.bits.transactionId:=command.context.transactionId
   io.rawScoreObservation.bits.ownerSequence:=command.ownerSequence
   io.rawScoreObservation.bits.profile:=command.context.host.profileId
   io.rawScoreObservation.bits.token:=token
-  io.rawScoreObservation.bits.expert:=io.selection.in.bits.index
-  io.rawScoreObservation.bits.score:=io.selection.in.bits.score
+  io.rawScoreObservation.bits.expert:=Mux(io.selection.out.fire,io.selection.out.bits.index,io.selection.in.bits.index)
+  io.rawScoreObservation.bits.score:=Mux(io.selection.out.fire,io.selection.out.bits.score,io.selection.in.bits.score)
   io.selection.out.ready:=state===selectRead && !quarantine
   io.format.request.valid:=state===formatIssue;io.format.request.bits.value:=temporary
   io.format.result.ready:=state===formatWait && !quarantine

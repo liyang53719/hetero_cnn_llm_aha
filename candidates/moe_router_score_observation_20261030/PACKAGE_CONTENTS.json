@@ -1,42 +1,92 @@
 {
-  "schema": "INACTIVE_MOE_SOURCE_CANDIDATE_PACKAGE_V1",
+  "schema": "INACTIVE_MOE_SOURCE_CANDIDATE_PACKAGE_V2",
   "selected_by_active_pipeline": false,
   "includes_weights_or_tensors_or_binary_or_raw_logs": false,
   "files": [
     {
+      "path": "ABI_SCHEMA_V2.json",
+      "bytes": 1801,
+      "sha256": "1301f5b6abb232a65535445848caecfcbda3ecf38c1caf9df92bcc504a6a3272"
+    },
+    {
       "path": "BASE_AND_RESULT_PINS.json",
-      "bytes": 4137,
-      "sha256": "f8d3e3584be3a36ac4b56ff520986cb22262afaac8f1e1e98f3cacb518b413bc"
+      "bytes": 4198,
+      "sha256": "fc73dd6b44c94b71ec929087434708a76fa6e030d30e9eb6f3cb2f6119ab1598"
     },
     {
       "path": "README.zh.md",
-      "bytes": 4034,
-      "sha256": "698c269577c60e096636f97fb2b10845ad31f39e2624f596d4c9a434b847c11a"
+      "bytes": 5193,
+      "sha256": "33242ca8534925801fb8673359928891da5d5b088b4a68d7cfbad191b4c3d492"
     },
     {
       "path": "driver/moe_raw_score_observation.hpp",
-      "bytes": 2080,
-      "sha256": "98dd2f54d6dfa52a244a9e8e2a83da3190bae03923077df223b56be4c67c19ef"
+      "bytes": 4391,
+      "sha256": "fc029f28224bf07452b36702b6c81f5cd196fd7870e81fe980efce13bffaf9df"
     },
     {
-      "path": "evidence/LOCAL_COMPILE_AND_BOUNDARIES.json",
+      "path": "evidence/CROSS_LANGUAGE_SYNTHETIC_V2.json",
+      "bytes": 14411,
+      "sha256": "f6f1638e33a6ffea428cef00fbe0cdd423534708fd5f415e1817126c6c2c7a8f"
+    },
+    {
+      "path": "evidence/GATE_ONLY_FIXTURE.json",
+      "bytes": 2605,
+      "sha256": "cd95d6bd39d0609652e56f4dc92801a2f48f3a104b26b05c08e5a9f7d0d5998d"
+    },
+    {
+      "path": "evidence/REVIEW_AND_BOUNDARIES.json",
+      "bytes": 1841,
+      "sha256": "ee78acce8beedfa74ce5c77b3a9974e40cbda8d02da85a4373c0fc8a53b5becf"
+    },
+    {
+      "path": "legacy_r1/evidence/LOCAL_COMPILE_AND_BOUNDARIES.json",
       "bytes": 1986,
       "sha256": "5c3558bca32856eab3dbce9e0a83641a1d8d1f8b7806c0b2337478d7724d0047"
     },
     {
-      "path": "materialize.py",
-      "bytes": 2163,
-      "sha256": "1f0a28d3c43987ffeefe92e7c9690500ce708dfacc9a3e5000b7cbe6d5fabc6e"
-    },
-    {
-      "path": "patches/CONSUMER_GUARD.patch",
+      "path": "legacy_r1/patches/CONSUMER_GUARD.patch",
       "bytes": 2712,
       "sha256": "99d2d6f8dd1f0b5d5eb2322d4afc3b9174976e0f5f6dbdd9aa003c903e77ae9c"
     },
     {
+      "path": "legacy_r1/test_profile_coverage.py.txt",
+      "bytes": 2236,
+      "sha256": "27e8b59fedf56f5421edcb0e45a1eb5ce139442e7f33473d4156656dbf0805d7"
+    },
+    {
+      "path": "legacy_r1/test_raw_scores.cpp.txt",
+      "bytes": 1029,
+      "sha256": "bf9395ef5e613bed8c7eca97aad48bab99093dd18627b2e9fd2530cc1b27cf0d"
+    },
+    {
+      "path": "legacy_r1/test_tap_source.py.txt",
+      "bytes": 1315,
+      "sha256": "18968286854841f0b42cf564b0388a0e7f89b6cb525de1e0c4faf561f6d1d3ee"
+    },
+    {
+      "path": "materialize.py",
+      "bytes": 2663,
+      "sha256": "6649b1b71ffdb530e2bae298ab4f228315c8144af408d6046097e6ef693a299d"
+    },
+    {
+      "path": "numeric/moe_score_compare.py",
+      "bytes": 12215,
+      "sha256": "f2e54044e90f9f08e10f361730cbe0fc4ffc6f19412f7c78cc69be6b5661830e"
+    },
+    {
+      "path": "numeric/resident_compare.py",
+      "bytes": 2472,
+      "sha256": "0b0aebe70aa668847cf816b5aed86eae245bebea1a5f29ecdf66e99efb08ddfb"
+    },
+    {
+      "path": "patches/CONSUMER_INTEGRATED.patch",
+      "bytes": 11218,
+      "sha256": "f7577248599e83a808d95614cc735da7f3d3237836ee0b5abe46d606718d4a16"
+    },
+    {
       "path": "patches/DRIVER.patch",
-      "bytes": 5298,
-      "sha256": "d11772741339344610a13e6eb8418a8a36a7dc1a39b03ca6ede541a6527ca2e7"
+      "bytes": 6267,
+      "sha256": "7d99179883f0b0a89aa92e4399d37f1ae70f389668b54d0f9419cf0f73aa0e0f"
     },
     {
       "path": "patches/REFERENCE_WRAPPER.patch",
@@ -55,8 +105,8 @@
     },
     {
       "path": "source/UnifiedMoeRouterNumericalOwnerV2.scala",
-      "bytes": 14008,
-      "sha256": "6fc9534e5de335802e5b3a34ca4d5951246196601b8069f6b836a928a98cf305"
+      "bytes": 14732,
+      "sha256": "7c4358e766fca3101657e1702c8fdb2ee579a589eea768fcf1f2eed20412334f"
     },
     {
       "path": "source/UnifiedMoeRouterPipelineBindingV2.scala",
@@ -74,24 +124,54 @@
       "sha256": "c656b7e573547267f8c02dd5851e93bc323501016a34ce2da2f946d6f2f73140"
     },
     {
-      "path": "test_profile_coverage.py",
-      "bytes": 2236,
-      "sha256": "27e8b59fedf56f5421edcb0e45a1eb5ce139442e7f33473d4156656dbf0805d7"
-    },
-    {
-      "path": "test_raw_scores.cpp",
-      "bytes": 1029,
-      "sha256": "bf9395ef5e613bed8c7eca97aad48bab99093dd18627b2e9fd2530cc1b27cf0d"
-    },
-    {
-      "path": "test_tap_source.py",
-      "bytes": 1315,
-      "sha256": "18968286854841f0b42cf564b0388a0e7f89b6cb525de1e0c4faf561f6d1d3ee"
+      "path": "tests/actual_gate_fixture.py",
+      "bytes": 3603,
+      "sha256": "cbdefb5e2861c779b66b62c615f9d44992445c8f74502afab71c4ccc7673ee8a"
     },
     {
       "path": "tests/check_driver_syntax.py",
       "bytes": 1528,
       "sha256": "5379c33deb41240009a52305579acb7ace9e68404b7e7f14b84ed467591235b2"
+    },
+    {
+      "path": "tests/test_collector.cpp",
+      "bytes": 3557,
+      "sha256": "4c091cfad9482758125d5eb012e3b2241c548b399b2142990a921e8ab9a7b3e1"
+    },
+    {
+      "path": "tests/test_collector_reader.py",
+      "bytes": 5113,
+      "sha256": "e17c26c9fd8c8120592cf7d3cc95b4a1965f9193677b81aeab9de692c5f04ea6"
+    },
+    {
+      "path": "tests/test_integration.py",
+      "bytes": 8633,
+      "sha256": "74c4f68d88ae2593d7a6186278e3cfa269ad9e08c5fd7f4c954514740ba4ba86"
+    },
+    {
+      "path": "tests/test_lifecycle.py",
+      "bytes": 4059,
+      "sha256": "bec8b0026cd7cb232ead18bbd449eeb0fce357b00c493c9098e6d920f7306602"
+    },
+    {
+      "path": "tests/test_main_mock.py",
+      "bytes": 5741,
+      "sha256": "f1782c1d668ce65a63dc6c2e7c9c553c50d4c275cc9d87082eab0c4c149c2075"
+    },
+    {
+      "path": "tests/test_resident_compare.py",
+      "bytes": 931,
+      "sha256": "4a7e9588c9e32a27ded38fd31e6b1711156e0c5e339bab0716574230011382ec"
+    },
+    {
+      "path": "tests/test_selected_output.py",
+      "bytes": 5065,
+      "sha256": "2a2d6f558f9dcae17ca9b9ba10acae26ca957a76b5bfa02b2c5ac5f7c53a24a4"
+    },
+    {
+      "path": "tests/test_source.py",
+      "bytes": 1255,
+      "sha256": "10a4fe4b9ba587861876bf7bcfe564899843f0afadcc9f20e102caf6bbd6164a"
     }
   ]
 }

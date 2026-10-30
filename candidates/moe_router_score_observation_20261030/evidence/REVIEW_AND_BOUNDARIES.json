@@ -1,0 +1,35 @@
+{
+  "scope": "R2_SOURCE_REVIEW_AND_LIGHT_TESTS_ONLY",
+  "r2_numeric_scala_compile": "NOT_RUN",
+  "r2_elaboration": "NOT_RUN",
+  "r2_generated_abi": "NOT_RUN",
+  "top_ports_expected": 122,
+  "moe_output_signal_count_expected": 10,
+  "moe_output_bits_expected": 259,
+  "v1_compile_evidence_not_transferred": true,
+  "old_v1_ir_session": {
+    "identity": 84990,
+    "status": "INCOMPLETE_OBSERVATION_UNAVAILABLE",
+    "scope": "OLD_INPUT_ONLY_MOE_VERSION_NOT_R2",
+    "terminal_result_and_official_low_missing": true
+  },
+  "withdrawn_collector_sha256": "15e0cd55f9598713b8d4a17a39b741b02282a9c7018b0ecd89a530c7d87260fe",
+  "withdrawal_reason": "Numeric input-link/order and range veto could discard erroneous actual scores before dump",
+  "replacement_collector_sha256": "fc029f28224bf07452b36702b6c81f5cd196fd7870e81fe980efce13bffaf9df",
+  "replacement_driver_sha256": "f4f00dffd348e1822e7fcb5ac59602579d693d7a8d04e221cdd3f0255b56b04c",
+  "replacement_policy": "Protocol/fault/completeness gate only; every uint32 score pattern preserved; numeric counters diagnostic only",
+  "independent_cross_language_evidence_review": "Existing executed synthetic fixture script and results reviewed; independently regenerated expected raw byte hashes for NORMAL/BAD_BITS and matched; reviewer did not recompile/rerun native fixture",
+  "full_block_m128_pass_count": 0,
+  "profiles_required": 5,
+  "final_rtl_numeric_pass_count": 0,
+  "runtime_integration_complete": false,
+  "active_pins_modified": false,
+  "package_validation": {
+    "all_seven_base_result_reconstructions_hash_verified": true,
+    "isolated_reconstructed_package_tests_passed": 38,
+    "official_observer_light_tests_passed": 7,
+    "torch_imported_during_package_validation": false,
+    "native_cpp_reexecuted_by_reviewer": false,
+    "temporary_reconstruction_removed": true
+  }
+}

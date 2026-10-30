@@ -16,7 +16,7 @@
   uint8_t memoryByte(uint64_t address)const{const auto& a=cfg.range(address,1);need(a.access!="virtual","virtual allocation access");return a.access=="ro"?immutable.byte(address):mutableMemory.byte(address);}
   void initializedRead(uint64_t address,uint64_t bytes){need(cfg.range(address,bytes).access!="virtual","virtual scores/probabilities must not reach DDR");for(uint64_t i=0;i<bytes;++i)(void)memoryByte(address+i);}
   bool drained()const{return !pending.valid&&!aw.valid&&writes.empty()&&committing.empty();}
-@@ -133,6 +135,16 @@
+@@ -133,6 +135,19 @@
    if(d.io_axi_ar_valid){arNow=address(true);if(arHeld)need(arNow==heldAr,"AR changed while stalled");heldAr=arNow;arHeld=!arf;}else need(!arHeld,"AR withdrawn while stalled");
    if(d.io_axi_aw_valid){awNow=address(false);if(awHeld)need(awNow==heldAw,"AW changed while stalled");heldAw=awNow;awHeld=!awf;}else need(!awHeld,"AW withdrawn while stalled");
    if(d.io_axi_w_valid){for(unsigned i=0;i<16;i++)wNow.data[i]=d.io_axi_w_bits_data[i];wNow.mask=d.io_axi_w_bits_strb;wNow.last=d.io_axi_w_bits_last;if(wHeld)need(wNow==heldW,"W changed while stalled");heldW=wNow;wHeld=!wf;}else need(!wHeld,"W withdrawn while stalled");
@@ -28,12 +28,15 @@
 +   b.token=d.io_rawScoreObservation_bits_token;
 +   b.expert=d.io_rawScoreObservation_bits_expert;
 +   b.score=d.io_rawScoreObservation_bits_score;
++   b.kind=d.io_rawScoreObservation_bits_kind;
++   b.rank=d.io_rawScoreObservation_bits_rank;
++   b.last=d.io_rawScoreObservation_bits_last;
 +   rawScores.capture(b,launched,bool(d.io_resetRequired));
 +  }
    if(d.io_residentObservation_valid){
     resident_observation::Beat b;
     b.identity=d.io_residentObservation_bits_identity;
-@@ -185,7 +197,7 @@
+@@ -185,7 +200,7 @@
    d.clock=0;d.eval();context.timeInc(1);
   }
   public:
@@ -42,7 +45,7 @@
    uint16_t endian=1;need(*reinterpret_cast<uint8_t*>(&endian)==1,"little-endian host");
    need(!std::filesystem::exists(output),"fresh retained output directory");std::filesystem::create_directory(output);
    std::vector<stimulus::ViewAllocation> readonly;
-@@ -218,12 +230,14 @@
+@@ -218,12 +233,16 @@
    // specific to that real source, NOT a general iDMA legalizer assumption.
    const std::array<uint64_t,8> stopped{d.io_idmaTransfers,d.io_idmaReadBursts,d.io_idmaReadBeats,d.io_pipelineIssues,d.io_issuedJobs,d.io_memoryAccepted_0,d.io_memoryAccepted_1,d.io_idmaStreamedWriteBeats};
    auto terminalQuiet=[&](){
@@ -55,6 +58,8 @@
    d.io_result_ready=1;step();d.io_result_ready=0;terminalQuiet();need(!d.io_result_valid&&drained(),"result consumption");immutable.checkStable();
 +  rawScores.close(true);rawScores.write(output);
 +  if(cfg.profile==3||cfg.profile==4)std::cout<<"HOST_ROUTER_RAW_SCORE_V1 profile="<<cfg.profile<<" transaction="<<rawScores.transactionId()<<" owner="<<rawScores.ownerSequence()<<" values="<<rawScores.count()<<" bytes=131072 dtype=FP32 source=SELECTION_INPUT_FIRE terminal=CLEAN coverage=EXACT_ONCE\n";
++  if(cfg.profile==3||cfg.profile==4)std::cout<<"HOST_ROUTER_SELECTED_SCORE_V2 profile="<<cfg.profile<<" transaction="<<rawScores.transactionId()<<" owner="<<rawScores.ownerSequence()<<" values="<<rawScores.selectedCount()<<" score_bytes=4096 id_bytes=4096 dtype=FP32 index_dtype=UINT32 source=SELECTION_OUTPUT_FIRE terminal=CLEAN coverage=EXACT_ONCE\n";
++  if(cfg.profile==3||cfg.profile==4)std::cout<<"HOST_ROUTER_SELECTED_INTERNAL_DIAGNOSTIC_V2 input_score_mismatches="<<rawScores.inputMismatches()<<" score_order_mismatches="<<rawScores.orderMismatches()<<" nonfinite_scores="<<rawScores.nonfiniteScores()<<" negative_scores="<<rawScores.negativeScores()<<" negative_zero_scores="<<rawScores.negativeZeroScores()<<" above_one_scores="<<rawScores.aboveOneScores()<<" action=PRESERVED_ACTUAL_BITS_NOT_NUMERICAL_ACCEPTANCE\n";
    resident.close(true);resident.write(output);
    if(cfg.profile==0)std::cout<<"HOST_RESIDENT_OBSERVATION_V1 profile=0 beats="<<resident.count()<<" values=2293760 dtype=FP32 source=SEALED_SRAM_RESPONSE terminal=CLEAN coverage=EXACT_ONCE\n";
    dut->final();

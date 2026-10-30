@@ -1,5 +1,16 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-30 18时：真实 selector 输出与完整消费者接线（R2，TEMP / INCOMPLETE）
+
+- DONE（源码/轻测）：除每token256项真实selector输入概率，新增8项真实 selection.out.fire score/index/rank/last；kind区分事件，feed/read状态互斥，无新ready/算术/调度反馈。collector直接写真实输出score和ID两份4096B文件，绝不以input[ID]回填。新259bits/10信号、Top122口仅源码预期；本版Numeric尚未完整编译或发射IR，不继承V1编译/112口/旧119预期资格。
+- 修复采集语义：旧候选把input-link/排序数值检查当落盘前提，会丢失错误样本，已撤回旧collector GO。当前任意FP32位型（NaN/Inf/负数/±0/>1）均原样保存；数值异常只计数，协议/fault/覆盖才阻断。C++真实collector→Python reader合成negative证明错误bits保留，分别观察3个内部差异、6个全概率参考差异、8个selected参考差异；这不是硬件执行。
+- actual consumer以active7bb原00bac基线合并P0 resident gate/up与MoE input/actual output/独立reference比较，保留原ffb1合同、host/ABI/pins/cleanup/calibration及INCOMPLETE/exit2。内外比较分开：hardware output vs hardware input[actualID]是内部一致性；同次官方概率及原官方ID形成独立软件参考。无clip/舍入修补/新容差或tie批准。P0旧consumer不能覆盖active更新。
+- 官方观察器实际gate-only fixture一次native0：9.347591102s、direct-child RSS354574336B、native前后12项核验，原tuple/local身份与logits/IDs/weights逐bits不变。仅合成输入/权重的固定官方gate，不是完整block/reference；cleanup只按原reference supervisor finally stop/killpg/wait及postverify，不升级strict IR终结证明。
+- 包装复建7个base/result SHA在normal/-O分别通过，existing-output/base/result/P0-header负例均拒绝；38项包内轻测加7项observer轻测通过。materialize准入采用显式检查，避免-O跳过。5份旧摘要/patch/test按原字节归档legacy_r1，Git普通移动保留c639历史，不删除运行输入/唯一证据。
+- ONGOING：原run41096005966仍source7bb/launchfd947，17:57 API仍in_progress；本次不改其active pins、不增加activation。c639 source guard41100401245成功。新观察候选执行闭包、真实完整reference/DUT、全required-stage比较仍待接通；独立短CI仅compile+原HIGH/LOW的源码方案正审，未激活，不跑SV/RTL调数值。
+- 旧本地IR84990缺终结证据且跨namespace owner未知，保留INCOMPLETE、不重跑、不kill。完整五块M128 Chisel/最终RTL仍各0/5，有效MAC利用率未实测；4096固定资源与80%/90%目标不变。
+
+
 ## 2026-10-30 17:36 联合真实 MoE 概率观察候选（TEMP / INCOMPLETE）
 
 - DONE（源码/编译范围）：沿原 Numeric → Pipeline → RuntimeExpertLoop → Top 新增真实 selection.in.fire 的 FP32 softmax 后、topk 前概率只读 Valid tap，保留 P0 resident SRAM 观察，无 ready/算术/路由/调度反馈。每 P3/P4 全128×256项131072B，collector核序列/身份/fault及末拍静默。四 Scala 已独立审计，联合155源8覆盖完整编译 native0：118.871542250s、观测RSS1574649856B、862class17967658B，strict cleanup/EOF完整。源码见 [MoE观察候选](../candidates/moe_router_score_observation_20261030/README.zh.md)。

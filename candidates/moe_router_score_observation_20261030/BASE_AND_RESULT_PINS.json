@@ -1,12 +1,12 @@
 {
-  "schema": "INACTIVE_MOE_OBSERVATION_BASE_PINS_V1",
+  "schema": "INACTIVE_MOE_OBSERVATION_BASE_PINS_V2",
   "files": [
     {
-      "name": "source/UnifiedMoeRouterNumericalOwnerV2.scala",
-      "base_repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouterNumericalOwnerV2.scala",
+      "name": "source/UnifiedMoeRuntimeExpertLoopV4.scala",
+      "base_repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRuntimeExpertLoopV4.scala",
       "base_commit": "7bb6641b1d07aa4f83ffab1d37aff2d905237db7",
-      "base_sha256": "04ef8a11a5ec90af7622232dbec2369af9b574a0a1a74eb4f9236a9c8e549316",
-      "result_sha256": "6fc9534e5de335802e5b3a34ca4d5951246196601b8069f6b836a928a98cf305"
+      "base_sha256": "9a41408d5c846b1046957679731892dad7c06b177201975eeca22213d6eb8c8b",
+      "result_sha256": "1e0587156ff83ff1125abc4445cd9740f8377b2fe310c9dd0b85f238c7e0e605"
     },
     {
       "name": "source/UnifiedMoeRouterPipelineBindingV2.scala",
@@ -16,11 +16,11 @@
       "result_sha256": "0233df02cef3e1d81031f865838714a130bd7990d0dae4776a251f9498c6f3c2"
     },
     {
-      "name": "source/UnifiedMoeRuntimeExpertLoopV4.scala",
-      "base_repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRuntimeExpertLoopV4.scala",
+      "name": "source/UnifiedMoeRouterNumericalOwnerV2.scala",
+      "base_repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouterNumericalOwnerV2.scala",
       "base_commit": "7bb6641b1d07aa4f83ffab1d37aff2d905237db7",
-      "base_sha256": "9a41408d5c846b1046957679731892dad7c06b177201975eeca22213d6eb8c8b",
-      "result_sha256": "1e0587156ff83ff1125abc4445cd9740f8377b2fe310c9dd0b85f238c7e0e605"
+      "base_sha256": "04ef8a11a5ec90af7622232dbec2369af9b574a0a1a74eb4f9236a9c8e549316",
+      "result_sha256": "7c4358e766fca3101657e1702c8fdb2ee579a589eea768fcf1f2eed20412334f"
     },
     {
       "name": "source/HostBlockTopV4.scala",
@@ -34,16 +34,16 @@
       "base_repo_path": "candidates/p0_resident_observation_20261030/driver/host_axi_driver_non_dpi.cpp",
       "base_commit": "feafbd6d492da76923d23c6cd5dcd9c5e836ad0d",
       "base_sha256": "f7c0b05dce22225a818f00c4a781ebbe6ee01987f93b63f66e501ae4e13f2323",
-      "result_sha256": "4afa2352317d667855bcf48b5151fa40d607c56d6849403b86d19aad00f4baec",
+      "result_sha256": "f4f00dffd348e1822e7fcb5ac59602579d693d7a8d04e221cdd3f0255b56b04c",
       "patch": "patches/DRIVER.patch"
     },
     {
-      "name": "consumer_owned.py",
+      "name": "numeric/consumer_owned.py",
       "base_repo_path": "candidates/same_job_execution_20261030/numeric/consumer_owned.py",
       "base_commit": "7bb6641b1d07aa4f83ffab1d37aff2d905237db7",
       "base_sha256": "00bac8ae04a208bc41f586fa5d60fb683f21a209cf92cdcc87cbe04097728036",
-      "result_sha256": "83007dac4ff334c82c9d6ebaf66ac0797ad06c2f778f6345bbd8e8a1151276f3",
-      "patch": "patches/CONSUMER_GUARD.patch"
+      "result_sha256": "ca1f6340a73a7b98f6527feb3ae44cc7fc84852d447f8dc9484e472be56c6393",
+      "patch": "patches/CONSUMER_INTEGRATED.patch"
     },
     {
       "name": "run_reference.py",
@@ -69,5 +69,6 @@
       "commit": "feafbd6d492da76923d23c6cd5dcd9c5e836ad0d",
       "sha256": "88185df7e27f3c0ffa7f3fd857e40f4a31fd72a69c876602519be2e3b0a69721"
     }
-  ]
+  ],
+  "overwritten_package_not_used_as_base": true
 }

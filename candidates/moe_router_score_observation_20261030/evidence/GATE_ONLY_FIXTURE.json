@@ -1,0 +1,71 @@
+{
+  "status": "PASS_REAL_PINNED_OFFICIAL_GATE_SYNTHETIC_INPUT_OBSERVER_FIXTURE_ONLY",
+  "receipt": {
+    "status": "EXECUTED_REFERENCE_PROCESS_ONLY",
+    "exit_code": 0,
+    "reason": null,
+    "primary_error": null,
+    "postflight_error": null,
+    "peak_child_rss_bytes": 354574336,
+    "wall_seconds": 9.34759110199957,
+    "native_pre_count": 12,
+    "native_post_count": 12,
+    "scope": "RSS sampled for direct Python child; official runner does not spawn worker processes. No hardware validation."
+  },
+  "fixture_source_sha256": "cbdefb5e2861c779b66b62c615f9d44992445c8f74502afab71c4ccc7673ee8a",
+  "observer_sha256": "05dbc69e70c7804817174143ca006f119b67ce385fdbcf87b8ccd54cd6811308",
+  "wrapper_sha256": "d4f779881ebea182c747064fa159da7379fc45802232f04d04c013fe3d0aabd2",
+  "receipt_sha256": "1b3d7109e54e6d80819bf80630c8ffada5858f153f5c876b9229b4988b3a209f",
+  "stdout_sha256": "610be5eacebf86be5273333ce7c318e822a618b869f27d25015c0b4d13403cba",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_summary": {
+    "block_numerical_pass": false,
+    "capture": {
+      "bytes": 131072,
+      "dtype": "torch.float32",
+      "sha256": "1e0383967dc963ba9fc699e20fb9dca849ccb11a2834628c323f23c6bee38073",
+      "shape": [
+        128,
+        256
+      ]
+    },
+    "captured_local_identity": true,
+    "forward_calls": 2,
+    "hardware_executed": false,
+    "original_outputs_ids_weights_bitwise_unchanged": true,
+    "original_return_identity": true,
+    "outputs": [
+      {
+        "dtype": "torch.bfloat16",
+        "sha256": "89156cd0e29923b402019ef147648b75fe47252e72b94996c246d49711d459dd",
+        "shape": [
+          128,
+          256
+        ]
+      },
+      {
+        "dtype": "torch.bfloat16",
+        "sha256": "75392e03ef939f39c38fd4f7502f37418b0d77e05484e049a871f1d7cbd9609b",
+        "shape": [
+          128,
+          8
+        ]
+      },
+      {
+        "dtype": "torch.int64",
+        "sha256": "a3bca2c2947fa726a4db505af3eaa2db4fdd1d06771c9ecca13421f4872a5007",
+        "shape": [
+          128,
+          8
+        ]
+      }
+    ],
+    "scope": "SYNTHETIC_128x2048_GATE_ONLY_NOT_FULL_BLOCK_NOT_OFFICIAL_WEIGHT_REFERENCE",
+    "status": "PASS_GATE_ONLY_OBSERVER_FIXTURE",
+    "torch_version": "2.10.0+cpu"
+  },
+  "cleanup_scope": "Original reference supervisor finally stop/killpg/wait plus native postverify only; NOT strict IR absence/EOF proof and no claim about unrelated unknown IR process",
+  "actual_full_reference_wrapper_executed": false,
+  "full_block_reference_executed": false,
+  "raw_tensor_data_included": false
+}

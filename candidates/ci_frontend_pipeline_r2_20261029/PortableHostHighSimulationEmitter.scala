@@ -26,7 +26,7 @@ object PortableHostHighSimulationEmitter {
     // Unlike the service-only circuit, the actual original Host has retained
     // DontTouch targets in unchanged Top/core modules. Preserve every original
     // annotation object; none may point into the representation-replaced FIFO or denseAcc register.
-    require(a.size==8985 && a.count(_.isInstanceOf[firrtl2.transforms.DontTouchAnnotation])==8984,"fixed actual Host annotation classes/counts")
+    require(a.size==9022 && a.count(_.isInstanceOf[firrtl2.transforms.DontTouchAnnotation])==9021,"fixed actual Host annotation classes/counts")
     a.foreach {
       case d:firrtl2.transforms.DontTouchAnnotation=>
         require(d.target.circuit=="HostBlockTopV4" && d.target.path.isEmpty && Set("HostBlockTopV4","Qwen2ContinuousBlock","SiluVectorUnit","VectorSiluOwner")(d.target.module),"only actual unaffected original Host/core targets")

@@ -35,7 +35,7 @@ object CanonicalHighGate {
   require(c.main=="HostBlockTopV4" && c.modules.size==1056)
   require(c.modules.map(_.name).distinct.size==c.modules.size)
   val as=JsonProtocol.deserialize(new String(ann,UTF_8))
-  require(as.size==8985 && as.count(_.isInstanceOf[firrtl2.options.TargetDirAnnotation])==1)
+  require(as.size==(if(a(0)=="baseline") 8985 else 9022) && as.count(_.isInstanceOf[firrtl2.options.TargetDirAnnotation])==1)
   val keep=as.filterNot(_.isInstanceOf[firrtl2.options.TargetDirAnnotation])
   val clean=c.copy(info=NoInfo,modules=c.modules.map(module))
   val rows=Seq("TEMP_CANONICAL_SOURCEINFO_TARGETDIR_ONLY_V1", "main\t"+clean.main,

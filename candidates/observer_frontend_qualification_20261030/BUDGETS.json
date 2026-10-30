@@ -1,0 +1,183 @@
+{
+  "schema": "EXPLICIT_FRONTEND_WHOLE_JOB_BUDGET_V1",
+  "whole_job_seconds": 21000,
+  "first_step_clock": true,
+  "prep_stages": [
+    {
+      "name": "jdk",
+      "wall_seconds": 300,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "compile_tools",
+      "wall_seconds": 300,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "jars",
+      "wall_seconds": 600,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "verilator",
+      "wall_seconds": 300,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "idma",
+      "wall_seconds": 240,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "matrix",
+      "wall_seconds": 300,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "fresh_host",
+      "wall_seconds": 300,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "binding",
+      "wall_seconds": 300,
+      "cleanup_seconds": 30
+    }
+  ],
+  "prep_sum_wall": 2640,
+  "prep_sum_cleanup": 240,
+  "prep_conservative_reservation": 2880,
+  "prep_original_dynamic_cap_seconds": 1800,
+  "prep_all_maxima_completion_guaranteed": false,
+  "inner_stages": [
+    {
+      "name": "compile155",
+      "wall_seconds": 300,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "helper_compile",
+      "wall_seconds": 300,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "original_high",
+      "wall_seconds": 600,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "canonical_micro",
+      "wall_seconds": 120,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "canonical_full",
+      "wall_seconds": 300,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "transform_new_toolchain",
+      "wall_seconds": 300,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "emit_host",
+      "wall_seconds": 900,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "sv_identity",
+      "wall_seconds": 180,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "emit_fma",
+      "wall_seconds": 300,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "subset",
+      "wall_seconds": 120,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "frontend",
+      "wall_seconds": 180,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "frontend_native_Vbf16_context_lane_cluster16_rev8b_b_candidate_d",
+      "wall_seconds": 1800,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "frontend_native_Vqwen2_matrix_command_endpoint_0",
+      "wall_seconds": 1800,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "frontend_native_VTransposedDenseDownOwner",
+      "wall_seconds": 1800,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "frontend_native_VHostBlockTopV4",
+      "wall_seconds": 1800,
+      "cleanup_seconds": 30
+    },
+    {
+      "name": "driver_tu_only",
+      "wall_seconds": 300,
+      "cleanup_seconds": 30
+    }
+  ],
+  "inner_sum_wall": 11100,
+  "inner_sum_cleanup": 480,
+  "inner_seconds": 12000,
+  "inner_metadata_deadline_slack": 420,
+  "parent_phases": [
+    {
+      "name": "identity_source_resource_admission",
+      "seconds": 300
+    },
+    {
+      "name": "contract_environment_source_pins",
+      "seconds": 300
+    },
+    {
+      "name": "binding_augmentation",
+      "seconds": 300
+    }
+  ],
+  "execution_step_seconds": 15780,
+  "workflow_other_steps": [
+    {
+      "name": "first_step_clock",
+      "seconds": 60
+    },
+    {
+      "name": "launch_checkout",
+      "seconds": 300
+    },
+    {
+      "name": "launch_validation",
+      "seconds": 60
+    },
+    {
+      "name": "source_checkout",
+      "seconds": 300
+    },
+    {
+      "name": "typed_metadata_export",
+      "seconds": 300
+    },
+    {
+      "name": "artifact_upload",
+      "seconds": 300
+    }
+  ],
+  "whole_declared_envelope": 17100,
+  "unallocated_whole_job_slack": 3900,
+  "resource_caps_unchanged": true,
+  "scope": "No guarantee all prep individual maxima fit existing stricter1800 aggregate. Exhaustion fails closed; no automatic retry or cap expansion."
+}

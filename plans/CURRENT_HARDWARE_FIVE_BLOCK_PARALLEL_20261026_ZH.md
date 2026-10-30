@@ -1,5 +1,15 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-30 19:50 frontend-only / 真实单 driver TU 接线（TEMP，尚未 activation）
+
+- DONE / SOURCE：基于d5cc9ff7501c9b99eeb17b03df20006604341bc7，将已实测IR的canonical/122口证据用于独立frontend-only候选。旧baseline原件保留；沿原155源8观察覆盖、完整4096 MAC、同一五profile硬件定义，不按模型重elaboration。16文件源码包manifest SHA446706d8244debedecf1d196dade84fcd47906f1804619f106b62ffa299995e8；专用644 pins SHA99adde3413b505b67ee68939e992f6e11eb50274662a1042417ce8121b5797c8。详见[候选范围与预算](../candidates/observer_frontend_qualification_20261030/README.zh.md)。
+- PASS精确范围：21项core＋14项wrapper/export＝35项normal/-O轻测，YAML/bash语法通过，均source/synthetic；不证明实际frontend或driver编译。两个变更Scala helper＋五个纯AST依赖实际小编译native0：14.637411039秒、观测RSS272748544 B，strictcleanup/EOF/gzip完整，原RSS1GiB/CPU60/wall90限内。本次小编译没有编译155源、elaboration、生成SV或运行数值；[受控证据](../candidates/ci_frontend_pipeline_r2_20261029/OBSERVER_HELPER_COMPILE_20261030.json) SHAaeb84b01d7dd2c1a48fd446a08e7bff5337b8c8f9773cef22f0c683d03185a55。
+- ONGOING / TEMP：候选只允许原HIGH→精确canonical与原变换→SV及完整normalized/module-fingerprint观察→串行Verilator frontend→真实header完整122口对照→Make严格语法和真实单GCC driver TU .o/.d。depfile必须来自实际-MMD且含两个观察header和sparse header；ET_REL对象不是host binary。明确不做archive/link、权重、reference、DUT或数值运行；新SV身份仍OBSERVED_UNREVIEWED，不能自动重pin接受。
+- 预算逐层绑定同一首步monotonic起点：whole job21000秒；inner12000（16 stage wall11100＋cleanup480，余420）；prep预约2880但原aggregate1800更紧动态截止仍保持；3个parent metadata共900，执行step15780秒，含clock/checkout/guard/export/upload的声明envelope17100，whole job余3900。动态剩余不足即拒绝，不承诺各阶段最坏值都可用满；原supervisor/caps不放宽，资源不足不缩硬件。
+- 发布只含两个白名单metadata文件，总≤2MiB（summary≤64KiB、qualification≤2MiB−64KiB），包含必要真实Make/dep文本及严格来源，不上传IR/SV/class/object/ELF/rawlog/系统header库存/权重。P0 avx512f仅原exact-token能力布尔观察，不承诺runtime/参考CPU资格，不改变profile策略。
+- TODO：源码与CI/交叉审查确认后，另作唯一source→单文件activation（observer_fixed4096_frontend_make_driver_20261030_once），目前没有新重型运行。实际SV/ABI/Make/.d需再次独审才能推进共同backend及完整数值；原IR成功不迁移成frontend通过。五块128-token完整Chisel数值仍0/5、最终冻结同刺激RTL0/5、有效MAC利用率未实测，80%/90%目标保持，无本轮数据清理。
+
+
 ## 2026-10-30 19:37 实际HIGH/LOW描述符与8源差异审计（PASS仅限IR结构，数值仍INCOMPLETE）
 
 - DONE / 实际IR：run41114764250，source975556/launch ec198，九阶段native0/error0/complete。统一155源8覆盖完整编译134.383487633秒、原HIGH/official LOW210.570589043秒、descriptor29.056340970秒；原严格cleanup/EOF完成条件保留，不继承旧run结果。原四份bounded metadata见[本次证据](../candidates/observer_ir_only_20261030/evidence/run41114764250/README.zh.md)。

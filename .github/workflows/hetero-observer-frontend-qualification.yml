@@ -1,0 +1,91 @@
+name: hetero-observer-fixed4096-frontend-driver-qualification
+on:
+  push:
+    branches: [main]
+    paths: [ci_launch/observer_fixed4096_frontend_make_driver_20261030_once.json]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: hetero-exclusive-numeric-bootstrap
+  cancel-in-progress: false
+jobs:
+  frontend_qualification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 350
+    env:
+      MAKEFLAGS: -j1
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record whole job clock before checkout
+        timeout-minutes: 1
+        run: |
+          set -euo pipefail
+          python3 -B - <<'PY'
+          import json, os, pathlib, time
+          p = pathlib.Path(os.environ['RUNNER_TEMP']) / 'hetero-observer-frontend-job-start.json'
+          with p.open('x') as f:
+              json.dump(dict(schema='SAME_JOB_START_V1', started_monotonic=time.monotonic(), run_id=int(os.environ['GITHUB_RUN_ID']), launch_commit=os.environ['GITHUB_SHA'], job_budget_seconds=21000), f, sort_keys=True)
+              f.write('\n')
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        timeout-minutes: 5
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 2
+      - name: Validate unique first-attempt direct-parent launch
+        id: launch
+        timeout-minutes: 1
+        run: python3 -B candidates/observer_frontend_qualification_20261030/validate_launch.py
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        timeout-minutes: 5
+        with:
+          ref: ${{ steps.launch.outputs.source_sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Full4096 frontend and Make single driver TU only
+        id: qualification
+        timeout-minutes: 263
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 -B candidates/observer_frontend_qualification_20261030/prepare_and_run.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --identity "$RUNNER_TEMP/hetero-observer-frontend-identity.json" \
+            --job-start "$RUNNER_TEMP/hetero-observer-frontend-job-start.json" \
+            --work "$RUNNER_TEMP/hetero-observer-frontend" \
+            --execute-reviewed-once
+      - name: Export only bounded typed frontend observations
+        id: summary
+        if: ${{ always() && steps.launch.outputs.source_sha != '' }}
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          python3 -B candidates/observer_frontend_qualification_20261030/export_metadata.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --work "$RUNNER_TEMP/hetero-observer-frontend" \
+            --identity "$RUNNER_TEMP/hetero-observer-frontend-identity.json" \
+            --job-start "$RUNNER_TEMP/hetero-observer-frontend-job-start.json" \
+            --output "$RUNNER_TEMP/observer-frontend-metadata"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ always() && steps.launch.outputs.source_sha != '' && steps.summary.outcome == 'success' }}
+        timeout-minutes: 5
+        with:
+          name: hetero-observer-frontend-summary-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/observer-frontend-metadata/frontend-summary.json
+            ${{ runner.temp }}/observer-frontend-metadata/frontend-qualification.json
+          if-no-files-found: error
+          retention-days: 14
+          overwrite: false
+# No activation in source publication. Separate one-file direct-parent launch only.
+# Whole21000 starts before checkout; inner12000 is a distinct nested envelope.
+# GH_TOKEN is forwarded only to existing iDMA acquisition, never frontend/compiler.
+# No host archive/link, weights, reference or DUT. One driver relocatable object
+# remains local. Upload is exactly two typed files with aggregate <=2MiB.
+# New SV identity remains OBSERVED_UNREVIEWED; no numerical/physical-II PASS.

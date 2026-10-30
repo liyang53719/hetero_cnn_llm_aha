@@ -1,0 +1,61 @@
+{
+  "schema": "BOUNDED_OBSERVER_HELPER_COMPILE_V1",
+  "scope": "TWO_CHANGED_HELPERS_AND_FIVE_AST_DEPENDENCIES_BYTECODE_ONLY",
+  "status": "PASS_HELPER_COMPILE_ONLY_NOT_155_ELABORATION_FRONTEND_OR_NUMERICS",
+  "source_files": [
+    {
+      "path": "candidates/ci_frontend_pipeline_r2_20261029/CanonicalHighGate.scala",
+      "sha256": "46ff62a45a47ccb0099378ac27619b79a346b9e3c3ad415cafca77788c1ffabc",
+      "bytes": 3266
+    },
+    {
+      "path": "candidates/ci_frontend_pipeline_r2_20261029/PortableHostHighSimulationEmitter.scala",
+      "sha256": "d81c1a88c17f58843596b99cd2cd63b0f0e66fdd1c079aef0beb6184175035a0",
+      "bytes": 23405
+    },
+    {
+      "path": "candidates/ci_frontend_pipeline_r2_20261029/PortableHostDenseAccMemoryLowering.scala",
+      "sha256": "12cb0c748e7cc80cb9ffdc34cf5f0f36effb6092badd5a2d7f4e815e1d05c5b2",
+      "bytes": 7764
+    },
+    {
+      "path": "candidates/ci_frontend_pipeline_r2_20261029/PortableHostMatrixResultFifoMemoryLowering.scala",
+      "sha256": "5b2b02984f7ae7a05417865e6ad9da37bdabf7ac93ce41f5ed492740e064dd2b",
+      "bytes": 5659
+    },
+    {
+      "path": "candidates/fresh_non_dpi_backend_recovery_20261028/source/RetainedBackendCircuitGate.scala",
+      "sha256": "0fda5f49c9d465a5dd00e933201d0b29921e25f50a07e4615fa9b80f7155012a",
+      "bytes": 4009
+    },
+    {
+      "path": "candidates/fresh_non_dpi_backend_recovery_20261028/source/RetainedEndpointPortContract.scala",
+      "sha256": "ed617ff27dd48c838b5efc6a10991abb0a3cd41cff71681601b155282462bdc6",
+      "bytes": 825
+    },
+    {
+      "path": "candidates/fresh_non_dpi_backend_recovery_20261028/source/RetainedServicePhaseObserver.scala",
+      "sha256": "bd54a1c54cef1bd475e78794c826d245c0ae06b73a9e104229928c181a64e5d7",
+      "bytes": 1647
+    }
+  ],
+  "java_sha256": "6698f6f10143ed8463b06062281c727152d2e0ae2a3569b1716fbb2c6cedf0ba",
+  "classpath_count": 106,
+  "classpath_ordered_pin_sha256": "fb299a6f2396346bb8af1b9086101150198ebf388435948974457c6df0083bf7",
+  "heap_bytes": 536870912,
+  "rss_cap_bytes": 1073741824,
+  "cpu_seconds_cap": 60,
+  "wall_seconds_cap": 90,
+  "min_mem_available_bytes": 7516192768,
+  "native_exit": 0,
+  "elapsed_seconds": 14.637411039002473,
+  "peak_rss_bytes": 272748544,
+  "errors": [],
+  "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+  "pipe_eof_observed": true,
+  "gzip_finalized": true,
+  "full_155_compile": false,
+  "elaboration": false,
+  "sv_generation": false,
+  "numerical_pass": false
+}

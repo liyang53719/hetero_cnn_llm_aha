@@ -168,3 +168,10 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 准入要求27原native完整cleanup/EOF、七文件和源身份/五archive-link receipt一致、两端hash/size、effective uid和gid相同、mode完全相等、初始单链接、无symlink及可见writer。三锁内重核journal；普通失败可回滚，foreign inode或无法证明的残留保留等待诊断。禁止chmod/chown，任一mode不等整轮NO_OP。
 - 20临时小文件fixture normal/-O通过仅是源码/生命周期测试；未操作真实CI数据、未删除唯一证据、没有启动新CI执行。收益0至362,153,111B仅逻辑inode存活量，不是物理free释放或整体12.081GB适配证明。原ELF可能755而pack700，因而可完全NO_OP。
 - 原run41034072605的35B安装错误仍UNKNOWN，不能把候选去重当根因修复。原任务不重试；完整Chisel数值/最终冻结RTL仍0/5，无新利用率实测。下一次真实执行仍需独立审查准入与有限预算，仅摘要出站。
+
+## 2026-10-30 安装前后whole-root快照（TEMP / 未实际采样）
+
+- 在既有install_job的三安装前后/finally调用原已pin live_budget.census；同一native锁下仅使用未预占全job剩余时间，保留原native/cleanup/bind/tail预算。原watchdog、cap、数值、workflow/activation均未修改，不增加执行壳。
+- 固定6个安全label，记录whole job+repo inode去重bytes/files/entries/free/symlink计数和monotonic起止/耗时；20s为协作检查，不是OS调用硬限。后置只在cleanup/EOF完整时扫描，否则明确UNAVAILABLE。native失败但cleanup完整可观测；结果不是失败瞬间，也不是连续峰值或资源PASS。
+- 快照每条4KiB，summary严格枚举/数值/hash投影，缺失/超限/巨整数等标INVALID_FIELDS，不丢原stage，64KiB降级保留；不上传私路径、argv、原错误全文或数据。17小fixture normal/-O通过，仅元数据/模拟census，不是真实安装或目录采样通过。
+- 原run41034072605的35B安装原因仍UNKNOWN，不能追认旧缺失reason；该源码只改善未来获准执行的可观察性。没有新安装/EDA/去重/删除/activation，完整硬件数值仍0/5。

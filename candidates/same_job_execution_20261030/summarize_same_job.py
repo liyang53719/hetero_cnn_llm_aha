@@ -9,7 +9,7 @@ def read(p):
  except(ValueError,OSError):return None
 def sha(p):
  with p.open('rb')as f:return hashlib.file_digest(f,'sha256').hexdigest()
-def number(x):return x if type(x)in(int,float)and math.isfinite(x)and 0<=x<=2**63 else None
+def number(x):return x if type(x)in(int,float)and 0<=x<=2**63 and math.isfinite(x)else None
 def hp(v):
  if not isinstance(v,dict)or not re.fullmatch('[0-9a-f]{64}',str(v.get('sha256',''))):return None
  n=v.get('bytes');return {'sha256':v['sha256'],'bytes':n}if type(n)is int and 0<=n<=4<<30 else None
@@ -31,8 +31,42 @@ def stage_resources(r):
  out['initial_resource_observations']='NOT_RECORDED_BY_ORIGINAL_SUPERVISOR'
  return out
 
+def install_snapshots(work):
+ rows=[]
+ reasons={'OBSERVED','NOT_OBSERVED','CLEANUP_OR_EOF_UNPROVEN','NO_UNRESERVED_DEADLINE_SLACK','OWNERSHIP_LOCK_BUSY','CENSUS_ENTRY_CAP','CENSUS_DEADLINE','CENSUS_UNAVAILABLE'}
+ for key in ('qwen2','qwen35_08b','qwen35_35b'):
+  for when in ('before','after'):
+   label='install_'+key+'_'+when;p=work/'materials/results'/(label+'_RESOURCE.json')
+   if not p.exists()and not p.is_symlink():continue
+   base=dict(label=label,status='INVALID_FIELDS',resource_peak_qualification='INCOMPLETE_SAMPLED')
+   try:
+    if p.is_symlink()or not p.is_file()or p.stat().st_size>4096:raise ValueError('snapshot bound')
+    r=read(p);base['receipt_sha256']=sha(p)
+    expected='BEFORE_NATIVE'if when=='before'else'AFTER_CLEANUP_NOT_FAILURE_INSTANT'
+    if not isinstance(r,dict)or r.get('schema')!='INSTALL_WHOLE_ROOT_SNAPSHOT_V1'or r.get('label')!=label or r.get('observation')!=expected or r.get('scope')!='WHOLE_JOB_AND_REPO_INODE_DEDUPLICATED'or r.get('resource_peak_qualification')!='INCOMPLETE_SAMPLED'or r.get('status')not in ('COMPLETE','UNAVAILABLE')or r.get('reason')not in reasons:raise ValueError('snapshot schema')
+    selected=dict(observation=expected,scope=r['scope'],reason=r['reason'])
+    if r['status']=='COMPLETE':
+     if r['reason']!='OBSERVED':raise ValueError('complete reason')
+     for k in ('bytes','files','entries','free_bytes','symlinks_not_followed'):
+      if type(r.get(k))is not int or number(r[k])is None:raise ValueError('integer metric')
+      selected[k]=r[k]
+     for k in ('started_monotonic','finished_monotonic','elapsed_seconds'):
+      if number(r.get(k))is None:raise ValueError('time metric')
+      selected[k]=r[k]
+     if selected['finished_monotonic']<selected['started_monotonic']:raise ValueError('time order')
+    else:
+     if r['reason']=='OBSERVED':raise ValueError('unavailable observed')
+     if 'error_sha256'in r:
+      if not re.fullmatch('[0-9a-f]{64}',str(r['error_sha256']))or type(r.get('error_bytes'))is not int or number(r['error_bytes'])is None:raise ValueError('error pin')
+      selected.update(error_sha256=r['error_sha256'],error_bytes=r['error_bytes'])
+    base.update(status=r['status'],**selected)
+   except (OSError,ValueError,TypeError,KeyError):pass
+   rows.append(base)
+ return rows
+
 def summarize(work,identity):
  out=dict(schema='FIVE_M128_SAME_JOB_SAFE_SUMMARY_V1',status='INCOMPLETE',numeric_pass=False,final_rtl_replay=False,uploaded_payloads=False,profiles_registered=list(range(5)),tokens=128,matrix_macs=4096,vector_lanes=32,resource_peak_qualification='INCOMPLETE_SAMPLED',stages=[],actual_dut_reports=[])
+ out['installation_resource_snapshots']=install_snapshots(work)
  for k in ('source_commit','launch_commit'):
   h=identity.get(k);out[k]=h if isinstance(h,str)and re.fullmatch('[0-9a-f]{40}',h)else None
  out['run_id']=identity.get('run_id')if type(identity.get('run_id'))is int else None

@@ -1,0 +1,19 @@
+--- fresh_job_runtime_candidate_20261030T0803/reference_job.py	2026-10-30 15:19:26.294177170 +0700
++++ fresh_job_runtime_r2_candidate_20261030T0857/reference_job.py	2026-10-30 15:58:10.147079438 +0700
+@@ -22,14 +22,14 @@
+  observed,_=owner.verify(b['owner_manifest']['path'],b['owner_manifest']['sha256'],b['owner_root']);need(observed['identity']==b['identity'],'actual samejob owner')
+  result={}
+  for i in b['profiles']:
+-  home=out/f'profile{i}';home.mkdir();dest=home/'reference'
++  home=out/f'profile{i}';home.mkdir();dest=home/'actual/reference'
+   with owner.lease(b['owner_manifest']['path'],b['owner_manifest']['sha256'],b['owner_root'],i,home)as selected:
+    rt=selected[KEYS[i]];source=repo/'candidates'/('independent_reference_p0_cache_arm_20261028T2313'if i==0 else'independent_block_reference_prepare_v3_20261028T2312')/'run_reference.py'
+    need(sha(source)==b['pins'][str(source)],'original arithmetic source')
+    args=[str(source),'--profile',str(i),'--payload',b['payload'],'--config',str(repo/'config/upstream/weight_headers'/MODELS[i]/'config.json'),'--runtime-receipt',rt['receipt']['path'],'--runtime-receipt-sha256',rt['receipt']['sha256'],'--runtime-source-pins',rt['sidecar']['path'],'--runtime-source-pins-sha256',rt['sidecar']['sha256'],'--output',str(dest),'--execute-reviewed']
+    phase=home/'PHASE.json'
+    with phase.open('x')as f:json.dump(dict(argv=args,source_sha256=sha(source)),f,indent=2)
+-   r=stage(f'reference{i}',[rt['wrapper'],str(D/'reference_phase.py'),'--binding',str(phase),'--sha256',sha(phase)],b['wall_seconds'],3,{str(phase):sha(phase)})
++   r=stage(f'reference{i}',[rt['wrapper'],str(D/'reference_phase.py'),'--binding',str(phase),'--sha256',sha(phase)],b['wall_seconds'],3,{str(phase):sha(phase)},output_root=home/'actual',resource_profile='reference')
+    if not complete(r):
+     with(home/'OWNERSHIP_INCOMPLETE.json').open('x')as f:json.dump({'state':'HOLD_PARENT_LEASE'},f)
+     while True:signal.pause()

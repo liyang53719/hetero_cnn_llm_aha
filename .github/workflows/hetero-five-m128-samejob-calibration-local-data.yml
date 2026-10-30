@@ -1,0 +1,85 @@
+name: hetero-five-m128-samejob-calibration-local-data
+on:
+  push:
+    branches: [main]
+    paths: [ci_launch/five_m128_samejob_calibration_20261030_once.json]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: hetero-exclusive-numeric-bootstrap
+  cancel-in-progress: false
+jobs:
+  samejob_calibration:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 350
+    env:
+      MAKEFLAGS: -j1
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record owning job monotonic start before checkout
+        run: |
+          set -euo pipefail
+          python3 -B - <<'PY'
+          import json, os, pathlib, time
+          path = pathlib.Path(os.environ['RUNNER_TEMP']) / 'hetero-five-m128-job-start.json'
+          with path.open('x') as stream:
+              json.dump(dict(schema='SAME_JOB_START_V1', started_monotonic=time.monotonic(), run_id=int(os.environ['GITHUB_RUN_ID']), launch_commit=os.environ['GITHUB_SHA'], job_budget_seconds=21000), stream, sort_keys=True)
+              stream.write('\n')
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 2
+      - name: Validate unique launch commit and source identity
+        id: launch
+        run: python3 -B candidates/same_job_execution_20261030/validate_samejob_calibration_launch.py
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ steps.launch.outputs.source_sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Bounded one common Chisel simulation backend and five full128 calibration profiles
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 -B candidates/same_job_execution_20261030/prepare_and_run.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --identity "$RUNNER_TEMP/hetero-five-m128-identity.json" \
+            --job-start "$RUNNER_TEMP/hetero-five-m128-job-start.json" \
+            --work "$RUNNER_TEMP/hetero-five-m128"
+      - name: Produce bounded summary only
+        id: summary
+        if: ${{ always() && steps.launch.outputs.source_sha != '' }}
+        run: |
+          set -euo pipefail
+          python3 -B candidates/same_job_execution_20261030/summarize_same_job.py \
+            --work "$RUNNER_TEMP/hetero-five-m128" \
+            --identity "$RUNNER_TEMP/hetero-five-m128-identity.json" \
+            --output "$RUNNER_TEMP/five-m128-summary.json"
+          python3 -B - <<'PY'
+          import json, os, pathlib
+          p = pathlib.Path(os.environ['RUNNER_TEMP']) / 'five-m128-summary.json'
+          if not p.is_file() or p.is_symlink() or p.stat().st_size > 65536:
+              raise ValueError('bounded regular summary only')
+          if not isinstance(json.loads(p.read_text()), dict):
+              raise ValueError('summary JSON object required')
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ always() && steps.launch.outputs.source_sha != '' && steps.summary.outcome == 'success' }}
+        with:
+          name: five-m128-summary-${{ github.run_id }}
+          path: ${{ runner.temp }}/five-m128-summary.json
+          if-no-files-found: error
+          retention-days: 14
+          overwrite: false
+# NO_PAYLOAD_UPLOAD: binary/SV/weights/reference data remain inside this job.
+# Controller grants GH_TOKEN only to original bootstrap's artifact acquisition;
+# no token forwarding to runtime installers, reference, provider, ABI, DUT or summary.
+# Exit 2 remains INCOMPLETE, never continue-on-error or a numerical green PASS.
+# Source publication contains no activation manifest; separate review is required.

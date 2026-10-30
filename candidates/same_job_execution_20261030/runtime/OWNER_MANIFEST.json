@@ -1,0 +1,35 @@
+{
+  "schema": "FRESH_JOB_RUNTIME_OWNER_SOURCE_CANDIDATE_V1",
+  "files": [
+    {
+      "path": "owner_fresh.py",
+      "bytes": 12528,
+      "sha256": "08d96919a81ddece81596f76e36b29c3fd91d185534b3472ad4ecf400c8f0124"
+    },
+    {
+      "path": "test_owner_fresh.py",
+      "bytes": 7033,
+      "sha256": "4b8c1b5758c24b4fe63329bc86be71df10d696c5da8586f6c975debd5eb9a1cd"
+    },
+    {
+      "path": "README_CN.md",
+      "bytes": 3292,
+      "sha256": "e52c174e9e57f9cffddfddf2d18fde1027ee8dbfcf53893f70fee3c81106a8c0"
+    },
+    {
+      "path": "BINDING_SCHEMA_EXAMPLE_NOT_EXECUTABLE.json",
+      "bytes": 3322,
+      "sha256": "587a999384fe7105953d7beca7f6186a9b3a24e001c25b09782c65f38f09be36"
+    },
+    {
+      "path": "RECEIPT_INDEX_SCHEMA_EXAMPLE_NOT_EXECUTABLE.json",
+      "bytes": 2025,
+      "sha256": "4557fb2476a2244058951281c68b8fa21bdee209e0d5d63074015d28a42d35ed"
+    }
+  ],
+  "tests": {
+    "normal": 11,
+    "optimized": 11,
+    "scope": "TINY_MOCKED_INSTALL_EVIDENCE_NO_REAL_INSTALL_OR_TREE_SCAN"
+  }
+}

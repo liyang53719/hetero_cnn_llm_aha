@@ -1,0 +1,81 @@
+{
+  "schema": "FRESH_JOB_THREE_RUNTIME_RECEIPTS_V1",
+  "identity": {
+    "run_id": 123,
+    "source_commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "launch_commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  },
+  "binding": {
+    "path": "/ABS/JOB/OWNER_BINDING.json",
+    "bytes": 123,
+    "sha256": "INDEPENDENT_ADMISSION_SHA"
+  },
+  "entries": {
+    "qwen2": {
+      "native": {
+        "path": "EXACT_ROLE_PATH",
+        "bytes": 123,
+        "sha256": "ACTUAL_AFTER_INSTALL_SHA"
+      },
+      "phase_result": {
+        "path": "EXACT_ROLE_PATH",
+        "bytes": 123,
+        "sha256": "ACTUAL_AFTER_INSTALL_SHA"
+      },
+      "installation": {
+        "path": "EXACT_ROLE_PATH",
+        "bytes": 123,
+        "sha256": "ACTUAL_AFTER_INSTALL_SHA"
+      },
+      "sidecar": {
+        "path": "EXACT_ROLE_PATH",
+        "bytes": 123,
+        "sha256": "ACTUAL_AFTER_INSTALL_SHA"
+      }
+    },
+    "qwen35_08b": {
+      "native": {
+        "path": "EXACT_ROLE_PATH",
+        "bytes": 123,
+        "sha256": "ACTUAL_AFTER_INSTALL_SHA"
+      },
+      "phase_result": {
+        "path": "EXACT_ROLE_PATH",
+        "bytes": 123,
+        "sha256": "ACTUAL_AFTER_INSTALL_SHA"
+      },
+      "installation": {
+        "path": "EXACT_ROLE_PATH",
+        "bytes": 123,
+        "sha256": "ACTUAL_AFTER_INSTALL_SHA"
+      },
+      "sidecar": {
+        "path": "EXACT_ROLE_PATH",
+        "bytes": 123,
+        "sha256": "ACTUAL_AFTER_INSTALL_SHA"
+      }
+    },
+    "qwen35_35b": {
+      "native": {
+        "path": "EXACT_ROLE_PATH",
+        "bytes": 123,
+        "sha256": "ACTUAL_AFTER_INSTALL_SHA"
+      },
+      "phase_result": {
+        "path": "EXACT_ROLE_PATH",
+        "bytes": 123,
+        "sha256": "ACTUAL_AFTER_INSTALL_SHA"
+      },
+      "installation": {
+        "path": "EXACT_ROLE_PATH",
+        "bytes": 123,
+        "sha256": "ACTUAL_AFTER_INSTALL_SHA"
+      },
+      "sidecar": {
+        "path": "EXACT_ROLE_PATH",
+        "bytes": 123,
+        "sha256": "ACTUAL_AFTER_INSTALL_SHA"
+      }
+    }
+  }
+}

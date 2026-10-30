@@ -1,0 +1,63 @@
+"""Only bounded scalar/hash status; never upload runtime/build/input bytes or paths."""
+import argparse,hashlib,importlib.util,json,math,pathlib,re,sys
+P=pathlib.Path;D=P(__file__).resolve().parent
+STATES={'STARTED_TIMEOUT_INCOMPLETE','STARTED_NATIVE_FAILED','COMPLETE_TERMINAL_DIAGNOSTIC_NOT_PASS','STARTED_OBSERVATION_INCOMPLETE'}
+REASONS={'PYTHON_OR_ARCH','CPU_AVX512','IMAGE_VERSION','MEMAVAILABLE_13GIB','DISK_20671240864','SOURCE_PIN','JOB_DEADLINE','EXECUTION_FAILED_DETAILS_IN_STAGE_RECEIPTS'}
+def read(p):
+ if not p.is_file()or p.is_symlink()or p.stat().st_size>16<<20:return None
+ try:return json.loads(p.read_text())
+ except(ValueError,OSError):return None
+def sha(p):
+ with p.open('rb')as f:return hashlib.file_digest(f,'sha256').hexdigest()
+def number(x):return x if type(x)in(int,float)and math.isfinite(x)and 0<=x<=2**63 else None
+def hp(v):
+ if not isinstance(v,dict)or not re.fullmatch('[0-9a-f]{64}',str(v.get('sha256',''))):return None
+ n=v.get('bytes');return {'sha256':v['sha256'],'bytes':n}if type(n)is int and 0<=n<=4<<30 else None
+def summarize(work,identity):
+ out=dict(schema='FIVE_M128_SAME_JOB_SAFE_SUMMARY_V1',status='INCOMPLETE',numeric_pass=False,final_rtl_replay=False,uploaded_payloads=False,profiles_registered=list(range(5)),tokens=128,matrix_macs=4096,vector_lanes=32,resource_peak_qualification='INCOMPLETE_SAMPLED',stages=[],actual_dut_reports=[])
+ for k in ('source_commit','launch_commit'):
+  h=identity.get(k);out[k]=h if isinstance(h,str)and re.fullmatch('[0-9a-f]{40}',h)else None
+ out['run_id']=identity.get('run_id')if type(identity.get('run_id'))is int else None
+ failure=read(work.parent/(work.name+'-CONTROLLER_FAILURE.json'))or{}
+ out['failure_reason']=failure.get('reason_code')if failure.get('reason_code')in REASONS else 'UNKNOWN_OR_NOT_FAILED'
+ # Exact known stage roles only. No arbitrary recursive source/payload traversal.
+ roles=[('archive',work/'runs/archives'),('weights',work/'runs/weights')]
+ roles += [('install_'+k,work/'materials/runs'/k)for k in('qwen2','qwen35_08b','qwen35_35b','bind')]
+ roles += [(f'reference{i}',work/f'materials/references/profile{i}/actual')for i in range(5)]
+ numeric=work/'materials/numeric'
+ roles += [(name,numeric/'runs'/name)for name in('startup_abi','p0_p0_rope','p0_p0_provider','p0_p0_transport','p1_p12_provider','p2_p12_provider','p3_p34_provider','p4_p34_provider')]
+ for i in range(5):
+  for suffix in('initialize','connect','dut'):roles.append((f'p{i}_{suffix}',numeric/'runs'/f'p{i}_{suffix}'))
+ for name,folder in roles:
+  p=folder/'RESULT.json';r=read(p)
+  if not isinstance(r,dict):continue
+  cap=r.get('log_capture')or{};cleanup=r.get('cleanup_proof')or{}
+  out['stages'].append(dict(phase=name,receipt_sha256=sha(p),native_exit=r.get('native_exit')if type(r.get('native_exit'))is int else None,errors=len(r['errors'])if isinstance(r.get('errors'),list)else None,wall_seconds=number(r.get('elapsed_seconds')),observed_cpu_seconds=number(r.get('observed_cpu_seconds')),observed_peak_rss=number(r.get('observed_peak_rss')),process_sample_count=number(r.get('process_sample_count')),cleanup_complete=cleanup.get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP',pipe_eof=cap.get('pipe_eof_observed')is True,gzip_finalized=cap.get('gzip_finalized')is True))
+ for i in range(5):
+  p=numeric/f'PROFILE_{i}_DIAGNOSTIC.json';r=read(p)
+  if not isinstance(r,dict)or r.get('profile')!=i or r.get('state')not in STATES or r.get('numerical_pass')is not False:continue
+  selected={k:hp(r.get(k))for k in('report','startup','outer')}
+  if all(selected.values()):out['actual_dut_reports'].append(dict(profile=i,state=r['state'],receipt_sha256=sha(p),**selected))
+ # Reuse reviewed exact build exporter; it already strips paths and caps text.
+ materialization=D.parent/'ci_frontend_materialization_r2_20261029'
+ if (work/'build').exists()and(materialization/'summarize_build_only.py').is_file():
+  try:
+   sys.path.insert(0,str(materialization));spec=importlib.util.spec_from_file_location('original_safe_build_summary',materialization/'summarize_build_only.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+   out['build']=json.loads(m.encode_build_summary(m.build_summary(work/'build',out['source_commit'])))
+  except Exception:out['build_summary_state']='UNAVAILABLE_NOT_PASS'
+ return out
+def encode(v):
+ raw=json.dumps(v,ensure_ascii=True,sort_keys=True,indent=2)+'\n'
+ if len(raw.encode())>65536:
+  v['optional_build_details_truncated']=True
+  for row in v.get('build',{}).get('stages',[]):
+   for k in list(row):
+    if k not in{'stage','name','native_exit','elapsed_seconds','observed_cpu_seconds','observed_peak_rss','cleanup_complete','log_capture','error_count','typed_reasons'}:del row[k]
+  raw=json.dumps(v,ensure_ascii=True,sort_keys=True)+'\n'
+ if len(raw.encode())>65536:raise ValueError('bounded summary exceeded; never upload unbounded output')
+ return raw
+if __name__=='__main__':
+ p=argparse.ArgumentParser()
+ for k in('work','identity','output'):p.add_argument('--'+k,type=P,required=True)
+ a=p.parse_args();raw=encode(summarize(a.work,read(a.identity)or{}))
+ with a.output.open('x')as f:f.write(raw)

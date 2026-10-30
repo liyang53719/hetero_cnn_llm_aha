@@ -1,0 +1,20 @@
+--- same_job_controller_candidate_20261030T0835/bootstrap_samejob.py	2026-10-30 15:43:11.806802551 +0700
++++ same_job_controller_r2_candidate_20261030T0857/bootstrap_samejob.py	2026-10-30 15:58:10.147016383 +0700
+@@ -39,13 +39,14 @@
+  restore=R/'candidates/fresh_original_top_recovery_20261028/restore_inputs.py';pins[str(restore)]=sha(restore)
+  stages=[];started=time.monotonic()
+  def stage(name,argv,wall=300,rss=1,token=False):
+-  need(time.monotonic()-started+wall<1800,'bounded bootstrap shared30min budget')
+-  need(time.monotonic()-v.job_started_monotonic+wall+v.remaining_tail_reserve_seconds<21000,'same job deadline reserves numeric tail')
++  need(time.monotonic()-started+wall+30<1800,'bounded bootstrap shared30min budget')
++  need(time.monotonic()-started+wall+30<=v.maximum_build_seconds,'each setup stays inside reviewed build budget including cleanup')
++  need(time.monotonic()-v.job_started_monotonic+wall+30+v.remaining_tail_reserve_seconds<21000,'same job deadline reserves numeric tail')
+   need(shutil.disk_usage(W).free>=1_500_000_000,'disk reserve')
+   e=dict(env)
+   if token:
+    need(bool(os.environ.get('GH_TOKEN')),'existing job actions-read token required');e['GH_TOKEN']=os.environ['GH_TOKEN']
+-  caps=dict(wall_seconds=wall,cleanup_seconds=30,file_bytes=536870912,tree_bytes=12_081_306_272,log_bytes=16_777_216,raw_log_bytes=33_554_432,max_entries=100000,per_process_as_bytes=4*1024**3,per_process_cpu_seconds=wall,rss_bytes=rss*1024**3,cpu_seconds=wall,extra_watch_roots=[str(W),str(R)],min_free_disk_bytes=1_500_000_000,watch_tree_bytes=12_081_306_272)
++  caps=dict(wall_seconds=wall,cleanup_seconds=30,file_bytes=536870912,tree_bytes=12_081_306_272,log_bytes=16_777_216,raw_log_bytes=33_554_432,max_entries=100000,per_process_as_bytes=4*1024**3,per_process_cpu_seconds=wall,rss_bytes=rss*1024**3,cpu_seconds=wall,extra_watch_roots=[str(W),str(R),str(v.shared_owned_root.resolve())],min_free_disk_bytes=1_500_000_000,watch_tree_bytes=12_081_306_272)
+   r=supervise.execute(argv,str(W/('stage_'+name)),str(W/'bootstrap.lock'),caps,e,pins,resource_gate={'min_available_memory':(rss+1)*1024**3,'min_disk_free':1_500_000_000})
+   stages.append({k:r[k] for k in ['status','native_exit','elapsed_seconds','observed_peak_rss']});(W/'bootstrap_stages.json').write_text(json.dumps(stages,indent=2)+'\n')
+   need(r['native_exit']==0 and not r['errors'] and r['cleanup_proof'],'bootstrap failed '+name)

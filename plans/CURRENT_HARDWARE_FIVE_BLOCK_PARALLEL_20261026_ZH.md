@@ -139,3 +139,14 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 独立硬件审查：`8159839a9e4e50c41c6b3057601ae1f55be4f67297b04a4d67eb609bddf40cab`；冻结：`e36f413483370372cf5b9a5dbbc30abb1c35ea87e6d7307bb29394262197358b`。安全投影见 [SUMMARY.json](../candidates/current_hardware_reemission/evidence/SUMMARY.json)。采样 RSS 不是连续峰值；root 端点证据为 expected 列表与 source-bound pass，不声称逐项独立 observed digest 轨迹。
 
 本片不含新的四 block 实际成果、共享 state32 修复或 TopK 测试，也不把下一工具候选写成已经通过。后续各自独审后再小批纳入，不等待全部五类同时完工才提交。
+
+
+## 2026-10-30 同 job 五块 M128 接线（TEMP / INCOMPLETE，尚未激活）
+
+- 新增唯一未激活 workflow 与 source/launch 分离身份校验；没有启动 manifest，本提交不启动重 CI。原被拒 watchdog 新版不包含，仍用已发布监督脚本。
+- 真正接线顺序为同一 4096 MAC / Vector32 backend 构建 → 原 53 archives / 完整 70 tensors 单份 → 原三安装及 fresh owner → 五块 M128 独立参考 → 原 provider → 同一 ELF 五 profile 短 wall 标定。所有数据留 job，仅允许受控 ≤64KiB 摘要上传。
+- 350min 首步骤时钟；19500s 有限停止预算，另留1500s。五个300s诊断窗口不缩M128/max_cycles，不能冒完整数值PASS。旧本地5/5 Python参考与历史build资格不迁移为新 job 通过。
+- 前置需实际 AVX512/Python3.12/原image和JDK、MemAvailable13GiB、free20,671,240,864B；不满足明确NO GO，不改硬件或资源门。标准runner标称存储不保证此门通过。
+- Source-only 审查及轻量元数据/mock测试通过；无真实新安装、参考、DUT执行。完整Chisel数值与最终冻结RTL仍0/5，利用率没有新实测。属于Chisel测试发射IR/SV仿真backend，不是最终RTL回放。
+- 下一步仅在独立复核实际资源/唯一 activation 后开展受限标定；失败沿原身份诊断，不自动重复构建。MoE同分小ID契约仍待明确。
+

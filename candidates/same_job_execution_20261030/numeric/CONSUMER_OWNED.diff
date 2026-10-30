@@ -1,0 +1,128 @@
+--- unchanged_published_run_compare.py
++++ NEW_R6_consumer_owned.py
+@@ -2,6 +2,8 @@
+ """Run existing external-AXI DUT for one selected profile using the unchanged shared artifact manifest; no model arithmetic.
+ No tolerance contract is assumed. Bitwise equality is a diagnostic, NOT block PASS.
+ Binding paths are explicit; all hardware artifacts and inputs must remain immutable.
++NEW lifecycle-only adapter: requires caller-owned strict outer supervision.
++Calibration changes only the wall deadline, never stimulus, cycles or acceptance.
+ """
+ import argparse, hashlib, json, os, pathlib, resource, signal, subprocess, time, struct
+ 
+@@ -111,9 +113,13 @@
+         resource.setrlimit(resource.RLIMIT_CPU,(limits['cpu_seconds'],)*2)
+         resource.setrlimit(resource.RLIMIT_FSIZE,(limits['file_bytes'],)*2)
+         resource.setrlimit(resource.RLIMIT_CORE,(0,0))
++    binary_sha=sha(binary);runtime_sha=sha(runtime)
+     with open(log,'xb') as f:
+-        p=subprocess.Popen([str(binary),str(runtime),str(output),str(limits['max_active_cycles'])],stdout=f,stderr=subprocess.STDOUT,start_new_session=True,preexec_fn=bounded,env=runtime_abi_module().clean_env())
++        p=subprocess.Popen([str(binary),str(runtime),str(output),str(limits['max_active_cycles'])],stdout=f,stderr=subprocess.STDOUT,preexec_fn=bounded,env=runtime_abi_module().clean_env())
+         try:
++            started=pathlib.Path(log).with_suffix('.started.json')
++            with started.open('x') as evidence:
++                json.dump(dict(schema='ACTUAL_DUT_POPEN_V1',pid=p.pid,consumer_pid=os.getpid(),consumer_start_tick=int(pathlib.Path('/proc/self/stat').read_text().rsplit(')',1)[1].split()[19]),inherited_group=os.getpgrp(),inherited_session=os.getsid(0),binary_sha256=binary_sha,runtime_sha256=runtime_sha),evidence)
+             deadline=time.monotonic()+limits['wall_seconds']
+             while True:
+                 # WNOWAIT retains the leader (including a zombie) as PGID anchor.
+@@ -123,12 +129,15 @@
+                 if time.monotonic()>=deadline: raise TimeoutError('DUT wall deadline')
+                 time.sleep(0.2)
+         finally:
+-            # Kill owned original group before reaping its leader; escaped sessions
+-            # require the outer established cgroup/subreaper supervisor.
+-            try: os.killpg(p.pid,signal.SIGKILL)
+-            except ProcessLookupError: pass
++            # The DUT inherits the strict outer group/session: never create or
++            # kill a nested group here. Reap this leader only; caller must retain
++            # the consumer leader and prove full outer group absence afterward.
++            if p.poll() is None:
++                p.kill()
+             p.wait()
+ 
++
++OWNED_ENVIRONMENT=None
+ 
+ V3_DRIVER_SHA256='20df2692d41693491f0da03fa17f21886b9375ca599c83b5b75c0994841dc45e'
+ 
+@@ -217,9 +226,9 @@
+ 
+ def runtime_abi_module():
+     import importlib.util
+-    path=pathlib.Path(__file__).resolve().with_name('runtime_abi.py')
+-    need(sha(path)=='f6826a38f3d479b18a45f8bd2d80ff20a7eb2c77ba1783f77a5abf612308632c','reviewed startup ABI module')
+-    spec=importlib.util.spec_from_file_location('pinned_startup_abi',path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
++    path=pathlib.Path(__file__).resolve().with_name('runtime_abi_owned.py')
++    need(sha(path)=='ca7e9d9ce42634d57cd249e4407be436018ce5afbc18fe79e9bdac50b6496930','reviewed startup ABI module')
++    spec=importlib.util.spec_from_file_location('pinned_startup_abi',path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);need(OWNED_ENVIRONMENT is not None,'explicit owned environment admission');m.configure_owned_environment(*OWNED_ENVIRONMENT);return m
+ 
+ def verify_runtime_abi(args,frozen):
+     root=args.artifact_manifest.resolve().parent
+@@ -230,6 +239,19 @@
+         bundle=json.loads(args.runtime_bundle.read_text());r=bundle['local_runtime_abi']
+         need(pin(r)==args.local_runtime_abi and r['sha256']==args.local_runtime_abi_sha256,'bundle startup ABI receipt binding')
+     return result
++
++def owned_execution_limits(limits, calibration_wall_seconds):
++    result=dict(limits)
++    if calibration_wall_seconds is not None:
++        need(type(calibration_wall_seconds) is int and 0 < calibration_wall_seconds <= limits['wall_seconds'],'calibration wall within original bound')
++        result['wall_seconds']=calibration_wall_seconds
++    return result
++
++
++def require_outer_context(declared):
++    need(declared,'requires established strict outer supervisor; flag alone is not a cleanup proof')
++    need(os.getpid()==os.getpgrp()==os.getsid(0),'consumer must be the owned outer session/group leader')
++
+ 
+ def main():
+     a=argparse.ArgumentParser()
+@@ -246,7 +268,14 @@
+     a.add_argument('--profile',type=int,choices=range(5),required=True)
+     a.add_argument('--output',type=pathlib.Path,required=True)
+     a.add_argument('--validate-only',action='store_true')
++    a.add_argument('--strict-outer-supervised',action='store_true')
++    a.add_argument('--calibration-wall-seconds',type=int)
++    a.add_argument('--owned-environment',type=pathlib.Path,required=True)
++    a.add_argument('--owned-environment-sha256',required=True)
+     args=a.parse_args()
++    global OWNED_ENVIRONMENT
++    OWNED_ENVIRONMENT=(args.owned_environment,args.owned_environment_sha256,dict(run_id=args.expected_run_id,source_commit=args.expected_source_commit,launch_commit=args.expected_launch_commit))
++    require_outer_context(args.strict_outer_supervised)
+     b, frozen=load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile)
+     download=verify_local_build(args,frozen)
+     abi=verify_runtime_abi(args,frozen)
+@@ -266,6 +295,7 @@
+     need(0 < limits['max_active_cycles'] <= 1000000000, 'driver cycle bound')
+     need(0 < limits['wall_seconds'] <= 21600 and 0 < limits['cpu_seconds'] <= 21600, 'bounded job time')
+     need(0 < limits['address_space_bytes'] <= 16*1024**3, 'bounded process AS')
++    execution_limits=owned_execution_limits(limits,args.calibration_wall_seconds)
+     prepared=[]
+     for p in b['profiles']:
+         runtime=pin(p['runtime']);views=pin(p['views']);ref=pin(p['reference_result']);pin(p['provider_receipt'])
+@@ -289,6 +319,7 @@
+         print('VALIDATED_BINDING_ONLY_NO_DUT_NO_NUMERICAL_PASS');return
+     need(not args.output.exists(),'fresh output directory');args.output.mkdir(parents=True)
+     summary=dict(status='INCOMPLETE',layer=b['layer'],artifact_manifest_sha256=args.artifact_manifest_sha256,artifact_identity=frozen['artifact_identity'],local_build_provenance=download,local_build_result_sha256=args.local_build_result_sha256,runtime_bundle_sha256=runtime_bundle_sha,startup_abi=abi,common=common,profiles=[],numeric_acceptance='NO_NEW_TOLERANCE_STRICT_BITWISE_DIAGNOSTICS_ONLY',final_rtl_executed=False)
++    summary['execution_admission']={'scope':'CALIBRATION_SAME_FULL_M128_STIMULUS' if args.calibration_wall_seconds is not None else 'ORIGINAL_FULL_M128_DIAGNOSTIC','original_limits':dict(limits),'effective_limits':execution_limits,'outer_cleanup_proof_required':True,'peak_resource_qualification':'INCOMPLETE_SAMPLED','numerical_pass':False}
+     for p,runtime,obs,want,route_ref in prepared:
+         r=dict(profile=p['id'],status='INCOMPLETE',coverage_policy=b['coverage_policy']);summary['profiles'].append(r)
+         try:
+@@ -299,7 +330,7 @@
+             need(sha(args.runtime_bundle)==runtime_bundle_sha,'runtime bundle changed')
+             for v in list(common.values())+[p[k] for k in ('runtime','views','reference_result','provider_receipt')]: pin(v)
+             target=args.output/('profile'+str(p['id']));log=args.output/('profile'+str(p['id'])+'.log')
+-            rc=execute(files['binary'],runtime,target,log,b['limits']);r['exit_code']=rc
++            rc=execute(files['binary'],runtime,target,log,execution_limits);r['exit_code']=rc
+             load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile)
+             verify_local_build(args,frozen)
+             verify_runtime_abi(args,frozen)
+@@ -323,7 +354,7 @@
+                 need(text.count('HOST_FINAL_ROUTER_LOGITS bytes=65536 dtype=BF16 coverage=ACKNOWLEDGED_EVERY_BYTE')==1,'actual router logits coverage')
+                 r['router']['bf16_dense_logits']=compare((target/'router_logits_bf16.final.bin').read_bytes(),route_ref[2])
+             r['status']='BITWISE_MATCH_DIAGNOSTIC' if all(x['byte_mismatches']==0 for x in r['comparisons'].values()) and (route_ref is None or (r['router']['ids']['byte_mismatches']==0 and r['router']['normalized_bf16_weights']['byte_mismatches']==0 and r['router']['bf16_dense_logits']['byte_mismatches']==0)) else 'BITWISE_MISMATCH_DIAGNOSTIC'
+-        except Exception as e: r['error']=str(e)
++        except Exception as e: r['error']=str(e);r['error_class']=type(e).__name__
+         (args.output/'RESULT.json').write_text(json.dumps(summary,indent=2)+'\n')
+     # Never assert Chisel/RTL numerical PASS from unapproved diagnostic policy.
+     print(json.dumps(summary,indent=2))

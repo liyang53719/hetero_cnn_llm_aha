@@ -1,0 +1,34 @@
+--- same_job_controller_candidate_20261030T0835/test_flow_mock.py	2026-10-30 15:46:01.101164595 +0700
++++ same_job_controller_r2_candidate_20261030T0857/test_flow_mock.py	2026-10-30 15:58:41.105569964 +0700
+@@ -6,9 +6,10 @@
+ class T(unittest.TestCase):
+  def test_order_and_identity_handoff(self):
+   with tempfile.TemporaryDirectory()as td:
+-   base=P(td);repo=base/'repo';repo.mkdir();job=base/'job';runtime=W/'fresh_job_runtime_candidate_20261030T0803';numeric=W/'same_job_execution_r7_candidate_20261030T0829';sup=W/'published_source_closure_recovery_20261029T1833/candidates/ci_frontend_pipeline_r2_20261029'
++   base=P(td);repo=base/'repo';repo.mkdir();job=base/'job';runtime=W/'fresh_job_runtime_r2_candidate_20261030T0857';numeric=W/'same_job_execution_r7_candidate_20261030T0829';sup=W/'published_source_closure_recovery_20261029T1833/candidates/ci_frontend_pipeline_r2_20261029'
+    pins={str(p):flow.sha(p)for d in(runtime,numeric)for p in d.rglob('*')if p.is_file()and p.suffix in('.py','.json')and'__pycache__'not in p.parts}
+    for name in('supervise_multiroot.py','strict_cleanup.py','lossless_log.py'):pins[str(sup/name)]=flow.sha(sup/name)
++   for p in (P(flow.__file__).resolve(),P(flow.__file__).resolve().parent/'bootstrap_samejob.py',P(sys.executable).resolve()):pins[str(p)]=flow.sha(p)
+    calls=[];sizes={};old_stat=P.stat
+    def fake_stat(p,*args,**kwargs):
+     st=old_stat(p,*args,**kwargs)
+@@ -18,9 +19,9 @@
+    def execute(argv,out,*args,**kwargs):
+     name=P(out).name;calls.append(name);P(out).mkdir()
+     if name=='archives':
+-     dest=job/'archives';dest.mkdir();(dest/'ARCHIVES.json').write_text(json.dumps({'archives':[]}))
++     dest=job/'runs/archives/output';dest.mkdir();(dest/'ARCHIVES.json').write_text(json.dumps({'archives':[]}))
+     elif name=='weights':
+-     dest=job/'weights';dest.mkdir();(dest/'SUMMARY.json').write_text(json.dumps({'tensors':70,'tensor_bytes':3531306272}))
++     dest=job/'runs/weights/output';dest.mkdir();(dest/'SUMMARY.json').write_text(json.dumps({'tensors':70,'tensor_bytes':3531306272}))
+      for i in range(70):
+       d=dest/'model';d.mkdir(exist_ok=True);f=d/f'tensor{i}.bin';f.write_bytes(b'x');n=1 if i<69 else 3531306272-69;sizes[str(f)]=n
+       (d/f'tensor{i}.receipt.json').write_text(json.dumps({'actual_bytes':n,'actual_sha256':hashlib.sha256(b'x').hexdigest()}))
+@@ -40,6 +41,6 @@
+    binding=base/'B.json';binding.write_text(json.dumps(b));h=flow.sha(binding)
+    env={'GITHUB_RUN_ID':'1','GITHUB_SHA':'b'*40,'GITHUB_RUN_ATTEMPT':'1','ImageVersion':'20261026.354.1'}
+    with patch.dict('os.environ',env),patch.dict(sys.modules,{'supervise_multiroot':types.SimpleNamespace(execute=execute)}),patch.object(flow,'mod',side_effect=module),patch.object(subprocess,'check_output',return_value='a'*40+'\n'),patch.object(subprocess,'run',side_effect=build),patch('shutil.disk_usage',return_value=types.SimpleNamespace(free=100<<30)),patch.object(P,'stat',fake_stat):flow.run(b,binding,h)
+-   self.assertEqual(calls,['archives','weights','install_owner','five_references','one_original_backend','five_consumers'])
++   self.assertEqual(calls,['one_original_backend','archives','weights','install_owner','five_references','five_consumers'])
+    self.assertEqual(json.loads((job/'FLOW_RESULT.json').read_text())['status'],'INCOMPLETE_DIAGNOSTIC_ONLY')
+ if __name__=='__main__':unittest.main()

@@ -1,0 +1,155 @@
+{
+  "scope": "PACKAGED_SOURCE_COPY_NOT_EXECUTION_QUALIFICATION",
+  "files": [
+    {
+      "path": "ARCHIVE_UNION_SOURCE_ONLY.json",
+      "bytes": 18522,
+      "sha256": "19d53666c68854b38375f00d86f18b04105f072744713472a0d99fb269477e07"
+    },
+    {
+      "path": "BINDING_SCHEMA_EXAMPLE_NOT_EXECUTABLE.json",
+      "bytes": 3322,
+      "sha256": "587a999384fe7105953d7beca7f6186a9b3a24e001c25b09782c65f38f09be36"
+    },
+    {
+      "path": "OWNER_MANIFEST.json",
+      "bytes": 1020,
+      "sha256": "9a927885c7f3cdb29442dbd7228f320764b31aa22d0bb06faf881c04398cf078"
+    },
+    {
+      "path": "README_CN.md",
+      "bytes": 3292,
+      "sha256": "e52c174e9e57f9cffddfddf2d18fde1027ee8dbfcf53893f70fee3c81106a8c0"
+    },
+    {
+      "path": "RECEIPT_INDEX_SCHEMA_EXAMPLE_NOT_EXECUTABLE.json",
+      "bytes": 2025,
+      "sha256": "4557fb2476a2244058951281c68b8fa21bdee209e0d5d63074015d28a42d35ed"
+    },
+    {
+      "path": "TEST_NORMAL.txt",
+      "bytes": 114,
+      "sha256": "29ba48b17acbac13b9ac435213cd0387686f8555bbbd29546dbd3690b9c3a323"
+    },
+    {
+      "path": "TEST_OPTIMIZED.txt",
+      "bytes": 114,
+      "sha256": "a0c18c7c8c99681e14cc5430277bd3eb565caf1ae2c531b8c298d0a8039947ed"
+    },
+    {
+      "path": "acquire_archives.py",
+      "bytes": 2061,
+      "sha256": "7c3b29478ee648bd4a7cc7660c6ffb7d24da560a7b3b05b7c2f9e7359e3485b3"
+    },
+    {
+      "path": "bind_phase.py",
+      "bytes": 959,
+      "sha256": "12d935608e1388e1a0620392984f7211f9132808b4231ee24e6bf9920cdcc41f"
+    },
+    {
+      "path": "install_job.py",
+      "bytes": 9662,
+      "sha256": "42d131a5d4d0b193697d0044c144e91a9f3a21d737df3aa11efaf2180d0957b1"
+    },
+    {
+      "path": "owner_fresh.py",
+      "bytes": 12528,
+      "sha256": "08d96919a81ddece81596f76e36b29c3fd91d185534b3472ad4ecf400c8f0124"
+    },
+    {
+      "path": "reference_job.py",
+      "bytes": 3825,
+      "sha256": "e9783286a46768421a721be8f2e95949bfd29b8cf7a69c7f480ed718391b9f0a"
+    },
+    {
+      "path": "reference_phase.py",
+      "bytes": 831,
+      "sha256": "8eec3a41a45ef4319335c20330a4832b8cb4a401be37e09909f5e2f7970971a5"
+    },
+    {
+      "path": "runtime_phase.py",
+      "bytes": 2684,
+      "sha256": "8c38345f0099d06f397b3ff6b69e9eda7a00e6922cecc106e239a14fccd65969"
+    },
+    {
+      "path": "source/QWEN2_WHEEL_LOCK.json",
+      "bytes": 68921,
+      "sha256": "92e02a64b81a3433206ce85bfe1d65593088f0c4a40dbb0db3c3dd45d5ce0889"
+    },
+    {
+      "path": "source/RUNTIME_CONTRACT.json",
+      "bytes": 702,
+      "sha256": "ae5cafb9d2294c890d6d5f2aae98761599cb92f354322cf16df27333a9c5f094"
+    },
+    {
+      "path": "source/derive_sidecar.py",
+      "bytes": 4610,
+      "sha256": "e96130e044520444758b913ba38f7fe774ac752675daf85aaa95da77e136e274"
+    },
+    {
+      "path": "source/prepare_runtimes.py",
+      "bytes": 13130,
+      "sha256": "6aa5755d1112093b3060e3e867c09bbb7a9723d96d1ce7ab0a3509a5c997588c"
+    },
+    {
+      "path": "source/qwen35_08b/ARTIFACT_SPEC.json",
+      "bytes": 75691,
+      "sha256": "5f720e691773187f1f99108bf92748ae46e0c616d6b4ec8ec23dc63878d80469"
+    },
+    {
+      "path": "source/qwen35_08b/install_qwen35_official_runtime.py",
+      "bytes": 20368,
+      "sha256": "8d335e3e57b89dd2af1af22b884b9c1314aa6607ac7a72129fb8a98435166ab4"
+    },
+    {
+      "path": "source/qwen35_08b/pip_qwen35_offline_driver.py",
+      "bytes": 7752,
+      "sha256": "d6b5953062250492f5fcb457b58704f4ed0122ac2e54f277c00b3b2cf569d193"
+    },
+    {
+      "path": "source/qwen35_08b/qwen35_backend_runner.py",
+      "bytes": 2141,
+      "sha256": "43a4c91380fc9ad6e3ca2d7780e623e2780a5c69126983d93c40b653a8e309e4"
+    },
+    {
+      "path": "source/qwen35_08b/qwen35_runtime_network_guard.py",
+      "bytes": 3226,
+      "sha256": "adf905304fe32c34ccb07892f2627fcb76417178d36058270b74a4666b28c2c5"
+    },
+    {
+      "path": "source/qwen35_35b/ARTIFACT_SPEC.json",
+      "bytes": 76273,
+      "sha256": "f68383f290f01e3ce9894e8b7421dec5fdfb1ce80522f3a583f73519adf22dba"
+    },
+    {
+      "path": "source/qwen35_35b/install_qwen35_official_runtime.py",
+      "bytes": 20425,
+      "sha256": "7d102d0ad81640d751a65ef67b4ef1085256035f7dd8d1da0f1ca9909b6fd399"
+    },
+    {
+      "path": "source/qwen35_35b/pip_qwen35_offline_driver.py",
+      "bytes": 7752,
+      "sha256": "a8823f5a9c3a5b77345622a59d1c48da1a99f1f96903abd6d09e2c585cdffc85"
+    },
+    {
+      "path": "source/qwen35_35b/qwen35_backend_runner.py",
+      "bytes": 2141,
+      "sha256": "43a4c91380fc9ad6e3ca2d7780e623e2780a5c69126983d93c40b653a8e309e4"
+    },
+    {
+      "path": "source/qwen35_35b/qwen35_runtime_network_guard.py",
+      "bytes": 3226,
+      "sha256": "adf905304fe32c34ccb07892f2627fcb76417178d36058270b74a4666b28c2c5"
+    },
+    {
+      "path": "test_owner_fresh.py",
+      "bytes": 7033,
+      "sha256": "4b8c1b5758c24b4fe63329bc86be71df10d696c5da8586f6c975debd5eb9a1cd"
+    },
+    {
+      "path": "test_phase_wiring.py",
+      "bytes": 1370,
+      "sha256": "33bbae0073b76304c1decba7b8f9f6f29ee397956ab9a8231a8cb641ed711860"
+    }
+  ]
+}

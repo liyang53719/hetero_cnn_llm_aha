@@ -1,0 +1,53 @@
+{
+  "scope": "R7_CURRENT_CONSUMER_ENV_AND_STRICT_VALIDATION_ARGV",
+  "files": {
+    "consumer_owned.py": {
+      "bytes": 25035,
+      "sha256": "48a0c0ec7d890fec5d73ff9db9c7e411ffb2669e8bee9eb5e20af20522b437a5"
+    },
+    "runtime_abi_owned.py": {
+      "bytes": 12662,
+      "sha256": "ca7e9d9ce42634d57cd249e4407be436018ce5afbc18fe79e9bdac50b6496930"
+    },
+    "connect_owned.py": {
+      "bytes": 11665,
+      "sha256": "6ae7dd17343f66faba7cc4aaca74be7040291b8f2c692b27f927062005cbb03d"
+    },
+    "local_build_proof.py": {
+      "bytes": 2683,
+      "sha256": "b58ebbff5578e641b58e7f2c4c1366a7c73f3a4861cf21e37cab7a01c46d8b56"
+    },
+    "correct_observation_policy.py": {
+      "bytes": 11308,
+      "sha256": "3e205b979194d82fc215a1f8c013eff6e009ef79444d05cb20f857db56de3c1d"
+    },
+    "observation_contract.py": {
+      "bytes": 7795,
+      "sha256": "9b9c44af0964cdf2213ce649c5e86dff68ceaa492ec46e4d95b780e4460206db"
+    },
+    "consumption_proof.py": {
+      "bytes": 8208,
+      "sha256": "d4b47498bf0d7c50b90761446edb4d33eb7c5e12a645dc6a40ebcef612a61a4c"
+    },
+    "driver_dependency_proof.py": {
+      "bytes": 9808,
+      "sha256": "104326a1630a689f18d6144734fc6142a315c378a42678e41959a27c8a64f278"
+    },
+    "attach_bundle.py": {
+      "bytes": 3277,
+      "sha256": "d7562dbd0b30f6b0ce30eb0321afffdde571cd0c25569b7f323b7a045899fc0b"
+    },
+    "LOCKED_SOURCE_CONTRACT.json": {
+      "bytes": 1730,
+      "sha256": "9a0a4e8e7acb477b48e90afe0fc545d971f9fbaa87cf6586fe090f6f344c41f0"
+    },
+    "run_compare.py": {
+      "bytes": 22602,
+      "sha256": "ac89dcfe29283903be42b3da39848a922b3b18ff8468aa2bbf9cd2582348dd60"
+    },
+    "runtime_abi.py": {
+      "bytes": 8995,
+      "sha256": "f6826a38f3d479b18a45f8bd2d80ff20a7eb2c77ba1783f77a5abf612308632c"
+    }
+  }
+}

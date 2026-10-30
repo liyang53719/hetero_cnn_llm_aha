@@ -1,0 +1,95 @@
+{
+  "schema": "FRESH_JOB_THREE_RUNTIME_INSTALL_BINDING_V1",
+  "scope": "INSTALL_AND_SOURCE_BIND_ONLY_NO_REFERENCE_DUT",
+  "owner_root": "/ABS/JOB",
+  "identity": {
+    "run_id": 123,
+    "source_commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "launch_commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  },
+  "python": "/ABS/PYTHON",
+  "admitted_runner": "/ABS/CHECKOUT/controller.py",
+  "phase_script": "/ABS/CHECKOUT/runtime_phase.py",
+  "helper": "/ABS/CHECKOUT/shared_runtime.py",
+  "phase_binding": {
+    "path": "/ABS/JOB/INSTALL_PHASE_BINDING.json",
+    "bytes": 123,
+    "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "pins": {
+    "/ABS/PYTHON": "TOOL_SHA",
+    "/ABS/CHECKOUT/controller.py": "REVIEWED_SOURCE_SHA",
+    "/ABS/CHECKOUT/runtime_phase.py": "REVIEWED_SOURCE_SHA",
+    "/ABS/CHECKOUT/shared_runtime.py": "e853a724acefd26e7b3ef1f6883003376eaf968b808db505793e731ca0b1d302",
+    "/ABS/JOB/INSTALL_PHASE_BINDING.json": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "archives": [],
+  "runtimes": {
+    "qwen2": {
+      "root": "/ABS/JOB/installs/qwen2",
+      "home": "/ABS/JOB/installs/qwen2",
+      "site": "/ABS/JOB/installs/qwen2/site-packages",
+      "native_path": "/ABS/JOB/runs/qwen2/RESULT.json",
+      "phase_result_path": "/ABS/JOB/results/qwen2_RESULT.json",
+      "argv": [
+        "/ABS/PYTHON",
+        "-S",
+        "-B",
+        "/ABS/CHECKOUT/runtime_phase.py",
+        "--binding",
+        "/ABS/JOB/INSTALL_PHASE_BINDING.json",
+        "--binding-sha256",
+        "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "--runtime",
+        "qwen2"
+      ],
+      "caps": {
+        "EXACT_ACTUAL_SUPERVISOR_CAPS_REQUIRED_NOT_THIS_EXAMPLE": true
+      }
+    },
+    "qwen35_08b": {
+      "root": "/ABS/JOB/installs/qwen35_08b",
+      "home": "/ABS/JOB/installs/qwen35_08b/work/runtime",
+      "site": "/ABS/JOB/installs/qwen35_08b/work/runtime/site-packages",
+      "native_path": "/ABS/JOB/runs/qwen35_08b/RESULT.json",
+      "phase_result_path": "/ABS/JOB/results/qwen35_08b_RESULT.json",
+      "argv": [
+        "/ABS/PYTHON",
+        "-S",
+        "-B",
+        "/ABS/CHECKOUT/runtime_phase.py",
+        "--binding",
+        "/ABS/JOB/INSTALL_PHASE_BINDING.json",
+        "--binding-sha256",
+        "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "--runtime",
+        "qwen35_08b"
+      ],
+      "caps": {
+        "EXACT_ACTUAL_SUPERVISOR_CAPS_REQUIRED_NOT_THIS_EXAMPLE": true
+      }
+    },
+    "qwen35_35b": {
+      "root": "/ABS/JOB/installs/qwen35_35b",
+      "home": "/ABS/JOB/installs/qwen35_35b/work/runtime",
+      "site": "/ABS/JOB/installs/qwen35_35b/work/runtime/site-packages",
+      "native_path": "/ABS/JOB/runs/qwen35_35b/RESULT.json",
+      "phase_result_path": "/ABS/JOB/results/qwen35_35b_RESULT.json",
+      "argv": [
+        "/ABS/PYTHON",
+        "-S",
+        "-B",
+        "/ABS/CHECKOUT/runtime_phase.py",
+        "--binding",
+        "/ABS/JOB/INSTALL_PHASE_BINDING.json",
+        "--binding-sha256",
+        "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "--runtime",
+        "qwen35_35b"
+      ],
+      "caps": {
+        "EXACT_ACTUAL_SUPERVISOR_CAPS_REQUIRED_NOT_THIS_EXAMPLE": true
+      }
+    }
+  }
+}

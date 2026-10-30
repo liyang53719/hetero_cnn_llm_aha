@@ -1,9 +1,10 @@
 """One reviewed owning CI job: materials/reference -> one original backend -> five
 same-stimulus bounded diagnostics. Only summary may leave job. NO automatic launch.
-All numerical scripts, 4096 MAC definition and original four P0 producer pins stay.
+Numerical definitions and 4096 MAC stay. Fresh-host producer identity changes are explicit.
 """
 import argparse,hashlib,importlib.util,json,os,pathlib,platform,subprocess,sys,time
 P=pathlib.Path;D=P(__file__).resolve().parent
+_policy_spec=importlib.util.spec_from_file_location('samejob_profile_policy', P(__file__).resolve().parent.parent/'profile_policy.py');profile_policy=importlib.util.module_from_spec(_policy_spec);_policy_spec.loader.exec_module(profile_policy)
 TREE=12_081_306_272
 
 def need(v,m):
@@ -35,12 +36,16 @@ def stage_policy(kind,seconds):
  raise ValueError('unknown explicit actual output/resource profile')
 
 def run(b,binding_path,binding_sha):
+ profile_policy.require_source_pin(b['pins']);execution_policy=profile_policy.checked(b)
  started=b['job_started_monotonic'];need(type(started)in(int,float)and 0<=time.monotonic()-started<21000,'first workflow-step monotonic clock, never reset at flow/build boundary');materials_reserved,tail_reserved,total=reservations(b)
  need(b['schema']=='ONE_JOB_FIVE_M128_CHISEL_TEST_CALIBRATION_V1'and b['profiles']==list(range(5))and b['tokens']==128 and b['matrix_macs']==4096 and b['vector_lanes']==32,'exact registered same-hardware five profiles')
  need(b['payload_uploads']is False and b['final_rtl_replay']is False,'explicit local data only, Chisel simulation backend')
  identity=b['identity'];need({k:b['artifact_identity'][k]for k in identity}==identity,'same builder and runtime owning job identity');need(str(identity['run_id'])==os.environ.get('GITHUB_RUN_ID')and identity['launch_commit']==os.environ.get('GITHUB_SHA')and os.environ.get('GITHUB_RUN_ATTEMPT')=='1','actual first owning CI job')
- need(os.environ.get('ImageVersion')=='20261026.354.1','original bootstrap tool image gate: new image needs explicit qualification')
- need(sys.version_info[:2]==(3,12)and platform.machine()=='x86_64'and'avx512f'in P('/proc/cpuinfo').read_text().split(),'original Python/P0 AVX512 before downloads or build')
+ fresh=b.get('fresh_host_contract')
+ if fresh is None:need(os.environ.get('ImageVersion')=='20261026.354.1','original bootstrap tool image gate: new image needs explicit qualification')
+ else:
+  host=mod('fresh_host_contract',P(b['materialization_dir'])/'fresh_host.py');host.validate_contract(fresh,identity);host.reject_injection(os.environ)
+ need(sys.version_info[:2]==(3,12)and platform.machine()=='x86_64','original Python ABI before downloads or build');profile_policy.require_cpu(b,P('/proc/cpuinfo').read_text().split())
  repo=P(b['repo']).resolve();need(subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()==identity['source_commit'],'actual checked-out source')
  job=P(b['job_root']);need(not job.exists()and job.is_absolute()and not any(p.is_symlink()for p in(job,*job.parents)),'fresh canonical job root')
  import shutil
@@ -78,6 +83,9 @@ def run(b,binding_path,binding_sha):
  build=job/'build';bid=job/'bindings/ARTIFACT_IDENTITY.json';save(bid,b['artifact_identity'])
  need(time.monotonic()-started+q['build']+materials_reserved+tail_reserved<=21000,'full remaining build+five diagnostics reservation')
  argv=[py,'-B',str(D/'bootstrap_samejob.py'),'--repo',str(repo),'--pipeline',b['pipeline'],'--materialization-dir',b['materialization_dir'],'--shared-owned-root',str(job),'--work',str(build),'--reviewed-repo-sha',identity['source_commit'],'--artifact-identity',str(bid),'--job-started-monotonic',str(started),'--remaining-tail-reserve-seconds',str(materials_reserved+tail_reserved),'--maximum-build-seconds',str(q['build']),'--execute-reviewed-once']
+ if fresh is not None:
+  contract_path=job/'bindings/FRESH_HOST_CONTRACT.json';save(contract_path,fresh)
+  argv+=['--fresh-host-contract',str(contract_path),'--fresh-host-contract-sha256',sha(contract_path)]
  # Original bootstrap/one_job owns all of its native strict groups and deadlines;
  # do not nest it under another supervisor or modify the four P0 producer sources.
  with(job/'build_parent.log').open('xb')as log:code=subprocess.run(argv,stdout=log,stderr=subprocess.STDOUT).returncode
@@ -95,14 +103,14 @@ def run(b,binding_path,binding_sha):
   r=json.loads(receipt.read_text());p=receipt.with_name(receipt.name.removesuffix('.receipt.json')+'.bin');need(p.stat().st_size==r['actual_bytes']and sha(p)==r['actual_sha256'],'actual acquired tensor bytes');weights.append(dict(model=receipt.parent.name,name=receipt.name.removesuffix('.receipt.json'),pin=pin(p)))
  need(len(weights)==70 and sum(x['pin']['bytes']for x in weights)==3_531_306_272,'all original five block tensors and bytes')
  owner_root=job/'materials';ib=job/'bindings/INSTALL.json';archives_rows=json.loads((archives/'ARCHIVES.json').read_text())['archives'];ipins=dict(pins);ipins.update({r['path']:r['sha256']for r in archives_rows})
- save(ib,dict(schema='FRESH_JOB_RUNTIME_CONTROLLER_V1',identity=identity,repo=str(repo),owner_root=str(owner_root),python=py,helper=b['shared_runtime_helper'],supervisor_dir=supervisor_dir,lock=lock,owned_roots=roots,pins=ipins,archives=archives_rows,job_started_monotonic=started,install_wall_seconds=q['install'],metadata_wall_seconds=q['owner_bind'],remaining_job_reservation_seconds=5*(q['reference']+30)+tail_reserved))
+ save(ib,dict(execution_policy=execution_policy,schema='FRESH_JOB_RUNTIME_CONTROLLER_V1',identity=identity,repo=str(repo),owner_root=str(owner_root),python=py,helper=b['shared_runtime_helper'],supervisor_dir=supervisor_dir,lock=lock,owned_roots=roots,pins=ipins,archives=archives_rows,job_started_monotonic=started,install_wall_seconds=q['install'],metadata_wall_seconds=q['owner_bind'],remaining_job_reservation_seconds=5*(q['reference']+30)+tail_reserved))
  installer=mod('actual_fresh_installer',runtime/'install_job.py');_,_,owner=installer.run(json.loads(ib.read_text()),ib,sha(ib));owner_pin=pin(owner)
  reference=mod('actual_original_references',runtime/'reference_job.py')
- rb=dict(profiles=list(range(5)),tokens=128,identity=identity,repo=str(repo),output=str(owner_root/'references'),owner_root=str(owner_root),owner_module=str(runtime/'owner_fresh.py'),owner_manifest=owner_pin,pins=pins,payload=str(payload),wall_seconds=q['reference'])
+ rb=dict(execution_policy=execution_policy,profiles=list(range(5)),tokens=128,identity=identity,repo=str(repo),output=str(owner_root/'references'),owner_root=str(owner_root),owner_module=str(runtime/'owner_fresh.py'),owner_manifest=owner_pin,pins=pins,payload=str(payload),wall_seconds=q['reference'])
  references=reference.run(rb,stage)
  tail=mod('actual_five_diagnostics',numeric/'numeric_tail.py');tb=job/'bindings/NUMERIC.json'
- body=dict(schema='SAME_JOB_FIVE_M128_DIAGNOSTIC_TAIL_V1',profiles=list(range(5)),tokens=128,matrix_macs=4096,vector_lanes=32,upload_payloads=False,final_rtl_replay=False,references=references,weights=weights,calibration_seconds=q['calibration_seconds'],job_started_monotonic=started,reserved_material_seconds=7*q['provider']+11*120,reserved_cleanup_seconds=1530,reserved_parent_seconds=q['parent'],tree_cap=TREE,rss_bytes=b['dut_rss_bytes'],address_space_bytes=12<<30,phase_extra_bytes=b['numeric_reserved_increment_bytes'],provider_wall_seconds=q['provider'],pins=pins,output=str(owner_root/'numeric'),owned_roots=roots,owner_root=str(owner_root),owner_module=str(runtime/'owner_fresh.py'),owner_manifest=owner_pin,supervisor_dir=supervisor_dir,build_result=pin(build_result),run_id=identity['run_id'],source_commit=identity['source_commit'],launch_commit=identity['launch_commit'],python=py,lock=lock,repo=str(repo),payload=str(payload),materializer=b['materializer'],environment={})
+ body=dict(execution_policy=execution_policy,schema='SAME_JOB_FIVE_M128_DIAGNOSTIC_TAIL_V1',profiles=list(range(5)),tokens=128,matrix_macs=4096,vector_lanes=32,upload_payloads=False,final_rtl_replay=False,references=references,weights=weights,calibration_seconds=q['calibration_seconds'],job_started_monotonic=started,reserved_material_seconds=7*q['provider']+11*120,reserved_cleanup_seconds=1530,reserved_parent_seconds=q['parent'],tree_cap=TREE,rss_bytes=b['dut_rss_bytes'],address_space_bytes=12<<30,phase_extra_bytes=b['numeric_reserved_increment_bytes'],provider_wall_seconds=q['provider'],pins=pins,output=str(owner_root/'numeric'),owned_roots=roots,owner_root=str(owner_root),owner_module=str(runtime/'owner_fresh.py'),owner_manifest=owner_pin,supervisor_dir=supervisor_dir,build_result=pin(build_result),run_id=identity['run_id'],source_commit=identity['source_commit'],launch_commit=identity['launch_commit'],python=py,lock=lock,repo=str(repo),payload=str(payload),materializer=b['materializer'],environment={})
  save(tb,body);tail.run(body,tb,sha(tb))
- save(job/'FLOW_RESULT.json',dict(status='INCOMPLETE_DIAGNOSTIC_ONLY',scope='CHISEL_TEST_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL',stages=history,numeric_result=pin(owner_root/'numeric/RESULT.json'),hardware_definitions=1,profiles=list(range(5)),uploaded_payloads=False))
+ save(job/'FLOW_RESULT.json',dict(execution_policy=execution_policy,status='INCOMPLETE_DIAGNOSTIC_ONLY',scope='CHISEL_TEST_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL',stages=history,numeric_result=pin(owner_root/'numeric/RESULT.json'),hardware_definitions=1,profiles=list(range(5)),uploaded_payloads=False))
 if __name__=='__main__':
  a=argparse.ArgumentParser();a.add_argument('--binding',type=P,required=True);a.add_argument('--binding-sha256',required=True);v=a.parse_args();need(sha(v.binding)==v.binding_sha256,'independent top binding');run(json.loads(v.binding.read_text()),v.binding.resolve(),v.binding_sha256);raise SystemExit(2) # diagnosis is deliberately not full numeric qualification

@@ -7,6 +7,7 @@ import live_budget
 import dut_evidence
 import provider_from_frozen as material
 P=pathlib.Path;D=P(__file__).resolve().parent
+_policy_spec=importlib.util.spec_from_file_location('samejob_profile_policy', P(__file__).resolve().parent.parent/'profile_policy.py');profile_policy=importlib.util.module_from_spec(_policy_spec);_policy_spec.loader.exec_module(profile_policy)
 
 def need(v,m):
  if not v:raise ValueError(m)
@@ -37,7 +38,7 @@ def validate(b):
  need(b['schema']=='SAME_JOB_FIVE_M128_DIAGNOSTIC_TAIL_V1','explicit samejob tail')
  need(b['profiles']==list(range(5)) and b['tokens']==128 and b['matrix_macs']==4096 and b['vector_lanes']==32,'five fixed full profiles')
  need(b['upload_payloads']is False and b['final_rtl_replay']is False,'local generated Chisel test backend only')
- need(set(b['references'])==set(map(str,range(5))),'five independently frozen reference receipts')
+ profile_policy.require_references(b,b['references'])
  need(set(b['calibration_seconds'])==set(map(str,range(5))),'all five budgeted before any execution')
  need(all(type(n)is int and 0<n<=20000 for n in b['calibration_seconds'].values()),'explicit bounded same-stimulus calibration')
  need(b['job_started_monotonic']<=time.monotonic(),'owning job start clock, not reset after build')
@@ -59,7 +60,7 @@ def owned_environment(base,root):
  return e
 
 def run(b,binding_path,binding_sha):
- validate(b);pins=dict(b['pins']);pins[str(binding_path)]=binding_sha
+ validate(b);profile_policy.require_source_pin(b['pins']);pins=dict(b['pins']);pins[str(binding_path)]=binding_sha
  need(not {r['pin']['path']for r in b['weights']} & set(pins),'large payload uses streaming pins, not supervisor read_bytes')
  for p,h in pins.items():need(sha(p)==h,'source pin drift')
  for name in ('supervise_multiroot.py','strict_cleanup.py','lossless_log.py'):
@@ -71,11 +72,12 @@ def run(b,binding_path,binding_sha):
   need(any(P(b[role]).resolve().is_relative_to(r)for r in roots),'unwatched required material '+role)
  need(any(P(b['build_result']['path']).resolve().is_relative_to(r)for r in roots),'unwatched build tree')
  need(not out.exists() and out.is_relative_to(P(b['owner_root'])),'fresh output inside runtime owner');out.mkdir();(out/'runs').mkdir();(out/'phases').mkdir();(out/'cache_roots').mkdir()
- save(out/'REGISTERED_FIVE.json',dict(profiles=b['profiles'],tokens=128,calibration_seconds=b['calibration_seconds'],scope='CHISEL_EMITTED_SV_SIMULATION_NOT_FINAL_RTL',numeric_pass=False))
+ save(out/'REGISTERED_FIVE.json',dict(execution_policy=profile_policy.checked(b),profiles=b['profiles'],tokens=128,calibration_seconds=b['calibration_seconds'],scope='CHISEL_EMITTED_SV_SIMULATION_NOT_FINAL_RTL',numeric_pass=False))
  sys.path.insert(0,b['supervisor_dir']);import supervise_multiroot as supervisor
  owner=module('admitted_runtime_owner',P(b['owner_module']),pins)
  owner_doc,_=owner.verify(b['owner_manifest']['path'],b['owner_manifest']['sha256'],b['owner_root'])
  need(owner_doc['schema']=='SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3'and owner_doc['identity']==dict(run_id=b['run_id'],source_commit=b['source_commit'],launch_commit=b['launch_commit']),'fresh CI owner exact same run/source/launch, never historical V2 receipt')
+ profile_policy.require_same(b,owner_doc)
  build=material.checked(b['build_result']);br=json.loads(build.read_text());manifest=material.checked(br['artifact']['manifest']);frozen=json.loads(manifest.read_text());common=frozen['common'];root=manifest.parent
  # Original proof checks actual owning run + source/launch, not invented API proof.
  proof=module('same_job_proof',D/'local_build_proof.py',pins)
@@ -100,7 +102,7 @@ def run(b,binding_path,binding_sha):
  abi=out/'STARTUP_ABI.json';tool=frozen['tool_manifest'];binary=common['binary']
  stage('startup_abi',[b['python'],'-B',str(D/'runtime_abi_owned.py'),'--binary',str(root/binary['path']),'--binary-sha256',binary['sha256'],'--tool-manifest',str(root/tool['path']),'--tool-manifest-sha256',tool['sha256'],'--output',str(abi),'--execute-reviewed-loader-list','--expected-run-id',str(b['run_id']),'--expected-source-commit',b['source_commit'],'--expected-launch-commit',b['launch_commit'],*env_args],120)
  identity_args=['--artifact-manifest',str(manifest),'--artifact-manifest-sha256',sha(manifest),'--local-build-result',str(build),'--local-build-result-sha256',b['build_result']['sha256'],'--expected-run-id',str(b['run_id']),'--expected-launch-commit',b['launch_commit'],'--expected-source-commit',b['source_commit'],'--local-runtime-abi',str(abi),'--local-runtime-abi-sha256',sha(abi),*env_args]
- for i in b['profiles']:
+ for i in profile_policy.eligible(b):
   lease_root=out/f'profile{i}';lease_root.mkdir();profile=lease_root/'material'
   with owner.lease(b['owner_manifest']['path'],b['owner_manifest']['sha256'],b['owner_root'],i,lease_root) as selected:
    weights(b,i)
@@ -120,7 +122,7 @@ def run(b,binding_path,binding_sha):
    diagnostic=dut_evidence.verify(profile/'dut_result',i,sha(manifest),sha(bundle),binary['sha256'],runtime_sha,material.pin(out/'runs'/f'p{i}_dut'/'RESULT.json'));dut_records.append(diagnostic)
    save(out/f'PROFILE_{i}_DIAGNOSTIC.json',diagnostic)
    weights(b,i)
- save(out/'RESULT.json',dict(status='INCOMPLETE_DIAGNOSTIC_ONLY',scope='CHISEL_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL',stages=allstage,profiles=b['profiles'],actual_dut_reports=dut_records,numerical_pass=False,moe_contract='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE',uploaded_payloads=False))
+ save(out/'RESULT.json',dict(execution_policy=profile_policy.checked(b),status='INCOMPLETE_DIAGNOSTIC_ONLY',scope='CHISEL_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL',stages=allstage,profiles=b['profiles'],actual_dut_reports=dut_records,numerical_pass=False,moe_contract='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE',uploaded_payloads=False))
 
 def main():
  a=argparse.ArgumentParser();a.add_argument('--binding',type=P,required=True);a.add_argument('--binding-sha256',required=True);v=a.parse_args();need(sha(v.binding)==v.binding_sha256,'independently reviewed binding');run(json.loads(v.binding.read_text()),v.binding.resolve(),v.binding_sha256)

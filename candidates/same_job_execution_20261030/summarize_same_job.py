@@ -1,6 +1,7 @@
 """Only bounded scalar/hash status; never upload runtime/build/input bytes or paths."""
 import argparse,hashlib,importlib.util,json,math,pathlib,re,sys
 P=pathlib.Path;D=P(__file__).resolve().parent
+_policy_spec=importlib.util.spec_from_file_location('samejob_profile_policy', D/'profile_policy.py');profile_policy=importlib.util.module_from_spec(_policy_spec);_policy_spec.loader.exec_module(profile_policy)
 STATES={'STARTED_TIMEOUT_INCOMPLETE','STARTED_NATIVE_FAILED','COMPLETE_TERMINAL_DIAGNOSTIC_NOT_PASS','STARTED_OBSERVATION_INCOMPLETE'}
 REASONS={'PYTHON_OR_ARCH','CPU_AVX512','IMAGE_VERSION','MEMAVAILABLE_13GIB','DISK_20671240864','SOURCE_PIN','JOB_DEADLINE','EXECUTION_FAILED_DETAILS_IN_STAGE_RECEIPTS'}
 def read(p):
@@ -93,8 +94,63 @@ def pack_deduplication(work):
  except (OSError,ValueError,TypeError,KeyError):out['status']='INVALID_FIELDS'
  return out
 
+def fresh_host_projection(work,identity):
+ # Fixed paths only. Receipt observations are not host or numerical qualification.
+ out=dict(scope='IDENTITY_AND_PROCESS_OBSERVATIONS_ONLY_NOT_HOST_OR_NUMERICAL_PASS',host_qualified=False,numeric_pass=False)
+ parent={'GNU_RUNTIME_ADMISSION':'GNU_RUNTIME_DEPENDENCIES_UNQUALIFIED','BOOTSTRAP_ALIAS':'RUNTIME_ALIAS_REJECTED','HOST_RECEIPT_ADMISSION':'FRESH_HOST_RECEIPT_REJECTED'}
+ native={'UNCLASSIFIED_EXCEPTION','ELF_DEPENDENCY_UNRESOLVED','ELF_DEPENDENCY_ROOT_REJECTED','SEARCH_PATH_INJECTION_REJECTED','CONTRACT_REJECTED','JDK_QUERY_ROOT_REJECTED','QUERY_TIMEOUT','QUERY_FAILED','FILESYSTEM_UNAVAILABLE'}
+ specs=(('stage','stage_fresh_host/RESULT.json',16<<20),('identity','fresh-host.json',16<<20),('parent_failure','FRESH_HOST_PARENT_FAILURE.json',4096),('native_failure','FRESH_HOST_NATIVE_FAILURE.json',4096))
+ for role,name,limit in specs:
+  path=work/'build'/name;row=dict(state='UNOBSERVED_NOT_QUALIFIED');out[role]=row
+  try:
+   if not path.exists()and not path.is_symlink():continue
+   row['state']='INVALID_NOT_QUALIFIED'
+   if path.is_symlink()or (work/'build').is_symlink()or path.parent.is_symlink()or not path.is_file()or path.stat().st_size>limit:continue
+   r=read(path)
+   if not isinstance(r,dict):continue
+   digest=sha(path)
+   if role=='identity':
+    c=r.get('contract');pins=r.get('pins')
+    if r.get('schema')!='BOUNDED_FRESH_HOST_IDENTITY_V1'or r.get('qualification')!='IDENTITY_ONLY_PENDING_ORIGINAL_BUILD_AND_NUMERICAL_GATES'or r.get('old_pass_transfer')is not False:continue
+    if not isinstance(c,dict)or set(c)!={'schema','run_id','source_commit','launch_commit'}or c['schema']!='BOUNDED_FRESH_HOST_V1':continue
+    if type(c['run_id'])is not int or c['run_id']<=0 or type(identity.get('run_id'))is not int:continue
+    if any(not isinstance(c[k],str)or not re.fullmatch('[0-9a-f]{40}',c[k])for k in ('source_commit','launch_commit'))or c['source_commit']==c['launch_commit']:continue
+    if any(c[k]!=identity.get(k)for k in ('run_id','source_commit','launch_commit')):continue
+    if not isinstance(pins,dict)or not 0<len(pins)<=10000 or any(not isinstance(k,str)or not isinstance(v,str)or not re.fullmatch('[0-9a-f]{64}',v)for k,v in pins.items()):continue
+    row.update(state='OBSERVED_IDENTITY_ONLY_NOT_QUALIFIED',receipt_sha256=digest,contract_identity_matches=True,pin_count=len(pins))
+   elif role=='stage':
+    cap=r.get('log_capture')or{};cleanup=r.get('cleanup_proof')or{};code=r.get('native_exit')
+    if 'native_exit'not in r or (code is not None and(type(code)is not int or not -255<=code<=255))or not isinstance(cap,dict)or not isinstance(cleanup,dict)or not isinstance(r.get('errors'),list):continue
+    row.update(state='OBSERVED_PROCESS_ONLY_NOT_QUALIFIED',receipt_sha256=digest,native_exit=code,errors=len(r['errors']),wall_seconds=number(r.get('elapsed_seconds')),observed_cpu_seconds=number(r.get('observed_cpu_seconds')),observed_peak_rss=number(r.get('observed_peak_rss')),cleanup_complete=cleanup.get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP',pipe_eof=cap.get('pipe_eof_observed')is True,gzip_finalized=cap.get('gzip_finalized')is True,resources=stage_resources(r))
+   else:
+    if r.get('status')!='FAILED'or r.get('numeric_pass')is not False:continue
+    if role=='parent_failure':
+     if r.get('schema')!='FRESH_HOST_PARENT_FAILURE_V1'or r.get('phase')not in parent or r.get('reason')!=parent[r['phase']]:continue
+    elif r.get('schema')!='FRESH_HOST_NATIVE_FAILURE_V1'or r.get('phase')!='BOUNDED_HOST_INVENTORY'or r.get('reason')not in native:continue
+    row.update(state='OBSERVED_FAILURE_NOT_QUALIFIED',receipt_sha256=digest,status='FAILED',phase=r['phase'],reason=r['reason'])
+  except (OSError,ValueError,TypeError,KeyError,AttributeError,ImportError):
+   # Partial projection must not accidentally advertise a validated receipt.
+   out[role]=dict(state='INVALID_NOT_QUALIFIED')
+ return out
+
+def execution_policy_summary(work):
+ # Select only exact versioned policy; no arbitrary binding fields/paths exported.
+ binding=read(work.parent/(work.name+'-BINDING.json'))
+ failure=read(work.parent/(work.name+'-CONTROLLER_FAILURE.json'))
+ rows=[r for r in (binding,failure)if isinstance(r,dict)and 'execution_policy'in r]
+ if not rows:return dict(state='UNOBSERVED_NOT_QUALIFIED')
+ try:
+  value=profile_policy.checked(rows[0])
+  for row in rows[1:]:profile_policy.require_same(rows[0],row)
+  return dict(state='DECLARED_NOT_QUALIFIED',policy=value,profiles_registered=value['registered_profiles'],profiles_eligible=value['eligible_profiles'])
+ except (ValueError,TypeError,KeyError):return dict(state='INVALID_OR_CONFLICTING_NOT_QUALIFIED')
+
 def summarize(work,identity):
  out=dict(schema='FIVE_M128_SAME_JOB_SAFE_SUMMARY_V1',status='INCOMPLETE',numeric_pass=False,final_rtl_replay=False,uploaded_payloads=False,profiles_registered=list(range(5)),tokens=128,matrix_macs=4096,vector_lanes=32,resource_peak_qualification='INCOMPLETE_SAMPLED',stages=[],actual_dut_reports=[])
+ out['vector_lanes_semantics']='DECLARED_ARTIFACT_TAG_NOT_VERIFIED_PHYSICAL_ISSUE_LANES'
+ out['vector_ii1_verified']=False
+ out['fresh_host']=fresh_host_projection(work,identity)
+ out['execution_selection']=execution_policy_summary(work)
  out['installation_resource_snapshots']=install_snapshots(work)
  out['pack_deduplication']=pack_deduplication(work)
  for k in ('source_commit','launch_commit'):

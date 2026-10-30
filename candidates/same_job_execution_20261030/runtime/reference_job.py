@@ -4,6 +4,7 @@ No model algorithm/seed/topk rewrite. No backend/DUT dependency or upload.
 """
 import hashlib,importlib.util,json,pathlib,signal
 P=pathlib.Path;D=P(__file__).resolve().parent
+_policy_spec=importlib.util.spec_from_file_location('samejob_profile_policy', P(__file__).resolve().parent.parent/'profile_policy.py');profile_policy=importlib.util.module_from_spec(_policy_spec);_policy_spec.loader.exec_module(profile_policy)
 MODELS=('qwen2_1p5b','qwen3_5_0p8b','qwen3_5_0p8b','qwen3_5_35b_a3b','qwen3_5_35b_a3b')
 KEYS=('qwen2','qwen35_08b','qwen35_08b','qwen35_35b','qwen35_35b')
 def need(v,m):
@@ -15,13 +16,15 @@ def pin(p):
 def complete(r):return(r.get('cleanup_proof')or{}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP'and(r.get('log_capture')or{}).get('pipe_eof_observed')is True and(r.get('log_capture')or{}).get('gzip_finalized')is True
 
 def run(b,stage):
- need(b['profiles']==list(range(5))and b['tokens']==128,'whole original reference round')
+ need(b['profiles']==list(range(5))and b['tokens']==128,'whole original registered reference round')
+ profile_policy.require_source_pin(b['pins']);execution_policy=profile_policy.checked(b)
  repo=P(b['repo']);out=P(b['output']);need(not out.exists()and out.is_relative_to(P(b['owner_root'])),'fresh owning reference output');out.mkdir()
  owner_path=P(b['owner_module']);need(sha(owner_path)==b['pins'][str(owner_path)],'reviewed fresh owner module')
  spec=importlib.util.spec_from_file_location('fresh_owner_reference',owner_path);owner=importlib.util.module_from_spec(spec);spec.loader.exec_module(owner)
  observed,_=owner.verify(b['owner_manifest']['path'],b['owner_manifest']['sha256'],b['owner_root']);need(observed['identity']==b['identity'],'actual samejob owner')
+ profile_policy.require_same(b,observed)
  result={}
- for i in b['profiles']:
+ for i in profile_policy.eligible(b):
   home=out/f'profile{i}';home.mkdir();dest=home/'actual/reference'
   with owner.lease(b['owner_manifest']['path'],b['owner_manifest']['sha256'],b['owner_root'],i,home)as selected:
    rt=selected[KEYS[i]];source=repo/'candidates'/('independent_reference_p0_cache_arm_20261028T2313'if i==0 else'independent_block_reference_prepare_v3_20261028T2312')/'run_reference.py'
@@ -38,5 +41,5 @@ def run(b,stage):
    for row in doc['tensor_records'].values():
     p=dest/row['file'];need(p.resolve().is_relative_to(dest)and not p.is_symlink()and p.stat().st_size==row['bytes']and sha(p)==row['sha256'],'actual reference tensor pin')
    result[str(i)]=pin(receipt)
- with(out/'REFERENCES.json').open('x')as f:json.dump(dict(scope='FIVE_SOFTWARE_REFERENCES_NOT_DUT',references=result,identity=b['identity']),f,indent=2)
+ with(out/'REFERENCES.json').open('x')as f:json.dump(dict(execution_policy=execution_policy,scope='REGISTERED_FIVE_ELIGIBLE_SOFTWARE_REFERENCES_NOT_DUT',references=result,identity=b['identity']),f,indent=2)
  return result

@@ -1,7 +1,7 @@
 """Read actual fresh GCC -MMD dependency evidence; never invokes a compiler."""
 import hashlib,json,pathlib,re,posixpath
 P=pathlib.Path
-PRODUCER_IMPLEMENTATION_PINS={'build_producer.py': '82aef295be117550be5c7c878f6f70b78d6e195c17061bad0ac292593dd80bfe', 'one_job_build_only.py': 'be3c652d4f9b074994731c9bf386d8576e05140fee6e9402da79d4fa11181634', 'pack_frozen_artifact.py': '773575951ecf63fca15d5c2082c098a2ca6bd0bc988a3a3df3aaaabba712119c', 'p0_source_evidence.py': '47a126be32385720fd3b3d94e848609f57c24174ea917110bdb1b221d916b800'}
+PRODUCER_IMPLEMENTATION_PINS={'build_producer.py': '82aef295be117550be5c7c878f6f70b78d6e195c17061bad0ac292593dd80bfe', 'one_job_build_only.py': 'd70c929243fd7e6b5b0ed266b2634e24b1c863715d14a5d34cde3604ebcc1015', 'pack_frozen_artifact.py': '773575951ecf63fca15d5c2082c098a2ca6bd0bc988a3a3df3aaaabba712119c', 'p0_source_evidence.py': '47a126be32385720fd3b3d94e848609f57c24174ea917110bdb1b221d916b800'}
 GLOBAL_MK_SHA='74121398e5be12bf03721f1f0f5ce75e7c703635ec7e50920d43f9c4e31fcc0c'
 def need(v,s):
  if not v:raise ValueError(s)

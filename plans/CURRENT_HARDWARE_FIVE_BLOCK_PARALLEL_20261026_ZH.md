@@ -1,5 +1,16 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 最新源码批：分离 P0 阻塞与四块推进（TEMP，尚未激活）
+
+- 基于 e5801897，复用现有 entry/flow/runtime/owner/numeric 接线。默认全五合同不变；新增显式注册五块、eligible P1–P4、P0 原宿主策略延期模式。选择四块不是 CPU 缺 AVX512 的观测，也不是实际执行/PASS；不伪造 P0 receipt，owner 拒绝 P0 lease。仅两个 Qwen3.5 runtime 与四份 reference/numeric 调度，原三安装/五块时间和资源预约上界保留。
+- 新鲜宿主合同只允许在原 owning bootstrap 内完成具体工具/依赖核验后进入原 build。原 JDK exact vendor/version、GNU13/14、固定 Verilator/JAR/source/canonical/SV/ABI 保持；新增固定范围 ELF/Python/shell 身份、GNU 缺库拒绝、查询专用 JDK 路径及 stage 前后 alias 核验。不是镜像白名单或整个 OS 资格，不继承旧 PASS。默认无 flag 仍执行原镜像合同。
+- one_job 的监督后 alias 核验是新代码，已同步三份 producer proof 及 consumer pin 链与 manifest，并从 UNCHANGED 列表移出，单独记录 reviewed delta。旧被拒 watchdog 未纳入，原监督实现/资源 caps 不改。四个固定 fresh-host receipt 路径只导出状态/枚举/hash/计数；缺失及无效明确未资格，不上传依赖路径、环境或原始日志。
+- 资源标签勘误：vector_lanes=32 是既有 artifact 声明值，不能证明真实32-lane每周期issue。已核 P0 SiLU 16-lane 源路径，GDN另有32项bank以scalar游标处理；不据此推断整个设计仅16 lanes。summary 增加 DECLARED_ARTIFACT_TAG_NOT_VERIFIED_PHYSICAL_ISSUE_LANES 和 vector_ii1_verified=false。4096 MAC约束、全部硬件/算术/路由源码未因本执行器批改变。
+- PASS精确范围：合并后94项轻量 metadata/lifecycle/mock 测试在 normal 与 -O 各通过；初次合并的旧global-CPU字符串断言失败已保留工具记录，并改为检验真实profile-specific CPU合同后重测。无真实fresh-host inventory/安装/build/DUT、无新activation、无数值或利用率资格。
+- 下一步：独立审查显式四块/fresh-host启动配置和实际runner准入，不能重跑已消耗activation。另有真实P0 resident gate/up只读观察候选：当前本地155源仅五文件override的Scala typer已native0（55.46s，观测RSS892080128B、cleanup/EOF完整），但本地DebianJava21.0.12不同CI，未做插件后置阶段/elaboration/RTL；该硬件/ABI候选尚未接入本批当前backend，旧哈希不得迁移。
+- 完整五块128-token Chisel/最终RTL数值仍各0/5；原35B安装原因UNKNOWN。临时目录已盘点，未删运行输入或唯一证据。
+
+
 ## 2026-10-29 五profile共享三runtime接线及provider检查点（TEMP / INCOMPLETE）
 
 原selected materializer新增显式共享runtime lease分支：P0使用Qwen2，P1/P2共享原dense14e738，P3/P4共享原MoE42ca970；不是五模型混用一个framework。三实际安装树adoption核原wrapper/Python/固定侧车和完整import-root快照，lease前后验证且postcheck成功后才发布V3；原孤立安装模式仍保留。reference_command、provider算术/程序/完整权重、原BF16/FP32及Torch路由基线不变。

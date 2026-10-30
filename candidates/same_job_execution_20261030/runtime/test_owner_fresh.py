@@ -13,6 +13,7 @@ class Tests(unittest.TestCase):
   self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.root=pathlib.Path(self.tmp.name)
   self.identity=dict(run_id=123,source_commit='a'*40,launch_commit='b'*40)
   self.b=dict(schema='FRESH_JOB_THREE_RUNTIME_INSTALL_BINDING_V1',owner_root=str(self.root),identity=self.identity,scope='INSTALL_AND_SOURCE_BIND_ONLY_NO_REFERENCE_DUT',runtimes={},pins={},archives=[])
+  policy=pathlib.Path(m.profile_policy.__file__).resolve();self.b['pins'][str(policy)]=pin(policy)['sha256']
   for role in ('python','admitted_runner','phase_script','helper'):
    p=self.root/role;p.write_text(role);self.b[role]=str(p);self.b['pins'][str(p)]=pin(p)['sha256']
   phase=self.root/'phase.json';self.b['phase_binding']=write(phase,{'source_pins':dict(self.b['pins'])});self.b['pins'][str(phase)]=pin(phase)['sha256']
@@ -38,6 +39,20 @@ class Tests(unittest.TestCase):
   self.index=self.root/'RECEIPTS.json';write(self.index,dict(schema='FRESH_JOB_THREE_RUNTIME_RECEIPTS_V1',identity=self.identity,binding=pin(self.bp),entries=self.entries))
   self.fake=types.SimpleNamespace(pin=pin,checked=checked,read=lambda p:json.loads(pathlib.Path(p).read_text()),QWEN2_LOCK_SHA=self.lock_sha,INSTALL_CHECKS=('fixture',),CONTRACT={k:('fixture-revision',self.side[k]['sha256'])for k in m.KEYS},wrapper_policy=lambda *a:None,sidecar=lambda *a:None,tree=lambda root,py:{str(p.relative_to(root)):dict(bytes=p.stat().st_size,sha256=pin(p)['sha256'])for p in pathlib.Path(root).rglob('*')if p.is_file()})
   self.addCleanup(patch.stopall);patch.object(m,'HELPER_SHA',self.b['pins'][self.b['helper']]).start();patch.object(m,'helper',return_value=self.fake).start()
+ def deferred(self):
+  self.b['execution_policy']=m.profile_policy.policy(m.profile_policy.DEFER)
+  self.b['runtimes'].pop('qwen2');self.entries.pop('qwen2')
+  write(self.bp,self.b);write(self.index,dict(execution_policy=self.b['execution_policy'],schema='FRESH_JOB_THREE_RUNTIME_RECEIPTS_V1',identity=self.identity,binding=pin(self.bp),entries=self.entries))
+ def test_deferred_actual_small_owner_receipt_chain(self):
+  self.deferred();b,_,entries=self.evidence();self.assertEqual(set(entries),{'qwen35_08b','qwen35_35b'})
+  row=m.bind(self.bp,pin(self.bp)['sha256'],self.index,pin(self.index)['sha256'],self.root/'owner')
+  owner,_=m.verify(row['path'],row['sha256'],self.root)
+  self.assertEqual(owner['execution_policy']['blocked_profiles'],{'0':'BLOCKED_ORIGINAL_HOST_POLICY'});self.assertNotIn('qwen2',owner['entries']);self.assertFalse(owner['numerical_qualified'])
+  with self.assertRaisesRegex(ValueError,'blocked'):
+   with m.lease(row['path'],row['sha256'],self.root,0,self.root):self.fail('blocked lease granted')
+ def test_deferred_rejects_fabricated_p0_index(self):
+  original=self.entries['qwen2'];self.deferred();index=json.loads(self.index.read_text());index['entries']['qwen2']=original;write(self.index,index)
+  with self.assertRaises(ValueError):self.evidence()
  def evidence(self):return m.evidence(self.bp,pin(self.bp)['sha256'],self.index,pin(self.index)['sha256'])
  def mutate_native(self,field,value):
   r=self.entries['qwen2']['native'];p=pathlib.Path(r['path']);doc=json.loads(p.read_text());doc[field]=value;self.entries['qwen2']['native']=write(p,doc);idx=json.loads(self.index.read_text());idx['entries']=self.entries;write(self.index,idx)

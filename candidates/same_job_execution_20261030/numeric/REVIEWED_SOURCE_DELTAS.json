@@ -1,0 +1,12 @@
+{
+  "schema": "FRESH_HOST_REVIEWED_SOURCE_DELTA_V1",
+  "baseline_commit": "e580189798c9884d96f1e5c3e84693f566943a00",
+  "scope": "NEW_REVIEWED_CODE_AND_TRANSITIVE_PIN_CONSTANTS_NOT_OLD_SOURCE_IDENTITY_OR_NUMERIC_PASS",
+  "one_job_build_only": {
+    "before_sha256": "be3c652d4f9b074994731c9bf386d8576e05140fee6e9402da79d4fa11181634",
+    "after_sha256": "d70c929243fd7e6b5b0ed266b2634e24b1c863715d14a5d34cde3604ebcc1015"
+  },
+  "consumer_logic_change": "NONE; dependency identity constants only",
+  "old_pass_transfer": false,
+  "execution_policy_delta": "Explicit registered-five / eligible-four P0 policy deferral; selected consumer numerical logic unchanged."
+}

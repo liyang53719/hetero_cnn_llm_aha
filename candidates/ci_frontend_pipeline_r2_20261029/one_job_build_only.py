@@ -88,11 +88,15 @@ def main():
   import shutil
   need(shutil.disk_usage(out).free>=1_500_000_000+additional_bytes,'preserve disk reserve; no automatic deletion')
  def stage(name,argv,seconds=600,rss=5,tree=2_000_000_000,accepted_exit_codes=(0,),env_override=None,extra_watch_roots=None,extra_pins=None):
+  for path,target in b.get('fresh_host_aliases',{}).items():need(str(pathlib.Path(path).resolve(strict=True))==target,'fresh runtime alias drift')
   disk_gate()
   left=job_budget-(time.monotonic()-start);need(left>seconds+60,'shared 350min deadline reserve')
   caps=dict(jdk_aliases=b['jdk_aliases'],wall_seconds=seconds,cleanup_seconds=30,file_bytes=536870912,tree_bytes=tree,log_bytes=150_000_000,raw_log_bytes=1073741824,max_entries=100000,per_process_as_bytes=15*1024**3,per_process_cpu_seconds=seconds,rss_bytes=rss*1024**3,cpu_seconds=seconds,extra_watch_roots=[str(repo),str(out)]+b['materialized_roots']+(extra_watch_roots or []),min_free_disk_bytes=1_500_000_000,watch_tree_bytes=12_081_306_272)
   stage_env=dict(env);stage_env.update(env_override or {});stage_pins=dict(b['pins']);stage_pins.update(extra_pins or {})
-  r=supervise.execute(argv,str(out/name),str(lock),caps,stage_env,stage_pins,resource_gate={'min_available_memory':(rss+1)*1024**3,'min_disk_free':1_500_000_000})
+  try:
+   r=supervise.execute(argv,str(out/name),str(lock),caps,stage_env,stage_pins,resource_gate={'min_available_memory':(rss+1)*1024**3,'min_disk_free':1_500_000_000})
+  finally:
+   for path,target in b.get('fresh_host_aliases',{}).items():need(str(pathlib.Path(path).resolve(strict=True))==target,'fresh runtime alias drift after stage')
   stages.append(dict(name=name,status=r['status'],native_exit=r['native_exit'],rss=r['observed_peak_rss'],elapsed=r['elapsed_seconds']));(out/'stage_exits.json').write_text(json.dumps(stages,indent=2)+'\n')
   need(r['native_exit'] in accepted_exit_codes and not r['errors'] and r.get('cleanup_proof',{}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP','stage failed/incomplete: '+name);disk_gate()
   return r

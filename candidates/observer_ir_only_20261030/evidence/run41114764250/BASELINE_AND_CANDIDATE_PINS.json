@@ -1,0 +1,25 @@
+{
+  "candidate_r2": {
+    "raw_sha256": "ee6f1eb80ecf990a89e5c3457a14be74fb5e9ac5e0fa4789404e2d15ddc84dc9",
+    "bytes": 1358737,
+    "ordered_annotation_sha256": "8dd84536415d0f97aad603d1e0b9fbdadf8cae58a04d4ae5328105c9a844af39",
+    "annotation_count": 9022,
+    "dont_touch_count": 9021,
+    "target_dir_count": 1
+  },
+  "expected_changed_module_names": [
+    "FfnTileSiluBridge",
+    "FfnResidentCoordinator",
+    "QwenOwnerKernel",
+    "HostBlockCommandsV4",
+    "HostBlockTopV4",
+    "UnifiedMoeRouterNumericalOwnerV2",
+    "UnifiedMoeRouterPipelineBindingV2",
+    "UnifiedMoeRuntimeExpertLoopV4"
+  ],
+  "old_manifest": {
+    "bytes": 101108,
+    "sha256": "90464ff45917c1b853c7d1b36e67dd5e43b5503b7fa0583704ee615c08919533",
+    "git_blob": "ddf92a1b74b2b98985ed71ea1305c4645a3f4b0d"
+  }
+}

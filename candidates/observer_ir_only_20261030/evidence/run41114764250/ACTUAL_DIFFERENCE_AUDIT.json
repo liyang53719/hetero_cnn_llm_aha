@@ -1,0 +1,111 @@
+{
+  "scope": "ACTUAL_DESCRIPTOR_DIFFERENCE_REPORT_NOT_ACCEPTANCE",
+  "source_commit": "97555642bee1b7a40047db8677d28f1f89185bce",
+  "launch_commit": "ec198c27364fc537da06d6430bf27607d9865596",
+  "launch_manifest_blob_sha": "ce88cb7cefdb7e71d937fcabb342d5c02e031562",
+  "run_id": 41114764250,
+  "metadata_pins": {
+    "observed-canonical.tsv": {
+      "bytes": 101108,
+      "sha256": "00897fd49e82036e04195ef6fe2a671e0a3fd948d968de3e47c4dfa7388f6b5c"
+    },
+    "observed-details.json": {
+      "bytes": 11040,
+      "sha256": "cbaac4be9004d75751c18c41feebf9ca362eb9aa46d393e06f226ae13fb9c6b7"
+    },
+    "provenance.json": {
+      "bytes": 1670,
+      "sha256": "6a959cc5ac53cf501d00fb3cf7641fc188dc46e909e47372ced12dc193e5322b"
+    }
+  },
+  "source_artifact_binding_verified": true,
+  "old_module_count": 1056,
+  "new_module_count": 1056,
+  "module_order_unchanged": true,
+  "added_modules": [],
+  "removed_modules": [],
+  "changed_modules": [
+    {
+      "module": "HostBlockCommandsV4",
+      "old_sha256": "a5ec6b296569eafd89a1ed644cd87e0edb038a1f9b411a717ab37c1c13f338da",
+      "new_sha256": "b497631fbe70630b362e63a6c35f8376c8dcdc48e6c28831d4029fcd79d95fc4"
+    },
+    {
+      "module": "FfnTileSiluBridge",
+      "old_sha256": "e31535566ec6a7f6836f5512f0a42e9b3381f33442ba1c345b5f0b902a92adf3",
+      "new_sha256": "81dd0afcc98dba182950d8d709ce07877fb2644e62bffa31c4567fc9d6e707d3"
+    },
+    {
+      "module": "FfnResidentCoordinator",
+      "old_sha256": "a2973dc18cc311f340744d4c896c5691c8d2e3bf5f7c25ede3418c4be7ab54c6",
+      "new_sha256": "e18d0f4de4cd2b007120ffa9341a48fbc7cb009002b2eeb36892b959b873e024"
+    },
+    {
+      "module": "QwenOwnerKernel",
+      "old_sha256": "4b36ba409a9c968d0592956144103362b69b6329c704635d69bacf056b87e838",
+      "new_sha256": "a7a0d33cde8cf98181d4ef1feacc67869e3f61e04b0b805ea866da2bd63d9bf4"
+    },
+    {
+      "module": "UnifiedMoeRouterNumericalOwnerV2",
+      "old_sha256": "b09a9aff92c7ced2c989285cdafca7d71633b7cacbbb080bac56be56b4231c40",
+      "new_sha256": "2254af603ce68bde9f3be3147c50c4d755b0511a78c4ae703c3199eb0f5648b9"
+    },
+    {
+      "module": "UnifiedMoeRouterPipelineBindingV2",
+      "old_sha256": "bd214eb2a6f198135626fbf4888afb13013694f64b0e556af3fd9614492d97ae",
+      "new_sha256": "1beeb7aaf8dcb16dd968eddc2808a85553174eb32eefbbc02baebdba194d2b00"
+    },
+    {
+      "module": "UnifiedMoeRuntimeExpertLoopV4",
+      "old_sha256": "6731a45e341c34c672b0249f7c001874accd7cb2f97068e07c63a72e36b0f061",
+      "new_sha256": "4ff4534741804ed94cfaedc97697694bdb07633766a1e667168a11243789be7f"
+    },
+    {
+      "module": "HostBlockTopV4",
+      "old_sha256": "5b09c706cfa0c403b0c6403f76d4a1c4c407e4b70390d9631fc8e487f1e234d9",
+      "new_sha256": "1bb3c19c00a8bc0c613712eef8368f66a89f2afd8a9157749c54c911a20b43ca"
+    }
+  ],
+  "unexpected_changed_modules": [],
+  "expected_modules_not_changed": [],
+  "unchanged_module_count": 1048,
+  "whole_circuit": {
+    "old": "0d3abf62329320472199bdc10b81db1df7610dac90caf37ebe6717f7d1ba9f1f",
+    "new": "107bcbc0e17d430c2908666bdb750bcbc53b8b4caedc45ccbd9df612173ff872"
+  },
+  "annotations": {
+    "old_ordered_sha256": "084025556b70d6a0c7cf992667c40d899b0a897da0fb311c8ec2b253f5d3ca0f",
+    "actual_ordered_sha256": "8dd84536415d0f97aad603d1e0b9fbdadf8cae58a04d4ae5328105c9a844af39",
+    "candidate_full_raw_and_ordered_match": true,
+    "candidate_only_origin_not_prior_run_pass": true,
+    "candidate": {
+      "raw_sha256": "ee6f1eb80ecf990a89e5c3457a14be74fb5e9ac5e0fa4789404e2d15ddc84dc9",
+      "bytes": 1358737,
+      "ordered_annotation_sha256": "8dd84536415d0f97aad603d1e0b9fbdadf8cae58a04d4ae5328105c9a844af39",
+      "annotation_count": 9022,
+      "dont_touch_count": 9021,
+      "target_dir_count": 1
+    }
+  },
+  "ports": {
+    "module_count": 1056,
+    "annotation_count": 9022,
+    "retained_annotation_count": 9021,
+    "target_dir_annotation_count": 1,
+    "port_count": 122,
+    "old_ports_unchanged": 85,
+    "added_output_ports": 37,
+    "added_output_bits": 948,
+    "circuit_sha256": "107bcbc0e17d430c2908666bdb750bcbc53b8b4caedc45ccbd9df612173ff872",
+    "ordered_annotations_sha256": "8dd84536415d0f97aad603d1e0b9fbdadf8cae58a04d4ae5328105c9a844af39"
+  },
+  "acceptance_authorized": false,
+  "canonical_pass": false,
+  "numerical_pass": false,
+  "limitations": [
+    "Actual typed descriptor hashes are from the pinned successful CI helper; this local audit does not possess or reparse full actual HIGH/LOW.",
+    "Matching source-derived annotation candidate becomes supported only by this actual run raw and ordered hashes; old partial run terminal status is never inherited.",
+    "Changed-module names alone do not prove no logic/control feedback; independent source diff audit still required.",
+    "SV normalized identity, generated header, native backend, full numerical regression and utilization not qualified."
+  ]
+}

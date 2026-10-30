@@ -1,0 +1,295 @@
+{
+  "schema": "OBSERVER_IR_SAFE_SUMMARY_V1",
+  "scope": "ORIGINAL_HIGH_AND_OFFICIAL_LOW_ONLY",
+  "numerical_pass": false,
+  "canonical_pass": false,
+  "target_host_qualified": false,
+  "sv_generated": false,
+  "generated_abi_qualification": false,
+  "physical_resource_or_qor_qualification": false,
+  "block_numerical_pass": false,
+  "source_commit": "97555642bee1b7a40047db8677d28f1f89185bce",
+  "launch_commit": "ec198c27364fc537da06d6430bf27607d9865596",
+  "launch_manifest_blob_sha": "ce88cb7cefdb7e71d937fcabb342d5c02e031562",
+  "run_id": 41114764250,
+  "status": "COMPLETE_ORIGINAL_HIGH_AND_OFFICIAL_LOW_DIAGNOSTIC_ONLY",
+  "stages": [
+    {
+      "name": "jdk",
+      "native_exit": 0,
+      "complete": true,
+      "error_count": 0,
+      "elapsed_seconds": 12.151714673000015,
+      "observed_peak_rss": 21012480,
+      "admission": {
+        "scope": "REPO_WORK_AGGREGATE",
+        "status": "ADMITTED",
+        "reason": "NONE",
+        "census_complete": true,
+        "execute_called": true,
+        "entry_cap": 100000,
+        "reserved_entries": 8,
+        "entries_observed": 22006,
+        "bytes_observed": 743344265,
+        "largest_file_bytes": 67663327
+      }
+    },
+    {
+      "name": "compile_tools",
+      "native_exit": 0,
+      "complete": true,
+      "error_count": 0,
+      "elapsed_seconds": 29.992514386999915,
+      "observed_peak_rss": 21770240,
+      "admission": {
+        "scope": "REPO_WORK_AGGREGATE",
+        "status": "ADMITTED",
+        "reason": "NONE",
+        "census_complete": true,
+        "execute_called": true,
+        "entry_cap": 100000,
+        "reserved_entries": 8,
+        "entries_observed": 22016,
+        "bytes_observed": 743436695,
+        "largest_file_bytes": 67663327
+      }
+    },
+    {
+      "name": "jars",
+      "native_exit": 0,
+      "complete": true,
+      "error_count": 0,
+      "elapsed_seconds": 9.547069098999941,
+      "observed_peak_rss": 39063552,
+      "admission": {
+        "scope": "REPO_WORK_AGGREGATE",
+        "status": "ADMITTED",
+        "reason": "NONE",
+        "census_complete": true,
+        "execute_called": true,
+        "entry_cap": 100000,
+        "reserved_entries": 8,
+        "entries_observed": 22024,
+        "bytes_observed": 744996017,
+        "largest_file_bytes": 67663327
+      }
+    },
+    {
+      "name": "verilator_bytes",
+      "native_exit": 0,
+      "complete": true,
+      "error_count": 0,
+      "elapsed_seconds": 2.9658769600000596,
+      "observed_peak_rss": 10027008,
+      "admission": {
+        "scope": "REPO_WORK_AGGREGATE",
+        "status": "ADMITTED",
+        "reason": "NONE",
+        "census_complete": true,
+        "execute_called": true,
+        "entry_cap": 100000,
+        "reserved_entries": 8,
+        "entries_observed": 22420,
+        "bytes_observed": 822884554,
+        "largest_file_bytes": 67663327
+      }
+    },
+    {
+      "name": "runtime_identity",
+      "native_exit": 0,
+      "complete": true,
+      "error_count": 0,
+      "elapsed_seconds": 3.2182324399999516,
+      "observed_peak_rss": 9875456,
+      "admission": {
+        "scope": "REPO_WORK_AGGREGATE",
+        "status": "ADMITTED",
+        "reason": "NONE",
+        "census_complete": true,
+        "execute_called": true,
+        "entry_cap": 100000,
+        "reserved_entries": 8,
+        "entries_observed": 22665,
+        "bytes_observed": 864260609,
+        "largest_file_bytes": 67663327
+      }
+    },
+    {
+      "name": "compile155",
+      "native_exit": 0,
+      "complete": true,
+      "error_count": 0,
+      "elapsed_seconds": 134.38348763299996,
+      "observed_peak_rss": 1663705088,
+      "admission": {
+        "scope": "REPO_WORK_AGGREGATE",
+        "status": "ADMITTED",
+        "reason": "NONE",
+        "census_complete": true,
+        "execute_called": true,
+        "entry_cap": 100000,
+        "reserved_entries": 8,
+        "entries_observed": 22673,
+        "bytes_observed": 864320655,
+        "largest_file_bytes": 67663327
+      }
+    },
+    {
+      "name": "helper_compile",
+      "native_exit": 0,
+      "complete": true,
+      "error_count": 0,
+      "elapsed_seconds": 10.004086856999947,
+      "observed_peak_rss": 262389760,
+      "admission": {
+        "scope": "REPO_WORK_AGGREGATE",
+        "status": "ADMITTED",
+        "reason": "NONE",
+        "census_complete": true,
+        "execute_called": true,
+        "entry_cap": 100000,
+        "reserved_entries": 8,
+        "entries_observed": 23549,
+        "bytes_observed": 882423996,
+        "largest_file_bytes": 67663327
+      }
+    },
+    {
+      "name": "original_ir",
+      "native_exit": 0,
+      "complete": true,
+      "error_count": 0,
+      "elapsed_seconds": 210.57058904300004,
+      "observed_peak_rss": 4158230528,
+      "admission": {
+        "scope": "REPO_WORK_AGGREGATE",
+        "status": "ADMITTED",
+        "reason": "NONE",
+        "census_complete": true,
+        "execute_called": true,
+        "entry_cap": 100000,
+        "reserved_entries": 8,
+        "entries_observed": 23562,
+        "bytes_observed": 882550268,
+        "largest_file_bytes": 67663327
+      }
+    },
+    {
+      "name": "descriptor",
+      "native_exit": 0,
+      "complete": true,
+      "error_count": 0,
+      "elapsed_seconds": 29.05634096999995,
+      "observed_peak_rss": 2206941184,
+      "admission": {
+        "scope": "REPO_WORK_AGGREGATE",
+        "status": "ADMITTED",
+        "reason": "NONE",
+        "census_complete": true,
+        "execute_called": true,
+        "entry_cap": 100000,
+        "reserved_entries": 8,
+        "entries_observed": 23585,
+        "bytes_observed": 1588529619,
+        "largest_file_bytes": 293360741
+      }
+    }
+  ],
+  "artifacts": {
+    "original-high.fir": {
+      "bytes": 115925488,
+      "sha256": "4c8260ff31d9d2c7e66ac66dede95b6d1b9f647b23606eeff356a7d6fbc51803"
+    },
+    "official-low.fir": {
+      "bytes": 293360741,
+      "sha256": "54a5095979077c541ac33861fd00203a735915c39d6852ef9e717ac83d6f6f45"
+    },
+    "SCOPE.txt": {
+      "bytes": 93,
+      "sha256": "2292550be86ec9868b02459d544f0996a3b9b195f2771863075b2a99f17d196e"
+    },
+    "high-annotations.json": {
+      "bytes": 1358737,
+      "sha256": "ee6f1eb80ecf990a89e5c3457a14be74fb5e9ac5e0fa4789404e2d15ddc84dc9"
+    },
+    "high-hierarchy.tsv": {
+      "bytes": 72323,
+      "sha256": "45f57b54246c7d5dea9c94fc3b49aa03edaa3923690c932dc1df0c09b4f7f86b"
+    },
+    "high-top-ports.fir": {
+      "bytes": 2548,
+      "sha256": "7949cfe07d10512e4314d78c9081a248d72171dce6b90291f13b420093a09eee"
+    },
+    "high-extmodules.fir": {
+      "bytes": 17667,
+      "sha256": "a38252945df790f9a0f29817a4fdbdce895a30b3eabf7fd930847cd86732fd64"
+    },
+    "high-summary.txt": {
+      "bytes": 272,
+      "sha256": "0f2b943d47567b38c1df2206ec296d1c6ba5226563f6d6e4ee730b2fee7f8170"
+    },
+    "low-annotations.json": {
+      "bytes": 1685698,
+      "sha256": "d378dc21b965d07fa443e734ee0e3f444e23bf65befe356d0b7a4b74298da130"
+    },
+    "low-hierarchy.tsv": {
+      "bytes": 69691,
+      "sha256": "7eb52a37535c4cd8bb885d2884e244acae3f8aa3783a9ea42445084e919aaf6d"
+    },
+    "low-top-ports.fir": {
+      "bytes": 22388,
+      "sha256": "c214ea5debe0fcf876e8f3361bcbafcdd49cc480ab22872f70771757d9df2591"
+    },
+    "low-extmodules.fir": {
+      "bytes": 2799,
+      "sha256": "3ae597be9fc9c7f9769abc6489de09912e43154a053473b5f18e258d78840a97"
+    },
+    "low-summary.txt": {
+      "bytes": 270,
+      "sha256": "89d01c813e26060a01ddaf6a9068f61b3d26a1a216ad7adcd0a64bae0d018794"
+    }
+  },
+  "descriptor": {
+    "qualification": "OBSERVED_UNREVIEWED",
+    "files": {
+      "observed-canonical.tsv": {
+        "bytes": 101108,
+        "sha256": "00897fd49e82036e04195ef6fe2a671e0a3fd948d968de3e47c4dfa7388f6b5c"
+      },
+      "observed-details.json": {
+        "bytes": 11040,
+        "sha256": "cbaac4be9004d75751c18c41feebf9ca362eb9aa46d393e06f226ae13fb9c6b7"
+      }
+    },
+    "bound_inputs": {
+      "original-high.fir": {
+        "bytes": 115925488,
+        "sha256": "4c8260ff31d9d2c7e66ac66dede95b6d1b9f647b23606eeff356a7d6fbc51803"
+      },
+      "high-annotations.json": {
+        "bytes": 1358737,
+        "sha256": "ee6f1eb80ecf990a89e5c3457a14be74fb5e9ac5e0fa4789404e2d15ddc84dc9"
+      },
+      "low-top-ports.fir": {
+        "bytes": 22388,
+        "sha256": "c214ea5debe0fcf876e8f3361bcbafcdd49cc480ab22872f70771757d9df2591"
+      }
+    },
+    "counts": {
+      "module_count": 1056,
+      "annotation_count": 9022,
+      "retained_annotation_count": 9021,
+      "target_dir_annotation_count": 1,
+      "port_count": 122,
+      "old_ports_unchanged": 85,
+      "added_output_ports": 37,
+      "added_output_bits": 948,
+      "circuit_sha256": "107bcbc0e17d430c2908666bdb750bcbc53b8b4caedc45ccbd9df612173ff872",
+      "ordered_annotations_sha256": "8dd84536415d0f97aad603d1e0b9fbdadf8cae58a04d4ae5328105c9a844af39"
+    }
+  },
+  "measured_top_port_counts": {
+    "high": 3,
+    "low": 122
+  }
+}

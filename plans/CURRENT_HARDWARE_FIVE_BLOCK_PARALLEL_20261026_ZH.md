@@ -1,5 +1,13 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-30 19:37 实际HIGH/LOW描述符与8源差异审计（PASS仅限IR结构，数值仍INCOMPLETE）
+
+- DONE / 实际IR：run41114764250，source975556/launch ec198，九阶段native0/error0/complete。统一155源8覆盖完整编译134.383487633秒、原HIGH/official LOW210.570589043秒、descriptor29.056340970秒；原严格cleanup/EOF完成条件保留，不继承旧run结果。原四份bounded metadata见[本次证据](../candidates/observer_ir_only_20261030/evidence/run41114764250/README.zh.md)。
+- DONE / 独立源码与差异审计：1056模块顺序/集合相同，精确8个预期观察相关模块变化、1048项canonical hash不变。实际LOW122口，旧85口name/direction/type/width不变，新增37只读output（27/689bits＋10/259bits）。源码仅观察直连和互斥assert，无原ready/算术/状态反馈；不是整体电路语义相同，也不是generated header通过。
+- DONE / annotations事实：实际9022条（9021 DontTouch＋1 TargetDir），旧8985内容与相对顺序保留，增37Top观察target。已pin历史文本重构1358737B的raw/ordered双hash与本次实际run一致；partial旧V1仅文本来源，不继承终态。发布重构脚本、pins及摘要，不上传annotation正文/IR/class。4项synthetic审计测试normal/-O只验证拒绝，acceptance_authorized始终false；限定GO来自真实metadata和源码审计。
+- ONGOING：独立新canonical/LOW基线可引用本次observed-canonical.tsv（SHA00897fd49e82036e04195ef6fe2a671e0a3fd948d968de3e47c4dfa7388f6b5c），旧baseline原件保留。当前原metadata的canonical_pass=false/OBSERVED_UNREVIEWED保持，后续必须显式完成新严格接受gate，不能自动repin任意输出。
+- TODO：新SV normalized/module fingerprints、实际Verilator header/GCC依赖、新共享backend数值仍未验证；当前ad299只是完整执行链source/mock接线。五块M128 Chisel完整数值0/5、最终冻结同刺激RTL0/5，固定4096 MAC与同一硬件/RTL要求不变，有效MAC利用率尚无实测。本轮未删除临时数据。
+
 ## 2026-10-30 19:25 五块 M128 真实消费者与运行来源链整合（TEMP / INCOMPLETE，未数值 activation）
 
 - DONE / SOURCE：将已发布 P0 SRAM gate/up 和 MoE 实际 selector 输入/输出观察源码、统一155源的精确8项覆盖、R2 driver/headers及只读官方参考观察器接入实际 execution closure。真实调用仍为 numeric_tail → provider.prepare → connect_owned → consumer_owned，不是停在祖先run_compare或独立资格外壳。所有五profile共用硬件定义与后端来源，原4096 MAC、FP32/BF16顺序、原PyTorch路由不改。

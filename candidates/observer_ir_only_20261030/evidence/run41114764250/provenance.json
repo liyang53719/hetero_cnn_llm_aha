@@ -1,0 +1,47 @@
+{
+  "schema": "OBSERVED_DESCRIPTOR_PROVENANCE_V1",
+  "qualification": "OBSERVED_UNREVIEWED",
+  "source_commit": "97555642bee1b7a40047db8677d28f1f89185bce",
+  "launch_commit": "ec198c27364fc537da06d6430bf27607d9865596",
+  "launch_manifest_blob_sha": "ce88cb7cefdb7e71d937fcabb342d5c02e031562",
+  "run_id": 41114764250,
+  "descriptor": {
+    "qualification": "OBSERVED_UNREVIEWED",
+    "files": {
+      "observed-canonical.tsv": {
+        "bytes": 101108,
+        "sha256": "00897fd49e82036e04195ef6fe2a671e0a3fd948d968de3e47c4dfa7388f6b5c"
+      },
+      "observed-details.json": {
+        "bytes": 11040,
+        "sha256": "cbaac4be9004d75751c18c41feebf9ca362eb9aa46d393e06f226ae13fb9c6b7"
+      }
+    },
+    "bound_inputs": {
+      "original-high.fir": {
+        "bytes": 115925488,
+        "sha256": "4c8260ff31d9d2c7e66ac66dede95b6d1b9f647b23606eeff356a7d6fbc51803"
+      },
+      "high-annotations.json": {
+        "bytes": 1358737,
+        "sha256": "ee6f1eb80ecf990a89e5c3457a14be74fb5e9ac5e0fa4789404e2d15ddc84dc9"
+      },
+      "low-top-ports.fir": {
+        "bytes": 22388,
+        "sha256": "c214ea5debe0fcf876e8f3361bcbafcdd49cc480ab22872f70771757d9df2591"
+      }
+    },
+    "counts": {
+      "module_count": 1056,
+      "annotation_count": 9022,
+      "retained_annotation_count": 9021,
+      "target_dir_annotation_count": 1,
+      "port_count": 122,
+      "old_ports_unchanged": 85,
+      "added_output_ports": 37,
+      "added_output_bits": 948,
+      "circuit_sha256": "107bcbc0e17d430c2908666bdb750bcbc53b8b4caedc45ccbd9df612173ff872",
+      "ordered_annotations_sha256": "8dd84536415d0f97aad603d1e0b9fbdadf8cae58a04d4ae5328105c9a844af39"
+    }
+  }
+}

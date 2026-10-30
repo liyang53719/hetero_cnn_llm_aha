@@ -1,0 +1,55 @@
+{
+  "schema": "FIXED155_OBSERVER_OVERLAY8_V1",
+  "source_count": 155,
+  "files": [
+    {
+      "name": "FfnTileSiluBridge.scala",
+      "path": "candidates/p0_resident_observation_20261030/source/FfnTileSiluBridge.scala",
+      "bytes": 6164,
+      "sha256": "27ee34a131aa508bb246b7e2e9196eaed3e8c4d9127ea9ca835ac5333fb4e868"
+    },
+    {
+      "name": "FfnResidentCoordinator.scala",
+      "path": "candidates/p0_resident_observation_20261030/source/FfnResidentCoordinator.scala",
+      "bytes": 8452,
+      "sha256": "65d786a0a0f92a8aea2c8db945b3448162d8b3c814356218fc98f588f201d8ee"
+    },
+    {
+      "name": "QwenOwnerProtocol.scala",
+      "path": "candidates/p0_resident_observation_20261030/source/QwenOwnerProtocol.scala",
+      "bytes": 91421,
+      "sha256": "78dfd535faefb30b70a60d3ef4f83fbe923f0e35a10c995a2830cdb772fa0af4"
+    },
+    {
+      "name": "HostBlockCommandsV4.scala",
+      "path": "candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala",
+      "bytes": 190813,
+      "sha256": "79a721ddb498a5d5863085535c2aaedea14e5503e0f3a41abe2af29995fb813b"
+    },
+    {
+      "name": "HostBlockTopV4.scala",
+      "path": "candidates/moe_router_score_observation_20261030/source/HostBlockTopV4.scala",
+      "bytes": 27328,
+      "sha256": "da22759883a9749c1706ff77ff78afcdabb7fe869aed19df90f817017ef89583"
+    },
+    {
+      "name": "UnifiedMoeRouterNumericalOwnerV2.scala",
+      "path": "candidates/moe_router_score_observation_20261030/source/UnifiedMoeRouterNumericalOwnerV2.scala",
+      "bytes": 14732,
+      "sha256": "7c4358e766fca3101657e1702c8fdb2ee579a589eea768fcf1f2eed20412334f"
+    },
+    {
+      "name": "UnifiedMoeRouterPipelineBindingV2.scala",
+      "path": "candidates/moe_router_score_observation_20261030/source/UnifiedMoeRouterPipelineBindingV2.scala",
+      "bytes": 11097,
+      "sha256": "0233df02cef3e1d81031f865838714a130bd7990d0dae4776a251f9498c6f3c2"
+    },
+    {
+      "name": "UnifiedMoeRuntimeExpertLoopV4.scala",
+      "path": "candidates/moe_router_score_observation_20261030/source/UnifiedMoeRuntimeExpertLoopV4.scala",
+      "bytes": 26605,
+      "sha256": "1e0587156ff83ff1125abc4445cd9740f8377b2fe310c9dd0b85f238c7e0e605"
+    }
+  ],
+  "expected_low_ports": 122
+}

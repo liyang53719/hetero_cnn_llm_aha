@@ -1,0 +1,88 @@
+name: hetero-observer-fixed155-original-ir-only
+on:
+  push:
+    branches: [main]
+    paths: [ci_launch/observer_fixed155_original_ir_r2_20261030_once.json]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: hetero-exclusive-numeric-bootstrap
+  cancel-in-progress: false
+jobs:
+  observer_ir:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      MAKEFLAGS: -j1
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record owning job monotonic start before checkout
+        run: |
+          set -euo pipefail
+          python3 -B - <<'PY'
+          import json, os, pathlib, time
+          path = pathlib.Path(os.environ['RUNNER_TEMP']) / 'hetero-observer-ir-job-start.json'
+          with path.open('x') as stream:
+              json.dump(dict(schema='SAME_JOB_START_V1', started_monotonic=time.monotonic(), run_id=int(os.environ['GITHUB_RUN_ID']), launch_commit=os.environ['GITHUB_SHA'], job_budget_seconds=3600), stream, sort_keys=True)
+              stream.write('\n')
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 2
+      - name: Validate unique launch commit and source identity
+        id: launch
+        run: python3 -B candidates/observer_ir_only_20261030/validate_launch.py
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ steps.launch.outputs.source_sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Fixed155 Scala compile and original HIGH official LOW only
+        run: |
+          set -euo pipefail
+          P=candidates/observer_ir_only_20261030
+          python3 -B "$P/run_ir_only.py" \
+            --execute-reviewed-ir-only \
+            --repo "$GITHUB_WORKSPACE" \
+            --identity "$RUNNER_TEMP/hetero-observer-ir-identity.json" \
+            --job-start "$RUNNER_TEMP/hetero-observer-ir-job-start.json" \
+            --work "$RUNNER_TEMP/hetero-observer-ir" \
+            --source-sha '${{ steps.launch.outputs.source_sha }}' \
+            --source-pins "$P/SOURCE_PINS.json" \
+            --source-pins-sha256 "$(sha256sum "$P/SOURCE_PINS.json" | cut -d' ' -f1)"
+      - name: Produce bounded summary only
+        id: summary
+        if: ${{ always() && steps.launch.outputs.source_sha != '' }}
+        run: |
+          set -euo pipefail
+          python3 -B candidates/observer_ir_only_20261030/summarize_ir.py \
+            --work "$RUNNER_TEMP/hetero-observer-ir" \
+            --identity "$RUNNER_TEMP/hetero-observer-ir-identity.json" \
+            --output "$RUNNER_TEMP/observer-ir-summary.json"
+          python3 -B - <<'PY'
+          import json, os, pathlib
+          p = pathlib.Path(os.environ['RUNNER_TEMP']) / 'observer-ir-summary.json'
+          if not p.is_file() or p.is_symlink() or p.stat().st_size > 65536:
+              raise ValueError('bounded regular summary only')
+          if not isinstance(json.loads(p.read_text()), dict):
+              raise ValueError('summary JSON object required')
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ always() && steps.launch.outputs.source_sha != '' && steps.summary.outcome == 'success' }}
+        with:
+          name: hetero-observer-ir-summary-${{ github.run_id }}
+          path: ${{ runner.temp }}/observer-ir-summary.json
+          if-no-files-found: error
+          retention-days: 14
+          overwrite: false
+# Source-only: no activation manifest. This workflow never calls SV, Verilator
+# frontend, native backend, dedup, weights, reference, or DUT. Verilator bytes
+# exist only for the unchanged original fresh-host identity inventory.
+# Only the exact typed bounded metadata projection above is uploaded.
+# IR success is not numerical, canonical, host, RTL, or physical-II qualification.

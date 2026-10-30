@@ -1,5 +1,14 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-30 18:30 原始 Chisel 观察接口的独立 IR-only 源码（TEMP，尚未激活）
+
+- 新增独立入口，复用原监督/cleanup/lossless log、固定工具/JAR与原Diagnose空参数，只到统一155源8覆盖的完整compile和HIGH/official LOW，不进入SV/Verilator frontend/native backend/weights/reference/DUT。Verilator只准备原identity所需固定包，避免更改原fresh_host合同。此步骤补新接口证据，不替代完整M128数值链。
+- 专用616项闭包以215f active598为底，仅增加8已发布统一观察源和10入口/workflow，逐bytes/hash独立核验；32轻测normal/-O通过，原supervisor字节未改。preflight在execute前一次只读census，超原cap/不可读不调用execute，预留8项；非原子，不宣称运行期连续上界。
+- 总预算3600秒、阶段wall2580+cleanup225秒；IR RSS5GiB/480秒/CPU420、tree1GiB/file384MiB/log8/raw16MiB/entries20k保持。目标runner准入未实测，不预先PASS；不会因为全tree API观测不可用而放宽cap。唯一上传typed摘要，不上传IR/class/rawlog/权重/tensor。
+- 共享exclusive组避免与原数值bootstrap并发争资源；unique guard要求后续单独activation、单parent/attempt1/source直接parent。本源码提交无activation，无旧run重试。215f source CI41106619735已success，dedup/CPU修复只source/mock资格。
+- 新R2的122口只是预期，须实际发射后独立核验；旧local84990未知不迁移PASS，不触碰旧owner。完整五块M128 Chisel/最终RTL仍各0/5，利用率未实测，4096/80%/90%目标不变。
+
+
 ## 2026-10-30 18:21 可选去重权限失败与 runtime CPU 门修复（TEMP，未新启动数值）
 
 - 本轮明确终态：run41096005966/source7bb/launchfd947在17:58:24退出1；原27个backend阶段全部native0、wall合计2985.197s，fresh-host native0/192pins，host_link已完成，共享ELF139950896B/SHA ce0bcb621646cb9286c4273d9cb819e42f1513a4b3084d0b7c76bd44ba83837c。仅build准备，不是DUT执行或最终RTL数值通过。随后optional dedup初始writer census的fd.stat权限错误，在任何artifact修改前退出；runtime安装/reference/DUT均未开始。原job日志和受控summary保留，旧35B安装失败原因仍UNKNOWN，不混作本轮原因。

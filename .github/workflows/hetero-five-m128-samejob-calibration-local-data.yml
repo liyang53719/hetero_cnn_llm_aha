@@ -2,7 +2,7 @@ name: hetero-qwen35-four-m128-fresh-host-calibration-local-data
 on:
   push:
     branches: [main]
-    paths: [ci_launch/qwen35_four_m128_freshhost_canonical_r2_20261030_once.json]
+    paths: [ci_launch/qwen35_four_m128_freshhost_python_dso_r3_20261030_once.json]
 permissions:
   contents: read
   actions: read

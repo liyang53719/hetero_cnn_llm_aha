@@ -1,0 +1,184 @@
+{
+  "schema": "LOCAL_COMPILE_AND_EMITTED_IR_EVIDENCE_V1",
+  "selected_by_active_pipeline": false,
+  "full_bytecode_compile": {
+    "status": "PASS_LOCAL_FULL_SCALA_BYTECODE_COMPILE_WITH_PLUGIN_EFFECT_EVIDENCE_ONLY",
+    "source_count": 155,
+    "candidate_source_overrides": 5,
+    "jdk": "Debian OpenJDK 21.0.12.1 (local; not CI Adoptium 21.0.13+9 qualification)",
+    "receipt": {
+      "native_exit": 0,
+      "elapsed_seconds": 120.92817983399436,
+      "observed_peak_rss": 1589428224,
+      "errors": [],
+      "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+      "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+      "pipe_eof_observed": true,
+      "gzip_finalized": true,
+      "raw_log_sha256": "aea26dd2b610ab26e8ded8ad7706598fdc95dacec6d317ee97b9189cb6243eaa",
+      "compressed_log_sha256": "08ef540d7c62cdf4904cbb2a209a6ea024cfbb055657869230842e08c8929720"
+    },
+    "class_count": 861,
+    "class_bytes": 17950177,
+    "class_hashes_sha256": "f4480650ae32e20404f23a13165c368b2b2a0add8ada27b89e85e688810ecbe8",
+    "class_hash_digest_recipe": "SHA256 of json.dumps(relative_class_path_to_sha256, sort_keys=True), UTF-8",
+    "required_classes": {
+      "heteronpu/continuous/FfnResidentObservation.class": {
+        "sha256": "634396b34eede08c35438f81e72aa9977dd54a5319dcb44183f94d5f6fb4ec2a",
+        "major": 52
+      },
+      "heteronpu/continuous/FfnTileSiluBridge.class": {
+        "sha256": "eef016630012ac86b108665dbfbb01cea253571b32cd73f01f7aab1b094a8786",
+        "major": 52
+      },
+      "heteronpu/continuous/FfnResidentCoordinator.class": {
+        "sha256": "f8e3bac949890b0490dc9fcd0dd11b7e64f404490538810b06a1be40227b734c",
+        "major": 52
+      },
+      "heteronpu/continuous/QwenOwnerKernel.class": {
+        "sha256": "173108bec417c6d53c2db26016e178d9d1c5a965bf0dce82c6b47b99e6b1c90c",
+        "major": 52
+      },
+      "heteronpu/continuous/HostBlockTopV4.class": {
+        "sha256": "47a6cc41058813f2f53b32a70dd4d66fc9691b297dc5e044fef4cc1ba325464e",
+        "major": 52
+      },
+      "heteronpu/continuous/HostBlockCommandsV4.class": {
+        "sha256": "f1482e83d12274504ce82169a1bae45d60f8978a1b0dde6896d7433b0710c13c",
+        "major": 52
+      }
+    },
+    "plugin_generated_methods_observed": [
+      "_usingPlugin",
+      "_cloneTypeImpl"
+    ],
+    "plugin_jar_sha256": "3260acf1b41b399974d21ba7ef970124ff35df6e5b0a164e65d5038e3b803bfb",
+    "bytecode_compile_only": true,
+    "class_payloads_included": false
+  },
+  "original_high_official_low": {
+    "status": "PASS_LOCAL_ORIGINAL_HIGH_AND_OFFICIAL_LOW_DIAGNOSTIC_ONLY",
+    "receipt": {
+      "native_exit": 0,
+      "elapsed_seconds": 151.34263757600274,
+      "observed_peak_rss": 4318490624,
+      "errors": [],
+      "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+      "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+      "pipe_eof_observed": true,
+      "gzip_finalized": true,
+      "raw_log_sha256": "192166eef3ae0013aa31529d592dafa87811e6223db6855f43c8d75ef1c9e3b2",
+      "compressed_log_sha256": "90bba3f1f0c8ca50f3780569253a11dfbc3c1f92dead217288c9fb48f974eb30"
+    },
+    "artifacts": {
+      "original-high.fir": {
+        "bytes": 122731862,
+        "sha256": "0beb67704eca597275afea1aa688601996aca4ffb5dfc5e2fc728b17d6179afc"
+      },
+      "official-low.fir": {
+        "bytes": 313044298,
+        "sha256": "f52a49582417a849ea3c0d63082c5e9bbdb117aec6d79993eacc783c917ddde3"
+      },
+      "SCOPE.txt": {
+        "bytes": 93,
+        "sha256": "2292550be86ec9868b02459d544f0996a3b9b195f2771863075b2a99f17d196e"
+      },
+      "high-annotations.json": {
+        "bytes": 1357296,
+        "sha256": "cf376f327b3203ff0ba03e3392fe0165027d2959c0a582c992249733372f0b09"
+      },
+      "high-hierarchy.tsv": {
+        "bytes": 72323,
+        "sha256": "45f57b54246c7d5dea9c94fc3b49aa03edaa3923690c932dc1df0c09b4f7f86b"
+      },
+      "high-top-ports.fir": {
+        "bytes": 2245,
+        "sha256": "86978ed0b70d1d7dce323c0dcab96fbb50cdc6053006f16091d1052910ff4b81"
+      },
+      "high-extmodules.fir": {
+        "bytes": 18075,
+        "sha256": "aacbc801b65348a64a6fcb643b855d933f469f90ee6e8f91e6feaf06814ef649"
+      },
+      "high-summary.txt": {
+        "bytes": 272,
+        "sha256": "0f2b943d47567b38c1df2206ec296d1c6ba5226563f6d6e4ee730b2fee7f8170"
+      },
+      "low-annotations.json": {
+        "bytes": 1684257,
+        "sha256": "5172cb95ac90dd1d24a710486bda84f965993c001d961c9c45b6afa6f9a947c1"
+      },
+      "low-hierarchy.tsv": {
+        "bytes": 69691,
+        "sha256": "7eb52a37535c4cd8bb885d2884e244acae3f8aa3783a9ea42445084e919aaf6d"
+      },
+      "low-top-ports.fir": {
+        "bytes": 17650,
+        "sha256": "7ca2c3851e6dfcdbfacbd3d6cf0909b25d5f22bfb628e83b1c9298fd5e4114c6"
+      },
+      "low-extmodules.fir": {
+        "bytes": 2871,
+        "sha256": "1934426789efce5f76c28adb8b3c047308cf6a0c85c529d0e2913f124167c18e"
+      },
+      "low-summary.txt": {
+        "bytes": 270,
+        "sha256": "89d01c813e26060a01ddaf6a9068f61b3d26a1a216ad7adcd0a64bae0d018794"
+      }
+    },
+    "listed_artifact_count": 13,
+    "listed_artifact_bytes": 439001203,
+    "actual_temporary_directory": {
+      "file_count": 14,
+      "bytes": 752045501,
+      "extra_file": "HostBlockTopV4.lo.fir",
+      "extra_bytes": 313044298,
+      "extra_sha256": "f52a49582417a849ea3c0d63082c5e9bbdb117aec6d79993eacc783c917ddde3",
+      "duplicate_of": "official-low.fir",
+      "deleted": false
+    },
+    "low_ir_interface": {
+      "top": "HostBlockTopV4",
+      "ports": 112,
+      "old_schema_ports": 85,
+      "old_schema_sha256": "b340016de7c8d14e4edbd5c376c736176933a15695e8ed45dc99a45150f35a00",
+      "old_ports_removed": 0,
+      "old_ports_direction_or_width_changed": 0,
+      "added_output_ports": 27,
+      "added_output_bits": 689,
+      "proposal_exact_match": true,
+      "evidence": "Independent streaming parse of emitted official-low.fir; not generated SV/Verilator ABI"
+    },
+    "low_ir_structure": {
+      "module_definitions": 95,
+      "reachable_instances": 1056,
+      "hierarchy_tsv_independently_matched": true,
+      "hetero_fp32_alu_total_instances": 81,
+      "moe_arithmetic_bank_alu_instances": 32,
+      "bank_paths": "moeArithmetic.bank.alus_0 through alus_31",
+      "other_alu_instances": 49,
+      "matrix_endpoint_instances": 8,
+      "matrix_endpoint_paths": "owner.matrix.leaves_0 through leaves_7",
+      "matrix_endpoint_implementation_proven": false,
+      "vector32_ii1_proven": false
+    },
+    "ir_payloads_included": false
+  },
+  "qualification": {
+    "new_ir_identity": true,
+    "old_canonical_pass_transferred": false,
+    "sv_generated": false,
+    "dut_executed": false,
+    "generated_abi_qualified": false,
+    "physical_resources_or_ppa_qualified": false,
+    "full_m128_block_numeric_pass_count": 0,
+    "required_block_count": 5,
+    "final_rtl_numeric_pass_count": 0
+  },
+  "publication_excludes": [
+    "IR",
+    "class files",
+    "raw logs",
+    "local absolute paths",
+    "weights",
+    "tensor payloads"
+  ]
+}

@@ -61,6 +61,22 @@ def dependency_paths(text,roots=None):
  if not paths:raise DependencyRejected('EMPTY_DEPENDENCY_LIST')
  for path in paths:resolve_dependency(path,roots)
  return paths # retain original loader spelling so add() records raw -> real alias
+def loaded_python_zero_needed_class(role,currently_loaded,dynamic,header,programs,ldd_output):
+ # This exception is solely for an already imported stdlib extension whose host
+ # interpreter provides symbols. It is NOT an independent static executable.
+ def reject():raise DependencyRejected('EMPTY_DEPENDENCY_LIST')
+ if role!='PYTHON_EXTENSION' or currently_loaded is not True or ldd_output.strip()!='statically linked':reject()
+ if 'not found' in ldd_output or '=> not' in ldd_output:reject()
+ if not re.search(r'^\s*Type:\s+DYN\s+\(Shared object file\)\s*$',header,re.M):reject()
+ counts=re.findall(r'^\s*Number of program headers:\s*([0-9]+)\s*$',header,re.M)
+ program_rows=re.findall(r'^\s*([A-Za-z0-9_]+)\s+0x[0-9a-fA-F]+\s+0x[0-9a-fA-F]+\s+0x[0-9a-fA-F]+\s+',programs,re.M)
+ if len(counts)!=1 or not 1<=int(counts[0])<=128 or len(program_rows)!=int(counts[0]) or 'Program Headers:' not in programs:reject()
+ if 'INTERP' in program_rows or 'Requesting program interpreter' in programs:reject()
+ sections=re.findall(r'^Dynamic section at offset 0x[0-9a-fA-F]+ contains ([0-9]+) entries:\s*$',dynamic,re.M)
+ rows=re.findall(r'^\s*0x[0-9a-fA-F]+\s+\(([^)]+)\)\s+[^\n]*$',dynamic,re.M)
+ if len(sections)!=1 or not 1<=int(sections[0])<=512 or len(rows)!=int(sections[0]) or rows[-1]!='NULL' or 'NULL' in rows[:-1]:reject()
+ if any(tag in {'NEEDED','FILTER','AUXILIARY','AUDIT','DEPAUDIT'} for tag in rows):reject()
+ return 'LOADED_PYTHON_DSO_NO_DT_NEEDED'
 def validate_compile_inventory(record):
  need(record.get('schema')=='INSTALLED_GNU_BUILD_TOOLS_V1' and record.get('qualification')=='IDENTITY_AND_SUPPORTED_OPTIONS_ONLY_NOT_COMPILE_OR_NUMERICAL_PASS','original GNU identity scope')
  deps=record.get('dynamic_dependencies');tools=record.get('compile_tools')
@@ -90,10 +106,10 @@ def inventory(contract,java_home,verilator_root):
    pins[str(r)]=sha(r)
   return r
  env={'PATH':'/usr/bin:/bin','LC_ALL':'C','LANG':'C'}
- def query(argv,context=None):
+ def query(argv,context=None,strict_stderr=False):
   query_env=dict(env);query_env.update(context or {})
   r=subprocess.run(list(map(str,argv)),stdout=subprocess.PIPE,stderr=subprocess.PIPE,env=query_env,timeout=15)
-  need(r.returncode==0 and len(r.stdout)+len(r.stderr)<131072,'bounded dependency query failed')
+  need(r.returncode==0 and len(r.stdout)+len(r.stderr)<131072 and (not strict_stderr or not r.stderr),'bounded dependency query failed')
   return r.stdout.decode('utf-8','strict')
  # Bound the actual interpreter and stdlib modules used by bootstrap/materializers,
  # not every Python module or every OS file. Native extension dependencies included.
@@ -110,23 +126,29 @@ def inventory(contract,java_home,verilator_root):
  tools=[P(sys.executable),P('/bin/sh'),P('/bin/bash'),P('/usr/bin/perl'),P('/usr/bin/readelf'),P('/usr/bin/dirname'),P('/usr/bin/git'),P('/usr/bin/gh'),P('/usr/bin/dpkg-deb'),P('/usr/bin/ldd'),P('/usr/bin/dpkg-query')]
  jh=P(java_home).resolve(strict=True);vr=P(verilator_root).resolve(strict=True);jdk_context=jdk_query_context(jh)
  targets=tools+[jh/'bin/java',vr/'verilator-package/usr/bin/verilator_bin']+list(jh.rglob('*.so'))+native
- dependencies={};query_contexts={}
+ dependencies={};query_contexts={};dependency_classes={}
  for p in targets:
   p=add(p)
   with p.open('rb') as f:elf=f.read(4)==b'\x7fELF'
   if not elf:continue # trusted distro scripts are pinned, not sent to ldd
   role='JDK_LIBRARY' if p.is_relative_to(jh) and p.suffix=='.so' else 'JDK_EXECUTABLE' if p==jh/'bin/java' else 'VERILATOR_BINARY' if p==vr/'verilator-package/usr/bin/verilator_bin' else 'PYTHON_EXTENSION' if p in native else 'SYSTEM_TOOL'
   try:
-   dynamic=query(['/usr/bin/readelf','-d',p])
+   dynamic=query(['/usr/bin/readelf','-d',p],strict_stderr=role=='PYTHON_EXTENSION' and p in native)
    if 'There is no dynamic section in this file.' in dynamic:
     dependencies[str(p)]=[];continue # actual static ELF, not missing dependency
    context=jdk_context if p.is_relative_to(jh) and p.suffix=='.so' else {}
-   output=query(['/usr/bin/ldd',p],context);paths=dependency_paths(output);dependencies[str(p)]=paths;query_contexts[str(p)]=context
+   output=query(['/usr/bin/ldd',p],context,strict_stderr=role=='PYTHON_EXTENSION' and p in native)
+   if role=='PYTHON_EXTENSION' and p in native and output.strip()=='statically linked':
+    header=query(['/usr/bin/readelf','-W','-h',p],strict_stderr=True);programs=query(['/usr/bin/readelf','-W','-l',p],strict_stderr=True)
+    classification=loaded_python_zero_needed_class(role,p in native,dynamic,header,programs,output)
+    dependencies[str(p)]=[];query_contexts[str(p)]=context;dependency_classes[pins[str(p)]]=classification
+    continue # pinned imported module + pinned interpreter; no standalone-symbol claim
+   paths=dependency_paths(output);dependencies[str(p)]=paths;query_contexts[str(p)]=context
    for dep in paths:add(dep,dependency=True) # repeat canonical admission at pin time
   except Exception as exc:
    exc.query_role=role;raise
  for p in (P('/etc/os-release'),P('/usr/bin/perl')):add(p)
- return dict(schema='BOUNDED_FRESH_HOST_IDENTITY_V1',contract=contract,qualification='IDENTITY_ONLY_PENDING_ORIGINAL_BUILD_AND_NUMERICAL_GATES',old_pass_transfer=False,image_version=os.environ.get('ImageVersion'),image_os=os.environ.get('ImageOS'),kernel=platform.release(),python=sys.version,pins=pins,aliases=aliases,elf_dependencies=dependencies,elf_query_contexts=query_contexts,hashed_bytes=total,scope='explicit Python/bootstrap shell tools and JDK/Verilator ELF dependencies; not full OS or numerical qualification',not_qualified=['P0 CPU policy','compiler execution','canonical AST and generated SV','block numerics','final RTL replay'])
+ return dict(schema='BOUNDED_FRESH_HOST_IDENTITY_V1',contract=contract,qualification='IDENTITY_ONLY_PENDING_ORIGINAL_BUILD_AND_NUMERICAL_GATES',old_pass_transfer=False,image_version=os.environ.get('ImageVersion'),image_os=os.environ.get('ImageOS'),kernel=platform.release(),python=sys.version,pins=pins,aliases=aliases,elf_dependencies=dependencies,elf_query_contexts=query_contexts,elf_dependency_classes_by_sha256=dependency_classes,hashed_bytes=total,scope='explicit Python/bootstrap shell tools and JDK/Verilator ELF dependencies; not full OS or numerical qualification',not_qualified=['P0 CPU policy','compiler execution','canonical AST and generated SV','block numerics','final RTL replay'])
 def failure_metadata(exc):
  # Fixed codes only; traceback stays local. Unknown exceptions do not invent cause.
  text=str(exc)

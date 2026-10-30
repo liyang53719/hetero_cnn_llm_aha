@@ -4,8 +4,8 @@
   "files": [
     {
       "path": ".github/workflows/hetero-five-m128-samejob-calibration-local-data.yml",
-      "bytes": 4229,
-      "sha256": "4624fb51784b617e52d8240bda200d843b9852cdf0753b6b1e4f245f5eb2394a"
+      "bytes": 4230,
+      "sha256": "80374824cff606599c29484c4765ad7f1b155c13126fbc829b67beebdc15e37b"
     },
     {
       "path": "candidates/attention_policy_count_fix_20261029T0054/source/HostBlockCommandsV4.scala",
@@ -79,8 +79,8 @@
     },
     {
       "path": "candidates/ci_frontend_materialization_r2_20261029/fresh_host.py",
-      "bytes": 11911,
-      "sha256": "13dbbf5d605376c89b2ab9387937051c725503d249e8994e1d27050ea0216d0e"
+      "bytes": 14134,
+      "sha256": "dd33888e9bdd50d7776e3615d34a2c677b076319ce4155d0eb4a0d94e697793f"
     },
     {
       "path": "candidates/ci_frontend_materialization_r2_20261029/frontend_telemetry.py",
@@ -161,6 +161,11 @@
       "path": "candidates/ci_frontend_materialization_r2_20261029/test_fresh_host_r2.py",
       "bytes": 6332,
       "sha256": "0574df88dd6acefdd1728faa2bb547c4e6958387dc59210f7720007051f2aff9"
+    },
+    {
+      "path": "candidates/ci_frontend_materialization_r2_20261029/test_zero_needed_python_dso.py",
+      "bytes": 6154,
+      "sha256": "178a511643ac5173657f1e924888aff18463641a3601439fd8ec2fedcd9cd53b"
     },
     {
       "path": "candidates/ci_frontend_materialization_r2_20261029/verify_extract_artifact.py",
@@ -2179,8 +2184,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/test_samejob_launch.py",
-      "bytes": 8441,
-      "sha256": "d73813d3f6175961cdaa67575ee889bb2080426147a7633bdd9920dd329c1f9f"
+      "bytes": 8774,
+      "sha256": "6801c514d23a724e655be7b6cef533d4716f129de8bfb9b3bcb3c3c52c0e6d67"
     },
     {
       "path": "candidates/same_job_execution_20261030/test_summary_resources.py",
@@ -2189,8 +2194,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/validate_samejob_calibration_launch.py",
-      "bytes": 2459,
-      "sha256": "846d0d8df1c3d2f83dc57898fa5fe40e1712bc10320a6a4712c62fef9c23dbc9"
+      "bytes": 2461,
+      "sha256": "77f70c9f4202306714dc537db6503f0d715074cc59b371f7e82cbb30afc844d7"
     },
     {
       "path": "candidates/same_job_materialization_20261029/CONNECTION_SOURCE_PINS.json",

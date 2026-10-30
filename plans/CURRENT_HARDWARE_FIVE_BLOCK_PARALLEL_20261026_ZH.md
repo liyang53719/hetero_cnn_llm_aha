@@ -1,5 +1,17 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-30 17时：真实观察通路发射 IR，Python DSO 准入修复（TEMP / INCOMPLETE）
+
+- DONE（精确范围）：P0 resident gate/up 真实 SRAM 只读观察候选已完成本地原155源/5覆盖完整 Scala 字节码编译，native0，120.928s，观测RSS1589428224B，861 class。原 DiagnoseOriginalHostMoePhaseV5 随后实际发射 HIGH 与 official LOW FIRRTL，native0，151.343s，观测RSS4318490624B，严格 cleanup/EOF。该候选仍未替换 active backend。
+- 本次 LOW 独立解析确认112端口：原85个端口无删除/方向/位宽改变，新增27个输出共689bits。HIGH SHA256 0beb67704eca597275afea1aa688601996aca4ffb5dfc5e2fc728b17d6179afc，LOW f52a49582417a849ea3c0d63082c5e9bbdb117aec6d79993eacc783c917ddde3。只是实际IR/接口证据，尚非生成SV、Verilator ABI、数值或PPA通过；本地DebianJava也不迁移CI Adoptium资格。
+- 结构勘误：原helper已有一个UnifiedVectorElement32BankV4及其32个HeteroFP32Alu后代断言，本次LOW也独立确认该bank的32个ALU。全可达图是81个该类ALU，不是全设计仅32个。P0 SiLU16-lane/GDN scalar调度不否定已有32-unit结构，也不能把结构当成统一32-lane持续II=1。8个Matrix endpoint是接口/层级证据，不单凭端点数证明内部4096 MAC实现。
+- FAIL：唯一canonical R2 run41086843436（source8cae，launch2afa）在6项准备native0后，fresh-host以PYTHON_EXTENSION / ELF_DEPENDENCY_UNRESOLVED / EMPTY_DEPENDENCY_LIST退出1，cleanup/EOF完整。未进入backend编译、runtime/reference/DUT。guard41086843454成功。保留受控摘要，不上传原始路径/库存。
+- ONGOING：修复已加载Python扩展被ldd报告statically linked时的零DT_NEEDED分类。只接纳已pin、已由当前解释器加载、ET_DYN、无INTERP、完整dynamic表且无NEEDED/FILTER/AUXILIARY/AUDIT/DEPAUDIT的DSO；其他空依赖仍拒绝。本地Python3.13实物复现与synthetic测试不能证明本轮CI Python3.12具体模块，后者仍UNKNOWN。根目录许可、P0原策略、算术、硬件与资源cap不放宽。新R3源码nonce与旧4份launch隔离，source先CI，activation另提交，绝不重跑旧run。
+- PASS精确范围：本次合并139项轻量metadata/lifecycle/mock/合成解析测试在normal与-O分别全部通过，非目标host或DUT验证。
+- TODO：接通未覆盖的完整数值观察与比较；新观察接口须建立新的canonical/SV/ABI资格，旧hash不继承。P0原宿主策略仍延期；P1–P4只进入显式四块诊断路径，不能冒充五块通过。五块M128 Chisel与最终RTL完整数值均0/5，利用率未实测，80%/90%目标未达成证据。
+- 临时数据盘点：本次IR manifest为13项439001203B，目录实际14项752045501B，额外LOW副本同hash；保留未删。17:02云端可用磁盘约20GiB、MemAvailable约8.6GiB，无本地重型作业；不启动超内存完整C++ frontend，不提交生成IR/class/权重/NPZ。
+
+
 ## 最新源码批：分离 P0 阻塞与四块推进（TEMP，尚未激活）
 
 - 基于 e5801897，复用现有 entry/flow/runtime/owner/numeric 接线。默认全五合同不变；新增显式注册五块、eligible P1–P4、P0 原宿主策略延期模式。选择四块不是 CPU 缺 AVX512 的观测，也不是实际执行/PASS；不伪造 P0 receipt，owner 拒绝 P0 lease。仅两个 Qwen3.5 runtime 与四份 reference/numeric 调度，原三安装/五块时间和资源预约上界保留。
@@ -235,3 +247,4 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 失败投影增加固定 query_role、rejection_kind 和 bool had_parent_component，拒绝任意字符串/路径及错误类型；旧 receipt 不凭空补 query_role。公开只给受限标量/hash，无原始 ldd、机器路径或库存。
 - 新 unique canonical R2 path/nonce 仅是源码接线；schema/profile、eligible P1–P4、P0 原策略延期、两 flags、预算/并发/摘要限制不变。全部已消耗 launch 保留并拒绝重用。source 与之后的单文件 activation 必须分开。
 - PASS 范围：119 项合并 metadata/lifecycle/mock/launch 测试在 normal 和 -O 各通过；本机可信路径解析复现通过。没有新 host inventory、backend、runtime、DUT 或数值通过。下一步必须绑定本源码新身份后做一次独立受限运行；不重试旧 run。
+

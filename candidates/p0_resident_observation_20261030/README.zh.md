@@ -26,7 +26,7 @@ driver基于最终 `five_profile_execution_v3_20261029T0148/host_axi_driver_non_
 - 155源，仅五个候选替换；107个已pin JAR（含插件）；`-Ystop-after:typer`。
 - 本地Debian OpenJDK21.0.12.1，与CI Adoptium21.0.13+9不同。
 
-**这只是LOCAL Scala typer通过，不含Chisel插件typer之后阶段、完整字节码编译、Chisel elaboration、真实端口ABI、IR/RTL生成、CI资格或block数值验证。** 新RTL哈希待定，完整M128/五块数值未通过。
+**以上为先前typer检查当时的范围；下方新增实测已覆盖完整字节码与HIGH/LOW IR。该typer检查本身不含Chisel插件typer之后阶段、完整字节码编译、Chisel elaboration、真实端口ABI、IR/RTL生成、CI资格或block数值验证。** 新RTL哈希待定，完整M128/五块数值未通过。
 
 打包后重跑的微型检查：4项BF16位型比较测试、C++ synthetic collector负例及完整shape映射、mock-port完整driver语法、7项原owned-consumer mock生命周期测试。没有运行实际DUT。详情见 `evidence/TINY_TESTS.json`。
 
@@ -54,3 +54,17 @@ python -B "$P/tests/test_consumer_owned.py" --baseline candidates/same_job_execu
 ```
 
 mock-port测试不是实际ABI资格；collector生成的合成输出只存临时目录并在结束后清除。这里不提供机器本地绑定、运行环境库存、原始日志、权重、二进制或tensor数据。
+
+## 2026-10-30 新增实测：完整字节码与原始 HIGH/官方 LOW IR
+
+状态：**PASS_LOCAL_COMPILE_AND_IR_STRUCTURE_ONLY；候选仍未选用。完整 M128 block 数值 0/5，最终 RTL 数值 0/5。** 证据见 `evidence/LOCAL_FULL_COMPILE_AND_IR_EVIDENCE.json`。前文“预计接口”现仅对 SV/Verilator ABI 仍待验证，LOW IR 端口已取得以下实证。
+
+- 实际155源、五文件覆盖的完整Scala字节码编译 native 0，120.928179834秒，observed RSS 1,589,428,224 B；861个class、17,950,177 B。新Bundle出现 `_usingPlugin` / `_cloneTypeImpl` 插件生成方法。不是仅typer；本地Debian JDK不构成CI工具链资格。
+- 原始helper实际HIGH/官方LOW发射 native 0，151.342637576秒，observed RSS 4,318,490,624 B；两次任务均errors空、严格原进程组清理先于leader reap、pipe EOF及gzip finalized。RSS是采样观测，不是资源上界证明。
+- HIGH：122,731,862 B，SHA256 `0beb67704eca597275afea1aa688601996aca4ffb5dfc5e2fc728b17d6179afc`。LOW：313,044,298 B，SHA256 `f52a49582417a849ea3c0d63082c5e9bbdb117aec6d79993eacc783c917ddde3`。这是新IR身份，不迁移旧canonical/RTL PASS。
+- 独立流式解析实际LOW：Top共112端口；原85端口无删除、方向/宽度无变化；新增27个输出、689 bits，逐项匹配提案。**只证明本次LOW IR接口；没有生成SV或Verilator ABI资格。**
+- 模块图95定义/1,056可达实例与hierarchy TSV一致。`moeArithmetic.bank.alus_0..31`为32个可达HeteroFP32Alu，但全图合计81个，另49个在原scalar/vector/element/Silu路径。不能称全设计仅32 ALU，更不证明统一32-lane每周期发射或90%利用率。
+- `owner.matrix.leaves_0..7`为8个Matrix endpoint；外部端点可达性不是4096 MAC底层实现、综合或数值证据。候选不改变既定4096资源要求。
+- 清单列13文件合计439,001,203 B；实际临时目录14文件752,045,501 B，另有313,044,298 B的 `HostBlockTopV4.lo.fir`，与official-low同SHA。**未删除任何文件**；本包仅提交摘要/hash，不提交IR/class/原始日志/机器本地路径。
+
+仍未做SV生成、真实DUT执行、PPA、完整block数值或最终RTL回放。模型/ABI/canonical及五块同硬件资格仍须分别完成；没有更新active源码选择或放宽任何旧门禁。

@@ -192,3 +192,11 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 原始log的runner ImageVersion为20261025.353.1，亦不等于固定20261026.354.1；实际首个失败仅CPU门，不能声称后续内存/磁盘/源码门已通过。
 - 唯一artifact12980938760为638B摘要ZIP，SHA72191129a1b4f94c586ba8fea4c915edd64e3d9151a09225af7cb55ce387279e；解包原摘要SHA77c91397c306fba7c583ffe821ea1def2c7e50de3c322ce5d0e0d790a4afdacd，stages空、numeric_pass=false、dedup NOT_OBSERVED。未上传payload。
 - 下一步审核宿主CPU/工具版本绑定的真实依赖，不能直接删除AVX512或镜像门、盲目重试或迁移旧参考PASS。原35B安装原因仍UNKNOWN；五块完整Chisel/最终RTL仍各0/5，有效MAC无新增实测。
+
+## 2026-10-30 P0 宿主 dispatch 实测（FAIL_BYTE_DIFFERENCE，非硬件）
+
+- 未重试CI。当前本地AVX512宿主上，复用原runtime/官方forward/权重/刺激/FP32-BF16规则，A=AVX512四线程、B=default四线程、C=AVX2四线程。A/B串行，C独立新目录复用已核A；原V2 lease及监督资源cap不变。三捕获native0、cleanup/EOF完整，两个严格比较入口均exit1。
+- 独立复核全部24项导出张量文件：A与原参考24/24逐字节一致；B与C均23/24。唯一差异为注意力概率stage.self_attn.0.1的196608个BF16元素中1个编码相差1，最大绝对差5.820766091346741e-11。最终输出和KV完全一致仍不升级严格中间张量等价；两试验均FAIL_BYTE_DIFFERENCE，不替换原参考、不修改阈值。
+- PASS只限捕获进程完成、身份/文件哈希核验和相应相同张量；没有Chisel/RTL/DUT执行。ATEN AVX2不保证底层MKL/oneDNN不使用AVX512，本地试验不认证实际非AVX512宿主。只检查24个导出张量，不声称官方函数内部全部中间值已观测。
+- 发布仅安全摘要、receipt/recipe哈希与策略差异；本地binding、运行库、权重和张量数据不出站。两套轻测分别7/8项normal及-O通过。源码/FAIL/原数据均保留，没有清理。
+- 重执行仍缺符合原P0及具体工具身份的足额AVX512宿主；不能在随机standard runner上反复碰运气或直接删除CPU/image门。原35B安装错误UNKNOWN不受本实验解释。完整五块M128 Chisel/最终RTL仍各0/5，无新增MAC利用率实测。

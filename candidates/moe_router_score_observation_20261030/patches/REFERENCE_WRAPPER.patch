@@ -1,0 +1,40 @@
+--- a/candidates/independent_block_reference_prepare_v3_20261028T2312/run_reference.py
++++ b/run_reference.py
+@@ -5,6 +5,8 @@
+ supervisor. This is not a hardware model and supplies no output or router IDs to
+ hardware. Input-only exports are segregated from observed reference outputs.
+ """
++from contextlib import nullcontext
++from router_local_observer import OfficialRouterObserver
+ import argparse
+ import hashlib
+ import importlib
+@@ -216,15 +218,19 @@
+             tree(value, "")
+         return hook
+ 
++    router_observer = OfficialRouterObserver(layer.mlp.gate) if p["profile"] in (3, 4) else None
+     for name, submodule in layer.named_modules():
+         if name in selected: handles.append(submodule.register_forward_hook(observe(name)))
+     try:
+-        with torch.inference_mode(), torch.autocast("cpu", enabled=False):
++        with torch.inference_mode(), torch.autocast("cpu", enabled=False), (router_observer if router_observer is not None else nullcontext()):
+             observed, observed_state = call()
+     finally:
+         for handle in handles: handle.remove()
+     require(raw(observed) == baseline_bytes, "observer changed exact official output")
+     require({name: raw(t) for name, t in observed_state.items()} == baseline_state_bytes, "observer changed final cache")
++    if router_observer is not None:
++        # Actual local from the SAME official forward; no re-evaluation of softmax.
++        save(refs, "stage.mlp.gate.0.pre_topk_probs", router_observer.take(torch))
+     for name, t in observed_state.items(): save(refs, "final_cache."+name, t)
+     require(tuple(observed.shape) == (1, 128, p["width"]) and torch.isfinite(observed).all().item(), "complete finite output")
+     save(refs, "output_storage", observed.float() if p["profile"] == 0 else observed)
+@@ -235,6 +241,7 @@
+                   runtime_source_pins_sha256=args.runtime_source_pins_sha256,
+                   exact_baseline_observer_output_equal=True, complete_block_tokens=128, forward_calls=2,
+                   input_identity="NEW_EXTERNAL_BOUNDARY_NOT_HISTORICAL_PREFIX", tensor_records=saved, observed_module_calls=calls,
++                  raw_router_score_observation=("ORIGINAL_FORWARD_LOCAL_RETURN_READONLY_PROFILE" if router_observer is not None else "NOT_APPLICABLE"),
+                   hardware_executed=False, numerical_comparison_with_hardware=False, router_policy="UNMODIFIED_OFFICIAL_TORCH_TOPK",
+                   no_reference_outputs_or_router_ids_allowed_in_hardware_stimulus=True,
+                   limits=["TEMP until actual isolated runtime execution and independent review", "No cross-runtime arithmetic equivalence claimed", "Functional-call-only intermediates are not all captured"])

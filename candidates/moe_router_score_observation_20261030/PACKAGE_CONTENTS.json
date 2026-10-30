@@ -1,0 +1,97 @@
+{
+  "schema": "INACTIVE_MOE_SOURCE_CANDIDATE_PACKAGE_V1",
+  "selected_by_active_pipeline": false,
+  "includes_weights_or_tensors_or_binary_or_raw_logs": false,
+  "files": [
+    {
+      "path": "BASE_AND_RESULT_PINS.json",
+      "bytes": 4137,
+      "sha256": "f8d3e3584be3a36ac4b56ff520986cb22262afaac8f1e1e98f3cacb518b413bc"
+    },
+    {
+      "path": "README.zh.md",
+      "bytes": 4034,
+      "sha256": "698c269577c60e096636f97fb2b10845ad31f39e2624f596d4c9a434b847c11a"
+    },
+    {
+      "path": "driver/moe_raw_score_observation.hpp",
+      "bytes": 2080,
+      "sha256": "98dd2f54d6dfa52a244a9e8e2a83da3190bae03923077df223b56be4c67c19ef"
+    },
+    {
+      "path": "evidence/LOCAL_COMPILE_AND_BOUNDARIES.json",
+      "bytes": 1986,
+      "sha256": "5c3558bca32856eab3dbce9e0a83641a1d8d1f8b7806c0b2337478d7724d0047"
+    },
+    {
+      "path": "materialize.py",
+      "bytes": 2163,
+      "sha256": "1f0a28d3c43987ffeefe92e7c9690500ce708dfacc9a3e5000b7cbe6d5fabc6e"
+    },
+    {
+      "path": "patches/CONSUMER_GUARD.patch",
+      "bytes": 2712,
+      "sha256": "99d2d6f8dd1f0b5d5eb2322d4afc3b9174976e0f5f6dbdd9aa003c903e77ae9c"
+    },
+    {
+      "path": "patches/DRIVER.patch",
+      "bytes": 5298,
+      "sha256": "d11772741339344610a13e6eb8418a8a36a7dc1a39b03ca6ede541a6527ca2e7"
+    },
+    {
+      "path": "patches/REFERENCE_WRAPPER.patch",
+      "bytes": 2725,
+      "sha256": "5167684233383b17358887da6d5ed6363560ac140912253fbd7f5ab39fd3dc89"
+    },
+    {
+      "path": "router_local_observer.py",
+      "bytes": 3746,
+      "sha256": "05dbc69e70c7804817174143ca006f119b67ce385fdbcf87b8ccd54cd6811308"
+    },
+    {
+      "path": "source/HostBlockTopV4.scala",
+      "bytes": 27328,
+      "sha256": "da22759883a9749c1706ff77ff78afcdabb7fe869aed19df90f817017ef89583"
+    },
+    {
+      "path": "source/UnifiedMoeRouterNumericalOwnerV2.scala",
+      "bytes": 14008,
+      "sha256": "6fc9534e5de335802e5b3a34ca4d5951246196601b8069f6b836a928a98cf305"
+    },
+    {
+      "path": "source/UnifiedMoeRouterPipelineBindingV2.scala",
+      "bytes": 11097,
+      "sha256": "0233df02cef3e1d81031f865838714a130bd7990d0dae4776a251f9498c6f3c2"
+    },
+    {
+      "path": "source/UnifiedMoeRuntimeExpertLoopV4.scala",
+      "bytes": 26605,
+      "sha256": "1e0587156ff83ff1125abc4445cd9740f8377b2fe310c9dd0b85f238c7e0e605"
+    },
+    {
+      "path": "test_local_observer.py",
+      "bytes": 3131,
+      "sha256": "c656b7e573547267f8c02dd5851e93bc323501016a34ce2da2f946d6f2f73140"
+    },
+    {
+      "path": "test_profile_coverage.py",
+      "bytes": 2236,
+      "sha256": "27e8b59fedf56f5421edcb0e45a1eb5ce139442e7f33473d4156656dbf0805d7"
+    },
+    {
+      "path": "test_raw_scores.cpp",
+      "bytes": 1029,
+      "sha256": "bf9395ef5e613bed8c7eca97aad48bab99093dd18627b2e9fd2530cc1b27cf0d"
+    },
+    {
+      "path": "test_tap_source.py",
+      "bytes": 1315,
+      "sha256": "18968286854841f0b42cf564b0388a0e7f89b6cb525de1e0c4faf561f6d1d3ee"
+    },
+    {
+      "path": "tests/check_driver_syntax.py",
+      "bytes": 1528,
+      "sha256": "5379c33deb41240009a52305579acb7ace9e68404b7e7f14b84ed467591235b2"
+    }
+  ]
+}

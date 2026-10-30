@@ -1,0 +1,41 @@
+--- a/candidates/same_job_execution_20261030/numeric/consumer_owned.py
++++ b/consumer_owned.py
+@@ -105,6 +105,29 @@
+         actual_ids.extend(struct.pack('<q',expert));actual_weights.extend(struct.pack('<H',weight))
+     return {'ids':compare(actual_ids,ids),'normalized_bf16_weights':compare(actual_weights,weights),
+             'coverage':'128x8_ACKNOWLEDGED_DUT_ROUTE_RECORDS','raw_fp32_selection_scores':'INCOMPLETE_NOT_STORED_IN_ROUTE_MAP'}
++
++
++def classify_observed_profile(result, has_router):
++    """Only classify actually compared bytes; missing MoE scores fail closed.
++
++    This consumer has no authenticated raw-score reader/comparator yet. Adding
++    a dictionary or a claimed coverage marker cannot enable that missing path.
++    Keep original Torch IDs and weights unchanged, including tied rows.
++    """
++    checks = list(result['comparisons'].values())
++    if has_router:
++        checks += [result['router'][key] for key in
++                   ('ids', 'normalized_bf16_weights', 'bf16_dense_logits')]
++    matched = bool(checks) and all(x['byte_mismatches'] == 0 for x in checks)
++    result['observed_subset_status'] = ('BITWISE_MATCH_DIAGNOSTIC' if matched
++                                        else 'BITWISE_MISMATCH_DIAGNOSTIC')
++    if has_router:
++        result['status'] = 'INCOMPLETE'
++        result['missing_observations'] = ['raw_fp32_selection_scores',
++                                          'raw_fp32_selected_topk_scores']
++        result['numerical_pass'] = False
++    else:
++        result['status'] = result['observed_subset_status']
+ 
+ 
+ def execute(binary, runtime, output, log, limits):
+@@ -353,7 +376,7 @@
+                 r['router']=router_compare((target/'router_token_map.final.bin').read_bytes(),*route_ref[:2])
+                 need(text.count('HOST_FINAL_ROUTER_LOGITS bytes=65536 dtype=BF16 coverage=ACKNOWLEDGED_EVERY_BYTE')==1,'actual router logits coverage')
+                 r['router']['bf16_dense_logits']=compare((target/'router_logits_bf16.final.bin').read_bytes(),route_ref[2])
+-            r['status']='BITWISE_MATCH_DIAGNOSTIC' if all(x['byte_mismatches']==0 for x in r['comparisons'].values()) and (route_ref is None or (r['router']['ids']['byte_mismatches']==0 and r['router']['normalized_bf16_weights']['byte_mismatches']==0 and r['router']['bf16_dense_logits']['byte_mismatches']==0)) else 'BITWISE_MISMATCH_DIAGNOSTIC'
++            classify_observed_profile(r, route_ref is not None)
+         except Exception as e: r['error']=str(e);r['error_class']=type(e).__name__
+         (args.output/'RESULT.json').write_text(json.dumps(summary,indent=2)+'\n')
+     # Never assert Chisel/RTL numerical PASS from unapproved diagnostic policy.

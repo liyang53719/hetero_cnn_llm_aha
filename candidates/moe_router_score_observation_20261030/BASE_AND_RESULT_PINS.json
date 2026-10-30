@@ -1,0 +1,73 @@
+{
+  "schema": "INACTIVE_MOE_OBSERVATION_BASE_PINS_V1",
+  "files": [
+    {
+      "name": "source/UnifiedMoeRouterNumericalOwnerV2.scala",
+      "base_repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouterNumericalOwnerV2.scala",
+      "base_commit": "7bb6641b1d07aa4f83ffab1d37aff2d905237db7",
+      "base_sha256": "04ef8a11a5ec90af7622232dbec2369af9b574a0a1a74eb4f9236a9c8e549316",
+      "result_sha256": "6fc9534e5de335802e5b3a34ca4d5951246196601b8069f6b836a928a98cf305"
+    },
+    {
+      "name": "source/UnifiedMoeRouterPipelineBindingV2.scala",
+      "base_repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouterPipelineBindingV2.scala",
+      "base_commit": "7bb6641b1d07aa4f83ffab1d37aff2d905237db7",
+      "base_sha256": "380b5b7b36fe238d2444ca530e92bd1dabb8852e9d42a42f88392dcd194dae0c",
+      "result_sha256": "0233df02cef3e1d81031f865838714a130bd7990d0dae4776a251f9498c6f3c2"
+    },
+    {
+      "name": "source/UnifiedMoeRuntimeExpertLoopV4.scala",
+      "base_repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRuntimeExpertLoopV4.scala",
+      "base_commit": "7bb6641b1d07aa4f83ffab1d37aff2d905237db7",
+      "base_sha256": "9a41408d5c846b1046957679731892dad7c06b177201975eeca22213d6eb8c8b",
+      "result_sha256": "1e0587156ff83ff1125abc4445cd9740f8377b2fe310c9dd0b85f238c7e0e605"
+    },
+    {
+      "name": "source/HostBlockTopV4.scala",
+      "base_repo_path": "candidates/p0_resident_observation_20261030/source/HostBlockTopV4.scala",
+      "base_commit": "feafbd6d492da76923d23c6cd5dcd9c5e836ad0d",
+      "base_sha256": "3a7aff0301457f151df47772963c6cad04263cecfa55884c3cefd14836d877b0",
+      "result_sha256": "da22759883a9749c1706ff77ff78afcdabb7fe869aed19df90f817017ef89583"
+    },
+    {
+      "name": "driver/host_axi_driver_non_dpi.cpp",
+      "base_repo_path": "candidates/p0_resident_observation_20261030/driver/host_axi_driver_non_dpi.cpp",
+      "base_commit": "feafbd6d492da76923d23c6cd5dcd9c5e836ad0d",
+      "base_sha256": "f7c0b05dce22225a818f00c4a781ebbe6ee01987f93b63f66e501ae4e13f2323",
+      "result_sha256": "4afa2352317d667855bcf48b5151fa40d607c56d6849403b86d19aad00f4baec",
+      "patch": "patches/DRIVER.patch"
+    },
+    {
+      "name": "consumer_owned.py",
+      "base_repo_path": "candidates/same_job_execution_20261030/numeric/consumer_owned.py",
+      "base_commit": "7bb6641b1d07aa4f83ffab1d37aff2d905237db7",
+      "base_sha256": "00bac8ae04a208bc41f586fa5d60fb683f21a209cf92cdcc87cbe04097728036",
+      "result_sha256": "83007dac4ff334c82c9d6ebaf66ac0797ad06c2f778f6345bbd8e8a1151276f3",
+      "patch": "patches/CONSUMER_GUARD.patch"
+    },
+    {
+      "name": "run_reference.py",
+      "base_repo_path": "candidates/independent_block_reference_prepare_v3_20261028T2312/run_reference.py",
+      "base_commit": "7bb6641b1d07aa4f83ffab1d37aff2d905237db7",
+      "base_sha256": "805a31aa100fd71cf088db1f54a6530a80c3119b1665c04f59706483d6db3606",
+      "result_sha256": "d4f779881ebea182c747064fa159da7379fc45802232f04d04c013fe3d0aabd2",
+      "patch": "patches/REFERENCE_WRAPPER.patch"
+    }
+  ],
+  "helper_sha256": "05dbc69e70c7804817174143ca006f119b67ce385fdbcf87b8ccd54cd6811308",
+  "official_source_sha256": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30",
+  "official_source_origin": {
+    "repository": "huggingface/transformers",
+    "revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c",
+    "relative_path": "src/transformers/models/qwen3_5_moe/modeling_qwen3_5_moe.py",
+    "archive_sha256": "69273c7d563dd207ad4d6ada4ab16105e7c21366ac4142be1e5f53649b23c5e9"
+  },
+  "reproduction_scope": "Source reconstruction from specified published base bytes; external official runtime source must be independently reconstructed and hash-verified. Not a self-contained native toolchain or complete runtime bundle.",
+  "dependencies": [
+    {
+      "path": "candidates/p0_resident_observation_20261030/driver/resident_observation.hpp",
+      "commit": "feafbd6d492da76923d23c6cd5dcd9c5e836ad0d",
+      "sha256": "88185df7e27f3c0ffa7f3fd857e40f4a31fd72a69c876602519be2e3b0a69721"
+    }
+  ]
+}

@@ -1,5 +1,15 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-30 17:36 联合真实 MoE 概率观察候选（TEMP / INCOMPLETE）
+
+- DONE（源码/编译范围）：沿原 Numeric → Pipeline → RuntimeExpertLoop → Top 新增真实 selection.in.fire 的 FP32 softmax 后、topk 前概率只读 Valid tap，保留 P0 resident SRAM 观察，无 ready/算术/路由/调度反馈。每 P3/P4 全128×256项131072B，collector核序列/身份/fault及末拍静默。四 Scala 已独立审计，联合155源8覆盖完整编译 native0：118.871542250s、观测RSS1574649856B、862class17967658B，strict cleanup/EOF完整。源码见 [MoE观察候选](../candidates/moe_router_score_observation_20261030/README.zh.md)。
+- 独立官方参考候选只在原 PyTorch forward return 观察实际 router_probs 对象，不修改 forward/topk/返回/算术。baseline输出与cache逐字节检查先于保存。7项 observer 轻测通过，并非真实 Torch fixture或完整参考捕获；P7/stride8与torch.softmax差异仅报告，不创设容差、不擅认小ID tie契约。消费者 raw-score compare 与 P0 consumer 合并尚未完成，不得只复制候选覆盖现有路径。
+- FAIL/INCOMPLETE 边界：联合IR已启动，但环境重连后原session84990不可读取，无终结RESULT、LOW及finalized日志。保留partial HIGH和采样，1248输入pins（含862classes）完整；当前exec隔离PIDnamespace和可取得锁不能证明原Java已消失，禁止推断native失败、通过或停止。当前新增225bits/7ports、合计119口均仅源码预期，不继承原P0实测112口。原IR重资格未重启，需原owner/session终结身份确认。
+- ONGOING：GitHub唯一R3 run41096005966（source7bb6641、launchfd947e0）仍按原身份观测；source CI41095793997及launch guard41096005880成功。它使用冻结旧观察接口，独立于本候选，不把local重连当CI停止，不重复build/CI。注册五块、四Qwen3.5 eligible、P0原宿主策略延期均保持。
+- 复建资格：新候选按7份已发布base/result SHA在fresh目录重建成功，16项轻量测试通过；不含完整runtime、IR/class/tensor/权重/原始日志。未改active source pins，未启动新activation。
+- 完整M128 Chisel五块与最终RTL数值仍各0/5，有效MAC利用率未实测，固定4096与80%/90%目标不变。临时目录本轮407项、磁盘约20GiB可用；保留partial/唯一证据及所有输入，未删除数据。
+
+
 ## 2026-10-30 17时：真实观察通路发射 IR，Python DSO 准入修复（TEMP / INCOMPLETE）
 
 - DONE（精确范围）：P0 resident gate/up 真实 SRAM 只读观察候选已完成本地原155源/5覆盖完整 Scala 字节码编译，native0，120.928s，观测RSS1589428224B，861 class。原 DiagnoseOriginalHostMoePhaseV5 随后实际发射 HIGH 与 official LOW FIRRTL，native0，151.343s，观测RSS4318490624B，严格 cleanup/EOF。该候选仍未替换 active backend。

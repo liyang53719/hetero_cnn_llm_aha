@@ -1,0 +1,51 @@
+{
+  "status": "PASS_LOCAL_COMBINED_P0_MOE_FULL_SCALA_BYTECODE_COMPILE_WITH_PLUGIN_EFFECT_EVIDENCE_ONLY",
+  "native_exit": 0,
+  "elapsed_seconds": 118.87154225000268,
+  "observed_peak_rss": 1574649856,
+  "errors": [],
+  "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+  "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+  "pipe_eof_observed": true,
+  "gzip_finalized": true,
+  "class_count": 862,
+  "class_bytes": 17967658,
+  "class_hashes_sha256": "30a3a1505784d38c17597519a2af43c3af9eb4b9762eaeee5f4a9f79060bc5f1",
+  "classes_included": false,
+  "joint_ir": {
+    "status": "INCOMPLETE_OBSERVATION_UNAVAILABLE",
+    "session_identity": 84990,
+    "reason": "Environment reconnected; terminal RESULT and official LOW unavailable; no success inherited",
+    "typecheck_or_compile_does_not_prove_ir_success": true
+  },
+  "interface": {
+    "new_moe_output_bits_expected": 225,
+    "new_moe_output_ports_expected": 7,
+    "combined_top_ports_expected": 119,
+    "combined_emitted_abi_verified": false,
+    "existing_p0_low_ir_ports": 112,
+    "existing_p0_proof_not_transferred": true
+  },
+  "validation": {
+    "original_moe_helper_python_tests": 9,
+    "original_moe_collector_test": "SYNTHETIC_ONLY_REPORTED_PASS",
+    "original_driver_syntax": "MOCK_PORTS_ONLY_REPORTED_PASS",
+    "official_observer_independent_light_tests": 7,
+    "real_torch_fixture_executed": false,
+    "full_reference_executed": false,
+    "full_block_m128_numeric_pass_count": 0,
+    "required_profiles": 5,
+    "final_rtl_numeric_pass_count": 0,
+    "sv_or_dut_execution": false
+  },
+  "package_reconstruction_validation": {
+    "all_7_source_and_patch_results_exact_sha256": true,
+    "consumer_guard_tests": 5,
+    "source_and_terminal_tests": 4,
+    "observer_fixture_and_official_ast_tests": 7,
+    "total_light_tests_passed": 16,
+    "torch_imported": false,
+    "cpp_test_reexecuted_during_packaging": false,
+    "temporary_reconstruction_removed": true
+  }
+}

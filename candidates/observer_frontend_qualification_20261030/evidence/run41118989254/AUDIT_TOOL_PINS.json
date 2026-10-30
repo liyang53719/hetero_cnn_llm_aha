@@ -1,0 +1,50 @@
+{
+  "source_commit": "a06b51416090fce2ad3d04336c82a5b7a2d00b97",
+  "launch_commit": "50f2e807f28f11e80ffc418461da94fe1ba3c80b",
+  "original_audit_py_sha256": "1c57ab8eb4167e42c3c505845dc39cc64400a30de0afe712759e32ac308e67a6",
+  "portable_audit_py_sha256": "14662d2563e52fef18cbf8dd56fe60c32013530a625bfdea1282657ea73dfcd1",
+  "test_audit_py_sha256": "78619d96e3091d21dd5090ccafb26961edd794bfd4353bcd51455173e6c8b1d1",
+  "only_portability_change": "Root directory lookup uses HETERO_AUDIT_REPO_ROOT or repository-relative default; audit algorithm unchanged",
+  "files": [
+    {
+      "path": "ACTUAL_AUDIT.json",
+      "bytes": 5939,
+      "sha256": "773a6d6ef51c81385d05f991f68eb652b7d95e4856b4d2ed72bf39889213d99d"
+    },
+    {
+      "path": "BASELINE_SOURCES.json",
+      "bytes": 1013,
+      "sha256": "b981cd7838336a446fff2246d147366aad2441a6d45ebd8bab7d73ad7d38004a"
+    },
+    {
+      "path": "README.zh.md",
+      "bytes": 3253,
+      "sha256": "6665d7f32295f7cdad2fffbc1e6819b8836a5a96c43912cbe87ec263612e2664"
+    },
+    {
+      "path": "TWO_MODULE_PENDING.json",
+      "bytes": 2983,
+      "sha256": "ea1284762c09bf09d4f243787e0becf2587622a633e4d549e08d0706b7f1028d"
+    },
+    {
+      "path": "audit.py",
+      "bytes": 6892,
+      "sha256": "14662d2563e52fef18cbf8dd56fe60c32013530a625bfdea1282657ea73dfcd1"
+    },
+    {
+      "path": "metadata/frontend-qualification.json",
+      "bytes": 246285,
+      "sha256": "510fa27c03b7db63bfaa364fb7334cbcff52398ee930f025a0f3862417b7cbf1"
+    },
+    {
+      "path": "metadata/frontend-summary.json",
+      "bytes": 9339,
+      "sha256": "7841015364903c9b8fe8f40974aba43de5b9b6a7928957916c5f7a6e44b3f314"
+    },
+    {
+      "path": "test_audit.py",
+      "bytes": 3558,
+      "sha256": "78619d96e3091d21dd5090ccafb26961edd794bfd4353bcd51455173e6c8b1d1"
+    }
+  ]
+}

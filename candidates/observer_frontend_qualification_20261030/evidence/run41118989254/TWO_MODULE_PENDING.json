@@ -1,0 +1,69 @@
+{
+  "scope": "ACTUAL_TWO_ADDITIONAL_SV_MODULE_CHANGES_NOT_ACCEPTANCE",
+  "artifact_identity": {
+    "artifact_name": "hetero-observer-frontend-summary-41118989254",
+    "launch_commit": "50f2e807f28f11e80ffc418461da94fe1ba3c80b",
+    "launch_manifest_blob_sha": "47edaa7b528863d6c213c7fac7a754982bc4cbe2",
+    "launch_manifest_path": "ci_launch/observer_fixed4096_frontend_make_driver_20261030_once.json",
+    "run_id": 41118989254,
+    "source_commit": "a06b51416090fce2ad3d04336c82a5b7a2d00b97"
+  },
+  "modules": [
+    {
+      "module": "Public21QkvReductionRouter",
+      "old_and_new_high_canonical_sha256": "41b76d9e83d617ba62e3356f501797928458b30319369eb11fbb6a7aa8d5b5e7",
+      "old_sv": {
+        "module": "Public21QkvReductionRouter",
+        "bytes": 289985,
+        "raw_sha256": "44d6da40ed949536408f24c4e56a97a71fd68b5e3b8c1e81cf87bdda6e2ddc3e",
+        "normalized_sha256": "1e87261c949e8fe372f64ec54886aa597479cb1e6b23ab6c4311242c6b71271d",
+        "sourceinfo_count": 1461
+      },
+      "new_sv": {
+        "bytes": 342091,
+        "module": "Public21QkvReductionRouter",
+        "normalized_sha256": "4a11a5c08ef38434ecf827120e6627b96f9537049ed0ca7eaaef24a7954b973e",
+        "raw_sha256": "94398dcec7ad953d8bf6b4c2ead83746c3d86dd61ce2627d45312cd7e85b8d8a",
+        "sourceinfo_count": 1473
+      },
+      "cause": "UNPROVEN_FROM_METADATA_ALONE",
+      "sv_body_available": false
+    },
+    {
+      "module": "TransposedDenseDownOwner",
+      "old_and_new_high_canonical_sha256": "f897086bfee0b73f9fe8e19329d299e3007249e4e746e334fe47b6c2d119ba37",
+      "old_sv": {
+        "module": "TransposedDenseDownOwner",
+        "bytes": 64823522,
+        "raw_sha256": "794ebe152065096da9fe452adb4146a1d83165318cf83a0ac910f47a2333508c",
+        "normalized_sha256": "e07f04f309da1a58a528082ab327d0f361dd117eb8fbc4bc878b4b15faa9b78f",
+        "sourceinfo_count": 267729
+      },
+      "new_sv": {
+        "bytes": 73926957,
+        "module": "TransposedDenseDownOwner",
+        "normalized_sha256": "d26f8e11bcd4e663774f921d38e22d442faf176657067401001d0fd7cd5f8a6f",
+        "raw_sha256": "a50daf4dda9da27bad0b8a75d4df575363395430491fc4d490bcbad53eb29b4b",
+        "sourceinfo_count": 267737
+      },
+      "cause": "UNPROVEN_FROM_METADATA_ALONE",
+      "sv_body_available": false
+    }
+  ],
+  "production_sv_repin_authorized": false,
+  "accepted_evidence_scope": [
+    "ACTUAL_122_HEADER_ABI_EQUALS_REVIEWED_LOW",
+    "TEN_MAKE_FILES_FIXED_GRAMMAR",
+    "FIVE_NATIVE_DEPENDENCY_ROWS",
+    "ACTUAL_SINGLE_DRIVER_ET_REL_AND_13_DEPENDENCIES",
+    "TWENTY_FOUR_STRICT_PROCESS_RECEIPTS"
+  ],
+  "not_proven": [
+    "WHOLE_SV_SEMANTIC_EQUIVALENCE",
+    "ACTUAL_HOST_LINK",
+    "FIVE_BLOCK_M128_NUMERICAL",
+    "FINAL_RTL_REPLAY",
+    "MAC_UTILIZATION"
+  ],
+  "needed_evidence": "Exact old/new module-body differences or independently verified bounded structural equivalence/port-retention proof tied to actual new module hashes; do not infer from CI success or module names."
+}

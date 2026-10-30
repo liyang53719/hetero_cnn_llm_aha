@@ -1,5 +1,14 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-30 20:34 — 实际 frontend/ABI/单 TU 限定资格通过；SV re-pin TEMP 暂缓
+
+- source `a06b51416090fce2ad3d04336c82a5b7a2d00b97`，launch `50f2e807f28f11e80ffc418461da94fe1ba3c80b`，run `41118989254` SUCCESS；24阶段严格终态/cleanup/EOF/gzip/native0，完整4096 MAC不变。证据：`candidates/observer_frontend_qualification_20261030/evidence/run41118989254/`。
+- **DONE（精确范围）**：实际 frontend、122-port header ABI（旧85不变+37观察输出）与真实 GCC 单 driver TU ET_REL / `.d` 依赖资格；不是 archive/link、DUT 或数值通过。host frontend 382.55016183s / RSS9596760064 B；driver TU 9.280295733s / RSS282021888 B。CPU avx512f=true只观察，runtime_qualified=false。
+- **ONGOING / TEMP**：92 SV模块82 normalized相同、10改变，含额外 `Public21QkvReductionRouter` / `TransposedDenseDownOwner`。61-bit key / SourceInfo路径仅候选解释；尚缺绑定实际旧新hash的严格差异证明，整体SV re-pin不批准，旧production门保留。原metadata继续OBSERVED_UNREVIEWED，审计acceptance_authorized=false。
+- **TODO**：先完成最小SV-only proof方案与独审，再决定正式生产全五块执行；未启动新job，不重复完整frontend。五块128-token完整数值仍0/5，最终同冻结RTL回放0/5，利用率未测。维持4096资源/同硬件、舍入/路由契约和原预算；不继承旧16-lane PASS或拿IR替RTL数值。
+- 本包5项normal/-O测试仅合成审计资格；真实结果另由原2JSON及644闭包复核。只发布有界metadata/pins/脚本，不上传rawSV/IR/classes/o/rawlogs/weights。
+
+
 ## 2026-10-30 19:50 frontend-only / 真实单 driver TU 接线（TEMP，尚未 activation）
 
 - DONE / SOURCE：基于d5cc9ff7501c9b99eeb17b03df20006604341bc7，将已实测IR的canonical/122口证据用于独立frontend-only候选。旧baseline原件保留；沿原155源8观察覆盖、完整4096 MAC、同一五profile硬件定义，不按模型重elaboration。16文件源码包manifest SHA446706d8244debedecf1d196dade84fcd47906f1804619f106b62ffa299995e8；专用644 pins SHA99adde3413b505b67ee68939e992f6e11eb50274662a1042417ce8121b5797c8。详见[候选范围与预算](../candidates/observer_frontend_qualification_20261030/README.zh.md)。

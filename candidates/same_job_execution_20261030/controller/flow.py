@@ -83,6 +83,8 @@ def run(b,binding_path,binding_sha):
  with(job/'build_parent.log').open('xb')as log:code=subprocess.run(argv,stdout=log,stderr=subprocess.STDOUT).returncode
  need(code==0,'original backend build failed, no repeat')
  build_result=build/'frontend/BUILD_ONLY_RESULT.json';need(build_result.is_file(),'actual retained shared backend result')
+ need(pins.get(str(D/'deduplicate_pack.py'))==sha(D/'deduplicate_pack.py'),'independently pinned duplicate lifecycle');duplicate=mod('exact_pack_duplicate_lifecycle',D/'deduplicate_pack.py')
+ duplicate.run(build_result,sha(build_result),job,code) # exact two stable copies, mode mismatch is NO_OP; no producer edits
  archives=job/'runs/archives/output';ab=job/'bindings/ARCHIVES.json';save(ab,dict(source_dir=str(runtime/'source'),pins=pins,output=str(archives)))
  ok(stage('archives',[py,'-B',runtime/'acquire_archives.py','--binding',ab,'--binding-sha256',sha(ab)],q['archives'],.25,{str(ab):sha(ab)},True))
  payload=job/'runs/weights/output';acq=repo/'candidates/five_profile_acquisition_resume_20261028/acquire_resumable.py'

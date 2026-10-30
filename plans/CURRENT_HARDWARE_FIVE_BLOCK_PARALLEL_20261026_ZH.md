@@ -161,3 +161,10 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 本提交仅补摘要typed reasons/原错误hash和长度/现有资源指标，并修64KiB降级时保留真实嵌套telemetry；6小fixture normal/-O通过。没有修改监督脚本、cap、硬件、数值算法、workflow或activation；不能追补已丢失的原reason。
 - 下一步先收束保活磁盘证据和原路径引用，原2.462GB inventory仅obj，不代表总job；不得先据推测提高cap或盲目重跑。
 
+
+## 2026-10-30 精确两复制物生命周期接线（TEMP / 未实际去重）
+
+- 基于57ec657d新增固定SV/ELF两对复制物去重helper及20小fixture，接在原build完全终态后、材料前。只保留两端路径的同设备硬链接去重，不清理obj目录；原四P0 producer、4096 MAC/Vector32、数值算法、cap、已发布supervisor、workflow/activation均未改。
+- 准入要求27原native完整cleanup/EOF、七文件和源身份/五archive-link receipt一致、两端hash/size、effective uid和gid相同、mode完全相等、初始单链接、无symlink及可见writer。三锁内重核journal；普通失败可回滚，foreign inode或无法证明的残留保留等待诊断。禁止chmod/chown，任一mode不等整轮NO_OP。
+- 20临时小文件fixture normal/-O通过仅是源码/生命周期测试；未操作真实CI数据、未删除唯一证据、没有启动新CI执行。收益0至362,153,111B仅逻辑inode存活量，不是物理free释放或整体12.081GB适配证明。原ELF可能755而pack700，因而可完全NO_OP。
+- 原run41034072605的35B安装错误仍UNKNOWN，不能把候选去重当根因修复。原任务不重试；完整Chisel数值/最终冻结RTL仍0/5，无新利用率实测。下一次真实执行仍需独立审查准入与有限预算，仅摘要出站。

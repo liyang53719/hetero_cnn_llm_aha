@@ -2,7 +2,7 @@
 No compile, no dependency download, no mutation of checked-out source.
 """
 import argparse,hashlib,json,pathlib,subprocess
-OVERLAY_SHA='f8cb8f64819e7f2dd4f3778cc6066e18d062ec1102832f53ef6eabfbcace4b39'
+OVERLAY_SHA='9be7810a372572e87b40d86d0b30245140c31cd40cdd6cf2f9cacead459beda2'
 FIXED_SHA='8cea5e8863e47ca14978871d23b7f80639e43ae3192c3e6c0ccf372b1c73a20f'
 COMMIT='7a22ccc14d6d269262ecf5756488c81e8e4ccfc4'
 def need(v,msg):
@@ -17,8 +17,7 @@ def validate_overlay(raw,original):
  for x in d['files']:
   path=pathlib.PurePosixPath(x['repo_path']);need(not path.is_absolute() and '..' not in path.parts,'relative source')
   if x['sha256']!=old[x['name']]['sha256']:changed.append(x['name'])
- need(changed==['HostBlockCommandsV4.scala'],'only approved carry fix')
- fixed=next(x for x in d['files'] if x['name']==changed[0]);need(fixed['sha256']==FIXED_SHA,'fixed source')
+ need(set(changed)==set(['FfnResidentCoordinator.scala', 'FfnTileSiluBridge.scala', 'HostBlockCommandsV4.scala', 'HostBlockTopV4.scala', 'QwenOwnerProtocol.scala', 'UnifiedMoeRouterNumericalOwnerV2.scala', 'UnifiedMoeRouterPipelineBindingV2.scala', 'UnifiedMoeRuntimeExpertLoopV4.scala']),'exact eight observer source overrides, no model-dependent selection')
  return d['files']
 def checked_paths(repo,overlay,original):
  rows=validate_overlay(pathlib.Path(overlay).read_bytes(),original);paths=[]

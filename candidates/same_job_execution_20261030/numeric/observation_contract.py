@@ -1,8 +1,8 @@
 """Required P0 coverage contract; does not execute DUT or reference arithmetic."""
 import hashlib,importlib.util,json,pathlib
 HERE=pathlib.Path(__file__).resolve().parent
-CORRECTOR_SHA='3e205b979194d82fc215a1f8c013eff6e009ef79444d05cb20f857db56de3c1d'
-CONTRACT_SHA='9a0a4e8e7acb477b48e90afe0fc545d971f9fbaa87cf6586fe090f6f344c41f0'
+CORRECTOR_SHA='32df9fc596dedd87030f2cd4df2e6e1c06eb95b6a48cf7f6d8674242709a8a1e'
+CONTRACT_SHA='bd8f9b3b2d5ba97eac448b293592cf5a55ae7670c8a75ed2819cfbd7294b64f3'
 def need(v,s):
  if not v:raise ValueError(s)
 def sha(p):
@@ -16,7 +16,7 @@ def corrector():
  spec=importlib.util.spec_from_file_location('p0_locked_corrector_r2',p);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
 
 def source_links(manifest,policy,identity,common,evidence):
- proof_path=HERE/'consumption_proof.py';need(sha(proof_path)=='1527ead5704ae1a1292b01df2cbf2072b03a099aaf39104bde94dc6b07e059cc','reviewed existing-producer consumption verifier')
+ proof_path=HERE/'consumption_proof.py';need(sha(proof_path)=='fe3e60041eb22db1f76f335255b20726cca5e0824c461c2ea4a7683fb17a3a93','reviewed existing-producer consumption verifier')
  spec=importlib.util.spec_from_file_location('existing_producer_consumption',proof_path);proof=importlib.util.module_from_spec(spec);spec.loader.exec_module(proof)
  proof.validate(manifest,policy,identity,common,evidence)
  need(manifest['source_commit']==identity['source_commit'],'actual shared artifact source commit')

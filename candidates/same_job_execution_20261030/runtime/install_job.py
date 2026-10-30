@@ -55,9 +55,24 @@ def snapshot(root,key,when,b,census,pending_phases,native=None):
  with target.open('x')as f:f.write(raw)
  return row
 
-def run(b,binding_path,binding_sha):
+def install_order(keys):
+ need('qwen35_35b' in keys and len(set(keys))==len(keys),'unique eligible runtimes include35B')
+ return ['qwen35_35b',*[k for k in keys if k!='qwen35_35b']]
+
+def build_boundary(b,seconds,callback):
+ need(type(seconds)is int and seconds>0 and callable(callback),'one planned build callback')
+ need(b['remaining_job_reservation_seconds']>=seconds,'build already included in remaining reservation')
+ callback() # caller owns its original non-nested supervisors; failure propagates before later installs
+ b['remaining_job_reservation_seconds']-=seconds
+
+def run(b,binding_path,binding_sha,after_first_install=None):
  need(b['schema']=='FRESH_JOB_RUNTIME_CONTROLLER_V1','fresh controller binding')
  profile_policy.require_source_pin(b['pins']);execution_policy=profile_policy.checked(b);keys=profile_policy.runtimes(b)
+ early=b.get('early_build_seconds',0)
+ need(type(early)is int and early>=0 and ((early==0 and after_first_install is None)or(early>0 and callable(after_first_install))),'early build reservation and callback paired')
+ if early:keys=install_order(keys)
+ # This local copy releases only the declared build reservation after its one callback succeeds.
+ b=dict(b)
  need(sys.version_info[:2]==(3,12)and platform.machine()=='x86_64','original Python3.12/x86_64 before installation');profile_policy.require_cpu(b,P('/proc/cpuinfo').read_text().split())
  need(set(b['identity'])=={'run_id','source_commit','launch_commit'},'samejob identity')
  need(str(b['identity']['run_id'])==os.environ.get('GITHUB_RUN_ID')and b['identity']['launch_commit']==os.environ.get('GITHUB_SHA')and os.environ.get('GITHUB_RUN_ATTEMPT')=='1','actual owning first CI job')
@@ -113,6 +128,9 @@ def run(b,binding_path,binding_sha):
   need(complete(r)and r['native_exit']==0 and not r['errors'],'actual install/cleanup failure; no retry')
   pr=root/'results'/(k+'_RESULT.json');result=json.loads(pr.read_text());entries[k]=dict(native=pin(root/'runs'/k/'RESULT.json'),phase_result=pin(pr),installation=result['installation'],sidecar=result['sidecar'])
   save(root/'results'/(k+'_NATIVE_VERIFIED.json'),dict(native=entries[k]['native'],scope='INSTALL_ONLY_NO_NUMERICAL_PASS'))
+  if early and k=='qwen35_35b':
+   build_boundary(b,early,after_first_install)
+   early=0
  index=root/'RECEIPT_INDEX.json';save(index,dict(execution_policy=execution_policy,schema='FRESH_JOB_THREE_RUNTIME_RECEIPTS_V1',identity=b['identity'],binding=pin(ownerpath),entries=entries))
  need(time.monotonic()-b['job_started_monotonic']+b['metadata_wall_seconds']+30+b['remaining_job_reservation_seconds']<=21000,'fulljob bind deadline')
  owner_output=root/'runs/bind/owner';metadata=root/'BIND_METADATA.json'

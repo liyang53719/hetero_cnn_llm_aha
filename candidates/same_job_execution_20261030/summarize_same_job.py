@@ -2,7 +2,7 @@
 import argparse,hashlib,importlib.util,json,math,pathlib,re,sys
 P=pathlib.Path;D=P(__file__).resolve().parent
 _policy_spec=importlib.util.spec_from_file_location('samejob_profile_policy', D/'profile_policy.py');profile_policy=importlib.util.module_from_spec(_policy_spec);_policy_spec.loader.exec_module(profile_policy)
-STATES={'STARTED_TIMEOUT_INCOMPLETE','STARTED_NATIVE_FAILED','COMPLETE_TERMINAL_DIAGNOSTIC_NOT_PASS','STARTED_OBSERVATION_INCOMPLETE'}
+STATES={'COMPLETE_FULL128_EXACT_REFERENCE_NOT_FINAL_RTL','COMPLETE_EXACT_REFERENCE_FAILED','STARTED_TIMEOUT_INCOMPLETE','STARTED_NATIVE_FAILED','COMPLETE_TERMINAL_DIAGNOSTIC_NOT_PASS','STARTED_OBSERVATION_INCOMPLETE'}
 REASONS={'PYTHON_OR_ARCH','CPU_AVX512','IMAGE_VERSION','MEMAVAILABLE_13GIB','DISK_20671240864','SOURCE_PIN','JOB_DEADLINE','EXECUTION_FAILED_DETAILS_IN_STAGE_RECEIPTS'}
 def read(p):
  if not p.is_file()or p.is_symlink()or p.stat().st_size>16<<20:return None
@@ -162,6 +162,51 @@ def execution_policy_summary(work):
   return dict(state='DECLARED_NOT_QUALIFIED',policy=value,profiles_registered=value['registered_profiles'],profiles_eligible=value['eligible_profiles'])
  except (ValueError,TypeError,KeyError):return dict(state='INVALID_OR_CONFLICTING_NOT_QUALIFIED')
 
+def numeric_qualification_projection(work,identity):
+ # Fixed known paths, actual evidence verifier, and reaggregation; never trust a
+ # copied PASS flag or arbitrary serialized path. Only hashes/enums leave job.
+ result=dict(status='UNOBSERVED',numerical_pass=False,final_rtl_executed=False)
+ root=work/'materials/numeric'
+ try:
+  sys.path.insert(0,str(D/'numeric'))
+  import required_acceptance as acceptance
+  import dut_evidence as evidence
+  flow_path=work/'FLOW_RESULT.json';numeric_path=root/'RESULT.json'
+  flow=read(flow_path);numeric=read(numeric_path)
+  if flow is None or numeric is None:return result
+  result['status']='INVALID_OR_UNBOUND'
+  if not isinstance(flow,dict)or not isinstance(numeric,dict):return result
+  expected_identity={k:identity[k]for k in ('run_id','source_commit','launch_commit')}
+  if type(expected_identity['run_id'])is not int or expected_identity['run_id']<=0 or any(not isinstance(expected_identity[k],str)or not re.fullmatch('[0-9a-f]{40}',expected_identity[k])for k in ('source_commit','launch_commit')):return result
+  if flow.get('identity')!=expected_identity or flow.get('execution_mode')!='BOUNDED_CALIBRATION' or flow.get('transport_exit_code')!=2:return result
+  if flow.get('numeric_result')!=evidence.pin(numeric_path):return result
+  if flow.get('hardware_definitions')!=1 or flow.get('profiles')!=list(range(5)) or flow.get('uploaded_payloads') is not False:return result
+  verified=[];projected=[]
+  for i in range(5):
+   path=root/f'PROFILE_{i}_DIAGNOSTIC.json';record=read(path)
+   if record is None:continue
+   if not isinstance(record,dict)or record.get('profile')!=i:return result
+   out=root/f'profile{i}/material/dut_result';outer=root/f'runs/p{i}_dut/RESULT.json'
+   fixed={'report':out/'RESULT.json','startup':out/f'profile{i}.started.json','outer':outer}
+   if any(record.get(k)!=evidence.pin(v)for k,v in fixed.items()):return result
+   consumer=read(fixed['report']);started=read(fixed['startup'])
+   if not isinstance(consumer,dict)or not isinstance(started,dict):return result
+   artifact=consumer.get('artifact_identity',{})
+   if any(artifact.get(k)!=identity.get(k)for k in ('run_id','source_commit','launch_commit')):return result
+   actual=evidence.verify(out,i,consumer['artifact_manifest_sha256'],consumer['runtime_bundle_sha256'],started['binary_sha256'],started['runtime_sha256'],record['outer'])
+   if actual!=record:return result
+   verified.append(actual)
+   q=actual['qualification']
+   # Recomputed function emits only fixed vocabulary; cap arrays defensively.
+   if any(not isinstance(q.get(k),list)or len(q[k])>64 for k in ('missing','failed','checked')):return result
+   projected.append(dict(profile=i,state=actual['state'],receipt_sha256=sha(path),qualification=q,common_artifact_identity=actual['common_artifact_identity'],**{k:hp(record[k])for k in fixed}))
+  qualification=acceptance.aggregate(verified)
+  if numeric.get('actual_dut_reports')!=verified or numeric.get('qualification')!=qualification or numeric.get('status')!=qualification['status'] or numeric.get('numerical_pass')is not qualification['numerical_pass']:return result
+  if flow.get('qualification')!=qualification or flow.get('status')!=qualification['status']:return result
+  return dict(status='VERIFIED_REAGGREGATED',numerical_pass=qualification['numerical_pass'],final_rtl_executed=False,execution_mode='BOUNDED_CALIBRATION',transport_exit_code=2,qualification=qualification,profiles=projected,flow_receipt_sha256=sha(flow_path),numeric_receipt_sha256=sha(numeric_path))
+ except (OSError,ValueError,TypeError,KeyError,AttributeError,ImportError):
+  return dict(status='INVALID_OR_UNBOUND',numerical_pass=False,final_rtl_executed=False)
+
 def summarize(work,identity):
  out=dict(schema='FIVE_M128_SAME_JOB_SAFE_SUMMARY_V1',status='INCOMPLETE',numeric_pass=False,final_rtl_replay=False,uploaded_payloads=False,profiles_registered=list(range(5)),tokens=128,matrix_macs=4096,vector_lanes=32,resource_peak_qualification='INCOMPLETE_SAMPLED',stages=[],actual_dut_reports=[])
  out['vector_lanes_semantics']='DECLARED_ARTIFACT_TAG_NOT_VERIFIED_PHYSICAL_ISSUE_LANES'
@@ -193,6 +238,11 @@ def summarize(work,identity):
   if not isinstance(r,dict)or r.get('profile')!=i or r.get('state')not in STATES or r.get('numerical_pass')is not False:continue
   selected={k:hp(r.get(k))for k in('report','startup','outer')}
   if all(selected.values()):out['actual_dut_reports'].append(dict(profile=i,state=r['state'],receipt_sha256=sha(p),**selected))
+ qualification=numeric_qualification_projection(work,identity)
+ out['numeric_qualification']=qualification
+ if qualification['status']=='VERIFIED_REAGGREGATED':
+  out['status']=qualification['qualification']['status'];out['numeric_pass']=qualification['numerical_pass']
+  out['actual_dut_reports']=qualification['profiles']
  # Reuse reviewed exact build exporter; it already strips paths and caps text.
  materialization=D.parent/'ci_frontend_materialization_r2_20261029'
  if (work/'build').exists()and(materialization/'summarize_build_only.py').is_file():
@@ -216,3 +266,4 @@ if __name__=='__main__':
  for k in('work','identity','output'):p.add_argument('--'+k,type=P,required=True)
  a=p.parse_args();raw=encode(summarize(a.work,read(a.identity)or{}))
  with a.output.open('x')as f:f.write(raw)
+

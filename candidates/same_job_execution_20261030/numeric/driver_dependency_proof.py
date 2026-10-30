@@ -1,7 +1,8 @@
 """Read actual fresh GCC -MMD dependency evidence; never invokes a compiler."""
 import hashlib,json,pathlib,re,posixpath
 P=pathlib.Path
-PRODUCER_IMPLEMENTATION_PINS={'build_producer.py': '82aef295be117550be5c7c878f6f70b78d6e195c17061bad0ac292593dd80bfe', 'one_job_build_only.py': 'd70c929243fd7e6b5b0ed266b2634e24b1c863715d14a5d34cde3604ebcc1015', 'pack_frozen_artifact.py': '773575951ecf63fca15d5c2082c098a2ca6bd0bc988a3a3df3aaaabba712119c', 'p0_source_evidence.py': '47a126be32385720fd3b3d94e848609f57c24174ea917110bdb1b221d916b800'}
+PRODUCER_IMPLEMENTATION_PINS={'build_producer.py': '6684fb1648aa2b40b03489da8cf610af273263b911083ecfe8801d13bb451472', 'one_job_build_only.py': '437fd6af755f0e7b59b94679898cdb1386a8c2ea2e021908d7b47b4029129ec9', 'pack_frozen_artifact.py': 'cb725630ee39e811c63048b4594c403c0548c9c0a5bd48258a4ace1fd98d0d9e', 'p0_source_evidence.py': '589ffa6d518b1ab7c247868e64a11f447c110ad8bdd4f2e8876c15222a2f94d9'}
+OBSERVER_HEADER_PINS={'resident_observation.hpp': '88185df7e27f3c0ffa7f3fd857e40f4a31fd72a69c876602519be2e3b0a69721', 'moe_raw_score_observation.hpp': 'fc029f28224bf07452b36702b6c81f5cd196fd7870e81fe980efce13bffaf9df'}
 GLOBAL_MK_SHA='74121398e5be12bf03721f1f0f5ce75e7c703635ec7e50920d43f9c4e31fcc0c'
 def need(v,s):
  if not v:raise ValueError(s)
@@ -29,6 +30,12 @@ def parse_dependencies(text,cwd,driver):
  sparse=[p for p in paths if P(p).name=='sparse_write_memory.hpp'];need(len(sparse)==1,'one actually resolved sparse header dependency')
  return paths
 def parse_dep(text,cwd,driver):return next(p for p in parse_dependencies(text,cwd,driver) if P(p).name=='sparse_write_memory.hpp')
+def verify_observer_dependencies(dependencies,driver,known):
+ # Actual GCC -MMD paths, not guessed include directories or a self-reported flag.
+ for name,want in OBSERVER_HEADER_PINS.items():
+  matches=[p for p in dependencies if P(p).name==name]
+  need(len(matches)==1 and matches[0]==str(P(driver).parent/name),'unique real observer header dependency '+name)
+  need(known.get(matches[0])==want,'reviewed observer header identity '+name)
 def capture(b,phase,supervisor):
  obj=P(b['obj']).resolve();driver=str(P(b['driver']).resolve());stem=P(driver).stem
  record=dict(schema='ACTUAL_FRESH_DRIVER_DEPENDENCY_V1',cwd=str(obj),driver=driver,depfile=text_pin(obj/(stem+'.d'),1024**2),object=pin(obj/(stem+'.o')),host_make=text_pin(obj/'VHostBlockTopV4.mk'),host_hierarchy=text_pin(obj/'VHostBlockTopV4_hier.mk'),global_make=text_pin(P(b['verilator_root'])/'include/verilated.mk'),host_link_receipt=supervisor,host_link_argv=phase['argv'],binary=pin(phase['output']),make_closure_pins=b['admission']['make_closure_pins'])
@@ -36,6 +43,7 @@ def capture(b,phase,supervisor):
  need(b['pins'].get(header)==record['resolved_sparse_header']['sha256'],'resolved header belongs to original build input pins')
  record['dependencies']={p:pin(p) for p in parse_dependencies(record['depfile']['text'],obj,driver)}
  for p,v in record['dependencies'].items():need(b['pins'].get(p)==v['sha256'],'all actual non-system dependencies were prebuild pinned')
+ verify_observer_dependencies(record['dependencies'],driver,b['pins'])
  return record
 
 def verify(r,m,policy,common,build_receipt,producer_repo):
@@ -50,6 +58,7 @@ def verify(r,m,policy,common,build_receipt,producer_repo):
  text=check_text(r['depfile'],1024**2);selected=parse_dep(text,cwd,driver);header=r['resolved_sparse_header']
  dependencies=parse_dependencies(text,cwd,driver);need(set(r['dependencies'])==set(dependencies),'complete actual non-system dependency set')
  known={**m['generation_input_pins'],**m['derived_generated_pins']}
+ verify_observer_dependencies(dependencies,driver,known)
  for p,v in r['dependencies'].items():need(v['path']==p and v['bytes']>0 and known.get(p)==v['sha256'],'non-system dependency versus original generation/derived pin')
  need(selected==header['path'] and header['bytes']==policy['source_pins']['sparse_memory']['bytes'] and header['sha256']==policy['source_pins']['sparse_memory']['sha256'],'actual selected sparse header pin')
  need(m['generation_input_pins'].get(selected)==header['sha256'],'resolved dependency versus prebuild source pin')

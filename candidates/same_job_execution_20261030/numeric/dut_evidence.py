@@ -1,5 +1,6 @@
 """Require real consumer report and actual successful Popen evidence, never rc2 alone."""
 import hashlib,json,pathlib
+import required_acceptance
 P=pathlib.Path
 def need(v,m):
  if not v:raise ValueError(m)
@@ -8,12 +9,12 @@ def pin(p):
  return dict(path=str(p),bytes=p.stat().st_size,sha256=hashlib.sha256(p.read_bytes()).hexdigest())
 def verify(out,profile,artifact_sha,bundle_sha,binary_sha,runtime_sha,outer_pin):
  out=P(out);outer_path=P(outer_pin['path']);need(pin(outer_path)==outer_pin,'actual stage supervisor receipt pin');outer=json.loads(outer_path.read_text())
- need(outer.get('worker_started')is True and outer.get('native_exit')==2 and outer.get('errors')==[],'actual supervised diagnostic exit2')
+ need(outer.get('worker_started')is True and outer.get('native_exit') in (1,2) and outer.get('errors')==[],'actual supervised consumer exit1/2')
  cleanup=outer.get('cleanup_proof')or{};capture=outer.get('log_capture')or{}
  need(cleanup.get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP'and capture.get('pipe_eof_observed')is True and capture.get('gzip_finalized')is True,'complete actual outer cleanup/log')
  leader=outer.get('owner_identity');need(isinstance(leader,dict)and cleanup.get('owner_identity')==leader,'same cleanup leader identity')
  report=out/'RESULT.json';rp=pin(report);r=json.loads(report.read_text())
- need(r['status']=='INCOMPLETE'and r['layer']=='CHISEL_EMITTED_SV_NUMERICAL_BACKEND'and r['final_rtl_executed']is False,'diagnostic scope')
+ need(r['status'] in ('INCOMPLETE','FAIL_EXACT_REFERENCE')and r['layer']=='CHISEL_EMITTED_SV_NUMERICAL_BACKEND'and r['final_rtl_executed']is False,'diagnostic scope')
  need(r['artifact_manifest_sha256']==artifact_sha and r['runtime_bundle_sha256']==bundle_sha,'same artifact/bundle')
  need(len(r['profiles'])==1 and r['profiles'][0]['profile']==profile,'one exact diagnostic profile')
  row=r['profiles'][0];started=out/f'profile{profile}.started.json';sp=pin(started);start=json.loads(started.read_text())
@@ -24,4 +25,19 @@ def verify(out,profile,artifact_sha,bundle_sha,binary_sha,runtime_sha,outer_pin)
  elif row.get('exit_code')is not None and row['exit_code']!=0:state='STARTED_NATIVE_FAILED'
  elif row.get('status')in ('BITWISE_MATCH_DIAGNOSTIC','BITWISE_MISMATCH_DIAGNOSTIC')and row.get('exit_code')==0:state='COMPLETE_TERMINAL_DIAGNOSTIC_NOT_PASS'
  else:state='STARTED_OBSERVATION_INCOMPLETE'
- return dict(profile=profile,state=state,report=rp,startup=sp,outer=outer_pin,numerical_pass=False)
+ qualification=required_acceptance.evaluate(row,outer_verified=True)
+ need(outer['native_exit']==(1 if r['status']=='FAIL_EXACT_REFERENCE' else 2),'native consumer result/status correspondence')
+ inner=required_acceptance.evaluate(row)
+ need(row.get('qualification')==inner,'recomputed inner necessary predicate')
+ need(row.get('status')==r['status']==inner['status'],'inner/report status must agree with recomputed evidence')
+ need(row.get('numerical_pass') is False and r.get('numerical_pass') is False,'inner cannot claim outer cleanup in advance')
+ if qualification['numerical_pass']:state='COMPLETE_FULL128_EXACT_REFERENCE_NOT_FINAL_RTL'
+ elif qualification['failed']:state='COMPLETE_EXACT_REFERENCE_FAILED'
+ common=r['common']
+ need(common['binary']['sha256']==binary_sha,'same binary common artifact')
+ identity=dict(layer=r['layer'],matrix_macs=4096,vector_lanes=32,artifact_manifest_sha256=artifact_sha,**{name+'_sha256':common[name]['sha256'] for name in ('binary','sv','source_manifest','driver')})
+ # Resources were checked against the pinned frozen artifact by consumer main;
+ # preserve its explicit values rather than infer them from a profile name.
+ need(r.get('matrix_macs')==4096 and r.get('vector_lanes')==32,'verified fixed hardware resources')
+ return dict(profile=profile,state=state,report=rp,startup=sp,outer=outer_pin,qualification=qualification,common_artifact_identity=identity,numerical_pass=qualification['numerical_pass'])
+

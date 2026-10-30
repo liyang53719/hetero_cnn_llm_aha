@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Run existing external-AXI DUT for one selected profile using the unchanged shared artifact manifest; no model arithmetic.
-No tolerance contract is assumed. Bitwise equality is a diagnostic, NOT block PASS.
+Full exact-reference qualification is joined only after verified outer cleanup.
+No new tolerance is assumed; mismatch does not itself locate an arithmetic bug.
 Binding paths are explicit; all hardware artifacts and inputs must remain immutable.
 NEW lifecycle-only adapter: requires caller-owned strict outer supervision.
 Calibration changes only the wall deadline, never stimulus, cycles or acceptance.
 """
 import argparse, hashlib, json, os, pathlib, resource, signal, subprocess, time, struct
+import required_acceptance
 
 
 def need(ok, why):
@@ -85,12 +87,20 @@ def expected(root, result, profile):
     return out
 
 
-def compare(actual, wanted):
+def nonfinite(data, dtype):
+    code,mask=('<I',0x7f800000) if dtype=='FP32' else ('<H',0x7f80)
+    return sum((word & mask)==mask for (word,) in struct.iter_unpack(code,data))
+
+def compare(actual, wanted, float_dtype=None):
     need(len(actual)==len(wanted), 'actual output size')
     mismatches=sum(a!=b for a,b in zip(actual,wanted))
     first=next((i for i,(a,b) in enumerate(zip(actual,wanted)) if a!=b),None)
-    return dict(bytes=len(actual),byte_mismatches=mismatches,first_mismatch_byte=first,
+    result=dict(bytes=len(actual),byte_mismatches=mismatches,first_mismatch_byte=first,
                 actual_sha256=hashlib.sha256(actual).hexdigest(),expected_layout_sha256=hashlib.sha256(wanted).hexdigest())
+    if float_dtype is not None:
+        need(float_dtype in ('FP32','BF16'),'declared floating comparison type')
+        result.update(actual_nonfinite_elements=nonfinite(actual,float_dtype),reference_nonfinite_elements=nonfinite(wanted,float_dtype))
+    return result
 
 
 def router_compare(data, ids, weights):
@@ -103,9 +113,58 @@ def router_compare(data, ids, weights):
         if rank==0: seen=set()
         need(expert not in seen,'duplicate actual expert');seen.add(expert);counts[expert]+=1
         actual_ids.extend(struct.pack('<q',expert));actual_weights.extend(struct.pack('<H',weight))
-    return {'ids':compare(actual_ids,ids),'normalized_bf16_weights':compare(actual_weights,weights),
+    return {'ids':compare(actual_ids,ids),'normalized_bf16_weights':compare(actual_weights,weights,'BF16'),
             'coverage':'128x8_ACKNOWLEDGED_DUT_ROUTE_RECORDS','raw_fp32_selection_scores':'INCOMPLETE_NOT_STORED_IN_ROUTE_MAP'}
 
+
+def classify_observed_profile(result, has_router):
+    """Observed byte diagnostics are never full-stage numerical qualification."""
+    checks=list(result['comparisons'].values())
+    if has_router:
+        checks += [result['router'][key] for key in ('ids','normalized_bf16_weights','bf16_dense_logits')]
+        raw=result['router'].get('raw_probability_diagnostics',{})
+        if raw.get('status')=='COMPARED_DIAGNOSTIC_ONLY':
+            checks.append(raw['full_probabilities'])
+            selected=raw.get('actual_selected_output',{})
+            if selected.get('status')=='COMPARED_ACTUAL_SELECTION_OUTPUT_DIAGNOSTIC_ONLY':
+                checks += [selected['input_output_score_consistency'],selected['official_probability_at_actual_selected_id'],selected['official_selected_probability_by_rank']]
+                checks += [{'byte_mismatches':selected['selected_vs_route_id_mismatches']},{'byte_mismatches':selected['selected_vs_official_id_mismatches']}]
+    result['observed_subset_status']=('BITWISE_MATCH_DIAGNOSTIC' if checks and all(x['byte_mismatches']==0 for x in checks) else 'BITWISE_MISMATCH_DIAGNOSTIC')
+    qualification=required_acceptance.evaluate(result)
+    result['qualification']=qualification
+    result['status']=qualification['status']
+    result['numerical_pass']=False  # Outer cleanup cannot be known inside its live worker.
+    result['remaining_required_stage_comparisons']=qualification['missing']
+    if has_router:
+        raw=result['router'].get('raw_probability_diagnostics',{})
+        result['missing_observations']=(['raw_fp32_selected_topk_scores'] if raw.get('status')=='COMPARED_DIAGNOSTIC_ONLY' else ['raw_fp32_selection_scores','raw_fp32_selected_topk_scores'])
+        if raw.get('actual_selected_output',{}).get('status')=='COMPARED_ACTUAL_SELECTION_OUTPUT_DIAGNOSTIC_ONLY':
+            result['missing_observations']=[]
+        result['moe_small_id_tie_contract']='PENDING_USER_APPROVAL'
+
+
+OBSERVATION_HELPER_PINS={'resident_compare': '0b0aebe70aa668847cf816b5aed86eae245bebea1a5f29ecdf66e99efb08ddfb', 'moe_score_compare': 'f2e54044e90f9f08e10f361730cbe0fc4ffc6f19412f7c78cc69be6b5661830e'}
+
+def observation_helpers():
+    import importlib.util
+    modules=[]
+    for name,expected_sha in OBSERVATION_HELPER_PINS.items():
+        path=pathlib.Path(__file__).resolve().with_name(name+'.py')
+        need(path.is_file() and not path.is_symlink() and sha(path)==expected_sha,'reviewed observation helper '+name)
+        spec=importlib.util.spec_from_file_location(name,path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+        modules.append(module)
+    return modules
+
+
+def verify_current_observation_round(log, binary, runtime):
+    started=log.with_suffix('.started.json')
+    need(started.is_file() and not started.is_symlink() and started.stat().st_size<=4096,'bounded actual Popen receipt')
+    proof=json.loads(started.read_text())
+    need(proof['schema']=='ACTUAL_DUT_POPEN_V1' and type(proof['pid']) is int and proof['pid']>0,'actual DUT process identity')
+    need(proof['consumer_pid']==os.getpid() and proof['consumer_start_tick']==int(pathlib.Path('/proc/self/stat').read_text().rsplit(')',1)[1].split()[19]),'current consumer process identity')
+    need(proof['inherited_group']==os.getpgrp()==os.getpid() and proof['inherited_session']==os.getsid(0)==os.getpid(),'current owned outer group/session')
+    need(proof['binary_sha256']==sha(binary) and proof['runtime_sha256']==sha(runtime),'current binary/runtime identity')
+    return dict(proof,receipt_sha256=sha(started))
 
 def execute(binary, runtime, output, log, limits):
     def bounded():
@@ -139,7 +198,7 @@ def execute(binary, runtime, output, log, limits):
 
 OWNED_ENVIRONMENT=None
 
-V3_DRIVER_SHA256='20df2692d41693491f0da03fa17f21886b9375ca599c83b5b75c0994841dc45e'
+V3_DRIVER_SHA256='f4f00dffd348e1822e7fcb5ac59602579d693d7a8d04e221cdd3f0255b56b04c'
 
 def verify_frozen(path,expected_sha):
     need(len(expected_sha)==64 and all(c in '0123456789abcdef' for c in expected_sha),'expected artifact SHA256 required')
@@ -164,7 +223,7 @@ def artifact_identity(frozen):
 def coverage_policy(profile,common,identity,bundle_root):
     import importlib.util
     path=pathlib.Path(__file__).resolve().with_name('observation_contract.py')
-    need(sha(path)=='ffb1c043cc1e21912a6ee6f11c7222e0885ebe89a38e68efce0027129e12617b','reviewed observation contract module')
+    need(sha(path)=='1bdc7fe9f8d4c1af3d39652f2f6a9d81f8ce0001a90b1ac3956f6ba590e9b523','reviewed observation contract module')
     spec=importlib.util.spec_from_file_location('required_observation_policy',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
     return module.validate(profile,common,identity,bundle_root)
 
@@ -296,6 +355,7 @@ def main():
     need(0 < limits['wall_seconds'] <= 21600 and 0 < limits['cpu_seconds'] <= 21600, 'bounded job time')
     need(0 < limits['address_space_bytes'] <= 16*1024**3, 'bounded process AS')
     execution_limits=owned_execution_limits(limits,args.calibration_wall_seconds)
+    resident_helper,moe_helper=observation_helpers()
     prepared=[]
     for p in b['profiles']:
         runtime=pin(p['runtime']);views=pin(p['views']);ref=pin(p['reference_result']);pin(p['provider_receipt'])
@@ -318,10 +378,10 @@ def main():
     if args.validate_only:
         print('VALIDATED_BINDING_ONLY_NO_DUT_NO_NUMERICAL_PASS');return
     need(not args.output.exists(),'fresh output directory');args.output.mkdir(parents=True)
-    summary=dict(status='INCOMPLETE',layer=b['layer'],artifact_manifest_sha256=args.artifact_manifest_sha256,artifact_identity=frozen['artifact_identity'],local_build_provenance=download,local_build_result_sha256=args.local_build_result_sha256,runtime_bundle_sha256=runtime_bundle_sha,startup_abi=abi,common=common,profiles=[],numeric_acceptance='NO_NEW_TOLERANCE_STRICT_BITWISE_DIAGNOSTICS_ONLY',final_rtl_executed=False)
+    summary=dict(status='INCOMPLETE',numerical_pass=False,matrix_macs=b['matrix_macs'],vector_lanes=b['vector_lanes'],layer=b['layer'],artifact_manifest_sha256=args.artifact_manifest_sha256,artifact_identity=frozen['artifact_identity'],local_build_provenance=download,local_build_result_sha256=args.local_build_result_sha256,runtime_bundle_sha256=runtime_bundle_sha,startup_abi=abi,common=common,profiles=[],numeric_acceptance='NO_NEW_TOLERANCE_STRICT_BITWISE_DIAGNOSTICS_ONLY',final_rtl_executed=False)
     summary['execution_admission']={'scope':'CALIBRATION_SAME_FULL_M128_STIMULUS' if args.calibration_wall_seconds is not None else 'ORIGINAL_FULL_M128_DIAGNOSTIC','original_limits':dict(limits),'effective_limits':execution_limits,'outer_cleanup_proof_required':True,'peak_resource_qualification':'INCOMPLETE_SAMPLED','numerical_pass':False}
     for p,runtime,obs,want,route_ref in prepared:
-        r=dict(profile=p['id'],status='INCOMPLETE',coverage_policy=b['coverage_policy']);summary['profiles'].append(r)
+        r=dict(profile=p['id'],complete_block_tokens=128,status='INCOMPLETE',numerical_pass=False,coverage_policy=b['coverage_policy']);summary['profiles'].append(r)
         try:
             # Reverify common frozen identity before AND after every process.
             load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile)
@@ -330,6 +390,7 @@ def main():
             need(sha(args.runtime_bundle)==runtime_bundle_sha,'runtime bundle changed')
             for v in list(common.values())+[p[k] for k in ('runtime','views','reference_result','provider_receipt')]: pin(v)
             target=args.output/('profile'+str(p['id']));log=args.output/('profile'+str(p['id'])+'.log')
+            need(not target.exists() and not log.exists() and not log.with_suffix('.started.json').exists(),'fresh per-round observations')
             rc=execute(files['binary'],runtime,target,log,execution_limits);r['exit_code']=rc
             load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile)
             verify_local_build(args,frozen)
@@ -337,6 +398,7 @@ def main():
             need(sha(args.runtime_bundle)==runtime_bundle_sha,'runtime bundle changed')
             for v in list(common.values())+[p[k] for k in ('runtime','views','reference_result','provider_receipt')]: pin(v)
             need(rc==0,'DUT process failure')
+            r['observation_round']=verify_current_observation_round(log,files['binary'],runtime)
             text=log.read_text();terminal='COMPLETE_ORIGINAL_HOST_DDR_REPLAY profile='+str(p['id'])+' '
             need(text.count(terminal)==1,'clean real DUT terminal receipt')
             # Every declared stage observation must exist with exact byte size.
@@ -347,17 +409,47 @@ def main():
                 _,address,size,dtype=obs[name]
                 marker=f'HOST_FINAL_OUTPUT name={name} address={address} bytes={size} dtype={dtype} coverage=ACKNOWLEDGED_EVERY_BYTE'
                 need(text.count(marker)==1,'final acknowledged write receipt '+name)
-                r['comparisons'][name]=compare((target/(name+'.final.bin')).read_bytes(),data)
+                float_dtype='FP32' if p['id']==0 or name=='state_out' else 'BF16'
+                r['comparisons'][name]=compare((target/(name+'.final.bin')).read_bytes(),data,float_dtype)
+            if p['id']==0:
+                reference_root=pathlib.Path(p['reference_result']['path']).parent
+                reference_result=json.loads(pathlib.Path(p['reference_result']['path']).read_text())
+                for name in ('gate','up'):
+                    relative=pathlib.PurePosixPath(reference_result['tensor_records']['stage.mlp.'+name+'_proj.0']['file'])
+                    need(not relative.is_absolute() and '..' not in relative.parts and relative.parts[0]=='reference_only','resident reference_only file required')
+                    component=reference_root.resolve()
+                    for part in relative.parts:
+                        component=component/part
+                        need(not component.is_symlink(),'resident reference symlink component')
+                resident_refs={name:reference(reference_root,reference_result,'stage.mlp.'+name+'_proj.0',[1,128,8960],'torch.bfloat16') for name in ('gate','up')}
+                r['comparisons'].update(resident_helper.compare_full128(target,text,resident_refs))
+                for name in ('gate','up'):
+                    r['comparisons']['resident_'+name].update(actual_nonfinite_elements=nonfinite((target/('resident_'+name+'.fp32.actual.bin')).read_bytes(),'FP32'),reference_nonfinite_elements=nonfinite(resident_refs[name],'BF16'))
             if route_ref is not None:
                 need(text.count('HOST_FINAL_ROUTE_MAP bytes=8192 coverage=ACKNOWLEDGED_EVERY_BYTE')==1,'actual route map coverage')
                 r['router']=router_compare((target/'router_token_map.final.bin').read_bytes(),*route_ref[:2])
                 need(text.count('HOST_FINAL_ROUTER_LOGITS bytes=65536 dtype=BF16 coverage=ACKNOWLEDGED_EVERY_BYTE')==1,'actual router logits coverage')
-                r['router']['bf16_dense_logits']=compare((target/'router_logits_bf16.final.bin').read_bytes(),route_ref[2])
-            r['status']='BITWISE_MATCH_DIAGNOSTIC' if all(x['byte_mismatches']==0 for x in r['comparisons'].values()) and (route_ref is None or (r['router']['ids']['byte_mismatches']==0 and r['router']['normalized_bf16_weights']['byte_mismatches']==0 and r['router']['bf16_dense_logits']['byte_mismatches']==0)) else 'BITWISE_MISMATCH_DIAGNOSTIC'
+                r['router']['bf16_dense_logits']=compare((target/'router_logits_bf16.final.bin').read_bytes(),route_ref[2],'BF16')
+                r['router']['raw_fp32_selection_scores']='INCOMPLETE'
+                r['router']['raw_probability_diagnostics']={'status':'INCOMPLETE'}
+                try:
+                    ref_path=pathlib.Path(p['reference_result']['path'])
+                    raw_reference=moe_helper.reference_probabilities(ref_path.parent,json.loads(ref_path.read_text()),p['id'])
+                    raw=moe_helper.observe(target,text,p['id'],raw_reference,(target/'router_token_map.final.bin').read_bytes(),route_ref[0])
+                    r['router']['raw_probability_diagnostics']=raw
+                    r['router']['raw_fp32_selection_scores']='COMPARED_DIAGNOSTIC_ONLY'
+                except (ValueError,KeyError,OSError) as error:
+                    r['router']['raw_probability_diagnostics']={'status':'INCOMPLETE','error':str(error),'error_class':type(error).__name__}
+            r['execution_evidence']={key:True for key in required_acceptance.EXECUTION}
+            classify_observed_profile(r, route_ref is not None)
         except Exception as e: r['error']=str(e);r['error_class']=type(e).__name__
+        r['qualification']=required_acceptance.evaluate(r)
+        r['status']=r['qualification']['status']
+        summary['status']='FAIL_EXACT_REFERENCE' if any(x['status']=='FAIL_EXACT_REFERENCE' for x in summary['profiles']) else 'INCOMPLETE'
+        summary['numeric_acceptance']='FULL_M128_EXACT_REFERENCE_PENDING_VERIFIED_OUTER_CLEANUP'
         (args.output/'RESULT.json').write_text(json.dumps(summary,indent=2)+'\n')
     # Never assert Chisel/RTL numerical PASS from unapproved diagnostic policy.
     print(json.dumps(summary,indent=2))
-    raise SystemExit(2)
+    raise SystemExit(1 if summary['status']=='FAIL_EXACT_REFERENCE' else 2)
 
 if __name__=='__main__': main()

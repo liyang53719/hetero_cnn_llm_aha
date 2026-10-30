@@ -18,7 +18,7 @@ def bounded_payload_identity(value,expanded,manifest_bytes):
   if not isinstance(h,str)or re.fullmatch('[0-9a-f]{64}',h)is None or type(n)is not int or not 0<n<=4*1024**3:raise ValueError('identity bounded scalars')
   result[k]={'sha256':h,'bytes':n}
  if sum(v['bytes']for v in result.values())+manifest_bytes!=expanded:raise ValueError('identity expanded size mismatch')
- if result['driver']['sha256']!='20df2692d41693491f0da03fa17f21886b9375ca599c83b5b75c0994841dc45e':raise ValueError('driver identity')
+ if result['driver']['sha256']!='f4f00dffd348e1822e7fcb5ac59602579d693d7a8d04e221cdd3f0255b56b04c':raise ValueError('driver identity')
  return result
 
 def pack(original,b,built,host,overlay,out,budget_check):

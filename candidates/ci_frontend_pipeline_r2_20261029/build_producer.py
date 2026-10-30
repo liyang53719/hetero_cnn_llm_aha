@@ -6,7 +6,7 @@ from pathlib import Path
 import hashlib,json,re,shlex,struct,os
 TOP='VHostBlockTopV4'
 CHILDREN=('bf16_context_lane_cluster16_rev8b_b_candidate_d','qwen2_matrix_command_endpoint_0','TransposedDenseDownOwner')
-DRIVER_SHA='20df2692d41693491f0da03fa17f21886b9375ca599c83b5b75c0994841dc45e'
+DRIVER_SHA='f4f00dffd348e1822e7fcb5ac59602579d693d7a8d04e221cdd3f0255b56b04c'
 O0=['OPT_FAST=-O0','OPT_SLOW=-O0','OPT_GLOBAL=-O0','CXXFLAGS=-O0']
 def need(x,m):
  if not x: raise ValueError(m)

@@ -52,13 +52,13 @@ def main():
  # NEW R2 recovery manifest is distinct from the original source/tool lock.
  # Never compile the stale old155 source list after the HostCommands fix.
  need(b['fixed_source_validator'] in b['pins'] and b['fixed_source_overlay'] in b['pins'],'fixed overlay/validator pin')
- need(b['pins'][b['fixed_source_overlay']]=='f8cb8f64819e7f2dd4f3778cc6066e18d062ec1102832f53ef6eabfbcace4b39','reviewed R2 overlay identity')
- need(b['pins'][b['fixed_source_validator']]=='86ed3e5319bcbdd0ea7a7a941f2eb12f72a12daf97e383e22f336cda01ef9ab9','reviewed fixed155 validator')
+ need(b['pins'][b['fixed_source_overlay']]=='9be7810a372572e87b40d86d0b30245140c31cd40cdd6cf2f9cacead459beda2','reviewed R2 overlay identity')
+ need(b['pins'][b['fixed_source_validator']]=='ac480aaeb39ebae58ce310939e7ae9ed293ddc65e61303d8ef53841c8362bfcb','reviewed fixed155 validator')
  import importlib.util
  spec=importlib.util.spec_from_file_location('reviewed_fixed_sources',b['fixed_source_validator']);validator=importlib.util.module_from_spec(spec);spec.loader.exec_module(validator)
  source_paths=validator.checked_paths(repo,b['fixed_source_overlay'],m)
  manifest=pathlib.Path(b['fixed_source_overlay'])
- need(b['pins'][b['driver']]=='20df2692d41693491f0da03fa17f21886b9375ca599c83b5b75c0994841dc45e','V3 final-state driver')
+ need(b['pins'][b['driver']]=='f4f00dffd348e1822e7fcb5ac59602579d693d7a8d04e221cdd3f0255b56b04c','V3 final-state driver')
  jars=[];plugin=None
  for x in m['jars']:
   p=original/'cache'/x['maven_path'];pinned(p,x['sha256'])

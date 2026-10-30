@@ -5,6 +5,7 @@ acquisition/build defaults, no API artifact, no upload, no numerical PASS claim.
 import argparse,hashlib,importlib.util,json,os,pathlib,signal,sys,time
 import live_budget
 import dut_evidence
+import required_acceptance
 import provider_from_frozen as material
 P=pathlib.Path;D=P(__file__).resolve().parent
 _policy_spec=importlib.util.spec_from_file_location('samejob_profile_policy', P(__file__).resolve().parent.parent/'profile_policy.py');profile_policy=importlib.util.module_from_spec(_policy_spec);_policy_spec.loader.exec_module(profile_policy)
@@ -65,7 +66,7 @@ def run(b,binding_path,binding_sha):
  for p,h in pins.items():need(sha(p)==h,'source pin drift')
  for name in ('supervise_multiroot.py','strict_cleanup.py','lossless_log.py'):
   path=str(P(b['supervisor_dir'])/name);need(pins.get(path)==sha(path),'exact published supervisor closure')
- for name in ('numeric_tail.py','provider_from_frozen.py','locked_phase.py','live_budget.py','consumer_owned.py','dut_evidence.py','runtime_abi_owned.py','connect_owned.py','CONNECTION_OWNED_SOURCE_PINS.json'):
+ for name in ('required_acceptance.py','numeric_tail.py','provider_from_frozen.py','locked_phase.py','live_budget.py','consumer_owned.py','dut_evidence.py','runtime_abi_owned.py','connect_owned.py','CONNECTION_OWNED_SOURCE_PINS.json'):
   need(pins.get(str(D/name))==sha(D/name),'controller source pin')
  out=P(b['output']);roots=live_budget.roots_checked(b['owned_roots'])
  for role in ('repo','owner_root','payload'):
@@ -117,13 +118,15 @@ def run(b,binding_path,binding_sha):
    stage(f'p{i}_connect',[b['python'],'-B',str(D/'connect_owned.py'),'--existing-output',str(profile),'--profile',str(i),*identity_args],120,lease_out=lease_root)
    generated=json.loads((profile/'CONSUMER_ARGV.json').read_text())['consumer_argv'];need(generated[1]==str(D/'consumer_owned.py'),'explicit owned consumer handoff')
    generated[1]=str(D/'consumer_owned.py');generated+=['--calibration-wall-seconds',str(b['calibration_seconds'][str(i)])]
-   dut_outer=stage(f'p{i}_dut',generated,b['calibration_seconds'][str(i)]+30,accepted=(2,),lease_out=lease_root)
+   dut_outer=stage(f'p{i}_dut',generated,b['calibration_seconds'][str(i)]+30,accepted=(1,2),lease_out=lease_root)
    bundle=profile/'runtime_bundle.v3.json';bundle_doc=json.loads(bundle.read_text());runtime_sha=bundle_doc['profiles'][0]['runtime']['sha256']
    diagnostic=dut_evidence.verify(profile/'dut_result',i,sha(manifest),sha(bundle),binary['sha256'],runtime_sha,material.pin(out/'runs'/f'p{i}_dut'/'RESULT.json'));dut_records.append(diagnostic)
    save(out/f'PROFILE_{i}_DIAGNOSTIC.json',diagnostic)
    weights(b,i)
- save(out/'RESULT.json',dict(execution_policy=profile_policy.checked(b),status='INCOMPLETE_DIAGNOSTIC_ONLY',scope='CHISEL_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL',stages=allstage,profiles=b['profiles'],actual_dut_reports=dut_records,numerical_pass=False,moe_contract='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE',uploaded_payloads=False))
+ qualification=required_acceptance.aggregate(dut_records)
+ save(out/'RESULT.json',dict(qualification=qualification,execution_policy=profile_policy.checked(b),status=qualification['status'],scope='CHISEL_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL',stages=allstage,profiles=b['profiles'],actual_dut_reports=dut_records,numerical_pass=qualification['numerical_pass'],moe_contract='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE',uploaded_payloads=False))
 
 def main():
  a=argparse.ArgumentParser();a.add_argument('--binding',type=P,required=True);a.add_argument('--binding-sha256',required=True);v=a.parse_args();need(sha(v.binding)==v.binding_sha256,'independently reviewed binding');run(json.loads(v.binding.read_text()),v.binding.resolve(),v.binding_sha256)
 if __name__=='__main__':main()
+

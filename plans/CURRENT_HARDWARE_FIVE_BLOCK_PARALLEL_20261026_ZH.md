@@ -1,5 +1,17 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-30 19:25 五块 M128 真实消费者与运行来源链整合（TEMP / INCOMPLETE，未数值 activation）
+
+- DONE / SOURCE：将已发布 P0 SRAM gate/up 和 MoE 实际 selector 输入/输出观察源码、统一155源的精确8项覆盖、R2 driver/headers及只读官方参考观察器接入实际 execution closure。真实调用仍为 numeric_tail → provider.prepare → connect_owned → consumer_owned，不是停在祖先run_compare或独立资格外壳。所有五profile共用硬件定义与后端来源，原4096 MAC、FP32/BF16顺序、原PyTorch路由不改。
+- DONE / SOURCE：必要完整128输出/cache/state及已定观察逐项判定，缺项INCOMPLETE、精确参考不符FAIL_EXACT_REFERENCE；consumer不提前声称其外层进程已经清理，dut_evidence以真实owner/group absence/EOF收据复核后再给单块资格。numeric_tail/flow/safe summary重验同一来源与五块聚合，eligible4不能冒五块通过。MoE raw FP32与Torch差异只诊断，内部同ID位传递另验，不新增容差或擅认小ID tie。
+- DONE / SOURCE：P0来源合同只同步实际改变的6项源/driver身份，原输入/view/程序及20→18真实DDR观察修正语义保留；旧UNOBSERVED metadata不伪造新SRAM receipt。producer/consumer必须核实际GCC depfile中的两个唯一观测header、真实路径与审核SHA，不能仅凭自报已编译字段。
+- DONE / SOURCE：35B runtime提前安装，通过原strict cleanup后回调一次原build，再装其余eligible runtime，之后owner/weights/reference/tail；原资源cap、monotonic总期限与预约保持，不把安装当Torch/model import资格。所有新顺序仍仅source/mock验证，原35B历史失败原因UNKNOWN。
+- PASS精确范围：82项normal/-O轻测（51验收与完整尺寸mock接线、9独立safe-summary反例、14安装顺序/预算mock、8闭包/来源链）。629项完整source pins精确校验。mock字段不计入真实五块数值结果，源级测试不等于实际IR/ABI、runtime或硬件通过。
+- ONGOING / INCOMPLETE：IR-only source975556 / activationec198 / run41114764250已按独立身份启动，真实canonical描述符、完整122端口及其审核仍待原run产物；新SV normalized/module identity、真实Verilator ABI和数值执行尚未完成。旧canonical/85口/SV接受锁未删除或随意替换，本整合批不提供新的数值activation，不影响该IR run的冻结源码。
+- TODO：消费并独审真实IR descriptor，再以新产物资格更新严格canonical/ABI/SV链；完成同源新五块128-token数值后冻结输入/参考/配置与源码，再同刺激最终RTL回放。当前仍300秒BOUNDED_CALIBRATION运输模式，未冒FULL_BLOCK_ACCEPTANCE；后者完整预算待实测校准。
+- 五块完整Chisel数值仍0/5、最终冻结RTL0/5，利用率未实测；80%/90%目标保持。临时文件清单复查，本轮无数据删除，不上传权重/NPZ、IR/class、原日志或唯一运行证据。整合细节见 [源码接入状态](../candidates/same_job_execution_20261030/OBSERVER_INTEGRATION_STATUS_ZH.md)。
+
+
 ## 2026-10-30 19:18 补齐后续真实锁所需 canonical / 完整端口证据（TEMP，未 activation）
 
 - DONE / SOURCE：发现IR-only原先只导出hash/count，后续actual backend仍缺新canonical完整manifest，故18828不先激活，先补同一IR的只读描述符，避免再做一遍重IR。新helper直接调用未修改CanonicalHighGate公开semantic方法；只剥Info/TargetDir，顺序不改，实际module/annotation计数。HIGH/annotations exact roundtrip；无新硬件elaboration。

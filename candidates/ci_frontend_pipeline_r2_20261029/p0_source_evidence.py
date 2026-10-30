@@ -5,11 +5,11 @@ import json,pathlib,hashlib
 from driver_dependency_proof import need,sha,pin,text_pin,check_text
 P=pathlib.Path
 SCALA={'helper':'DiagnoseOriginalHostMoePhaseV5.scala','host_top':'HostBlockTopV4.scala','host_commands':'HostBlockCommandsV4.scala','owner_kernel':'QwenOwnerProtocol.scala','qkv_router':'Public21QkvReductionRouter.scala','resident':'FfnResidentCoordinator.scala','bridge':'FfnTileSiluBridge.scala'}
-CONTRACT_SHA='9a0a4e8e7acb477b48e90afe0fc545d971f9fbaa87cf6586fe090f6f344c41f0'
-CORRECTOR_SHA='3e205b979194d82fc215a1f8c013eff6e009ef79444d05cb20f857db56de3c1d'
+CONTRACT_SHA='bd8f9b3b2d5ba97eac448b293592cf5a55ae7670c8a75ed2819cfbd7294b64f3'
+CORRECTOR_SHA='32df9fc596dedd87030f2cd4df2e6e1c06eb95b6a48cf7f6d8674242709a8a1e'
 def enrich(original,b,built):
  old=text_pin(b['source_manifest'],16*1024**2);m=json.loads(old['text']);repo=P(original['repo']).resolve()
- contract_path=repo/'candidates/same_job_materialization_20261029/consumer/LOCKED_SOURCE_CONTRACT.json';program=repo/'candidates/p0_newboundary_input_provider_20261028/PROGRAM_MANIFEST.json'
+ contract_path=repo/'candidates/same_job_execution_20261030/numeric/LOCKED_SOURCE_CONTRACT.json';program=repo/'candidates/p0_newboundary_input_provider_20261028/PROGRAM_MANIFEST.json'
  need(original['pins'].get(str(contract_path))==sha(contract_path)==CONTRACT_SHA,'original independently pinned P0 contract')
  contract=json.loads(contract_path.read_text())['sources'];need(original['pins'].get(str(program))==sha(program)==contract['program_manifest']['sha256'],'original independently pinned runtime manifest')
  overlay_path=m['fixed_source_overlay'];overlay=text_pin(overlay_path);need(overlay['sha256']==m['generation_input_pins'][overlay_path],'original overlay generation pin')

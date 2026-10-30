@@ -80,21 +80,34 @@ def run(b,binding_path,binding_sha):
   return r
  def ok(r):need(r['native_exit']==0 and not r['errors']and(r.get('cleanup_proof')or{}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP'and(r.get('log_capture')or{}).get('pipe_eof_observed')is True and(r.get('log_capture')or{}).get('gzip_finalized')is True,'phase failed/incomplete; no retry')
  q=b['budgets']
- build=job/'build';bid=job/'bindings/ARTIFACT_IDENTITY.json';save(bid,b['artifact_identity'])
- need(time.monotonic()-started+q['build']+materials_reserved+tail_reserved<=21000,'full remaining build+five diagnostics reservation')
- argv=[py,'-B',str(D/'bootstrap_samejob.py'),'--repo',str(repo),'--pipeline',b['pipeline'],'--materialization-dir',b['materialization_dir'],'--shared-owned-root',str(job),'--work',str(build),'--reviewed-repo-sha',identity['source_commit'],'--artifact-identity',str(bid),'--job-started-monotonic',str(started),'--remaining-tail-reserve-seconds',str(materials_reserved+tail_reserved),'--maximum-build-seconds',str(q['build']),'--execute-reviewed-once']
- if fresh is not None:
-  contract_path=job/'bindings/FRESH_HOST_CONTRACT.json';save(contract_path,fresh)
-  argv+=['--fresh-host-contract',str(contract_path),'--fresh-host-contract-sha256',sha(contract_path)]
- # Original bootstrap/one_job owns all of its native strict groups and deadlines;
- # do not nest it under another supervisor or modify the four P0 producer sources.
- with(job/'build_parent.log').open('xb')as log:code=subprocess.run(argv,stdout=log,stderr=subprocess.STDOUT).returncode
- need(code==0,'original backend build failed, no repeat')
- build_result=build/'frontend/BUILD_ONLY_RESULT.json';need(build_result.is_file(),'actual retained shared backend result')
- need(pins.get(str(D/'deduplicate_pack.py'))==sha(D/'deduplicate_pack.py'),'independently pinned duplicate lifecycle');duplicate=mod('exact_pack_duplicate_lifecycle',D/'deduplicate_pack.py')
- duplicate.run(build_result,sha(build_result),job,code) # exact two stable copies, mode mismatch is NO_OP; no producer edits
  archives=job/'runs/archives/output';ab=job/'bindings/ARCHIVES.json';save(ab,dict(source_dir=str(runtime/'source'),pins=pins,output=str(archives)))
  ok(stage('archives',[py,'-B',runtime/'acquire_archives.py','--binding',ab,'--binding-sha256',sha(ab)],q['archives'],.25,{str(ab):sha(ab)},True))
+ remaining_after_build=q['weights']+2*q['install']+q['owner_bind']+5*q['reference']+9*30+tail_reserved
+ build_result=None
+ def build_after_first_runtime():
+  nonlocal build_result
+  need(build_result is None,'one backend build only')
+  # Admission observation, not a proof of future peak. Original100k watcher remains authoritative.
+  need(21000-(time.monotonic()-started)-(q['build']+remaining_after_build)>=20,'census only from unreserved deadline slack')
+  census=live_budget.census(roots,max_entries=100000,max_seconds=20)
+  need(census.get('complete')is True and census['entries']<=100000,'whole repo/job census within existing build entry cap; not future peak proof')
+  build=job/'build';bid=job/'bindings/ARTIFACT_IDENTITY.json';save(bid,b['artifact_identity'])
+  need(time.monotonic()-started+q['build']+remaining_after_build<=21000,'full remaining build+five diagnostics reservation')
+  argv=[py,'-B',str(D/'bootstrap_samejob.py'),'--repo',str(repo),'--pipeline',b['pipeline'],'--materialization-dir',b['materialization_dir'],'--shared-owned-root',str(job),'--work',str(build),'--reviewed-repo-sha',identity['source_commit'],'--artifact-identity',str(bid),'--job-started-monotonic',str(started),'--remaining-tail-reserve-seconds',str(remaining_after_build),'--maximum-build-seconds',str(q['build']),'--execute-reviewed-once']
+  if fresh is not None:
+   contract_path=job/'bindings/FRESH_HOST_CONTRACT.json';save(contract_path,fresh)
+   argv+=['--fresh-host-contract',str(contract_path),'--fresh-host-contract-sha256',sha(contract_path)]
+  # Original bootstrap/one_job owns all of its native strict groups and deadlines;
+  # do not nest it under another supervisor or modify the four P0 producer sources.
+  with(job/'build_parent.log').open('xb')as log:code=subprocess.run(argv,stdout=log,stderr=subprocess.STDOUT).returncode
+  need(code==0,'original backend build failed, no repeat')
+  build_result=build/'frontend/BUILD_ONLY_RESULT.json';need(build_result.is_file(),'actual retained shared backend result')
+  need(pins.get(str(D/'deduplicate_pack.py'))==sha(D/'deduplicate_pack.py'),'independently pinned duplicate lifecycle');duplicate=mod('exact_pack_duplicate_lifecycle',D/'deduplicate_pack.py')
+  duplicate.run(build_result,sha(build_result),job,code) # exact two stable copies, mode mismatch is NO_OP; no producer edits
+ owner_root=job/'materials';ib=job/'bindings/INSTALL.json';archives_rows=json.loads((archives/'ARCHIVES.json').read_text())['archives'];ipins=dict(pins);ipins.update({r['path']:r['sha256']for r in archives_rows})
+ save(ib,dict(execution_policy=execution_policy,schema='FRESH_JOB_RUNTIME_CONTROLLER_V1',identity=identity,repo=str(repo),owner_root=str(owner_root),python=py,helper=b['shared_runtime_helper'],supervisor_dir=supervisor_dir,lock=lock,owned_roots=roots,pins=ipins,archives=archives_rows,job_started_monotonic=started,install_wall_seconds=q['install'],metadata_wall_seconds=q['owner_bind'],early_build_seconds=q['build'],remaining_job_reservation_seconds=q['build']+q['weights']+30+5*(q['reference']+30)+tail_reserved))
+ installer=mod('actual_fresh_installer',runtime/'install_job.py');_,_,owner=installer.run(json.loads(ib.read_text()),ib,sha(ib),after_first_install=build_after_first_runtime);owner_pin=pin(owner)
+ need(build_result is not None,'one actual backend build completed')
  payload=job/'runs/weights/output';acq=repo/'candidates/five_profile_acquisition_resume_20261028/acquire_resumable.py'
  ok(stage('weights',[py,'-B',acq,'--output',payload,'--execute'],q['weights'],.5,network=True))
  summary=json.loads((payload/'SUMMARY.json').read_text());need(summary['tensors']==70 and summary['tensor_bytes']==3_531_306_272,'one full70 tensor acquisition')
@@ -102,15 +115,18 @@ def run(b,binding_path,binding_sha):
  for receipt in sorted(payload.glob('*/*.receipt.json')):
   r=json.loads(receipt.read_text());p=receipt.with_name(receipt.name.removesuffix('.receipt.json')+'.bin');need(p.stat().st_size==r['actual_bytes']and sha(p)==r['actual_sha256'],'actual acquired tensor bytes');weights.append(dict(model=receipt.parent.name,name=receipt.name.removesuffix('.receipt.json'),pin=pin(p)))
  need(len(weights)==70 and sum(x['pin']['bytes']for x in weights)==3_531_306_272,'all original five block tensors and bytes')
- owner_root=job/'materials';ib=job/'bindings/INSTALL.json';archives_rows=json.loads((archives/'ARCHIVES.json').read_text())['archives'];ipins=dict(pins);ipins.update({r['path']:r['sha256']for r in archives_rows})
- save(ib,dict(execution_policy=execution_policy,schema='FRESH_JOB_RUNTIME_CONTROLLER_V1',identity=identity,repo=str(repo),owner_root=str(owner_root),python=py,helper=b['shared_runtime_helper'],supervisor_dir=supervisor_dir,lock=lock,owned_roots=roots,pins=ipins,archives=archives_rows,job_started_monotonic=started,install_wall_seconds=q['install'],metadata_wall_seconds=q['owner_bind'],remaining_job_reservation_seconds=5*(q['reference']+30)+tail_reserved))
- installer=mod('actual_fresh_installer',runtime/'install_job.py');_,_,owner=installer.run(json.loads(ib.read_text()),ib,sha(ib));owner_pin=pin(owner)
+
  reference=mod('actual_original_references',runtime/'reference_job.py')
  rb=dict(execution_policy=execution_policy,profiles=list(range(5)),tokens=128,identity=identity,repo=str(repo),output=str(owner_root/'references'),owner_root=str(owner_root),owner_module=str(runtime/'owner_fresh.py'),owner_manifest=owner_pin,pins=pins,payload=str(payload),wall_seconds=q['reference'])
  references=reference.run(rb,stage)
  tail=mod('actual_five_diagnostics',numeric/'numeric_tail.py');tb=job/'bindings/NUMERIC.json'
  body=dict(execution_policy=execution_policy,schema='SAME_JOB_FIVE_M128_DIAGNOSTIC_TAIL_V1',profiles=list(range(5)),tokens=128,matrix_macs=4096,vector_lanes=32,upload_payloads=False,final_rtl_replay=False,references=references,weights=weights,calibration_seconds=q['calibration_seconds'],job_started_monotonic=started,reserved_material_seconds=7*q['provider']+11*120,reserved_cleanup_seconds=1530,reserved_parent_seconds=q['parent'],tree_cap=TREE,rss_bytes=b['dut_rss_bytes'],address_space_bytes=12<<30,phase_extra_bytes=b['numeric_reserved_increment_bytes'],provider_wall_seconds=q['provider'],pins=pins,output=str(owner_root/'numeric'),owned_roots=roots,owner_root=str(owner_root),owner_module=str(runtime/'owner_fresh.py'),owner_manifest=owner_pin,supervisor_dir=supervisor_dir,build_result=pin(build_result),run_id=identity['run_id'],source_commit=identity['source_commit'],launch_commit=identity['launch_commit'],python=py,lock=lock,repo=str(repo),payload=str(payload),materializer=b['materializer'],environment={})
  save(tb,body);tail.run(body,tb,sha(tb))
- save(job/'FLOW_RESULT.json',dict(execution_policy=execution_policy,status='INCOMPLETE_DIAGNOSTIC_ONLY',scope='CHISEL_TEST_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL',stages=history,numeric_result=pin(owner_root/'numeric/RESULT.json'),hardware_definitions=1,profiles=list(range(5)),uploaded_payloads=False))
+ numeric_path=owner_root/'numeric/RESULT.json';numeric_result=json.loads(numeric_path.read_text())
+ acceptance=mod('actual_full128_acceptance',numeric/'required_acceptance.py')
+ qualification=acceptance.aggregate(numeric_result['actual_dut_reports'])
+ need(numeric_result.get('qualification')==qualification and numeric_result.get('status')==qualification['status'] and numeric_result.get('numerical_pass')is qualification['numerical_pass'],'recomputed actual numeric finalization')
+ save(job/'FLOW_RESULT.json',dict(identity=identity,execution_mode='BOUNDED_CALIBRATION',transport_exit_code=2,qualification=qualification,execution_policy=execution_policy,status=qualification['status'],scope='CHISEL_TEST_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL',stages=history,numeric_result=pin(numeric_path),hardware_definitions=1,profiles=list(range(5)),uploaded_payloads=False))
 if __name__=='__main__':
- a=argparse.ArgumentParser();a.add_argument('--binding',type=P,required=True);a.add_argument('--binding-sha256',required=True);v=a.parse_args();need(sha(v.binding)==v.binding_sha256,'independent top binding');run(json.loads(v.binding.read_text()),v.binding.resolve(),v.binding_sha256);raise SystemExit(2) # diagnosis is deliberately not full numeric qualification
+ a=argparse.ArgumentParser();a.add_argument('--binding',type=P,required=True);a.add_argument('--binding-sha256',required=True);v=a.parse_args();need(sha(v.binding)==v.binding_sha256,'independent top binding');run(json.loads(v.binding.read_text()),v.binding.resolve(),v.binding_sha256);raise SystemExit(2) # bounded-calibration transport code; numerical qualification is separately bound in FLOW_RESULT
+

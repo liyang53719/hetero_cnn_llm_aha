@@ -9,8 +9,8 @@
     },
     {
       "path": ".github/workflows/hetero-observer-original-ir-only.yml",
-      "bytes": 4025,
-      "sha256": "ce849d9dda7c6b86eb942fd14778e900e067281ad1e2499442f591939582f732"
+      "bytes": 5264,
+      "sha256": "e1e2387f7218a140e95af96ff1a89561745ab05d067ec2e278c3aa7193081857"
     },
     {
       "path": "candidates/attention_policy_count_fix_20261029T0054/source/HostBlockCommandsV4.scala",
@@ -1543,9 +1543,24 @@
       "sha256": "3dabd3f832d152b48c172dac929f53ac80aa75b0fbcbbb84aae01a4c12885eb9"
     },
     {
+      "path": "candidates/observer_ir_only_20261030/ObservedHighDescriptor.scala",
+      "bytes": 4439,
+      "sha256": "95937266a0c97c17b4af5f1f725fb4078081ade79f3c5a054511cb59100a5b62"
+    },
+    {
+      "path": "candidates/observer_ir_only_20261030/PORT_CONTRACT.json",
+      "bytes": 8136,
+      "sha256": "03080fe2b0e9d648129a7a4366660fa9c77ce0ad0c0425489b4724465f7149d1"
+    },
+    {
       "path": "candidates/observer_ir_only_20261030/check_ir.py",
       "bytes": 3281,
       "sha256": "4c2a8da38da7766accc358c48ae9f84585ca868818d4c3f8d70a0b6c1327278a"
+    },
+    {
+      "path": "candidates/observer_ir_only_20261030/descriptor_metadata.py",
+      "bytes": 8030,
+      "sha256": "f53bff15269a083db8b654f3e3ac9a855e9ea6185deee484abcbd37887fcf725"
     },
     {
       "path": "candidates/observer_ir_only_20261030/inventory_host.py",
@@ -1554,18 +1569,23 @@
     },
     {
       "path": "candidates/observer_ir_only_20261030/run_ir_only.py",
-      "bytes": 18652,
-      "sha256": "50084f616ba5dd849f420e766f94603555abe8af3da2d87fd96fc890f3ae0c85"
+      "bytes": 20338,
+      "sha256": "e063dfac16d8daccc9e842fbcdce4b8827147bb344e3ee098318c1a3de529dab"
     },
     {
       "path": "candidates/observer_ir_only_20261030/summarize_ir.py",
-      "bytes": 4678,
-      "sha256": "d0ffab144e66a81b59c81b61d0e20635cd0623deb6d966a319e786f8b8232561"
+      "bytes": 4931,
+      "sha256": "0b28194063b5d9a40fda0d405ec847ae5af408291d413805555d026131d16a14"
     },
     {
       "path": "candidates/observer_ir_only_20261030/test_admission_summary.py",
       "bytes": 3555,
       "sha256": "dc85245a8f912ba605ca01080e66e6a8fe4af7599832be063946dde1e3f119b5"
+    },
+    {
+      "path": "candidates/observer_ir_only_20261030/test_descriptor_metadata.py",
+      "bytes": 5760,
+      "sha256": "aa47622d05f3ba7458a7e281f7d43598ef5808a065678d0c4b45fa24be6181d2"
     },
     {
       "path": "candidates/observer_ir_only_20261030/test_entry_scope.py",
@@ -1574,13 +1594,13 @@
     },
     {
       "path": "candidates/observer_ir_only_20261030/test_ir_only.py",
-      "bytes": 7597,
-      "sha256": "417ec444ebc056d5581f654e53335d336291fe7b18647872e2d13998382ee41d"
+      "bytes": 7629,
+      "sha256": "647b19fd3661d08d3f3f41a6253027e0c9864f42fc2d56c2899adb28f47e6d55"
     },
     {
       "path": "candidates/observer_ir_only_20261030/test_launch_summary.py",
-      "bytes": 4632,
-      "sha256": "980a6644d301b1ad8948e145879524435bfe846011b4d512c054c5c403f66537"
+      "bytes": 5020,
+      "sha256": "164851aac65844cb13ae75f394e01f9ad5a44c7465b0c068cc3ee47c2e38f530"
     },
     {
       "path": "candidates/observer_ir_only_20261030/test_preflight.py",

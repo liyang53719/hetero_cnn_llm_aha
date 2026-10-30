@@ -66,8 +66,8 @@ class TestIRScope(unittest.TestCase):
         tree = ast.parse((D / 'run_ir_only.py').read_text())
         calls = [x for x in ast.walk(tree) if isinstance(x, ast.Call) and isinstance(x.func, ast.Name) and x.func.id == 'stage']
         names = [x.args[0].value for x in calls]
-        self.assertEqual(names, ['jdk', 'compile_tools', 'jars', 'verilator_bytes', 'runtime_identity', 'compile155', 'original_ir'])
-        ir = calls[-1]
+        self.assertEqual(names, ['jdk', 'compile_tools', 'jars', 'verilator_bytes', 'runtime_identity', 'compile155', 'helper_compile', 'original_ir', 'descriptor'])
+        ir = calls[-2]
         values = {k.arg: ast.literal_eval(k.value) for k in ir.keywords if not isinstance(k.value, ast.BinOp)}
         self.assertEqual(values, dict(wall=480, rss=5, heap_as=12, cpu=420, ir_specific=True))
         self.assertEqual(m.JOB_SECONDS, 3600)

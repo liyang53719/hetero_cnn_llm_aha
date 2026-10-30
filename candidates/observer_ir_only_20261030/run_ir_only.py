@@ -242,8 +242,29 @@ def run(a, ownership):
     need(0 < len(classes) <= 20000, 'fresh compiled class inventory')
     for p in classes:
         pins[str(p)] = sha(p)
+    # Compile only two descriptor helpers; original155 class files remain untouched.
+    helper = D / 'ObservedHighDescriptor.scala'
+    canonical = pipeline / 'CanonicalHighGate.scala'
+    for p in (helper, canonical):
+        need(pins.get(str(p.resolve())) == sha(p), 'descriptor helper source pin')
+    stage('helper_compile', java_command(java, '2g', cp, 'scala.tools.nsc.Main', ['-classpath', cp, '-d', '.', str(canonical), str(helper)]), rss=3, heap_as=8, tree=256 << 20)
+    helpers = sorted((work / 'helper_compile').rglob('*.class'))
+    need(0 < len(helpers) <= 64, 'bounded descriptor helper class inventory')
+    for p in helpers:
+        pins[str(p)] = sha(p)
     stage('original_ir', java_command(java, '4g', str(work / 'compile155') + ':' + cp, 'chiseltest.simulator.DiagnoseOriginalHostMoePhaseV5'), wall=480, rss=5, heap_as=12, tree=1 << 30, cpu=420, ir_specific=True)
     result = module('original_ir_artifact_check', D / 'check_ir.py').inspect(work / 'original_ir')
+    diagnostic = work / 'original_ir' / 'host-diagnostic'
+    for name in ('original-high.fir', 'high-annotations.json', 'low-top-ports.fir'):
+        p = diagnostic / name
+        actual = dict(bytes=p.stat().st_size, sha256=sha(p))
+        need(actual == result['artifacts'][name], 'descriptor input drift after IR check')
+        pins[str(p)] = actual['sha256']
+    stage('descriptor', java_command(java, '2g', str(work / 'helper_compile') + ':' + cp, 'chiseltest.simulator.ObservedHighDescriptor', [str(diagnostic / 'original-high.fir'), str(diagnostic / 'high-annotations.json'), str(diagnostic / 'low-top-ports.fir'), 'observed-canonical.tsv', 'observed-details.json']), rss=3, heap_as=8, tree=256 << 20)
+    descriptor = module('observed_descriptor_check', D / 'descriptor_metadata.py')
+    descriptor.verify_inputs(diagnostic, {n: result['artifacts'][n] for n in descriptor.INPUTS})
+    result['descriptor'] = descriptor.inspect(work / 'descriptor', result['artifacts'], load(D / 'PORT_CONTRACT.json'))
+
     need(time.monotonic() - started < JOB_SECONDS - 30, 'summary deadline reserve')
     result.update(scope='ORIGINAL_HIGH_AND_OFFICIAL_LOW_ONLY', numerical_pass=False,
         source_commit=identity['source_commit'], launch_commit=identity['launch_commit'], run_id=identity['run_id'], stages=stages, canonical_pass=False, target_host_qualified=False)

@@ -47,6 +47,10 @@ class Summary(unittest.TestCase):
   with self.assertRaises(ValueError):s.project({'status':s.COMPLETE},self.identity)
  def test_positive_complete(self):
   raw=dict(status=s.COMPLETE,stages=[dict(name=n,complete=True,native_exit=0,error_count=0,elapsed_seconds=1,observed_peak_rss=1) for n in s.STAGES],artifacts={n:dict(bytes=1,sha256='d'*64) for n in s.NAMES},measured_top_port_counts={'high':30,'low':122})
+  from test_descriptor_metadata import fixture
+  import descriptor_metadata as dm
+  canonical,details,contract=fixture()
+  raw['descriptor']={'qualification':dm.QUAL,'files':{'observed-canonical.tsv':dm.pin(canonical),'observed-details.json':dm.pin(json.dumps(details).encode())},'bound_inputs':{n:raw['artifacts'][n] for n in dm.INPUTS},'counts':dm.validate(canonical,details,contract)}
   out=s.project(raw,self.identity);self.assertEqual(out['status'],s.COMPLETE);self.assertFalse(out['numerical_pass'])
   raw['artifacts']['evil']='payload'
   with self.assertRaises(ValueError):s.project(raw,self.identity)

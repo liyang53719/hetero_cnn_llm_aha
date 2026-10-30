@@ -1,5 +1,13 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-30 19:18 补齐后续真实锁所需 canonical / 完整端口证据（TEMP，未 activation）
+
+- DONE / SOURCE：发现IR-only原先只导出hash/count，后续actual backend仍缺新canonical完整manifest，故18828不先激活，先补同一IR的只读描述符，避免再做一遍重IR。新helper直接调用未修改CanonicalHighGate公开semantic方法；只剥Info/TargetDir，顺序不改，实际module/annotation计数。HIGH/annotations exact roundtrip；无新硬件elaboration。
+- DONE / SOURCE：原helper实际LOW-port提取经hash/marker绑定后用官方Parser读完整name/direction/type/width，85旧口逐一保持＋37审核只读观察输出；输入在descriptor前后及导出前复核。完整canonical.tsv与details/provenance为≤512KiB独立白名单metadata artifact，不截断为只有digest，也不上传IR/class/rawlog。所有资格仍OBSERVED_UNREVIEWED，canonical_pass=false。
+- PASS精确范围：56项Python轻测normal/-O；两helper＋一个微型fixture driver真实编译7.608秒/RSS248766464B，3口官方Parser fixture1.763秒/RSS110387200B，均native0/strictcleanup/EOF。只是本地Debian Java源码/API微测，不是CI工具链、122口、完整IR或数值通过。
+- ONGOING：新helper_compile/descriptor各沿既有300秒/3GiB/heap2GiB上限，9阶段wall3180＋cleanup285=3465，3600总预算留135秒；原监督与IR资源caps不变。源提交/CI/独审后才可用未消费r3路径另行activation，未重试原任务。下一步真实descriptor独审后接通新canonical/SV/ABI锁，不直接更新旧接受hash来冒通过。
+- 五块仍完整M128、固定4096 MAC/同一硬件与生成RTL哈希；Chisel完整数值0/5、最终冻结RTL0/5，利用率未实测。P0精度合同与MoE原路由基线保持，未批准tie不视为已批准。无本轮临时数据删除。
+
 ## 2026-10-30 19:07 IR 目录计数范围修复（TEMP，源码未 activation）
 
 - DONE / PASS（仅真实编译）：run41108031789 / source0719 / launch400a 六阶段均native0，新R2统一155源8覆盖完整Scala编译75.941635151秒、观测RSS1585991680 B。source guard41107649508与launch guard41108031875成功；实际IR运行失败，不能用guard成功替代。证据见[原受控摘要与归因](../candidates/observer_ir_only_20261030/evidence/run41108031789/README.zh.md)。

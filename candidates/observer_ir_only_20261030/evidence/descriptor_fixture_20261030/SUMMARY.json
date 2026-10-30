@@ -1,0 +1,40 @@
+{
+  "schema": "TINY_DESCRIPTOR_FIXTURE_EVIDENCE_V1",
+  "scope": "TWO_HELPERS_PLUS_ONE_SYNTHETIC_DRIVER_THREE_PORTS_ONLY",
+  "target_ci_toolchain_qualified": false,
+  "full_ir_or_122port_qualified": false,
+  "numerical_pass": false,
+  "local_java": "Debian 21.0.12.1, not CI Adoptium 21.0.13",
+  "max_rss_bytes": 1073741824,
+  "max_cpu_seconds": 60,
+  "max_wall_seconds": 90,
+  "conservative_min_available_memory": 7516192768,
+  "observed_available_memory": 9232347136,
+  "stages": [
+    {
+      "name": "compile",
+      "native_exit": 0,
+      "elapsed_seconds": 7.608129029998963,
+      "observed_peak_rss": 248766464,
+      "error_count": 0,
+      "strict_cleanup_complete": true,
+      "pipe_eof_observed": true,
+      "gzip_finalized": true
+    },
+    {
+      "name": "fixture",
+      "native_exit": 0,
+      "elapsed_seconds": 1.7632902480036137,
+      "observed_peak_rss": 110387200,
+      "error_count": 0,
+      "strict_cleanup_complete": true,
+      "pipe_eof_observed": true,
+      "gzip_finalized": true
+    }
+  ],
+  "source_sha256": {
+    "CanonicalHighGate.scala": "d96368a47fa0161072e554822b9e70409ccb06d58ae29d5fa8139043f8f64f98",
+    "ObservedHighDescriptor.scala": "95937266a0c97c17b4af5f1f725fb4078081ade79f3c5a054511cb59100a5b62",
+    "DescriptorFixture.scala": "bdd99e12ca48ef2d1b49d76f2618ee64bbad41b4249a2afe7669aae99a52e6ba"
+  }
+}

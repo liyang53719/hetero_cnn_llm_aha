@@ -44,6 +44,7 @@ jobs:
           persist-credentials: false
           fetch-depth: 1
       - name: Fixed155 Scala compile and original HIGH official LOW only
+        id: ir
         run: |
           set -euo pipefail
           P=candidates/observer_ir_only_20261030
@@ -73,6 +74,28 @@ jobs:
           if not isinstance(json.loads(p.read_text()), dict):
               raise ValueError('summary JSON object required')
           PY
+      - name: Export exact observed canonical and complete ports metadata
+        id: descriptor
+        if: ${{ steps.ir.outcome == 'success' && steps.summary.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          python3 -B candidates/observer_ir_only_20261030/descriptor_metadata.py \
+            --work "$RUNNER_TEMP/hetero-observer-ir" \
+            --summary "$RUNNER_TEMP/observer-ir-summary.json" \
+            --identity "$RUNNER_TEMP/hetero-observer-ir-identity.json" \
+            --contract candidates/observer_ir_only_20261030/PORT_CONTRACT.json \
+            --output "$RUNNER_TEMP/observer-descriptor-metadata"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ steps.descriptor.outcome == 'success' }}
+        with:
+          name: hetero-observer-descriptor-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/observer-descriptor-metadata/observed-canonical.tsv
+            ${{ runner.temp }}/observer-descriptor-metadata/observed-details.json
+            ${{ runner.temp }}/observer-descriptor-metadata/provenance.json
+          if-no-files-found: error
+          retention-days: 14
+          overwrite: false
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: ${{ always() && steps.launch.outputs.source_sha != '' && steps.summary.outcome == 'success' }}
         with:
@@ -84,5 +107,5 @@ jobs:
 # Source-only: no activation manifest. This workflow never calls SV, Verilator
 # frontend, native backend, dedup, weights, reference, or DUT. Verilator bytes
 # exist only for the unchanged original fresh-host identity inventory.
-# Only the exact typed bounded metadata projection above is uploaded.
+# Only exact typed summary and separately bounded observed metadata are uploaded.
 # IR success is not numerical, canonical, host, RTL, or physical-II qualification.

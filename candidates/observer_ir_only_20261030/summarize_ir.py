@@ -1,7 +1,7 @@
 """Exact metadata projection. Never uploads logs, IR, paths, errors, or data payloads."""
 import argparse,json,math,pathlib,re
 from check_ir import NAMES
-STAGES=('jdk','compile_tools','jars','verilator_bytes','runtime_identity','compile155','original_ir')
+STAGES=('jdk','compile_tools','jars','verilator_bytes','runtime_identity','compile155','helper_compile','original_ir','descriptor')
 FLAGS=('numerical_pass','canonical_pass','target_host_qualified','sv_generated','generated_abi_qualification','physical_resource_or_qor_qualification','block_numerical_pass')
 COMPLETE='COMPLETE_ORIGINAL_HIGH_AND_OFFICIAL_LOW_DIAGNOSTIC_ONLY'
 def need(x):
@@ -33,7 +33,7 @@ def project(raw,identity):
  need(type(identity.get('run_id')) is int and identity['run_id']>0);out['run_id']=identity['run_id']
  status=raw.get('status','OBSERVATION_UNAVAILABLE');need(status in (COMPLETE,'FAILED_OR_INCOMPLETE','OBSERVATION_UNAVAILABLE'));out['status']=status
  need(all(raw.get(k,False) is False for k in FLAGS))
- stages=raw.get('stages',[]);need(type(stages) is list and len(stages)<=7);out['stages']=[]
+ stages=raw.get('stages',[]);need(type(stages) is list and len(stages)<=9);out['stages']=[]
  for i,row in enumerate(stages):
   need(type(row) is dict and row.get('name')==STAGES[i] and type(row.get('complete')) is bool)
   exitcode=row.get('native_exit');need(exitcode is None or type(exitcode) is int and -255<=exitcode<=255)
@@ -43,12 +43,15 @@ def project(raw,identity):
    if admission['status']=='REJECTED':need(not row['complete'] and exitcode is None and row['error_count']>=1)
    out['stages'][-1]['admission']=admission
  if status==COMPLETE:
-  need(len(stages)==7 and all(r['complete'] and r['native_exit']==0 and r['error_count']==0 for r in stages))
+  need(len(stages)==9 and all(r['complete'] and r['native_exit']==0 and r['error_count']==0 for r in stages))
   need(all(r.get('admission',{}).get('status','ADMITTED')=='ADMITTED' for r in out['stages']))
   artifacts=raw.get('artifacts');need(type(artifacts) is dict and set(artifacts)==set(NAMES));out['artifacts']={}
   for name in NAMES:
    row=artifacts[name];need(type(row) is dict and type(row.get('sha256')) is str and re.fullmatch('[0-9a-f]{64}',row['sha256']))
    size=number(row.get('bytes'));need(type(size) is int and 0<size<=384*1024**2);out['artifacts'][name]={'bytes':size,'sha256':row['sha256']}
+  from descriptor_metadata import project_receipt
+  out['descriptor']=project_receipt(raw.get('descriptor'))
+  need(all(out['descriptor']['bound_inputs'][k]==out['artifacts'][k] for k in out['descriptor']['bound_inputs']))
   ports=raw.get('measured_top_port_counts');need(type(ports) is dict and set(ports)=={'high','low'} and ports['low']==122)
   out['measured_top_port_counts']={k:number(ports[k]) for k in ('high','low')}
  return out

@@ -1,5 +1,19 @@
 # TEMP：原始 Chisel 观察接口的独立 IR-only 有界尝试
 
+## 最新增补：完整 canonical / ports 观测描述符（TEMP，未 activation）
+
+以18828f90da5a1b059a055a8c5273351a41eca946为源码基线；原155源编译与HIGH/official LOW保持。compile155后仅编译原CanonicalHighGate.scala和新ObservedHighDescriptor.scala；不调用原硬锁main、不改旧gate。IR成功后新descriptor调用原公开module/circuit/annotation semantic方法：只去Info及TargetDirAnnotation，模块及保留annotations顺序不改；实际module/annotation/class计数，不抄旧1056/8985。HIGH及annotations反序列化后须逐字节serialize roundtrip。
+
+LOW完整端口来自原helper的low-top-ports.fir，既有artifact hash/terminal marker先核，descriptor前后及导出前再核三个输入bytes/hash。官方Parser只解析端口metadata容器，不重parse整个313MB LOW、不改变实际电路。所有name/direction/type/width均保留；85旧口逐一不变，37新增严格只读output（P0 27/689bits，MoE10/259bits），只检查122总数不足以通过。
+
+完整canonical TSV上限256KiB，details JSON上限128KiB，另附固定provenance，三文件总上限512KiB；独立artifact白名单，仅observed-canonical.tsv、observed-details.json、provenance.json。原64KiB摘要只保留文件bytes/hash、有限计数及OBSERVED_UNREVIEWED。全部仍canonical_pass=false，不自动批准新硬件或解除后续SV/ABI/hash gate。无rawlog/IR/classes/权重/张量上传。
+
+两个新增阶段沿已有同类helper/canonical上限：各wall300秒、RSS3GiB、heap2GiB，原supervisor与原IR 480秒/5GiB/heap4GiB及其它caps不改。全9阶段wall上限3180秒＋cleanup285=3465秒，3600秒总预算留135秒；每阶段动态至少90秒余量仍核验。旧同类耗时不是新descriptor实测，目标CI准入仍待执行。
+
+本地[微型fixture](evidence/descriptor_fixture_20261030/SUMMARY.json)只编译2helper＋1合成driver：7.608s / RSS248766464B；三端口Parser/descriptor fixture1.763s / RSS110387200B，均native0与严格cleanup/EOF。限RSS1GiB/CPU60/wall90，MemAvailable至少7GiB（未知旧IR按5GiB保留）；未触碰旧owner。本地Debian Java不迁移CI资格，三口fixture不证明真实122口或完整数值。Python 56项normal/-O轻测另记。
+
+本批无activation，不重用旧run；原r3路径尚未消费，保持它并要求未来source为新直接parent。下一步真实获得描述符后独立审查改变模块/annotations，建立新数值backend锁；不把观测描述符当SV生成、GCC依赖、RTL数值或利用率通过。
+
 ## 最新状态：aggregate scope r3（source-only）
 
 原r2 run41108031789完整Scala编译通过，但IR在前置entry census被拒、未调用execute；详见[原摘要与失败归因](evidence/run41108031789/README.zh.md)。扫描仓库＋work时已计数19993加预留8超过20k即停止，不是完整总数。当前修复显式将IR条目门对齐其余阶段既有aggregate 100k；原supervisor、其他资源/cleanup门、扫描根与8项预留不变，真实准入仍待执行。

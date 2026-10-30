@@ -13,6 +13,24 @@ def number(x):return x if type(x)in(int,float)and math.isfinite(x)and 0<=x<=2**6
 def hp(v):
  if not isinstance(v,dict)or not re.fullmatch('[0-9a-f]{64}',str(v.get('sha256',''))):return None
  n=v.get('bytes');return {'sha256':v['sha256'],'bytes':n}if type(n)is int and 0<=n<=4<<30 else None
+def stage_resources(r):
+ # Reuse original published classifier, not new monitoring logic or raw errors.
+ path=D.parent/'ci_frontend_materialization_r2_20261029/frontend_telemetry.py'
+ spec=importlib.util.spec_from_file_location('original_stage_telemetry',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+ out=module.typed_metrics(r);caps=r.get('caps')or{}
+ if not isinstance(caps,dict):caps={}
+ for key in ('cleanup_seconds','file_bytes','min_free_disk_bytes','max_entries','per_process_as_bytes','per_process_cpu_seconds'):
+  if number(caps.get(key))is not None:out['caps'][key]=caps[key]
+ errors=r.get('errors');errors=errors if isinstance(errors,list)else[]
+ out['error_evidence']=[];out['errors_truncated']=len(errors)>32
+ for i,e in enumerate(errors[:32]):
+  raw=e.encode('utf-8')if isinstance(e,str)else json.dumps(e,sort_keys=True).encode('utf-8')
+  out['error_evidence'].append(dict(code=out['supervisor_reason_codes'][i],raw_bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest()))
+ out['worker_started']=r.get('worker_started')is True
+ # The old monitor does not retain measured admission-free/MemAvailable values.
+ out['initial_resource_observations']='NOT_RECORDED_BY_ORIGINAL_SUPERVISOR'
+ return out
+
 def summarize(work,identity):
  out=dict(schema='FIVE_M128_SAME_JOB_SAFE_SUMMARY_V1',status='INCOMPLETE',numeric_pass=False,final_rtl_replay=False,uploaded_payloads=False,profiles_registered=list(range(5)),tokens=128,matrix_macs=4096,vector_lanes=32,resource_peak_qualification='INCOMPLETE_SAMPLED',stages=[],actual_dut_reports=[])
  for k in ('source_commit','launch_commit'):
@@ -32,7 +50,7 @@ def summarize(work,identity):
   p=folder/'RESULT.json';r=read(p)
   if not isinstance(r,dict):continue
   cap=r.get('log_capture')or{};cleanup=r.get('cleanup_proof')or{}
-  out['stages'].append(dict(phase=name,receipt_sha256=sha(p),native_exit=r.get('native_exit')if type(r.get('native_exit'))is int else None,errors=len(r['errors'])if isinstance(r.get('errors'),list)else None,wall_seconds=number(r.get('elapsed_seconds')),observed_cpu_seconds=number(r.get('observed_cpu_seconds')),observed_peak_rss=number(r.get('observed_peak_rss')),process_sample_count=number(r.get('process_sample_count')),cleanup_complete=cleanup.get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP',pipe_eof=cap.get('pipe_eof_observed')is True,gzip_finalized=cap.get('gzip_finalized')is True))
+  out['stages'].append(dict(phase=name,receipt_sha256=sha(p),native_exit=r.get('native_exit')if type(r.get('native_exit'))is int else None,errors=len(r['errors'])if isinstance(r.get('errors'),list)else None,wall_seconds=number(r.get('elapsed_seconds')),observed_cpu_seconds=number(r.get('observed_cpu_seconds')),observed_peak_rss=number(r.get('observed_peak_rss')),process_sample_count=number(r.get('process_sample_count')),cleanup_complete=cleanup.get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP',pipe_eof=cap.get('pipe_eof_observed')is True,gzip_finalized=cap.get('gzip_finalized')is True,resources=stage_resources(r)))
  for i in range(5):
   p=numeric/f'PROFILE_{i}_DIAGNOSTIC.json';r=read(p)
   if not isinstance(r,dict)or r.get('profile')!=i or r.get('state')not in STATES or r.get('numerical_pass')is not False:continue
@@ -52,7 +70,7 @@ def encode(v):
   v['optional_build_details_truncated']=True
   for row in v.get('build',{}).get('stages',[]):
    for k in list(row):
-    if k not in{'stage','name','native_exit','elapsed_seconds','observed_cpu_seconds','observed_peak_rss','cleanup_complete','log_capture','error_count','typed_reasons'}:del row[k]
+    if k not in{'telemetry','stage','name','native_exit','elapsed_seconds','observed_peak_rss','error_count','observed_cpu_seconds','supervisor_cpu_seconds','parent_cpu_seconds','disk_census_total_seconds','minimum_MemAvailable_bytes','memory_reserve_warning_samples','peak_tree_bytes','peak_file_bytes','output_sample_count','output_sample_max_seconds','process_sample_count','process_sample_max_seconds','max_monitor_interval_seconds','disk_census_count','disk_census_max_seconds','disk_census_last_seconds','process_sample_max_gap_seconds','process_sample_terminal_gap_seconds','caps','cleanup_status','supervisor_reason_codes','reader_join_barrier','reader_started_after_popen','capture_census'}:del row[k]
   raw=json.dumps(v,ensure_ascii=True,sort_keys=True)+'\n'
  if len(raw.encode())>65536:raise ValueError('bounded summary exceeded; never upload unbounded output')
  return raw

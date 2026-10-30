@@ -150,3 +150,14 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - Source-only 审查及轻量元数据/mock测试通过；无真实新安装、参考、DUT执行。完整Chisel数值与最终冻结RTL仍0/5，利用率没有新实测。属于Chisel测试发射IR/SV仿真backend，不是最终RTL回放。
 - 下一步仅在独立复核实际资源/唯一 activation 后开展受限标定；失败沿原身份诊断，不自动重复构建。MoE同分小ID契约仍待明确。
 
+
+
+## 2026-10-30 原同 job run 41034072605：FAIL / 具体资源原因 UNKNOWN
+
+- source0235a207、launch1ed8612f，attempt1，原任务已终止且未重试。27个backend准备/编译/归档/link阶段native0，阶段耗时和2516.52s；实际共同ELF139,950,896B，SHA ce0bcb621646cb9286c4273d9cb819e42f1513a4b3084d0b7c76bd44ba83837c。仅hash可验证，未上传/保留可下载binary。
+- SV raw c8e6b1c8…、受限SourceInfo规范化6555ede3…通过，仅仿真backend身份资格，不是完整数值或最终RTL通过。Host观察RSS9,597,370,368B，旧采样监控不是连续峰值证明。
+- archive、70tensor、Qwen2与08B安装native0；35B安装阶段27.43s，native=null/errors2，cleanup与日志EOF完整。原supervisor具体错误及tree/cap数据未被摘要导出，完整公开job日志也没有，故原因保持UNKNOWN，不能因两条error猜定磁盘超限。
+- 本次owner/五参考/provider/DUT均未开始，完整数值仍0/5。实际安全摘要12,031B SHA77a70f8bf677342910de92c8995f2144f0da223aa252621f5b689ccc1fa4882e，原artifact12969717356只含摘要。
+- 本提交仅补摘要typed reasons/原错误hash和长度/现有资源指标，并修64KiB降级时保留真实嵌套telemetry；6小fixture normal/-O通过。没有修改监督脚本、cap、硬件、数值算法、workflow或activation；不能追补已丢失的原reason。
+- 下一步先收束保活磁盘证据和原路径引用，原2.462GB inventory仅obj，不代表总job；不得先据推测提高cap或盲目重跑。
+

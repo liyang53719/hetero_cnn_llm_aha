@@ -1,0 +1,66 @@
+{
+  "schema": "OBSERVER_IR_SAFE_SUMMARY_V1",
+  "scope": "ORIGINAL_HIGH_AND_OFFICIAL_LOW_ONLY",
+  "numerical_pass": false,
+  "canonical_pass": false,
+  "target_host_qualified": false,
+  "sv_generated": false,
+  "generated_abi_qualification": false,
+  "physical_resource_or_qor_qualification": false,
+  "block_numerical_pass": false,
+  "source_commit": "0719dfbea5e984f2639e4db6b6bd97c1cb65e7d6",
+  "launch_commit": "400a8174b1ba7bc2ffb7d8c99f48fcc66f4d1b4f",
+  "launch_manifest_blob_sha": "c53cf1661b2dd8957bf888337893dceabf693de4",
+  "run_id": 41108031789,
+  "status": "FAILED_OR_INCOMPLETE",
+  "stages": [
+    {
+      "name": "jdk",
+      "native_exit": 0,
+      "complete": true,
+      "error_count": 0,
+      "elapsed_seconds": 12.474794730000006,
+      "observed_peak_rss": 50835456
+    },
+    {
+      "name": "compile_tools",
+      "native_exit": 0,
+      "complete": true,
+      "error_count": 0,
+      "elapsed_seconds": 30.227015724000005,
+      "observed_peak_rss": 22372352
+    },
+    {
+      "name": "jars",
+      "native_exit": 0,
+      "complete": true,
+      "error_count": 0,
+      "elapsed_seconds": 12.201007953000001,
+      "observed_peak_rss": 39440384
+    },
+    {
+      "name": "verilator_bytes",
+      "native_exit": 0,
+      "complete": true,
+      "error_count": 0,
+      "elapsed_seconds": 1.9979349700000029,
+      "observed_peak_rss": 9043968
+    },
+    {
+      "name": "runtime_identity",
+      "native_exit": 0,
+      "complete": true,
+      "error_count": 0,
+      "elapsed_seconds": 2.065543243999997,
+      "observed_peak_rss": 23810048
+    },
+    {
+      "name": "compile155",
+      "native_exit": 0,
+      "complete": true,
+      "error_count": 0,
+      "elapsed_seconds": 75.94163515100001,
+      "observed_peak_rss": 1585991680
+    }
+  ]
+}

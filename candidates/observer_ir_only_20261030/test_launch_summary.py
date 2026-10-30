@@ -6,12 +6,12 @@ class Guard(unittest.TestCase):
  def setUp(self):
   self.source='a'*40;self.head='b'*40
   self.event={'ref':'refs/heads/main','before':self.source,'after':self.head}
-  self.manifest={'schema':'OBSERVER_FIXED155_ORIGINAL_IR_ONE_SHOT_V1','source_sha':self.source,'profile':'FIXED4096_OBSERVER8_COMPILE155_HIGH_OFFICIAL_LOW_ONLY','nonce':'observer_fixed155_original_ir_r2_20261030_once'}
+  self.manifest={'schema':'OBSERVER_FIXED155_ORIGINAL_IR_ONE_SHOT_V1','source_sha':self.source,'profile':'FIXED4096_OBSERVER8_COMPILE155_HIGH_OFFICIAL_LOW_ONLY','nonce':'observer_fixed155_original_ir_aggregate_scope_r3_20261030_once'}
  def call(self,manifest=None,diff=None,attempt='1',parent=None,event=None):
   return g.validate(event or self.event,manifest or self.manifest,attempt,self.head,parent or self.source,diff if diff is not None else 'A\t'+g.LAUNCH+'\n')
  def test_positive(self):self.assertEqual(self.call(),self.source)
  def test_old_paths(self):
-  for nonce in ('five_m128_samejob_calibration_20261030_once','five_m128_samejob_diagnostic_r2_20261030_once','qwen35_four_m128_freshhost_20261030_once','qwen35_four_m128_freshhost_canonical_r2_20261030_once','qwen35_four_m128_freshhost_python_dso_r3_20261030_once'):
+  for nonce in ('five_m128_samejob_calibration_20261030_once', 'five_m128_samejob_diagnostic_r2_20261030_once', 'fixed_build_local_data_20261029_once', 'fixed_build_local_data_r2_20261029_once', 'fixed_frontend_20261029_once', 'fixed_frontend_r2_20261029_once', 'fixed_frontend_r3_20261029_once', 'fixed_frontend_r4_20261029_once', 'fixed_frontend_r5_20261029_once', 'fixed_frontend_r6_20261029_once', 'fixed_frontend_r7_20261029_once', 'fixed_frontend_r8_20261029_once', 'jdk_diagnostic_20261029_once', 'qwen35_four_m128_freshhost_20261030_once', 'qwen35_four_m128_freshhost_canonical_r2_20261030_once', 'qwen35_four_m128_freshhost_python_dso_r3_20261030_once', 'observer_fixed155_original_ir_r2_20261030_once'):
    with self.subTest(nonce=nonce),self.assertRaises(ValueError):self.call(diff='A\tci_launch/'+nonce+'.json\n')
    bad=dict(self.manifest,nonce=nonce)
    with self.assertRaises(ValueError):self.call(manifest=bad)

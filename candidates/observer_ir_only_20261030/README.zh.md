@@ -1,5 +1,13 @@
 # TEMP：原始 Chisel 观察接口的独立 IR-only 有界尝试
 
+## 最新状态：aggregate scope r3（source-only）
+
+原r2 run41108031789完整Scala编译通过，但IR在前置entry census被拒、未调用execute；详见[原摘要与失败归因](evidence/run41108031789/README.zh.md)。扫描仓库＋work时已计数19993加预留8超过20k即停止，不是完整总数。当前修复显式将IR条目门对齐其余阶段既有aggregate 100k；原supervisor、其他资源/cleanup门、扫描根与8项预留不变，真实准入仍待执行。
+
+本次专用闭包618项（125813 B），SHA256 1277341d821c7ed915b15e4c500d88c6696dab23ff62a923137421b92265e0af。44项轻测normal/-O分别通过。新单次路径ci_launch/observer_fixed155_original_ir_aggregate_scope_r3_20261030_once.json仅源码接线，本包没有activation；须在源码CI后用实际source SHA另提交一次，禁止重用已消费r2。旧文字以下作为r2历史方案保留，其中616、32 tests、20k和r2路径不描述当前修复状态。新R2 122口仍未实际IR核验，数值/最终RTL各0/5。
+
+## 历史 r2 源码方案
+
 发布父基线为215f4670a92f29f67ba03aab52944e4653ed2aa3。专用闭包616项：原active598字节不变，加8个统一硬件观察覆盖与10个IR入口/测试/workflow；所有bytes/hash已独立核验。原32项轻量测试normal/-O均通过，不等于真实编译或发射。
 
 仅执行原JDK/编译工具/107 JAR/固定Verilator包身份准备、完整fresh_host inventory、固定155源（8覆盖、147原文件）完整Scala compile、原DiagnoseOriginalHostMoePhaseV5空参数HIGH及official LOW。Verilator包仅供原identity inventory，不调用frontend；没有SV/native backend/权重/reference/DUT，不按模型重新elaborate，原canonical/SV门保持不变。122端口仅待测预期，不能沿旧112/119或V1 class证据。

@@ -1,9 +1,9 @@
 """Unique observer fixed155 original HIGH/official LOW launch; no simulation or backend."""
 import json,os,pathlib,re,subprocess
-LAUNCH='ci_launch/observer_fixed155_original_ir_r2_20261030_once.json'
+LAUNCH='ci_launch/observer_fixed155_original_ir_aggregate_scope_r3_20261030_once.json'
 def validate(event,manifest,attempt,head,parent,diff):
  if attempt!='1':raise ValueError('retry not admitted')
- if set(manifest)!={'schema','source_sha','profile','nonce'} or manifest['schema']!='OBSERVER_FIXED155_ORIGINAL_IR_ONE_SHOT_V1' or manifest['profile']!='FIXED4096_OBSERVER8_COMPILE155_HIGH_OFFICIAL_LOW_ONLY' or manifest['nonce']!='observer_fixed155_original_ir_r2_20261030_once':raise ValueError('observer IR-only launch contract')
+ if set(manifest)!={'schema','source_sha','profile','nonce'} or manifest['schema']!='OBSERVER_FIXED155_ORIGINAL_IR_ONE_SHOT_V1' or manifest['profile']!='FIXED4096_OBSERVER8_COMPILE155_HIGH_OFFICIAL_LOW_ONLY' or manifest['nonce']!='observer_fixed155_original_ir_aggregate_scope_r3_20261030_once':raise ValueError('observer IR-only launch contract')
  sha=manifest['source_sha']
  if not isinstance(sha,str) or not re.fullmatch('[0-9a-f]{40}',sha):raise ValueError('reviewed source SHA')
  if event.get('ref')!='refs/heads/main' or event.get('before')!=sha or parent!=sha or event.get('after')!=head or sha==head:raise ValueError('exact direct launch from reviewed source')

@@ -9,8 +9,8 @@
     },
     {
       "path": ".github/workflows/hetero-observer-original-ir-only.yml",
-      "bytes": 4009,
-      "sha256": "c06c549bc695e2d47ee44c431049f686aa0a686371c04fd7ddc76c7afa2c8fc1"
+      "bytes": 4025,
+      "sha256": "ce849d9dda7c6b86eb942fd14778e900e067281ad1e2499442f591939582f732"
     },
     {
       "path": "candidates/attention_policy_count_fix_20261029T0054/source/HostBlockCommandsV4.scala",
@@ -1554,13 +1554,23 @@
     },
     {
       "path": "candidates/observer_ir_only_20261030/run_ir_only.py",
-      "bytes": 16901,
-      "sha256": "cc03442a31ba06ca182659e7e4f13178898c63819a056ac66832be7bbc00ad79"
+      "bytes": 18652,
+      "sha256": "50084f616ba5dd849f420e766f94603555abe8af3da2d87fd96fc890f3ae0c85"
     },
     {
       "path": "candidates/observer_ir_only_20261030/summarize_ir.py",
-      "bytes": 3342,
-      "sha256": "7136366f874cc04e1cd1a9a5b85f3a4ae6acfa88b3231ec54e57c0c996aa75a8"
+      "bytes": 4678,
+      "sha256": "d0ffab144e66a81b59c81b61d0e20635cd0623deb6d966a319e786f8b8232561"
+    },
+    {
+      "path": "candidates/observer_ir_only_20261030/test_admission_summary.py",
+      "bytes": 3555,
+      "sha256": "dc85245a8f912ba605ca01080e66e6a8fe4af7599832be063946dde1e3f119b5"
+    },
+    {
+      "path": "candidates/observer_ir_only_20261030/test_entry_scope.py",
+      "bytes": 2226,
+      "sha256": "b3db2587a116decfdde76dee5614e4de46c16fe533fd49413b30b41dd36ca36f"
     },
     {
       "path": "candidates/observer_ir_only_20261030/test_ir_only.py",
@@ -1569,8 +1579,8 @@
     },
     {
       "path": "candidates/observer_ir_only_20261030/test_launch_summary.py",
-      "bytes": 4170,
-      "sha256": "3df91aa41016069de4eb51b5983bd30b422b250e6c0882fba3487471da4715c7"
+      "bytes": 4632,
+      "sha256": "980a6644d301b1ad8948e145879524435bfe846011b4d512c054c5c403f66537"
     },
     {
       "path": "candidates/observer_ir_only_20261030/test_preflight.py",
@@ -1579,8 +1589,8 @@
     },
     {
       "path": "candidates/observer_ir_only_20261030/validate_launch.py",
-      "bytes": 2386,
-      "sha256": "856451a62d8760e289f83e1a05a7a616d0500bd9618cff7a88d8b927a8ac717c"
+      "bytes": 2418,
+      "sha256": "3b53b18b3edd07f0bcb99f8cedb30eb303ad636038c6cdcf72b19f2910276ec6"
     },
     {
       "path": "candidates/p0_newboundary_input_provider_20261028/MANIFEST.json",
@@ -3083,6 +3093,6 @@
       "sha256": "78b6cf4cd7ae54f4bf92c3ba310f0658074bf25df755e25eb194c7ca91870657"
     }
   ],
-  "source_base_commit": "215f4670a92f29f67ba03aab52944e4653ed2aa3",
+  "source_base_commit": "400a8174b1ba7bc2ffb7d8c99f48fcc66f4d1b4f",
   "scope": "OBSERVER_IR_ONLY_REUSES_EXISTING_FULL_SOURCE_CLOSURE_NO_NUMERICAL_PASS"
 }

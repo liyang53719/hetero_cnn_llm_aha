@@ -1,5 +1,14 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-30 19:07 IR 目录计数范围修复（TEMP，源码未 activation）
+
+- DONE / PASS（仅真实编译）：run41108031789 / source0719 / launch400a 六阶段均native0，新R2统一155源8覆盖完整Scala编译75.941635151秒、观测RSS1585991680 B。source guard41107649508与launch guard41108031875成功；实际IR运行失败，不能用guard成功替代。证据见[原受控摘要与归因](../candidates/observer_ir_only_20261030/evidence/run41108031789/README.zh.md)。
+- FAIL / INCOMPLETE：original_ir 在execute之前因entry准入被拒，HIGH/LOW未开始。已计数19993项＋预留8项>20000即中止，不是完整目录总数。当前扫描仓库＋work，却沿用旧局部IR 20k门；修复显式对齐入口既有aggregate 100k条目门。根范围、预留8项、原supervisor/cleanup及CPU/RSS/wall/tree/file/log预算不变，不保证新准入必过。
+- DONE / PASS（仅源码轻测）：新admission有限枚举摘要保留拒绝/不完整census/execute未调用的区别，44项normal与-O分别通过。专用618项闭包SHA256 1277341d821c7ed915b15e4c500d88c6696dab23ff62a923137421b92265e0af；active598未变。新唯一r3路径/nonce及guard/workflow同步，旧17路径保留并拒绝重用，本提交无activation。
+- ONGOING / TEMP：先核源码提交与CI，再独立提交一次性activation，获取新R2真实HIGH/official LOW与接口证据。当前122口只是预期；原本地84990未知owner与唯一证据保留，不推断已停止，不触碰它。CI旧classes随job结束未作为可下载payload保留，下一新身份只能按pins重建，不能从摘要伪造复用。
+- TODO：把真实P0 gate/up、MoE输入/实际选择输出、独立参考与原实际consumer接入同一执行闭包；完整输出/cache/state及必要观察逐项判定，不能以固定INCOMPLETE壳或子集绿色代替验收。新接受条件仍待源码实现/独审，原路由基线、未批准同分契约、精度/舍入规则不变。
+- 五块P0 Qwen2-1.5B、P1/P2 Qwen3.5-0.8B L0/L3、P3/P4 Qwen3.5-35B-A3B L0/L3完整128-token Chisel数值仍0/5，最终同刺激冻结RTL回放0/5，有效MAC利用率未实测。固定4096 MAC与同一硬件/RTL哈希要求、80%/90%目标不变。临时文件清单已复查，本轮未删除数据；原始log/IR/class/权重不上传。
+
 ## 2026-10-30 18:30 原始 Chisel 观察接口的独立 IR-only 源码（TEMP，尚未激活）
 
 - 新增独立入口，复用原监督/cleanup/lossless log、固定工具/JAR与原Diagnose空参数，只到统一155源8覆盖的完整compile和HIGH/official LOW，不进入SV/Verilator frontend/native backend/weights/reference/DUT。Verilator只准备原identity所需固定包，避免更改原fresh_host合同。此步骤补新接口证据，不替代完整M128数值链。

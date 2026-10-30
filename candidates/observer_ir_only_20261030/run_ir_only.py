@@ -56,7 +56,7 @@ def java_command(java, heap, cp, main, args=()):
     return [str(java), '-XX:-UsePerfData', '-XX:ActiveProcessorCount=1',
         '-XX:ReservedCodeCacheSize=128m', '-Xss4m', '-Xmx' + heap, '-cp', cp, main, *args]
 
-def preflight_census(roots, caps):
+def preflight_census(roots, caps, admission=None):
     """One read-only admission sample, not atomic containment or a new monitor.
 
     Same root/lstat/inode rules as the unchanged original supervisor. Reserve
@@ -70,34 +70,53 @@ def preflight_census(roots, caps):
     seen = set()
     def unreadable(error):
         raise error
-    for root in unique:
-        need(root.is_dir() and not root.is_symlink(), 'preflight existing regular root')
-        for base, dirs, files in os.walk(root, followlinks=False, onerror=unreadable):
-            for name in dirs + files:
-                path = P(base) / name
-                try:
-                    st = path.lstat()
-                except FileNotFoundError:
-                    continue
-                count += 1
-                need(count + 8 <= caps['max_entries'], 'preflight entry cap with stage reserve')
-                if stat.S_ISLNK(st.st_mode):
-                    continue
-                need(stat.S_ISDIR(st.st_mode) or stat.S_ISREG(st.st_mode), 'preflight nonregular entry')
-                if stat.S_ISREG(st.st_mode):
-                    key = (st.st_dev, st.st_ino)
-                    if key not in seen:
-                        seen.add(key)
-                        total += st.st_size
-                        largest = max(largest, st.st_size)
-        need(shutil.disk_usage(root).free >= caps['min_free_disk_bytes'], 'preflight disk reserve')
-    need(count + 8 <= caps['max_entries'], 'preflight entry cap with stage reserve')
-    need(total <= caps['watch_tree_bytes'], 'preflight aggregate tree cap')
-    need(largest <= caps['file_bytes'], 'preflight file cap')
+    record = admission if admission is not None else {}
+    def record_result(status, reason, complete):
+        record.update(scope='REPO_WORK_AGGREGATE', entry_cap=caps['max_entries'],
+            reserved_entries=8, entries_observed=count, bytes_observed=total,
+            largest_file_bytes=largest, census_complete=complete,
+            status=status, reason=reason, execute_called=False)
+    try:
+        for root in unique:
+            need(root.is_dir() and not root.is_symlink(), 'preflight existing regular root')
+            for base, dirs, files in os.walk(root, followlinks=False, onerror=unreadable):
+                for name in dirs + files:
+                    path = P(base) / name
+                    try:
+                        st = path.lstat()
+                    except FileNotFoundError:
+                        continue
+                    count += 1
+                    need(count + 8 <= caps['max_entries'], 'preflight entry cap with stage reserve')
+                    if stat.S_ISLNK(st.st_mode):
+                        continue
+                    need(stat.S_ISDIR(st.st_mode) or stat.S_ISREG(st.st_mode), 'preflight nonregular entry')
+                    if stat.S_ISREG(st.st_mode):
+                        key = (st.st_dev, st.st_ino)
+                        if key not in seen:
+                            seen.add(key)
+                            total += st.st_size
+                            largest = max(largest, st.st_size)
+            need(shutil.disk_usage(root).free >= caps['min_free_disk_bytes'], 'preflight disk reserve')
+        need(count + 8 <= caps['max_entries'], 'preflight entry cap with stage reserve')
+        need(total <= caps['watch_tree_bytes'], 'preflight aggregate tree cap')
+        need(largest <= caps['file_bytes'], 'preflight file cap')
+    except (ValueError, OSError) as exc:
+        reasons = {'preflight entry cap with stage reserve':'ENTRY_CAP',
+            'preflight existing regular root':'ROOT_INVALID',
+            'preflight nonregular entry':'NONREGULAR_ENTRY',
+            'preflight disk reserve':'DISK_RESERVE',
+            'preflight aggregate tree cap':'TREE_CAP', 'preflight file cap':'FILE_CAP'}
+        reason = 'CENSUS_UNREADABLE' if isinstance(exc, OSError) else reasons.get(str(exc), 'CENSUS_REJECTED')
+        record_result('REJECTED', reason, False)
+        raise
+    record_result('ADMITTED', 'NONE', True)
     return dict(entries=count, reserved_entries=8, bytes=total, largest_file_bytes=largest)
 
-def admitted_execute(supervisor, argv, run, lock, caps, env, pins, resource_gate):
-    preflight_census(caps['extra_watch_roots'], caps)
+def admitted_execute(supervisor, argv, run, lock, caps, env, pins, resource_gate, admission=None):
+    record = admission if admission is not None else {}
+    preflight_census(caps['extra_watch_roots'], caps, record)
+    record['execute_called'] = True
     return supervisor.execute(argv, run, lock, caps, env, pins, resource_gate=resource_gate)
 
 def run(a, ownership):
@@ -159,16 +178,25 @@ def run(a, ownership):
         need(time.monotonic() - started + wall + 90 < JOB_SECONDS, 'whole-job cleanup/summary reserve')
         for path, target in aliases.items():
             need(str(P(path).resolve(strict=True)) == target, 'inventoried alias drift')
+        # Entry census covers repo + all work, not only this stage's IR output.
+        # Keep the same aggregate100k contract used by the six preceding stages.
         caps = dict(jdk_aliases=jdk_aliases, wall_seconds=wall, cleanup_seconds=45 if ir_specific else 30, file_bytes=(384 << 20) if ir_specific else 536870912,
             tree_bytes=tree, log_bytes=(8 << 20) if ir_specific else 16_777_216, raw_log_bytes=(16 << 20) if ir_specific else 33_554_432,
-            max_entries=20000 if ir_specific else 100000, per_process_as_bytes=heap_as << 30,
+            max_entries=100000, per_process_as_bytes=heap_as << 30,
             per_process_cpu_seconds=cpu or wall, rss_bytes=rss << 30, cpu_seconds=cpu or wall,
             extra_watch_roots=[str(repo), str(work)], min_free_disk_bytes=8 << 30,
             watch_tree_bytes=TREE)
-        result = admitted_execute(supervisor, argv, str(work / name), str(work / 'exclusive.lock'), caps, env, pins,
-            resource_gate={'min_available_memory': (rss + 1) << 30, 'min_disk_free': 8 << 30})
+        admission = {}
+        try:
+            result = admitted_execute(supervisor, argv, str(work / name), str(work / 'exclusive.lock'), caps, env, pins,
+                resource_gate={'min_available_memory': (rss + 1) << 30, 'min_disk_free': 8 << 30}, admission=admission)
+        except Exception:
+            stages.append(dict(name=name, native_exit=None, error_count=1, elapsed_seconds=None,
+                observed_peak_rss=None, complete=False, admission=admission))
+            (work / 'STAGES.json').write_text(json.dumps(stages, indent=2) + '\n')
+            raise
         stages.append(dict(name=name, native_exit=result.get('native_exit'), error_count=len(result.get('errors') or []),
-            elapsed_seconds=result.get('elapsed_seconds'), observed_peak_rss=result.get('observed_peak_rss'), complete=completed(result)))
+            elapsed_seconds=result.get('elapsed_seconds'), observed_peak_rss=result.get('observed_peak_rss'), complete=completed(result), admission=admission))
         (work / 'STAGES.json').write_text(json.dumps(stages, indent=2) + '\n')
         need(completed(result), 'stage incomplete: ' + name)
         return result

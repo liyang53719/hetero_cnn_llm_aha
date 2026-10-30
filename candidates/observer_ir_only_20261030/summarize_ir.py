@@ -11,6 +11,20 @@ def read(path):
  x=json.loads(path.read_text());need(type(x) is dict);return x
 def number(x,nullable=False):
  need((x is None and nullable) or (type(x) in (int,float) and math.isfinite(x) and 0<=x<=2**53));return x
+def admission_projection(value):
+ need(type(value) is dict)
+ need(value.get('scope')=='REPO_WORK_AGGREGATE')
+ status=value.get('status');reason=value.get('reason');complete=value.get('census_complete');called=value.get('execute_called')
+ need(type(complete) is bool and type(called) is bool)
+ need((status=='ADMITTED' and reason=='NONE' and complete and called)
+      or (status=='REJECTED' and reason in ('ENTRY_CAP','ROOT_INVALID','NONREGULAR_ENTRY','DISK_RESERVE','TREE_CAP','FILE_CAP','CENSUS_UNREADABLE','CENSUS_REJECTED') and not complete and not called))
+ out=dict(scope='REPO_WORK_AGGREGATE',status=status,reason=reason,census_complete=complete,execute_called=called)
+ for key in ('entry_cap','reserved_entries','entries_observed','bytes_observed','largest_file_bytes'):
+  v=number(value.get(key));need(type(v) is int);out[key]=v
+ need(out['entry_cap']==100000 and out['reserved_entries']==8)
+ if status=='ADMITTED':need(out['entries_observed']+out['reserved_entries']<=out['entry_cap'])
+ return out
+
 def project(raw,identity):
  need(type(raw) is dict and type(identity) is dict)
  out={'schema':'OBSERVER_IR_SAFE_SUMMARY_V1','scope':'ORIGINAL_HIGH_AND_OFFICIAL_LOW_ONLY',**{k:False for k in FLAGS}}
@@ -24,8 +38,13 @@ def project(raw,identity):
   need(type(row) is dict and row.get('name')==STAGES[i] and type(row.get('complete')) is bool)
   exitcode=row.get('native_exit');need(exitcode is None or type(exitcode) is int and -255<=exitcode<=255)
   out['stages'].append(dict(name=STAGES[i],native_exit=exitcode,complete=row['complete'],error_count=number(row.get('error_count')),elapsed_seconds=number(row.get('elapsed_seconds'),True),observed_peak_rss=number(row.get('observed_peak_rss'),True)))
+  if 'admission' in row:
+   admission=admission_projection(row['admission'])
+   if admission['status']=='REJECTED':need(not row['complete'] and exitcode is None and row['error_count']>=1)
+   out['stages'][-1]['admission']=admission
  if status==COMPLETE:
   need(len(stages)==7 and all(r['complete'] and r['native_exit']==0 and r['error_count']==0 for r in stages))
+  need(all(r.get('admission',{}).get('status','ADMITTED')=='ADMITTED' for r in out['stages']))
   artifacts=raw.get('artifacts');need(type(artifacts) is dict and set(artifacts)==set(NAMES));out['artifacts']={}
   for name in NAMES:
    row=artifacts[name];need(type(row) is dict and type(row.get('sha256')) is str and re.fullmatch('[0-9a-f]{64}',row['sha256']))

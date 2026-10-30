@@ -1,0 +1,30 @@
+{
+  "actual_dut_reports": [],
+  "failure_reason": "CPU_AVX512",
+  "final_rtl_replay": false,
+  "installation_resource_snapshots": [],
+  "launch_commit": "718a451e9a79062166aa739eed1fd562f63928a1",
+  "matrix_macs": 4096,
+  "numeric_pass": false,
+  "pack_deduplication": {
+    "physical_space_saved": "NOT_MEASURED",
+    "scope": "LIFECYCLE_JOURNAL_ONLY_NOT_NUMERICAL_PASS",
+    "status": "NOT_OBSERVED"
+  },
+  "profiles_registered": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "resource_peak_qualification": "INCOMPLETE_SAMPLED",
+  "run_id": 41064855934,
+  "schema": "FIVE_M128_SAME_JOB_SAFE_SUMMARY_V1",
+  "source_commit": "04be815f803ab45876f0e687146b96281ed857e4",
+  "stages": [],
+  "status": "INCOMPLETE",
+  "tokens": 128,
+  "uploaded_payloads": false,
+  "vector_lanes": 32
+}

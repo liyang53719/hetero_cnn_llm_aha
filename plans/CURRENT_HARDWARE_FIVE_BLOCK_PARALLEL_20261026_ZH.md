@@ -185,3 +185,10 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 五块仍完整 M128、同一 4096-MAC/Vector32 backend；未来每块 300 秒仅执行标定。独立 Python 参考 5/5；完整 Chisel/RTL 数值各 0/5，MAC 利用率未新增实测。未修改数值/路由/硬件/caps/旧监督程序，未上传权重或运行 payload，未清理文件。
 
 - 同批补充：安全摘要新增固定去重 journal 的六类枚举状态、逻辑节约量、receipt/build hash 和两固定 role 状态；不导出路径/用户标识/异常全文。新增14项与既有安装快照17项元数据测试normal/-O通过。journal产生前失败仍可能为NOT_OBSERVED；COMPLETE仅为journal声明，不是独立实际去重、物理空间或数值验收。原35B安装原因仍UNKNOWN。
+
+## 2026-10-30 diagnostic R2 实际 NO_GO：CPU_AVX512（无重构建）
+
+- source04be815f、launch718a451e，run41064855934/job124093486574/attempt1，已completed/failure；启动身份与checkout通过，主步骤在13:38:23Z因CPU_AVX512前置停止。没有材料下载、backend构建、安装、参考/provider/DUT执行，未重跑原任务。launch提交检查41064856103成功。
+- 原始log的runner ImageVersion为20261025.353.1，亦不等于固定20261026.354.1；实际首个失败仅CPU门，不能声称后续内存/磁盘/源码门已通过。
+- 唯一artifact12980938760为638B摘要ZIP，SHA72191129a1b4f94c586ba8fea4c915edd64e3d9151a09225af7cb55ce387279e；解包原摘要SHA77c91397c306fba7c583ffe821ea1def2c7e50de3c322ce5d0e0d790a4afdacd，stages空、numeric_pass=false、dedup NOT_OBSERVED。未上传payload。
+- 下一步审核宿主CPU/工具版本绑定的真实依赖，不能直接删除AVX512或镜像门、盲目重试或迁移旧参考PASS。原35B安装原因仍UNKNOWN；五块完整Chisel/最终RTL仍各0/5，有效MAC无新增实测。

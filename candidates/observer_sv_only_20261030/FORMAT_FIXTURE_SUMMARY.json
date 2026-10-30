@@ -1,0 +1,119 @@
+{
+  "schema": "SYNTHETIC_OFFICIAL_EMITTER_FORMAT_CHECK_V1",
+  "scope": "SMALL_AST_ONLY_NOT_ACTUAL_TWO_MODULE_SV_PROOF",
+  "status": "PASS_SYNTHETIC_FORMAT_AND_EXACT_BYTE_PROJECTION_ONLY",
+  "source_sha256": "066f164d95da9d8b70fb1e647d313b2b42ec90ea1b99e7e4fc13e6d809735d7e",
+  "scanner_sha256": "b49c75780d2bfb295d3e90df6d478475f42c3129dba73c850b4d564e4114965b",
+  "projection_source_sha256": "81aada0fd6c89db9f259d48089ba3f352f4ea7a4438693aa97a0bb708c2280a4",
+  "results": {
+    "Public21QkvReductionRouter": {
+      "old": {
+        "input_sha256": "5da03d7e7818f06dc4dba6e8cb3bab8feff530dd2e90693e2f40fab320cabaa2",
+        "normalized_sha256": "5da03d7e7818f06dc4dba6e8cb3bab8feff530dd2e90693e2f40fab320cabaa2",
+        "projected_normalized_sha256": "5da03d7e7818f06dc4dba6e8cb3bab8feff530dd2e90693e2f40fab320cabaa2",
+        "projected_normalized_bytes": 144,
+        "removed_ports": [],
+        "removed_sourceinfo_comments": 0,
+        "removed_assignments": []
+      },
+      "new": {
+        "input_sha256": "fc85d7148f3b8e13f6cecc55c7745695a37ab1f3cddb6a569713f6bd1666f8b8",
+        "normalized_sha256": "2c5414d4797e588f8b115dac91d5676e0f22d8c4d69d28ac57f041e049bffa36",
+        "projected_normalized_sha256": "5da03d7e7818f06dc4dba6e8cb3bab8feff530dd2e90693e2f40fab320cabaa2",
+        "projected_normalized_bytes": 144,
+        "removed_ports": [
+          "io_residentTiles_response_bits_key_identity",
+          "io_residentTiles_response_bits_key_index",
+          "io_residentTiles_response_bits_key_ng",
+          "io_residentTiles_response_bits_key_slot",
+          "io_tiles_response_bits_key_identity",
+          "io_tiles_response_bits_key_index",
+          "io_tiles_response_bits_key_ng",
+          "io_tiles_response_bits_key_slot"
+        ],
+        "removed_sourceinfo_comments": 12,
+        "removed_assignments": [
+          {
+            "destination": "io_residentTiles_response_bits_key_identity",
+            "source": "io_tiles_response_bits_key_identity"
+          },
+          {
+            "destination": "io_residentTiles_response_bits_key_index",
+            "source": "io_tiles_response_bits_key_index"
+          },
+          {
+            "destination": "io_residentTiles_response_bits_key_ng",
+            "source": "io_tiles_response_bits_key_ng"
+          },
+          {
+            "destination": "io_residentTiles_response_bits_key_slot",
+            "source": "io_tiles_response_bits_key_slot"
+          }
+        ]
+      }
+    },
+    "TransposedDenseDownOwner": {
+      "old": {
+        "input_sha256": "a3962c00b6355ba14ad51e2877a8f087d691a4e7d19cbe174f7080884f901f52",
+        "normalized_sha256": "8af7bf397724e2219fd62a309803193bd992c50ccb8dea5f23223f0a094d2bca",
+        "projected_normalized_sha256": "8af7bf397724e2219fd62a309803193bd992c50ccb8dea5f23223f0a094d2bca",
+        "projected_normalized_bytes": 830,
+        "removed_ports": [],
+        "removed_sourceinfo_comments": 0,
+        "removed_assignments": []
+      },
+      "new": {
+        "input_sha256": "02cb5a4efc404b948ea0a4ca3b6c7406dfa6ec122253b06c4656a351f8880372",
+        "normalized_sha256": "0a7c5cc7e0fefe4b41d68aa3059b8e16796c9b7bbbea2901c826fb4f57c9c5e9",
+        "projected_normalized_sha256": "8af7bf397724e2219fd62a309803193bd992c50ccb8dea5f23223f0a094d2bca",
+        "projected_normalized_bytes": 830,
+        "removed_ports": [
+          "io_tiles_response_bits_key_identity",
+          "io_tiles_response_bits_key_index",
+          "io_tiles_response_bits_key_ng",
+          "io_tiles_response_bits_key_slot"
+        ],
+        "removed_sourceinfo_comments": 8,
+        "removed_assignments": [
+          {
+            "destination": "io_tiles_response_bits_key_identity",
+            "source": "banks_io_tiles_response_bits_key_identity"
+          },
+          {
+            "destination": "io_tiles_response_bits_key_index",
+            "source": "banks_io_tiles_response_bits_key_index"
+          },
+          {
+            "destination": "io_tiles_response_bits_key_ng",
+            "source": "banks_io_tiles_response_bits_key_ng"
+          },
+          {
+            "destination": "io_tiles_response_bits_key_slot",
+            "source": "banks_io_tiles_response_bits_key_slot"
+          }
+        ]
+      }
+    }
+  },
+  "processes": [
+    {
+      "name": "compile_r2",
+      "native_exit": 0,
+      "elapsed_seconds": 6.382872267000494,
+      "observed_peak_rss": 225329152,
+      "errors": []
+    },
+    {
+      "name": "fixture",
+      "native_exit": 0,
+      "elapsed_seconds": 1.967995079998218,
+      "observed_peak_rss": 111169536,
+      "errors": []
+    }
+  ],
+  "all_strict_cleanup_eof_gzip": true,
+  "initial_failed_compile": "LowForm_symbol_not_in_firrtl2_fixed_to_original_CircuitState_API",
+  "actual_module_proof": false,
+  "sv_repin_authorized": false,
+  "numerical_pass": false
+}

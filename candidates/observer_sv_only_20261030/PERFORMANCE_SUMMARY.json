@@ -1,0 +1,21 @@
+{
+  "schema": "SYNTHETIC_PROJECTION_PERFORMANCE_V1",
+  "input_bytes": 8388541,
+  "elapsed_seconds": 2.7085092370034545,
+  "peak_rss_bytes": 49020928,
+  "projected_bytes": 8388025,
+  "actual_sv_proof": false,
+  "numerical_pass": false,
+  "supervisor_native_exit": 0,
+  "supervisor_elapsed_seconds": 3.483709715997975,
+  "supervisor_sampled_peak_rss_bytes": 43638784,
+  "strict_cleanup": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+  "pipe_eof_observed": true,
+  "gzip_finalized": true,
+  "rss_cap_bytes": 1073741824,
+  "wall_cap_seconds": 30,
+  "cpu_cap_seconds": 30,
+  "timed_projection_source_sha256": "81aada0fd6c89db9f259d48089ba3f352f4ea7a4438693aa97a0bb708c2280a4",
+  "performance_fixture_source_sha256": "3abe02ba9d8c18c2d4dcd179c7927e0a2c79a1eb95d94f32a227973bd47ce799",
+  "scope": "SYNTHETIC_8MIB_WITH_PROJECTED_OUTPUT_SINK_NOT_ACTUAL_SV_PROOF"
+}

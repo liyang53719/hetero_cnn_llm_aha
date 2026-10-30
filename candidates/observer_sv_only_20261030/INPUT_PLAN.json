@@ -1,0 +1,104 @@
+{
+  "scope": "DESIGN_ONLY_NOT_EXECUTABLE_OR_AUTHORIZED_NEW_JOB",
+  "source_delta": [
+    {
+      "old": {
+        "path": "candidates/fresh_original_top_recovery_20261028/source/FfnTileSiluBridge.scala",
+        "sha256": "efc433714219745a0fa012899a0d1fb16fdc72ab797fcdbbf3674154eb58329b"
+      },
+      "new": {
+        "path": "candidates/p0_resident_observation_20261030/source/FfnTileSiluBridge.scala",
+        "sha256": "27ee34a131aa508bb246b7e2e9196eaed3e8c4d9127ea9ca835ac5333fb4e868"
+      }
+    },
+    {
+      "old": {
+        "path": "candidates/fresh_original_top_recovery_20261028/source/FfnResidentCoordinator.scala",
+        "sha256": "c2b58a685ec8adedace26a830e93c1e3d2b63093df878cccc4b6020ababdb9db"
+      },
+      "new": {
+        "path": "candidates/p0_resident_observation_20261030/source/FfnResidentCoordinator.scala",
+        "sha256": "65d786a0a0f92a8aea2c8db945b3448162d8b3c814356218fc98f588f201d8ee"
+      }
+    },
+    {
+      "old": {
+        "path": "candidates/fresh_original_top_recovery_20261028/source/QwenOwnerProtocol.scala",
+        "sha256": "7da3466f9720722a636301b163c72d795c556e75f020efef4b1120be365142d2"
+      },
+      "new": {
+        "path": "candidates/p0_resident_observation_20261030/source/QwenOwnerProtocol.scala",
+        "sha256": "78dfd535faefb30b70a60d3ef4f83fbe923f0e35a10c995a2830cdb772fa0af4"
+      }
+    },
+    {
+      "old": {
+        "path": "candidates/attention_policy_count_fix_20261029T0054/source/HostBlockCommandsV4.scala",
+        "sha256": "8cea5e8863e47ca14978871d23b7f80639e43ae3192c3e6c0ccf372b1c73a20f"
+      },
+      "new": {
+        "path": "candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala",
+        "sha256": "79a721ddb498a5d5863085535c2aaedea14e5503e0f3a41abe2af29995fb813b"
+      }
+    },
+    {
+      "old": {
+        "path": "candidates/fresh_original_top_recovery_20261028/source/HostBlockTopV4.scala",
+        "sha256": "588fcba10ff4d55634192513469eeb4d757e81d4693fc9ac64b1143335537f8a"
+      },
+      "new": {
+        "path": "candidates/moe_router_score_observation_20261030/source/HostBlockTopV4.scala",
+        "sha256": "da22759883a9749c1706ff77ff78afcdabb7fe869aed19df90f817017ef89583"
+      }
+    },
+    {
+      "old": {
+        "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouterNumericalOwnerV2.scala",
+        "sha256": "04ef8a11a5ec90af7622232dbec2369af9b574a0a1a74eb4f9236a9c8e549316"
+      },
+      "new": {
+        "path": "candidates/moe_router_score_observation_20261030/source/UnifiedMoeRouterNumericalOwnerV2.scala",
+        "sha256": "7c4358e766fca3101657e1702c8fdb2ee579a589eea768fcf1f2eed20412334f"
+      }
+    },
+    {
+      "old": {
+        "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouterPipelineBindingV2.scala",
+        "sha256": "380b5b7b36fe238d2444ca530e92bd1dabb8852e9d42a42f88392dcd194dae0c"
+      },
+      "new": {
+        "path": "candidates/moe_router_score_observation_20261030/source/UnifiedMoeRouterPipelineBindingV2.scala",
+        "sha256": "0233df02cef3e1d81031f865838714a130bd7990d0dae4776a251f9498c6f3c2"
+      }
+    },
+    {
+      "old": {
+        "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRuntimeExpertLoopV4.scala",
+        "sha256": "9a41408d5c846b1046957679731892dad7c06b177201975eeca22213d6eb8c8b"
+      },
+      "new": {
+        "path": "candidates/moe_router_score_observation_20261030/source/UnifiedMoeRuntimeExpertLoopV4.scala",
+        "sha256": "1e0587156ff83ff1125abc4445cd9740f8377b2fe310c9dd0b85f238c7e0e605"
+      }
+    }
+  ],
+  "helper_delta": [
+    {
+      "name": "CanonicalHighGate.scala",
+      "old_sha256": "d96368a47fa0161072e554822b9e70409ccb06d58ae29d5fa8139043f8f64f98",
+      "new_sha256": "46ff62a45a47ccb0099378ac27619b79a346b9e3c3ad415cafca77788c1ffabc"
+    },
+    {
+      "name": "PortableHostHighSimulationEmitter.scala",
+      "old_sha256": "3f51c68bd82939a1dae46e7d45a5b751a4d5b2638a9ade3f94552f587e31567a",
+      "new_sha256": "d81c1a88c17f58843596b99cd2cd63b0f0e66fdd1c079aef0beb6184175035a0"
+    }
+  ],
+  "old_canonical_sha256": "90464ff45917c1b853c7d1b36e67dd5e43b5503b7fa0583704ee615c08919533",
+  "new_canonical_sha256": "00897fd49e82036e04195ef6fe2a671e0a3fd948d968de3e47c4dfa7388f6b5c",
+  "whole_sv_normalized_old": "6555ede34ba2980a6ebfddb13325ffb14734063d3253fdadd493bfcb4bf67bb5",
+  "whole_sv_normalized_new": "ec70f91181b0422ca7cf2bc845a2a1f04c9d862f4f27d265c5a064a969058d72",
+  "local_heavy_allowed": false,
+  "reason": "UNKNOWN_OLD_OWNER_RESERVATION_5GiB_PLUS_NEW_6GiB_PLUS1GiB_REQUIRES12GiB_CURRENT_INSUFFICIENT",
+  "fresh_ci_plan": "Two independent full155 class roots; old/new helper roots; exact canonical+annotations; emitSVonly with no Verilator/GCC/archive/link/weights; bounded strict61bit proof"
+}

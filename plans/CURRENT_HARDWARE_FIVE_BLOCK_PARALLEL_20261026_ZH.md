@@ -1,5 +1,14 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-30 — SV-only 严格差异取证候选：TEMP / SOURCE-ONLY，未激活
+
+- **DONE（仅源码/轻测）**：独立fresh CI旧/新完整155源码、各7helper、既有完整original IR→canonical→emit SV→scan→两模块严格差异证明入口。专用source pins 664项，SHA256 `7e7681939364073d9d236d51b06608fbf2bc90f9cf36a8256f6340ef545e2413`；normal/-O各53项轻量测试通过，含真实project_proof合成链及失败双artifact出口。它们不是实际全SV证明或数值通过。
+- **ONGOING / TEMP**：保持旧/新canonical `90464ff…` / `00897fd…` 和whole normalized `6555ede…` / `ec70f91…` 硬锁；只审核两额外模块的61-bit key四字段端口及直接转发，其他normalized字节须严格一致。无自动re-pin，后续真实证明仍需独审；当前全SV整体re-pin继续暂缓。
+- **TODO**：先核新source远端及CI，再另一个仅新增唯一launch的direct-parent提交激活一次；本源码提交不触发。原class不搬、本地未知owner84990不触碰/重试。仅JDK/JAR和SV-only，不含serialVerilator/GCC/providers/archive/link/weights/reference/DUT。
+- 15阶段wall6360s+cleanup450s+parent900s=内部7710s；GitHub step129min=7740s只取整30s，workflow保守9060s，whole10800s余1740s。原phasecaps最大RSS6GiB、freshhost至少7GiB；保留原bootstrap更紧AS/log caps及whole repo+work的100k entry总边界。
+- 只导出两份各≤64KiB的proof/summary及固定字段runtime身份hash，不导出rawSV/IR/classes/o/log/weights。CPU/runtime及最终数值资格不由此继承。五块M128完整数值仍0/5，最终冻结同RTL回放0/5，利用率未测。既有实际frontend/122 ABI/单TU限定证据及下方历史正文完整保留。
+
+
 ## 2026-10-30 20:34 — 实际 frontend/ABI/单 TU 限定资格通过；SV re-pin TEMP 暂缓
 
 - source `a06b51416090fce2ad3d04336c82a5b7a2d00b97`，launch `50f2e807f28f11e80ffc418461da94fe1ba3c80b`，run `41118989254` SUCCESS；24阶段严格终态/cleanup/EOF/gzip/native0，完整4096 MAC不变。证据：`candidates/observer_frontend_qualification_20261030/evidence/run41118989254/`。

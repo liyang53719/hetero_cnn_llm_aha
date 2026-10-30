@@ -1,0 +1,93 @@
+{
+  "scope": "TEMP_SOURCE_ONLY_NOT_ACTIVATED",
+  "whole_job_seconds": 10800,
+  "stage_wall_seconds": 6360,
+  "stage_cleanup_seconds": 450,
+  "parent_seconds": 900,
+  "workflow_seconds": 1320,
+  "declared_envelope_seconds": 9060,
+  "reserve_seconds": 1740,
+  "execution_step_seconds": 7740,
+  "max_stage_rss_bytes": 6442450944,
+  "fresh_host_min_available_bytes": 7516192768,
+  "stages": [
+    {
+      "name": "jdk",
+      "wall_seconds": 300,
+      "rss_gib": 1
+    },
+    {
+      "name": "jars",
+      "wall_seconds": 600,
+      "rss_gib": 1
+    },
+    {
+      "name": "old_compile155",
+      "wall_seconds": 300,
+      "rss_gib": 3
+    },
+    {
+      "name": "old_helper_compile",
+      "wall_seconds": 300,
+      "rss_gib": 3
+    },
+    {
+      "name": "old_original_ir",
+      "wall_seconds": 600,
+      "rss_gib": 6
+    },
+    {
+      "name": "old_canonical",
+      "wall_seconds": 300,
+      "rss_gib": 3
+    },
+    {
+      "name": "old_emit_sv",
+      "wall_seconds": 900,
+      "rss_gib": 6
+    },
+    {
+      "name": "old_svscan",
+      "wall_seconds": 180,
+      "rss_gib": 1
+    },
+    {
+      "name": "new_compile155",
+      "wall_seconds": 300,
+      "rss_gib": 3
+    },
+    {
+      "name": "new_helper_compile",
+      "wall_seconds": 300,
+      "rss_gib": 3
+    },
+    {
+      "name": "new_original_ir",
+      "wall_seconds": 600,
+      "rss_gib": 6
+    },
+    {
+      "name": "new_canonical",
+      "wall_seconds": 300,
+      "rss_gib": 3
+    },
+    {
+      "name": "new_emit_sv",
+      "wall_seconds": 900,
+      "rss_gib": 6
+    },
+    {
+      "name": "new_svscan",
+      "wall_seconds": 180,
+      "rss_gib": 1
+    },
+    {
+      "name": "projection",
+      "wall_seconds": 300,
+      "rss_gib": 1
+    }
+  ],
+  "internal_envelope_seconds": 9030,
+  "internal_execution_seconds": 7710,
+  "outer_integer_roundup_seconds": 30
+}

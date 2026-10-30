@@ -2,7 +2,7 @@ name: hetero-five-m128-samejob-calibration-local-data
 on:
   push:
     branches: [main]
-    paths: [ci_launch/five_m128_samejob_calibration_20261030_once.json]
+    paths: [ci_launch/five_m128_samejob_diagnostic_r2_20261030_once.json]
 permissions:
   contents: read
   actions: read

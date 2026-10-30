@@ -175,3 +175,13 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 固定6个安全label，记录whole job+repo inode去重bytes/files/entries/free/symlink计数和monotonic起止/耗时；20s为协作检查，不是OS调用硬限。后置只在cleanup/EOF完整时扫描，否则明确UNAVAILABLE。native失败但cleanup完整可观测；结果不是失败瞬间，也不是连续峰值或资源PASS。
 - 快照每条4KiB，summary严格枚举/数值/hash投影，缺失/超限/巨整数等标INVALID_FIELDS，不丢原stage，64KiB降级保留；不上传私路径、argv、原错误全文或数据。17小fixture normal/-O通过，仅元数据/模拟census，不是真实安装或目录采样通过。
 - 原run41034072605的35B安装原因仍UNKNOWN，不能追认旧缺失reason；该源码只改善未来获准执行的可观察性。没有新安装/EDA/去重/删除/activation，完整硬件数值仍0/5。
+
+## 2026-10-30：新一次性同 job 诊断启动源码（TEMP，尚未启动）
+
+- done / PASS（仅启动接线）：以 7c545226 为源码基线，将既有 workflow 与 guard 的单次路径/nonce 更换为 five_m128_samejob_diagnostic_r2_20261030_once；保留单新增文件、精确 parent/source/event、attempt 1、实际 run/blob 身份与所有资源门。对应三项 source pin 同步更新，其余不变。
+- done / PASS（仅轻量 fixture）：7 项测试在 normal/-O 各通过；含真实两提交 Git 身份、旧 activation 文件保留、旧 nonce/path 及错误事件/重试/资源拒绝。无 backend/runtime/DUT 执行。
+- ongoing / TEMP：先发布并验证新源码提交，再独立审核只新增新 activation 路径的一次提交，source_sha 必须绑定实际新源码。当前没有新运行身份，不能宣称已启动或资源门已通过。
+- 原 41034072605 安装失败原因仍 UNKNOWN；27-stage backend 构建不是数值通过。修复后的 typed 诊断、安装前后离散快照与精确副本候选只适用于未来运行，不追补旧证据，不保证资源适配。
+- 五块仍完整 M128、同一 4096-MAC/Vector32 backend；未来每块 300 秒仅执行标定。独立 Python 参考 5/5；完整 Chisel/RTL 数值各 0/5，MAC 利用率未新增实测。未修改数值/路由/硬件/caps/旧监督程序，未上传权重或运行 payload，未清理文件。
+
+- 同批补充：安全摘要新增固定去重 journal 的六类枚举状态、逻辑节约量、receipt/build hash 和两固定 role 状态；不导出路径/用户标识/异常全文。新增14项与既有安装快照17项元数据测试normal/-O通过。journal产生前失败仍可能为NOT_OBSERVED；COMPLETE仅为journal声明，不是独立实际去重、物理空间或数值验收。原35B安装原因仍UNKNOWN。

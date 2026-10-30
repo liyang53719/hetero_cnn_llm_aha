@@ -64,9 +64,39 @@ def install_snapshots(work):
    rows.append(base)
  return rows
 
+def pack_deduplication(work):
+ # One fixed journal; absence is not proof that the operation never started.
+ out=dict(status='NOT_OBSERVED',scope='LIFECYCLE_JOURNAL_ONLY_NOT_NUMERICAL_PASS',physical_space_saved='NOT_MEASURED')
+ p=work/'PACK_DEDUPLICATION.json'
+ try:
+  if not p.exists()and not p.is_symlink():return out
+  out['status']='INVALID_FIELDS'
+  if p.is_symlink()or not p.is_file()or p.stat().st_size>65536:return out
+  with p.open('rb')as f:raw=f.read(65537)
+  if len(raw)>65536:return out
+  out['receipt_sha256']=hashlib.sha256(raw).hexdigest()
+  r=json.loads(raw)
+  states={'PREPARED','NO_OP_MODE_MISMATCH','VERIFIED_BACKUPS_RETAINED','RECOVERY_REQUIRED','ROLLED_BACK','COMPLETE'}
+  pair_states={'PENDING','REPLACED_BACKUP_RETAINED','BOTH_PATHS_RETAINED_SAME_INODE'}
+  if not isinstance(r,dict)or r.get('schema')!='EXACT_TWO_COPY_DEDUPLICATION_V1'or r.get('scope')!='LIFECYCLE_ONLY_NOT_NUMERICAL_PASS'or r.get('status')not in states or r.get('physical_space_saved')!='NOT_MEASURED':return out
+  saved=r.get('logical_saved_bytes');build=r.get('build_result_sha256');pairs=r.get('pairs')
+  if type(saved)is not int or not 0<=saved<=362153111 or (r['status']!='COMPLETE'and saved!=0):return out
+  if not isinstance(build,str)or not re.fullmatch('[0-9a-f]{64}',build):return out
+  if not isinstance(pairs,list)or len(pairs)!=2:return out
+  selected=[]
+  for row in pairs:
+   if not isinstance(row,dict)or row.get('role')not in ('sv','binary')or row.get('status')not in pair_states:return out
+   selected.append(dict(role=row['role'],status=row['status']))
+  if {x['role']for x in selected}!={'sv','binary'}:return out
+  if r['status']=='COMPLETE'and any(x['status']!='BOTH_PATHS_RETAINED_SAME_INODE'for x in selected):return out
+  out.update(status=r['status'],logical_saved_bytes=saved,build_result_sha256=build,pairs=selected)
+ except (OSError,ValueError,TypeError,KeyError):out['status']='INVALID_FIELDS'
+ return out
+
 def summarize(work,identity):
  out=dict(schema='FIVE_M128_SAME_JOB_SAFE_SUMMARY_V1',status='INCOMPLETE',numeric_pass=False,final_rtl_replay=False,uploaded_payloads=False,profiles_registered=list(range(5)),tokens=128,matrix_macs=4096,vector_lanes=32,resource_peak_qualification='INCOMPLETE_SAMPLED',stages=[],actual_dut_reports=[])
  out['installation_resource_snapshots']=install_snapshots(work)
+ out['pack_deduplication']=pack_deduplication(work)
  for k in ('source_commit','launch_commit'):
   h=identity.get(k);out[k]=h if isinstance(h,str)and re.fullmatch('[0-9a-f]{40}',h)else None
  out['run_id']=identity.get('run_id')if type(identity.get('run_id'))is int else None

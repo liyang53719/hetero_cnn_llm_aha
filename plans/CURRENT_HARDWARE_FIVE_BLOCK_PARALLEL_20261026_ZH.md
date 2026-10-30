@@ -219,3 +219,11 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - ongoing / TEMP：先发布上述源码并核验 CI，再单独审核仅新增新 activation 文件的提交，以实际新源码 SHA 为唯一 parent/source。当前未创建 activation，不能称四块已启动。新 host 必须通过既有有界 prebuild 契约，尚未 qualified。
 - 保持五 profile 登记：P1–P4 是本次执行候选；P0 按原 host policy deferred / NOT_TESTED，不改其数值基线，不计入已通过。共享完整 4096-MAC 硬件定义未改；vector_lanes32 仅声明 tag，不代表物理 32-lane II=1 已验证。
 - 原资源上限、21000秒总时限、并发互斥、每块标定时限和仅上传受限摘要保持。所有历史 activation/失败材料保留，不重跑旧 run、不清理、不上传权重/二进制/原始参考。完整五块 Chisel/RTL 数值仍需真实完成；本次接线测试不能替代数值或 MAC 利用率实测。
+
+## 2026-10-30 四块新宿主运行终态与真实 SRAM 观察候选
+
+- 运行 41081287332（job 124150795368，attempt 1；source 0ebe665a，launch edaf391f）的主步骤已失败。JDK、GNU tool inventory、JAR、Verilator、iDMA、Matrix 六个准备阶段均 native 0；fresh-host inventory 为 native 1，原因码 ELF_DEPENDENCY_ROOT_REJECTED，cleanup/EOF 完整。未进入长 backend 编译、runtime 安装、reference 或 DUT。P0 是策略延期、未测试，不能称实测 CPU 缺 AVX512。
+- 原安全摘要为 19,228 B，SHA256 c330617708d91025fcdc91eacd037b9510f2442fec28730d0a6880f3c1b991d1；artifact 12989501775 的 ZIP SHA256 为 9f9e7abe53f806ee272e7b9adba60e5100064b11004d1ed4d16a3bdac6996a9d。拒绝路径未导出，不能猜定原现场路径。只读本地 JDK ldd 显示合法 bin/../lib 路径会被现词法门误拒绝。这是已复现的本地代码缺陷，不等于原 CI 具体根因已完整定位；不重试旧任务。
+- 本批发布 candidates/p0_resident_observation_20261030 隔离源码包：从真实 sealed SRAM gate/up 读响应输出 valid-only 观察口，统一 689 bit / 预计 27 port，配套最终 V3 driver collector 和实际 consumer_owned 位比较器。无 ready 反馈，不改算术或 DDR。参考 BF16 位扩展后与 actual 原始 FP32 精确比较，不舍入 actual。该包未替换 active fixed155/backend，原规范化、ABI、RTL 哈希门禁保留。
+- 实际本地 Scala typer：155 份源码、五文件 override；native 0，用时 55.460118529998 秒，观测 RSS 892080128 B，严格 cleanup/EOF/gzip 完整。receipt SHA256 为 81f6b9f1bf1f8243c874d45a9a2d6054e4ca7828f103cb9243960b5f4af3d4ba。Debian Java 21.0.12.1 不同于 CI Adoptium 21.0.13；-Ystop-after:typer 不覆盖插件后置阶段、字节码编译、elaboration、真实 ABI、RTL 或数值。C++ 完整 shape 合成 collector、mock-port 语法及 Python helper/owned 测试只按各自范围通过。
+- 后续需将观察包与新 source overlay、driver/header、owned-helper pin 链、新 ABI 及实际规范化/RTL 身份共同资格化，不能迁移旧 85 port 或旧 canonical PASS。MoE raw scores 观测及其余 required stage 比较仍未补齐。整个设计的物理 Vector32/II=1 未证明。五块完整 Chisel/RTL 各 0/5，无新增利用率实测；原 35B 安装原因仍 UNKNOWN。

@@ -1,0 +1,69 @@
+{
+  "status": "TEMP_UNQUALIFIED_SOURCE_CANDIDATE",
+  "base_commit": "04be815f803ab45876f0e687146b96281ed857e4",
+  "new_rtl_sha256": null,
+  "files": [
+    {
+      "original": "candidates/fresh_original_top_recovery_20261028/source/FfnTileSiluBridge.scala",
+      "candidate": "source/FfnTileSiluBridge.scala",
+      "before_sha256": "efc433714219745a0fa012899a0d1fb16fdc72ab797fcdbbf3674154eb58329b",
+      "after_sha256": "27ee34a131aa508bb246b7e2e9196eaed3e8c4d9127ea9ca835ac5333fb4e868",
+      "final_fixed155_selected": true
+    },
+    {
+      "original": "candidates/fresh_original_top_recovery_20261028/source/FfnResidentCoordinator.scala",
+      "candidate": "source/FfnResidentCoordinator.scala",
+      "before_sha256": "c2b58a685ec8adedace26a830e93c1e3d2b63093df878cccc4b6020ababdb9db",
+      "after_sha256": "65d786a0a0f92a8aea2c8db945b3448162d8b3c814356218fc98f588f201d8ee",
+      "final_fixed155_selected": true
+    },
+    {
+      "original": "candidates/fresh_original_top_recovery_20261028/source/QwenOwnerProtocol.scala",
+      "candidate": "source/QwenOwnerProtocol.scala",
+      "before_sha256": "7da3466f9720722a636301b163c72d795c556e75f020efef4b1120be365142d2",
+      "after_sha256": "78dfd535faefb30b70a60d3ef4f83fbe923f0e35a10c995a2830cdb772fa0af4",
+      "final_fixed155_selected": true
+    },
+    {
+      "original": "candidates/fresh_original_top_recovery_20261028/source/HostBlockTopV4.scala",
+      "candidate": "source/HostBlockTopV4.scala",
+      "before_sha256": "588fcba10ff4d55634192513469eeb4d757e81d4693fc9ac64b1143335537f8a",
+      "after_sha256": "3a7aff0301457f151df47772963c6cad04263cecfa55884c3cefd14836d877b0",
+      "final_fixed155_selected": true
+    },
+    {
+      "original": "candidates/attention_policy_count_fix_20261029T0054/source/HostBlockCommandsV4.scala",
+      "candidate": "source/HostBlockCommandsV4.scala",
+      "before_sha256": "8cea5e8863e47ca14978871d23b7f80639e43ae3192c3e6c0ccf372b1c73a20f",
+      "after_sha256": "79a721ddb498a5d5863085535c2aaedea14e5503e0f3a41abe2af29995fb813b",
+      "final_fixed155_selected": true
+    },
+    {
+      "original": "candidates/five_profile_execution_v3_20261029T0148/host_axi_driver_non_dpi_final_dump.cpp",
+      "candidate": "driver/host_axi_driver_non_dpi.cpp",
+      "before_sha256": "20df2692d41693491f0da03fa17f21886b9375ca599c83b5b75c0994841dc45e",
+      "after_sha256": "f7c0b05dce22225a818f00c4a781ebbe6ee01987f93b63f66e501ae4e13f2323"
+    },
+    {
+      "original": "candidates/same_job_execution_20261030/numeric/consumer_owned.py",
+      "candidate": "numeric/consumer_owned.py",
+      "before_sha256": "48a0c0ec7d890fec5d73ff9db9c7e411ffb2669e8bee9eb5e20af20522b437a5",
+      "after_sha256": "c482295ce89d81c7d840d4ac0fd59498a225301c5338d67356ef46f5d29854b3"
+    }
+  ],
+  "new_files": [
+    {
+      "path": "driver/resident_observation.hpp",
+      "sha256": "88185df7e27f3c0ffa7f3fd857e40f4a31fd72a69c876602519be2e3b0a69721"
+    },
+    {
+      "path": "numeric/resident_compare.py",
+      "sha256": "4b0f0fb9984d3fc45b9ecd2a87310b1ce9ce940695caf2888c2c625996581b8b"
+    }
+  ],
+  "scala_typecheck": "PASS_LOCAL_SCALA_TYPER_ONLY",
+  "rtl_generation": "NOT_RUN",
+  "new_abi_qualified": false,
+  "selected_by_current_active_pipeline": false,
+  "fresh_host_pin_only_changes_merged": false
+}

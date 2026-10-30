@@ -1,0 +1,108 @@
+{
+  "schema": "INACTIVE_SOURCE_CANDIDATE_PACKAGE_V1",
+  "selected_by_active_pipeline": false,
+  "includes_weights": false,
+  "includes_binary_or_tensor_data": false,
+  "files": [
+    {
+      "path": "ABI_SCHEMA_DELTA.json",
+      "bytes": 1937,
+      "sha256": "c97302282f191f0a5249d71d488b5c2999b8c8973c38d1446c36915172689787"
+    },
+    {
+      "path": "IMPLEMENTATION_DELTA.patch",
+      "bytes": 17059,
+      "sha256": "47b8bc6102a5e35ccb58da397bf2b4126af01c7cc56d2154ced38a3bd42364cd"
+    },
+    {
+      "path": "README.zh.md",
+      "bytes": 4776,
+      "sha256": "ea9b876d489b76f37bdda8553faeafac1ec2f5a7b387c2608c2a07b440e25085"
+    },
+    {
+      "path": "SOURCE_DELTA.json",
+      "bytes": 3296,
+      "sha256": "678a4e6f2945489e4e15eee0a163627f694c4422c6ad03430380f71232fc02e6"
+    },
+    {
+      "path": "driver/host_axi_driver_non_dpi.cpp",
+      "bytes": 24861,
+      "sha256": "f7c0b05dce22225a818f00c4a781ebbe6ee01987f93b63f66e501ae4e13f2323"
+    },
+    {
+      "path": "driver/resident_observation.hpp",
+      "bytes": 3504,
+      "sha256": "88185df7e27f3c0ffa7f3fd857e40f4a31fd72a69c876602519be2e3b0a69721"
+    },
+    {
+      "path": "evidence/LOCAL_TYPER_EVIDENCE.json",
+      "bytes": 1486,
+      "sha256": "e9ca357d19297303bf56b04d1d03ab830018d995ca35161b2eb86dc37251c082"
+    },
+    {
+      "path": "evidence/TINY_TESTS.json",
+      "bytes": 350,
+      "sha256": "9a220f4ef8e688616fc6fcd1f495e019b1f8b29353452472ff0cb9a63a6efd87"
+    },
+    {
+      "path": "numeric/consumer_owned.py",
+      "bytes": 25538,
+      "sha256": "c482295ce89d81c7d840d4ac0fd59498a225301c5338d67356ef46f5d29854b3"
+    },
+    {
+      "path": "numeric/resident_compare.py",
+      "bytes": 1814,
+      "sha256": "4b0f0fb9984d3fc45b9ecd2a87310b1ce9ce940695caf2888c2c625996581b8b"
+    },
+    {
+      "path": "source/FfnResidentCoordinator.scala",
+      "bytes": 8452,
+      "sha256": "65d786a0a0f92a8aea2c8db945b3448162d8b3c814356218fc98f588f201d8ee"
+    },
+    {
+      "path": "source/FfnTileSiluBridge.scala",
+      "bytes": 6164,
+      "sha256": "27ee34a131aa508bb246b7e2e9196eaed3e8c4d9127ea9ca835ac5333fb4e868"
+    },
+    {
+      "path": "source/HostBlockCommandsV4.scala",
+      "bytes": 190813,
+      "sha256": "79a721ddb498a5d5863085535c2aaedea14e5503e0f3a41abe2af29995fb813b"
+    },
+    {
+      "path": "source/HostBlockTopV4.scala",
+      "bytes": 27189,
+      "sha256": "3a7aff0301457f151df47772963c6cad04263cecfa55884c3cefd14836d877b0"
+    },
+    {
+      "path": "source/QwenOwnerProtocol.scala",
+      "bytes": 91421,
+      "sha256": "78dfd535faefb30b70a60d3ef4f83fbe923f0e35a10c995a2830cdb772fa0af4"
+    },
+    {
+      "path": "tests/check_driver_syntax.py",
+      "bytes": 1528,
+      "sha256": "5379c33deb41240009a52305579acb7ace9e68404b7e7f14b84ed467591235b2"
+    },
+    {
+      "path": "tests/test_collector.cpp",
+      "bytes": 1805,
+      "sha256": "40c82fb5eae6a67dcbc2005d6b6b2d243e5a096ae1cdeee9438c1bc20826f975"
+    },
+    {
+      "path": "tests/test_compare.py",
+      "bytes": 931,
+      "sha256": "4a7e9588c9e32a27ded38fd31e6b1711156e0c5e339bab0716574230011382ec"
+    },
+    {
+      "path": "tests/test_consumer_owned.py",
+      "bytes": 3995,
+      "sha256": "a6e5786ee64710122c1d0f054363f74b1f37a344c55e25e32045fe82c4f24756"
+    },
+    {
+      "path": "tests/test_mapping.py",
+      "bytes": 841,
+      "sha256": "13d3fcd40a7f9f07eb0737e25763261f7dd02f4946e477c36717d81af22112fd"
+    }
+  ]
+}

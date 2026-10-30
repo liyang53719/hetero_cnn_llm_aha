@@ -1,0 +1,533 @@
+{
+  "actual_dut_reports": [],
+  "build": {
+    "completed": false,
+    "generated_output_inventory": {
+      "bytes": 0,
+      "files": 0,
+      "status": "UNAVAILABLE"
+    },
+    "jdk_public_external_dependencies": [
+      {
+        "alias_relative": "lib/security/cacerts",
+        "bytes": 134280,
+        "resolved_target": "/etc/ssl/certs/adoptium/cacerts",
+        "sha256": "ad7a35abd9e551152c31bfbca3ae605eea89dd15499486d5cf024a26cbbb0f8f"
+      }
+    ],
+    "native_frontend_plan": [],
+    "schema": "BUILD_ONLY_SUMMARY_V1",
+    "scope": "CHISEL_TEST_BACKEND_PREPARATION_NO_NUMERICS_NO_FINAL_RTL_REPLAY",
+    "source_commit": "0ebe665a2fa6b5cad196c53739aa2da35a3fff2b",
+    "stages": [
+      {
+        "cleanup_recorded": true,
+        "diagnostics": {
+          "failure_codes": [],
+          "log_status": "COMPLETE",
+          "observed_signatures": [],
+          "root_cause": "NO_FAILURE_RECORDED",
+          "scanned_bytes": 0,
+          "scanned_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "elapsed_seconds": 15.129039361999986,
+        "error_count": 0,
+        "native_exit": 0,
+        "observed_peak_rss": 36782080,
+        "stage": "jdk",
+        "telemetry": {
+          "caps": {
+            "cpu_seconds": 300,
+            "log_bytes": 16777216,
+            "raw_log_bytes": 33554432,
+            "rss_bytes": 1073741824,
+            "tree_bytes": 12081306272,
+            "wall_seconds": 300,
+            "watch_tree_bytes": 12081306272
+          },
+          "capture_census": {
+            "capture_cap_hit": false,
+            "compressed_bytes": 20,
+            "compressed_sha256": "d1111b245f685176180e6f1631e6dc49badf6672368e9ce260c71355165effdf",
+            "error_lines": 0,
+            "gzip_finalized": true,
+            "lines": 0,
+            "pipe_eof_observed": true,
+            "raw_bytes": 0,
+            "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "warning_histogram": {}
+          },
+          "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+          "disk_census_count": 13,
+          "disk_census_last_seconds": 1.052602567000008,
+          "disk_census_max_seconds": 1.1255050939999762,
+          "disk_census_total_seconds": 14.29301227100001,
+          "memory_reserve_warning_samples": 0,
+          "minimum_MemAvailable_bytes": 15482716160,
+          "observed_cpu_seconds": 0.52,
+          "peak_file_bytes": 67484814,
+          "peak_tree_bytes": 742037865,
+          "process_sample_count": 12,
+          "process_sample_max_gap_seconds": 1.1846557380000036,
+          "process_sample_terminal_gap_seconds": 2.2452831859999947,
+          "reader_join_barrier": {
+            "alive": false,
+            "complete": true,
+            "reader_finally_done": true
+          },
+          "reader_started_after_popen": true,
+          "supervisor_cpu_seconds": 14.974781696,
+          "supervisor_reason_codes": []
+        }
+      },
+      {
+        "cleanup_recorded": true,
+        "diagnostics": {
+          "failure_codes": [],
+          "log_status": "COMPLETE",
+          "observed_signatures": [],
+          "root_cause": "NO_FAILURE_RECORDED",
+          "scanned_bytes": 59710,
+          "scanned_sha256": "61cc93a0a40895e2e38a26a27b71c954d01f1290cd87da94924afe47df858301"
+        },
+        "elapsed_seconds": 8.68590694400001,
+        "error_count": 0,
+        "native_exit": 0,
+        "observed_peak_rss": 39084032,
+        "stage": "jars",
+        "telemetry": {
+          "caps": {
+            "cpu_seconds": 600,
+            "log_bytes": 16777216,
+            "raw_log_bytes": 33554432,
+            "rss_bytes": 1073741824,
+            "tree_bytes": 12081306272,
+            "wall_seconds": 600,
+            "watch_tree_bytes": 12081306272
+          },
+          "capture_census": {
+            "capture_cap_hit": false,
+            "compressed_bytes": 5108,
+            "compressed_sha256": "212a12d487aaea2a6fe494abcd6568f92633304c5a82112eebdfc191940d7de9",
+            "error_lines": 0,
+            "gzip_finalized": true,
+            "lines": 4,
+            "pipe_eof_observed": true,
+            "raw_bytes": 59710,
+            "raw_sha256": "61cc93a0a40895e2e38a26a27b71c954d01f1290cd87da94924afe47df858301",
+            "warning_histogram": {}
+          },
+          "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+          "disk_census_count": 7,
+          "disk_census_last_seconds": 1.0688784899999746,
+          "disk_census_max_seconds": 1.2188709080000422,
+          "disk_census_total_seconds": 8.205756680999968,
+          "memory_reserve_warning_samples": 0,
+          "minimum_MemAvailable_bytes": 15713505280,
+          "observed_cpu_seconds": 1.15,
+          "peak_file_bytes": 67484814,
+          "peak_tree_bytes": 821487241,
+          "process_sample_count": 6,
+          "process_sample_max_gap_seconds": 1.2817736810000042,
+          "process_sample_terminal_gap_seconds": 2.375136623000003,
+          "reader_join_barrier": {
+            "alive": false,
+            "complete": true,
+            "reader_finally_done": true
+          },
+          "reader_started_after_popen": true,
+          "supervisor_cpu_seconds": 8.646602111999997,
+          "supervisor_reason_codes": []
+        }
+      },
+      {
+        "cleanup_recorded": true,
+        "diagnostics": {
+          "failure_codes": [],
+          "log_status": "COMPLETE",
+          "observed_signatures": [],
+          "root_cause": "NO_FAILURE_RECORDED",
+          "scanned_bytes": 0,
+          "scanned_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "elapsed_seconds": 2.7365177150000477,
+        "error_count": 0,
+        "native_exit": 0,
+        "observed_peak_rss": 9547776,
+        "stage": "verilator",
+        "telemetry": {
+          "caps": {
+            "cpu_seconds": 300,
+            "log_bytes": 16777216,
+            "raw_log_bytes": 33554432,
+            "rss_bytes": 1073741824,
+            "tree_bytes": 12081306272,
+            "wall_seconds": 300,
+            "watch_tree_bytes": 12081306272
+          },
+          "capture_census": {
+            "capture_cap_hit": false,
+            "compressed_bytes": 20,
+            "compressed_sha256": "d1111b245f685176180e6f1631e6dc49badf6672368e9ce260c71355165effdf",
+            "error_lines": 0,
+            "gzip_finalized": true,
+            "lines": 0,
+            "pipe_eof_observed": true,
+            "raw_bytes": 0,
+            "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "warning_histogram": {}
+          },
+          "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+          "disk_census_count": 2,
+          "disk_census_last_seconds": 1.0863777129999903,
+          "disk_census_max_seconds": 1.458162247999951,
+          "disk_census_total_seconds": 2.5445399609999413,
+          "memory_reserve_warning_samples": 0,
+          "minimum_MemAvailable_bytes": 15724056576,
+          "observed_cpu_seconds": 0.0,
+          "peak_file_bytes": 67484814,
+          "peak_tree_bytes": 862862905,
+          "process_sample_count": 1,
+          "process_sample_terminal_gap_seconds": 2.6641324710000163,
+          "reader_join_barrier": {
+            "alive": false,
+            "complete": true,
+            "reader_finally_done": true
+          },
+          "reader_started_after_popen": true,
+          "supervisor_cpu_seconds": 2.7421050379999983,
+          "supervisor_reason_codes": []
+        }
+      },
+      {
+        "cleanup_recorded": true,
+        "diagnostics": {
+          "failure_codes": [],
+          "log_status": "COMPLETE",
+          "observed_signatures": [],
+          "root_cause": "NO_FAILURE_RECORDED",
+          "scanned_bytes": 0,
+          "scanned_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "elapsed_seconds": 3.954829812000014,
+        "error_count": 0,
+        "native_exit": 0,
+        "observed_peak_rss": 20369408,
+        "stage": "idma",
+        "telemetry": {
+          "caps": {
+            "cpu_seconds": 240,
+            "log_bytes": 16777216,
+            "raw_log_bytes": 33554432,
+            "rss_bytes": 1073741824,
+            "tree_bytes": 12081306272,
+            "wall_seconds": 240,
+            "watch_tree_bytes": 12081306272
+          },
+          "capture_census": {
+            "capture_cap_hit": false,
+            "compressed_bytes": 20,
+            "compressed_sha256": "d1111b245f685176180e6f1631e6dc49badf6672368e9ce260c71355165effdf",
+            "error_lines": 0,
+            "gzip_finalized": true,
+            "lines": 0,
+            "pipe_eof_observed": true,
+            "raw_bytes": 0,
+            "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "warning_histogram": {}
+          },
+          "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+          "disk_census_count": 3,
+          "disk_census_last_seconds": 1.162507306000009,
+          "disk_census_max_seconds": 1.2821963469999673,
+          "disk_census_total_seconds": 3.700336447999973,
+          "memory_reserve_warning_samples": 0,
+          "minimum_MemAvailable_bytes": 15688228864,
+          "observed_cpu_seconds": 0.18,
+          "peak_file_bytes": 67484814,
+          "peak_tree_bytes": 906573540,
+          "process_sample_count": 2,
+          "process_sample_max_gap_seconds": 1.318456432000005,
+          "process_sample_terminal_gap_seconds": 2.5633202189999906,
+          "reader_join_barrier": {
+            "alive": false,
+            "complete": true,
+            "reader_finally_done": true
+          },
+          "reader_started_after_popen": true,
+          "supervisor_cpu_seconds": 3.9327069770000094,
+          "supervisor_reason_codes": []
+        }
+      },
+      {
+        "cleanup_recorded": true,
+        "diagnostics": {
+          "failure_codes": [],
+          "log_status": "COMPLETE",
+          "observed_signatures": [],
+          "root_cause": "NO_FAILURE_RECORDED",
+          "scanned_bytes": 0,
+          "scanned_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "elapsed_seconds": 2.5165603199999964,
+        "error_count": 0,
+        "native_exit": 0,
+        "observed_peak_rss": 9564160,
+        "stage": "matrix",
+        "telemetry": {
+          "caps": {
+            "cpu_seconds": 300,
+            "log_bytes": 16777216,
+            "raw_log_bytes": 33554432,
+            "rss_bytes": 1073741824,
+            "tree_bytes": 12081306272,
+            "wall_seconds": 300,
+            "watch_tree_bytes": 12081306272
+          },
+          "capture_census": {
+            "capture_cap_hit": false,
+            "compressed_bytes": 20,
+            "compressed_sha256": "d1111b245f685176180e6f1631e6dc49badf6672368e9ce260c71355165effdf",
+            "error_lines": 0,
+            "gzip_finalized": true,
+            "lines": 0,
+            "pipe_eof_observed": true,
+            "raw_bytes": 0,
+            "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "warning_histogram": {}
+          },
+          "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+          "disk_census_count": 2,
+          "disk_census_last_seconds": 1.1435499969999796,
+          "disk_census_max_seconds": 1.1824776600000177,
+          "disk_census_total_seconds": 2.3260276569999974,
+          "memory_reserve_warning_samples": 0,
+          "minimum_MemAvailable_bytes": 15697915904,
+          "observed_cpu_seconds": 0.0,
+          "peak_file_bytes": 67484814,
+          "peak_tree_bytes": 906624274,
+          "process_sample_count": 1,
+          "process_sample_terminal_gap_seconds": 2.4438636360000032,
+          "reader_join_barrier": {
+            "alive": false,
+            "complete": true,
+            "reader_finally_done": true
+          },
+          "reader_started_after_popen": true,
+          "supervisor_cpu_seconds": 2.4969226510000055,
+          "supervisor_reason_codes": []
+        }
+      },
+      {
+        "diagnostics": {
+          "failure_codes": [],
+          "log_status": "COMPLETE",
+          "observed_signatures": [],
+          "root_cause": "NO_FAILURE_RECORDED",
+          "scanned_bytes": 0,
+          "scanned_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "elapsed_seconds": 36.684087231000035,
+        "native_exit": 0,
+        "observed_peak_rss": 23056384,
+        "stage": "compile_tools",
+        "telemetry": {
+          "caps": {
+            "cpu_seconds": 300,
+            "log_bytes": 16777216,
+            "raw_log_bytes": 33554432,
+            "rss_bytes": 1073741824,
+            "tree_bytes": 12081306272,
+            "wall_seconds": 300,
+            "watch_tree_bytes": 12081306272
+          },
+          "capture_census": {
+            "capture_cap_hit": false,
+            "compressed_bytes": 20,
+            "compressed_sha256": "d1111b245f685176180e6f1631e6dc49badf6672368e9ce260c71355165effdf",
+            "error_lines": 0,
+            "gzip_finalized": true,
+            "lines": 0,
+            "pipe_eof_observed": true,
+            "raw_bytes": 0,
+            "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "warning_histogram": {}
+          },
+          "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+          "disk_census_count": 31,
+          "disk_census_last_seconds": 1.0529612970000244,
+          "disk_census_max_seconds": 1.2009060780000027,
+          "disk_census_total_seconds": 34.80953115699995,
+          "memory_reserve_warning_samples": 0,
+          "minimum_MemAvailable_bytes": 15745830912,
+          "observed_cpu_seconds": 2.08,
+          "peak_file_bytes": 67484814,
+          "peak_tree_bytes": 743598980,
+          "process_sample_count": 30,
+          "process_sample_max_gap_seconds": 1.258667011,
+          "process_sample_terminal_gap_seconds": 2.2475643699999637,
+          "reader_join_barrier": {
+            "alive": false,
+            "complete": true,
+            "reader_finally_done": true
+          },
+          "reader_started_after_popen": true,
+          "supervisor_cpu_seconds": 36.452456656,
+          "supervisor_reason_codes": []
+        }
+      }
+    ],
+    "summary_truncation": []
+  },
+  "execution_selection": {
+    "policy": {
+      "blocked_profiles": {
+        "0": "BLOCKED_ORIGINAL_HOST_POLICY"
+      },
+      "cpu_avx512_observation": "NOT_ASSERTED_BY_SELECTION",
+      "eligible_profiles": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "mode": "QWEN35_FOUR_P0_BLOCKED_ORIGINAL_HOST_POLICY",
+      "p0_numeric_qualification": "UNTESTED_IN_THIS_MODE",
+      "registered_profiles": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "schema": "REGISTERED_FIVE_ELIGIBLE_EXECUTION_POLICY_V1",
+      "selection_reason": "EXPLICIT_POLICY_DEFERRAL_NOT_CPU_OBSERVATION"
+    },
+    "profiles_eligible": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "profiles_registered": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "state": "DECLARED_NOT_QUALIFIED"
+  },
+  "failure_reason": "EXECUTION_FAILED_DETAILS_IN_STAGE_RECEIPTS",
+  "final_rtl_replay": false,
+  "fresh_host": {
+    "host_qualified": false,
+    "identity": {
+      "state": "UNOBSERVED_NOT_QUALIFIED"
+    },
+    "native_failure": {
+      "phase": "BOUNDED_HOST_INVENTORY",
+      "reason": "ELF_DEPENDENCY_ROOT_REJECTED",
+      "receipt_sha256": "093ae48ea25486c8e95bcd4b3e0f907dcdce97091bf470496afca1496d39b914",
+      "state": "OBSERVED_FAILURE_NOT_QUALIFIED",
+      "status": "FAILED"
+    },
+    "numeric_pass": false,
+    "parent_failure": {
+      "state": "UNOBSERVED_NOT_QUALIFIED"
+    },
+    "scope": "IDENTITY_AND_PROCESS_OBSERVATIONS_ONLY_NOT_HOST_OR_NUMERICAL_PASS",
+    "stage": {
+      "cleanup_complete": true,
+      "errors": 0,
+      "gzip_finalized": true,
+      "native_exit": 1,
+      "observed_cpu_seconds": 0.0,
+      "observed_peak_rss": 9605120,
+      "pipe_eof": true,
+      "receipt_sha256": "46400f556bd6bc9454f48eba00b0b53f29a80e3818afd6ab7581d558e61024e4",
+      "resources": {
+        "caps": {
+          "cleanup_seconds": 30,
+          "cpu_seconds": 300,
+          "file_bytes": 536870912,
+          "log_bytes": 16777216,
+          "max_entries": 100000,
+          "min_free_disk_bytes": 1500000000,
+          "per_process_as_bytes": 4294967296,
+          "per_process_cpu_seconds": 300,
+          "raw_log_bytes": 33554432,
+          "rss_bytes": 1073741824,
+          "tree_bytes": 12081306272,
+          "wall_seconds": 300,
+          "watch_tree_bytes": 12081306272
+        },
+        "capture_census": {
+          "capture_cap_hit": false,
+          "compressed_bytes": 504,
+          "compressed_sha256": "bf26eb8fa64eb8bf1b1d35cb60f02c91799c8e6848662b1ae458b70004d6ec8f",
+          "error_lines": 0,
+          "gzip_finalized": true,
+          "lines": 13,
+          "pipe_eof_observed": true,
+          "raw_bytes": 1420,
+          "raw_sha256": "4ee45df5fa6f64c65eadb031f2397acc7aaf2c6d71f26a1b21abb809546f7b50",
+          "warning_histogram": {}
+        },
+        "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+        "disk_census_count": 2,
+        "disk_census_last_seconds": 1.1591541409999877,
+        "disk_census_max_seconds": 1.3221294429999944,
+        "disk_census_total_seconds": 2.481283583999982,
+        "error_evidence": [],
+        "errors_truncated": false,
+        "initial_resource_observations": "NOT_RECORDED_BY_ORIGINAL_SUPERVISOR",
+        "memory_reserve_warning_samples": 0,
+        "minimum_MemAvailable_bytes": 15703613440,
+        "observed_cpu_seconds": 0.0,
+        "peak_file_bytes": 67484814,
+        "peak_tree_bytes": 906630080,
+        "process_sample_count": 1,
+        "process_sample_terminal_gap_seconds": 2.5997816980000152,
+        "reader_join_barrier": {
+          "alive": false,
+          "complete": true,
+          "reader_finally_done": true
+        },
+        "reader_started_after_popen": true,
+        "supervisor_cpu_seconds": 2.6696543989999952,
+        "supervisor_reason_codes": [],
+        "worker_started": true
+      },
+      "state": "OBSERVED_PROCESS_ONLY_NOT_QUALIFIED",
+      "wall_seconds": 2.672664260999966
+    }
+  },
+  "installation_resource_snapshots": [],
+  "launch_commit": "edaf391f6b82e393c282098f6c1c352977e135d7",
+  "matrix_macs": 4096,
+  "numeric_pass": false,
+  "pack_deduplication": {
+    "physical_space_saved": "NOT_MEASURED",
+    "scope": "LIFECYCLE_JOURNAL_ONLY_NOT_NUMERICAL_PASS",
+    "status": "NOT_OBSERVED"
+  },
+  "profiles_registered": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "resource_peak_qualification": "INCOMPLETE_SAMPLED",
+  "run_id": 41081287332,
+  "schema": "FIVE_M128_SAME_JOB_SAFE_SUMMARY_V1",
+  "source_commit": "0ebe665a2fa6b5cad196c53739aa2da35a3fff2b",
+  "stages": [],
+  "status": "INCOMPLETE",
+  "tokens": 128,
+  "uploaded_payloads": false,
+  "vector_ii1_verified": false,
+  "vector_lanes": 32,
+  "vector_lanes_semantics": "DECLARED_ARTIFACT_TAG_NOT_VERIFIED_PHYSICAL_ISSUE_LANES"
+}

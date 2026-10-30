@@ -1,0 +1,38 @@
+{
+  "status": "PASS_LOCAL_SCALA_TYPER_ONLY",
+  "actual_receipt_sha256": "81f6b9f1bf1f8243c874d45a9a2d6054e4ca7828f103cb9243960b5f4af3d4ba",
+  "native_exit": 0,
+  "elapsed_seconds": 55.460118529998,
+  "observed_peak_rss_bytes": 892080128,
+  "errors": [],
+  "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+  "pipe_eof_observed": true,
+  "gzip_finalized": true,
+  "java": {
+    "vendor": "Debian",
+    "version": "21.0.12.1",
+    "runtime_version": "21.0.12.1+1-1-deb13u1-Debian",
+    "differs_from_ci": "Eclipse Adoptium 21.0.13+9"
+  },
+  "compiler_stop_after": "typer",
+  "sources": 155,
+  "candidate_overrides": 5,
+  "pinned_jars_including_plugin": 107,
+  "old_pass_transfer": false,
+  "excludes": [
+    "Chisel compiler plugin post-typer phases",
+    "complete bytecode compilation",
+    "Chisel elaboration",
+    "generated ABI qualification",
+    "RTL generation",
+    "block numerical validation",
+    "CI qualification"
+  ],
+  "candidate_source_sha256": {
+    "FfnTileSiluBridge.scala": "27ee34a131aa508bb246b7e2e9196eaed3e8c4d9127ea9ca835ac5333fb4e868",
+    "FfnResidentCoordinator.scala": "65d786a0a0f92a8aea2c8db945b3448162d8b3c814356218fc98f588f201d8ee",
+    "QwenOwnerProtocol.scala": "78dfd535faefb30b70a60d3ef4f83fbe923f0e35a10c995a2830cdb772fa0af4",
+    "HostBlockTopV4.scala": "3a7aff0301457f151df47772963c6cad04263cecfa55884c3cefd14836d877b0",
+    "HostBlockCommandsV4.scala": "79a721ddb498a5d5863085535c2aaedea14e5503e0f3a41abe2af29995fb813b"
+  }
+}

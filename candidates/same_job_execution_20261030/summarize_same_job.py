@@ -77,8 +77,8 @@ def pack_deduplication(work):
   if len(raw)>65536:return out
   out['receipt_sha256']=hashlib.sha256(raw).hexdigest()
   r=json.loads(raw)
-  states={'PREPARED','NO_OP_MODE_MISMATCH','VERIFIED_BACKUPS_RETAINED','RECOVERY_REQUIRED','ROLLED_BACK','COMPLETE'}
-  pair_states={'PENDING','REPLACED_BACKUP_RETAINED','BOTH_PATHS_RETAINED_SAME_INODE'}
+  states={'PREPARED','NO_OP_WRITER_CENSUS_UNAVAILABLE','NO_OP_MODE_MISMATCH','VERIFIED_BACKUPS_RETAINED','RECOVERY_REQUIRED','ROLLED_BACK','COMPLETE'}
+  pair_states={'PENDING','UNCHANGED_NOT_DEDUPLICATED','REPLACED_BACKUP_RETAINED','BOTH_PATHS_RETAINED_SAME_INODE'}
   if not isinstance(r,dict)or r.get('schema')!='EXACT_TWO_COPY_DEDUPLICATION_V1'or r.get('scope')!='LIFECYCLE_ONLY_NOT_NUMERICAL_PASS'or r.get('status')not in states or r.get('physical_space_saved')!='NOT_MEASURED':return out
   saved=r.get('logical_saved_bytes');build=r.get('build_result_sha256');pairs=r.get('pairs')
   if type(saved)is not int or not 0<=saved<=362153111 or (r['status']!='COMPLETE'and saved!=0):return out
@@ -90,6 +90,14 @@ def pack_deduplication(work):
    selected.append(dict(role=row['role'],status=row['status']))
   if {x['role']for x in selected}!={'sv','binary'}:return out
   if r['status']=='COMPLETE'and any(x['status']!='BOTH_PATHS_RETAINED_SAME_INODE'for x in selected):return out
+  census=r.get('writer_census')
+  if r['status']=='NO_OP_WRITER_CENSUS_UNAVAILABLE'or isinstance(census,dict)and census.get('status')=='UNAVAILABLE':
+   if r['status']not in {'NO_OP_WRITER_CENSUS_UNAVAILABLE','RECOVERY_REQUIRED','ROLLED_BACK'}:return out
+   reasons={'PERMISSION_DENIED','PROCESS_OR_FD_DISAPPEARED','IO_UNAVAILABLE','DEADLINE','PROCESS_CAP','FD_CAP','MAPS_CAP','MALFORMED_PROC_METADATA'}
+   if not isinstance(census,dict)or census.get('status')!='UNAVAILABLE'or census.get('reason')not in reasons or census.get('writers_absent_established')is not False or type(r.get('artifact_mutation_started'))is not bool:return out
+   if r['status']=='NO_OP_WRITER_CENSUS_UNAVAILABLE'and(r['artifact_mutation_started']is not False or any(x['status']!='UNCHANGED_NOT_DEDUPLICATED'for x in selected)):return out
+   if r['status']in {'RECOVERY_REQUIRED','ROLLED_BACK'}and r['artifact_mutation_started']is not True:return out
+   out.update(writer_census=dict(status='UNAVAILABLE',reason=census['reason'],writers_absent_established=False),artifact_mutation_started=r['artifact_mutation_started'])
   out.update(status=r['status'],logical_saved_bytes=saved,build_result_sha256=build,pairs=selected)
  except (OSError,ValueError,TypeError,KeyError):out['status']='INVALID_FIELDS'
  return out

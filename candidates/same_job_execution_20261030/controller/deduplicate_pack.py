@@ -24,32 +24,46 @@ def doc(p,cap=16<<20):
 def canonical(v):return hashlib.sha256(json.dumps(v,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 def complete(r):
  need(r.get('native_exit')==0 and r.get('errors')==[] and (r.get('cleanup_proof')or{}).get('status')==CLEAN and (r.get('log_capture')or{}).get('pipe_eof_observed')is True and (r.get('log_capture')or{}).get('gzip_finalized')is True,'native owner not fully complete')
+CENSUS_REASONS={'PERMISSION_DENIED','PROCESS_OR_FD_DISAPPEARED','IO_UNAVAILABLE','DEADLINE','PROCESS_CAP','FD_CAP','MAPS_CAP','MALFORMED_PROC_METADATA'}
+class WriterCensusUnavailable(Exception):
+ def __init__(self,reason):
+  need(reason in CENSUS_REASONS,'fixed writer census reason');self.reason=reason;super().__init__('writer census unavailable')
+def census_need(value,reason):
+ if not value:raise WriterCensusUnavailable(reason)
+def unavailable_census(exc):
+ return dict(status='UNAVAILABLE',reason=exc.reason,writers_absent_established=False,scope='SAMPLED_SAME_UID_FD_AND_MAPS_NOT_HOSTILE_WRITER_EXCLUSION')
 def writers_absent(paths,seconds=10):
- """Read-only same-uid /proc FD scan. Inaccessible live same-uid FD metadata fails.
- This rejects observed writable FDs, including mmap backing FDs kept open. A
- closed-FD writable mmap is separately rejected by scanning writable maps.
+ """Inconclusive observations NEVER establish writer absence or permit mutation.
+ No retry, privilege change, alternate proc access, or ignored inaccessible FD.
+ Artifact identity checks stay outside this narrow observation classification.
  """
- targets={(regular(p).st_dev,regular(p).st_ino)for p in paths};start=time.monotonic();count=0
+ targets={(regular(p).st_dev,regular(p).st_ino)for p in paths}
+ try:return _writer_census(targets,seconds)
+ except PermissionError as exc:raise WriterCensusUnavailable('PERMISSION_DENIED') from exc
+ except (FileNotFoundError,ProcessLookupError) as exc:raise WriterCensusUnavailable('PROCESS_OR_FD_DISAPPEARED') from exc
+ except OSError as exc:raise WriterCensusUnavailable('IO_UNAVAILABLE') from exc
+def _writer_census(targets,seconds):
+ start=time.monotonic();count=0
  for directory in P('/proc').iterdir():
   if not directory.name.isdigit():continue
-  need(time.monotonic()-start<seconds,'writer census deadline');count+=1;need(count<=8192,'writer census process cap')
-  try:
-   if directory.stat().st_uid!=os.geteuid():continue
-   for index,fd in enumerate((directory/'fd').iterdir()):
-    need(index<65536 and time.monotonic()-start<seconds,'writer descriptor census cap/deadline')
-    try:
-     s=fd.stat()
-     if (s.st_dev,s.st_ino)not in targets:continue
-     flags=next(x.split()[1]for x in (directory/'fdinfo'/fd.name).read_text().splitlines()if x.startswith('flags:'))
-     need(int(flags,8)&os.O_ACCMODE==os.O_RDONLY,'observed writable descriptor')
-    except FileNotFoundError:continue
-   with (directory/'maps').open()as maps:raw=maps.read((1<<20)+1)
-   need(len(raw)<=1<<20,'writer maps census bound')
-   for line in raw.splitlines():
-    fields=line.split(None,5)
-    if len(fields)<5 or 'w'not in fields[1]:continue
-    major,minor=(int(x,16)for x in fields[3].split(':'));need((os.makedev(major,minor),int(fields[4]))not in targets,'observed writable mapping')
-  except (FileNotFoundError,ProcessLookupError):continue
+  census_need(time.monotonic()-start<seconds,'DEADLINE');count+=1;census_need(count<=8192,'PROCESS_CAP')
+  if directory.stat().st_uid!=os.geteuid():continue
+  for index,fd in enumerate((directory/'fd').iterdir()):
+   census_need(index<65536,'FD_CAP');census_need(time.monotonic()-start<seconds,'DEADLINE')
+   st=fd.stat()
+   if (st.st_dev,st.st_ino)not in targets:continue
+   text=(directory/'fdinfo'/fd.name).read_text()
+   try:flags=next(x.split()[1]for x in text.splitlines()if x.startswith('flags:'));mode=int(flags,8)
+   except (StopIteration,IndexError,ValueError) as exc:raise WriterCensusUnavailable('MALFORMED_PROC_METADATA') from exc
+   need(mode&os.O_ACCMODE==os.O_RDONLY,'observed writable descriptor')
+  with (directory/'maps').open()as maps:raw=maps.read((1<<20)+1)
+  census_need(len(raw)<=1<<20,'MAPS_CAP')
+  for line in raw.splitlines():
+   fields=line.split(None,5);census_need(len(fields)>=5,'MALFORMED_PROC_METADATA')
+   if 'w'not in fields[1]:continue
+   try:major,minor=(int(x,16)for x in fields[3].split(':'));key=(os.makedev(major,minor),int(fields[4]))
+   except (ValueError,OverflowError) as exc:raise WriterCensusUnavailable('MALFORMED_PROC_METADATA') from exc
+   need(key not in targets,'observed writable mapping')
  return dict(scope='SAMPLED_SAME_UID_FD_AND_MAPS_NOT_HOSTILE_WRITER_EXCLUSION',processes=count)
 def fsync_dir(p):
  fd=os.open(p,os.O_RDONLY|os.O_DIRECTORY)
@@ -100,9 +114,14 @@ def run(result_path,result_sha,job_root,expected_build_returncode):
  journal=job/'PACK_DEDUPLICATION.json';need(not journal.exists()and not journal.is_symlink()and not journal.with_suffix('.tmp').exists()and not journal.with_suffix('.tmp').is_symlink(),'single invocation; interrupted journal requires explicit recovery')
  with locks([job/'exclusive.lock',B.parent/'bootstrap.lock',B/'exclusive.lock']):
   need(not journal.exists()and not journal.is_symlink()and not journal.with_suffix('.tmp').exists()and not journal.with_suffix('.tmp').is_symlink(),'single invocation rechecked under all locks; prior transaction requires review')
-  pairs,pins=admitted(result_path,result_sha);paths=[p for x in pairs for p in(x['source'],x['target'])];census=writers_absent(paths)
+  pairs,pins=admitted(result_path,result_sha);paths=[p for x in pairs for p in(x['source'],x['target'])]
   rows=[dict(role=x['role'],source=str(x['source'].relative_to(job)),target=str(x['target'].relative_to(job)),**x['want'],source_mode=x['before_source'][3],target_mode=x['before_target'][3],owner_uid=x['before_source'][6],owner_gid=x['before_source'][7],status='PENDING')for x in pairs]
-  report=dict(schema='EXACT_TWO_COPY_DEDUPLICATION_V1',status='PREPARED',scope='LIFECYCLE_ONLY_NOT_NUMERICAL_PASS',build_result_sha256=result_sha,pairs=rows,logical_saved_bytes=0,writer_census=census,physical_space_saved='NOT_MEASURED')
+  report=dict(schema='EXACT_TWO_COPY_DEDUPLICATION_V1',status='PREPARED',scope='LIFECYCLE_ONLY_NOT_NUMERICAL_PASS',build_result_sha256=result_sha,pairs=rows,logical_saved_bytes=0,writer_census=None,physical_space_saved='NOT_MEASURED')
+  try:report['writer_census']=writers_absent(paths)
+  except WriterCensusUnavailable as exc:
+   report.update(status='NO_OP_WRITER_CENSUS_UNAVAILABLE',writer_census=unavailable_census(exc),artifact_mutation_started=False)
+   for row in rows:row['status']='UNCHANGED_NOT_DEDUPLICATED'
+   write_json(journal,report);return report
   if any(x['before_source'][3]!=x['before_target'][3]for x in pairs):
    report['status']='NO_OP_MODE_MISMATCH';write_json(journal,report);return report
   write_json(journal,report);backups=[]
@@ -119,7 +138,13 @@ def run(result_path,result_sha,job_root,expected_build_returncode):
    for src,dst,backup,temp,x in backups:
     need(identity(src)[6:8]==identity(dst)[6:8]==x['before_source'][6:8]and identity(src)[3]==identity(dst)[3]==x['before_source'][3]and identity(src)[-1]==identity(dst)[-1]==2,'mode/link count changed');stable(backup,x['want'])
    report['status']='VERIFIED_BACKUPS_RETAINED';write_json(journal,report)
-  except BaseException:
+  except BaseException as exc:
+   if isinstance(exc,WriterCensusUnavailable):
+    report['writer_census']=unavailable_census(exc);report['artifact_mutation_started']=bool(backups)
+    if not backups:
+     report['status']='NO_OP_WRITER_CENSUS_UNAVAILABLE'
+     for row in rows:row['status']='UNCHANGED_NOT_DEDUPLICATED'
+     write_json(journal,report);return report
    report['status']='RECOVERY_REQUIRED';write_json(journal,report)
    # Restore copied targets; original source is never removed. If rollback cannot
    # prove identity, leave backup+journal and fail for explicit recovery.

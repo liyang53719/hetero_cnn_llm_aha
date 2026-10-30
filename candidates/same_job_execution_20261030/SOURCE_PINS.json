@@ -1789,8 +1789,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/controller/deduplicate_pack.py",
-      "bytes": 13661,
-      "sha256": "1677e17b3ff1077c07fa52141e87559c18802b942f9de308de3474bceeb80ca8"
+      "bytes": 15452,
+      "sha256": "4b7bfa0a578b4f21dade9334f9e185f63d726240902c63fa49e853bd797957c1"
     },
     {
       "path": "candidates/same_job_execution_20261030/controller/flow.py",
@@ -2069,8 +2069,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/runtime/runtime_phase.py",
-      "bytes": 2684,
-      "sha256": "8c38345f0099d06f397b3ff6b69e9eda7a00e6922cecc106e239a14fccd65969"
+      "bytes": 2875,
+      "sha256": "3406f530a1325749540c89107a55909595736e26e216b7c8dc9f0b3d5f456428"
     },
     {
       "path": "candidates/same_job_execution_20261030/runtime/source/QWEN2_WHEEL_LOCK.json",
@@ -2158,9 +2158,19 @@
       "sha256": "33bbae0073b76304c1decba7b8f9f6f29ee397956ab9a8231a8cb641ed711860"
     },
     {
+      "path": "candidates/same_job_execution_20261030/runtime/test_runtime_cpu_guard.py",
+      "bytes": 2978,
+      "sha256": "a7a3383efa3f0fb57ba9153141ffe157ef94315f3bda51813f823fb902b65f27"
+    },
+    {
       "path": "candidates/same_job_execution_20261030/summarize_same_job.py",
-      "bytes": 17169,
-      "sha256": "5cdad785679ce0c14e250a6dc277084a8b908840d858104787362846c7a6ff98"
+      "bytes": 18327,
+      "sha256": "0c8c95f7b927738a6bbdf35b77099f1dc6d9c30157791a4ed3ff9b1384ca771d"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/test_dedup_inconclusive.py",
+      "bytes": 9349,
+      "sha256": "3676e5f4895f49d881c0e9b29dd712d7bcc74bebb1614d00ee37a115f0887472"
     },
     {
       "path": "candidates/same_job_execution_20261030/test_dedup_summary.py",

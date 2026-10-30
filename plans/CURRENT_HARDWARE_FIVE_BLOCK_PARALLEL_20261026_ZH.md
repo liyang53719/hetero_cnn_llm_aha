@@ -1,5 +1,16 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-30 18:21 可选去重权限失败与 runtime CPU 门修复（TEMP，未新启动数值）
+
+- 本轮明确终态：run41096005966/source7bb/launchfd947在17:58:24退出1；原27个backend阶段全部native0、wall合计2985.197s，fresh-host native0/192pins，host_link已完成，共享ELF139950896B/SHA ce0bcb621646cb9286c4273d9cb819e42f1513a4b3084d0b7c76bd44ba83837c。仅build准备，不是DUT执行或最终RTL数值通过。随后optional dedup初始writer census的fd.stat权限错误，在任何artifact修改前退出；runtime安装/reference/DUT均未开始。原job日志和受控summary保留，旧35B安装失败原因仍UNKNOWN，不混作本轮原因。
+- 修复：初始/首prelink扫描不可用只NO_OP，保留两份物料、零link、节省0，不假称writers absent；交易开始后扫描错误沿原rollback/recovery并继续抛错，不能伪称零修改成功。实际writer/hash/admission和未知错误不吞掉；safe summary拒绝COMPLETE+UNAVAILABLE等矛盾。36项mock普通/-O独立复测通过，没有读取受限FD、提权或改系统安全/资源设置。保留双份仍受原资源caps。
+- 另修静态潜在门槛不一致：runtime_phase原本对全部runtime无条件要求AVX512，尽管外层已选Qwen35-only。现在仅qwen2保留原AVX512 exact-token gate，未知key与错误Python/架构仍拒绝；两个Qwen35原DEFAULT/thread1/taskset/offline wrapper字节不变。10项mock普通/-O独立复测通过，未安装/import，非真实nonAVX主机资格，也不是本轮失败归因。P0原合同不放宽。
+- 合并后46项mock测试在normal/-O各通过，未触发实际proc扫描/安装/import。
+- 本批仅源码及598项精确闭包更新，无新activation，不改算术、精度、同分参考或固定4096资源。候选R2观察接口仍未完整编译/发射。独立IR-only前置资源census正在审查，原supervisor不改，新的有界尝试需单独source/identity。
+- 后续降低重复build成本的方案：原安装可前移并复用同一树，但install不等于Torch/model import；原budget/reservation需重排，两个旧Qwen35树约74.7k entries会纳入build的100k限制，必须实际准入，未静默扩大cap/改flow/新增probe。
+- 完整五块M128 Chisel/最终RTL仍各0/5，有效MAC利用率未实测。16afe源码保护CI41103075571已成功。原本地IR84990 owner未知证据保留，不据此说停止或重跑；本批未删除临时数据。
+
+
 ## 2026-10-30 18时：真实 selector 输出与完整消费者接线（R2，TEMP / INCOMPLETE）
 
 - DONE（源码/轻测）：除每token256项真实selector输入概率，新增8项真实 selection.out.fire score/index/rank/last；kind区分事件，feed/read状态互斥，无新ready/算术/调度反馈。collector直接写真实输出score和ID两份4096B文件，绝不以input[ID]回填。新259bits/10信号、Top122口仅源码预期；本版Numeric尚未完整编译或发射IR，不继承V1编译/112口/旧119预期资格。

@@ -14,7 +14,10 @@ def module(name,path):
 
 def install(b,key):
  need(key in ('qwen2','qwen35_08b','qwen35_35b'),'selected runtime')
- need(sys.version_info[:2]==(3,12)and platform.machine()=='x86_64'and 'avx512f'in P('/proc/cpuinfo').read_text().split(),'original installation ABI/P0 capability')
+ need(sys.version_info[:2]==(3,12)and platform.machine()=='x86_64','original installation ABI')
+ # P0 alone requires AVX512; known Qwen35 installers retain their original
+ # default-CPU, single-thread wrapper policy. This is not host qualification.
+ if key=='qwen2':need('avx512f'in P('/proc/cpuinfo').read_text().split(),'original P0 AVX512 capability')
  for p,h in b['pins'].items():need(sha(p)==h,'source/archive/tool drift')
  need(str(P(sys.executable).resolve())==b['python'],'exact owning interpreter')
  source=P(b['source_dir']);m=module('locked_runtime_install',source/'prepare_runtimes.py');items,specs,torch=m.artifacts();cache=P(b['cache']);out=P(b['install_root'])

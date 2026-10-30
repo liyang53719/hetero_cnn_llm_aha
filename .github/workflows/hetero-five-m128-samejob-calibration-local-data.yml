@@ -1,8 +1,8 @@
-name: hetero-five-m128-samejob-calibration-local-data
+name: hetero-qwen35-four-m128-fresh-host-calibration-local-data
 on:
   push:
     branches: [main]
-    paths: [ci_launch/five_m128_samejob_diagnostic_r2_20261030_once.json]
+    paths: [ci_launch/qwen35_four_m128_freshhost_20261030_once.json]
 permissions:
   contents: read
   actions: read
@@ -43,13 +43,15 @@ jobs:
           ref: ${{ steps.launch.outputs.source_sha }}
           persist-credentials: false
           fetch-depth: 1
-      - name: Bounded one common Chisel simulation backend and five full128 calibration profiles
+      - name: Bounded shared Chisel backend and four Qwen35 full128 profiles; P0 deferred
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           python3 -B candidates/same_job_execution_20261030/prepare_and_run.py \
             --repo "$GITHUB_WORKSPACE" \
+            --execution-policy QWEN35_FOUR_P0_BLOCKED_ORIGINAL_HOST_POLICY \
+            --fresh-host-profile \
             --identity "$RUNNER_TEMP/hetero-five-m128-identity.json" \
             --job-start "$RUNNER_TEMP/hetero-five-m128-job-start.json" \
             --work "$RUNNER_TEMP/hetero-five-m128"
@@ -83,3 +85,7 @@ jobs:
 # no token forwarding to runtime installers, reference, provider, ABI, DUT or summary.
 # Exit 2 remains INCOMPLETE, never continue-on-error or a numerical green PASS.
 # Source publication contains no activation manifest; separate review is required.
+
+# REGISTERED5_ELIGIBLE4: P1-P4 execute; P0 is policy-deferred and NOT_TESTED.
+# Fresh host must pass existing bounded prebuild checks; not prequalified here.
+# vector_lanes32 is a declared tag, not evidence of physical 32-lane II=1.

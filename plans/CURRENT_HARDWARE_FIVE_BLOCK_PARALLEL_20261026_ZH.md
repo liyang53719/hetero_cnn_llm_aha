@@ -211,3 +211,11 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - PASS只限捕获进程完成、身份/文件哈希核验和相应相同张量；没有Chisel/RTL/DUT执行。ATEN AVX2不保证底层MKL/oneDNN不使用AVX512，本地试验不认证实际非AVX512宿主。只检查24个导出张量，不声称官方函数内部全部中间值已观测。
 - 发布仅安全摘要、receipt/recipe哈希与策略差异；本地binding、运行库、权重和张量数据不出站。两套轻测分别7/8项normal及-O通过。源码/FAIL/原数据均保留，没有清理。
 - 重执行仍缺符合原P0及具体工具身份的足额AVX512宿主；不能在随机standard runner上反复碰运气或直接删除CPU/image门。原35B安装错误UNKNOWN不受本实验解释。完整五块M128 Chisel/最终RTL仍各0/5，无新增MAC利用率实测。
+
+## 2026-10-30：Qwen3.5 四块 fresh-host 一次性启动接线（TEMP，未 activation）
+
+- done / PASS（仅源码/轻测）：以已发布 4e2407d5ee830de261511c1f6ad0e8a5b0075b05 为基线，新一次性路径和 nonce 为 qwen35_four_m128_freshhost_20261030_once；schema/profile 明确 registered5、eligible4、P0 deferred、fresh-host。既有 prepare_and_run 入口显式传入 QWEN35_FOUR_P0_BLOCKED_ORIGINAL_HOST_POLICY 及 --fresh-host-profile；仅三项 source pin 更新，其余不变。
+- done / PASS（仅 fixture）：9 项 normal/-O 测试分别通过，覆盖新路径/nonce、两份已消耗 activation 保留及拒绝、旧全五块 schema/profile 拒绝、flags/scope 绑定、实际 Git 身份、重试/额外文件/错误资源和事件拒绝。未运行 target host 资格、backend、runtime 或 DUT。
+- ongoing / TEMP：先发布上述源码并核验 CI，再单独审核仅新增新 activation 文件的提交，以实际新源码 SHA 为唯一 parent/source。当前未创建 activation，不能称四块已启动。新 host 必须通过既有有界 prebuild 契约，尚未 qualified。
+- 保持五 profile 登记：P1–P4 是本次执行候选；P0 按原 host policy deferred / NOT_TESTED，不改其数值基线，不计入已通过。共享完整 4096-MAC 硬件定义未改；vector_lanes32 仅声明 tag，不代表物理 32-lane II=1 已验证。
+- 原资源上限、21000秒总时限、并发互斥、每块标定时限和仅上传受限摘要保持。所有历史 activation/失败材料保留，不重跑旧 run、不清理、不上传权重/二进制/原始参考。完整五块 Chisel/RTL 数值仍需真实完成；本次接线测试不能替代数值或 MAC 利用率实测。

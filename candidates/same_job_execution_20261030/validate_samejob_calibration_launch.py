@@ -1,9 +1,9 @@
-"""Unique five-M128 same-job calibration launch; local data only, no network or compilation."""
+"""Unique Qwen35 four-M128 fresh-host calibration launch; five registered, P0 deferred."""
 import json,os,pathlib,re,subprocess
-LAUNCH='ci_launch/five_m128_samejob_diagnostic_r2_20261030_once.json'
+LAUNCH='ci_launch/qwen35_four_m128_freshhost_20261030_once.json'
 def validate(event,manifest,attempt,head,parent,diff):
  if attempt!='1':raise ValueError('retry not admitted')
- if set(manifest)!={'schema','source_sha','profile','nonce'} or manifest['schema']!='FIVE_M128_SAMEJOB_CALIBRATION_LOCAL_DATA_ONE_SHOT_V1' or manifest['profile']!='FIXED4096_VECTOR32_FIVE_M128_CALIBRATION_LOCAL_DATA' or manifest['nonce']!='five_m128_samejob_diagnostic_r2_20261030_once':raise ValueError('five-M128 calibration local-data launch contract')
+ if set(manifest)!={'schema','source_sha','profile','nonce'} or manifest['schema']!='QWEN35_FOUR_M128_FRESH_HOST_LOCAL_DATA_ONE_SHOT_V1' or manifest['profile']!='FIXED4096_REGISTERED5_QWEN35_ELIGIBLE4_P0_DEFERRED_M128_FRESH_HOST_CALIBRATION_LOCAL_DATA' or manifest['nonce']!='qwen35_four_m128_freshhost_20261030_once':raise ValueError('Qwen35 eligible-four fresh-host launch contract')
  sha=manifest['source_sha']
  if not isinstance(sha,str) or not re.fullmatch('[0-9a-f]{40}',sha):raise ValueError('reviewed source SHA')
  if event.get('ref')!='refs/heads/main' or event.get('before')!=sha or parent!=sha or event.get('after')!=head or sha==head:raise ValueError('exact direct launch from reviewed source')
@@ -23,4 +23,4 @@ if __name__=='__main__':
  dest=pathlib.Path(os.environ['RUNNER_TEMP'])/'hetero-five-m128-identity.json'
  with dest.open('x') as f:json.dump(identity,f,sort_keys=True);f.write('\n')
  with open(os.environ['GITHUB_OUTPUT'],'a') as f:f.write('source_sha='+sha+'\n')
- print('FIVE_M128_CALIBRATION_LOCAL_DATA_SOURCE_IDENTITY_VALIDATED '+sha)
+ print('QWEN35_FOUR_FRESH_HOST_SOURCE_IDENTITY_VALIDATED '+sha)

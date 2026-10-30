@@ -7,9 +7,9 @@ def manifest(source=None):
  raw=(D/'ACTUAL_R2_LAUNCH_FIXTURE.json').read_bytes()
  if len(raw)!=209 or hashlib.sha256(raw).hexdigest()!=FIXTURE_SHA:raise ValueError('actual acdb R2 fixture')
  m=json.loads(raw)
- m['schema']='FIVE_M128_SAMEJOB_CALIBRATION_LOCAL_DATA_ONE_SHOT_V1'
- m['profile']='FIXED4096_VECTOR32_FIVE_M128_CALIBRATION_LOCAL_DATA'
- m['nonce']='five_m128_samejob_diagnostic_r2_20261030_once'
+ m['schema']='QWEN35_FOUR_M128_FRESH_HOST_LOCAL_DATA_ONE_SHOT_V1'
+ m['profile']='FIXED4096_REGISTERED5_QWEN35_ELIGIBLE4_P0_DEFERRED_M128_FRESH_HOST_CALIBRATION_LOCAL_DATA'
+ m['nonce']='qwen35_four_m128_freshhost_20261030_once'
  if source is not None:m['source_sha']=source
  return m
 class T(unittest.TestCase):
@@ -20,8 +20,8 @@ class T(unittest.TestCase):
  def test_retry_and_wrong_resource_rejected(self):
   a=self.args();a[2]='2'
   with self.assertRaises(ValueError):g.validate(*a)
-  for resource in ('VECTOR42','VECTOR52','MATRIX512'):
-   a=self.args();a[1]['profile']=a[1]['profile'].replace('VECTOR32',resource)
+  for resource in ('FIXED512','FIXED2048','FIXED8192'):
+   a=self.args();a[1]['profile']=a[1]['profile'].replace('FIXED4096',resource)
    with self.assertRaises(ValueError):g.validate(*a)
  def test_modification_extra_file_wrong_parent_or_event(self):
   for diff in ('M\t'+g.LAUNCH+'\n','A\t'+g.LAUNCH+'\nA\tother\n','A\tci_launch/old.json\n'):
@@ -47,17 +47,41 @@ class T(unittest.TestCase):
   workflow=D.parents[1]/'.github/workflows/hetero-five-m128-samejob-calibration-local-data.yml'
   text=workflow.read_text();self.assertIn('paths: ['+g.LAUNCH+']',text)
   self.assertNotIn('paths: [ci_launch/five_m128_samejob_calibration_20261030_once.json]',text)
-  self.assertEqual(g.LAUNCH,'ci_launch/five_m128_samejob_diagnostic_r2_20261030_once.json')
+  self.assertEqual(g.LAUNCH,'ci_launch/qwen35_four_m128_freshhost_20261030_once.json')
+ def test_both_consumed_identities_and_full_five_scope_rejected(self):
+  for nonce in ('five_m128_samejob_calibration_20261030_once','five_m128_samejob_diagnostic_r2_20261030_once'):
+   a=self.args();a[1]['nonce']=nonce
+   with self.assertRaises(ValueError):g.validate(*a)
+   a=self.args();a[5]='A\tci_launch/'+nonce+'.json\n'
+   with self.assertRaises(ValueError):g.validate(*a)
+  for key,value in [('schema','FIVE_M128_SAMEJOB_CALIBRATION_LOCAL_DATA_ONE_SHOT_V1'),('profile','FIXED4096_VECTOR32_FIVE_M128_CALIBRATION_LOCAL_DATA')]:
+   a=self.args();a[1][key]=value
+   with self.assertRaises(ValueError):g.validate(*a)
+ def test_eligible_four_scope_binds_explicit_workflow_flags(self):
+  text=(D.parents[1]/'.github/workflows/hetero-five-m128-samejob-calibration-local-data.yml').read_text()
+  def flags_match(text):
+   lines=[line.strip().rstrip('\\').rstrip() for line in text.splitlines()]
+   return lines.count('--execution-policy QWEN35_FOUR_P0_BLOCKED_ORIGINAL_HOST_POLICY')==1 and lines.count('--fresh-host-profile')==1
+  self.assertTrue(flags_match(text))
+  self.assertFalse(flags_match(text.replace('--fresh-host-profile','')))
+  self.assertFalse(flags_match(text.replace('QWEN35_FOUR_P0_BLOCKED_ORIGINAL_HOST_POLICY','ALL_FIVE_ORIGINAL_HOST_POLICY')))
+  self.assertFalse(flags_match(text.replace('--fresh-host-profile','--fresh-host-profile=false')))
+  self.assertIn('REGISTERED5_QWEN35_ELIGIBLE4_P0_DEFERRED',manifest()['profile'])
+  self.assertIn('FRESH_HOST',manifest()['schema'])
+  self.assertNotIn('VECTOR32',manifest()['profile'])
+  entry=(D/'prepare_and_run.py').read_text()
+  self.assertIn("p.add_argument('--execution-policy'",entry)
+  self.assertIn("p.add_argument('--fresh-host-profile',action='store_true'",entry)
  def test_real_two_commit_cli_identity(self):
   with tempfile.TemporaryDirectory()as t:
    root=pathlib.Path(t);repo=root/'repo';repo.mkdir();run=root/'temp';run.mkdir()
    def git(*args):return subprocess.check_output(['git','-C',str(repo),*args],text=True).strip()
-   git('init','-q','-b','main');(repo/'SOURCE.txt').write_text('reviewed source fixture\n');consumed=repo/'ci_launch/five_m128_samejob_calibration_20261030_once.json';consumed.parent.mkdir();consumed.write_text('historical consumed manifest fixture\n');old_bytes=consumed.read_bytes();git('add','SOURCE.txt',str(consumed.relative_to(repo)));git('-c','user.name=Fixture','-c','user.email=fixture@example.invalid','commit','-qm','source');source=git('rev-parse','HEAD')
+   git('init','-q','-b','main');(repo/'SOURCE.txt').write_text('reviewed source fixture\n');consumed=repo/'ci_launch/five_m128_samejob_calibration_20261030_once.json';consumed.parent.mkdir();consumed.write_text('historical consumed manifest fixture\n');old_bytes=consumed.read_bytes();consumed2=repo/'ci_launch/five_m128_samejob_diagnostic_r2_20261030_once.json';consumed2.write_text('second historical consumed manifest fixture\n');old_bytes2=consumed2.read_bytes();git('add','SOURCE.txt',str(consumed.relative_to(repo)),str(consumed2.relative_to(repo)));git('-c','user.name=Fixture','-c','user.email=fixture@example.invalid','commit','-qm','source');source=git('rev-parse','HEAD')
    p=repo/g.LAUNCH;p.parent.mkdir(exist_ok=True);p.write_text(json.dumps(manifest(source))+'\n');git('add',g.LAUNCH);git('-c','user.name=Fixture','-c','user.email=fixture@example.invalid','commit','-qm','unique launch');head=git('rev-parse','HEAD')
    event=root/'event.json';event.write_text(json.dumps(dict(ref='refs/heads/main',before=source,after=head)));output=root/'GITHUB_OUTPUT';output.touch()
    env=dict(os.environ,GITHUB_EVENT_PATH=str(event),GITHUB_RUN_ATTEMPT='1',GITHUB_SHA=head,GITHUB_RUN_ID='123',RUNNER_TEMP=str(run),GITHUB_OUTPUT=str(output))
    subprocess.run([sys.executable,*(['-O']if not __debug__ else []),'-B',str(D/'validate_samejob_calibration_launch.py')],cwd=repo,env=env,check=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-   identity=json.loads((run/'hetero-five-m128-identity.json').read_text());self.assertEqual(set(identity),{'run_id','artifact_name','source_commit','launch_commit','launch_manifest_path','launch_manifest_blob_sha'});self.assertEqual(identity['source_commit'],source);self.assertEqual(identity['launch_commit'],head);self.assertEqual(identity['launch_manifest_blob_sha'],git('rev-parse','HEAD:'+g.LAUNCH));self.assertEqual(output.read_text(),'source_sha='+source+'\n');self.assertEqual(consumed.read_bytes(),old_bytes)
+   identity=json.loads((run/'hetero-five-m128-identity.json').read_text());self.assertEqual(set(identity),{'run_id','artifact_name','source_commit','launch_commit','launch_manifest_path','launch_manifest_blob_sha'});self.assertEqual(identity['source_commit'],source);self.assertEqual(identity['launch_commit'],head);self.assertEqual(identity['launch_manifest_blob_sha'],git('rev-parse','HEAD:'+g.LAUNCH));self.assertEqual(output.read_text(),'source_sha='+source+'\n');self.assertEqual(consumed.read_bytes(),old_bytes);self.assertEqual(consumed2.read_bytes(),old_bytes2)
  def test_workflow_fixed_summary_only_and_clock_first(self):
   workflow=D.parents[1]/'.github/workflows/hetero-five-m128-samejob-calibration-local-data.yml';text=workflow.read_text()
   self.assertEqual(text.count('uses: actions/upload-artifact@'),1);self.assertIn('path: ${{ runner.temp }}/five-m128-summary.json',text);self.assertIn("steps.summary.outcome == 'success'",text)

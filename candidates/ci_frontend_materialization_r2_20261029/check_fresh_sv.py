@@ -4,15 +4,20 @@ New baseline must be independently reviewed before this candidate is published.
 import argparse,hashlib,json,pathlib,re,os
 from sv_comment_only_identity import digest
 D=pathlib.Path(__file__).resolve().parent
-# Filled only from independently reviewed original c7, never fresh CI output.
-EXPECTED='6555ede34ba2980a6ebfddb13325ffb14734063d3253fdadd493bfcb4bf67bb5'
+# Observed run41118989254 identity, NOT accepted until the separate proof/review gate.
+# Never learn an expected identity from the fresh production execution itself.
+EXPECTED='ec70f91181b0422ca7cf2bc845a2a1f04c9d862f4f27d265c5a064a969058d72'
 SCANNER_SHA='b49c75780d2bfb295d3e90df6d478475f42c3129dba73c850b4d564e4114965b'
-MODULE_BASELINE_SHA='0d80da62c042b5da4f2879525d4660df957579a169295a5844deb0d953f2067a'
+MODULE_BASELINE_SHA='e065ef02d0bda38d7a9497d6c9531360803400f6c240055aa333f102c3fa650c'
 
 def check(sv,output):
  if output.exists():raise ValueError('fresh receipt required')
  r={'schema':'SV_DIRECTORY_IDENTITY_RECEIPT_V2','scope':'IDENTITY_ONLY_NO_NUMERICS','status':'FAIL_OR_INCOMPLETE','phase':'scanner_pin','expected_normalized_sha256':EXPECTED,'actual_normalized_sha256':None,'raw_sha256':None,'bytes':None,'counts':{},'error_code':None}
  try:
+  import sys
+  sys.path.insert(0,str(D.parent/'ci_frontend_pipeline_r2_20261029'))
+  from observer_baseline_gate import require_accepted_baseline
+  require_accepted_baseline(D)
   r['scanner_sha256']=hashlib.sha256((D/'sv_comment_only_identity.py').read_bytes()).hexdigest()
   if EXPECTED is None or SCANNER_SHA is None:raise ValueError('BASELINE_NOT_APPROVED')
   if r['scanner_sha256']!=SCANNER_SHA:raise ValueError('SCANNER_SOURCE_PIN_MISMATCH')
@@ -25,7 +30,7 @@ def check(sv,output):
   if r['actual_normalized_sha256']!=EXPECTED:raise ValueError('SV_DIRECTORY_NORMALIZED_BYTES_DIFFER_STOP_AUDIT')
   r['status']='PASS_SV_SOURCEINFO_DIRECTORY_IDENTITY_ONLY_NO_NUMERICS';r['phase']='complete'
  except Exception as e:
-  allowed={'BASELINE_NOT_APPROVED','SCANNER_SOURCE_PIN_MISMATCH','SV_INPUT_BOUND','SV_DIRECTORY_NORMALIZED_BYTES_DIFFER_STOP_AUDIT','bounded line comment','unterminated lexical token/comment'}
+  allowed={'OBSERVER_BASELINE_NOT_READY_ACTUAL_PROOF_AND_REVIEW_REQUIRED','BASELINE_NOT_APPROVED','SCANNER_SOURCE_PIN_MISMATCH','SV_INPUT_BOUND','SV_DIRECTORY_NORMALIZED_BYTES_DIFFER_STOP_AUDIT','bounded line comment','unterminated lexical token/comment'}
   r['error_code']=str(e) if str(e) in allowed else 'SV_IDENTITY_UNCLASSIFIED_ERROR';r['exception_class']=type(e).__name__
  raw=json.dumps(r,indent=2)+'\n'
  if len(raw.encode())>8192:raise ValueError('bounded identity receipt')
@@ -34,7 +39,7 @@ def check(sv,output):
  if r['error_code']=='SV_DIRECTORY_NORMALIZED_BYTES_DIFFER_STOP_AUDIT':
   try:
    from module_fingerprints import fingerprints
-   data=(D/'C7_MODULE_FINGERPRINTS.json').read_bytes()
+   data=(D/'OBSERVER_MODULE_FINGERPRINTS_PENDING.json').read_bytes()
    if hashlib.sha256(data).hexdigest()!=MODULE_BASELINE_SHA:raise ValueError('module baseline pin')
    expected={x['module']:x for x in json.loads(data)['modules']};actual={x['module']:x for x in fingerprints(sv)};changed=[]
    for name in sorted(set(expected)|set(actual)):

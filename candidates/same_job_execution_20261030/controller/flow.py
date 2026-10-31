@@ -36,6 +36,12 @@ def stage_policy(kind,seconds):
  raise ValueError('unknown explicit actual output/resource profile')
 
 def run(b,binding_path,binding_sha):
+ # Refuse pending observation baseline before acquisition, owner creation or any stage.
+ import importlib.util
+ baseline_root=D.parent.parent
+ spec=importlib.util.spec_from_file_location('production_observer_baseline',baseline_root/'ci_frontend_pipeline_r2_20261029/observer_baseline_gate.py')
+ gate=importlib.util.module_from_spec(spec);spec.loader.exec_module(gate)
+ gate.require_accepted_baseline(baseline_root/'ci_frontend_materialization_r2_20261029')
  profile_policy.require_source_pin(b['pins']);execution_policy=profile_policy.checked(b)
  started=b['job_started_monotonic'];need(type(started)in(int,float)and 0<=time.monotonic()-started<21000,'first workflow-step monotonic clock, never reset at flow/build boundary');materials_reserved,tail_reserved,total=reservations(b)
  need(b['schema']=='ONE_JOB_FIVE_M128_CHISEL_TEST_CALIBRATION_V1'and b['profiles']==list(range(5))and b['tokens']==128 and b['matrix_macs']==4096 and b['vector_lanes']==32,'exact registered same-hardware five profiles')

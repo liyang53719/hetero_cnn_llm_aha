@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <array>
 #include <charconv>
+#include <chrono>
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
@@ -221,7 +222,18 @@ class Simulation {
  void run(uint64_t maxCycles){auto& d=*dut;need(maxCycles>0&&maxCycles<=1000000000ULL,"explicit watchdog bound");
   const uint64_t dmaBefore=d.io_idmaTransfers,readBurstBefore=d.io_idmaReadBursts,readBeatBefore=d.io_idmaReadBeats;std::array<uint64_t,2> acceptedBefore{d.io_memoryAccepted_0,d.io_memoryAccepted_1},returnedBefore{d.io_memoryReturned_0,d.io_memoryReturned_1};
   d.io_completion_ready=1;d.io_launch_valid=1;d.eval();need(d.io_launch_ready,"real launch fire");launched=true;step();need(launchFires==1,"one actual Host launch handshake");d.io_launch_valid=0;
-  while(!d.io_result_valid&&activeCycles<maxCycles){step();if((activeCycles&0xfffff)==0)trace("running");}
+  // Read-only host telemetry: one immediate low-cycle sample, then at most
+  // one clock query per64 active cycles and one running line per steady second.
+  // No DUT step, completion condition, arithmetic, input or ABI is changed.
+  bool progressSeen=false;auto lastProgress=std::chrono::steady_clock::time_point{};
+  while(!d.io_result_valid&&activeCycles<maxCycles){step();
+   if(!progressSeen||(activeCycles&63ULL)==0){
+    const auto now=std::chrono::steady_clock::now();
+    if(!progressSeen||now-lastProgress>=std::chrono::seconds(1)){
+     trace("running");lastProgress=now;progressSeen=true;
+    }
+   }
+  }
   trace("terminal");need(d.io_result_valid,"bounded original Host did not finish; partial progress is not numerical PASS");
   need(launchFires==1&&d.io_result_bits_status==0&&d.io_result_bits_completed==cfg.commands&&d.io_result_bits_epoch==cfg.epoch&&completions==cfg.commands,"complete clean original Host result");
   need(drained()&&readBeats==readAcks&&writeBeats==writeAcks&&!d.io_resetRequired,"final memory drain and ACK conservation");

@@ -1,8 +1,8 @@
-name: hetero-qwen35-four-m128-fresh-host-calibration-local-data
+name: hetero-five-m128-observer-backend-fresh-host-calibration-local-data
 on:
   push:
     branches: [main]
-    paths: [ci_launch/qwen35_four_m128_freshhost_python_dso_r3_20261030_once.json]
+    paths: [ci_launch/five_m128_observer_backend_freshhost_20261030_once.json]
 permissions:
   contents: read
   actions: read
@@ -43,14 +43,14 @@ jobs:
           ref: ${{ steps.launch.outputs.source_sha }}
           persist-credentials: false
           fetch-depth: 1
-      - name: Bounded shared Chisel backend and four Qwen35 full128 profiles; P0 deferred
+      - name: One shared4096 observer backend and all five full128 profiles; recheck actual host AVX512
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           python3 -B candidates/same_job_execution_20261030/prepare_and_run.py \
             --repo "$GITHUB_WORKSPACE" \
-            --execution-policy QWEN35_FOUR_P0_BLOCKED_ORIGINAL_HOST_POLICY \
+            --execution-policy FULL_FIVE_ORIGINAL_HOST_POLICY \
             --fresh-host-profile \
             --identity "$RUNNER_TEMP/hetero-five-m128-identity.json" \
             --job-start "$RUNNER_TEMP/hetero-five-m128-job-start.json" \
@@ -83,9 +83,10 @@ jobs:
 # NO_PAYLOAD_UPLOAD: binary/SV/weights/reference data remain inside this job.
 # Controller grants GH_TOKEN only to original bootstrap's artifact acquisition;
 # no token forwarding to runtime installers, reference, provider, ABI, DUT or summary.
-# Exit 2 remains INCOMPLETE, never continue-on-error or a numerical green PASS.
+# Exit 2 is calibration transport only: it does not establish numerical PASS.
+# Independently bound receipts determine qualification; no continue-on-error.
 # Source publication contains no activation manifest; separate review is required.
 
-# REGISTERED5_ELIGIBLE4: P1-P4 execute; P0 is policy-deferred and NOT_TESTED.
+# REGISTERED5_ELIGIBLE5: all five original profiles; next-host AVX512f is checked, not inherited.
 # Fresh host must pass existing bounded prebuild checks; not prequalified here.
 # vector_lanes32 is a declared tag, not evidence of physical 32-lane II=1.

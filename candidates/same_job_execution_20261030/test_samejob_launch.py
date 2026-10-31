@@ -7,9 +7,9 @@ def manifest(source=None):
  raw=(D/'ACTUAL_R2_LAUNCH_FIXTURE.json').read_bytes()
  if len(raw)!=209 or hashlib.sha256(raw).hexdigest()!=FIXTURE_SHA:raise ValueError('actual acdb R2 fixture')
  m=json.loads(raw)
- m['schema']='QWEN35_FOUR_M128_FRESH_HOST_LOCAL_DATA_ONE_SHOT_V1'
- m['profile']='FIXED4096_REGISTERED5_QWEN35_ELIGIBLE4_P0_DEFERRED_M128_FRESH_HOST_CALIBRATION_LOCAL_DATA'
- m['nonce']='qwen35_four_m128_freshhost_python_dso_r3_20261030_once'
+ m['schema']='FIVE_M128_OBSERVER_BACKEND_FRESH_HOST_LOCAL_DATA_ONE_SHOT_V1'
+ m['profile']='FIXED4096_REGISTERED5_ELIGIBLE5_OBSERVER_BACKEND_M128_FRESH_HOST_CALIBRATION_LOCAL_DATA'
+ m['nonce']='five_m128_observer_backend_freshhost_20261030_once'
  if source is not None:m['source_sha']=source
  return m
 class T(unittest.TestCase):
@@ -47,9 +47,9 @@ class T(unittest.TestCase):
   workflow=D.parents[1]/'.github/workflows/hetero-five-m128-samejob-calibration-local-data.yml'
   text=workflow.read_text();self.assertIn('paths: ['+g.LAUNCH+']',text)
   self.assertNotIn('paths: [ci_launch/five_m128_samejob_calibration_20261030_once.json]',text)
-  self.assertEqual(g.LAUNCH,'ci_launch/qwen35_four_m128_freshhost_python_dso_r3_20261030_once.json')
- def test_all_consumed_identities_and_full_five_scope_rejected(self):
-  for nonce in ('five_m128_samejob_calibration_20261030_once','five_m128_samejob_diagnostic_r2_20261030_once','qwen35_four_m128_freshhost_20261030_once','qwen35_four_m128_freshhost_canonical_r2_20261030_once'):
+  self.assertEqual(g.LAUNCH,'ci_launch/five_m128_observer_backend_freshhost_20261030_once.json')
+ def test_all_consumed_identities_and_legacy_scopes_rejected(self):
+  for nonce in ('five_m128_samejob_calibration_20261030_once','five_m128_samejob_diagnostic_r2_20261030_once','qwen35_four_m128_freshhost_20261030_once','qwen35_four_m128_freshhost_canonical_r2_20261030_once','qwen35_four_m128_freshhost_python_dso_r3_20261030_once'):
    a=self.args();a[1]['nonce']=nonce
    with self.assertRaises(ValueError):g.validate(*a)
    a=self.args();a[5]='A\tci_launch/'+nonce+'.json\n'
@@ -57,16 +57,16 @@ class T(unittest.TestCase):
   for key,value in [('schema','FIVE_M128_SAMEJOB_CALIBRATION_LOCAL_DATA_ONE_SHOT_V1'),('profile','FIXED4096_VECTOR32_FIVE_M128_CALIBRATION_LOCAL_DATA')]:
    a=self.args();a[1][key]=value
    with self.assertRaises(ValueError):g.validate(*a)
- def test_eligible_four_scope_binds_explicit_workflow_flags(self):
+ def test_all_five_scope_binds_explicit_workflow_flags(self):
   text=(D.parents[1]/'.github/workflows/hetero-five-m128-samejob-calibration-local-data.yml').read_text()
   def flags_match(text):
    lines=[line.strip().rstrip('\\').rstrip() for line in text.splitlines()]
-   return lines.count('--execution-policy QWEN35_FOUR_P0_BLOCKED_ORIGINAL_HOST_POLICY')==1 and lines.count('--fresh-host-profile')==1
+   return lines.count('--execution-policy FULL_FIVE_ORIGINAL_HOST_POLICY')==1 and lines.count('--fresh-host-profile')==1
   self.assertTrue(flags_match(text))
   self.assertFalse(flags_match(text.replace('--fresh-host-profile','')))
-  self.assertFalse(flags_match(text.replace('QWEN35_FOUR_P0_BLOCKED_ORIGINAL_HOST_POLICY','ALL_FIVE_ORIGINAL_HOST_POLICY')))
+  self.assertFalse(flags_match(text.replace('FULL_FIVE_ORIGINAL_HOST_POLICY','QWEN35_FOUR_P0_BLOCKED_ORIGINAL_HOST_POLICY')))
   self.assertFalse(flags_match(text.replace('--fresh-host-profile','--fresh-host-profile=false')))
-  self.assertIn('REGISTERED5_QWEN35_ELIGIBLE4_P0_DEFERRED',manifest()['profile'])
+  self.assertIn('REGISTERED5_ELIGIBLE5_OBSERVER_BACKEND',manifest()['profile'])
   self.assertIn('FRESH_HOST',manifest()['schema'])
   self.assertNotIn('VECTOR32',manifest()['profile'])
   entry=(D/'prepare_and_run.py').read_text()

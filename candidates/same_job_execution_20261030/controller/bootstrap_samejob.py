@@ -8,6 +8,12 @@ def need(x,m):
 def sha(p):
  with pathlib.Path(p).open('rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
 def main():
+ # Refuse pending observation baseline before acquisition, owner creation or any stage.
+ import importlib.util
+ baseline_root=pathlib.Path(__file__).resolve().parents[2]
+ spec=importlib.util.spec_from_file_location('production_observer_baseline',baseline_root/'ci_frontend_pipeline_r2_20261029/observer_baseline_gate.py')
+ gate=importlib.util.module_from_spec(spec);spec.loader.exec_module(gate)
+ gate.require_accepted_baseline(baseline_root/'ci_frontend_materialization_r2_20261029')
  global D
  a=argparse.ArgumentParser()
  for n in ['repo','pipeline','work']:a.add_argument('--'+n,type=pathlib.Path,required=True)
@@ -93,7 +99,7 @@ def main():
    fresh_aliases=dict(host['aliases']);pins.update(host['pins']);pins[str(W/'fresh-host.json')]=sha(W/'fresh-host.json')
   except Exception:
    parent_failure('HOST_RECEIPT_ADMISSION','FRESH_HOST_RECEIPT_REJECTED');raise
- stage('binding',[py,'-B',str(D/'materialize_frontend_binding.py'),'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--canonical',str(D/'fixed-canonical-baseline.tsv'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')])
+ stage('binding',[py,'-B',str(D/'materialize_frontend_binding.py'),'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--canonical',str(R/'candidates/observer_ir_only_20261030/evidence/run41114764250/observed-canonical.tsv'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')])
  # This entry owns its own stage-level process groups and aggregate memory budget.
  # Token is intentionally absent. Outer GitHub job timeout bounds all stages.
  binding=W/'FRONTEND_BINDING.json';bound=json.loads(binding.read_text());bound['mode']='BUILD_ONLY';bound['artifact_identity']=identity

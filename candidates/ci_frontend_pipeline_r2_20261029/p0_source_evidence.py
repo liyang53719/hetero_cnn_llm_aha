@@ -5,8 +5,8 @@ import json,pathlib,hashlib
 from driver_dependency_proof import need,sha,pin,text_pin,check_text
 P=pathlib.Path
 SCALA={'helper':'DiagnoseOriginalHostMoePhaseV5.scala','host_top':'HostBlockTopV4.scala','host_commands':'HostBlockCommandsV4.scala','owner_kernel':'QwenOwnerProtocol.scala','qkv_router':'Public21QkvReductionRouter.scala','resident':'FfnResidentCoordinator.scala','bridge':'FfnTileSiluBridge.scala'}
-CONTRACT_SHA='bd8f9b3b2d5ba97eac448b293592cf5a55ae7670c8a75ed2819cfbd7294b64f3'
-CORRECTOR_SHA='32df9fc596dedd87030f2cd4df2e6e1c06eb95b6a48cf7f6d8674242709a8a1e'
+CONTRACT_SHA='ac2db97abc2dec264fd8e5d0eda06da11c1b955017075d7a2c79c49d1efdccd4'
+CORRECTOR_SHA='dc2708cb5d258fff64f1e6aca4620ddd69d8410119f3aa00230a3e9fe907da58'
 def enrich(original,b,built):
  old=text_pin(b['source_manifest'],16*1024**2);m=json.loads(old['text']);repo=P(original['repo']).resolve()
  contract_path=repo/'candidates/same_job_execution_20261030/numeric/LOCKED_SOURCE_CONTRACT.json';program=repo/'candidates/p0_newboundary_input_provider_20261028/PROGRAM_MANIFEST.json'

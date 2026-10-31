@@ -5,6 +5,8 @@ from conditional_admission import admit_build as _admit_build
 from build_producer import prepare as _prepare,run as _run,artifact_manifest
 
 def admit_build(b,obj,host,frontend_receipt,out):
+ from observer_baseline_gate import require_accepted_baseline
+ require_accepted_baseline(Path(__file__).resolve().parent.parent/'ci_frontend_materialization_r2_20261029')
  p=Path(out);existed=p.exists()
  try:
   result=_admit_build(b,obj,host,frontend_receipt,out)
@@ -17,6 +19,8 @@ def admit_build(b,obj,host,frontend_receipt,out):
   raise
 
 def run(b,stage):
+ from observer_baseline_gate import require_accepted_baseline
+ require_accepted_baseline(Path(__file__).resolve().parent.parent/'ci_frontend_materialization_r2_20261029')
  try:return _run(b,stage)
  except Exception as e:
   p=Path(b['build_evidence_dir'])
@@ -24,6 +28,8 @@ def run(b,stage):
   raise
 
 def prepare(b):
+ from observer_baseline_gate import require_accepted_baseline
+ require_accepted_baseline(Path(__file__).resolve().parent.parent/'ci_frontend_materialization_r2_20261029')
  try:return _prepare(b)
  except Exception as e:
   (Path(b['build_evidence_dir'])/'build_preflight.json').write_text(json.dumps(dict(status='FAIL',code='DERIVED_BUILD_PLAN_REJECTED',error_type=type(e).__name__,detail=str(e)[:1024],actual_compile_executed=False),indent=2)+'\n')

@@ -1,3 +1,4 @@
+import hashlib
 import argparse,ast,importlib.util,json,pathlib,tempfile,types,unittest
 from unittest.mock import patch
 D=pathlib.Path(__file__).resolve().parents[1]/'numeric'
@@ -7,7 +8,7 @@ spec=importlib.util.spec_from_file_location('owned',D/'consumer_owned.py');m=imp
 BASE=D.parent/'acceptance_tests/fixtures/consumer_r2_baseline.py.txt'
 class Tests(unittest.TestCase):
  def test_original_functions_ast(self):
-  old={n.name:ast.dump(n,include_attributes=False) for n in ast.parse(BASE.read_text().replace('ffb1c043cc1e21912a6ee6f11c7222e0885ebe89a38e68efce0027129e12617b','1bdc7fe9f8d4c1af3d39652f2f6a9d81f8ce0001a90b1ac3956f6ba590e9b523')).body if isinstance(n,ast.FunctionDef)}
+  old={n.name:ast.dump(n,include_attributes=False) for n in ast.parse(BASE.read_text().replace('ffb1c043cc1e21912a6ee6f11c7222e0885ebe89a38e68efce0027129e12617b',hashlib.sha256((D/'observation_contract.py').read_bytes()).hexdigest())).body if isinstance(n,ast.FunctionDef)}
   new={n.name:ast.dump(n,include_attributes=False) for n in ast.parse((D/'consumer_owned.py').read_text()).body if isinstance(n,ast.FunctionDef)}
   for name in old:
    if name not in ('main','compare','router_compare','classify_observed_profile'):self.assertEqual(old[name],new[name],name)

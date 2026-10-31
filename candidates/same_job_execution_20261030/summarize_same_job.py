@@ -207,6 +207,14 @@ def numeric_qualification_projection(work,identity):
  except (OSError,ValueError,TypeError,KeyError,AttributeError,ImportError):
   return dict(status='INVALID_OR_UNBOUND',numerical_pass=False,final_rtl_executed=False)
 
+def progress_projection(work,identity):
+ # Optional telemetry must never suppress the existing failure/build summary.
+ try:
+  spec=importlib.util.spec_from_file_location('samejob_summary_progress',D/'summary_progress.py');progress=importlib.util.module_from_spec(spec);spec.loader.exec_module(progress)
+  return progress.project(work,identity)
+ except Exception:
+  return dict(status='UNAVAILABLE',numerical_pass=False,profiles=[dict(profile=i,status='UNAVAILABLE',last=None,outer_elapsed_seconds=None,observed_cycles_per_outer_second=None,full_block_total_cycles=None,full_block_remaining_seconds=None,full_block_mac_utilization=None) for i in range(5)])
+
 def summarize(work,identity):
  out=dict(schema='FIVE_M128_SAME_JOB_SAFE_SUMMARY_V1',status='INCOMPLETE',numeric_pass=False,final_rtl_replay=False,uploaded_payloads=False,profiles_registered=list(range(5)),tokens=128,matrix_macs=4096,vector_lanes=32,resource_peak_qualification='INCOMPLETE_SAMPLED',stages=[],actual_dut_reports=[])
  out['vector_lanes_semantics']='DECLARED_ARTIFACT_TAG_NOT_VERIFIED_PHYSICAL_ISSUE_LANES'
@@ -215,6 +223,7 @@ def summarize(work,identity):
  out['execution_selection']=execution_policy_summary(work)
  out['installation_resource_snapshots']=install_snapshots(work)
  out['pack_deduplication']=pack_deduplication(work)
+ out['execution_progress']=progress_projection(work,identity)
  for k in ('source_commit','launch_commit'):
   h=identity.get(k);out[k]=h if isinstance(h,str)and re.fullmatch('[0-9a-f]{40}',h)else None
  out['run_id']=identity.get('run_id')if type(identity.get('run_id'))is int else None

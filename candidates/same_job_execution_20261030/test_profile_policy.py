@@ -2,6 +2,7 @@
 import ast,contextlib,copy,hashlib,importlib.util,json,pathlib,sys,tempfile,time,types,unittest
 from unittest.mock import patch
 PKG=pathlib.Path(__file__).resolve().parent
+sys.path.insert(0,str(PKG/'numeric'))
 def load(name,path):
  s=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
 p=load('policy_under_test',PKG/'profile_policy.py')

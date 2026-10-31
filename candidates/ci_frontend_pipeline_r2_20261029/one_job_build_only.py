@@ -21,6 +21,8 @@ def pinned(p,h):
  p=pathlib.Path(p).absolute();need(p.is_file() and not p.is_symlink() and sha(p)==h,'pin mismatch '+str(p));return p
 def main():
  ap=argparse.ArgumentParser();ap.add_argument('--binding',type=pathlib.Path,required=True);ap.add_argument('--binding-sha256',required=True);ap.add_argument('--execute-reviewed-once',action='store_true');a=ap.parse_args()
+ from observer_baseline_gate import require_accepted_baseline
+ require_accepted_baseline(D.parent/'ci_frontend_materialization_r2_20261029')
  b=load(pinned(a.binding,a.binding_sha256));need(b['schema']=='FRESH155_SINGLE_BINARY_M128_V1','schema')
  plan=load(D/'BUILD_PLAN.json')
  need(plan['schema']=='FIXED_SHARED_BUILD_ONLY_PLAN_V1' and plan['mode']=='BUILD_ONLY' and plan['matrix_mac']==4096 and plan['vector_lanes']==32 and plan['profiles']==PROFILES and plan['builds']==1 and plan['tokens']==128,'exact shared build plan')
@@ -38,14 +40,14 @@ def main():
  need(len(b['idma_include_dirs'])==8 and len(b['idma_defines'])==4,'exact lifted includes/defines')
  for p,h in b['pins'].items():pinned(p,h)
  pinned(b['canonical_manifest'],b['canonical_manifest_sha256'])
- need(b['canonical_manifest_sha256']=='90464ff45917c1b853c7d1b36e67dd5e43b5503b7fa0583704ee615c08919533','root-reviewed fixed canonical baseline only')
+ need(b['canonical_manifest_sha256']=='00897fd49e82036e04195ef6fe2a671e0a3fd948d968de3e47c4dfa7388f6b5c','root-reviewed fixed canonical baseline only')
  canonical_rows=pathlib.Path(b['canonical_manifest']).read_text().splitlines()
- need('circuit\t0d3abf62329320472199bdc10b81db1df7610dac90caf37ebe6717f7d1ba9f1f' in canonical_rows,'fixed typed AST canonical identity')
- need('annotations_order_preserved\t084025556b70d6a0c7cf992667c40d899b0a897da0fb311c8ec2b253f5d3ca0f' in canonical_rows,'ordered annotation identity')
+ need('circuit\t107bcbc0e17d430c2908666bdb750bcbc53b8b4caedc45ccbd9df612173ff872' in canonical_rows,'fixed typed AST canonical identity')
+ need('annotations_order_preserved\t8dd84536415d0f97aad603d1e0b9fbdadf8cae58a04d4ae5328105c9a844af39' in canonical_rows,'ordered annotation identity')
  for key in ['java','verilator','make','python','hierarchy','driver']:
   need(b[key] in b['pins'],'required tool/source pin '+key)
  need(all(x in b['pins'] for x in b['provider_sources']+b['helper_sources']),'source closure pin')
- for name in ('conditional_binary_producer.py','conditional_admission.py','build_producer.py','HOST_PORTS.json','pack_frozen_artifact.py','driver_dependency_proof.py','p0_source_evidence.py'):
+ for name in ('conditional_binary_producer.py','conditional_admission.py','build_producer.py','OBSERVER_HOST_PORTS_122.json','observer_baseline_gate.py','pack_frozen_artifact.py','driver_dependency_proof.py','p0_source_evidence.py'):
   need(str(D/name) in b['pins'],'build helper source pin '+name)
  need(subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()==b['repo_sha'],'exact checked-out source commit')
  original=repo/'candidates/fresh_original_top_recovery_20261028';manifest=original/'SOURCE_AND_TOOLCHAIN_PINS.json';need(str(manifest) in b['pins'],'source manifest itself independently pinned');m=load(manifest);need(len(m['sources'])==155,'155 original sources')
@@ -58,7 +60,7 @@ def main():
  spec=importlib.util.spec_from_file_location('reviewed_fixed_sources',b['fixed_source_validator']);validator=importlib.util.module_from_spec(spec);spec.loader.exec_module(validator)
  source_paths=validator.checked_paths(repo,b['fixed_source_overlay'],m)
  manifest=pathlib.Path(b['fixed_source_overlay'])
- need(b['pins'][b['driver']]=='f4f00dffd348e1822e7fcb5ac59602579d693d7a8d04e221cdd3f0255b56b04c','V3 final-state driver')
+ need(b['pins'][b['driver']]=='343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61','V3 final-state driver')
  jars=[];plugin=None
  for x in m['jars']:
   p=original/'cache'/x['maven_path'];pinned(p,x['sha256'])

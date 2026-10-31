@@ -6,7 +6,7 @@ from pathlib import Path
 import hashlib,json,re,shlex,struct,os
 TOP='VHostBlockTopV4'
 CHILDREN=('bf16_context_lane_cluster16_rev8b_b_candidate_d','qwen2_matrix_command_endpoint_0','TransposedDenseDownOwner')
-DRIVER_SHA='f4f00dffd348e1822e7fcb5ac59602579d693d7a8d04e221cdd3f0255b56b04c'
+DRIVER_SHA='343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61'
 O0=['OPT_FAST=-O0','OPT_SLOW=-O0','OPT_GLOBAL=-O0','CXXFLAGS=-O0']
 def need(x,m):
  if not x: raise ValueError(m)
@@ -32,6 +32,8 @@ def check_aliases(b):
  for p,target in b.get('compile_aliases',{}).items():need(str(Path(p).resolve(strict=True))==target,'compile alias drift: '+p)
 
 def prepare(b):
+ from observer_baseline_gate import require_accepted_baseline
+ require_accepted_baseline(Path(__file__).resolve().parent.parent/'ci_frontend_materialization_r2_20261029')
  """Source-only inspection; reviewed exact actual make closure is REQUIRED.
  This is not a general make evaluator/security proof. Admission must additionally
  review expanded flags/includes/recipes and all tool/header/driver identities.
@@ -41,7 +43,7 @@ def prepare(b):
  need(b['admission']['status']=='ACTUAL_MAKE_CLOSURE_REVIEWED','actual Host make review missing')
  check_aliases(b);check_pins(b['pins']); a=b['admission'];check_pins(a['make_closure_pins'])
  need(a['no_implicit_frontend'] is True and a['uniform_O0_no_fast_math'] is True,'make review incomplete')
- need(a['header_85_ports_and_driver_ABI_reviewed'] is True,'actual header/driver ABI review missing')
+ need(a['header_122_observation_ports_and_driver_ABI_reviewed'] is True,'actual header/driver ABI review missing')
  need(sha(b['driver'])==DRIVER_SHA,'real V3 driver required')
  obj=Path(b['obj']).resolve();need(obj.is_dir(),'actual generated object tree absent')
  # Reject stale compiled products: candidate requires a NEW uncompiled copy tree.
@@ -83,6 +85,8 @@ def prepare(b):
  return dict(schema='SERIAL_REAL_BINARY_PLAN_V1',scope='BUILD_LINK_ONLY_NOT_NUMERICAL',phases=phases,VM_HIER_LIBS=libs,pins=b['pins'],make_closure_pins=a['make_closure_pins'])
 
 def run(b,stage):
+ from observer_baseline_gate import require_accepted_baseline
+ require_accepted_baseline(Path(__file__).resolve().parent.parent/'ci_frontend_materialization_r2_20261029')
  """Call only after exact binding review. Adapter must enforce existing shared
  wall/disk/log/root/lock caps and clean environment; no implicit retries.
  """

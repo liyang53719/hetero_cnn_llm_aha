@@ -79,6 +79,8 @@ def admit_build(b,obj,host,frontend_receipt,out):
  """Caller already completed source/canonical/SV/frontend stages in this run.
  Require their actual receipt files/pins, not a manual hash for future outputs.
  """
+ from observer_baseline_gate import require_accepted_baseline
+ require_accepted_baseline(D.parent/'ci_frontend_materialization_r2_20261029')
  obj=Path(obj).resolve();out=Path(out)
  for p in (obj,host,out,b['driver'],b['driver_include'],b['verilator_root']):need(re.fullmatch(r'[/A-Za-z0-9_.+\-]+',str(p)) is not None,'make path metacharacter')
  out.mkdir(exist_ok=False)
@@ -95,7 +97,7 @@ def admit_build(b,obj,host,frontend_receipt,out):
  for key in ('make','cxx','ar','ranlib','perl','python'):
   p=Path(tools[key]);need(p.is_absolute() and p.is_file() and str(p.resolve()) in b['compile_tool_pins'],'compiler/tool identity missing '+key)
  globalmk=root/'include/verilated.mk';need(str(globalmk) in b['pins'],'unbound official global make rules')
- need(header_ports((obj/(TOP+'.h')).read_text())==json.loads((D/'HOST_PORTS.json').read_text()),'actual Host85 ABI mismatch')
+ need(header_ports((obj/(TOP+'.h')).read_text())==json.loads((D/'OBSERVER_HOST_PORTS_122.json').read_text()),'actual Host122 observation ABI mismatch')
  refs=[];makepins={str(globalmk):sha(globalmk)}
  for prefix in ['V'+n for n in CHILDREN]+[TOP]:
   cwd=obj if prefix==TOP else obj/prefix
@@ -120,7 +122,7 @@ def admit_build(b,obj,host,frontend_receipt,out):
  bb['pins']={**b['pins'],**b['verified_gate_pins'],**b['compile_tool_pins'],**derived}
  identity_path=Path(b['sv_identity_receipt']).resolve();serial_path=Path(b['serial_frontend_receipt']).resolve();subset=Path(b['fma_subset']).resolve()
  for p in (identity_path,serial_path,subset):need(str(p) in b['verified_gate_pins'],'unbound actual frontend identity artifact')
- identity=json.loads(identity_path.read_text());normalized='6555ede34ba2980a6ebfddb13325ffb14734063d3253fdadd493bfcb4bf67bb5'
+ identity=json.loads(identity_path.read_text());normalized='ec70f91181b0422ca7cf2bc845a2a1f04c9d862f4f27d265c5a064a969058d72'
  need(identity.get('status')=='PASS_SV_SOURCEINFO_DIRECTORY_IDENTITY_ONLY_NO_NUMERICS' and identity.get('phase')=='complete' and identity.get('expected_normalized_sha256')==normalized and identity.get('actual_normalized_sha256')==normalized and identity.get('raw_sha256')==sha(host),'raw/normalized Top identity drift')
  serial=json.loads(serial_path.read_text());need(serial.get('scanner_exited_before_children') is True,'serial frontend provenance')
  need([r['prefix'] for r in serial['stages']]==['V'+n for n in CHILDREN]+[TOP],'actual serial receipt stages')
@@ -148,7 +150,7 @@ def admit_build(b,obj,host,frontend_receipt,out):
  source_manifest.write_text(json.dumps(dict(schema='FIXED_COMMON_SOURCE_IDENTITY_V1',source_commit=b['repo_sha'],matrix_macs=4096,vector_lanes=32,sv_sha256=sha(host),driver_sha256=sha(b['driver']),source_pins={p:h for p,h in b['pins'].items() if p.startswith(b['repo']+'/') and Path(p).suffix in ('.scala','.sv','.v','.cpp','.h')},verified_gate_pins=b['verified_gate_pins'],provider_source_pins={p:b['pins'][p] for p in b['provider_sources']},generation_input_pins=b['pins'],derived_generated_pins=derived,fixed_source_overlay=b['fixed_source_overlay'],canonical_manifest_sha256=b['canonical_manifest_sha256'],physical_closure=physical_closure),indent=2)+'\n')
  bb['source_manifest']=str(source_manifest.resolve());bb['tool_manifest']=str(Path(b['compile_tool_manifest']).resolve())
  bb['pins'].update({bb['source_manifest']:sha(source_manifest),bb['tool_manifest']:sha(bb['tool_manifest'])})
- bb['admission']=dict(status='ACTUAL_MAKE_CLOSURE_REVIEWED',method='CONDITIONAL_V5032_EXACT_TEMPLATE',source_commit=b['repo_sha'],make_closure_pins=makepins,no_implicit_frontend=True,uniform_O0_no_fast_math=True,header_85_ports_and_driver_ABI_reviewed=True)
+ bb['admission']=dict(status='ACTUAL_MAKE_CLOSURE_REVIEWED',method='CONDITIONAL_V5032_EXACT_TEMPLATE',source_commit=b['repo_sha'],make_closure_pins=makepins,no_implicit_frontend=True,uniform_O0_no_fast_math=True,header_122_observation_ports_and_driver_ABI_reviewed=True)
  (out/'derived_admission.json').write_text(json.dumps(bb['admission'],indent=2)+'\n')
  (out/'derived_input_pins.json').write_text(json.dumps(bb['pins'],indent=2)+'\n')
  return bb

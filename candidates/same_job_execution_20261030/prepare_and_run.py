@@ -12,6 +12,12 @@ def sha(p):
 def read(p):
  need(p.stat().st_size<=16<<20,'bounded source metadata');return json.loads(p.read_text())
 def run(a):
+ # Refuse pending observation baseline before acquisition, owner creation or any stage.
+ import importlib.util
+ baseline_root=D.parent
+ spec=importlib.util.spec_from_file_location('production_observer_baseline',baseline_root/'ci_frontend_pipeline_r2_20261029/observer_baseline_gate.py')
+ gate=importlib.util.module_from_spec(spec);spec.loader.exec_module(gate)
+ gate.require_accepted_baseline(baseline_root/'ci_frontend_materialization_r2_20261029')
  execution_policy=profile_policy.policy(getattr(a,'execution_policy',profile_policy.FULL))
  repo=a.repo.resolve();work=a.work;identity=read(a.identity);clock=read(a.job_start)
  need(str(clock['run_id'])==os.environ['GITHUB_RUN_ID']and os.environ.get('GITHUB_RUN_ATTEMPT')=='1'and clock['launch_commit']==os.environ['GITHUB_SHA'],'first-step clock belongs same first run')

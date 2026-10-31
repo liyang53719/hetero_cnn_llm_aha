@@ -1,7 +1,7 @@
 """Read actual fresh GCC -MMD dependency evidence; never invokes a compiler."""
 import hashlib,json,pathlib,re,posixpath
 P=pathlib.Path
-PRODUCER_IMPLEMENTATION_PINS={'build_producer.py': '6684fb1648aa2b40b03489da8cf610af273263b911083ecfe8801d13bb451472', 'one_job_build_only.py': '437fd6af755f0e7b59b94679898cdb1386a8c2ea2e021908d7b47b4029129ec9', 'pack_frozen_artifact.py': 'cb725630ee39e811c63048b4594c403c0548c9c0a5bd48258a4ace1fd98d0d9e', 'p0_source_evidence.py': '589ffa6d518b1ab7c247868e64a11f447c110ad8bdd4f2e8876c15222a2f94d9'}
+PRODUCER_IMPLEMENTATION_PINS={'build_producer.py': '83af62741237d0c75741ec767dafda29c15ffa8d5ceaf1976ae671d498bdce21', 'one_job_build_only.py': 'd00767427ce2a51e83cd22181cb931342541c235b7f757a2b0b3c0aa5545f951', 'pack_frozen_artifact.py': 'fdea250492dd0ea7493ffec0ecf8b639a9ba5d4026419c5025701066a69a97eb', 'p0_source_evidence.py': '88dd9877813027c1b32a6de2f253109a53884b0d52bce481df39ebc2aa01f32f'}
 OBSERVER_HEADER_PINS={'resident_observation.hpp': '88185df7e27f3c0ffa7f3fd857e40f4a31fd72a69c876602519be2e3b0a69721', 'moe_raw_score_observation.hpp': 'fc029f28224bf07452b36702b6c81f5cd196fd7870e81fe980efce13bffaf9df'}
 GLOBAL_MK_SHA='74121398e5be12bf03721f1f0f5ce75e7c703635ec7e50920d43f9c4e31fcc0c'
 def need(v,s):

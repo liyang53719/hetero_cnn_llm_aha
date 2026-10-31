@@ -1,0 +1,18 @@
+{
+  "schema": "OBSERVER_PRODUCTION_BASELINE_ACCEPTANCE_V1",
+  "ready": true,
+  "status": "ACCEPTED_REVIEWED_OBSERVATION_SV_BASELINE_ONLY_NOT_NUMERICAL",
+  "frontend_run_id": 41118989254,
+  "frontend_artifact_sha256": "510fa27c03b7db63bfaa364fb7334cbcff52398ee930f025a0f3862417b7cbf1",
+  "canonical_manifest_sha256": "00897fd49e82036e04195ef6fe2a671e0a3fd948d968de3e47c4dfa7388f6b5c",
+  "observed_normalized_sv_sha256": "ec70f91181b0422ca7cf2bc845a2a1f04c9d862f4f27d265c5a064a969058d72",
+  "observed_module_fingerprints_sha256": "e065ef02d0bda38d7a9497d6c9531360803400f6c240055aa333f102c3fa650c",
+  "host_ports_122_sha256": "289f230ec8fc85e7aee0396ab34424f505855074a762707e874fbf8a2f45ca08",
+  "actual_sv_only_proof_sha256": "f88769ed00ab2dd052752e6ade9cf67f37f7c6f9d4ede64723e5441ca609835c",
+  "independent_sv_only_review_sha256": "598ff33f10f55ffbf78c589cf9d8ad37e3862bdd52aec9206477c4b04c7b1b7a",
+  "numerical_pass": false,
+  "final_rtl_pass": false,
+  "actual_sv_only_summary_sha256": "dfacbbe2c6bfdccefca47cf53a61eb3a1b2eac11fb8947850b2d5eee5ed5a677",
+  "sv_only_run_id": 41159843264,
+  "evidence_directory": "../observer_sv_only_20261030/evidence/run41159843264"
+}

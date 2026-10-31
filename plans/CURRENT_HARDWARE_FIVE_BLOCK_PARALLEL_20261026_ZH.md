@@ -1,5 +1,12 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-31 02:55 UTC：已审 SV 观测基线接回原五块生产链（TEMP / 待真实校准）
+- 以 d339 实际证据提交为基线合入原隔离 production 候选：不覆盖新扫描器/投影器；旧 canonical/C7/85口历史原样保留。实际 run41159843264 proof f88769ed…及独审598ff33f…、summary dfacbbe2…被门逐文件固定哈希读取。ready 只表示限定观测 SV 基线已审，可继续原后端构建，不授予数值或最终RTL通过。
+- 为避免300秒仅有reset样本，本包经授权仅调整driver只读日志调度：首个while成功step立即running，后每64 activecycles检查steadyclock且至少1秒才再输出；原DUT step/while条件/算术/ABI不改。safe summary复用原Popen/outer cleanup，输出有限进度及事后日志hash，未绑定/无active则null；外层elapsed除速率非即时仿真率，SIGKILL不保证最终帧，正式C++编译仍待同一次build。
+- 原主链不重设计：35B runtime先装并严格清理→单次共同build→其余runtime→owner/weights/5份独立参考→五块M128同刺激。同一4096 MAC固定硬件/122口/新SVhash ec70…；下一fresh host重新检查Python3.12/x86_64/AVX512f以运行全5，不迁移旧host或16-lane结果。源码资格与真实archive/link/GCC双头依赖/运行资格分开。
+- 当前实际入口仍只有每块300秒BOUNDED_CALIBRATION，21000秒总限及19500秒预留不变，不是完整执行mode。校准需导出原driver已有HOST_PROGRESS的实际周期/调度/速率证据；无完整block总周期依据时明确unknown，不把部分区间利用率当4096资源完整block分母。FULL_BLOCK_ACCEPTANCE模式尚待实际校准预算证据后最小接入，不能无限重复资格壳。
+- 当前后端会发射IR/SV并编译仿真，属于原Chisel生成模型的数值执行链，不是纯Python/Scala行为模型，也不是冻结后的独立最终RTL回放。完整五块M128数值仍0/5，最终同刺激RTL仍0/5。源码提交不包含activation实体；实际执行待独审、CI、资源及冲突检查。
+
 ## 2026-10-31 02:48 UTC：真实两模块61-bit限定SV差异证明 PASS（非数值）
 - 实际run41159843264成功，source c312f2ee、launch b845ae54；两原样安全回执及独审见 candidates/observer_sv_only_20261030/evidence/run41159843264/。15阶段严格native0、errors0、cleanup/EOF/gzip均真。
 - 旧/新全SV normalized6555ede3…/ec70f911…与既有身份相符。Router仅8端口/4直接assign、Dense仅4端口/4直接assign新增四字段61-bit；删除规定增量后实际剩余normalized bytes分别179237/44477654双流逐字节相等。92模块顺序不变，82未变+8既定observer修改+2本次限定证明，无额外模块变化。

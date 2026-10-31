@@ -198,7 +198,7 @@ def execute(binary, runtime, output, log, limits):
 
 OWNED_ENVIRONMENT=None
 
-V3_DRIVER_SHA256='f4f00dffd348e1822e7fcb5ac59602579d693d7a8d04e221cdd3f0255b56b04c'
+V3_DRIVER_SHA256='343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61'
 
 def verify_frozen(path,expected_sha):
     need(len(expected_sha)==64 and all(c in '0123456789abcdef' for c in expected_sha),'expected artifact SHA256 required')
@@ -223,7 +223,7 @@ def artifact_identity(frozen):
 def coverage_policy(profile,common,identity,bundle_root):
     import importlib.util
     path=pathlib.Path(__file__).resolve().with_name('observation_contract.py')
-    need(sha(path)=='1bdc7fe9f8d4c1af3d39652f2f6a9d81f8ce0001a90b1ac3956f6ba590e9b523','reviewed observation contract module')
+    need(sha(path)=='08287f20179a42046870ec8c26cd878e5ffe7a85ecabe26cdd1043ec054d307a','reviewed observation contract module')
     spec=importlib.util.spec_from_file_location('required_observation_policy',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
     return module.validate(profile,common,identity,bundle_root)
 

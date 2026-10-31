@@ -14,6 +14,10 @@ def main():
  for k in ['repo','pipeline','jdk_inventory','java','tools','idma','matrix','canonical','binding','output']:a.add_argument('--'+k.replace('_','-'),type=pathlib.Path,required=True)
  a.add_argument('--expected-repo-sha',required=True)
  v=a.parse_args();R=v.repo.resolve();C=v.pipeline.resolve();I=v.idma.resolve();T=v.tools.resolve();M=v.matrix.resolve()
+ import sys
+ sys.path.insert(0,str(C))
+ from observer_baseline_gate import require_accepted_baseline
+ require_accepted_baseline(D)
  head=subprocess.check_output(['git','-C',str(R),'rev-parse','HEAD'],text=True).strip()
  need(head==v.expected_repo_sha and len(head)==40,'independently reviewed checkout commit')
  need(C.is_relative_to(R) and D.is_relative_to(R),'published source candidates must be in reviewed checkout')
@@ -36,7 +40,7 @@ def main():
     need(stat.S_ISREG(target.stat().st_mode) and not target.is_symlink() and target.stat().st_size==e['bytes'] and 0<=e['bytes']<=4*1024**2 and sha(target)==e['sha256'],'external JDK dependency drift')
     external_pins[str(target)]=e['sha256']
   else:need(p.is_file() and p.stat().st_size==x['bytes'] and sha(p)==x['sha256'],'JDK file drift')
- need(sha(v.canonical)=='90464ff45917c1b853c7d1b36e67dd5e43b5503b7fa0583704ee615c08919533','approved fixed canonical')
+ need(sha(v.canonical)=='00897fd49e82036e04195ef6fe2a671e0a3fd948d968de3e47c4dfa7388f6b5c','approved fixed canonical')
  need(sha(I/'SHA256SUMS.json')=='a699b8074b8099e00859d5174c0a5fb6b5a171a28cad30bab8dd96226dc67b19','exact original idma manifest')
  im=json.loads((I/'SHA256SUMS.json').read_text())
  for n,h in im.items():need(sha(I/n)==h,'iDMA source drift '+n)
@@ -62,7 +66,7 @@ def main():
  driver_headers=R/'candidates/host_runtime_non_dpi_backend/source'
  helpers=[C/n for n in ['CanonicalHighGate.scala','CanonicalInfoMicroTest.scala','PortableHostDenseAccMemoryLowering.scala','PortableHostMatrixResultFifoMemoryLowering.scala','PortableHostHighSimulationEmitter.scala','NewToolchainTransformGate.scala']]+[backend/n for n in ['PhysicalFmaStageLibrary.scala','RetainedBackendCircuitGate.scala','RetainedEndpointPortContract.scala','RetainedServicePhaseObserver.scala']]
  driver=R/'candidates/moe_router_score_observation_20261030/driver/host_axi_driver_non_dpi.cpp'
- need(sha(driver)=='f4f00dffd348e1822e7fcb5ac59602579d693d7a8d04e221cdd3f0255b56b04c','V3 driver')
+ need(sha(driver)=='343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61','V3 driver')
  paths=[str(p) for folder in (C,D) for p in folder.iterdir() if p.is_file() and p.suffix in ('.py','.json','.scala','.vlt','.tsv')]+providers+list(map(str,helpers))+[str(java),str(T/'verilator'),str(pathlib.Path('/usr/bin/make').resolve()),str(pathlib.Path('/usr/bin/python3').resolve()),str(D/'hierarchy_r7.vlt'),str(driver),str(v.canonical.resolve()),str(D/'FIXED_SOURCE_OVERLAY_R2.json'),str(D/'fixed_sources.py'),str(C/'prepare_fma_subset.py'),str(R/'candidates/fresh_original_top_recovery_20261028/SOURCE_AND_TOOLCHAIN_PINS.json')]
  paths += [str(R/'candidates/same_job_execution_20261030/numeric/LOCKED_SOURCE_CONTRACT.json'),str(R/'candidates/p0_newboundary_input_provider_20261028/PROGRAM_MANIFEST.json')]
  paths += [str(driver.parent/n) for n in ('resident_observation.hpp','moe_raw_score_observation.hpp')]

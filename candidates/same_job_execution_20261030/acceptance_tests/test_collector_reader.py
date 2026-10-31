@@ -3,7 +3,7 @@ import argparse,hashlib,json,pathlib,struct,subprocess,sys,tempfile
 ROOT=pathlib.Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'numeric'))
 import moe_score_compare as m
 HEADER_SHA='fc029f28224bf07452b36702b6c81f5cd196fd7870e81fe980efce13bffaf9df'
-DRIVER_SHA='f4f00dffd348e1822e7fcb5ac59602579d693d7a8d04e221cdd3f0255b56b04c'
+DRIVER_SHA='343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61'
 def main():
  p=argparse.ArgumentParser();p.add_argument('--producer',type=pathlib.Path,required=True);a=p.parse_args()
  header=a.producer.resolve()/'driver/moe_raw_score_observation.hpp';driver=header.with_name('host_axi_driver_non_dpi.cpp')

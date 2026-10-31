@@ -1,0 +1,32 @@
+{
+  "schema": "SYNTHETIC_SV_SCANNER_DIFFERENTIAL_BENCHMARK_V1",
+  "scope": "SYNTHETIC_ONLY_NOT_ACTUAL_SV_ACCEPTANCE",
+  "input_bytes": 34998998,
+  "modules": 96,
+  "baseline_whole_scan_seconds": 8.972269674995914,
+  "baseline_modules_scan_seconds": 9.03932875400642,
+  "single_pass_inventory_seconds": 9.235507643999881,
+  "all_metadata_exact_equal": true,
+  "peak_rss_bytes": 16310272,
+  "scanner_sha256": "b49c75780d2bfb295d3e90df6d478475f42c3129dba73c850b4d564e4114965b",
+  "inventory_source_sha256": "685b15b4f9bee8d23ac25ffc7d26aa718d55621e5fe1b9b2f3519669f24768d4",
+  "numerical_pass": false,
+  "supervisor": {
+    "native_exit": 0,
+    "errors": [],
+    "elapsed_seconds": 28.103335718013113,
+    "observed_cpu_seconds": 27.31,
+    "observed_peak_rss": 12173312,
+    "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+    "pipe_eof_observed": true,
+    "gzip_finalized": true,
+    "caps": {
+      "wall_seconds": 90,
+      "cpu_seconds": 60,
+      "rss_bytes": 1073741824,
+      "cleanup_seconds": 30
+    }
+  },
+  "benchmark_source_sha256": "927b3b6046e572749122f3d090f461fc414fb9df2b1222d4b0a0b1782cce752d",
+  "performance_transfer_to_future_ci": false
+}

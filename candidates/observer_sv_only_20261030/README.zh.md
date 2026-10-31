@@ -1,3 +1,44 @@
+# SV-only 原扫描失败最小性能修复（候选，尚未重跑真实 SV）
+
+## 已证事实
+run41151061202 前7阶段 strict/native0，old_svscan 182.287298s、wall cap180s、native_exit=null、error_count1，strict=false；清理/EOF/gzip均完成。原两JSON未导出错误类型，不能仅凭native null断言具体wall/CPU/RSS原因。new和projection未开始，0/5数值。
+
+原collector先整SV调用原逐字节digest，再调用原module_fingerprints对所有模块再次digest，约2N Python词法遍历并额外模块raw读盘。本修复不扩180s或全job10800s，不增stage，不改原硬件、canonical、SVwhole/module期望、投影判据和scanner b49c源码。
+
+## 单遍等价方法
+新 `P/sv_inventory_single_pass.py` 保留每个模块一次**原b49c digest**，TeeHasher同时将同一份normalized bytes更新模块SHA与whole SHA。raw SHA和byte count由同一输入行更新。
+
+终态证明：原digest成功排除终态block/string；强制每个块最后rawbyte为LF，line/escapedidentifier状态也必退出，因此每块成功终态code。第一块原始初态code；全file严格无缝由module块穷尽覆盖，归纳得到各边界code。逐块normalized byte串拼接与原whole digest输出严格相同。所有counts键逐块累加，包括recognized/directory_changed/unrecognized；末EOF SourceInfo不会换义，因为每块均末LF。
+
+拒绝跨module block/string、嵌套假module、重复module、缺endmodule、前后/模块间空隙、无末LF、行/文件/模块上限超标。是对官方布局的保守收窄，不是宽松重解析。scanner.hashlib仅替换该模块命名空间且finally恢复，未修改全局hashlib对象。临时模块在原TMPDIR内，仍受原stage监督。
+
+collector调用并校验新helper SHA，保持 `OBSERVED_FRONTEND_SV_V1` 原字段/schema。projection仅同步collector源码SHA，未改任何投影判据或旧/新known hash。
+
+## 实测，不是假定增预算
+受原严格supervisor RSS1GiB/CPU60s/wall90s控制，35.0MB/96模块合成对照真实完成：
+- 旧 whole8.972270s + modules9.039329s =18.011598s。
+- 新完整inventory9.235508s，约49%降低。
+- 所有whole/raw/module hash、byte count、全部计数字段逐项精确相等。
+- 监督native0、wall28.103336s、CPU27.31s、RSS12,173,312B；cleanup/EOF/gzip均真。
+
+这是合成扫描可执行性证据，不是实际旧/新SV证明，不保证未来CI绝对耗时。stage仍180s/1GiB、whole3h全部原预算不变；净预算变化0。实际原扫描失败原因仍不可从丢失的errors恢复，因此安全诊断也修复。
+
+## 安全摘要
+`export_metadata.py` V2：error精确映射固定枚举（未知仅UNCLASSIFIED，不上传异常原文、路径、secret）；CPU观测无字段则null，不能猜0；明确wall/RSS cap。顶层期望hash改expected_*；只有完整project严格成功时才给observed_*，失败null。不改变严格终态与proof门，仍只两个≤128KiB合计白名单JSON。
+
+## 验证/交付范围
+15项原scanner差分测试，含100组确定随机样本、64KiB缓冲跨界、CRLF、pragma/string/escapedidentifier、跨模块恶意词法、无末LF、namespace恢复与真实collector入口；normal/-O通过。
+安全export新增5负例，8export tests normal/-O通过。最终closure/全套回归交独审打包owner重算。
+`SCANNER_SINGLE_PASS_BENCHMARK.json`是仅数字/pin的安全摘要；不上传合成SV正文、原SV、log/classes/IR、用户数据。
+
+本候选无重构build，无CI/推送/activation。实际专项重跑必须由root按已授权范围与新source/nonce验证执行；本次SV专项许可不代表生产M128已授权通过。
+
+## 新唯一启动约束
+修复source发布不触发专项；后续新source CI成功且main无冲突、原run已终态、无活动重任务后，仅新增 `ci_launch/observer_fixed4096_sv_only_difference_20261031_scanfix_once.json`。nonce同文件stem，attempt必须1，严格single A和direct parent；旧20261030路径已消费，永久不复用。全job仍10800秒、声明9060秒、余1740秒；原15stage及180秒scanner cap均不变。本文以下是原发布时历史说明，不代表本次或上次已通过。
+
+---
+## 历史：原source-only发布说明
+
 # TEMP / SOURCE-ONLY：旧新完整4096硬件的 SV-only 两模块严格差异取证
 
 本候选不激活；后续仅独立审核后由新source提交的直接父子关系、唯一新增launch触发一次fresh CI。基线main `15e6374af13e0f9d68cad1c9314a0228905bba59`，不回退既有frontend证据或计划。尚未实际运行本15阶段链，不宣称projection或SV re-pin PASS。

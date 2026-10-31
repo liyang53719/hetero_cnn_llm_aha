@@ -14,8 +14,8 @@
     },
     {
       "path": ".github/workflows/hetero-observer-sv-only-difference.yml",
-      "bytes": 3907,
-      "sha256": "4846cfc7fb160e0ae1cf28593d66e7e0286eb77e543cadbefbd7bf57b84e4d93"
+      "bytes": 3915,
+      "sha256": "cf4077fab427d8ff5add36cc87a41cf7a43549b0eab781989994250d0efbc1bb"
     },
     {
       "path": "candidates/attention_policy_count_fix_20261029T0054/source/HostBlockCommandsV4.scala",
@@ -248,6 +248,11 @@
       "sha256": "5b2b02984f7ae7a05417865e6ad9da37bdabf7ac93ce41f5ed492740e064dd2b"
     },
     {
+      "path": "candidates/ci_frontend_pipeline_r2_20261029/benchmark_sv_inventory.py",
+      "bytes": 2080,
+      "sha256": "927b3b6046e572749122f3d090f461fc414fb9df2b1222d4b0a0b1782cce752d"
+    },
+    {
       "path": "candidates/ci_frontend_pipeline_r2_20261029/build_producer.py",
       "bytes": 9846,
       "sha256": "6684fb1648aa2b40b03489da8cf610af273263b911083ecfe8801d13bb451472"
@@ -279,8 +284,8 @@
     },
     {
       "path": "candidates/ci_frontend_pipeline_r2_20261029/frontend_observation_metadata.py",
-      "bytes": 20103,
-      "sha256": "f314fee478766a847381288d1a675d3c55ea41562ec95c1e6bc4d9503f1e125f"
+      "bytes": 20127,
+      "sha256": "9295a2affa25970812a8b71d096b81be925facb0918223747df91b16a113cfb8"
     },
     {
       "path": "candidates/ci_frontend_pipeline_r2_20261029/frontend_qualify_only.py",
@@ -343,9 +348,19 @@
       "sha256": "14112fa337f8dda337cef61e9ea32979ebc382ea7c7f6dbe9f1cc3cfa5977c50"
     },
     {
+      "path": "candidates/ci_frontend_pipeline_r2_20261029/sv_inventory_single_pass.py",
+      "bytes": 3236,
+      "sha256": "685b15b4f9bee8d23ac25ffc7d26aa718d55621e5fe1b9b2f3519669f24768d4"
+    },
+    {
       "path": "candidates/ci_frontend_pipeline_r2_20261029/test_observer_frontend_qualification.py",
       "bytes": 9869,
       "sha256": "95bb064b93a399892aba385eeb1c80298f7b5ebb88af06618ef2e08cf184931c"
+    },
+    {
+      "path": "candidates/ci_frontend_pipeline_r2_20261029/test_sv_inventory_single_pass.py",
+      "bytes": 4262,
+      "sha256": "056e9701277401caead584e316bd2f50be44a90732fd1d2ae10ec92bb6958f17"
     },
     {
       "path": "candidates/ci_single_profile_runtime_20261029/BASELINE_LINEAGE.json",
@@ -1659,8 +1674,13 @@
     },
     {
       "path": "candidates/observer_sv_only_20261030/README.zh.md",
-      "bytes": 3640,
-      "sha256": "d62acd7f56f5a2ade69083bd94b06f4879e87c78ef929d3930ae8189b7d24258"
+      "bytes": 7881,
+      "sha256": "9265edadddb2cbb993784033c3ede3173191a8d50ea8884135a1827041dc977a"
+    },
+    {
+      "path": "candidates/observer_sv_only_20261030/SCANNER_SINGLE_PASS_BENCHMARK.json",
+      "bytes": 1181,
+      "sha256": "4c938db2ebc7f79a3d15d38f01e33e22d593cc8b70fed46f6992b91f3a6ce549"
     },
     {
       "path": "candidates/observer_sv_only_20261030/contract.py",
@@ -1669,8 +1689,8 @@
     },
     {
       "path": "candidates/observer_sv_only_20261030/export_metadata.py",
-      "bytes": 7453,
-      "sha256": "1ac450a977a04a7b46c5b821312b552f390a0bf1e0910b2ee3e57901e75c16cf"
+      "bytes": 9325,
+      "sha256": "7e391f9be905dc22f19293dcc6a184f1f1c73bd2541e5c9fe2fe090588f103eb"
     },
     {
       "path": "candidates/observer_sv_only_20261030/old_helpers/CanonicalHighGate.scala",
@@ -1700,17 +1720,17 @@
     {
       "path": "candidates/observer_sv_only_20261030/sv_difference_projection.py",
       "bytes": 18627,
-      "sha256": "81aada0fd6c89db9f259d48089ba3f352f4ea7a4438693aa97a0bb708c2280a4"
+      "sha256": "d3f753600d2ef17069ec54e9ee1a35672201c7f187fee9ea5b2c847e25e0ee81"
     },
     {
       "path": "candidates/observer_sv_only_20261030/test_contract.py",
-      "bytes": 7346,
-      "sha256": "e919df354f6c6e1b7f69893f15cc5abd4ec931a6bcdb7013a3d1e5f464feb40d"
+      "bytes": 7507,
+      "sha256": "072afa7e00271fcfb398adf0217a78031068402f8dd4db618d008f8e45a5c353"
     },
     {
       "path": "candidates/observer_sv_only_20261030/test_export_flow.py",
-      "bytes": 6092,
-      "sha256": "e623b1292eba02c1ef59b9ac0b6ea3248314829180476acc3e76cf24cdbf64da"
+      "bytes": 8771,
+      "sha256": "2a5e33f90346cccafca65e5ad081c9c69b660a1f9a0ccf5b71b06b9e188fd467"
     },
     {
       "path": "candidates/observer_sv_only_20261030/test_projection.py",
@@ -1719,8 +1739,8 @@
     },
     {
       "path": "candidates/observer_sv_only_20261030/validate_launch.py",
-      "bytes": 2400,
-      "sha256": "ad970c3cd6431137dddcf7cb2a9fb48293b6f12696832029ac1c3ed9383182f9"
+      "bytes": 2416,
+      "sha256": "bb3d5cf53c467d92487abd6b1ad6b6448ad47d2787c94df36e2f543e242c4465"
     },
     {
       "path": "candidates/p0_newboundary_input_provider_20261028/MANIFEST.json",

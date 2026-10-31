@@ -17,11 +17,11 @@ def observe_sv(sv,materialization,output):
  sv=pathlib.Path(sv);m=pathlib.Path(materialization)
  need(sv.is_file() and not sv.is_symlink() and 0<sv.stat().st_size<=512*1024**2,'bounded real emitted SV')
  need(sha(m/'sv_comment_only_identity.py')==SCANNER_SHA,'reviewed scanner identity')
- sys.path.insert(0,str(m));from sv_comment_only_identity import digest
- from module_fingerprints import fingerprints
- counts={}
- with sv.open('rb')as f:normalized=digest(f,counts)
- r=dict(schema='OBSERVED_FRONTEND_SV_V1',status='OBSERVED_UNREVIEWED_NOT_ACCEPTED',raw_sha256=sha(sv),normalized_sha256=normalized,bytes=sv.stat().st_size,scanner_sha256=SCANNER_SHA,counts=counts,modules=fingerprints(sv),numerical_pass=False)
+ need(sha(D/'sv_inventory_single_pass.py')=='685b15b4f9bee8d23ac25ffc7d26aa718d55621e5fe1b9b2f3519669f24768d4','reviewed single-pass inventory identity')
+ sys.path.insert(0,str(m));import sv_comment_only_identity as scanner
+ from sv_inventory_single_pass import inventory
+ observed=inventory(sv,scanner)
+ r=dict(schema='OBSERVED_FRONTEND_SV_V1',status='OBSERVED_UNREVIEWED_NOT_ACCEPTED',scanner_sha256=SCANNER_SHA,numerical_pass=False,**observed)
  write_new(output,r,512*1024)
  return r
 

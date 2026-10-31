@@ -2,6 +2,36 @@
 import argparse,pathlib,time,math
 from contract import *
 
+# Exact supervisor messages only. Never echo exception text, paths, or raw logs.
+ERROR_CATEGORIES={
+ 'ValueError: wall cap':'WALL_CAP',
+ 'ValueError: sampled observed aggregate CPU cap':'CPU_CAP',
+ 'ValueError: sampled observed aggregate RSS cap':'RSS_CAP',
+ 'ValueError: sampled disk reserve':'DISK_RESERVE',
+ 'ValueError: sampled aggregate writable-root cap':'AGGREGATE_TREE_CAP',
+ 'ValueError: sampled stage output tree cap':'STAGE_TREE_CAP',
+ 'ValueError: file cap':'FILE_CAP',
+ 'ValueError: entry cap':'ENTRY_CAP',
+ 'ValueError: sampled log cap':'LOG_CAP',
+ 'ValueError: RSS telemetry 64MiB cap':'TELEMETRY_CAP',
+ 'ValueError: prelaunch work deadline':'PRELAUNCH_DEADLINE',
+ 'ValueError: post-cleanup deadline':'CLEANUP_DEADLINE',
+ 'ValueError: reader completion deadline':'LOG_READER_DEADLINE',
+ 'ValueError: reader join deadline':'LOG_READER_DEADLINE',
+ 'ValueError: log EOF missing after cleanup':'LOG_EOF_MISSING',
+ 'ValueError: log reader failure':'LOG_READER_FAILURE',
+ 'ValueError: observed identities remain after group cleanup':'CLEANUP_INCOMPLETE',
+ 'ValueError: locked memory gate':'MEMORY_ADMISSION',
+ 'ValueError: locked disk gate':'DISK_ADMISSION',
+}
+def error_categories(errors):
+ need(type(errors)is list and len(errors)<=4096 and all(type(x)is str for x in errors),'bounded supervisor errors')
+ counts={}
+ for error in errors:
+  code=ERROR_CATEGORIES.get(error,'UNCLASSIFIED_SUPERVISOR_ERROR')
+  counts[code]=counts.get(code,0)+1
+ return dict(sorted(counts.items()))
+
 def stage_row(name,path,strict=True):
  r=read(path,4<<20)
  if strict:need(completed(r),'strict actual stage result required')
@@ -9,8 +39,10 @@ def stage_row(name,path,strict=True):
  caps=r['caps'];need(caps['wall_seconds']==wall and caps['cleanup_seconds']==30 and caps['rss_bytes']==rss<<30 and caps['max_entries']==100000,'unchanged per-phase caps')
  elapsed=r['elapsed_seconds'];peak=r['observed_peak_rss'];need(type(elapsed)in(int,float) and math.isfinite(elapsed) and 0<=elapsed<=(wall+30 if strict else WHOLE) and type(peak)is int and 0<=peak<=((rss if strict else 64)<<30),'bounded actual telemetry')
  native=r.get('native_exit');need(native is None or type(native)is int and -255<=native<=255,'bounded native status')
- errors=r.get('errors');need(type(errors)is list and len(errors)<=4096,'bounded error count')
- return dict(name=name,native_exit=native,strict_complete=completed(r),cleanup_complete=r.get('cleanup_proof',{}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP',pipe_eof_observed=r.get('log_capture',{}).get('pipe_eof_observed')is True,gzip_finalized=r.get('log_capture',{}).get('gzip_finalized')is True,error_count=len(errors),elapsed_seconds=elapsed,observed_peak_rss=peak,result_sha256=sha(path))
+ errors=r.get('errors');categories=error_categories(errors)
+ cpu=r.get('observed_cpu_seconds')
+ need(cpu is None or type(cpu)in(int,float) and math.isfinite(cpu) and 0<=cpu<=64*WHOLE,'bounded observed CPU telemetry')
+ return dict(name=name,native_exit=native,strict_complete=completed(r),cleanup_complete=r.get('cleanup_proof',{}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP',pipe_eof_observed=r.get('log_capture',{}).get('pipe_eof_observed')is True,gzip_finalized=r.get('log_capture',{}).get('gzip_finalized')is True,error_count=len(errors),error_categories=categories,observed_cpu_seconds=cpu,wall_cap_seconds=wall,rss_cap_bytes=rss<<30,elapsed_seconds=elapsed,observed_peak_rss=peak,result_sha256=sha(path))
 def project_runtime(path,expected,identity):
  need(sha(path)==expected,'runtime inventory completion pin')
  r=read(path,2<<20);need(r['schema']=='SV_ONLY_JDK_PYTHON_IDENTITY_V1' and r['old_pass_transfer']is False and r['scope']=='IDENTITY_ONLY_NO_RUNTIME_CPU_OR_NUMERICAL_QUALIFICATION','runtime scope')
@@ -64,6 +96,6 @@ def main():
  except (OSError,ValueError,KeyError,TypeError,ImportError):pass
  need(time.monotonic()-clock['started_monotonic']<WHOLE-300,'retain artifact publication deadline')
  a.output.mkdir();write(a.output/'sv-only-proof.json',proof,65536)
- summary=dict(schema='SV_ONLY_SAVED_SAFE_SUMMARY_V1',status=status,artifact_identity=identity,source_pins_sha256=sha(D/'SOURCE_PINS.json'),runtime_provenance=runtime,stages=stages,proof_file=dict(name='sv-only-proof.json',bytes=(a.output/'sv-only-proof.json').stat().st_size,sha256=sha(a.output/'sv-only-proof.json')),canonical_sha256=CANONICAL,normalized_sha256=NORMALIZED,numerical_pass=False,sv_repin_authorized=False,full_m128_pass_count=0,final_rtl_replay=False,archive_link_executed=False,verilator_gcc_executed=False)
+ summary=dict(schema='SV_ONLY_SAVED_SAFE_SUMMARY_V2',status=status,artifact_identity=identity,source_pins_sha256=sha(D/'SOURCE_PINS.json'),runtime_provenance=runtime,stages=stages,proof_file=dict(name='sv-only-proof.json',bytes=(a.output/'sv-only-proof.json').stat().st_size,sha256=sha(a.output/'sv-only-proof.json')),expected_canonical_sha256=CANONICAL,expected_normalized_sha256=NORMALIZED,observed_canonical_sha256=None if c is None else c['canonical_sha256'],observed_normalized_sha256=None if c is None else c['normalized_sha256'],numerical_pass=False,sv_repin_authorized=False,full_m128_pass_count=0,final_rtl_replay=False,archive_link_executed=False,verilator_gcc_executed=False)
  write(a.output/'sv-only-summary.json',summary,65536);need(sum(p.stat().st_size for p in a.output.iterdir())<=131072,'two metadata files aggregate128KiB')
 if __name__=='__main__':main()

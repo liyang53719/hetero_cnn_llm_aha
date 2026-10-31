@@ -6,7 +6,7 @@ import argparse,hashlib,io,json,pathlib,re,struct,sys,tempfile
 P=pathlib.Path
 SCANNER='b49c75780d2bfb295d3e90df6d478475f42c3129dba73c850b4d564e4114965b'
 FULL={'old':'6555ede34ba2980a6ebfddb13325ffb14734063d3253fdadd493bfcb4bf67bb5','new':'ec70f91181b0422ca7cf2bc845a2a1f04c9d862f4f27d265c5a064a969058d72'}
-COLLECTOR_SHA='f314fee478766a847381288d1a675d3c55ea41562ec95c1e6bc4d9503f1e125f'
+COLLECTOR_SHA='9295a2affa25970812a8b71d096b81be925facb0918223747df91b16a113cfb8'
 MODULES=('Public21QkvReductionRouter','TransposedDenseDownOwner')
 FIELDS=(('identity',32),('slot',2),('ng',16),('index',11))
 MOD_NORMALIZED={

@@ -47,4 +47,26 @@ class ExportFlow(unittest.TestCase):
  def test_proof_wrong_actual_binding_not_accepted(self):
   with tempfile.TemporaryDirectory()as td:
    d=pathlib.Path(td);w,can=setup_fixture(d);p=w/'projection/proof.json';proof=json.loads(p.read_text());proof['full_sv']['new']['metadata_sha256']='d'*64;p.write_text(json.dumps(proof));p=w/'COMPLETE.json';complete=json.loads(p.read_text());complete['proof_sha256']=c.sha(w/'projection/proof.json');p.write_text(json.dumps(complete));s,p=self.execute(d,w,can);self.assertEqual(s['status'],'OBSERVATION_UNAVAILABLE_OR_INCOMPLETE');self.assertEqual(p['schema'],'SV_ONLY_PROOF_UNAVAILABLE_V1')
+ def test_failure_exports_expected_not_observed_and_no_secret(self):
+  with tempfile.TemporaryDirectory()as td:
+   d=pathlib.Path(td);w,can=setup_fixture(d);(w/'COMPLETE.json').unlink()
+   path=w/'old_svscan/RESULT.json';r=json.loads(path.read_text());r.update(native_exit=None,errors=['ValueError: wall cap','ValueError: sampled observed aggregate CPU cap','ValueError: SECRET_TOKEN=/private/path'],observed_cpu_seconds=179.5);path.write_text(json.dumps(r))
+   s,p=self.execute(d,w,can);self.assertEqual(s['schema'],'SV_ONLY_SAVED_SAFE_SUMMARY_V2');self.assertEqual(s['expected_canonical_sha256'],c.CANONICAL);self.assertEqual(s['expected_normalized_sha256'],c.NORMALIZED);self.assertIsNone(s['observed_canonical_sha256']);self.assertIsNone(s['observed_normalized_sha256']);self.assertNotIn('canonical_sha256',s);self.assertNotIn('normalized_sha256',s)
+   row=next(x for x in s['stages']if x['name']=='old_svscan');self.assertEqual(row['error_categories'],dict(WALL_CAP=1,CPU_CAP=1,UNCLASSIFIED_SUPERVISOR_ERROR=1));self.assertEqual(row['observed_cpu_seconds'],179.5);self.assertFalse(row['strict_complete']);self.assertNotIn('SECRET_TOKEN',json.dumps(s));self.assertNotIn('/private/path',json.dumps(s))
+ def test_complete_observed_values_require_full_project(self):
+  with tempfile.TemporaryDirectory()as td:
+   d=pathlib.Path(td);w,can=setup_fixture(d);s,p=self.execute(d,w,can);self.assertEqual(s['observed_canonical_sha256'],c.CANONICAL);self.assertEqual(s['observed_normalized_sha256'],c.NORMALIZED)
+ def test_native_null_does_not_invent_wall_reason_or_cpu(self):
+  with tempfile.TemporaryDirectory()as td:
+   d=pathlib.Path(td);w,can=setup_fixture(d);path=w/'old_svscan/RESULT.json';r=json.loads(path.read_text());r['native_exit']=None;path.write_text(json.dumps(r));row=e.stage_row('old_svscan',path,False);self.assertEqual(row['error_categories'],{});self.assertIsNone(row['observed_cpu_seconds']);self.assertFalse(row['strict_complete'])
+ def test_only_exact_error_strings_are_classified(self):
+  self.assertEqual(e.error_categories(['ValueError: wall cap /secret','RuntimeError: wall cap']),{'UNCLASSIFIED_SUPERVISOR_ERROR':2})
+  with self.assertRaises(ValueError):e.error_categories([{'secret':'x'}])
+  with self.assertRaises(ValueError):e.error_categories(['x']*4097)
+ def test_bad_cpu_telemetry_rejected(self):
+  with tempfile.TemporaryDirectory()as td:
+   d=pathlib.Path(td);w,_=setup_fixture(d);path=w/'jdk/RESULT.json';r=json.loads(path.read_text())
+   for value in [True,-1,float('nan'),float('inf'),64*c.WHOLE+1,'private']:
+    r['observed_cpu_seconds']=value;path.write_text(json.dumps(r))
+    with self.assertRaises(ValueError):e.stage_row('jdk',path,False)
 if __name__=='__main__':unittest.main()

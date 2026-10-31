@@ -1,5 +1,13 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-31 01:00 UTC：SV专项扫描失败修复（TEMP / SOURCE-ONLY，未重新实测）
+- 用户已明确批准本次最多3小时的SV专项；原run41151061202终态FAIL，前7阶段native0/严格完成，old_svscan 182.287秒、native_exit=null、error_count1，清理/EOF/gzip完成；与180秒限时一致，但未保存错误类型，具体原因仍未知。新版与投影未开始，禁止继承PASS。
+- 单遍修复仍调用原b49c scanner：完整LF终止模块的原digest同时更新module/whole hash，严格连续覆盖与终态code证明；不改scanner字节、旧新canonical/SV期望、61-bit投影判据、硬件或预算。合成34,998,998B/96模块实测旧18.012秒→新9.236秒、全部元数据相等；仅合成性能，不是实际92模块证明。
+- 安全摘要V2区分expected/observed，失败observed=null；错误只输出固定枚举和CPU观测，不泄露日志原文。source轻测通过范围以本次发布manifest为准，不代表真实SV接受。
+- 原launch已消费；新唯一scanfix nonce只可在修复source CI成功、无活动重任务与直接parent/single-A校验后启动一次。源码提交本身不启动。原15stage caps与whole10800秒不变；无Verilator/GCC/archive/link/weights/DUT。
+- 主线五块128-token完整数值仍0/5，最终RTL回放未通过；SV接受/生产re-pin继续阻塞于实际两边whole/module哈希与严格字节投影结果。1024/1224未澄清不阻塞128。
+
+
 ## 2026-10-30 — SV-only 严格差异取证候选：TEMP / SOURCE-ONLY，未激活
 
 - **DONE（仅源码/轻测）**：独立fresh CI旧/新完整155源码、各7helper、既有完整original IR→canonical→emit SV→scan→两模块严格差异证明入口。专用source pins 664项，SHA256 `7e7681939364073d9d236d51b06608fbf2bc90f9cf36a8256f6340ef545e2413`；normal/-O各53项轻量测试通过，含真实project_proof合成链及失败双artifact出口。它们不是实际全SV证明或数值通过。

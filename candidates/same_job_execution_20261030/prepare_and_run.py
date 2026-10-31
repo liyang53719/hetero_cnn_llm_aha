@@ -11,6 +11,21 @@ def sha(p):
  with P(p).open('rb')as f:return hashlib.file_digest(f,'sha256').hexdigest()
 def read(p):
  need(p.stat().st_size<=16<<20,'bounded source metadata');return json.loads(p.read_text())
+def execution_request(a):
+ mode=getattr(a,'execution_mode','BOUNDED_CALIBRATION')
+ need(mode in ('BOUNDED_CALIBRATION','FULL_BLOCK_ACCEPTANCE'),'explicit execution mode')
+ path=getattr(a,'full_block_budget',None);digest=getattr(a,'full_block_budget_sha256',None)
+ if mode=='BOUNDED_CALIBRATION':
+  need(path is None and digest is None,'full budget not allowed in calibration')
+  return dict(execution_mode=mode)
+ need(path is not None and digest is not None,'full mode requires explicit reviewed budget')
+ import re
+ need(isinstance(digest,str)and re.fullmatch('[0-9a-f]{64}',digest),'full budget independent sha256')
+ path=P(path)
+ need(path.is_file()and all(not q.is_symlink()for q in(path,*path.parents))and path.stat().st_size<=65536,'bounded regular reviewed budget')
+ need(sha(path)==digest,'reviewed budget pin')
+ return dict(execution_mode=mode,full_block_budget=dict(path=str(path.resolve()),bytes=path.stat().st_size,sha256=digest))
+
 def run(a):
  # Refuse pending observation baseline before acquisition, owner creation or any stage.
  import importlib.util
@@ -18,6 +33,7 @@ def run(a):
  spec=importlib.util.spec_from_file_location('production_observer_baseline',baseline_root/'ci_frontend_pipeline_r2_20261029/observer_baseline_gate.py')
  gate=importlib.util.module_from_spec(spec);spec.loader.exec_module(gate)
  gate.require_accepted_baseline(baseline_root/'ci_frontend_materialization_r2_20261029')
+ request=execution_request(a)
  execution_policy=profile_policy.policy(getattr(a,'execution_policy',profile_policy.FULL))
  repo=a.repo.resolve();work=a.work;identity=read(a.identity);clock=read(a.job_start)
  need(str(clock['run_id'])==os.environ['GITHUB_RUN_ID']and os.environ.get('GITHUB_RUN_ATTEMPT')=='1'and clock['launch_commit']==os.environ['GITHUB_SHA'],'first-step clock belongs same first run')
@@ -44,22 +60,33 @@ def run(a):
  runtime=D/'runtime';numeric=D/'numeric';controller=D/'controller';pipeline=repo/'candidates/ci_frontend_pipeline_r2_20261029';materialization=repo/'candidates/ci_frontend_materialization_r2_20261029'
  budgets=read(D/'BUDGETS.json')
  b=dict(execution_policy=execution_policy,schema='ONE_JOB_FIVE_M128_CHISEL_TEST_CALIBRATION_V1',profiles=list(range(5)),tokens=128,matrix_macs=4096,vector_lanes=32,payload_uploads=False,final_rtl_replay=False,identity={k:identity[k]for k in('run_id','source_commit','launch_commit')},artifact_identity=identity,job_started_monotonic=started,repo=str(repo),job_root=str(work),pins=pins,runtime_package=str(runtime),numeric_package=str(numeric),python=str(P(sys.executable).resolve()),supervisor_dir=str(pipeline),shared_runtime_helper=str(repo/'candidates/same_job_materialization_20261029/shared_runtime.py'),pipeline=str(pipeline),materialization_dir=str(materialization),materializer=str(repo/'candidates/same_job_materialization_20261029'),dut_rss_bytes=8<<30,numeric_reserved_increment_bytes=512<<20,budgets=budgets)
+ b.update(request)
+ spec=importlib.util.spec_from_file_location('samejob_execution_mode',D/'execution_mode.py');mode=importlib.util.module_from_spec(spec);spec.loader.exec_module(mode)
+ need(pins.get(str(D/'execution_mode.py'))==sha(D/'execution_mode.py'),'execution mode source pin')
+ admission=mode.admit(b) # reviewed full mode admission before binding write or any acquisition
+ spec=importlib.util.spec_from_file_location('actual_owning_flow',controller/'flow.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+ if admission['mode']==mode.FULL:
+  _,_,total=m.reservations(b,admission)
+  need(total<=21000-(time.monotonic()-started),'reviewed full round exceeds remaining original deadline')
  if fresh is not None:
   sys.path.insert(0,str(materialization));from fresh_host import validate_contract,reject_injection
   validate_contract(fresh,identity);reject_injection(os.environ);b['fresh_host_contract']=fresh
  binding=work.parent/(work.name+'-BINDING.json')
  with binding.open('x')as f:json.dump(b,f,indent=2);f.write('\n')
- spec=importlib.util.spec_from_file_location('actual_owning_flow',controller/'flow.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);m.run(b,binding,sha(binding))
+ return m.run(b,binding,sha(binding))
 if __name__=='__main__':
  p=argparse.ArgumentParser()
  for x in('repo','identity','job-start','work'):p.add_argument('--'+x,type=P,required=True)
  p.add_argument('--execution-policy',choices=(profile_policy.FULL,profile_policy.DEFER),default=profile_policy.FULL)
+ p.add_argument('--execution-mode',choices=('BOUNDED_CALIBRATION','FULL_BLOCK_ACCEPTANCE'),default='BOUNDED_CALIBRATION')
+ p.add_argument('--full-block-budget',type=P)
+ p.add_argument('--full-block-budget-sha256')
  p.add_argument('--fresh-host-profile',action='store_true',help='explicit bounded fresh host identity before original build; not CPU waiver')
  a=p.parse_args()
- try:run(a)
+ try:transport=run(a)
  except Exception as e:
   # Deliberately no exception text/path/environment echo into the public summary.
   receipt=a.work.parent/(a.work.name+'-CONTROLLER_FAILURE.json')
   with receipt.open('x')as f:json.dump(dict(execution_policy=profile_policy.policy(a.execution_policy),status='NO_GO_OR_FAILED',exception_class=type(e).__name__,reason_code=FAILURE_CODES.get(str(e),'EXECUTION_FAILED_DETAILS_IN_STAGE_RECEIPTS'),numeric_pass=False),f)
   raise
- raise SystemExit(2) # diagnostic calibration is never numeric PASS
+ raise SystemExit(transport) # actual mode and independently recomputed qualification decide transport

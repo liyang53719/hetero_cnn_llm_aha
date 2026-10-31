@@ -1,5 +1,12 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-31 03:25 UTC：FULL执行模式源码接通，真实预算/宿主仍阻塞（TEMP / INCOMPLETE）
+- 实际run41163215771在原AVX512门早期拒绝，未runtime/build/DUT，没有可填full预算的速度证据。共同硬件不要求宿主CPU ISA相同，但原参考/ABI门不能无验证替换；合规固定云环境待用户/资源路径解决，不随机重抽runner、不降门。
+- 新Python模式已接原prepare→flow→numeric_tail→consumer→原逐块严格验收→safe summary。FULL必须显式独立已审五份wall/maxcycles及实际calibration/review pin；接受SHA保持None、模板全null/ready=false，不能直接启动。calibration仍原300秒×5；FULL不继承无条件300/20000，也不把timeout当完成。
+- 内层consumer保持原execute/Popen/清理AST及1/2返回；外层全5同artifact严格PASS才FULL transport0，明确exact mismatch为1，timeout/未到输出/缺state/缺profile为2。summary核固定根binding、源码pin、预算admission、每report实际mode/effective limits，再逐receipt重聚合，不能换label迁移cal结果。
+- Chisel/C++/硬件/数据/参考/舍入/ABI字节未改；原冷M128 chunk路径保留。新增Python源码身份仍需未来同新source一次共同build，不能借未产生的旧binary。当前仍是Chisel发射IR/SV模拟，不是冻结后独立最终RTL；五块完整M128和最终RTL均0/5。
+- 原21000秒及资源caps不增，现非DUT预留18000秒，五full窗口至多合计3000秒并须满足实际剩余首步时钟，未保证能完成。完整block周期/速度/比较耗时依据未有，利用率仍UNMEASURED；预算填值与实际启动留待真实证据，不继续空转资格任务。
+
 ## 2026-10-31 02:55 UTC：已审 SV 观测基线接回原五块生产链（TEMP / 待真实校准）
 - 以 d339 实际证据提交为基线合入原隔离 production 候选：不覆盖新扫描器/投影器；旧 canonical/C7/85口历史原样保留。实际 run41159843264 proof f88769ed…及独审598ff33f…、summary dfacbbe2…被门逐文件固定哈希读取。ready 只表示限定观测 SV 基线已审，可继续原后端构建，不授予数值或最终RTL通过。
 - 为避免300秒仅有reset样本，本包经授权仅调整driver只读日志调度：首个while成功step立即running，后每64 activecycles检查steadyclock且至少1秒才再输出；原DUT step/while条件/算术/ABI不改。safe summary复用原Popen/outer cleanup，输出有限进度及事后日志hash，未绑定/无active则null；外层elapsed除速率非即时仿真率，SIGKILL不保证最终帧，正式C++编译仍待同一次build。

@@ -1,0 +1,46 @@
+{
+  "schema": "FIVE_M128_FULL_EXECUTION_BUDGET_V1",
+  "ready": false,
+  "scope": "WATCHDOG_ADMISSION_ONLY_NOT_NUMERICAL_ACCEPTANCE",
+  "tokens": 128,
+  "matrix_macs": 4096,
+  "vector_lanes": 32,
+  "hardware_baseline_sha256": null,
+  "driver_sha256": null,
+  "basis": {
+    "calibration_summary": null,
+    "independent_budget_review": null
+  },
+  "profiles": {
+    "0": {
+      "wall_seconds": null,
+      "max_active_cycles": null,
+      "estimated_complete_active_cycles": null,
+      "estimated_required_wall_seconds": null
+    },
+    "1": {
+      "wall_seconds": null,
+      "max_active_cycles": null,
+      "estimated_complete_active_cycles": null,
+      "estimated_required_wall_seconds": null
+    },
+    "2": {
+      "wall_seconds": null,
+      "max_active_cycles": null,
+      "estimated_complete_active_cycles": null,
+      "estimated_required_wall_seconds": null
+    },
+    "3": {
+      "wall_seconds": null,
+      "max_active_cycles": null,
+      "estimated_complete_active_cycles": null,
+      "estimated_required_wall_seconds": null
+    },
+    "4": {
+      "wall_seconds": null,
+      "max_active_cycles": null,
+      "estimated_complete_active_cycles": null,
+      "estimated_required_wall_seconds": null
+    }
+  }
+}

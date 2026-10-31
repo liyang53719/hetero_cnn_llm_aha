@@ -18,8 +18,25 @@ def save(p,v):
 def mod(name,path):
  s=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
 
-def reservations(b):
- q=b['budgets'];cal=q['calibration_seconds'];need(set(cal)==set(map(str,range(5)))and all(type(x)is int and 0<x<=20000 for x in cal.values()),'all five explicit unchanged-stimulus calibration windows')
+def execution_admission(b):
+ path=D.parent/'execution_mode.py'
+ need(b['pins'].get(str(path))==sha(path),'execution mode source pin')
+ return mod('samejob_execution_mode',path).admit(b)
+
+def transport_code(mode,qualification):
+ if mode=='BOUNDED_CALIBRATION':return 2
+ need(mode=='FULL_BLOCK_ACCEPTANCE','explicit full execution mode')
+ need(type(qualification)is dict and type(qualification.get('numerical_pass'))is bool,'recomputed aggregate qualification')
+ status=qualification.get('status')
+ need(status in ('PASS_FIVE_FULL128_EXACT_REFERENCE','FAIL_EXACT_REFERENCE','INCOMPLETE'),'known aggregate status')
+ need(qualification['numerical_pass']is(status=='PASS_FIVE_FULL128_EXACT_REFERENCE'),'consistent aggregate qualification')
+ return 0 if qualification['numerical_pass'] else 1 if status=='FAIL_EXACT_REFERENCE' else 2
+
+def reservations(b,admission=None):
+ q=b['budgets']
+ if admission is None:
+  admission={'profile_seconds':q['calibration_seconds']} if b.get('execution_mode','BOUNDED_CALIBRATION')=='BOUNDED_CALIBRATION' else execution_admission(b)
+ cal=admission['profile_seconds'];need(set(cal)==set(map(str,range(5)))and all(type(x)is int and 0<x<=20000 for x in cal.values()),'all five explicit unchanged-stimulus calibration windows')
  for k in ('archives','weights','install','owner_bind','reference','provider','build','parent'):
   need(type(q[k])is int and q[k]>0,'reviewed finite phase budget '+k)
  need(q['archives']<=1800 and q['weights']<=7200 and q['install']<=1800 and q['owner_bind']<=1800 and q['reference']<=1800,'no unreviewed original resource expansion')
@@ -43,7 +60,8 @@ def run(b,binding_path,binding_sha):
  gate=importlib.util.module_from_spec(spec);spec.loader.exec_module(gate)
  gate.require_accepted_baseline(baseline_root/'ci_frontend_materialization_r2_20261029')
  profile_policy.require_source_pin(b['pins']);execution_policy=profile_policy.checked(b)
- started=b['job_started_monotonic'];need(type(started)in(int,float)and 0<=time.monotonic()-started<21000,'first workflow-step monotonic clock, never reset at flow/build boundary');materials_reserved,tail_reserved,total=reservations(b)
+ admission=execution_admission(b)
+ started=b['job_started_monotonic'];need(type(started)in(int,float)and 0<=time.monotonic()-started<21000,'first workflow-step monotonic clock, never reset at flow/build boundary');materials_reserved,tail_reserved,total=reservations(b,admission)
  need(b['schema']=='ONE_JOB_FIVE_M128_CHISEL_TEST_CALIBRATION_V1'and b['profiles']==list(range(5))and b['tokens']==128 and b['matrix_macs']==4096 and b['vector_lanes']==32,'exact registered same-hardware five profiles')
  need(b['payload_uploads']is False and b['final_rtl_replay']is False,'explicit local data only, Chisel simulation backend')
  identity=b['identity'];need({k:b['artifact_identity'][k]for k in identity}==identity,'same builder and runtime owning job identity');need(str(identity['run_id'])==os.environ.get('GITHUB_RUN_ID')and identity['launch_commit']==os.environ.get('GITHUB_SHA')and os.environ.get('GITHUB_RUN_ATTEMPT')=='1','actual first owning CI job')
@@ -127,12 +145,15 @@ def run(b,binding_path,binding_sha):
  references=reference.run(rb,stage)
  tail=mod('actual_five_diagnostics',numeric/'numeric_tail.py');tb=job/'bindings/NUMERIC.json'
  body=dict(execution_policy=execution_policy,schema='SAME_JOB_FIVE_M128_DIAGNOSTIC_TAIL_V1',profiles=list(range(5)),tokens=128,matrix_macs=4096,vector_lanes=32,upload_payloads=False,final_rtl_replay=False,references=references,weights=weights,calibration_seconds=q['calibration_seconds'],job_started_monotonic=started,reserved_material_seconds=7*q['provider']+11*120,reserved_cleanup_seconds=1530,reserved_parent_seconds=q['parent'],tree_cap=TREE,rss_bytes=b['dut_rss_bytes'],address_space_bytes=12<<30,phase_extra_bytes=b['numeric_reserved_increment_bytes'],provider_wall_seconds=q['provider'],pins=pins,output=str(owner_root/'numeric'),owned_roots=roots,owner_root=str(owner_root),owner_module=str(runtime/'owner_fresh.py'),owner_manifest=owner_pin,supervisor_dir=supervisor_dir,build_result=pin(build_result),run_id=identity['run_id'],source_commit=identity['source_commit'],launch_commit=identity['launch_commit'],python=py,lock=lock,repo=str(repo),payload=str(payload),materializer=b['materializer'],environment={})
+ body.update(execution_mode=admission['mode'],full_block_budget=b.get('full_block_budget'))
  save(tb,body);tail.run(body,tb,sha(tb))
  numeric_path=owner_root/'numeric/RESULT.json';numeric_result=json.loads(numeric_path.read_text())
  acceptance=mod('actual_full128_acceptance',numeric/'required_acceptance.py')
  qualification=acceptance.aggregate(numeric_result['actual_dut_reports'])
  need(numeric_result.get('qualification')==qualification and numeric_result.get('status')==qualification['status'] and numeric_result.get('numerical_pass')is qualification['numerical_pass'],'recomputed actual numeric finalization')
- save(job/'FLOW_RESULT.json',dict(identity=identity,execution_mode='BOUNDED_CALIBRATION',transport_exit_code=2,qualification=qualification,execution_policy=execution_policy,status=qualification['status'],scope='CHISEL_TEST_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL',stages=history,numeric_result=pin(numeric_path),hardware_definitions=1,profiles=list(range(5)),uploaded_payloads=False))
+ code=transport_code(admission['mode'],qualification)
+ save(job/'FLOW_RESULT.json',dict(identity=identity,execution_binding=pin(binding_path),execution_admission=admission,execution_mode=admission['mode'],transport_exit_code=code,qualification=qualification,execution_policy=execution_policy,status=qualification['status'],scope='CHISEL_TEST_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL',stages=history,numeric_result=pin(numeric_path),hardware_definitions=1,profiles=list(range(5)),uploaded_payloads=False))
+ return code
 if __name__=='__main__':
- a=argparse.ArgumentParser();a.add_argument('--binding',type=P,required=True);a.add_argument('--binding-sha256',required=True);v=a.parse_args();need(sha(v.binding)==v.binding_sha256,'independent top binding');run(json.loads(v.binding.read_text()),v.binding.resolve(),v.binding_sha256);raise SystemExit(2) # bounded-calibration transport code; numerical qualification is separately bound in FLOW_RESULT
+ a=argparse.ArgumentParser();a.add_argument('--binding',type=P,required=True);a.add_argument('--binding-sha256',required=True);v=a.parse_args();need(sha(v.binding)==v.binding_sha256,'independent top binding');code=run(json.loads(v.binding.read_text()),v.binding.resolve(),v.binding_sha256);raise SystemExit(code) # mode-specific transport follows recomputed qualification
 

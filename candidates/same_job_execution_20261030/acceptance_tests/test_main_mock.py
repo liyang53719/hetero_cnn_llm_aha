@@ -16,7 +16,7 @@ class MainTests(unittest.TestCase):
    profile=dict(id=3,runtime={'path':str(runtime)},views={'path':str(views)},reference_result={'path':str(ref)},provider_receipt={'path':str(receipt)})
    limits=dict(file_bytes=64*1024**2,max_active_cycles=1,wall_seconds=100,cpu_seconds=100,address_space_bytes=1024**3)
    b=dict(layer='CHISEL_EMITTED_SV_NUMERICAL_BACKEND',matrix_macs=4096,vector_lanes=32,moe_reference_contract='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE',common=pins,profiles=[profile],limits=limits,coverage_policy={})
-   args=types.SimpleNamespace(owned_environment=receipt,owned_environment_sha256='0'*64,expected_run_id=1,expected_launch_commit='1'*40,expected_source_commit='2'*40,strict_outer_supervised=True,artifact_manifest=receipt,artifact_manifest_sha256='0'*64,runtime_bundle=receipt,profile=3,calibration_wall_seconds=None,validate_only=False,output=root/'output',local_build_result_sha256='0'*64)
+   args=types.SimpleNamespace(owned_environment=receipt,owned_environment_sha256='0'*64,expected_run_id=1,expected_launch_commit='1'*40,expected_source_commit='2'*40,strict_outer_supervised=True,artifact_manifest=receipt,artifact_manifest_sha256='0'*64,runtime_bundle=receipt,profile=3,calibration_wall_seconds=1,validate_only=False,output=root/'output',local_build_result_sha256='0'*64)
    ids=b''.join(struct.pack('<q',i%8) for i in range(1024));weights=bytes(2048);logits=bytes(65536)
    route=b''.join(struct.pack('<Q',(i//8)<<34|(i%8)<<31|(i%8)<<23|i//8) for i in range(1024))
    def execute(binary,runtime,target,log,limits):

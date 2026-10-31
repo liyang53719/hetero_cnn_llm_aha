@@ -299,6 +299,25 @@ def verify_runtime_abi(args,frozen):
         need(pin(r)==args.local_runtime_abi and r['sha256']==args.local_runtime_abi_sha256,'bundle startup ABI receipt binding')
     return result
 
+def explicit_execution_admission(args):
+    import importlib.util
+    path=pathlib.Path(__file__).resolve().parent.parent/'execution_mode.py'
+    spec=importlib.util.spec_from_file_location('owned_execution_mode',path);mode=importlib.util.module_from_spec(spec);spec.loader.exec_module(mode)
+    selected=getattr(args,'execution_mode',mode.CALIBRATION)
+    budget=getattr(args,'full_block_budget',None);budget_sha=getattr(args,'full_block_budget_sha256',None)
+    if selected==mode.FULL:
+        need(args.calibration_wall_seconds is None,'calibration override forbidden in full mode')
+        need(budget is not None and budget_sha is not None,'full mode requires explicit reviewed budget')
+        need(budget.is_absolute() and not any(p.is_symlink()for p in (budget,*budget.parents)),'regular absolute full budget')
+        admission=mode.admit(dict(execution_mode=selected,full_block_budget=dict(path=str(budget),bytes=budget.stat().st_size,sha256=budget_sha)))
+    else:
+        need(budget is None and budget_sha is None,'full budget forbidden in calibration mode')
+        if selected==mode.CALIBRATION and getattr(args,'validate_only',False)and args.calibration_wall_seconds is None:return mode,None
+        need(args.calibration_wall_seconds is not None,'explicit calibration wall required; no implicit full20000')
+        admission=mode.admit(dict(execution_mode=selected,calibration_seconds={str(i):args.calibration_wall_seconds for i in range(5)}))
+    return mode,admission
+
+
 def owned_execution_limits(limits, calibration_wall_seconds):
     result=dict(limits)
     if calibration_wall_seconds is not None:
@@ -329,11 +348,15 @@ def main():
     a.add_argument('--validate-only',action='store_true')
     a.add_argument('--strict-outer-supervised',action='store_true')
     a.add_argument('--calibration-wall-seconds',type=int)
+    a.add_argument('--execution-mode',choices=('BOUNDED_CALIBRATION','FULL_BLOCK_ACCEPTANCE'),default='BOUNDED_CALIBRATION')
+    a.add_argument('--full-block-budget',type=pathlib.Path)
+    a.add_argument('--full-block-budget-sha256')
     a.add_argument('--owned-environment',type=pathlib.Path,required=True)
     a.add_argument('--owned-environment-sha256',required=True)
     args=a.parse_args()
     global OWNED_ENVIRONMENT
     OWNED_ENVIRONMENT=(args.owned_environment,args.owned_environment_sha256,dict(run_id=args.expected_run_id,source_commit=args.expected_source_commit,launch_commit=args.expected_launch_commit))
+    mode,admission=explicit_execution_admission(args)
     require_outer_context(args.strict_outer_supervised)
     b, frozen=load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile)
     download=verify_local_build(args,frozen)
@@ -354,7 +377,7 @@ def main():
     need(0 < limits['max_active_cycles'] <= 1000000000, 'driver cycle bound')
     need(0 < limits['wall_seconds'] <= 21600 and 0 < limits['cpu_seconds'] <= 21600, 'bounded job time')
     need(0 < limits['address_space_bytes'] <= 16*1024**3, 'bounded process AS')
-    execution_limits=owned_execution_limits(limits,args.calibration_wall_seconds)
+    execution_limits=dict(limits)if admission is None and args.validate_only else mode.consumer_limits(limits,admission,args.profile)
     resident_helper,moe_helper=observation_helpers()
     prepared=[]
     for p in b['profiles']:
@@ -379,7 +402,7 @@ def main():
         print('VALIDATED_BINDING_ONLY_NO_DUT_NO_NUMERICAL_PASS');return
     need(not args.output.exists(),'fresh output directory');args.output.mkdir(parents=True)
     summary=dict(status='INCOMPLETE',numerical_pass=False,matrix_macs=b['matrix_macs'],vector_lanes=b['vector_lanes'],layer=b['layer'],artifact_manifest_sha256=args.artifact_manifest_sha256,artifact_identity=frozen['artifact_identity'],local_build_provenance=download,local_build_result_sha256=args.local_build_result_sha256,runtime_bundle_sha256=runtime_bundle_sha,startup_abi=abi,common=common,profiles=[],numeric_acceptance='NO_NEW_TOLERANCE_STRICT_BITWISE_DIAGNOSTICS_ONLY',final_rtl_executed=False)
-    summary['execution_admission']={'scope':'CALIBRATION_SAME_FULL_M128_STIMULUS' if args.calibration_wall_seconds is not None else 'ORIGINAL_FULL_M128_DIAGNOSTIC','original_limits':dict(limits),'effective_limits':execution_limits,'outer_cleanup_proof_required':True,'peak_resource_qualification':'INCOMPLETE_SAMPLED','numerical_pass':False}
+    summary['execution_admission']={'scope':'CALIBRATION_SAME_FULL_M128_STIMULUS' if admission['mode']==mode.CALIBRATION else 'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE', 'execution_mode':admission['mode'], 'reviewed_budget_sha256':admission['reviewed_budget_sha256'],'original_limits':dict(limits),'effective_limits':execution_limits,'outer_cleanup_proof_required':True,'peak_resource_qualification':'INCOMPLETE_SAMPLED','numerical_pass':False}
     for p,runtime,obs,want,route_ref in prepared:
         r=dict(profile=p['id'],complete_block_tokens=128,status='INCOMPLETE',numerical_pass=False,coverage_policy=b['coverage_policy']);summary['profiles'].append(r)
         try:

@@ -2,6 +2,7 @@
 No DUT executes and no numerical PASS is claimed by this test. The production
 expected/reference/compare/predicate/readers are deliberately left unpatched.
 """
+import importlib.machinery
 import contextlib, hashlib, io, json, os, pathlib, sys, tempfile, types, unittest
 from unittest.mock import patch
 HERE=pathlib.Path(__file__).resolve().parent
@@ -17,7 +18,7 @@ def pin(p):
 def dump(p,v):p.write_text(json.dumps(v));return p
 
 class FullMainFixture(unittest.TestCase):
- def exercise(self,mode):
+ def exercise(self,mode,full_execution=False):
   with tempfile.TemporaryDirectory(prefix='synthetic_p1_main_fixture_') as tmp:
    root=pathlib.Path(tmp);refroot=root/'reference';refroot.mkdir();(refroot/'reference_only').mkdir()
    tensor_specs={
@@ -43,7 +44,12 @@ class FullMainFixture(unittest.TestCase):
    artifact=dump(root/'artifact.json',dict(scope='SYNTHETIC MOCK BUILD'))
    limits=dict(file_bytes=64*1024**2,max_active_cycles=1000,wall_seconds=100,cpu_seconds=100,address_space_bytes=1024**3)
    b=dict(layer=a.LAYER,matrix_macs=4096,vector_lanes=32,moe_reference_contract='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE',common=common,profiles=[profile],limits=limits,coverage_policy={})
-   args=types.SimpleNamespace(owned_environment=provider,owned_environment_sha256=pin(provider)['sha256'],expected_run_id=1,expected_launch_commit='1'*40,expected_source_commit='2'*40,strict_outer_supervised=True,artifact_manifest=artifact,artifact_manifest_sha256=pin(artifact)['sha256'],runtime_bundle=bundle,profile=1,calibration_wall_seconds=None,validate_only=False,output=root/'output',local_build_result_sha256='3'*64)
+   args=types.SimpleNamespace(owned_environment=provider,owned_environment_sha256=pin(provider)['sha256'],expected_run_id=1,expected_launch_commit='1'*40,expected_source_commit='2'*40,strict_outer_supervised=True,artifact_manifest=artifact,artifact_manifest_sha256=pin(artifact)['sha256'],runtime_bundle=bundle,profile=1,calibration_wall_seconds=1,validate_only=False,output=root/'output',local_build_result_sha256='3'*64)
+   full_budget=None
+   if full_execution:
+    budget_doc=dict(schema='FIVE_M128_FULL_EXECUTION_BUDGET_V1',ready=True,scope='WATCHDOG_ADMISSION_ONLY_NOT_NUMERICAL_ACCEPTANCE',tokens=128,matrix_macs=4096,vector_lanes=32,hardware_baseline_sha256=pin(CANDIDATE.parent/'ci_frontend_materialization_r2_20261029/OBSERVER_BASELINE_ACCEPTANCE.json')['sha256'],driver_sha256=pin(CANDIDATE.parent/'moe_router_score_observation_20261030/driver/host_axi_driver_non_dpi.cpp')['sha256'],basis=dict(calibration_summary=pin(provider),independent_budget_review=pin(provider)),profiles={str(i):dict(wall_seconds=1,max_active_cycles=1000,estimated_complete_active_cycles=900,estimated_required_wall_seconds=1)for i in range(5)})
+    full_budget=dump(root/'SYNTHETIC_FULL_BUDGET.json',budget_doc)
+    args.execution_mode='FULL_BLOCK_ACCEPTANCE';args.full_block_budget=full_budget;args.full_block_budget_sha256=pin(full_budget)['sha256'];args.calibration_wall_seconds=None
    pid=os.getpid();tick=int(pathlib.Path('/proc/self/stat').read_text().rsplit(')',1)[1].split()[19])
    def mock_execute(binary,runfile,target,log,execution_limits):
     # This is an explicitly mocked process receipt, not evidence of Popen.
@@ -59,6 +65,12 @@ class FullMainFixture(unittest.TestCase):
     log.write_text('\n'.join(lines)+'\n');return 0
    mocked=dict(load_binding=lambda *unused:(b,{'artifact_identity':dict(scope='SYNTHETIC MOCK BUILD')}),verify_local_build=lambda *unused:{'scope':'SYNTHETIC MOCK BUILD'},verify_runtime_abi=lambda *unused:{'scope':'SYNTHETIC MOCK ABI'},execute=mock_execute)
    with contextlib.ExitStack() as stack:
+    if full_execution:
+     original_load=importlib.machinery.SourceFileLoader.exec_module
+     def approve_synthetic_budget(loader,module):
+      original_load(loader,module)
+      if pathlib.Path(module.__file__).resolve()==(CANDIDATE/'execution_mode.py').resolve():module.ACCEPTED_FULL_ADMISSION_SHA256=pin(full_budget)['sha256']
+     stack.enter_context(patch.object(importlib.machinery.SourceFileLoader,'exec_module',approve_synthetic_budget))
     for name,value in mocked.items():stack.enter_context(patch.object(c,name,value))
     stack.enter_context(patch.object(c.os,'getpgrp',return_value=pid));stack.enter_context(patch.object(c.os,'getsid',return_value=pid))
     stack.enter_context(patch.object(c.argparse.ArgumentParser,'parse_args',return_value=args))
@@ -66,6 +78,7 @@ class FullMainFixture(unittest.TestCase):
    self.assertEqual(stopped.exception.code,2)
    result=json.loads((args.output/'RESULT.json').read_text());row=result['profiles'][0]
    self.assertFalse(result['numerical_pass']);self.assertFalse(row['numerical_pass'])
+   if full_execution:self.assertEqual(result['execution_admission']['execution_mode'],'FULL_BLOCK_ACCEPTANCE');self.assertEqual(result['execution_admission']['effective_limits']['wall_seconds'],1)
    leader=dict(pid=pid,start=tick,group=pid)
    outer=dump(root/'MOCK_OUTER.json',dict(worker_started=True,native_exit=2,errors=[],owner_identity=leader,cleanup_proof=dict(status='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP',owner_identity=leader,session=pid),log_capture=dict(pipe_eof_observed=True,gzip_finalized=True)))
    joined=d.verify(args.output,1,pin(artifact)['sha256'],pin(bundle)['sha256'],common['binary']['sha256'],pin(runtime)['sha256'],pin(outer))
@@ -84,4 +97,7 @@ class FullMainFixture(unittest.TestCase):
  def test_complete_full_size_main_then_outer_join(self):self.exercise('complete')
  def test_timeout_cannot_promote(self):self.exercise('timeout')
  def test_missing_full_state_cannot_promote(self):self.exercise('missing_state')
+ def test_explicit_full_mode_complete(self):self.exercise('complete',True)
+ def test_explicit_full_mode_timeout_not_completion(self):self.exercise('timeout',True)
+ def test_explicit_full_mode_missing_state_not_completion(self):self.exercise('missing_state',True)
 if __name__=='__main__':unittest.main()

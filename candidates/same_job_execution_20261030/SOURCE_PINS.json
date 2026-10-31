@@ -1859,8 +1859,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/acceptance_tests/test_full_main_fixture.py",
-      "bytes": 7284,
-      "sha256": "0e793f7c6093e09e0ccb62582663a07a43dd02ba5998e0ba40b031c3a961c50b"
+      "bytes": 9189,
+      "sha256": "a286f3e2db23ef6873205e84b8f35fc2b129d97a4aac8d13cbcc96a3576da13f"
     },
     {
       "path": "candidates/same_job_execution_20261030/acceptance_tests/test_lifecycle.py",
@@ -1869,8 +1869,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/acceptance_tests/test_main_mock.py",
-      "bytes": 5741,
-      "sha256": "f1782c1d668ce65a63dc6c2e7c9c553c50d4c275cc9d87082eab0c4c149c2075"
+      "bytes": 5738,
+      "sha256": "498ea8a7d296b3264a004d39b4d80cc1061346dc32bcc9f99761e0d3dc50edda"
     },
     {
       "path": "candidates/same_job_execution_20261030/acceptance_tests/test_projection_independent.py",
@@ -1954,8 +1954,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/controller/flow.py",
-      "bytes": 15374,
-      "sha256": "8dbb3d8c38e4bf7accbd305fa48c88e5cf6d2ef21ac2a4385fc7848787608daa"
+      "bytes": 16641,
+      "sha256": "2b13d6e650c742008921cf8bdbe7711b18cfefb12a45cf7dfcfa9d2a6f765728"
     },
     {
       "path": "candidates/same_job_execution_20261030/controller/test_deduplicate.py",
@@ -1980,7 +1980,7 @@
     {
       "path": "candidates/same_job_execution_20261030/numeric/CONNECTION_OWNED_SOURCE_PINS.json",
       "bytes": 1416,
-      "sha256": "93e6283c025a5281ec3aa01a78b1b38d17244e0910313e9bb6aa3a494fed8b70"
+      "sha256": "0eb87425168776424809766d62bfd4643870a5e8999537b55b63e6105da3925d"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/CONSUMER_MANIFEST.json",
@@ -2034,8 +2034,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/consumer_owned.py",
-      "bytes": 32114,
-      "sha256": "2657bdabd89809b2840baf37e640946855757064e2da18b39032b8d9b7037188"
+      "bytes": 34059,
+      "sha256": "eafb1a24f4ceca3f9e06825ba440fd5d83a856e61925d4789e7442a3fc69f184"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/consumption_proof.py",
@@ -2079,8 +2079,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/numeric_tail.py",
-      "bytes": 13009,
-      "sha256": "7845f192098865c9b1c3f1a84d56f0c796197ba5bccaad8069cf702d9ca19572"
+      "bytes": 14614,
+      "sha256": "79c96049942ec8912ac39994d15ead75cb05b4feda50750897982de63c883e80"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/observation_contract.py",
@@ -2164,8 +2164,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/prepare_and_run.py",
-      "bytes": 6381,
-      "sha256": "c8c60c28127ab74c7a3ea903d9efa8f9bbc3a52478574d0721bd1dc0279430a2"
+      "bytes": 8183,
+      "sha256": "195b80e2f43afdb23da9ccbe464d70803ab7fe84c525d056deff93556b3c4573"
     },
     {
       "path": "candidates/same_job_execution_20261030/profile_policy.py",
@@ -2339,8 +2339,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/summarize_same_job.py",
-      "bytes": 23153,
-      "sha256": "dc8df9f49ea976aed45e2e329275421bfe57ffdc4595c2371c3ecabf3eb346b0"
+      "bytes": 26404,
+      "sha256": "64561602f2add8206898206ba5b2405d459100fca9ad55ea4597901a2d8bbb01"
     },
     {
       "path": "candidates/same_job_execution_20261030/test_common_observer_integration.py",
@@ -3216,6 +3216,36 @@
       "path": "candidates/same_job_execution_20261030/DRIVER_PROGRESS_SAMPLING_SOURCE_SUMMARY.json",
       "bytes": 1981,
       "sha256": "9b51e6074f668d28ad11b42b16b3e2e66cc98dd58b7063156c2aec134585bb84"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/execution_mode.py",
+      "bytes": 5571,
+      "sha256": "c14bd665a1a68c5ee7e88a6a592100da8da3de4717c69ddfadb18f7ba570b313"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/FULL_BLOCK_BUDGET_PENDING.json",
+      "bytes": 1231,
+      "sha256": "d94d9443058fca38d7ae4071437ad6c2bac5406df343b9acc8a12df69d890de2"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/test_execution_mode.py",
+      "bytes": 4497,
+      "sha256": "ac62e09afe867b2668df444f7ed1e6d4d9e562977929a10ad0850e4e7e07ee1e"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/test_controller_mode.py",
+      "bytes": 3173,
+      "sha256": "612785f7c41f448efc09692077b60633d62f8a2d61415ba811ff76ee24d151a4"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/acceptance_tests/test_full_mode_summary.py",
+      "bytes": 7584,
+      "sha256": "c3072a70e93eb5d97b9fe942272167022c56b17e720b9e2bb91134c44102c6d2"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/test_full_tail_execution.py",
+      "bytes": 2848,
+      "sha256": "a6fa50822b82394f21d91cb40bc34249033533c82448a96a14c55907b947e8e1"
     }
   ]
 }

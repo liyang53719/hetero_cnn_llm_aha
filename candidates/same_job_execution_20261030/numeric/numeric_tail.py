@@ -9,6 +9,7 @@ import required_acceptance
 import provider_from_frozen as material
 P=pathlib.Path;D=P(__file__).resolve().parent
 _policy_spec=importlib.util.spec_from_file_location('samejob_profile_policy', P(__file__).resolve().parent.parent/'profile_policy.py');profile_policy=importlib.util.module_from_spec(_policy_spec);_policy_spec.loader.exec_module(profile_policy)
+_mode_spec=importlib.util.spec_from_file_location('samejob_execution_mode',D.parent/'execution_mode.py');execution_mode=importlib.util.module_from_spec(_mode_spec);_mode_spec.loader.exec_module(execution_mode)
 
 def need(v,m):
  if not v:raise ValueError(m)
@@ -40,10 +41,9 @@ def validate(b):
  need(b['profiles']==list(range(5)) and b['tokens']==128 and b['matrix_macs']==4096 and b['vector_lanes']==32,'five fixed full profiles')
  need(b['upload_payloads']is False and b['final_rtl_replay']is False,'local generated Chisel test backend only')
  profile_policy.require_references(b,b['references'])
- need(set(b['calibration_seconds'])==set(map(str,range(5))),'all five budgeted before any execution')
- need(all(type(n)is int and 0<n<=20000 for n in b['calibration_seconds'].values()),'explicit bounded same-stimulus calibration')
+ admission=execution_mode.admit(b)
  need(b['job_started_monotonic']<=time.monotonic(),'owning job start clock, not reset after build')
- need(sum(b['calibration_seconds'].values())+b['reserved_material_seconds']+b['reserved_cleanup_seconds']+b['reserved_parent_seconds'] <= 21000-(time.monotonic()-b['job_started_monotonic']),'whole five round exceeds remaining job')
+ need(sum(admission['profile_seconds'].values())+b['reserved_material_seconds']+b['reserved_cleanup_seconds']+b['reserved_parent_seconds'] <= 21000-(time.monotonic()-b['job_started_monotonic']),'whole five round exceeds remaining job')
  need(b['reserved_material_seconds']>=7*b['provider_wall_seconds']+11*120 and b['reserved_cleanup_seconds']>=23*60+5*30 and b['reserved_parent_seconds']>0,'all seven provider/five connect/ABI and twenty-three cleanup plus DUT/parent reservations')
  need(b['tree_cap']==12_081_306_272,'unchanged aggregate tree cap')
  for k in ('rss_bytes','address_space_bytes','phase_extra_bytes','provider_wall_seconds'):
@@ -60,8 +60,20 @@ def owned_environment(base,root):
   p=root/name.lower();p.mkdir();e[name]=str(p)
  return e
 
+def execution_command(generated,b,admission,profile):
+ need(generated[1]==str(D/'consumer_owned.py'),'explicit owned consumer handoff')
+ need(not any(flag in generated for flag in ('--execution-mode','--calibration-wall-seconds','--full-block-budget','--full-block-budget-sha256')),'no stale or duplicate execution mode arguments')
+ argv=list(generated)+['--execution-mode',admission['mode']]
+ if admission['mode']==execution_mode.CALIBRATION:argv+=['--calibration-wall-seconds',str(admission['profile_seconds'][str(profile)])]
+ else:
+  need(admission['mode']==execution_mode.FULL,'explicit execution mode')
+  budget=b['full_block_budget'];argv+=['--full-block-budget',budget['path'],'--full-block-budget-sha256',budget['sha256']]
+ return argv,admission['profile_seconds'][str(profile)]+30
+
+
 def run(b,binding_path,binding_sha):
- validate(b);profile_policy.require_source_pin(b['pins']);pins=dict(b['pins']);pins[str(binding_path)]=binding_sha
+ validate(b);admission=execution_mode.admit(b);profile_policy.require_source_pin(b['pins']);pins=dict(b['pins']);pins[str(binding_path)]=binding_sha
+ need(pins.get(str(D.parent/'execution_mode.py'))==sha(D.parent/'execution_mode.py'),'execution mode source pin')
  need(not {r['pin']['path']for r in b['weights']} & set(pins),'large payload uses streaming pins, not supervisor read_bytes')
  for p,h in pins.items():need(sha(p)==h,'source pin drift')
  for name in ('supervise_multiroot.py','strict_cleanup.py','lossless_log.py'):
@@ -73,7 +85,7 @@ def run(b,binding_path,binding_sha):
   need(any(P(b[role]).resolve().is_relative_to(r)for r in roots),'unwatched required material '+role)
  need(any(P(b['build_result']['path']).resolve().is_relative_to(r)for r in roots),'unwatched build tree')
  need(not out.exists() and out.is_relative_to(P(b['owner_root'])),'fresh output inside runtime owner');out.mkdir();(out/'runs').mkdir();(out/'phases').mkdir();(out/'cache_roots').mkdir()
- save(out/'REGISTERED_FIVE.json',dict(execution_policy=profile_policy.checked(b),profiles=b['profiles'],tokens=128,calibration_seconds=b['calibration_seconds'],scope='CHISEL_EMITTED_SV_SIMULATION_NOT_FINAL_RTL',numeric_pass=False))
+ save(out/'REGISTERED_FIVE.json',dict(execution_policy=profile_policy.checked(b),profiles=b['profiles'],tokens=128,execution_mode=admission['mode'],profile_seconds=admission['profile_seconds'],full_budget_sha256=admission['reviewed_budget_sha256'],scope='CHISEL_EMITTED_SV_SIMULATION_NOT_FINAL_RTL',numeric_pass=False))
  sys.path.insert(0,b['supervisor_dir']);import supervise_multiroot as supervisor
  owner=module('admitted_runtime_owner',P(b['owner_module']),pins)
  owner_doc,_=owner.verify(b['owner_manifest']['path'],b['owner_manifest']['sha256'],b['owner_root'])
@@ -116,15 +128,21 @@ def run(b,binding_path,binding_sha):
    stage(f'p{i}_initialize',[b['python'],'-B',str(D/'provider_from_frozen.py'),'--initialize-binding',str(initialization),'--sha256',sha(initialization)],120,lease_out=lease_root)
    material.prepare(b['repo'],b['materializer'],profile,i,runtime['wrapper'],b['payload'],b['references'][str(i)],provider_stage,pins)
    stage(f'p{i}_connect',[b['python'],'-B',str(D/'connect_owned.py'),'--existing-output',str(profile),'--profile',str(i),*identity_args],120,lease_out=lease_root)
-   generated=json.loads((profile/'CONSUMER_ARGV.json').read_text())['consumer_argv'];need(generated[1]==str(D/'consumer_owned.py'),'explicit owned consumer handoff')
-   generated[1]=str(D/'consumer_owned.py');generated+=['--calibration-wall-seconds',str(b['calibration_seconds'][str(i)])]
-   dut_outer=stage(f'p{i}_dut',generated,b['calibration_seconds'][str(i)]+30,accepted=(1,2),lease_out=lease_root)
+   generated=json.loads((profile/'CONSUMER_ARGV.json').read_text())['consumer_argv']
+   generated,outer_seconds=execution_command(generated,b,admission,i)
+   dut_outer=stage(f'p{i}_dut',generated,outer_seconds,accepted=(1,2),lease_out=lease_root)
    bundle=profile/'runtime_bundle.v3.json';bundle_doc=json.loads(bundle.read_text());runtime_sha=bundle_doc['profiles'][0]['runtime']['sha256']
-   diagnostic=dut_evidence.verify(profile/'dut_result',i,sha(manifest),sha(bundle),binary['sha256'],runtime_sha,material.pin(out/'runs'/f'p{i}_dut'/'RESULT.json'));dut_records.append(diagnostic)
+   diagnostic=dut_evidence.verify(profile/'dut_result',i,sha(manifest),sha(bundle),binary['sha256'],runtime_sha,material.pin(out/'runs'/f'p{i}_dut'/'RESULT.json'))
+   if admission['mode']==execution_mode.FULL:
+    report=json.loads((profile/'dut_result/RESULT.json').read_text());actual=report['execution_admission']
+    need(actual['execution_mode']==admission['mode']and actual['reviewed_budget_sha256']==admission['reviewed_budget_sha256'],'actual consumer full-mode budget identity')
+    need(actual['scope']=='FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE'and actual['outer_cleanup_proof_required']is True,'actual full execution scope')
+    need(actual['effective_limits']==execution_mode.consumer_limits(actual['original_limits'],admission,i),'actual full watchdog limits')
+   dut_records.append(diagnostic)
    save(out/f'PROFILE_{i}_DIAGNOSTIC.json',diagnostic)
    weights(b,i)
  qualification=required_acceptance.aggregate(dut_records)
- save(out/'RESULT.json',dict(qualification=qualification,execution_policy=profile_policy.checked(b),status=qualification['status'],scope='CHISEL_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL',stages=allstage,profiles=b['profiles'],actual_dut_reports=dut_records,numerical_pass=qualification['numerical_pass'],moe_contract='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE',uploaded_payloads=False))
+ save(out/'RESULT.json',dict(execution_mode=admission['mode'],full_budget_sha256=admission['reviewed_budget_sha256'],qualification=qualification,execution_policy=profile_policy.checked(b),status=qualification['status'],scope='CHISEL_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL',stages=allstage,profiles=b['profiles'],actual_dut_reports=dut_records,numerical_pass=qualification['numerical_pass'],moe_contract='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE',uploaded_payloads=False))
 
 def main():
  a=argparse.ArgumentParser();a.add_argument('--binding',type=P,required=True);a.add_argument('--binding-sha256',required=True);v=a.parse_args();need(sha(v.binding)==v.binding_sha256,'independently reviewed binding');run(json.loads(v.binding.read_text()),v.binding.resolve(),v.binding_sha256)

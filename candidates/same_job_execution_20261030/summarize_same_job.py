@@ -162,6 +162,29 @@ def execution_policy_summary(work):
   return dict(state='DECLARED_NOT_QUALIFIED',policy=value,profiles_registered=value['registered_profiles'],profiles_eligible=value['eligible_profiles'])
  except (ValueError,TypeError,KeyError):return dict(state='INVALID_OR_CONFLICTING_NOT_QUALIFIED')
 
+def full_execution_admission(work,flow,identity,evidence):
+ # Independently reread the fixed owning controller binding. Its explicit source
+ # pin is checked before executing the admission module; no imported label grants
+ # authority to replace the source-reviewed full-budget receipt.
+ binding_path=work.parent/(work.name+'-BINDING.json')
+ if any(x.is_symlink()for x in (binding_path,*binding_path.parents)):raise ValueError('execution binding symlink')
+ binding=read(binding_path)
+ if not isinstance(binding,dict) or flow.get('execution_binding')!=evidence.pin(binding_path):raise ValueError('fixed execution binding')
+ if binding.get('job_root')!=str(work) or binding.get('identity')!=identity:raise ValueError('owning execution binding')
+ artifact=binding.get('artifact_identity',{})
+ if any(artifact.get(k)!=v for k,v in identity.items()):raise ValueError('bound artifact identity')
+ path=D/'execution_mode.py'
+ if any(x.is_symlink()for x in (path,*path.parents)) or not path.is_file() or path.stat().st_size>65536:raise ValueError('bounded execution mode source')
+ raw=path.read_bytes();source_sha=hashlib.sha256(raw).hexdigest()
+ if binding.get('pins',{}).get(str(path))!=source_sha:raise ValueError('execution mode source pin')
+ # Compile the exact checked bytes rather than accepting a stale pyc/module.
+ import types
+ mode=types.ModuleType('summary_checked_execution_mode');mode.__file__=str(path)
+ exec(compile(raw,str(path),'exec'),mode.__dict__)
+ admission=mode.admit(binding)
+ if admission.get('mode')!='FULL_BLOCK_ACCEPTANCE' or flow.get('execution_admission')!=admission:raise ValueError('reviewed full admission binding')
+ return mode,admission,source_sha
+
 def numeric_qualification_projection(work,identity):
  # Fixed known paths, actual evidence verifier, and reaggregation; never trust a
  # copied PASS flag or arbitrary serialized path. Only hashes/enums leave job.
@@ -178,7 +201,14 @@ def numeric_qualification_projection(work,identity):
   if not isinstance(flow,dict)or not isinstance(numeric,dict):return result
   expected_identity={k:identity[k]for k in ('run_id','source_commit','launch_commit')}
   if type(expected_identity['run_id'])is not int or expected_identity['run_id']<=0 or any(not isinstance(expected_identity[k],str)or not re.fullmatch('[0-9a-f]{40}',expected_identity[k])for k in ('source_commit','launch_commit')):return result
-  if flow.get('identity')!=expected_identity or flow.get('execution_mode')!='BOUNDED_CALIBRATION' or flow.get('transport_exit_code')!=2:return result
+  if flow.get('identity')!=expected_identity:return result
+  execution_mode=flow.get('execution_mode');full_admission=None
+  if execution_mode=='BOUNDED_CALIBRATION':
+   if type(flow.get('transport_exit_code'))is not int or flow['transport_exit_code']!=2:return result
+  elif execution_mode=='FULL_BLOCK_ACCEPTANCE':
+   mode_module,full_admission,mode_source_sha=full_execution_admission(work,flow,expected_identity,evidence)
+   if numeric.get('execution_mode')!=execution_mode or numeric.get('full_budget_sha256')!=full_admission['reviewed_budget_sha256']:return result
+  else:return result
   if flow.get('numeric_result')!=evidence.pin(numeric_path):return result
   if flow.get('hardware_definitions')!=1 or flow.get('profiles')!=list(range(5)) or flow.get('uploaded_payloads') is not False:return result
   verified=[];projected=[]
@@ -191,6 +221,11 @@ def numeric_qualification_projection(work,identity):
    if any(record.get(k)!=evidence.pin(v)for k,v in fixed.items()):return result
    consumer=read(fixed['report']);started=read(fixed['startup'])
    if not isinstance(consumer,dict)or not isinstance(started,dict):return result
+   if full_admission is not None:
+    admitted=consumer.get('execution_admission')
+    if not isinstance(admitted,dict) or admitted.get('execution_mode')!=execution_mode or admitted.get('reviewed_budget_sha256')!=full_admission['reviewed_budget_sha256']:return result
+    if admitted.get('scope')!='FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE' or admitted.get('outer_cleanup_proof_required') is not True:return result
+    if not isinstance(admitted.get('original_limits'),dict) or admitted.get('effective_limits')!=mode_module.consumer_limits(admitted['original_limits'],full_admission,i):return result
    artifact=consumer.get('artifact_identity',{})
    if any(artifact.get(k)!=identity.get(k)for k in ('run_id','source_commit','launch_commit')):return result
    actual=evidence.verify(out,i,consumer['artifact_manifest_sha256'],consumer['runtime_bundle_sha256'],started['binary_sha256'],started['runtime_sha256'],record['outer'])
@@ -203,7 +238,14 @@ def numeric_qualification_projection(work,identity):
   qualification=acceptance.aggregate(verified)
   if numeric.get('actual_dut_reports')!=verified or numeric.get('qualification')!=qualification or numeric.get('status')!=qualification['status'] or numeric.get('numerical_pass')is not qualification['numerical_pass']:return result
   if flow.get('qualification')!=qualification or flow.get('status')!=qualification['status']:return result
-  return dict(status='VERIFIED_REAGGREGATED',numerical_pass=qualification['numerical_pass'],final_rtl_executed=False,execution_mode='BOUNDED_CALIBRATION',transport_exit_code=2,qualification=qualification,profiles=projected,flow_receipt_sha256=sha(flow_path),numeric_receipt_sha256=sha(numeric_path))
+  transport=2
+  if full_admission is not None:
+   transport=mode_module.transport_exit(execution_mode,qualification)
+   if type(flow.get('transport_exit_code'))is not int or flow['transport_exit_code']!=transport:return result
+  projected_result=dict(status='VERIFIED_REAGGREGATED',numerical_pass=qualification['numerical_pass'],final_rtl_executed=False,execution_mode=execution_mode,transport_exit_code=transport,qualification=qualification,profiles=projected,flow_receipt_sha256=sha(flow_path),numeric_receipt_sha256=sha(numeric_path))
+  if full_admission is not None:
+   projected_result['full_execution_admission']=dict(reviewed_budget_sha256=full_admission['reviewed_budget_sha256'],execution_mode_source_sha256=mode_source_sha,execution_binding_sha256=flow['execution_binding']['sha256'])
+  return projected_result
  except (OSError,ValueError,TypeError,KeyError,AttributeError,ImportError):
   return dict(status='INVALID_OR_UNBOUND',numerical_pass=False,final_rtl_executed=False)
 

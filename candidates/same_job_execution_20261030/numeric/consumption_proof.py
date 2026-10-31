@@ -26,7 +26,7 @@ def validate(m,policy,identity,common,evidence):
  embedded=m['p0_retained_evidence'];need(embedded['schema']=='P0_EMBEDDED_ACTUAL_BUILD_EVIDENCE_V1','actual producer embedded evidence')
  import importlib.util
  dep_path=P(__file__).with_name('driver_dependency_proof.py')
- need(h(dep_path)=='b2bdffb61d6597be1ded80162d47b3504864a66918a7bfc59b2714ab7d5bac1d','reviewed actual dependency verifier')
+ need(h(dep_path)=='80186b8c5727eeb9054b9e5b284fb27ba6baa7388f491d4ba996409086daa5f4','reviewed actual dependency verifier')
  spec=importlib.util.spec_from_file_location('actual_driver_dep',dep_path);dep=importlib.util.module_from_spec(spec);spec.loader.exec_module(dep)
  original=json.loads(dep.check_text(embedded['original_source_manifest'],16*1024**2))
  need(original=={k:v for k,v in m.items()if k not in ('files','observation_policy_bindings','p0_retained_evidence')},'original prebuild source fields preserved exactly')

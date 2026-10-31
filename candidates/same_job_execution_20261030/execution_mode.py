@@ -31,9 +31,16 @@ def admit(binding):
   return dict(mode=mode,profile_seconds=dict(windows),profile_max_active_cycles=None,reviewed_budget_sha256=None)
  policy_spec=importlib.util.spec_from_file_location('full_mode_profile_policy',D/'profile_policy.py');policy=importlib.util.module_from_spec(policy_spec);policy_spec.loader.exec_module(policy)
  need(policy.checked(binding)['mode']==FULL_POLICY,'full mode requires all five original-host profiles')
- need(ACCEPTED_FULL_ADMISSION_SHA256 is not None,'FULL_EXECUTION_BUDGET_PENDING_ACTUAL_CALIBRATION_AND_REVIEW')
+ expected_full=ACCEPTED_FULL_ADMISSION_SHA256
+ if binding.get('execution_context')=='CLOUD_EXECUTOR_V1':
+  cloud_path=D/'cloud_budget.py'
+  need(binding['pins'].get(str(cloud_path))==sha(cloud_path),'cloud admission source pin')
+  cloud_spec=importlib.util.spec_from_file_location('actual_cloud_budget_for_full',cloud_path);cloud=importlib.util.module_from_spec(cloud_spec);cloud_spec.loader.exec_module(cloud)
+  approved=cloud.admit(binding);need(approved['execution_mode']==FULL and approved['full_block_budget']==request,'operator approved actual full input')
+  expected_full=request['sha256']
+ need(expected_full is not None,'FULL_EXECUTION_BUDGET_PENDING_ACTUAL_CALIBRATION_AND_REVIEW')
  path=pin(request,65536)
- need(request['sha256']==ACCEPTED_FULL_ADMISSION_SHA256,'full budget must equal independently source-reviewed admission')
+ need(request['sha256']==expected_full,'full budget must equal independently reviewed admission')
  doc=json.loads(path.read_text())
  need(type(doc)is dict and set(doc)=={'schema','ready','scope','tokens','matrix_macs','vector_lanes','hardware_baseline_sha256','driver_sha256','basis','profiles'},'exact full admission fields')
  need(doc['schema']=='FIVE_M128_FULL_EXECUTION_BUDGET_V1'and doc['ready']is True and doc['scope']=='WATCHDOG_ADMISSION_ONLY_NOT_NUMERICAL_ACCEPTANCE','full admission not ready')

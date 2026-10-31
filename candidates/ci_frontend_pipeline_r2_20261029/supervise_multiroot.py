@@ -11,7 +11,8 @@ def need(ok,msg):
 def helper():
  p=Path(__file__).with_name('strict_cleanup.py');b=p.read_bytes();need(hashlib.sha256(b).hexdigest()==HELPER_SHA,'cleanup helper drift')
  m=types.ModuleType('admitted_cleanup');m._ADMITTED_SOURCE_SHA256=HELPER_SHA;exec(compile(b,str(p),'exec'),m.__dict__);return m
-def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+def sha(p):
+ with Path(p).open('rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
 def regular(p):
  p=Path(p).absolute()
  for q in (p,*p.parents):need(not q.is_symlink(),'symlink path '+str(q))

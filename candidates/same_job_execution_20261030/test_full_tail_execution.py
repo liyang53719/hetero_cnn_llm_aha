@@ -25,6 +25,18 @@ class Tests(unittest.TestCase):
   self.assertEqual(flow.reservations(b,good)[2],21000)
   bad=dict(good,profile_seconds={str(i):601 for i in range(5)})
   with self.assertRaises(ValueError):flow.reservations(b,bad)
+ def test_cloud_full_report_uses_same_approved_as_shrink_as_consumer(self):
+  from unittest.mock import patch
+  from types import SimpleNamespace
+  original={'address_space_bytes':12<<30,'wall_seconds':18000}
+  intermediate=dict(original,wall_seconds=400)
+  budget={'dut_address_space_bytes':2684354560}
+  helper=SimpleNamespace(admit=lambda b:budget,consumer_resource_limits=lambda x,a:dict(x,address_space_bytes=a['dut_address_space_bytes']))
+  with patch.object(tail.execution_mode,'consumer_limits',return_value=intermediate),patch.object(tail,'module',return_value=helper) as load:
+   self.assertEqual(tail.report_effective_limits(original,{'execution_context':'CLOUD_EXECUTOR_V1','pins':{}},{},0),dict(intermediate,address_space_bytes=2684354560))
+   self.assertEqual(load.call_count,1)
+  with patch.object(tail.execution_mode,'consumer_limits',return_value=intermediate),patch.object(tail,'module',side_effect=AssertionError('no cloud import')):
+   self.assertEqual(tail.report_effective_limits(original,{}, {},0),intermediate)
  def test_actual_consumer_missing_wall_never_implicit20000(self):
   from types import SimpleNamespace
   args=SimpleNamespace(execution_mode='BOUNDED_CALIBRATION',calibration_wall_seconds=None,validate_only=False)

@@ -8,10 +8,45 @@ spec=importlib.util.spec_from_file_location('owned',D/'consumer_owned.py');m=imp
 BASE=D.parent/'acceptance_tests/fixtures/consumer_r2_baseline.py.txt'
 class Tests(unittest.TestCase):
  def test_original_functions_ast(self):
-  old={n.name:ast.dump(n,include_attributes=False) for n in ast.parse(BASE.read_text().replace('ffb1c043cc1e21912a6ee6f11c7222e0885ebe89a38e68efce0027129e12617b',hashlib.sha256((D/'observation_contract.py').read_bytes()).hexdigest())).body if isinstance(n,ast.FunctionDef)}
-  new={n.name:ast.dump(n,include_attributes=False) for n in ast.parse((D/'consumer_owned.py').read_text()).body if isinstance(n,ast.FunctionDef)}
+  old={n.name:n for n in ast.parse(BASE.read_text()).body if isinstance(n,ast.FunctionDef)}
+  new={n.name:n for n in ast.parse((D/'consumer_owned.py').read_text()).body if isinstance(n,ast.FunctionDef)}
+  dump=lambda n:ast.dump(n,include_attributes=False)
+  # Only this reviewed split dispatch may precede the unchanged original path.
+  expected=ast.parse("""
+cloud=executor_context(args)
+if cloud is not None:
+    need(getattr(args,'local_build_result',None) is None and getattr(args,'local_build_result_sha256',None) is None,'imported build is not same-job retained result')
+    path=pathlib.Path(__file__).resolve().with_name('artifact_handoff.py')
+    need(sha(path)=='HANDOFF_SHA','reviewed imported build verifier')
+    spec=importlib.util.spec_from_file_location('verified_builder_handoff',path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+    need(frozen['artifact_identity']['run_id']==args.expected_run_id and frozen['artifact_identity']['launch_commit']==args.expected_launch_commit,'expected builder identity distinct from executor')
+    return m.verify(args.builder_handoff,args.builder_handoff_sha256,args.artifact_manifest,args.artifact_manifest_sha256,frozen,cloud)
+need(getattr(args,'builder_handoff_sha256',None) is None,'no unpaired handoff')
+""".replace('HANDOFF_SHA',hashlib.sha256((D/'artifact_handoff.py').read_bytes()).hexdigest())).body
+  actual=new['verify_local_build'];self.assertEqual(list(map(dump,actual.body[1:4])),list(map(dump,expected)))
+  actual.body=actual.body[:1]+actual.body[4:]
+  # Exact failed-Popen tightening and successful-Popen tightening inside the
+  # existing cleanup try. Restoring these two additions must recover old AST.
+  old_with=next(n for n in old['execute'].body if isinstance(n,ast.With))
+  new_with=next(n for n in new['execute'].body if isinstance(n,ast.With))
+  wrapper=new_with.body[0]
+  self.assertIsInstance(wrapper,ast.Try);self.assertEqual(wrapper.finalbody,[]);self.assertEqual(wrapper.orelse,[]);self.assertEqual(len(wrapper.body),1)
+  self.assertEqual(dump(wrapper.body[0]),dump(old_with.body[0]))
+  expected_handler=ast.parse('try:\n pass\nexcept BaseException:\n if CLOUD_MEMORY is not None:CLOUD_MEMORY.after_popen()\n raise').body[0].handlers
+  self.assertEqual(list(map(dump,wrapper.handlers)),list(map(dump,expected_handler)))
+  original_try=new_with.body[1];self.assertIsInstance(original_try,ast.Try)
+  expected_call=ast.parse('if CLOUD_MEMORY is not None:CLOUD_MEMORY.after_popen()').body[0]
+  self.assertEqual(dump(original_try.body[0]),dump(expected_call));original_try.body=original_try.body[1:]
+  new_with.body=wrapper.body+new_with.body[1:]
+  # Each approved dependency lock is the sole permitted constant change;
+  # neither function's coverage/environment logic may change.
+  for function,dependency in [('runtime_abi_module','runtime_abi_owned.py'),('coverage_policy','observation_contract.py')]:
+   previous=[n for n in ast.walk(old[function])if isinstance(n,ast.Constant)and isinstance(n.value,str)and len(n.value)==64]
+   current=[n for n in ast.walk(new[function])if isinstance(n,ast.Constant)and isinstance(n.value,str)and len(n.value)==64]
+   self.assertEqual(len(previous),1,function);self.assertEqual(len(current),1,function)
+   self.assertEqual(current[0].value,hashlib.sha256((D/dependency).read_bytes()).hexdigest(),function);previous[0].value=current[0].value
   for name in old:
-   if name not in ('main','compare','router_compare','classify_observed_profile'):self.assertEqual(old[name],new[name],name)
+   if name not in ('main','compare','router_compare','classify_observed_profile'):self.assertEqual(dump(old[name]),dump(new[name]),name)
  def test_limits_only_wall_copy(self):
   original=dict(wall_seconds=20000,cpu_seconds=18000,address_space_bytes=12*1024**3,file_bytes=64*1024**2,max_active_cycles=1000000000)
   actual=m.owned_execution_limits(original,120)

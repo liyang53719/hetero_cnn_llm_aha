@@ -87,11 +87,12 @@ def census(roots, *, max_entries=100_000, max_seconds=60):
                 resource_peak_qualification='INCOMPLETE_SAMPLED_NOT_CONTINUOUS')
 
 def admit(snapshot, *, extra_bytes, phase_seconds, job_started, now=None,
-          acquisition=False, cleanup_seconds=60, max_snapshot_age=2):
+          acquisition=False, cleanup_seconds=60, max_snapshot_age=2, job_seconds=JOB_SECONDS):
     """Reserve declared bounded increment and full phase wall+cleanup allowance.
     Caller must supply a fresh locked census. No default per-profile DUT budget:
     no measured DUT rate means no automatic full-five runtime admission.
     """
+    need(type(job_seconds)is int and 0<job_seconds<=2**31-1, 'finite separately admitted lifecycle')
     now = time.monotonic() if now is None else now
     finite(now, 'now'); finite(job_started, 'job start')
     integer(extra_bytes, 'reviewed extra byte reservation')
@@ -103,12 +104,12 @@ def admit(snapshot, *, extra_bytes, phase_seconds, job_started, now=None,
     live = integer(snapshot['bytes'], 'live bytes'); free = integer(snapshot['free_bytes'], 'free bytes')
     finished = finite(snapshot['finished_monotonic'], 'census finish')
     need(0 <= now-finished <= max_snapshot_age, 'stale/future census')
-    need(0 <= now-job_started <= JOB_SECONDS, 'job deadline')
+    need(0 <= now-job_started <= job_seconds, 'job deadline')
     need(live+extra_bytes <= TREE_CAP, 'owned aggregate allocation exceeds cap')
     need(free-extra_bytes >= FREE_RESERVE, 'disk reserve after allocation')
     if acquisition:
         need(free >= ACQUISITION_FLOOR, 'original 8GiB acquisition floor')
-    remaining = JOB_SECONDS-(now-job_started)
+    remaining = job_seconds-(now-job_started)
     need(phase_seconds+cleanup_seconds <= remaining, 'insufficient remaining job wall')
     return dict(schema='PHASE_LIVE_ADMISSION_V1', status='ADMITTED_BOUNDED_PHASE_NOT_PEAK_PROOF',
                 live_bytes=live, reserved_increment_bytes=extra_bytes,

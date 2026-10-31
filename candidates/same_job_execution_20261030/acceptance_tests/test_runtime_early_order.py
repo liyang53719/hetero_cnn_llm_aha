@@ -35,8 +35,23 @@ class EarlyOrder(unittest.TestCase):
   self.assertEqual(len(boundary),1);self.assertIn('early = 0',ast.unparse(boundary[0]))
  def test_original_caps_unchanged(self):
   old=ast.parse((D/'acceptance_tests/fixtures/runtime_install_base.py.txt').read_text());new=ast.parse(S)
-  get=lambda t:[ast.dump(n.value)for n in ast.walk(t)if isinstance(n,ast.Assign)and any(isinstance(x,ast.Name)and x.id in ('caps','bindcaps')for x in n.targets)]
-  self.assertEqual(get(old),get(new))
+  resources=functions(S,{'need','install_resources'})['install_resources']({})
+  self.assertEqual(resources,{'rss_bytes':3<<30,'as_bytes':4<<30})
+  self.assertTrue(all(type(v)is int for v in resources.values()))
+  # Normalize exactly the two indirections; every other original cap stays AST-identical.
+  assignments=lambda t:[n for n in ast.walk(t)if isinstance(n,ast.Assign)and any(isinstance(x,ast.Name)and x.id in ('caps','bindcaps')for x in n.targets)]
+  changed=[]
+  class OriginalCI(ast.NodeTransformer):
+   def visit_Subscript(self,node):
+    if isinstance(node.value,ast.Name)and node.value.id=='resource_limits':
+     key=ast.literal_eval(node.slice)
+     if key not in ('rss_bytes','as_bytes'):raise AssertionError('unexpected resource indirection')
+     changed.append(key)
+     return ast.parse('3<<30'if key=='rss_bytes'else'4<<30',mode='eval').body
+    return self.generic_visit(node)
+  normalized=[OriginalCI().visit(n.value)for n in assignments(new)]
+  self.assertCountEqual(changed,['rss_bytes','as_bytes'])
+  self.assertEqual([ast.dump(n.value)for n in assignments(old)],[ast.dump(n)for n in normalized])
  def test_flow_order(self):
   self.assertLess(F.index("ok(stage('archives'"),F.index('installer.run('))
   self.assertLess(F.index('installer.run('),F.index("ok(stage('weights'"))

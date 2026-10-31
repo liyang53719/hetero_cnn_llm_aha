@@ -81,7 +81,11 @@ def connect(args,out):
  consumer.load_binding(args.artifact_manifest,args.artifact_manifest_sha256,staged,args.profile)
  consumer.verify_local_build(args,frozen);consumer.pin(old_pin)
  os.link(staged,final);staged.unlink()
- argv=[sys.executable,str(HERE/'consumer_owned.py'),'--artifact-manifest',str(args.artifact_manifest),'--artifact-manifest-sha256',args.artifact_manifest_sha256,'--local-build-result',str(args.local_build_result),'--local-build-result-sha256',args.local_build_result_sha256,'--expected-run-id',str(args.expected_run_id),'--expected-launch-commit',args.expected_launch_commit,'--expected-source-commit',args.expected_source_commit,'--local-runtime-abi',str(abi_copy),'--local-runtime-abi-sha256',args.local_runtime_abi_sha256,'--owned-environment',str(args.owned_environment),'--owned-environment-sha256',args.owned_environment_sha256,'--runtime-bundle',str(final),'--profile',str(args.profile),'--output',str(out/'dut_result')]
+ argv=[sys.executable,str(HERE/'consumer_owned.py'),'--artifact-manifest',str(args.artifact_manifest),'--artifact-manifest-sha256',args.artifact_manifest_sha256,'--expected-run-id',str(args.expected_run_id),'--expected-launch-commit',args.expected_launch_commit,'--expected-source-commit',args.expected_source_commit,'--local-runtime-abi',str(abi_copy),'--local-runtime-abi-sha256',args.local_runtime_abi_sha256,'--owned-environment',str(args.owned_environment),'--owned-environment-sha256',args.owned_environment_sha256,'--runtime-bundle',str(final),'--profile',str(args.profile),'--output',str(out/'dut_result')]
+ if consumer.executor_context(args) is None:
+  argv+=['--local-build-result',str(args.local_build_result),'--local-build-result-sha256',args.local_build_result_sha256]
+ else:
+  argv+=['--builder-handoff',str(args.builder_handoff),'--builder-handoff-sha256',args.builder_handoff_sha256,'--executor-identity',str(args.executor_identity),'--executor-identity-sha256',args.executor_identity_sha256]
  argv+=['--strict-outer-supervised']
  receipt=dict(status='MATERIALIZED_AND_BOUND_NOT_DUT_EXECUTED',profile=args.profile,original_bundle=old_pin,runtime_bundle=pin(final),artifact_manifest_sha256=args.artifact_manifest_sha256,provenance=provenance,consumer_argv=argv,validate_only_argv=argv+['--validate-only'],hardware_executed=False,numerical_pass=False,raw_payloads_upload_allowed=False)
  with (out/'CONSUMER_ARGV.json').open('x') as f:json.dump(receipt,f,indent=2);f.write('\n')
@@ -91,6 +95,8 @@ def add_arguments(ap):
  ap.add_argument('--owned-environment',type=P,required=True);ap.add_argument('--owned-environment-sha256',required=True)
  ap.add_argument('--artifact-manifest',type=P);ap.add_argument('--artifact-manifest-sha256')
  ap.add_argument('--local-build-result',type=P);ap.add_argument('--local-build-result-sha256')
+ ap.add_argument('--builder-handoff',type=P);ap.add_argument('--builder-handoff-sha256')
+ ap.add_argument('--executor-identity',type=P);ap.add_argument('--executor-identity-sha256')
  ap.add_argument('--expected-run-id',type=int);ap.add_argument('--expected-launch-commit');ap.add_argument('--expected-source-commit')
  ap.add_argument('--local-runtime-abi',type=P);ap.add_argument('--local-runtime-abi-sha256')
  ap.add_argument('--p0-bindings',type=P);ap.add_argument('--p0-bindings-sha256')
@@ -112,9 +118,9 @@ def preflight_artifact(args,frozen):
  consumer.need(frozen['layer']=='CHISEL_EMITTED_SV_NUMERICAL_BACKEND' and frozen['moe_reference_contract']=='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE','unchanged layer/MoE contract')
 
 def preflight(args):
- consumer.OWNED_ENVIRONMENT=(args.owned_environment,args.owned_environment_sha256,dict(run_id=args.expected_run_id,source_commit=args.expected_source_commit,launch_commit=args.expected_launch_commit))
+ consumer.OWNED_ENVIRONMENT=(args.owned_environment,args.owned_environment_sha256,consumer.owning_environment_identity(args))
  source_guard()
- for k in ('artifact_manifest','artifact_manifest_sha256','local_build_result','local_build_result_sha256','expected_run_id','expected_launch_commit','expected_source_commit','local_runtime_abi','local_runtime_abi_sha256'):consumer.need(getattr(args,k,None) is not None,'required same-job identity '+k)
+ for k in ('artifact_manifest','artifact_manifest_sha256','expected_run_id','expected_launch_commit','expected_source_commit','local_runtime_abi','local_runtime_abi_sha256'):consumer.need(getattr(args,k,None) is not None,'required same-job identity '+k)
  consumer.verify_frozen(args.artifact_manifest,args.artifact_manifest_sha256)
  frozen=json.loads(args.artifact_manifest.read_text());preflight_artifact(args,frozen);consumer.verify_local_build(args,frozen);consumer.verify_runtime_abi(args,frozen)
  consumer.need(frozen['profiles']==list(range(5)) and frozen['matrix_macs']==4096 and frozen['vector_lanes']==32,'same complete five-profile hardware')

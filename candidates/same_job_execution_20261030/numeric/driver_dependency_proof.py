@@ -46,6 +46,13 @@ def capture(b,phase,supervisor):
  verify_observer_dependencies(record['dependencies'],driver,b['pins'])
  return record
 
+def builder_tool_pin(tool,name):
+ """Inventory already stored builder-resolved paths. Do not resolve on executor."""
+ value=tool['compile_tools'][name]
+ need(type(value)is str and value.startswith('/')and not value.startswith('//')and posixpath.normpath(value)==value and str(pathlib.PurePosixPath(value))==value and re.fullmatch(r'/[A-Za-z0-9_./+\-]+',value),'canonical original builder tool path')
+ need(value in tool['pins'],'original builder tool pin required')
+ return value
+
 def verify(r,m,policy,common,build_receipt,producer_repo):
  need(r['schema']=='ACTUAL_FRESH_DRIVER_DEPENDENCY_V1','actual driver dependency schema')
  for name,want in dict(PRODUCER_IMPLEMENTATION_PINS,**{'driver_dependency_proof.py':sha(__file__)}).items():
@@ -76,7 +83,7 @@ def verify(r,m,policy,common,build_receipt,producer_repo):
  argv=receipt['argv'];need(argv==r['host_link_argv'] and argv[1:5]==['-C',cwd,'-f','VHostBlockTopV4.mk'] and argv[-1]=='VHostBlockTopV4','actual host link recipe identity')
  tool_path=P(common['build_receipt']['path']).parent/'tool_manifest.json';need(sha(tool_path)==build_receipt['tool_manifest_sha256'],'actual frozen compiler/tool manifest')
  tool=json.loads(tool_path.read_text());need(tool['schema']=='INSTALLED_GNU_BUILD_TOOLS_V1','actual compiler tool schema');tools=tool['compile_tools']
- need(argv[0]==tools['make'] and tool['pins'].get(str(P(tools['make']).resolve())) is not None and tool['pins'].get(str(P(tools['cxx']).resolve())) is not None,'actual make/compiler inventory role')
+ need(argv[0]==tools['make'] and builder_tool_pin(tool,'make')==tools['make']and builder_tool_pin(tool,'cxx')==tools['cxx'],'actual make/compiler inventory role')
  hierarchy=check_text(r['host_hierarchy']);hp=r['host_hierarchy']['path']
  need(hp==str(P(cwd)/'VHostBlockTopV4_hier.mk') and m['derived_generated_pins'].get(hp)==r['host_hierarchy']['sha256']==r['make_closure_pins'].get(hp),'actual admitted hierarchy pin')
  flat=re.sub(r'\\\n',' ',hierarchy);assign=re.findall(r'^VM_HIER_LIBS\s*:=\s*(.*)$',flat,re.M);need(len(assign)==1,'actual unique hierarchy list');libs=assign[0].split()
@@ -85,7 +92,7 @@ def verify(r,m,policy,common,build_receipt,producer_repo):
  flags=['-j1','VM_HIER_VERILATION_INCLUDED=1','OPT_FAST=-O0','OPT_SLOW=-O0','OPT_GLOBAL=-O0','CXXFLAGS=-O0','CXX='+tools['cxx'],'LINK='+tools['cxx'],'AR='+tools['ar'],'RANLIB='+tools['ranlib'],'PERL='+tools['perl'],'PYTHON3='+tools['python'],'OBJCACHE=','OPT=','USER_CPPFLAGS=','USER_LDLIBS=','USER_LDFLAGS=']
  expected=[tools['make'],'-C',cwd,'-f','VHostBlockTopV4.mk',*flags,'VM_HIER_LIBS='+' '.join(libs),'VHostBlockTopV4']
  need(argv==expected,'exact actual host-link make/tool/override/hierarchy argv')
- for name in ('make','cxx','ar','ranlib','perl','python'):need(str(P(tools[name]).resolve())in tool['pins'],'tool identity missing '+name)
+ for name in ('make','cxx','ar','ranlib','perl','python'):need(builder_tool_pin(tool,name)==tools[name],'tool identity missing '+name)
  rows=[x for x in build_receipt['phases']if x['phase']=='host_link'];need(len(rows)==1 and rows[0]['native_exit']==0 and rows[0]['output_sha256']==common['binary']['sha256'],'frozen binary link phase')
  need(rows[0]['supervisor_receipt_sha256']==digest(json.dumps(receipt,sort_keys=True,separators=(',',':')).encode()),'actual build receipt binds retained host link receipt')
  return selected

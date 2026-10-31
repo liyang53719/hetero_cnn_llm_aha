@@ -27,7 +27,7 @@ def main():
   if sha(p)!=h:raise ValueError('phase source drift')
  check_environment(b)
  snapshot=live_budget.census(b['owned_roots'])
- admission=live_budget.admit(snapshot,extra_bytes=b['extra_bytes'],phase_seconds=b['seconds'],job_started=b['job_started'],acquisition=False)
+ admission=live_budget.admit(snapshot,extra_bytes=b['extra_bytes'],phase_seconds=b['seconds'],job_started=b['job_started'],job_seconds=b.get('job_budget_seconds',21000),acquisition=False)
  with open(b['admission_output'],'x') as f:json.dump(admission,f,indent=2)
  cap=b['write_file_bytes']
  if type(cap)is not int or not 0<cap<=128<<20:raise ValueError('bounded generated output')

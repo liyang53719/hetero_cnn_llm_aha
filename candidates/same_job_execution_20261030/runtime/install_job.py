@@ -17,6 +17,45 @@ def save(p,v):
  with P(p).open('x')as f:json.dump(v,f,indent=2);f.write('\n')
 def complete(r):return (r.get('cleanup_proof')or{}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP'and(r.get('log_capture')or{}).get('pipe_eof_observed')is True and(r.get('log_capture')or{}).get('gzip_finalized')is True
 
+def job_limit(b):
+ context=b.get('execution_context')
+ need(context in (None,'CLOUD_EXECUTOR_V1'),'known runtime execution context')
+ if context is None:return 21000
+ need(type(b.get('reserved_other_owner_bytes'))is int and b['reserved_other_owner_bytes']==5<<30,'unchanged unknown-owner5GiB reservation')
+ value=b.get('job_budget_seconds')
+ need(type(value)is int and 0<value<=2**31-1,'finite admitted cloud job budget')
+ return value
+
+def install_resources(b):
+ if b.get('execution_context')!='CLOUD_EXECUTOR_V1':return dict(rss_bytes=3<<30,as_bytes=4<<30)
+ roles=b.get('stage_resources');need(type(roles)is dict and set(roles)=={'install','reference'},'explicit cloud resource roles')
+ values=roles['install'];need(type(values)is dict and set(values)=={'rss_bytes','as_bytes'},'exact install resource fields')
+ need(type(values['rss_bytes'])is int and 0<values['rss_bytes']<=3<<30 and type(values['as_bytes'])is int and 0<values['as_bytes']<=4<<30,'no expanded original install ceilings')
+ return dict(values)
+
+def bind_resource_gate(b,bindcaps):
+ minimum=1<<30
+ if b.get('execution_context')=='CLOUD_EXECUTOR_V1':minimum=bindcaps['rss_bytes']+(1<<30)+b['reserved_other_owner_bytes']
+ return {'min_available_memory':minimum,'min_disk_free':8<<30}
+
+def verify_controller_identity(b):
+ limit=job_limit(b)
+ if b.get('execution_context')=='CLOUD_EXECUTOR_V1':
+  install_resources(b)
+  path=D.parent/'executor_identity.py'
+  need(path.is_file()and not path.is_symlink()and b['pins'].get(str(path))==sha(path),'executor identity helper source pin')
+  spec=importlib.util.spec_from_file_location('runtime_executor_identity',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+  module.verify_current(b['identity'])
+  need(b['job_started_monotonic']==b['identity']['started_monotonic'],'original executor clock never reset')
+ else:
+  need(set(b['identity'])=={'run_id','source_commit','launch_commit'},'samejob identity')
+  need(str(b['identity']['run_id'])==os.environ.get('GITHUB_RUN_ID')and b['identity']['launch_commit']==os.environ.get('GITHUB_SHA')and os.environ.get('GITHUB_RUN_ATTEMPT')=='1','actual owning first CI job')
+ return limit
+
+def context_fields(b):
+ if b.get('execution_context')!='CLOUD_EXECUTOR_V1':return {}
+ return {k:b[k]for k in ('execution_context','job_budget_seconds','job_started_monotonic','reserved_other_owner_bytes','stage_resources')}
+
 SNAPSHOT_SCHEMA='INSTALL_WHOLE_ROOT_SNAPSHOT_V1'
 def snapshot(root,key,when,b,census,pending_phases,native=None):
  # This is a discrete observation, not a failure-instant/continuous peak.
@@ -30,13 +69,13 @@ def snapshot(root,key,when,b,census,pending_phases,native=None):
   else:
    # Spend only actual unreserved slack; never reduce native/cleanup/tail caps.
    reserve=pending_phases*(b['install_wall_seconds']+30)+b['metadata_wall_seconds']+30+b['remaining_job_reservation_seconds']
-   if 21000-(time.monotonic()-b['job_started_monotonic'])-reserve<20:
+   if job_limit(b)-(time.monotonic()-b['job_started_monotonic'])-reserve<20:
     row['reason']='NO_UNRESERVED_DEADLINE_SLACK'
    else:
     with P(b['lock']).open('a+b')as lock:
      fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
      # Recheck clock after acquiring the same native-stage lock.
-     if 21000-(time.monotonic()-b['job_started_monotonic'])-reserve<20:row['reason']='NO_UNRESERVED_DEADLINE_SLACK'
+     if job_limit(b)-(time.monotonic()-b['job_started_monotonic'])-reserve<20:row['reason']='NO_UNRESERVED_DEADLINE_SLACK'
      else:
       result=census(b['owned_roots'],max_entries=150000,max_seconds=20)
       need(result.get('schema')=='SAMPLED_OWNED_LIVE_BYTES_V1'and result.get('complete')is True,'incomplete census result')
@@ -70,15 +109,15 @@ def run(b,binding_path,binding_sha,after_first_install=None):
  profile_policy.require_source_pin(b['pins']);execution_policy=profile_policy.checked(b);keys=profile_policy.runtimes(b)
  early=b.get('early_build_seconds',0)
  need(type(early)is int and early>=0 and ((early==0 and after_first_install is None)or(early>0 and callable(after_first_install))),'early build reservation and callback paired')
+ if b.get('execution_context')=='CLOUD_EXECUTOR_V1':need(early==0 and after_first_install is None,'cloud executor imports reviewed build; no build callback')
  if early:keys=install_order(keys)
  # This local copy releases only the declared build reservation after its one callback succeeds.
  b=dict(b)
  need(sys.version_info[:2]==(3,12)and platform.machine()=='x86_64','original Python3.12/x86_64 before installation');profile_policy.require_cpu(b,P('/proc/cpuinfo').read_text().split())
- need(set(b['identity'])=={'run_id','source_commit','launch_commit'},'samejob identity')
- need(str(b['identity']['run_id'])==os.environ.get('GITHUB_RUN_ID')and b['identity']['launch_commit']==os.environ.get('GITHUB_SHA')and os.environ.get('GITHUB_RUN_ATTEMPT')=='1','actual owning first CI job')
- need(type(b['job_started_monotonic'])in(int,float)and 0<=time.monotonic()-b['job_started_monotonic']<21000,'inherited fulljob deadline')
+ limit=verify_controller_identity(b)
+ need(type(b['job_started_monotonic'])in(int,float)and math.isfinite(b['job_started_monotonic'])and 0<=time.monotonic()-b['job_started_monotonic']<limit,'inherited fulljob deadline')
  need(type(b['install_wall_seconds'])is int and type(b['metadata_wall_seconds'])is int and type(b['remaining_job_reservation_seconds'])is int and b['remaining_job_reservation_seconds']>=0 and 0<b['install_wall_seconds']<=1800 and 0<b['metadata_wall_seconds']<=1800,'reviewed phase wall within original cap')
- need(3*(b['install_wall_seconds']+30)+b['metadata_wall_seconds']+30+b['remaining_job_reservation_seconds']<=21000-(time.monotonic()-b['job_started_monotonic']),'reserve all three plus remaining actual job before installation')
+ need(3*(b['install_wall_seconds']+30)+b['metadata_wall_seconds']+30+b['remaining_job_reservation_seconds']<=job_limit(b)-(time.monotonic()-b['job_started_monotonic']),'reserve all three plus remaining actual job before installation')
  pins=dict(b['pins']);pins[str(binding_path)]=binding_sha
  for p,h in pins.items():need(sha(p)==h,'admitted source/tool/archive drift')
  for p in (D/'install_job.py',D/'runtime_phase.py',D/'owner_fresh.py',D/'bind_phase.py',D/'source/prepare_runtimes.py',P(b['python']),P(b['helper'])):need(pins.get(str(p))==sha(p),'explicit role pin')
@@ -103,11 +142,13 @@ def run(b,binding_path,binding_sha,after_first_install=None):
   need(any(p.is_relative_to(q)for q in roots),'archive root watched');os.link(p,root/'cache'/p.name)
  phase=dict(repo=b['repo'],python=b['python'],source_dir=str(D/'source'),cache=str(root/'cache'),install_root=str(root/'installs'),result_root=str(root/'results'),pins=pins)
  phasepath=root/'INSTALL_PHASE_BINDING.json';save(phasepath,phase);pins[str(phasepath)]=sha(phasepath)
- caps=dict(wall_seconds=b['install_wall_seconds'],cleanup_seconds=30,file_bytes=2<<30,tree_bytes=12_081_306_272,watch_tree_bytes=12_081_306_272,extra_watch_roots=b['owned_roots'],min_free_disk_bytes=1610612736,log_bytes=16777216,raw_log_bytes=33554432,max_entries=150000,per_process_as_bytes=4<<30,per_process_cpu_seconds=b['install_wall_seconds'],rss_bytes=3<<30,cpu_seconds=b['install_wall_seconds'])
+ resource_limits=install_resources(b)
+ caps=dict(wall_seconds=b['install_wall_seconds'],cleanup_seconds=30,file_bytes=2<<30,tree_bytes=12_081_306_272,watch_tree_bytes=12_081_306_272,extra_watch_roots=b['owned_roots'],min_free_disk_bytes=1610612736,log_bytes=16777216,raw_log_bytes=33554432,max_entries=150000,per_process_as_bytes=resource_limits['as_bytes'],per_process_cpu_seconds=b['install_wall_seconds'],rss_bytes=resource_limits['rss_bytes'],cpu_seconds=b['install_wall_seconds'])
  owner_binding=dict(execution_policy=execution_policy,schema='FRESH_JOB_THREE_RUNTIME_INSTALL_BINDING_V1',scope='INSTALL_AND_SOURCE_BIND_ONLY_NO_REFERENCE_DUT',owner_root=str(root),identity=b['identity'],python=b['python'],admitted_runner=str(D/'install_job.py'),phase_script=str(D/'runtime_phase.py'),helper=b['helper'],phase_binding=pin(phasepath),pins=pins,archives=b['archives'],runtimes={})
  for k in keys:
   r=root/'installs'/k;home=r if k=='qwen2'else r/'work/runtime'
   owner_binding['runtimes'][k]=dict(root=str(r),home=str(home),site=str(home/'site-packages'),native_path=str(root/'runs'/k/'RESULT.json'),phase_result_path=str(root/'results'/(k+'_RESULT.json')),argv=[b['python'],'-S','-B',str(D/'runtime_phase.py'),'--binding',str(phasepath),'--binding-sha256',sha(phasepath),'--runtime',k],caps=caps)
+ owner_binding.update(context_fields(b))
  ownerpath=root/'OWNER_BINDING.json';save(ownerpath,owner_binding);execution_pins=dict(pins);execution_pins[str(ownerpath)]=sha(ownerpath)
  sys.path.insert(0,b['supervisor_dir']);import supervise_multiroot as supervisor
  census_path=D.parent/'numeric/live_budget.py';need(pins.get(str(census_path))==sha(census_path),'original live census source pin')
@@ -115,14 +156,16 @@ def run(b,binding_path,binding_sha,after_first_install=None):
  for name in ('supervise_multiroot.py','strict_cleanup.py','lossless_log.py'):need(pins.get(str(P(b['supervisor_dir'])/name))==sha(P(b['supervisor_dir'])/name),'published supervisor closure')
  entries={}
  for k in keys:
-  need(time.monotonic()-b['job_started_monotonic']+caps['wall_seconds']+30+b['remaining_job_reservation_seconds']<=21000,'fulljob remaining phase deadline')
+  need(time.monotonic()-b['job_started_monotonic']+caps['wall_seconds']+30+b['remaining_job_reservation_seconds']<=limit,'fulljob remaining phase deadline')
   home=root/'environment'/k;home.mkdir();tmp=home/'tmp';tmp.mkdir()
   env=dict(PATH='/usr/bin:/bin',LANG='C.UTF-8',LC_ALL='C.UTF-8',HOME=str(home),TMPDIR=str(tmp),XDG_CACHE_HOME=str(home),HF_HOME=str(home),TRANSFORMERS_CACHE=str(home),PYTHONDONTWRITEBYTECODE='1',PYTHONNOUSERSITE='1',HF_HUB_OFFLINE='1',TRANSFORMERS_OFFLINE='1')
   pending=len(keys)-keys.index(k)
   snapshot(root,k,'before',b,live.census,pending)
   r=None
   try:
-   r=supervisor.execute(owner_binding['runtimes'][k]['argv'],str(root/'runs'/k),b['lock'],caps,env,execution_pins,resource_gate={'min_available_memory':4<<30,'min_disk_free':8<<30})
+   gate={'min_available_memory':4<<30,'min_disk_free':8<<30}
+   if b.get('execution_context')=='CLOUD_EXECUTOR_V1':gate['min_available_memory']=resource_limits['rss_bytes']+(1<<30)+b['reserved_other_owner_bytes']
+   r=supervisor.execute(owner_binding['runtimes'][k]['argv'],str(root/'runs'/k),b['lock'],caps,env,execution_pins,resource_gate=gate)
   finally:
    snapshot(root,k,'after',b,live.census,pending-1,r)
   need(complete(r)and r['native_exit']==0 and not r['errors'],'actual install/cleanup failure; no retry')
@@ -131,8 +174,8 @@ def run(b,binding_path,binding_sha,after_first_install=None):
   if early and k=='qwen35_35b':
    build_boundary(b,early,after_first_install)
    early=0
- index=root/'RECEIPT_INDEX.json';save(index,dict(execution_policy=execution_policy,schema='FRESH_JOB_THREE_RUNTIME_RECEIPTS_V1',identity=b['identity'],binding=pin(ownerpath),entries=entries))
- need(time.monotonic()-b['job_started_monotonic']+b['metadata_wall_seconds']+30+b['remaining_job_reservation_seconds']<=21000,'fulljob bind deadline')
+ index=root/'RECEIPT_INDEX.json';save(index,dict(execution_policy=execution_policy,schema='FRESH_JOB_THREE_RUNTIME_RECEIPTS_V1',identity=b['identity'],binding=pin(ownerpath),entries=entries,**context_fields(b)))
+ need(time.monotonic()-b['job_started_monotonic']+b['metadata_wall_seconds']+30+b['remaining_job_reservation_seconds']<=limit,'fulljob bind deadline')
  owner_output=root/'runs/bind/owner';metadata=root/'BIND_METADATA.json'
  save(metadata,dict(owner_module=str(D/'owner_fresh.py'),owner_module_sha256=sha(D/'owner_fresh.py'),owner_binding=str(ownerpath),owner_binding_sha256=sha(ownerpath),receipt_index=str(index),receipt_index_sha256=sha(index),output=str(owner_output)))
  bindpins=dict(execution_pins);bindpins[str(index)]=sha(index);bindpins[str(metadata)]=sha(metadata)
@@ -140,9 +183,9 @@ def run(b,binding_path,binding_sha,after_first_install=None):
   for v in row.values():bindpins[v['path']]=v['sha256']
  bindcaps=dict(caps,wall_seconds=b['metadata_wall_seconds'],per_process_cpu_seconds=b['metadata_wall_seconds'],cpu_seconds=b['metadata_wall_seconds'],rss_bytes=256<<20,per_process_as_bytes=1<<30,tree_bytes=64<<20)
  bindrun=root/'runs/bind'
- r=supervisor.execute([b['python'],'-B',str(D/'bind_phase.py'),'--binding',str(metadata),'--sha256',sha(metadata)],str(bindrun),b['lock'],bindcaps,env,bindpins,resource_gate={'min_available_memory':1<<30,'min_disk_free':8<<30})
+ r=supervisor.execute([b['python'],'-B',str(D/'bind_phase.py'),'--binding',str(metadata),'--sha256',sha(metadata)],str(bindrun),b['lock'],bindcaps,env,bindpins,resource_gate=bind_resource_gate(b,bindcaps))
  need(complete(r)and r['native_exit']==0 and not r['errors'],'owner bind failed; preserve actual identity')
- owner=owner_output/'SHARED_RUNTIMES_FRESH_JOB_V3.json';doc=json.loads(owner.read_text());need(doc['schema']=='SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3'and doc['identity']==b['identity'],'actual fresh owner schema/identity')
+ owner=owner_output/'SHARED_RUNTIMES_FRESH_JOB_V3.json';doc=json.loads(owner.read_text());need(doc['schema']=='SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3'and doc['identity']==b['identity']and context_fields(doc)==context_fields(b),'actual fresh owner schema/identity')
  profile_policy.require_same(b,doc)
  save(root/'INSTALL_CONTROLLER_RESULT.json',dict(execution_policy=execution_policy,scope='FRESH_JOB_THREE_INSTALLS_NOT_REFERENCE_DUT',binding=pin(ownerpath),receipt_index=pin(index),owner_bound=True,owner=pin(owner),bind_native=pin(bindrun/'RESULT.json'),memory_peak_qualification='INCOMPLETE_SAMPLED'))
  return ownerpath,index,owner

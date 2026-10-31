@@ -36,19 +36,30 @@ def weights(b,i):
  for r in rows:
   p=material.checked(r['pin']);need(p.is_relative_to(P(b['payload'])),'owning shared payload')
 
+def cloud_context(b):
+ if b.get('execution_context')!='CLOUD_EXECUTOR_V1':
+  need('executor_identity'not in b and 'builder_handoff'not in b,'explicit split context required');return None
+ helper=module('cloud_tail_identity',D.parent/'executor_identity.py',b['pins']);identity=helper.verify_current(b['executor_identity'])
+ need(b['identity']==identity and b['job_started_monotonic']==identity['started_monotonic'],'actual cloud controller clock')
+ admitted=module('cloud_tail_budget',D.parent/'cloud_budget.py',b['pins']).admit(b)
+ need(b['reserved_other_owner_bytes']==admitted['reserved_other_owner_bytes']and b['job_budget_seconds']==admitted['job_budget_seconds']and b['rss_bytes']==admitted['dut_rss_bytes']and b['address_space_bytes']==admitted['dut_address_space_bytes'],'actual cloud resource admission')
+ need(b['phase_extra_bytes']==admitted['numeric_reserved_increment_bytes']and b['provider_wall_seconds']==admitted['budgets']['provider']and b['consumer_address_space_bytes']==admitted['consumer_address_space_bytes'],'tail role budgets exactly approved')
+ need(b['execution_mode']==admitted['execution_mode']and b.get('full_block_budget')==admitted['full_block_budget']and b['calibration_seconds']==admitted['budgets']['calibration_seconds'],'tail approved mode and windows')
+ return identity
+
 def validate(b):
  need(b['schema']=='SAME_JOB_FIVE_M128_DIAGNOSTIC_TAIL_V1','explicit samejob tail')
  need(b['profiles']==list(range(5)) and b['tokens']==128 and b['matrix_macs']==4096 and b['vector_lanes']==32,'five fixed full profiles')
  need(b['upload_payloads']is False and b['final_rtl_replay']is False,'local generated Chisel test backend only')
  profile_policy.require_references(b,b['references'])
- admission=execution_mode.admit(b)
+ cloud=cloud_context(b);admission=execution_mode.admit(b)
  need(b['job_started_monotonic']<=time.monotonic(),'owning job start clock, not reset after build')
- need(sum(admission['profile_seconds'].values())+b['reserved_material_seconds']+b['reserved_cleanup_seconds']+b['reserved_parent_seconds'] <= 21000-(time.monotonic()-b['job_started_monotonic']),'whole five round exceeds remaining job')
+ need(sum(admission['profile_seconds'].values())+b['reserved_material_seconds']+b['reserved_cleanup_seconds']+b['reserved_parent_seconds'] <= (b['job_budget_seconds']if cloud is not None else 21000)-(time.monotonic()-b['job_started_monotonic']),'whole five round exceeds remaining job')
  need(b['reserved_material_seconds']>=7*b['provider_wall_seconds']+11*120 and b['reserved_cleanup_seconds']>=23*60+5*30 and b['reserved_parent_seconds']>0,'all seven provider/five connect/ABI and twenty-three cleanup plus DUT/parent reservations')
  need(b['tree_cap']==12_081_306_272,'unchanged aggregate tree cap')
  for k in ('rss_bytes','address_space_bytes','phase_extra_bytes','provider_wall_seconds'):
   need(type(b[k])is int and b[k]>0,'explicit reviewed resource bound '+k)
- need(b['rss_bytes']<=12*1024**3 and 12*1024**3<=b['address_space_bytes']<=16*1024**3,'runner resource maxima')
+ need(b['rss_bytes']<=12*1024**3 and (b['address_space_bytes']>0 if cloud is not None else b['address_space_bytes']>=12*1024**3) and b['address_space_bytes']<=16*1024**3,'runner resource maxima')
 
 CACHE_NAMES=('HOME','HF_HOME','HF_HUB_CACHE','TRANSFORMERS_CACHE','XDG_CACHE_HOME','TORCH_HOME','NUMBA_CACHE_DIR','MPLCONFIGDIR','TMPDIR')
 def owned_environment(base,root):
@@ -68,11 +79,20 @@ def execution_command(generated,b,admission,profile):
  else:
   need(admission['mode']==execution_mode.FULL,'explicit execution mode')
   budget=b['full_block_budget'];argv+=['--full-block-budget',budget['path'],'--full-block-budget-sha256',budget['sha256']]
+ if b.get('execution_context')=='CLOUD_EXECUTOR_V1':
+  invocation=b['controller_binding'];material.checked(invocation);argv+=['--cloud-binding',invocation['path'],'--cloud-binding-sha256',invocation['sha256']]
  return argv,admission['profile_seconds'][str(profile)]+30
 
 
+def report_effective_limits(original,b,admission,profile):
+ expected=execution_mode.consumer_limits(original,admission,profile)
+ if b.get('execution_context')=='CLOUD_EXECUTOR_V1':
+  budget_module=module('cloud_tail_report_budget',D.parent/'cloud_budget.py',b['pins'])
+  expected=budget_module.consumer_resource_limits(expected,budget_module.admit(b))
+ return expected
+
 def run(b,binding_path,binding_sha):
- validate(b);admission=execution_mode.admit(b);profile_policy.require_source_pin(b['pins']);pins=dict(b['pins']);pins[str(binding_path)]=binding_sha
+ validate(b);cloud=cloud_context(b);admission=execution_mode.admit(b);profile_policy.require_source_pin(b['pins']);pins=dict(b['pins']);pins[str(binding_path)]=binding_sha
  need(pins.get(str(D.parent/'execution_mode.py'))==sha(D.parent/'execution_mode.py'),'execution mode source pin')
  need(not {r['pin']['path']for r in b['weights']} & set(pins),'large payload uses streaming pins, not supervisor read_bytes')
  for p,h in pins.items():need(sha(p)==h,'source pin drift')
@@ -83,38 +103,48 @@ def run(b,binding_path,binding_sha):
  out=P(b['output']);roots=live_budget.roots_checked(b['owned_roots'])
  for role in ('repo','owner_root','payload'):
   need(any(P(b[role]).resolve().is_relative_to(r)for r in roots),'unwatched required material '+role)
- need(any(P(b['build_result']['path']).resolve().is_relative_to(r)for r in roots),'unwatched build tree')
+ build_pin=b['builder_handoff']if cloud is not None else b['build_result']
+ need(any(P(build_pin['path']).resolve().is_relative_to(r)for r in roots),'unwatched build evidence')
  need(not out.exists() and out.is_relative_to(P(b['owner_root'])),'fresh output inside runtime owner');out.mkdir();(out/'runs').mkdir();(out/'phases').mkdir();(out/'cache_roots').mkdir()
  save(out/'REGISTERED_FIVE.json',dict(execution_policy=profile_policy.checked(b),profiles=b['profiles'],tokens=128,execution_mode=admission['mode'],profile_seconds=admission['profile_seconds'],full_budget_sha256=admission['reviewed_budget_sha256'],scope='CHISEL_EMITTED_SV_SIMULATION_NOT_FINAL_RTL',numeric_pass=False))
  sys.path.insert(0,b['supervisor_dir']);import supervise_multiroot as supervisor
  owner=module('admitted_runtime_owner',P(b['owner_module']),pins)
  owner_doc,_=owner.verify(b['owner_manifest']['path'],b['owner_manifest']['sha256'],b['owner_root'])
- need(owner_doc['schema']=='SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3'and owner_doc['identity']==dict(run_id=b['run_id'],source_commit=b['source_commit'],launch_commit=b['launch_commit']),'fresh CI owner exact same run/source/launch, never historical V2 receipt')
+ need(owner_doc['schema']in(('SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3','IMPORTED_THREE_RUNTIME_OWNER_CLOUD_V1')if cloud is not None else('SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3',))and owner_doc['identity']==(cloud if cloud is not None else dict(run_id=b['run_id'],source_commit=b['source_commit'],launch_commit=b['launch_commit'])),'fresh CI owner exact same run/source/launch, never historical V2 receipt')
  profile_policy.require_same(b,owner_doc)
- build=material.checked(b['build_result']);br=json.loads(build.read_text());manifest=material.checked(br['artifact']['manifest']);frozen=json.loads(manifest.read_text());common=frozen['common'];root=manifest.parent
- # Original proof checks actual owning run + source/launch, not invented API proof.
- proof=module('same_job_proof',D/'local_build_proof.py',pins)
- proof.verify(build,b['build_result']['sha256'],manifest,sha(manifest),frozen,b['run_id'],b['launch_commit'],b['source_commit'])
+ if cloud is None:
+  build=material.checked(b['build_result']);br=json.loads(build.read_text());manifest=material.checked(br['artifact']['manifest']);frozen=json.loads(manifest.read_text())
+  proof=module('same_job_proof',D/'local_build_proof.py',pins)
+  proof.verify(build,b['build_result']['sha256'],manifest,sha(manifest),frozen,b['run_id'],b['launch_commit'],b['source_commit'])
+ else:
+  build=None;manifest=material.checked(b['artifact_manifest']);frozen=json.loads(manifest.read_text())
+  proof=module('split_build_proof',D/'artifact_handoff.py',pins)
+  proof.verify(b['builder_handoff']['path'],b['builder_handoff']['sha256'],manifest,sha(manifest),frozen,cloud)
+ common=frozen['common'];root=manifest.parent
  allstage=[];dut_records=[]
  def stage(name,argv,seconds=None,accepted=(0,),lease_out=None):
   seconds=seconds or b['provider_wall_seconds'];phase=out/'phases'/(name+'.json');run_dir=out/'runs'/name
   cache_root=out/'cache_roots'/name;e=owned_environment(b['environment'],cache_root)
-  body=dict(argv=list(map(str,argv)),pins=pins,owned_roots=b['owned_roots'],extra_bytes=b['phase_extra_bytes'],seconds=seconds,job_started=b['job_started_monotonic'],write_file_bytes=128<<20,environment=e,cache_root=str(cache_root),admission_output=str(run_dir/'LIVE_ADMISSION.json'))
+  body=dict(argv=list(map(str,argv)),pins=pins,owned_roots=b['owned_roots'],extra_bytes=b['phase_extra_bytes'],seconds=seconds,job_started=b['job_started_monotonic'],job_budget_seconds=b['job_budget_seconds']if cloud is not None else 21000,write_file_bytes=128<<20,environment=e,cache_root=str(cache_root),admission_output=str(run_dir/'LIVE_ADMISSION.json'))
   save(phase,body);localpins=dict(pins);localpins[str(phase)]=sha(phase)
   caps=dict(wall_seconds=seconds+30,cleanup_seconds=30,file_bytes=2<<30,tree_bytes=512<<20,log_bytes=64<<20,raw_log_bytes=128<<20,max_entries=100000,per_process_as_bytes=b['address_space_bytes'],per_process_cpu_seconds=18000 if name.endswith('_dut') else seconds+30,rss_bytes=b['rss_bytes'],cpu_seconds=seconds+30,extra_watch_roots=b['owned_roots'],min_free_disk_bytes=1_500_000_000,watch_tree_bytes=b['tree_cap'])
-  r=supervisor.execute([b['python'],'-B',str(D/'locked_phase.py'),'--phase',str(phase),'--sha256',sha(phase)],str(run_dir),b['lock'],caps,e,localpins,resource_gate={'min_available_memory':b['rss_bytes']+(1<<30),'min_disk_free':8<<30})
+  r=supervisor.execute([b['python'],'-B',str(D/'locked_phase.py'),'--phase',str(phase),'--sha256',sha(phase)],str(run_dir),b['lock'],caps,e,localpins,resource_gate={'min_available_memory':b['rss_bytes']+(1<<30)+(b['reserved_other_owner_bytes']if cloud is not None else 0),'min_disk_free':8<<30})
   require_cleanup(r,out/('OWNERSHIP_INCOMPLETE_'+name+'.json'))
   allstage.append(dict(name=name,native_exit=r['native_exit'],receipt_sha256=sha(run_dir/'RESULT.json')))
   need(r['native_exit']in accepted and not r['errors'],'stage failed; no retry '+name)
   return r
  stable_cache=out/'execution_cache';owned_environment({},stable_cache)
  env_manifest=out/'EXECUTION_ENVIRONMENT.json'
- save(env_manifest,dict(schema='OWNED_EXECUTION_ENVIRONMENT_V1',identity=dict(run_id=b['run_id'],source_commit=b['source_commit'],launch_commit=b['launch_commit']),owner_root=b['owner_root'],watched_roots=[b['owner_root']],cache_root=str(stable_cache),cache_paths={k:str(stable_cache/k.lower())for k in CACHE_NAMES}))
+ save(env_manifest,dict(schema='OWNED_EXECUTION_ENVIRONMENT_V1',identity=cloud if cloud is not None else dict(run_id=b['run_id'],source_commit=b['source_commit'],launch_commit=b['launch_commit']),owner_root=b['owner_root'],watched_roots=[b['owner_root']],cache_root=str(stable_cache),cache_paths={k:str(stable_cache/k.lower())for k in CACHE_NAMES}))
  pins[str(env_manifest)]=sha(env_manifest)
  env_args=['--owned-environment',str(env_manifest),'--owned-environment-sha256',sha(env_manifest)]
+ if cloud is not None:
+  identity_pin=b['executor_identity_pin'];material.checked(identity_pin);need(json.loads(P(identity_pin['path']).read_text())==cloud,'actual executor identity bytes');env_args+=['--executor-identity',identity_pin['path'],'--executor-identity-sha256',identity_pin['sha256']]
  abi=out/'STARTUP_ABI.json';tool=frozen['tool_manifest'];binary=common['binary']
  stage('startup_abi',[b['python'],'-B',str(D/'runtime_abi_owned.py'),'--binary',str(root/binary['path']),'--binary-sha256',binary['sha256'],'--tool-manifest',str(root/tool['path']),'--tool-manifest-sha256',tool['sha256'],'--output',str(abi),'--execute-reviewed-loader-list','--expected-run-id',str(b['run_id']),'--expected-source-commit',b['source_commit'],'--expected-launch-commit',b['launch_commit'],*env_args],120)
- identity_args=['--artifact-manifest',str(manifest),'--artifact-manifest-sha256',sha(manifest),'--local-build-result',str(build),'--local-build-result-sha256',b['build_result']['sha256'],'--expected-run-id',str(b['run_id']),'--expected-launch-commit',b['launch_commit'],'--expected-source-commit',b['source_commit'],'--local-runtime-abi',str(abi),'--local-runtime-abi-sha256',sha(abi),*env_args]
+ identity_args=['--artifact-manifest',str(manifest),'--artifact-manifest-sha256',sha(manifest),'--expected-run-id',str(b['run_id']),'--expected-launch-commit',b['launch_commit'],'--expected-source-commit',b['source_commit'],'--local-runtime-abi',str(abi),'--local-runtime-abi-sha256',sha(abi),*env_args]
+ if cloud is None:identity_args+=['--local-build-result',str(build),'--local-build-result-sha256',b['build_result']['sha256']]
+ else:identity_args+=['--builder-handoff',b['builder_handoff']['path'],'--builder-handoff-sha256',b['builder_handoff']['sha256']]
  for i in profile_policy.eligible(b):
   lease_root=out/f'profile{i}';lease_root.mkdir();profile=lease_root/'material'
   with owner.lease(b['owner_manifest']['path'],b['owner_manifest']['sha256'],b['owner_root'],i,lease_root) as selected:
@@ -133,11 +163,14 @@ def run(b,binding_path,binding_sha):
    dut_outer=stage(f'p{i}_dut',generated,outer_seconds,accepted=(1,2),lease_out=lease_root)
    bundle=profile/'runtime_bundle.v3.json';bundle_doc=json.loads(bundle.read_text());runtime_sha=bundle_doc['profiles'][0]['runtime']['sha256']
    diagnostic=dut_evidence.verify(profile/'dut_result',i,sha(manifest),sha(bundle),binary['sha256'],runtime_sha,material.pin(out/'runs'/f'p{i}_dut'/'RESULT.json'))
+   if cloud is not None:
+    report=json.loads((profile/'dut_result/RESULT.json').read_text());need(report.get('executor_identity')==cloud and report.get('builder_handoff_sha256')==b['builder_handoff']['sha256'],'actual executor report not builder identity')
    if admission['mode']==execution_mode.FULL:
     report=json.loads((profile/'dut_result/RESULT.json').read_text());actual=report['execution_admission']
     need(actual['execution_mode']==admission['mode']and actual['reviewed_budget_sha256']==admission['reviewed_budget_sha256'],'actual consumer full-mode budget identity')
     need(actual['scope']=='FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE'and actual['outer_cleanup_proof_required']is True,'actual full execution scope')
-    need(actual['effective_limits']==execution_mode.consumer_limits(actual['original_limits'],admission,i),'actual full watchdog limits')
+    expected_limits=report_effective_limits(actual['original_limits'],b,admission,i)
+    need(actual['effective_limits']==expected_limits,'actual full watchdog limits')
    dut_records.append(diagnostic)
    save(out/f'PROFILE_{i}_DIAGNOSTIC.json',diagnostic)
    weights(b,i)

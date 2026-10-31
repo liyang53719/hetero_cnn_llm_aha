@@ -42,7 +42,10 @@ class Tests(unittest.TestCase):
    s=p.read_text();self.assertIn('header_122_observation_ports_and_driver_ABI_reviewed',s);self.assertNotIn('header_85_ports_and_driver_ABI_reviewed',s)
  def test_full5_requires_next_host(self):
   s=(R/'.github/workflows/hetero-five-m128-samejob-calibration-local-data.yml').read_text();self.assertIn('--execution-policy FULL_FIVE_ORIGINAL_HOST_POLICY',s);self.assertIn('--fresh-host-profile',s);self.assertIn('avx512f',(D/'runtime/runtime_phase.py').read_text())
- def test_no_activation(self):self.assertFalse((R/'ci_launch/five_m128_observer_backend_freshhost_20261030_once.json').exists())
+ def test_preserve_consumed_activation_no_new_launch(self):
+  historical=R/'ci_launch/five_m128_observer_backend_freshhost_20261030_once.json'
+  self.assertEqual(hashlib.sha256(historical.read_bytes()).hexdigest(),'648461463d548ad60900e0501f28c626d9a726606fe2d51989971878626cbcb8')
+  self.assertFalse(any('cloud' in p.name or 'split' in p.name for p in (R/'ci_launch').glob('*.json')))
  def test_unchanged_resource_mode(self):
   self.assertEqual(load(D/'BUDGETS.json')['calibration_seconds'],{str(i):300 for i in range(5)});self.assertIn('BOUNDED_CALIBRATION',(D/'controller/flow.py').read_text())
  def test_actual_outer_entry_precedes_all_work(self):

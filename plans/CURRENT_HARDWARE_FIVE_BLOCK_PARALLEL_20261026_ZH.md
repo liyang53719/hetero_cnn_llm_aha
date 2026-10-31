@@ -1,3 +1,16 @@
+## 2026-10-31 14:17 UTC — TEMP：GitHub 构建 / 本云数值执行分层（源码候选，未启动）
+
+用户明确 GitHub 不做完整验收；same-job 是原项目实现限制，不是用户要求。新增独立 cloud executor 身份/批准预算/完整入口，复用原 providers、原参考、完整 M128、严格逐项验收与 cleanup；builder 原六字段、七文件真实产物 SHA 和 executor PID/boot/UUID 分别绑定。GitHub 源码/构建 PASS 不计五块数值 PASS。
+
+- **SOURCE-ONLY / TEMP**：321 项 normal 与 321 项 `-O` 轻量/合成回归通过；包含真实Python入口的fresh/reuse分支接线、原验收谓词和完整新owner合成链。新GitHub build-only及只读runtime复用分支已接入；仍仅源码资格，最终发布待独审。
+- 完整 4096 Matrix MAC、同一五 profile 硬件/接口/容量/SV/ELF不变；本split不新增或认证Vector32全链II=1/性能，实际共享32-lane bank及其他ALU保持原冻结源码；原 FP32 顺序/每步 BF16 舍入、Qwen2 FP32存储、原 Torch 路由全部保留。
+- 云端不机械继承 CI 21000 秒。Operator 批准的独立预算和输入 SHA 必须先到位，生命周期有限、逐阶段真实资源检查；FULL 还需实际校准/独立预算依据，300秒校准绝不冒完整执行。
+- 低内存仅诊断候选：group RSS 采样 ≤2.5GiB、DUT hard AS ≤2.5GiB、consumer soft512MiB再于fork后hard512MiB；原1GiB非DUT余量与未知owner5GiB预约均保留。安装/参考同类受审角色低限不得改变数值/线程/数据；不足记 INCOMPLETE。真实ELF静态映射与父进程清单未审前不启动。
+- GitHub build-only复用原7200秒含prep预算、150分钟workflow；审批硬锁仍None且无新launch。原地runtime先35B再Qwen2/0.8B fresh验证，不重用旧PASS；每次lease前后仍核原完整树。
+- 七文件构建包中转未执行，不上传 weights/NPZ/input/reference/IR/classes/rawlog。runtime/archives优先复用已存在官方pin bytes并生成本次 fresh 验证链，不能继承旧PASS。
+- 当前 ABI 仍严格核实际 loader/DSO bytes；workspace重定位依赖尚未接，不以架构/SONAME同名替代兼容证明。
+- 原校准 run41163215771 在CPU AVX512门早拒，无DUT周期/速率；五块完整M128 **0/5**、最终RTL **0/5**、完整block利用率未知。现无新job、无新数值PASS。
+
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
 ## 2026-10-31 03:25 UTC：FULL执行模式源码接通，真实预算/宿主仍阻塞（TEMP / INCOMPLETE）

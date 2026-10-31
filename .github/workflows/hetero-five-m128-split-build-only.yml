@@ -1,0 +1,89 @@
+name: hetero-five-m128-split-build-only-seven-files
+on:
+  push:
+    branches: [main]
+    paths: [ci_launch/five_m128_split_build_only_20261031_once.json]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: hetero-exclusive-numeric-bootstrap
+  cancel-in-progress: false
+jobs:
+  build_only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    env:
+      MAKEFLAGS: -j1
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record original build-only clock
+        timeout-minutes: 1
+        run: |
+          set -euo pipefail
+          python3 -B - <<'PY'
+          import json, os, pathlib, time
+          with (pathlib.Path(os.environ['RUNNER_TEMP'])/'hetero-split-build-start.json').open('x') as f:
+              json.dump(dict(schema='SPLIT_BUILD_JOB_START_V1', started_monotonic=time.monotonic(), run_id=int(os.environ['GITHUB_RUN_ID']), launch_commit=os.environ['GITHUB_SHA'], job_budget_seconds=9000), f)
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        timeout-minutes: 4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 2
+      - name: Require independently approved unique build and transfer launch
+        id: launch
+        timeout-minutes: 1
+        run: python3 -B candidates/split_build_only_20261031/validate_launch.py
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        timeout-minutes: 4
+        with:
+          ref: ${{ steps.launch.outputs.source_sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Original single4096 build only; no runtime reference weights or DUT
+        timeout-minutes: 122
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 -B candidates/split_build_only_20261031/prepare_build.py \
+            --repo "$GITHUB_WORKSPACE" --work "$RUNNER_TEMP/hetero-split-build" \
+            --identity "$RUNNER_TEMP/hetero-split-build-identity.json" \
+            --job-start "$RUNNER_TEMP/hetero-split-build-start.json"
+      - name: Verify all strict original stages and exact seven bytes
+        id: export
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          python3 -B candidates/split_build_only_20261031/export_build.py \
+            --repo "$GITHUB_WORKSPACE" --work "$RUNNER_TEMP/hetero-split-build" \
+            --identity "$RUNNER_TEMP/hetero-split-build-identity.json" \
+            --output "$RUNNER_TEMP/hetero-split-build-summary.json"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ success() && steps.export.outputs.artifact_dir != '' }}
+        timeout-minutes: 10
+        with:
+          name: ${{ steps.export.outputs.artifact_name }}
+          path: |
+            ${{ steps.export.outputs.artifact_dir }}/dut.bin
+            ${{ steps.export.outputs.artifact_dir }}/hardware.sv
+            ${{ steps.export.outputs.artifact_dir }}/driver.cpp
+            ${{ steps.export.outputs.artifact_dir }}/source_manifest.json
+            ${{ steps.export.outputs.artifact_dir }}/tool_manifest.json
+            ${{ steps.export.outputs.artifact_dir }}/build_receipt.json
+            ${{ steps.export.outputs.artifact_dir }}/frozen_artifact.json
+          if-no-files-found: error
+          retention-days: 7
+          overwrite: false
+          compression-level: 0
+# Source-only dormant candidate. No launch file is published.
+# Transfer approval pin remains None: launch and export both fail closed.
+# Whole 150min, declared steps147min; build7200s inclusive of original prep1800s.
+# Per-stage caps and strict cleanup unchanged; worst-case all-stage maxima do NOT
+# fit7200s. Original remaining-time guards may refuse later stages (INCOMPLETE).
+# No runtime/reference/model weight acquisition, consumer, or full acceptance.

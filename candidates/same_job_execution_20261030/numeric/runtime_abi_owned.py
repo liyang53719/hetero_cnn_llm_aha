@@ -24,9 +24,16 @@ def owned_environment(path,expected_sha):
  need(path==path.resolve()and all(not q.is_symlink()for q in path.parents),'canonical environment metadata path')
  v=json.loads(path.read_text());need(set(v)=={'schema','identity','owner_root','watched_roots','cache_root','cache_paths'},'exact environment contract fields')
  need(v['schema']=='OWNED_EXECUTION_ENVIRONMENT_V1','owned environment schema')
- identity=v['identity'];need(set(identity)=={'run_id','source_commit','launch_commit'}and type(identity['run_id'])is int and identity['run_id']>0,'owning job identity')
- for k in ('source_commit','launch_commit'):need(isinstance(identity[k],str)and re.fullmatch('[0-9a-f]{40}',identity[k])is not None,'exact environment commit identity')
- need(identity['source_commit']!=identity['launch_commit'],'distinct source/launch')
+ identity=v['identity']
+ if isinstance(identity,dict) and identity.get('schema')=='CLOUD_EXECUTOR_IDENTITY_V1':
+  import importlib.util
+  helper=P(__file__).resolve().parent.parent/'executor_identity.py'
+  need(sha(helper)=='e3011725f319f543c0d9ba08075efa9a9341eded6112187de4afe611d1987af4','reviewed cloud executor helper')
+  spec=importlib.util.spec_from_file_location('abi_cloud_executor',helper);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);m.verify_owner(identity)
+ else:
+  need(set(identity)=={'run_id','source_commit','launch_commit'}and type(identity['run_id'])is int and identity['run_id']>0,'owning job identity')
+  for k in ('source_commit','launch_commit'):need(isinstance(identity[k],str)and re.fullmatch('[0-9a-f]{40}',identity[k])is not None,'exact environment commit identity')
+  need(identity['source_commit']!=identity['launch_commit'],'distinct source/launch')
  owner=canonical_directory(v['owner_root']);root=canonical_directory(v['cache_root'])
  need(root!=owner and root.is_relative_to(owner)and path.is_relative_to(owner),'environment metadata/cache under owner')
  watched=v['watched_roots'];need(isinstance(watched,list)and 1<=len(watched)<=64,'bounded watched roots')
@@ -125,8 +132,13 @@ def verify(receipt,receipt_sha,binary,binary_sha,tool_manifest,tool_sha):
 
 if __name__=='__main__':
  import argparse
- ap=argparse.ArgumentParser();ap.add_argument('--binary',type=P,required=True);ap.add_argument('--binary-sha256',required=True);ap.add_argument('--tool-manifest',type=P,required=True);ap.add_argument('--tool-manifest-sha256',required=True);ap.add_argument('--output',type=P,required=True);ap.add_argument('--expected-run-id',type=int,required=True);ap.add_argument('--expected-source-commit',required=True);ap.add_argument('--expected-launch-commit',required=True);ap.add_argument('--owned-environment',type=P,required=True);ap.add_argument('--owned-environment-sha256',required=True);ap.add_argument('--execute-reviewed-loader-list',action='store_true');args=ap.parse_args()
+ ap=argparse.ArgumentParser();ap.add_argument('--binary',type=P,required=True);ap.add_argument('--binary-sha256',required=True);ap.add_argument('--tool-manifest',type=P,required=True);ap.add_argument('--tool-manifest-sha256',required=True);ap.add_argument('--output',type=P,required=True);ap.add_argument('--expected-run-id',type=int,required=True);ap.add_argument('--expected-source-commit',required=True);ap.add_argument('--expected-launch-commit',required=True);ap.add_argument('--owned-environment',type=P,required=True);ap.add_argument('--owned-environment-sha256',required=True);ap.add_argument('--executor-identity',type=P);ap.add_argument('--executor-identity-sha256');ap.add_argument('--execute-reviewed-loader-list',action='store_true');args=ap.parse_args()
  need(args.execute_reviewed_loader_list,'explicit reviewed loader-list admission under strict outer supervisor required')
- configure_owned_environment(args.owned_environment,args.owned_environment_sha256,dict(run_id=args.expected_run_id,source_commit=args.expected_source_commit,launch_commit=args.expected_launch_commit))
+ expected=dict(run_id=args.expected_run_id,source_commit=args.expected_source_commit,launch_commit=args.expected_launch_commit)
+ if args.executor_identity is not None:
+  need(args.executor_identity.is_file()and not args.executor_identity.is_symlink()and args.executor_identity.stat().st_size<=65536 and sha(args.executor_identity)==args.executor_identity_sha256,'actual executor identity pin')
+  expected=json.loads(args.executor_identity.read_text());need(expected.get('source_commit')==args.expected_source_commit,'same builder/executor source')
+ else:need(args.executor_identity_sha256 is None,'paired executor pin')
+ configure_owned_environment(args.owned_environment,args.owned_environment_sha256,expected)
  prepare(args.binary,args.binary_sha256,args.tool_manifest,args.tool_manifest_sha256,args.output)
  print(json.dumps({'status':'STARTUP_ABI_RECEIPT_ONLY_NOT_DUT_EXECUTION','receipt_sha256':sha(args.output)}))

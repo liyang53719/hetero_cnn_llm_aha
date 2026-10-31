@@ -1,7 +1,7 @@
 """Fresh owning-job installation provenance and lease. No inherited receipt identity.
 Caller must supply separately reviewed binding and actual owning-controller receipt
 index pins; these do not authenticate arbitrary self-authored JSON. Never imports a framework."""
-import argparse,contextlib,fcntl,hashlib,importlib.util,json,pathlib,platform,shutil,sys
+import argparse,contextlib,fcntl,hashlib,importlib.util,json,math,pathlib,platform,shutil,sys
 P=pathlib.Path
 _policy_spec=importlib.util.spec_from_file_location('samejob_profile_policy', P(__file__).resolve().parent.parent/'profile_policy.py');profile_policy=importlib.util.module_from_spec(_policy_spec);_policy_spec.loader.exec_module(profile_policy)
 HELPER_SHA='e853a724acefd26e7b3ef1f6883003376eaf968b808db505793e731ca0b1d302'
@@ -18,7 +18,28 @@ def exact(p,h):
  p=P(p);need(p.is_absolute() and p.is_file() and not p.is_symlink() and digest(p)==h,'exact admitted input drift');return p
 def helper(path):
  p=exact(path,HELPER_SHA);spec=importlib.util.spec_from_file_location('unchanged_owner_utilities',p);s=importlib.util.module_from_spec(spec);spec.loader.exec_module(s);return s
-def identity(v):
+def context_fields(b):
+ context=b.get('execution_context')
+ need(context in (None,'CLOUD_EXECUTOR_V1'),'known owner execution context')
+ if context is None:return {}
+ need(type(b.get('reserved_other_owner_bytes'))is int and b['reserved_other_owner_bytes']==5<<30,'unchanged unknown-owner5GiB reservation')
+ roles=b.get('stage_resources');need(type(roles)is dict and set(roles)=={'install','reference'},'explicit cloud resource roles')
+ for role,limits in roles.items():
+  need(type(limits)is dict and set(limits)=={'rss_bytes','as_bytes'}and type(limits['rss_bytes'])is int and 0<limits['rss_bytes']<=3<<30 and type(limits['as_bytes'])is int and 0<limits['as_bytes']<=(4<<30 if role=='install'else 8<<30),'unchanged role resource ceilings')
+ value=b.get('job_budget_seconds');started=b.get('job_started_monotonic')
+ need(type(value)is int and 0<value<=2**31-1,'finite admitted cloud job budget')
+ need(type(started)in(int,float)and math.isfinite(started)and started>=0 and started==b['identity']['started_monotonic'],'original executor clock never reset')
+ return {k:b[k]for k in ('execution_context','job_budget_seconds','job_started_monotonic','reserved_other_owner_bytes','stage_resources')}
+
+def identity(v,b=None):
+ if b is not None and b.get('execution_context')=='CLOUD_EXECUTOR_V1':
+  context_fields(b)
+  path=P(__file__).resolve().parent.parent/'executor_identity.py'
+  need(path.is_file()and not path.is_symlink()and b['pins'].get(str(path))==digest(path),'executor identity helper source pin')
+  spec=importlib.util.spec_from_file_location('owner_executor_identity',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+  module.verify_owner(v) # live original controller; metadata subprocess need not be that PID
+  return v
+
  need(set(v)=={'run_id','source_commit','launch_commit'},'exact owning-job identity fields')
  need(type(v['run_id'])is int and v['run_id']>0,'actual CI run id')
  for key in ('source_commit','launch_commit'):
@@ -42,7 +63,7 @@ def binding(path,expected_sha):
  need(b['schema']=='FRESH_JOB_THREE_RUNTIME_INSTALL_BINDING_V1','new installation binding')
  profile_policy.require_source_pin(b['pins'])
  job=P(b['owner_root']);need(job.is_absolute() and job==job.resolve() and job.is_dir(),'owning root')
- owned(path,job);identity(b['identity'])
+ owned(path,job);context_fields(b);identity(b['identity'],b)
  need(set(b['runtimes'])==set(profile_policy.runtimes(b)),'exact eligible installation definitions')
  need(b['scope']=='INSTALL_AND_SOURCE_BIND_ONLY_NO_REFERENCE_DUT','installation-only scope')
  need(b['helper']in b['pins'] and b['pins'][b['helper']]==HELPER_SHA,'original helper source')
@@ -61,12 +82,13 @@ def binding(path,expected_sha):
   for field in ('native_path','phase_result_path'):owned(r[field],job)
   need(r['argv']==[b['python'],'-S','-B',b['phase_script'],'--binding',str(phase_binding),'--binding-sha256',b['phase_binding']['sha256'],'--runtime',key],'reviewed exact fresh phase invocation')
   need(type(r['caps'])is dict and r['caps']['wall_seconds']>0 and r['caps']['rss_bytes']>0,'finite admitted install resources')
+  if b.get('execution_context')=='CLOUD_EXECUTOR_V1':need(r['caps']['rss_bytes']==b['stage_resources']['install']['rss_bytes']and r['caps']['per_process_as_bytes']==b['stage_resources']['install']['as_bytes'],'actual install caps equal admitted cloud role')
  return b,job
 
 def evidence(binding_path,binding_sha,index_path,index_sha,verify_all_inputs=True):
  b,job=binding(binding_path,binding_sha);s=helper(b['helper'])
  index_path=exact(index_path,index_sha);owned(index_path,job);index=read(index_path)
- need(index['schema']=='FRESH_JOB_THREE_RUNTIME_RECEIPTS_V1' and identity(index['identity'])==b['identity'],'actual controller receipt identity')
+ need(index['schema']=='FRESH_JOB_THREE_RUNTIME_RECEIPTS_V1' and identity(index['identity'],b)==b['identity']and context_fields(index)==context_fields(b),'actual controller receipt identity')
  need(index['binding']==s.pin(binding_path) and set(index['entries'])==set(profile_policy.runtimes(b)),'actual controller binds original admission')
  profile_policy.require_same(b,index)
  entries={}
@@ -111,6 +133,7 @@ def bind(binding_path,binding_sha,index_path,index_sha,out):
   p=out/(key+'_TREE.json');p.write_text(json.dumps(s.tree(e['import_root'],e['python']['path']),sort_keys=True,separators=(',',':'))+'\n');e['tree_manifest']=s.pin(p);validate_tree(s,e)
  evidence(binding_path,binding_sha,index_path,index_sha)
  m={'execution_policy':profile_policy.checked(b),'schema':SCHEMA,'identity':b['identity'],'owner_root':str(job),'binding':s.pin(binding_path),'receipt_index':s.pin(index_path),'admitted_runner':s.pin(b['admitted_runner']),'helper':s.pin(b['helper']),'entries':entries,'profile_mapping':list(MAP),'reference_qualified':False,'numerical_qualified':False,'memory_peak_qualification':'INCOMPLETE_SYNCHRONOUS_CENSUS_GAPS','lifecycle':'RETAIN_UNTIL_ALL_FIVE_CONSUMERS_RELEASED_NO_AUTODELETE'}
+ m.update(context_fields(b))
  p=out/'SHARED_RUNTIMES_FRESH_JOB_V3.json';p.write_text(json.dumps(m,indent=2)+'\n');return s.pin(p)
 
 def verify(manifest,expected_sha,job):
@@ -120,7 +143,7 @@ def verify(manifest,expected_sha,job):
  need(m['reference_qualified'] is False and m['numerical_qualified'] is False and m['memory_peak_qualification']=='INCOMPLETE_SYNCHRONOUS_CENSUS_GAPS' and m['lifecycle']=='RETAIN_UNTIL_ALL_FIVE_CONSUMERS_RELEASED_NO_AUTODELETE','no qualification escalation')
  b,s,actual=evidence(m['binding']['path'],m['binding']['sha256'],m['receipt_index']['path'],m['receipt_index']['sha256'])
  profile_policy.require_same(b,m)
- need(b['owner_root']==str(job) and identity(m['identity'])==b['identity'],'same owning-job identity')
+ need(b['owner_root']==str(job) and identity(m['identity'],b)==b['identity']and context_fields(m)==context_fields(b),'same owning-job identity')
  for key in ('binding','receipt_index'):need(s.pin(m[key]['path'])==m[key],'metadata input drift')
  need(s.pin(b['admitted_runner'])==m['admitted_runner'] and s.pin(b['helper'])==m['helper'],'controller/helper identities')
  for k,e in actual.items():

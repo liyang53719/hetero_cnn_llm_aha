@@ -16,7 +16,7 @@ def corrector():
  spec=importlib.util.spec_from_file_location('p0_locked_corrector_r2',p);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
 
 def source_links(manifest,policy,identity,common,evidence):
- proof_path=HERE/'consumption_proof.py';need(sha(proof_path)=='568516e4b3254a70dd677912477131ccabefd3c6cc9a79aa2e75dcb0042e38a3','reviewed existing-producer consumption verifier')
+ proof_path=HERE/'consumption_proof.py';need(sha(proof_path)=='4c05ae18e34c41a3df1ee6690c12c39483df11bd7e9da6924498ee888e843e10','reviewed existing-producer consumption verifier')
  spec=importlib.util.spec_from_file_location('existing_producer_consumption',proof_path);proof=importlib.util.module_from_spec(spec);spec.loader.exec_module(proof)
  proof.validate(manifest,policy,identity,common,evidence)
  need(manifest['source_commit']==identity['source_commit'],'actual shared artifact source commit')

@@ -1,0 +1,140 @@
+{
+  "schema": "OFFICIAL_EXACT_BANKS_INSTANCE_LABEL_FIXTURE_V1",
+  "scope": "SYNTHETIC_ONLY_NOT_ACTUAL_TWO_MODULE_SV_PROOF",
+  "fixture_source_sha256": "ce5069a7bccbde6c569eb0cf5e2c1a65f2d1355b46bed35bcac3c6e3621ddc99",
+  "old_projection_source_sha256": "d3f753600d2ef17069ec54e9ee1a35672201c7f187fee9ea5b2c847e25e0ee81",
+  "new_projection_source_sha256": "484eab620e861fc4eb7e4d4e9fa9991c877498fa1d4f054c490b42183282f5ec",
+  "label_helper_source_sha256": "4cc62a5acb5a4b0a572f18a2fb9d6117b4900795f6091c21c5d80b84b07eb165",
+  "results": {
+    "Public21QkvReductionRouter": {
+      "old": {
+        "official_emitted_file_sha256": "5da03d7e7818f06dc4dba6e8cb3bab8feff530dd2e90693e2f40fab320cabaa2",
+        "normalized_module_sha256": "5da03d7e7818f06dc4dba6e8cb3bab8feff530dd2e90693e2f40fab320cabaa2",
+        "old_projector_status": "ACCEPTED_SYNTHETIC",
+        "new_projector": {
+          "projected_normalized_sha256": "5da03d7e7818f06dc4dba6e8cb3bab8feff530dd2e90693e2f40fab320cabaa2",
+          "projected_normalized_bytes": 144,
+          "removed_ports": [],
+          "removed_sourceinfo_comments": 0,
+          "removed_assignments": []
+        },
+        "remaining_bytes_sha256": "5da03d7e7818f06dc4dba6e8cb3bab8feff530dd2e90693e2f40fab320cabaa2"
+      },
+      "new": {
+        "official_emitted_file_sha256": "fc85d7148f3b8e13f6cecc55c7745695a37ab1f3cddb6a569713f6bd1666f8b8",
+        "normalized_module_sha256": "2c5414d4797e588f8b115dac91d5676e0f22d8c4d69d28ac57f041e049bffa36",
+        "old_projector_status": "ACCEPTED_SYNTHETIC",
+        "new_projector": {
+          "projected_normalized_sha256": "5da03d7e7818f06dc4dba6e8cb3bab8feff530dd2e90693e2f40fab320cabaa2",
+          "projected_normalized_bytes": 144,
+          "removed_ports": [
+            "io_residentTiles_response_bits_key_identity",
+            "io_residentTiles_response_bits_key_index",
+            "io_residentTiles_response_bits_key_ng",
+            "io_residentTiles_response_bits_key_slot",
+            "io_tiles_response_bits_key_identity",
+            "io_tiles_response_bits_key_index",
+            "io_tiles_response_bits_key_ng",
+            "io_tiles_response_bits_key_slot"
+          ],
+          "removed_sourceinfo_comments": 12,
+          "removed_assignments": [
+            {
+              "destination": "io_residentTiles_response_bits_key_identity",
+              "source": "io_tiles_response_bits_key_identity"
+            },
+            {
+              "destination": "io_residentTiles_response_bits_key_index",
+              "source": "io_tiles_response_bits_key_index"
+            },
+            {
+              "destination": "io_residentTiles_response_bits_key_ng",
+              "source": "io_tiles_response_bits_key_ng"
+            },
+            {
+              "destination": "io_residentTiles_response_bits_key_slot",
+              "source": "io_tiles_response_bits_key_slot"
+            }
+          ]
+        },
+        "remaining_bytes_sha256": "5da03d7e7818f06dc4dba6e8cb3bab8feff530dd2e90693e2f40fab320cabaa2"
+      }
+    },
+    "TransposedDenseDownOwner": {
+      "old": {
+        "official_emitted_file_sha256": "086a5b0d479c1a04e4629b8161b714f0b3d278c5e07b489a8a8af72ad37561db",
+        "normalized_module_sha256": "2ce92027c984fb367c9039e30c6fa5d8727d1d746c9a7b5c83fe93a4b5cf4f9b",
+        "old_projector_status": "REJECTED_SYNTHETIC",
+        "old_rejection": "new key remains in unprojected logic/port",
+        "new_projector": {
+          "projected_normalized_sha256": "2ce92027c984fb367c9039e30c6fa5d8727d1d746c9a7b5c83fe93a4b5cf4f9b",
+          "projected_normalized_bytes": 1082,
+          "removed_ports": [],
+          "removed_sourceinfo_comments": 0,
+          "removed_assignments": []
+        },
+        "remaining_bytes_sha256": "2ce92027c984fb367c9039e30c6fa5d8727d1d746c9a7b5c83fe93a4b5cf4f9b"
+      },
+      "new": {
+        "official_emitted_file_sha256": "85081684a479e14b48688d1d463879cf20571d6323621978a8033daf1dd07cf4",
+        "normalized_module_sha256": "23a6aa12a21aaebf0d746010a56124df5a78c4a0ce7770565d868a82d1fa64cc",
+        "old_projector_status": "REJECTED_SYNTHETIC",
+        "old_rejection": "new key remains in unprojected logic/port",
+        "new_projector": {
+          "projected_normalized_sha256": "2ce92027c984fb367c9039e30c6fa5d8727d1d746c9a7b5c83fe93a4b5cf4f9b",
+          "projected_normalized_bytes": 1082,
+          "removed_ports": [
+            "io_tiles_response_bits_key_identity",
+            "io_tiles_response_bits_key_index",
+            "io_tiles_response_bits_key_ng",
+            "io_tiles_response_bits_key_slot"
+          ],
+          "removed_sourceinfo_comments": 8,
+          "removed_assignments": [
+            {
+              "destination": "io_tiles_response_bits_key_identity",
+              "source": "banks_io_tiles_response_bits_key_identity"
+            },
+            {
+              "destination": "io_tiles_response_bits_key_index",
+              "source": "banks_io_tiles_response_bits_key_index"
+            },
+            {
+              "destination": "io_tiles_response_bits_key_ng",
+              "source": "banks_io_tiles_response_bits_key_ng"
+            },
+            {
+              "destination": "io_tiles_response_bits_key_slot",
+              "source": "banks_io_tiles_response_bits_key_slot"
+            }
+          ]
+        },
+        "remaining_bytes_sha256": "2ce92027c984fb367c9039e30c6fa5d8727d1d746c9a7b5c83fe93a4b5cf4f9b"
+      }
+    }
+  },
+  "numerical_pass": false,
+  "sv_repin_authorized": false,
+  "processes": [
+    {
+      "name": "compile_r3",
+      "native_exit": 0,
+      "elapsed_seconds": 6.045201729008113,
+      "observed_peak_rss": 232165376,
+      "errors": []
+    },
+    {
+      "name": "fixture_r3",
+      "native_exit": 0,
+      "elapsed_seconds": 2.0667192450055154,
+      "observed_peak_rss": 113115136,
+      "errors": []
+    }
+  ],
+  "all_strict_cleanup_eof_gzip": true,
+  "process_caps": {
+    "rss_bytes": 1073741824,
+    "cpu_seconds": 60,
+    "wall_seconds": 90
+  }
+}

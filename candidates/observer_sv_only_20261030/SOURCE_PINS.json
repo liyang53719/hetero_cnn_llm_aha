@@ -14,8 +14,8 @@
     },
     {
       "path": ".github/workflows/hetero-observer-sv-only-difference.yml",
-      "bytes": 3915,
-      "sha256": "cf4077fab427d8ff5add36cc87a41cf7a43549b0eab781989994250d0efbc1bb"
+      "bytes": 3917,
+      "sha256": "b3786b05c2338597aeb3f58ab7d6222cd06548d4bb337d569f94e88695807a1b"
     },
     {
       "path": "candidates/attention_policy_count_fix_20261029T0054/source/HostBlockCommandsV4.scala",
@@ -1648,6 +1648,16 @@
       "sha256": "2daeea20f273f1d21767e538a2bec879ace0553e3b6d022cc97b1de367177572"
     },
     {
+      "path": "candidates/observer_sv_only_20261030/EXACT_BANKS_INSTANCE_FIXTURE_SUMMARY.json",
+      "bytes": 6017,
+      "sha256": "91fd196b55f230baf9b2507944c8e393b4fb8d7ed403e095a28560c83596e835"
+    },
+    {
+      "path": "candidates/observer_sv_only_20261030/ExactBanksInstanceFixture.scala",
+      "bytes": 2729,
+      "sha256": "ce5069a7bccbde6c569eb0cf5e2c1a65f2d1355b46bed35bcac3c6e3621ddc99"
+    },
+    {
       "path": "candidates/observer_sv_only_20261030/FORMAT_FIXTURE_SUMMARY.json",
       "bytes": 4837,
       "sha256": "3231581d3b44564f8e9d95907fcb439f7c2a42d9557d65d32da6ef1257a154d9"
@@ -1674,8 +1684,8 @@
     },
     {
       "path": "candidates/observer_sv_only_20261030/README.zh.md",
-      "bytes": 7881,
-      "sha256": "9265edadddb2cbb993784033c3ede3173191a8d50ea8884135a1827041dc977a"
+      "bytes": 12403,
+      "sha256": "c3ab0a40317d4ec3e621cf5b8e464440cb3ad869b20184338b95f024e0ddadbb"
     },
     {
       "path": "candidates/observer_sv_only_20261030/SCANNER_SINGLE_PASS_BENCHMARK.json",
@@ -1689,8 +1699,13 @@
     },
     {
       "path": "candidates/observer_sv_only_20261030/export_metadata.py",
-      "bytes": 9325,
-      "sha256": "7e391f9be905dc22f19293dcc6a184f1f1c73bd2541e5c9fe2fe090588f103eb"
+      "bytes": 14018,
+      "sha256": "ff7e5c1e433a1b6d81746f33ad710beb9387d0dd135e418afd8b9efe2c180df4"
+    },
+    {
+      "path": "candidates/observer_sv_only_20261030/instance_port_labels.py",
+      "bytes": 2609,
+      "sha256": "4cc62a5acb5a4b0a572f18a2fb9d6117b4900795f6091c21c5d80b84b07eb165"
     },
     {
       "path": "candidates/observer_sv_only_20261030/old_helpers/CanonicalHighGate.scala",
@@ -1719,13 +1734,13 @@
     },
     {
       "path": "candidates/observer_sv_only_20261030/sv_difference_projection.py",
-      "bytes": 18627,
-      "sha256": "d3f753600d2ef17069ec54e9ee1a35672201c7f187fee9ea5b2c847e25e0ee81"
+      "bytes": 34392,
+      "sha256": "484eab620e861fc4eb7e4d4e9fa9991c877498fa1d4f054c490b42183282f5ec"
     },
     {
       "path": "candidates/observer_sv_only_20261030/test_contract.py",
-      "bytes": 7507,
-      "sha256": "072afa7e00271fcfb398adf0217a78031068402f8dd4db618d008f8e45a5c353"
+      "bytes": 7604,
+      "sha256": "2851334ed40257582e2777ae316561ce0d16d717dd7d9946f18575680c0f917e"
     },
     {
       "path": "candidates/observer_sv_only_20261030/test_export_flow.py",
@@ -1733,14 +1748,24 @@
       "sha256": "2a5e33f90346cccafca65e5ad081c9c69b660a1f9a0ccf5b71b06b9e188fd467"
     },
     {
+      "path": "candidates/observer_sv_only_20261030/test_instance_port_labels.py",
+      "bytes": 3226,
+      "sha256": "004398166280ee0744e27c940ab4a6bfa5093bcb9878dfb81f31c2e0b5a4f72f"
+    },
+    {
       "path": "candidates/observer_sv_only_20261030/test_projection.py",
       "bytes": 9834,
       "sha256": "92837ab07aac924c3393590809d03ceb6a83f6ac4a1956ccaa073caa4be4aee6"
     },
     {
+      "path": "candidates/observer_sv_only_20261030/test_projection_failure.py",
+      "bytes": 14061,
+      "sha256": "8cf4bfbbd95e52353cd74018da1ceeecf261c98264af5da07a689534f0ac3d8f"
+    },
+    {
       "path": "candidates/observer_sv_only_20261030/validate_launch.py",
-      "bytes": 2416,
-      "sha256": "bb3d5cf53c467d92487abd6b1ad6b6448ad47d2787c94df36e2f543e242c4465"
+      "bytes": 2420,
+      "sha256": "117fdedf8dfda457157a6077ac4a30f8f39687d09e601b834efab2e30cfd344e"
     },
     {
       "path": "candidates/p0_newboundary_input_provider_20261028/MANIFEST.json",

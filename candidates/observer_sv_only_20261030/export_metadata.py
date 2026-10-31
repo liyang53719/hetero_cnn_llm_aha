@@ -1,5 +1,5 @@
 """Whitelist-only saved metadata export. Never export logs/IR/SV/classes or authorize re-pin."""
-import argparse,pathlib,time,math
+import argparse,pathlib,time,math,sys
 from contract import *
 
 # Exact supervisor messages only. Never echo exception text, paths, or raw logs.
@@ -76,6 +76,38 @@ def project(repo,work,identity):
  runtime=project_runtime(work/'jdk-runtime.json',c['runtime_inventory_sha256'],identity)
  return stages,proof,c,runtime
 
+def project_failed_projection(repo,work,identity):
+ """A native1 diagnostic is never strict success; bind every prerequisite anew."""
+ pins=closure(repo);need(read(work/'IDENTITY.json',4096)==identity,'same failure owning identity')
+ stages=[stage_row(n,work/n/'RESULT.json')for n,_,_ in STAGES[:-1]]
+ receipt_path=work/'projection/RESULT.json';r=read(receipt_path,4<<20)
+ need(r.get('native_exit')==1 and r.get('errors')==[] and r.get('cleanup_proof',{}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP' and r.get('log_capture',{}).get('pipe_eof_observed')is True and r.get('log_capture',{}).get('gzip_finalized')is True,'projection native1 with strict owned cleanup and logs')
+ stages.append(stage_row('projection',receipt_path,False));need(stages[-1]['strict_complete']is False,'failure must remain non-success')
+ saved=read(work/'STAGES.json',65536);need(len(saved)==15,'actual15 terminal receipts')
+ for a,b in zip(saved,stages):need(a=={k:b[k]for k in a},'failure parent/actual receipt agreement')
+ from sv_difference_projection import project_failure,COLLECTOR_SHA,SCANNER,MOD_NORMALIZED,MODULES
+ proof=project_failure(read(work/'projection/proof.json',65536))
+ script=D/'sv_difference_projection.py';need(pins.get(str(script.resolve()))==sha(script),'failure projector current source pin')
+ materialization=repo/'candidates/ci_frontend_materialization_r2_20261029';collector=repo/'candidates/ci_frontend_pipeline_r2_20261029/frontend_observation_metadata.py'
+ need(pins.get(str(collector.resolve()))==COLLECTOR_SHA and sha(collector)==COLLECTOR_SHA and sha(materialization/'sv_comment_only_identity.py')==SCANNER,'actual collector/scanner source pins')
+ paths={side:work/(side+'_emit_sv')/'compiled-host/HostBlockTopV4.sv'for side in ('old','new')}
+ metadata={side:work/(side+'_svscan')/'sv-identity.json'for side in ('old','new')}
+ expected_argv=[str(pathlib.Path(sys.executable).resolve()),'-B',str(script),'--old-sv',str(paths['old']),'--new-sv',str(paths['new']),'--old-metadata',str(metadata['old']),'--new-metadata',str(metadata['new']),'--materialization',str(materialization),'--output','proof.json']
+ argv=r.get('argv');need(type(argv)is list and len(argv)==len(expected_argv)and pathlib.Path(argv[0]).resolve()==pathlib.Path(expected_argv[0])and argv[1:]==expected_argv[1:],'failure actual projection command')
+ observed_canonical={};observed_normalized={};exporter_inputs={}
+ for side in ('old','new'):
+  sv=paths[side];need(sv.is_file()and not any(p.is_symlink()for p in (sv,*sv.parents))and 0<sv.stat().st_size<=512<<20,'bounded failure actual SV')
+  canonical=work/(side+'_canonical')/'canonical.tsv';observed_canonical[side]=sha(canonical);need(observed_canonical[side]==CANONICAL[side],'failure actual canonical')
+  scan=read(metadata[side],512<<10);scan_receipt=metadata[side].parent/'RESULT.json';sr=read(scan_receipt,4<<20)
+  need(scan.get('schema')=='OBSERVED_FRONTEND_SV_V1'and scan.get('status')=='OBSERVED_UNREVIEWED_NOT_ACCEPTED'and scan.get('numerical_pass')is False and scan.get('scanner_sha256')==SCANNER,'failure actual scan schema')
+  sa=sr.get('argv');need(type(sa)is list and len(sa)==9 and pathlib.Path(sa[0]).resolve()==pathlib.Path(sys.executable).resolve()and sa[1:]==['-B',str(collector),'--observe-sv',str(sv),'--materialization',str(materialization),'--output',metadata[side].name],'failure source-pinned collector command')
+  rows=scan['modules'];mm={x['module']:x for x in rows};need(len(mm)==len(rows)==92 and all(mm[name]['normalized_sha256']==MOD_NORMALIZED[side][name]for name in MODULES),'failure actual selected module identities')
+  raw=sha(sv);observed_normalized[side]=scan['normalized_sha256'];need(observed_normalized[side]==NORMALIZED[side]and scan['raw_sha256']==raw and scan['bytes']==sv.stat().st_size,'failure actual SV and normalized identity')
+  expected=dict(bytes=sv.stat().st_size,raw_sha256=raw,normalized_sha256=observed_normalized[side],metadata_sha256=sha(metadata[side]),scan_receipt_sha256=sha(scan_receipt))
+  need(proof['full_sv'][side]is None or proof['full_sv'][side]==expected,'non-null failure child observation must match independently bound input')
+  exporter_inputs[side]=expected
+ return stages,proof,dict(canonical_sha256=observed_canonical,normalized_sha256=observed_normalized,exporter_bound_inputs=dict(scope='EXPORTER_REVERIFIED_INPUTS_NOT_CHILD_OBSERVATIONS',inputs=exporter_inputs)),None
+
 def main():
  ap=argparse.ArgumentParser()
  for n in ('repo','work','identity','job-start','output'):ap.add_argument('--'+n,type=pathlib.Path,required=True)
@@ -93,9 +125,11 @@ def main():
  except (OSError,ValueError,KeyError,TypeError):stages=[]
  proof=dict(schema='SV_ONLY_PROOF_UNAVAILABLE_V1',status=status,numerical_pass=False,sv_repin_authorized=False)
  try:stages,proof,c,runtime=project(a.repo.resolve(),a.work.resolve(),identity);status='TWO_MODULE_PROJECTION_OBSERVED_NOT_PRODUCTION_ACCEPTANCE'
- except (OSError,ValueError,KeyError,TypeError,ImportError):pass
+ except (OSError,ValueError,KeyError,TypeError,ImportError):
+  try:stages,proof,c,runtime=project_failed_projection(a.repo.resolve(),a.work.resolve(),identity);status='TWO_MODULE_PROJECTION_FAILED_BOUND_DIAGNOSTIC'
+  except (OSError,ValueError,KeyError,TypeError,ImportError):pass
  need(time.monotonic()-clock['started_monotonic']<WHOLE-300,'retain artifact publication deadline')
  a.output.mkdir();write(a.output/'sv-only-proof.json',proof,65536)
- summary=dict(schema='SV_ONLY_SAVED_SAFE_SUMMARY_V2',status=status,artifact_identity=identity,source_pins_sha256=sha(D/'SOURCE_PINS.json'),runtime_provenance=runtime,stages=stages,proof_file=dict(name='sv-only-proof.json',bytes=(a.output/'sv-only-proof.json').stat().st_size,sha256=sha(a.output/'sv-only-proof.json')),expected_canonical_sha256=CANONICAL,expected_normalized_sha256=NORMALIZED,observed_canonical_sha256=None if c is None else c['canonical_sha256'],observed_normalized_sha256=None if c is None else c['normalized_sha256'],numerical_pass=False,sv_repin_authorized=False,full_m128_pass_count=0,final_rtl_replay=False,archive_link_executed=False,verilator_gcc_executed=False)
+ summary=dict(schema='SV_ONLY_SAVED_SAFE_SUMMARY_V2',status=status,artifact_identity=identity,source_pins_sha256=sha(D/'SOURCE_PINS.json'),runtime_provenance=runtime,stages=stages,proof_file=dict(name='sv-only-proof.json',bytes=(a.output/'sv-only-proof.json').stat().st_size,sha256=sha(a.output/'sv-only-proof.json')),expected_canonical_sha256=CANONICAL,expected_normalized_sha256=NORMALIZED,observed_canonical_sha256=None if c is None else c['canonical_sha256'],observed_normalized_sha256=None if c is None else c['normalized_sha256'],exporter_bound_inputs=None if c is None else c.get('exporter_bound_inputs'),numerical_pass=False,sv_repin_authorized=False,full_m128_pass_count=0,final_rtl_replay=False,archive_link_executed=False,verilator_gcc_executed=False)
  write(a.output/'sv-only-summary.json',summary,65536);need(sum(p.stat().st_size for p in a.output.iterdir())<=131072,'two metadata files aggregate128KiB')
 if __name__=='__main__':main()

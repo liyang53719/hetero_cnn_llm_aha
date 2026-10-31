@@ -1,5 +1,14 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-31 01:37 UTC：实例命名端口标签误拒修复（TEMP / SOURCE-ONLY）
+- 实际scanfix run41153553582终态FAIL：前14阶段严格成功，旧/新SV扫描42.023/36.121秒；最终projection35.040秒/native1、supervisor errors空、清理EOFgzip完整。非cap超时；child拒绝谓词当时未导出，具体真实原因仍未知。不能把toy复现当实际失败原因确证。
+- 官方FIRRTL DefInstance小AST复现原projector错误：既有child命名port标签被当parent同名信号，Dense旧/新都误拒。严格exact TransposedDownDenseBanks banks实例分类仅豁免4标签offset，不删除/重写其字节；真实连接表达式、member/hierarchical、其它实例/类型、条件程序或未知语法仍拒。原四field删除规则与全部剩余normalized bytes逐字节比较不变。
+- 最终候选在官方exact实例toy经原scanner归一、旧新残余bytes直接比较相同；普通reg/memory toy排除了部分猜测。不继承真实SV通过；源码测试精确范围见发布manifest。
+- 失败诊断保留有限reason/phase/module/side/计数/哈希，未知为null，超界有饱和标记；无SV/body/token/rawlog。失败native1永不授权re-pin，严格导出将exporter独立输入证据与child已观测区分。
+- 原15阶段、scanner180秒、projection300秒、whole10800秒不增；无Verilator/GCC/archive/link/weights/DUT。源码提交不启动；新portlabel唯一nonce待独审、source CI与无并发确认后激活，旧launch不复用。
+- 完整五块128-token数值仍0/5，最终RTL回放仍0/5；只有真正完整SV差异证明核验后才能审后续production门，不能由CI绿色自动re-pin。
+
+
 ## 2026-10-31 01:00 UTC：SV专项扫描失败修复（TEMP / SOURCE-ONLY，未重新实测）
 - 用户已明确批准本次最多3小时的SV专项；原run41151061202终态FAIL，前7阶段native0/严格完成，old_svscan 182.287秒、native_exit=null、error_count1，清理/EOF/gzip完成；与180秒限时一致，但未保存错误类型，具体原因仍未知。新版与投影未开始，禁止继承PASS。
 - 单遍修复仍调用原b49c scanner：完整LF终止模块的原digest同时更新module/whole hash，严格连续覆盖与终态code证明；不改scanner字节、旧新canonical/SV期望、61-bit投影判据、硬件或预算。合成34,998,998B/96模块实测旧18.012秒→新9.236秒、全部元数据相等；仅合成性能，不是实际92模块证明。

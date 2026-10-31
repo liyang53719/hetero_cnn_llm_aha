@@ -1,3 +1,38 @@
+# SV 专项 projection 原失败修复：源码候选，实际二模块证明仍未通过
+
+## 原身份与实际结果
+scanfix run41153553582 前14阶段严格完成；old/new扫描42.023s/36.121s，证明上一轮单遍扫描性能修复在真实输入可执行。最终projection35.040s/native1、supervisor errors=[]、CPU31.3s/RSS65.2MB，清理/EOF/gzip完整，不是监督cap超限。原导出没有child拒绝谓词，不能以耗时/RSS确诊其具体代码位置；不可把未知失败说成某个已确认原因。
+
+## 已复现的真实语法缺陷
+官方FIRRTL emitter小AST DefInstance复现：原projector把existing child实例 `.io_tiles_response_bits_key_identity(banks_io_tiles_response_bits_key_identity)` 中的命名端口**标签**当成parent同名信号引用。Router toy两边通过，而Dense toy旧新两边均被 `new key remains in unprojected logic/port` 误拒。
+
+进一步用官方源AST中的真实类型名称 `TransposedDownDenseBanks`、实例名`banks`重新编译/发射，未手改SV文本。新classifier使两模块toy旧新剩余规范化字节精确相等。这个复现解释一个实际源码缺陷，但不等于证明run41153553582恰因同一谓词失败，真实proof仍待重测。
+
+普通寄存器/always toy与depth2 width8 memory toy均未复现其它误拒：官方emitter key assign位于always前。没有据猜测放宽procedural/attribute/generate规则。实际Dense既有drain matching本来读取banks key四字段；不凭SourceInfo计数推断新wire/instance连线，更没有扩大删除集合。
+
+## 最小修复边界
+新增 `instance_port_labels.py`：只对Dense中原词法扫描认定无条件code、且前一个有效token为`;`的exact `TransposedDownDenseBanks banks (` 处理。要求单一实例、完整有界named-port连接列表、四标签分别精确连接既有 `banks_io_tiles_response_bits_key_*` 标识符。只返回四个标签offset供“引用是否残留”检查排除，不删改任何SV字节。
+
+所有connection expression、member/hierarchical使用、其它实例/类型、条件/程序/generate/注释内伪实例、pkg::前缀、缺少/重复字段、未知列表形态仍不豁免。原四field port/assign删除规则、源/模块硬hash、全部剩余normalized bytes逐块比较、原b49c scanner均保持。helper读取同份bytes核sourceSHA后执行，绑定于projector和完整source closure。
+
+## 失败证据不再丢失
+原所有need拒绝保留谓词，映射有限reason codes，新增helper pin拒绝也具明确枚举。受控失败CLI仍native1，输出≤64KiB FAILED诊断而不是PASS：有限phase/module/old-new、已观测line/offset/byte/counts/hash、old/new比较行及不相等布尔，未知保持null，无SV正文、token、异常原文或路径。
+
+比较失败保留两边实际投影hash/长度/删除计数；NORMALIZE mismatch保留实际hash且明确与期望不符；新模块未完成仍保存同模块已完成old行。超执行计数不能使诊断自身丢失，执行cap不扩大。
+
+失败导出是独立严格路径：前14必须strict成功，projection必须native1/errors空/清理EOFgzip完整；重新核对完整source pins、同job identity、精确argv、collector/scanner pins、真实SV raw/normalized/模块metadata与收据。child未观测的full_sv侧不冒填；exporter独立核得的输入另标 `EXPORTER_REVERIFIED_INPUTS_NOT_CHILD_OBSERVATIONS`。失败永远strict_complete=false，仍numerical_pass=false、sv_repin_authorized=false。前置证据不完整或任意binding漂移仍unavailable。
+
+## 范围
+预算仍原15stage、scanner180s、projection300s、whole10800s；不改硬件、canonical/whole/module期望，不增加Verilator/GCC/archive/link/weights/DUT。没有提交、激活或启动重任务。仅官方toy编译/emit在原1GiB/CPU60/wall90监督下；无155模型重建。
+
+新增源码与安全fixture摘要可发布；不上传rawSV/IR/classes/rawlog。完整真实两模块证明、生产re-pin以及五块M128数值仍未通过，0/5不变。
+
+## 本次发布与唯一启动
+本source提交不触发SV任务。main基线5bff91494b66670098c804a311280b4bf9d0d990；原20261030与scanfix launch均已消费，不复用。新路径 `ci_launch/observer_fixed4096_sv_only_difference_20261031_portlabel_once.json` 只可在新source CI成功、原job终态、无活动重job、single A/directparent/attempt1全核后独立激活。以下保留过去版本记录，不代表新版本或实际证明通过。
+
+---
+## 历史版本记录
+
 # SV-only 原扫描失败最小性能修复（候选，尚未重跑真实 SV）
 
 ## 已证事实

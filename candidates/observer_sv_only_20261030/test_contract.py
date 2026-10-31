@@ -7,9 +7,10 @@ class ContractTests(unittest.TestCase):
  def test_budget(self):
   b=c.read(c.D/'BUDGETS.json');self.assertEqual(len(c.STAGES),15);self.assertEqual(sum(x[1]for x in c.STAGES),6360);self.assertEqual(6360+450+900+1320,9030);self.assertEqual(10800-9030,1770);self.assertLessEqual(max(x[2]for x in c.STAGES),6);self.assertEqual(b['internal_execution_seconds'],7710);self.assertEqual(b['execution_step_seconds'],129*60);self.assertEqual(b['execution_step_seconds']+1320,9060);self.assertEqual(b['declared_envelope_seconds'],9060);self.assertEqual(b['reserve_seconds'],1740)
  def test_unique_launch(self):
-  m=dict(schema='OBSERVER_FIXED4096_SV_ONLY_DIFFERENCE_ONE_SHOT_V1',source_sha='a'*40,profile='FIXED4096_OLD_NEW_SV_ONLY_TWO_MODULE_DIFFERENCE',nonce='observer_fixed4096_sv_only_difference_20261031_scanfix_once');e=dict(before='a'*40,after='b'*40,ref='refs/heads/main')
+  m=dict(schema='OBSERVER_FIXED4096_SV_ONLY_DIFFERENCE_ONE_SHOT_V1',source_sha='a'*40,profile='FIXED4096_OLD_NEW_SV_ONLY_TWO_MODULE_DIFFERENCE',nonce='observer_fixed4096_sv_only_difference_20261031_portlabel_once');e=dict(before='a'*40,after='b'*40,ref='refs/heads/main')
   self.assertEqual(validate(e,m,'1','b'*40,'a'*40,'A\t'+LAUNCH+'\n'),'a'*40)
-  with self.assertRaises(ValueError):validate(e,dict(m,nonce='observer_fixed4096_sv_only_difference_20261030_once'),'1','b'*40,'a'*40,'A\t'+LAUNCH+'\n')
+  for old_nonce in ('observer_fixed4096_sv_only_difference_20261030_once','observer_fixed4096_sv_only_difference_20261031_scanfix_once'):
+   with self.assertRaises(ValueError):validate(e,dict(m,nonce=old_nonce),'1','b'*40,'a'*40,'A\t'+LAUNCH+'\n')
   for args in [('2','b'*40,'a'*40,'A\t'+LAUNCH+'\n'),('1','b'*40,'c'*40,'A\t'+LAUNCH+'\n'),('1','b'*40,'a'*40,'M\t'+LAUNCH+'\n')]:
    with self.assertRaises(ValueError):validate(e,m,*args)
  def test_identity(self):

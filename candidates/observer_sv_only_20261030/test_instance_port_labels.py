@@ -1,5 +1,5 @@
 """Exact banks named-port label classification, not generic dot-token ignoring."""
-import pathlib,sys,unittest
+import pathlib,sys,unittest,re
 D=pathlib.Path(__file__).resolve().parent;sys.path.insert(0,str(D))
 import instance_port_labels as h
 import sv_difference_projection as p
@@ -9,8 +9,8 @@ def block(kind='TransposedDownDenseBanks',instance='banks'):
  return ('\n'.join(rows)+'\n').encode()
 def data(b=None):return b'module TransposedDenseDownOwner(\n input clock\n);\n'+(block()if b is None else b)+b'endmodule\n'
 class Tests(unittest.TestCase):
- def classify(self,x):
-  allowed,_=p.removable_code_starts(x,h.LABELS);return h.label_offsets(x,'TransposedDenseDownOwner',allowed,p.LEX)
+ def classify(self,x,sourceinfo=None,diagnostic=None):
+  allowed,_=p.removable_code_starts(x,h.LABELS);return h.label_offsets(x,'TransposedDenseDownOwner',allowed,p.LEX,sourceinfo,diagnostic)
  def test_only_four_label_offsets(self):
   x=data();out=self.classify(x);self.assertEqual(len(out),4)
   for f in FIELDS:
@@ -34,4 +34,24 @@ class Tests(unittest.TestCase):
  def test_scoped_type_prefix_is_not_exact_instance_type(self):
   for prefix in [b'pkg::\n',b'pkg:: /* fake delimiter ; */\n',b'pkg:: // fake delimiter ;\n']:
    self.assertEqual(self.classify(data(prefix+block())),set())
+ def test_instance_fileinfo_only_if_passed_grammar_recognizes_exact_body(self):
+  info=b' @[TransposedDenseOwner.scala 819:19]'
+  x=data(block().replace(b'banks (\n',b'banks ( //'+info+b'\n'))
+  grammar=re.compile(re.escape(info))
+  self.assertEqual(len(self.classify(x,grammar)),4)
+  self.assertEqual(self.classify(x),set())
+  for comment in (b' arbitrary',b' verilator lint_off WIDTH',b' synthesis translate_off',info+b' extra',b' @[/secret/not-scala 1:1]'):
+   y=data(block().replace(b'banks (\n',b'banks ( //'+comment+b'\n'))
+   events=[];self.assertEqual(self.classify(y,grammar,lambda reason,counts:events.append((reason,counts))),set())
+   self.assertEqual(events[-1][0],'START_COMMENT_NOT_SOURCEINFO')
+ def test_existing_end_and_named_port_comments_preserved_not_removed(self):
+  x=data(block().replace(b'key_identity),',b'key_identity), // @[TransposedDenseOwner.scala 819:19]').replace(b'  );',b'  ); // @[TransposedDenseOwner.scala 819:19]'))
+  before=bytes(x);self.assertEqual(len(self.classify(x)),4);self.assertEqual(x,before)
+ def test_classifier_reason_counts_are_finite(self):
+  for x,expected in [(data(),'EXACT_FOUR_LABELS'),(data(block('Other')),'START_COUNT'),(data(block().replace(b'(banks_io_tiles_response_bits_key_slot)',b'(parent.io_tiles_response_bits_key_slot)')),'KEY_EXPRESSION_NOT_EXACT')]:
+   events=[];self.classify(x,diagnostic=lambda reason,counts:events.append((reason,counts)))
+   self.assertEqual(len(events),1);self.assertEqual(events[0][0],expected);self.assertIn(events[0][0],h.REASONS)
+   self.assertEqual(set(events[0][1]),{'start_count','block_bytes','tokens','ports','key_labels'})
+   self.assertTrue(all(type(v)is int and v>=0 for v in events[0][1].values()))
 if __name__=='__main__':unittest.main()
+

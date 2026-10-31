@@ -1,5 +1,14 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-31 02:18 UTC：官方实例FileInfo布局修复（TEMP / SOURCE-ONLY）
+- 实际run41156443649终态FAIL，前14阶段严格完成，projection75.173秒/native1。已取得真实有限拒绝：old / TransposedDenseDownOwner / PROJECT_MODULE / REJECT_NEW_KEY_REMAINS_IN_UNPROJECTED_LOGIC_PORT；旧Dense归一化hash e07f04…与两边whole/canonical本次真实绑定相符。471600行/44477644偏移是旧诊断EOF残留，不可当真正拒绝位置。
+- 官方同布局小AST仅把WDefInstance NoInfo改为FileInfo，实际emitter在banks实例首行产生SourceInfo尾注释，使旧START正则不匹配，复现old/new Dense误拒。此是可复现解析缺陷，不是声称已读取本次真实SV实例行或确证唯一根因。279源端口上界小于4096，不扩cap。
+- 修复只额外识别原b49c SOURCEINFO.fullmatch认可的首行尾注释，所有注释/实例字节原样保留；fixed实例/4个标签offset/精确表达式及全部剩余字节比较不变。任意注释/pragma/伪SourceInfo仍拒。官方小fixture最终旧新残余bytes直接相等，不继承完整SV通过。
+- 有限诊断新增classifier分支/5计数及饱和标记；最终未豁免标识现在记录真正occurrence offset/line和有限类别，无raw token/body/log。原reason仍保留，失败不授权re-pin。
+- 原15stage、180秒scanner、300秒projection、10800秒whole及所有硬件/删除判据不变。源码提交不运行重job；新fileinfo唯一nonce待sourceCI与冲突检查后单独激活，前三nonce不复用。
+- 五块128-token完整数值及最终RTL仍0/5；真实SV证明未通过，不能由toy或CI绿灯更新生产基线。
+
+
 ## 2026-10-31 01:37 UTC：实例命名端口标签误拒修复（TEMP / SOURCE-ONLY）
 - 实际scanfix run41153553582终态FAIL：前14阶段严格成功，旧/新SV扫描42.023/36.121秒；最终projection35.040秒/native1、supervisor errors空、清理EOFgzip完整。非cap超时；child拒绝谓词当时未导出，具体真实原因仍未知。不能把toy复现当实际失败原因确证。
 - 官方FIRRTL DefInstance小AST复现原projector错误：既有child命名port标签被当parent同名信号，Dense旧/新都误拒。严格exact TransposedDownDenseBanks banks实例分类仅豁免4标签offset，不删除/重写其字节；真实连接表达式、member/hierarchical、其它实例/类型、条件程序或未知语法仍拒。原四field删除规则与全部剩余normalized bytes逐字节比较不变。

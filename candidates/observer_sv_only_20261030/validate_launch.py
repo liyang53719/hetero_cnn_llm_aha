@@ -1,9 +1,9 @@
 """Unique old/new fixed4096 SV-only launch; no Verilator/GCC/link/numerics."""
 import json,os,pathlib,re,subprocess
-LAUNCH='ci_launch/observer_fixed4096_sv_only_difference_20261031_portlabel_once.json'
+LAUNCH='ci_launch/observer_fixed4096_sv_only_difference_20261031_fileinfo_once.json'
 def validate(event,manifest,attempt,head,parent,diff):
  if attempt!='1':raise ValueError('retry not admitted')
- if set(manifest)!={'schema','source_sha','profile','nonce'} or manifest['schema']!='OBSERVER_FIXED4096_SV_ONLY_DIFFERENCE_ONE_SHOT_V1' or manifest['profile']!='FIXED4096_OLD_NEW_SV_ONLY_TWO_MODULE_DIFFERENCE' or manifest['nonce']!='observer_fixed4096_sv_only_difference_20261031_portlabel_once':raise ValueError('observer SV-only launch contract')
+ if set(manifest)!={'schema','source_sha','profile','nonce'} or manifest['schema']!='OBSERVER_FIXED4096_SV_ONLY_DIFFERENCE_ONE_SHOT_V1' or manifest['profile']!='FIXED4096_OLD_NEW_SV_ONLY_TWO_MODULE_DIFFERENCE' or manifest['nonce']!='observer_fixed4096_sv_only_difference_20261031_fileinfo_once':raise ValueError('observer SV-only launch contract')
  sha=manifest['source_sha']
  if not isinstance(sha,str) or not re.fullmatch('[0-9a-f]{40}',sha):raise ValueError('reviewed source SHA')
  if event.get('ref')!='refs/heads/main' or event.get('before')!=sha or parent!=sha or event.get('after')!=head or sha==head:raise ValueError('exact direct launch from reviewed source')

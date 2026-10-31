@@ -2,7 +2,7 @@ name: hetero-observer-fixed4096-old-new-sv-only-difference
 on:
   push:
     branches: [main]
-    paths: [ci_launch/observer_fixed4096_sv_only_difference_20261031_portlabel_once.json]
+    paths: [ci_launch/observer_fixed4096_sv_only_difference_20261031_fileinfo_once.json]
 permissions:
   contents: read
   actions: read

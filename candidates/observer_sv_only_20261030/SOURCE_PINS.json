@@ -14,8 +14,8 @@
     },
     {
       "path": ".github/workflows/hetero-observer-sv-only-difference.yml",
-      "bytes": 3917,
-      "sha256": "b3786b05c2338597aeb3f58ab7d6222cd06548d4bb337d569f94e88695807a1b"
+      "bytes": 3916,
+      "sha256": "f909afee5c4ce18bdedb916d78a893e57145eed795fff3d8840030d5b93aed9a"
     },
     {
       "path": "candidates/attention_policy_count_fix_20261029T0054/source/HostBlockCommandsV4.scala",
@@ -1668,6 +1668,16 @@
       "sha256": "948f0001ddc78ec7516e1529bc620f58af0b1ec73ee614605a05122cccb3059d"
     },
     {
+      "path": "candidates/observer_sv_only_20261030/INSTANCE_FILEINFO_FIXTURE_SUMMARY.json",
+      "bytes": 5936,
+      "sha256": "f45b459b730fcca6dfbc49020a32fb82a606fc16d8a6fd68baebcce5a16b7434"
+    },
+    {
+      "path": "candidates/observer_sv_only_20261030/InstanceFileInfoFixture.scala",
+      "bytes": 2790,
+      "sha256": "943836a89d46a419217463a4b65d8e57443e9678692e0b257fef5295447c6510"
+    },
+    {
       "path": "candidates/observer_sv_only_20261030/KeyFormatFixture.scala",
       "bytes": 1832,
       "sha256": "066f164d95da9d8b70fb1e647d313b2b42ec90ea1b99e7e4fc13e6d809735d7e"
@@ -1684,8 +1694,8 @@
     },
     {
       "path": "candidates/observer_sv_only_20261030/README.zh.md",
-      "bytes": 12403,
-      "sha256": "c3ab0a40317d4ec3e621cf5b8e464440cb3ad869b20184338b95f024e0ddadbb"
+      "bytes": 15303,
+      "sha256": "af4573e30340ed42ba95cf2c931596a4c32ca8c163a9c3fc94413a4b3919ec7e"
     },
     {
       "path": "candidates/observer_sv_only_20261030/SCANNER_SINGLE_PASS_BENCHMARK.json",
@@ -1704,8 +1714,8 @@
     },
     {
       "path": "candidates/observer_sv_only_20261030/instance_port_labels.py",
-      "bytes": 2609,
-      "sha256": "4cc62a5acb5a4b0a572f18a2fb9d6117b4900795f6091c21c5d80b84b07eb165"
+      "bytes": 3944,
+      "sha256": "52253066ca63f992ccb6099dde0f7950bdbf1bcab0b1f3771b9482f0f9ecd55c"
     },
     {
       "path": "candidates/observer_sv_only_20261030/old_helpers/CanonicalHighGate.scala",
@@ -1734,13 +1744,13 @@
     },
     {
       "path": "candidates/observer_sv_only_20261030/sv_difference_projection.py",
-      "bytes": 34392,
-      "sha256": "484eab620e861fc4eb7e4d4e9fa9991c877498fa1d4f054c490b42183282f5ec"
+      "bytes": 38110,
+      "sha256": "52cc6957f9d8492dc6b039ede139041c0f9098d4f6ee689b12f8dd873abb5318"
     },
     {
       "path": "candidates/observer_sv_only_20261030/test_contract.py",
-      "bytes": 7604,
-      "sha256": "2851334ed40257582e2777ae316561ce0d16d717dd7d9946f18575680c0f917e"
+      "bytes": 7667,
+      "sha256": "333d86addc09197788fa3d012876611ecadd4ffe3c5ab5a4a47da4fe833f4948"
     },
     {
       "path": "candidates/observer_sv_only_20261030/test_export_flow.py",
@@ -1749,8 +1759,13 @@
     },
     {
       "path": "candidates/observer_sv_only_20261030/test_instance_port_labels.py",
-      "bytes": 3226,
-      "sha256": "004398166280ee0744e27c940ab4a6bfa5093bcb9878dfb81f31c2e0b5a4f72f"
+      "bytes": 4990,
+      "sha256": "92fceb49e3269863c3cf7b8afd6e78a276119ea03c75d68c86cd36f1cb6ff013"
+    },
+    {
+      "path": "candidates/observer_sv_only_20261030/test_offending_occurrence.py",
+      "bytes": 3999,
+      "sha256": "d1ba350cc959f39183b6c64b2b051cd3ac4b277ba0da62c9a3a76670d11d79fe"
     },
     {
       "path": "candidates/observer_sv_only_20261030/test_projection.py",
@@ -1764,8 +1779,8 @@
     },
     {
       "path": "candidates/observer_sv_only_20261030/validate_launch.py",
-      "bytes": 2420,
-      "sha256": "117fdedf8dfda457157a6077ac4a30f8f39687d09e601b834efab2e30cfd344e"
+      "bytes": 2418,
+      "sha256": "41d337de973b40460c6aff44160895f20aae2fe42ca4081f130b334231452aef"
     },
     {
       "path": "candidates/p0_newboundary_input_provider_20261028/MANIFEST.json",

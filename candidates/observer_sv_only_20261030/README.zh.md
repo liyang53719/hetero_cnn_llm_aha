@@ -1,3 +1,31 @@
+# 实例 FileInfo 识别修复（源码候选，未发布/执行）
+
+实际 run 41156443649 前 14 stage 严格完成，projection native 1：old / TransposedDenseDownOwner / PROJECT_MODULE / REJECT_NEW_KEY_REMAINS_IN_UNPROJECTED_LOGIC_PORT。完整 old/new 输入哈希及 old Dense 归一化哈希真实绑定匹配，但旧摘要没有 classifier 分支或真正 remaining occurrence 位置；471600 行、44477644 偏移是 EOF 遗留值，不能冒充拒绝点。
+
+## 实质复现
+
+产品源 `TransposedDenseOwner.scala` line 819 创建 `banks=Module(new TransposedDownDenseBanks(...))`。banks 全 IO 源展开上界 279 个标量口，远低于原 4096 口上限；无证据支持扩大 cap。
+
+在原官方小 AST fixture 上只将 WDefInstance 的 NoInfo 改为 FileInfo，原 FIRRTL emitter 实际产生 `TransposedDownDenseBanks banks ( // @[...TransposedDenseOwner.scala 819:19]`。旧 484eab projector 对 toy old/new Dense 同样拒绝。原扫描器仅规范化 SourceInfo 路径前缀，不删除注释，所以原 START 正则不能匹配。此为官方同类布局可复现错误；未声称已经读取实际 SV 实例行或证明实际唯一根因。
+
+## 最小修复
+
+- START 只额外支持尾随行注释，且其完整 body 必须由调用方传入的原 b49c `SOURCEINFO.fullmatch` 接受；任意注释、pragma、伪 SourceInfo 均拒绝。
+- 不删除/重写实例或注释字节。原 exact type/name、唯一实例、完整 named list、四精确连接表达式、仅四 label offset 豁免全部保留。
+- END 和 named-port list 原本已经通过原词法器保留并支持注释，不新增放宽。最终 old/new 未删除部分仍逐字节全等；整 SV/模块的所有实际已知哈希不变。
+- 原 4096 ports、2 MiB block、200000 tokens、stage 180/300 秒和整 job 10800 秒预算不变。
+- finite classifier reason/counts 与源 hash 纳入失败摘要；计数超过诊断边界标饱和，不扩执行上限。最终 remaining key 拒绝时记录真正的 byte offset/line，类别仅 UNEXEMPTED_KEY_IDENTIFIER，不猜测其是成员、信号或 label，不导出原文本。
+
+## 资格范围
+
+官方 tiny fixture 只证明格式修复与其剩余字节恒等；不是实际两模块证明。源码/轻测不是五块完整数值资格，五块 M128 与 RTL 仍 0/5。生产 re-pin 仍未授权，未知 proof 仍不可填为 PASS。本候选不含 launch manifest，不启动新 job。
+
+## 本次发布/唯一启动
+源码提交不触发SV任务；基线main aaa690d9a934f57d1a15ab14b97ba22bad876a87。前三个launch均已消费，永久不复用。新路径 `ci_launch/observer_fixed4096_sv_only_difference_20261031_fileinfo_once.json` 仅在修复source CI成功、原job终态、无活动重job并校验single A/directparent/attempt1后独立激活。以下旧版本说明为历史，不是当前已验证结果。
+
+---
+## 历史版本记录
+
 # SV 专项 projection 原失败修复：源码候选，实际二模块证明仍未通过
 
 ## 原身份与实际结果

@@ -6,7 +6,7 @@ import argparse,hashlib,io,json,pathlib,re,struct,sys,tempfile
 P=pathlib.Path
 SCANNER='b49c75780d2bfb295d3e90df6d478475f42c3129dba73c850b4d564e4114965b'
 FULL={'old':'6555ede34ba2980a6ebfddb13325ffb14734063d3253fdadd493bfcb4bf67bb5','new':'ec70f91181b0422ca7cf2bc845a2a1f04c9d862f4f27d265c5a064a969058d72'}
-INSTANCE_LABELS_SHA='4cc62a5acb5a4b0a572f18a2fb9d6117b4900795f6091c21c5d80b84b07eb165'
+INSTANCE_LABELS_SHA='52253066ca63f992ccb6099dde0f7950bdbf1bcab0b1f3771b9482f0f9ecd55c'
 COLLECTOR_SHA='9295a2affa25970812a8b71d096b81be925facb0918223747df91b16a113cfb8'
 MODULES=('Public21QkvReductionRouter','TransposedDenseDownOwner')
 FIELDS=(('identity',32),('slot',2),('ng',16),('index',11))
@@ -18,12 +18,15 @@ REJECTION_CODES={'SV line cap': 'REJECT_SV_LINE_CAP', 'SV source changed during 
 PHASES=('START','INPUT_BINDING','EXTRACT_MODULES','NORMALIZE_MODULE','PROJECT_MODULE','COMPARE_MODULE','RECHECK_INPUTS','PROJECT_PROOF','WRITE_PROOF')
 PROGRESS_KEYS=('line_number','lexical_byte_offset','normalized_module_bytes','projected_normalized_bytes','removed_ports','removed_assignments','removed_sourceinfo_comments','normalized_module_sha256','projected_normalized_sha256')
 PROGRESS_CAPS={k:(1500001 if k=='line_number'else 96*1024**2 if k=='lexical_byte_offset'else 512*1024**2 if k.endswith('bytes')else 16)for k in PROGRESS_KEYS if not k.endswith('sha256')}
+CLASSIFIER_REASONS=('BLOCK_BYTES_CAP', 'DUPLICATE_PORT', 'END_MISSING', 'EXACT_FOUR_LABELS', 'EXPRESSION_FORBIDDEN_TOKEN', 'EXPRESSION_UNBALANCED', 'INSTANCE_PREFIX', 'KEY_EXPRESSION_NOT_EXACT', 'KEY_LABEL_COUNT', 'LEXICAL_GAP', 'LIST_SUFFIX', 'NAMED_PORT_SYNTAX', 'OTHER_MODULE', 'PORT_CAP', 'START_COMMENT_NOT_SOURCEINFO', 'START_COUNT', 'START_NOT_UNCONDITIONAL', 'TOKEN_CAP')
+CLASSIFIER_COUNT_CAPS={'start_count':2,'block_bytes':2*1024**2+1,'tokens':200001,'ports':4097,'key_labels':5}
 DIAGNOSTIC={}
 def reset_diagnostic():
- DIAGNOSTIC.clear();DIAGNOSTIC.update(phase='START',module=None,kind=None,saturated_fields=[],full_sv={'old':None,'new':None},progress={k:None for k in PROGRESS_KEYS},comparison={'old':None,'new':None,'projected_bytes_equal':None,'projected_sha256_equal':None})
+ DIAGNOSTIC.clear();DIAGNOSTIC.update(phase='START',module=None,kind=None,classifier=None,offending_token_category=None,saturated_fields=[],full_sv={'old':None,'new':None},progress={k:None for k in PROGRESS_KEYS},comparison={'old':None,'new':None,'projected_bytes_equal':None,'projected_sha256_equal':None})
 def diagnostic_context(phase,module=None,kind=None):
  comparison=DIAGNOSTIC['comparison']if module is not None and DIAGNOSTIC.get('module')==module else {'old':None,'new':None,'projected_bytes_equal':None,'projected_sha256_equal':None}
- DIAGNOSTIC.update(phase=phase,module=module,kind=kind,saturated_fields=[],progress={k:None for k in PROGRESS_KEYS},comparison=comparison)
+ classifier=DIAGNOSTIC['classifier']if module is not None and DIAGNOSTIC.get('module')==module and (kind is None or kind==DIAGNOSTIC.get('kind'))else None
+ DIAGNOSTIC.update(phase=phase,module=module,kind=kind,classifier=classifier,offending_token_category=None,saturated_fields=[],progress={k:None for k in PROGRESS_KEYS},comparison=comparison)
 def diagnostic_progress(**values):
  saturated=set(DIAGNOSTIC['saturated_fields'])
  for k,v in values.items():
@@ -41,6 +44,17 @@ def diagnostic_comparison(rows):
   result['projected_bytes_equal']=result['old']['projected_normalized_bytes']==result['new']['projected_normalized_bytes']
   result['projected_sha256_equal']=result['old']['projected_normalized_sha256']==result['new']['projected_normalized_sha256']
  DIAGNOSTIC['comparison']=result
+def diagnostic_classifier(reason,counts):
+ # Diagnostic capture must never introduce a new execution acceptance condition.
+ valid=type(reason)is str and reason in CLASSIFIER_REASONS and type(counts)is dict and set(counts)==set(CLASSIFIER_COUNT_CAPS)and all(type(v)is int and v>=0 for v in counts.values())
+ if not valid:
+  DIAGNOSTIC['classifier']=dict(reason_code='INVALID_CLASSIFIER_DIAGNOSTIC',source_sha256=INSTANCE_LABELS_SHA,module=DIAGNOSTIC['module'],kind=DIAGNOSTIC['kind'],counts={k:None for k in CLASSIFIER_COUNT_CAPS},saturated_fields=[])
+  return
+ observed={};saturated=[]
+ for key,cap in CLASSIFIER_COUNT_CAPS.items():
+  observed[key]=min(counts[key],cap)
+  if counts[key]>cap:saturated.append(key)
+ DIAGNOSTIC['classifier']=dict(reason_code=reason,source_sha256=INSTANCE_LABELS_SHA,module=DIAGNOSTIC['module'],kind=DIAGNOSTIC['kind'],counts=observed,saturated_fields=sorted(saturated))
 class ProjectionRejected(ValueError):
  def __init__(self,code):self.reason_code=code;super().__init__(code)
 reset_diagnostic()
@@ -128,7 +142,7 @@ def projected_hash(data,module,new,sourceinfo=None,sink=None):
  helper=P(__file__).with_name('instance_port_labels.py');helper_bytes=helper.read_bytes();need(hashlib.sha256(helper_bytes).hexdigest()==INSTANCE_LABELS_SHA,'reviewed exact instance label classifier')
  import types
  classifier=types.ModuleType('reviewed_instance_port_labels');exec(compile(helper_bytes,str(helper),'exec'),classifier.__dict__)
- label_offsets=classifier.label_offsets(data,module,allowed_starts,LEX)
+ label_offsets=classifier.label_offsets(data,module,allowed_starts,LEX,sourceinfo,diagnostic_classifier)
  key_occurrences=[location for location in key_occurrences if location not in label_offsets]
  offset=0;removed_ranges=[];digest=hashlib.sha256();projected_bytes=0
  def emit(line):
@@ -180,7 +194,12 @@ def projected_hash(data,module,new,sourceinfo=None,sink=None):
  need(not in_header,'complete emitter header')
  need(set(removed_ports)==(set(ports)if new else set()),'exact complete added key ports');need(set(removed_assigns)==(set(assigns)if new else set()),'exact complete direct key assigns')
  need(data.startswith(b'module '+module.encode()+b'(')and re.search(rb'\nendmodule[ \t\r\n]*\Z',data)is not None,'complete same named module')
- for location in key_occurrences:need(any(lo<=location<hi for lo,hi in removed_ranges),'new key remains in unprojected logic/port')
+ for location in key_occurrences:
+  if not any(lo<=location<hi for lo,hi in removed_ranges):
+   diagnostic_progress(lexical_byte_offset=location,line_number=data.count(b'\n',0,location)+1)
+   # Original LEX proved an identifier in the fixed key set, NOT its signal/label role.
+   DIAGNOSTIC['offending_token_category']='UNEXEMPTED_KEY_IDENTIFIER'
+  need(any(lo<=location<hi for lo,hi in removed_ranges),'new key remains in unprojected logic/port')
  diagnostic_progress(projected_normalized_sha256=digest.hexdigest())
  return dict(projected_normalized_sha256=digest.hexdigest(),projected_normalized_bytes=projected_bytes,removed_ports=sorted(removed_ports),removed_sourceinfo_comments=removed_info,removed_assignments=[dict(destination=k,source=assigns[k])for k in sorted(removed_assigns)])
 
@@ -310,19 +329,31 @@ EXCEPTION_CODES={'OSError':'IO_FAILURE','ValueError':'UNCLASSIFIED_VALUE_ERROR',
 def failure_record(error):
  if isinstance(error,ProjectionRejected):code=error.reason_code
  else:code=next((EXCEPTION_CODES[t.__name__]for t in (OSError,KeyError,TypeError,ImportError,MemoryError,ValueError)if isinstance(error,t)),'UNCLASSIFIED_CONTROLLED_FAILURE')
- return project_failure(dict(schema='EXACT_TWO_MODULE_KEY_PROJECTION_FAILED_V1',status='FAILED_PROJECTION_NOT_ACCEPTED',scope='DIAGNOSTIC_ONLY_NO_EQUIVALENCE_OR_NUMERICAL_PASS',reason_code=code,phase=DIAGNOSTIC['phase'],module=DIAGNOSTIC['module'],kind=DIAGNOSTIC['kind'],full_sv=DIAGNOSTIC['full_sv'],progress=DIAGNOSTIC['progress'],saturated_fields=DIAGNOSTIC['saturated_fields'],comparison=DIAGNOSTIC['comparison'],normalized_module_matches_expected=(None if DIAGNOSTIC['progress']['normalized_module_sha256']is None or DIAGNOSTIC['module']not in MODULES or DIAGNOSTIC['kind']not in ('old','new')else DIAGNOSTIC['progress']['normalized_module_sha256']==MOD_NORMALIZED[DIAGNOSTIC['kind']][DIAGNOSTIC['module']]),scanner_sha256=SCANNER,projection_source_sha256=sha(__file__),numerical_pass=False,sv_repin_authorized=False,remaining_bytes_compared=False))
+ return project_failure(dict(schema='EXACT_TWO_MODULE_KEY_PROJECTION_FAILED_V1',status='FAILED_PROJECTION_NOT_ACCEPTED',scope='DIAGNOSTIC_ONLY_NO_EQUIVALENCE_OR_NUMERICAL_PASS',reason_code=code,phase=DIAGNOSTIC['phase'],module=DIAGNOSTIC['module'],kind=DIAGNOSTIC['kind'],classifier=DIAGNOSTIC['classifier'],offending_token_category=DIAGNOSTIC['offending_token_category'],full_sv=DIAGNOSTIC['full_sv'],progress=DIAGNOSTIC['progress'],saturated_fields=DIAGNOSTIC['saturated_fields'],comparison=DIAGNOSTIC['comparison'],normalized_module_matches_expected=(None if DIAGNOSTIC['progress']['normalized_module_sha256']is None or DIAGNOSTIC['module']not in MODULES or DIAGNOSTIC['kind']not in ('old','new')else DIAGNOSTIC['progress']['normalized_module_sha256']==MOD_NORMALIZED[DIAGNOSTIC['kind']][DIAGNOSTIC['module']]),scanner_sha256=SCANNER,projection_source_sha256=sha(__file__),numerical_pass=False,sv_repin_authorized=False,remaining_bytes_compared=False))
 def project_failure(r):
  """Exact diagnostic whitelist; no exception text, paths or raw source slots."""
  def check(v,label):
   if not v:raise ValueError('invalid failure '+label)
  def keys(v,w):check(type(v)is dict and set(v)==set(w.split()),'fields')
  def h(v):return type(v)is str and re.fullmatch('[0-9a-f]{64}',v)is not None
- keys(r,'schema status scope reason_code phase module kind full_sv progress saturated_fields comparison normalized_module_matches_expected scanner_sha256 projection_source_sha256 numerical_pass sv_repin_authorized remaining_bytes_compared')
+ keys(r,'schema status scope reason_code phase module kind classifier offending_token_category full_sv progress saturated_fields comparison normalized_module_matches_expected scanner_sha256 projection_source_sha256 numerical_pass sv_repin_authorized remaining_bytes_compared')
  check(r['schema']=='EXACT_TWO_MODULE_KEY_PROJECTION_FAILED_V1'and r['status']=='FAILED_PROJECTION_NOT_ACCEPTED'and r['scope']=='DIAGNOSTIC_ONLY_NO_EQUIVALENCE_OR_NUMERICAL_PASS','scope')
  check(r['reason_code']in set(REJECTION_CODES.values())|set(EXCEPTION_CODES.values())|{'UNCLASSIFIED_CONTRACT_REJECTION','UNCLASSIFIED_CONTROLLED_FAILURE'},'reason')
  check(r['phase']in PHASES and r['module']in (None,*MODULES) and r['kind']in (None,'old','new'),'context')
  check(r['scanner_sha256']==SCANNER and r['projection_source_sha256']==sha(__file__),'algorithm')
  for k in ('numerical_pass','sv_repin_authorized','remaining_bytes_compared'):check(r[k]is False,'flags')
+ check(r['offending_token_category']in (None,'UNEXEMPTED_KEY_IDENTIFIER'),'offending token category')
+ if r['offending_token_category']is not None:check(r['phase']=='PROJECT_MODULE'and r['reason_code']==REJECTION_CODES['new key remains in unprojected logic/port']and r['progress']['lexical_byte_offset']is not None and r['progress']['line_number']is not None,'offending category bound rejection/location')
+ classifier=r['classifier']
+ if classifier is not None:
+  keys(classifier,'reason_code source_sha256 module kind counts saturated_fields')
+  check(classifier['reason_code']in (*CLASSIFIER_REASONS,'INVALID_CLASSIFIER_DIAGNOSTIC')and classifier['source_sha256']==INSTANCE_LABELS_SHA,'classifier source/reason')
+  check(classifier['module']in MODULES and classifier['kind']in ('old','new'),'classifier context')
+  keys(classifier['counts'],' '.join(CLASSIFIER_COUNT_CAPS))
+  if classifier['reason_code']=='INVALID_CLASSIFIER_DIAGNOSTIC':check(all(v is None for v in classifier['counts'].values())and classifier['saturated_fields']==[],'invalid classifier has no raw payload')
+  else:
+   for key,cap in CLASSIFIER_COUNT_CAPS.items():check(type(classifier['counts'][key])is int and 0<=classifier['counts'][key]<=cap,'classifier count cap')
+   check(type(classifier['saturated_fields'])is list and all(type(k)is str for k in classifier['saturated_fields'])and classifier['saturated_fields']==sorted(set(classifier['saturated_fields']))and all(k in CLASSIFIER_COUNT_CAPS and classifier['counts'][k]==CLASSIFIER_COUNT_CAPS[k]for k in classifier['saturated_fields']),'classifier saturation')
  keys(r['full_sv'],'old new')
  for kind,row in r['full_sv'].items():
   if row is None:continue

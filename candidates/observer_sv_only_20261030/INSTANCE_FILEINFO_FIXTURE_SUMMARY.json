@@ -1,0 +1,133 @@
+{
+  "schema": "OFFICIAL_INSTANCE_FILEINFO_FIXTURE_V1",
+  "scope": "OFFICIAL_SMALL_AST_INSTANCE_FILEINFO_REPRODUCTION_ONLY_NOT_ACTUAL_TWO_MODULE_SV_PROOF",
+  "fixture_source_sha256": "943836a89d46a419217463a4b65d8e57443e9678692e0b257fef5295447c6510",
+  "old_projection_source_sha256": "484eab620e861fc4eb7e4d4e9fa9991c877498fa1d4f054c490b42183282f5ec",
+  "new_projection_source_sha256": "52cc6957f9d8492dc6b039ede139041c0f9098d4f6ee689b12f8dd873abb5318",
+  "label_helper_source_sha256": "52253066ca63f992ccb6099dde0f7950bdbf1bcab0b1f3771b9482f0f9ecd55c",
+  "results": {
+    "Public21QkvReductionRouter": {
+      "old": {
+        "official_emitted_file_sha256": "5da03d7e7818f06dc4dba6e8cb3bab8feff530dd2e90693e2f40fab320cabaa2",
+        "normalized_module_sha256": "5da03d7e7818f06dc4dba6e8cb3bab8feff530dd2e90693e2f40fab320cabaa2",
+        "old_projector_status": "ACCEPTED_SYNTHETIC",
+        "new_projector": {
+          "projected_normalized_sha256": "5da03d7e7818f06dc4dba6e8cb3bab8feff530dd2e90693e2f40fab320cabaa2",
+          "projected_normalized_bytes": 144,
+          "removed_ports": [],
+          "removed_sourceinfo_comments": 0,
+          "removed_assignments": []
+        },
+        "remaining_bytes_sha256": "5da03d7e7818f06dc4dba6e8cb3bab8feff530dd2e90693e2f40fab320cabaa2"
+      },
+      "new": {
+        "official_emitted_file_sha256": "fc85d7148f3b8e13f6cecc55c7745695a37ab1f3cddb6a569713f6bd1666f8b8",
+        "normalized_module_sha256": "2c5414d4797e588f8b115dac91d5676e0f22d8c4d69d28ac57f041e049bffa36",
+        "old_projector_status": "ACCEPTED_SYNTHETIC",
+        "new_projector": {
+          "projected_normalized_sha256": "5da03d7e7818f06dc4dba6e8cb3bab8feff530dd2e90693e2f40fab320cabaa2",
+          "projected_normalized_bytes": 144,
+          "removed_ports": [
+            "io_residentTiles_response_bits_key_identity",
+            "io_residentTiles_response_bits_key_index",
+            "io_residentTiles_response_bits_key_ng",
+            "io_residentTiles_response_bits_key_slot",
+            "io_tiles_response_bits_key_identity",
+            "io_tiles_response_bits_key_index",
+            "io_tiles_response_bits_key_ng",
+            "io_tiles_response_bits_key_slot"
+          ],
+          "removed_sourceinfo_comments": 12,
+          "removed_assignments": [
+            {
+              "destination": "io_residentTiles_response_bits_key_identity",
+              "source": "io_tiles_response_bits_key_identity"
+            },
+            {
+              "destination": "io_residentTiles_response_bits_key_index",
+              "source": "io_tiles_response_bits_key_index"
+            },
+            {
+              "destination": "io_residentTiles_response_bits_key_ng",
+              "source": "io_tiles_response_bits_key_ng"
+            },
+            {
+              "destination": "io_residentTiles_response_bits_key_slot",
+              "source": "io_tiles_response_bits_key_slot"
+            }
+          ]
+        },
+        "remaining_bytes_sha256": "5da03d7e7818f06dc4dba6e8cb3bab8feff530dd2e90693e2f40fab320cabaa2"
+      }
+    },
+    "TransposedDenseDownOwner": {
+      "old": {
+        "official_emitted_file_sha256": "06c6f7d5d5c517fa385cd96fddaa213c49ce614a9422f3297d8a65dd661e9058",
+        "normalized_module_sha256": "6a0d616b51e9216e8da954814b212c546f65a42a883d3c173ee8757eddc39ba6",
+        "old_projector_status": "REJECTED_SYNTHETIC",
+        "old_rejection": "REJECT_NEW_KEY_REMAINS_IN_UNPROJECTED_LOGIC_PORT",
+        "new_projector": {
+          "projected_normalized_sha256": "6a0d616b51e9216e8da954814b212c546f65a42a883d3c173ee8757eddc39ba6",
+          "projected_normalized_bytes": 1282,
+          "removed_ports": [],
+          "removed_sourceinfo_comments": 0,
+          "removed_assignments": []
+        },
+        "remaining_bytes_sha256": "6a0d616b51e9216e8da954814b212c546f65a42a883d3c173ee8757eddc39ba6"
+      },
+      "new": {
+        "official_emitted_file_sha256": "b4aa8cd1aa753c88db7c6a3e877c197458580602a692d6d812fdf8d312d243cf",
+        "normalized_module_sha256": "2af25d9133eb843435b6e27d14a2ed05b6936326da7555031a7ecf6df10784e1",
+        "old_projector_status": "REJECTED_SYNTHETIC",
+        "old_rejection": "REJECT_NEW_KEY_REMAINS_IN_UNPROJECTED_LOGIC_PORT",
+        "new_projector": {
+          "projected_normalized_sha256": "6a0d616b51e9216e8da954814b212c546f65a42a883d3c173ee8757eddc39ba6",
+          "projected_normalized_bytes": 1282,
+          "removed_ports": [
+            "io_tiles_response_bits_key_identity",
+            "io_tiles_response_bits_key_index",
+            "io_tiles_response_bits_key_ng",
+            "io_tiles_response_bits_key_slot"
+          ],
+          "removed_sourceinfo_comments": 8,
+          "removed_assignments": [
+            {
+              "destination": "io_tiles_response_bits_key_identity",
+              "source": "banks_io_tiles_response_bits_key_identity"
+            },
+            {
+              "destination": "io_tiles_response_bits_key_index",
+              "source": "banks_io_tiles_response_bits_key_index"
+            },
+            {
+              "destination": "io_tiles_response_bits_key_ng",
+              "source": "banks_io_tiles_response_bits_key_ng"
+            },
+            {
+              "destination": "io_tiles_response_bits_key_slot",
+              "source": "banks_io_tiles_response_bits_key_slot"
+            }
+          ]
+        },
+        "remaining_bytes_sha256": "6a0d616b51e9216e8da954814b212c546f65a42a883d3c173ee8757eddc39ba6"
+      }
+    }
+  },
+  "numerical_pass": false,
+  "sv_repin_authorized": false,
+  "official_fixture_stages": [
+    {
+      "native_exit": 0,
+      "elapsed_seconds": 6.706056722003268,
+      "observed_peak_rss": 228806656,
+      "errors": []
+    },
+    {
+      "native_exit": 0,
+      "elapsed_seconds": 1.917118829995161,
+      "observed_peak_rss": 113188864,
+      "errors": []
+    }
+  ],
+  "remaining_normalized_bytes_directly_compared": true
+}

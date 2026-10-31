@@ -1,0 +1,114 @@
+{
+  "final_rtl_pass": false,
+  "full_m128_numeric_pass": false,
+  "full_sv": {
+    "new": {
+      "bytes": 221499536,
+      "metadata_sha256": "c6347d29e65c9d95aa233547da67f507bd52d3704c89473f6143464decb8917a",
+      "normalized_sha256": "ec70f91181b0422ca7cf2bc845a2a1f04c9d862f4f27d265c5a064a969058d72",
+      "raw_sha256": "9a8c64fd7459dd1abe741764b03cfdca3907d5ceb183a0fcdcea2f1b6c012893",
+      "scan_receipt_sha256": "6595d5f67a7dd79597709077f577a882725d2bf2f25cb18d3c9355dff119e5a8"
+    },
+    "old": {
+      "bytes": 222202215,
+      "metadata_sha256": "2868698302a8e64f3c65afb4c4c816a140489e6885a2b05a6c9208ada9a2905a",
+      "normalized_sha256": "6555ede34ba2980a6ebfddb13325ffb14734063d3253fdadd493bfcb4bf67bb5",
+      "raw_sha256": "c8e6b1c8faf26831d46daea019b70347c1ae441621aa6de3ed69c14b38fd2f53",
+      "scan_receipt_sha256": "cfa5038c670b9c46a9401e17ec0de3867abb95b77709aeb0f29c85bda08e7228"
+    }
+  },
+  "modules": {
+    "Public21QkvReductionRouter": {
+      "new": {
+        "normalized_module_sha256": "4a11a5c08ef38434ecf827120e6627b96f9537049ed0ca7eaaef24a7954b973e",
+        "projected_normalized_bytes": 179237,
+        "projected_normalized_sha256": "1e87261c949e8fe372f64ec54886aa597479cb1e6b23ab6c4311242c6b71271d",
+        "removed_assignments": [
+          {
+            "destination": "io_residentTiles_response_bits_key_identity",
+            "source": "io_tiles_response_bits_key_identity"
+          },
+          {
+            "destination": "io_residentTiles_response_bits_key_index",
+            "source": "io_tiles_response_bits_key_index"
+          },
+          {
+            "destination": "io_residentTiles_response_bits_key_ng",
+            "source": "io_tiles_response_bits_key_ng"
+          },
+          {
+            "destination": "io_residentTiles_response_bits_key_slot",
+            "source": "io_tiles_response_bits_key_slot"
+          }
+        ],
+        "removed_ports": [
+          "io_residentTiles_response_bits_key_identity",
+          "io_residentTiles_response_bits_key_index",
+          "io_residentTiles_response_bits_key_ng",
+          "io_residentTiles_response_bits_key_slot",
+          "io_tiles_response_bits_key_identity",
+          "io_tiles_response_bits_key_index",
+          "io_tiles_response_bits_key_ng",
+          "io_tiles_response_bits_key_slot"
+        ],
+        "removed_sourceinfo_comments": 12
+      },
+      "old": {
+        "normalized_module_sha256": "1e87261c949e8fe372f64ec54886aa597479cb1e6b23ab6c4311242c6b71271d",
+        "projected_normalized_bytes": 179237,
+        "projected_normalized_sha256": "1e87261c949e8fe372f64ec54886aa597479cb1e6b23ab6c4311242c6b71271d",
+        "removed_assignments": [],
+        "removed_ports": [],
+        "removed_sourceinfo_comments": 0
+      }
+    },
+    "TransposedDenseDownOwner": {
+      "new": {
+        "normalized_module_sha256": "d26f8e11bcd4e663774f921d38e22d442faf176657067401001d0fd7cd5f8a6f",
+        "projected_normalized_bytes": 44477654,
+        "projected_normalized_sha256": "e07f04f309da1a58a528082ab327d0f361dd117eb8fbc4bc878b4b15faa9b78f",
+        "removed_assignments": [
+          {
+            "destination": "io_tiles_response_bits_key_identity",
+            "source": "banks_io_tiles_response_bits_key_identity"
+          },
+          {
+            "destination": "io_tiles_response_bits_key_index",
+            "source": "banks_io_tiles_response_bits_key_index"
+          },
+          {
+            "destination": "io_tiles_response_bits_key_ng",
+            "source": "banks_io_tiles_response_bits_key_ng"
+          },
+          {
+            "destination": "io_tiles_response_bits_key_slot",
+            "source": "banks_io_tiles_response_bits_key_slot"
+          }
+        ],
+        "removed_ports": [
+          "io_tiles_response_bits_key_identity",
+          "io_tiles_response_bits_key_index",
+          "io_tiles_response_bits_key_ng",
+          "io_tiles_response_bits_key_slot"
+        ],
+        "removed_sourceinfo_comments": 8
+      },
+      "old": {
+        "normalized_module_sha256": "e07f04f309da1a58a528082ab327d0f361dd117eb8fbc4bc878b4b15faa9b78f",
+        "projected_normalized_bytes": 44477654,
+        "projected_normalized_sha256": "e07f04f309da1a58a528082ab327d0f361dd117eb8fbc4bc878b4b15faa9b78f",
+        "removed_assignments": [],
+        "removed_ports": [],
+        "removed_sourceinfo_comments": 0
+      }
+    }
+  },
+  "numerical_pass": false,
+  "projection_source_sha256": "52cc6957f9d8492dc6b039ede139041c0f9098d4f6ee689b12f8dd873abb5318",
+  "remaining_bytes_compared": true,
+  "scanner_sha256": "b49c75780d2bfb295d3e90df6d478475f42c3129dba73c850b4d564e4114965b",
+  "schema": "EXACT_TWO_MODULE_KEY_PROJECTION_V1",
+  "scope": "TWO_SPECIFIC_MODULES_NOT_GENERAL_SV_EQUIVALENCE_OR_NUMERICAL_PASS",
+  "status": "PASS_ONLY_61BIT_OBSERVATION_PORT_FORWARDING_NORMALIZED_BYTE_PROJECTION",
+  "sv_repin_authorized": false
+}

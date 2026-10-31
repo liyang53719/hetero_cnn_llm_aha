@@ -1,0 +1,59 @@
+{
+  "status": "PASS_ACTUAL_TWO_MODULE_61BIT_NORMALIZED_BYTE_PROJECTION_ONLY",
+  "artifact_identity": {
+    "run_id": 41159843264,
+    "artifact_name": "hetero-observer-sv-only-summary-41159843264",
+    "source_commit": "c312f2ee0a3ccbf23d898f0d8fe9142dedab8cd8",
+    "launch_commit": "b845ae540e073130b5565bb6f71b0f534f59bb72",
+    "launch_manifest_path": "ci_launch/observer_fixed4096_sv_only_difference_20261031_fileinfo_once.json",
+    "launch_manifest_blob_sha": "d82231341c1ae6d27edbfbd41fd0e8aa92d80482"
+  },
+  "zip_sha256": "950e3b29ff109bbd1738782c07cda817ac4a4b6b89d67e2b9f476b10d0582a64",
+  "summary_sha256": "dfacbbe2c6bfdccefca47cf53a61eb3a1b2eac11fb8947850b2d5eee5ed5a677",
+  "proof_sha256": "f88769ed00ab2dd052752e6ade9cf67f37f7c6f9d4ede64723e5441ca609835c",
+  "source_pins_sha256": "a81ece66d5e70cdcbcc83ee138090f2422b67d79c945cf3b681dd48e77e537dd",
+  "source_pin_count": 676,
+  "strict_stages": 15,
+  "full_sv": {
+    "new": {
+      "bytes": 221499536,
+      "metadata_sha256": "c6347d29e65c9d95aa233547da67f507bd52d3704c89473f6143464decb8917a",
+      "normalized_sha256": "ec70f91181b0422ca7cf2bc845a2a1f04c9d862f4f27d265c5a064a969058d72",
+      "raw_sha256": "9a8c64fd7459dd1abe741764b03cfdca3907d5ceb183a0fcdcea2f1b6c012893",
+      "scan_receipt_sha256": "6595d5f67a7dd79597709077f577a882725d2bf2f25cb18d3c9355dff119e5a8"
+    },
+    "old": {
+      "bytes": 222202215,
+      "metadata_sha256": "2868698302a8e64f3c65afb4c4c816a140489e6885a2b05a6c9208ada9a2905a",
+      "normalized_sha256": "6555ede34ba2980a6ebfddb13325ffb14734063d3253fdadd493bfcb4bf67bb5",
+      "raw_sha256": "c8e6b1c8faf26831d46daea019b70347c1ae441621aa6de3ed69c14b38fd2f53",
+      "scan_receipt_sha256": "cfa5038c670b9c46a9401e17ec0de3867abb95b77709aeb0f29c85bda08e7228"
+    }
+  },
+  "canonical": {
+    "new": "00897fd49e82036e04195ef6fe2a671e0a3fd948d968de3e47c4dfa7388f6b5c",
+    "old": "90464ff45917c1b853c7d1b36e67dd5e43b5503b7fa0583704ee615c08919533"
+  },
+  "module_order_unchanged": true,
+  "normalized_unchanged_modules": 82,
+  "expected_observer_changes": [
+    "FfnResidentCoordinator",
+    "FfnTileSiluBridge",
+    "HostBlockCommandsV4",
+    "HostBlockTopV4",
+    "QwenOwnerKernel",
+    "UnifiedMoeRouterNumericalOwnerV2",
+    "UnifiedMoeRouterPipelineBindingV2",
+    "UnifiedMoeRuntimeExpertLoopV4"
+  ],
+  "additional_two_modules_proved": [
+    "Public21QkvReductionRouter",
+    "TransposedDenseDownOwner"
+  ],
+  "remaining_bytes_compared": true,
+  "scope": "Exact actual whole hashes bind prior 92-module metadata; only additional two modules have strict deletion proof, eight observer changes retain separately audited source scope, not general equivalence.",
+  "production_gate_updated": false,
+  "sv_repin_automatically_authorized": false,
+  "full_m128_pass_count": 0,
+  "final_rtl_replay": false
+}

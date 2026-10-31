@@ -1,5 +1,11 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-31 02:48 UTC：真实两模块61-bit限定SV差异证明 PASS（非数值）
+- 实际run41159843264成功，source c312f2ee、launch b845ae54；两原样安全回执及独审见 candidates/observer_sv_only_20261030/evidence/run41159843264/。15阶段严格native0、errors0、cleanup/EOF/gzip均真。
+- 旧/新全SV normalized6555ede3…/ec70f911…与既有身份相符。Router仅8端口/4直接assign、Dense仅4端口/4直接assign新增四字段61-bit；删除规定增量后实际剩余normalized bytes分别179237/44477654双流逐字节相等。92模块顺序不变，82未变+8既定observer修改+2本次限定证明，无额外模块变化。
+- 这是完整实际SV窄差异证明，不再仅toy/源码推断；仍不声称一般逻辑等价、五块数值或RTL回放通过。此前三次失败历史保留，不倒改为PASS。生产门接入需独立复核，本证据不自动re-pin。
+- 原180秒scanner/300秒projection及3小时总cap未增加；未跑Verilator/GCC/archive/link/数值。五块完整128-token数值及最终RTL仍0/5，接下来回到同一统一4096硬件的五块主线。
+
 ## 2026-10-31 02:18 UTC：官方实例FileInfo布局修复（TEMP / SOURCE-ONLY）
 - 实际run41156443649终态FAIL，前14阶段严格完成，projection75.173秒/native1。已取得真实有限拒绝：old / TransposedDenseDownOwner / PROJECT_MODULE / REJECT_NEW_KEY_REMAINS_IN_UNPROJECTED_LOGIC_PORT；旧Dense归一化hash e07f04…与两边whole/canonical本次真实绑定相符。471600行/44477644偏移是旧诊断EOF残留，不可当真正拒绝位置。
 - 官方同布局小AST仅把WDefInstance NoInfo改为FileInfo，实际emitter在banks实例首行产生SourceInfo尾注释，使旧START正则不匹配，复现old/new Dense误拒。此是可复现解析缺陷，不是声称已读取本次真实SV实例行或确证唯一根因。279源端口上界小于4096，不扩cap。

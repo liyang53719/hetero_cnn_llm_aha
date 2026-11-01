@@ -44,7 +44,8 @@ class ContractTests(unittest.TestCase):
   self.assertIn('typedPorts==preconditions("typed_ports")',(D/'ModelCandidateHostSimulationEmitterV1.scala').read_text())
  def test_transform_observation_is_not_acceptance(self):
   s=(D/'ModelCandidateTransformGateV1.scala').read_text()
-  self.assertIn('PortableHostDenseAccMemoryLowering(intermediate,cp)',s)
+  self.assertIn('CandidateDenseAccMemoryLoweringV2(intermediate,cp)',s)
+  self.assertNotIn('PortableHostDenseAccMemoryLowering(intermediate,cp)',s)
   self.assertIn('"post_build_structure_accepted"->false',s)
   self.assertNotIn('0a41c578',s)
   self.assertIn('eb44e4267684bbb9cf265e88ea89a6910dedd67b2bd2896bb6367928d4ecf831',s)
@@ -58,5 +59,6 @@ class ContractTests(unittest.TestCase):
  def test_transform_functions_unchanged(self):
   old=(BASE/'ci_frontend_pipeline_r2_20261029/PortableHostHighSimulationEmitter.scala').read_text();new=(D/'ModelCandidateHostSimulationEmitterV1.scala').read_text()
   for start,end in [('  private def postHigh(', '  private def initializationGate('),('  private def initializationGate(', '  /** Official VerilogPrep'),('  private def finalBindings(', '  private def bitWidth('),('  private def verifyCanonicalLow(', '  private def retain(')]:
-   self.assertEqual(old[old.index(start):old.index(end)],new[new.index(start):new.index(end)])
+   expected=old[old.index(start):old.index(end)].replace('PortableHostDenseAccMemoryLowering.check(c)','CandidateDenseAccMemoryLoweringV2.check(c)')
+   self.assertEqual(expected,new[new.index(start):new.index(end)])
 if __name__=='__main__':unittest.main()

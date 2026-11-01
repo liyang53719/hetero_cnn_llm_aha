@@ -46,11 +46,11 @@ object ModelCandidateTransformGateV1 {
     ModelCandidateDiagnosticV1.phase("FIFO_LOCAL_SHAPE")
     val intermediate=PortableHostMatrixResultFifoMemoryLowering(input,fp)
     ModelCandidateDiagnosticV1.phase("DENSE_ACC_LOCAL_SHAPE")
-    val result=PortableHostDenseAccMemoryLowering(intermediate,cp)
-    require(result.modules.size==3&&result.modules.last.eq(sentinel))
-    require(result.modules(0).info==core.info&&result.modules(1).info==fifo.info,"fresh Info preserved")
-    require(result.modules(0).ports==core.ports&&result.modules(1).ports==fifo.ports,"all public ports preserved")
-    PortableHostDenseAccMemoryLowering.check(result)
+    val result=CandidateDenseAccMemoryLoweringV2(intermediate,cp)
+    CandidateDenseAccMemoryLoweringV2.checked("GATE_MODULE_COUNT",result.modules.size==3&&result.modules.last.eq(sentinel))
+    CandidateDenseAccMemoryLoweringV2.checked("GATE_INFO",result.modules(0).info==core.info&&result.modules(1).info==fifo.info,"fresh Info preserved")
+    CandidateDenseAccMemoryLoweringV2.checked("GATE_PORTS",result.modules(0).ports==core.ports&&result.modules(1).ports==fifo.ports,"all public ports preserved")
+    CandidateDenseAccMemoryLoweringV2.check(result)
     val summary=ujson.Obj("schema"->"MODEL_CANDIDATE_STORAGE_TRANSFORM_PRECONDITIONS_V1",
       "scope"->"CANDIDATE_GENERATION_PRECONDITIONS_ONLY_UNREVIEWED",
       "observed_high_sha256"->ModelCandidateHighDescriptorV1.sha(raw),"observed_canonical_sha256"->a(2),

@@ -62,7 +62,7 @@ object ModelCandidateDiagnosticV1 {
   private val Reasons=Set("NONE","INPUT_BOUNDS_OR_PIN","HIGH_ROUNDTRIP","ANNOTATION_ROUNDTRIP","ANNOTATION_CLASS_TARGET",
     "CANONICAL_IDENTITY","FIXED_MODULE_HASH","FIXED_PROVIDER_BINDINGS","BANK_SUBTREE_HASH","FIFO_LOCAL_SHAPE",
     "DENSE_ACC_LOCAL_SHAPE","LOW_LOWERING","LOW_SERIALIZATION","FINAL_CONNECTORS","TOP_PORT_ABI","SV_EMISSION","METADATA_BOUNDS","INTERNAL_UNCLASSIFIED")
-  private val NumberKeys=Set("high_bytes","annotation_bytes","module_count","annotation_count","target_dir_count","low_port_count","reachable_instance_count","fixed_module_index","bank_subtree_module_index")
+  private val NumberKeys=Set("high_bytes","annotation_bytes","module_count","annotation_count","target_dir_count","low_port_count","reachable_instance_count","fixed_module_index","bank_subtree_module_index","dense_bulk_writes","dense_zero_tiles","dense_zero_rows","dense_zero_elements")
   private val HashKeys=Set("high_sha256","annotations_sha256","canonical_sha256","failing_module_sha256")
   private var current="INTERNAL_UNCLASSIFIED"
   private val actual=ujson.Obj()
@@ -79,6 +79,17 @@ object ModelCandidateDiagnosticV1 {
     current="INTERNAL_UNCLASSIFIED";actual.obj.clear()
     try {body;record(stage,"OBSERVED_COMPLETE_UNREVIEWED","NONE")}
     catch {case scala.util.control.NonFatal(e)=>
+      if(current=="DENSE_ACC_LOCAL_SHAPE" || e.isInstanceOf[heteronpu.continuous.model.CandidateDenseAccMemoryLoweringV2.DenseShapeRejected]){
+        current="DENSE_ACC_LOCAL_SHAPE"
+        import heteronpu.continuous.model.CandidateDenseAccMemoryLoweringV2
+        val code=e match {
+          case d:CandidateDenseAccMemoryLoweringV2.DenseShapeRejected=>
+            d.counts.foreach{case(k,v)=>number(k,v)};d.code
+          case _=>"INTERNAL_UNCLASSIFIED"
+        }
+        if(CandidateDenseAccMemoryLoweringV2.PredicateCodes(code))actual("dense_predicate_code")=ujson.Str(code)
+        else actual("dense_predicate_code")=ujson.Str("INTERNAL_UNCLASSIFIED")
+      }
       try {record(stage,"REJECTED_UNREVIEWED",current)}catch{case scala.util.control.NonFatal(_)=>()}
       throw e
     }

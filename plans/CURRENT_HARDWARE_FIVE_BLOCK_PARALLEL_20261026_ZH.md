@@ -1,3 +1,13 @@
+## 2026-11-01：Dense 仿真存储转换的严格结构匹配
+
+- 反馈修复后，实际原Top HIGH/官方LOW及candidate canonical已经通过（1058 modules / 9127 annotations）；后续变换明确报 `DENSE_ACC_LOCAL_SHAPE`，不是OOM/超时或数值失败。原stage严格收尾保留；缺少新HIGH正文，具体原require仍不冒确定。
+- Dense算术/清除/索引源码与旧版逐字节相同。候选兼容转换由硬写2个自动临时名，改为证明完整typed全零构造和所有驱动/消费/条件位置；旧生产转换不改。131072bit容量、16并行写端口、原异步读及最后连接优先级保持，不减少4096 Matrix资源。
+- 实际小Scala/官方Parser对保留的历史Core验证新旧完整AST、序列化、canonical相等；alpha改名正例、旧类拒绝及10坏例均通过。源/安全摘要在 `evidence/dense_zero_closure_20261101`。初次API与测试期望的Block扁平化错误均如实保留，未删等价断言。
+- 本次未改变159硬件源、数值公式/刺激/驱动/编译flags；新helper与finite predicate作为独立构建源码身份。新实际HIGH必须重新通过完整结构门，不能把局部历史AST结果当新硬件、完整模型或最终RTL通过。
+- 原构建7200/9000预算与七件授权范围不扩；无权重/参考/rawlog/原IR上传，当前五块完整数值仍0/5。
+
+---
+
 ## 2026-11-01：共享 Vector32 P0 租约当前故障反馈修复
 
 - 原候选构建已通过 JAR 全校验、159 源编译和 helper 编译；`original_high`（实际含官方 LOW 检查）native1、资源监控无错误且严格收尾。远端子异常当时未导出，不臆称已经拿到其原因。

@@ -1,0 +1,114 @@
+{
+  "schema": "DENSE_ZERO_CLOSURE_LOCAL_AST_EVIDENCE_V1",
+  "scope": "HISTORICAL_ACTUAL_CORE_AND_ALPHA_AST_ONLY_NOT_NEW_HIGH_NUMERICAL_OR_FINAL_RTL_PASS",
+  "production_source_pins": {
+    "ModelCandidateTransformGateV1.scala": "cde4814fe9af0e6d8985164f04dbab398e71187d87caf86635f785663bcb69d2",
+    "CandidateDenseAccMemoryLoweringV2.scala": "52d9a20bbf943bee7a8c3d6312e7ee8405b01bdbb05c8f8fd1abedd888c10465",
+    "ModelCandidateHostSimulationEmitterV1.scala": "32eccfc51343984f8545dcbde6f9ac039e7a73aab6767f8f77f8421310447814",
+    "ModelCandidateHighDescriptorV1.scala": "ddbe7e57513a57e58839faf0354bee61db79b4e54de9c474985ae2e23c4c700b"
+  },
+  "fixture_sha256": "1365758fde263c97627c0b407dd81bef4f4ed35e999a565f6cfce99145900a09",
+  "prior_core_bytes": 5839431,
+  "prior_core_text_sha256": "dc6a5e1623bf5001f0c6d38fea5dd4287b23fe7460a3dc113e4962d316817bc8",
+  "prior_core_canonical_sha256": "9e3ba17f1c0f6353480abe57ef1db050b30cb953241df943cdcd043701286ca2",
+  "production_compile_inputs_sha256": "b8883ca5548b95d381da38268bc7a2cab02a767f01600cc00287bc7c25d35a74",
+  "fixture_inputs_sha256": "1cab9fc41806c6d258fc6230b4c7af1bd5d9105a5d511c0ed10aa90fd748bac2",
+  "old_new_complete_ast_equal": true,
+  "old_new_serialization_equal": true,
+  "old_new_canonical_equal": true,
+  "output_serialize_sha256": "57c355f95e6c3846c225d7c66d1290d63b61977cd8a604fdcbc3605163ccfb8a",
+  "output_canonical_sha256": "fda892566d8310d03408a25ee5f49efa2d7ba876dd767fd7ff7f22601f5c90d3",
+  "alpha_complete_ast_equal": true,
+  "old_transform_rejects_alpha": true,
+  "official_block_mapstmt_flatten_reproduced": true,
+  "negative_cases": [
+    {
+      "case": "nonzero",
+      "reason": "ZERO_EXACT_LITERAL"
+    },
+    {
+      "case": "missing_element",
+      "reason": "ZERO_ROW_DRIVERS"
+    },
+    {
+      "case": "extra_write",
+      "reason": "BULK_SOURCES"
+    },
+    {
+      "case": "index_change",
+      "reason": "READ_INDEX_NODES"
+    },
+    {
+      "case": "moved_condition",
+      "reason": "ZERO_SAME_BLOCK"
+    },
+    {
+      "case": "extra_consumer",
+      "reason": "ZERO_REFERENCE_CLOSURE"
+    },
+    {
+      "case": "duplicate_driver",
+      "reason": "ZERO_ROW_DRIVERS"
+    },
+    {
+      "case": "wrong_row_type",
+      "reason": "ZERO_DECLARATIONS"
+    },
+    {
+      "case": "duplicate_namespace",
+      "reason": "ZERO_DECLARATIONS"
+    },
+    {
+      "case": "row_order",
+      "reason": "ZERO_TILE_DRIVERS"
+    }
+  ],
+  "receipts": [
+    {
+      "phase": "production_helper_compile",
+      "receipt_sha256": "7bbcda1c0b42e22247e966e6cd069c98c9fbe65a9b6f2a004c69a34fabeb892f",
+      "native_exit": 0,
+      "errors": [],
+      "elapsed_seconds": 17.308167192997644,
+      "observed_peak_rss": 296980480,
+      "strict_cleanup": true,
+      "pipe_eof": true,
+      "gzip_finalized": true,
+      "raw_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "phase": "final_fixture_compile",
+      "receipt_sha256": "c0cc1a43651d8736b3718d2802ad4ddc2c054cc8b347c8f295275bd314605af5",
+      "native_exit": 0,
+      "errors": [],
+      "elapsed_seconds": 8.327300784992985,
+      "observed_peak_rss": 243171328,
+      "strict_cleanup": true,
+      "pipe_eof": true,
+      "gzip_finalized": true,
+      "raw_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "phase": "final_official_parser_ast",
+      "receipt_sha256": "438b144db9954630d33432e84c4187e520e48d27f7514fc06b8061b45b23d4df",
+      "native_exit": 0,
+      "errors": [],
+      "elapsed_seconds": 8.653781897010049,
+      "observed_peak_rss": 261771264,
+      "strict_cleanup": true,
+      "pipe_eof": true,
+      "gzip_finalized": true,
+      "raw_log_sha256": "5e8011cc11359cba600496152bcdd1039b93e54eb8b345679baf214a20dce6cd"
+    }
+  ],
+  "retained_initial_failures": [
+    "1131_SCALA_BLOCK_HAS_NO_INFO",
+    "1133_ALPHA_EXPECTATION_BLOCK_FLATTEN",
+    "1135_DIAGNOSTIC_DEPTH_BOUND",
+    "1137_CONFIRMED_BLOCK_VS_DEFMEMORY"
+  ],
+  "actual_new_high_verified": false,
+  "current_remote_dense_failed_predicate_known": false,
+  "numerical_pass": false,
+  "final_rtl_accepted": false
+}

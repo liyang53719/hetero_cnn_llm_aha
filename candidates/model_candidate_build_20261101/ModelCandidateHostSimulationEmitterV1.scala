@@ -7,7 +7,7 @@ import firrtl2.ir._
 import firrtl2.annotations.UnrecognizedAnnotation
 import firrtl2.options.TargetDirAnnotation
 import firrtl2.stage.FirrtlCircuitAnnotation
-import heteronpu.continuous.model.{RetainedBackendCircuitGate, RetainedServicePhaseObserver, PortableHostMatrixResultFifoMemoryLowering, PortableHostDenseAccMemoryLowering}
+import heteronpu.continuous.model.{RetainedBackendCircuitGate, RetainedServicePhaseObserver, PortableHostMatrixResultFifoMemoryLowering, CandidateDenseAccMemoryLoweringV2}
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths, StandardOpenOption}
 import java.security.MessageDigest
@@ -62,7 +62,7 @@ object ModelCandidateHostSimulationEmitterV1 {
     require(a.forall(x=> !forbidden(x.getClass.getSimpleName.stripSuffix("$"))),"fixed default initialization only")
   }
   private def memoryGate(c:firrtl2.ir.Circuit):Unit={
-    PortableHostDenseAccMemoryLowering.check(c)
+    CandidateDenseAccMemoryLoweringV2.check(c)
     val ss=all(fifo(c).body);val memories=ss.collect{case x:firrtl2.ir.DefMemory=>x}
     val expected=(0 until 16).map(i=>s"sim_storage_row_$i"->8192).toMap+("sim_storage_metadata"->5)
     require(memories.size==17 && memories.map(_.name).distinct.size==17,"one original FIFO, exactly17 memories")
@@ -312,7 +312,7 @@ object ModelCandidateHostSimulationEmitterV1 {
       val fifoChanged=PortableHostMatrixResultFifoMemoryLowering(high.circuit,observedModules("MatrixResultFifo"))
       postHigh(high.circuit,fifoChanged,observedModules("MatrixResultFifo"))
       ModelCandidateDiagnosticV1.phase("DENSE_ACC_LOCAL_SHAPE")
-      val changed=PortableHostDenseAccMemoryLowering(fifoChanged,observedModules("Qwen2ContinuousBlock"))
+      val changed=CandidateDenseAccMemoryLoweringV2(fifoChanged,observedModules("Qwen2ContinuousBlock"))
       memoryGate(changed)
       require(hostBindings(changed,high=true)==highBindings,"same complete17 external bindings")
       retain("official-bridge-memory-high.fir",changed.serialize)

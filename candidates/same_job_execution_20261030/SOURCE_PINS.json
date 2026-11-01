@@ -4,8 +4,8 @@
   "files": [
     {
       "path": ".github/workflows/hetero-five-m128-model-candidate-build.yml",
-      "bytes": 4060,
-      "sha256": "527b010a24d23e50112ad3d5b95484002f986537fb119d30c105e8d137172093"
+      "bytes": 4057,
+      "sha256": "7f3adcd658f341e494dea6e5e7ada5296fb6ff74eee2bb41389541241db6ae86"
     },
     {
       "path": ".github/workflows/hetero-five-m128-samejob-calibration-local-data.yml",
@@ -1593,6 +1593,16 @@
       "sha256": "680251e3a6bd94371ba64d5bbdce394e5ccbb1ff4c54462d406b1c0914ca4733"
     },
     {
+      "path": "candidates/model_candidate_build_20261101/CandidateDenseAccMemoryLoweringV2.scala",
+      "bytes": 14251,
+      "sha256": "52d9a20bbf943bee7a8c3d6312e7ee8405b01bdbb05c8f8fd1abedd888c10465"
+    },
+    {
+      "path": "candidates/model_candidate_build_20261101/CandidateDenseStorageFixture.scala",
+      "bytes": 7056,
+      "sha256": "1365758fde263c97627c0b407dd81bef4f4ed35e999a565f6cfce99145900a09"
+    },
+    {
       "path": "candidates/model_candidate_build_20261101/GENERATION_CONTRACT.json",
       "bytes": 766,
       "sha256": "cc0b2e5b8bb74fa87d20bf00610c18d7492bd23579c95f2c462e3776e0adbc3e"
@@ -1609,18 +1619,18 @@
     },
     {
       "path": "candidates/model_candidate_build_20261101/ModelCandidateHighDescriptorV1.scala",
-      "bytes": 6823,
-      "sha256": "e5311767bb4b40ee416f38d173e88fe4aff7b9c6fe3d7ecbd6b306499f6cdc90"
+      "bytes": 7572,
+      "sha256": "ddbe7e57513a57e58839faf0354bee61db79b4e54de9c474985ae2e23c4c700b"
     },
     {
       "path": "candidates/model_candidate_build_20261101/ModelCandidateHostSimulationEmitterV1.scala",
-      "bytes": 31345,
-      "sha256": "71c2437c5ae9c4d12f175bad9aa0ad555935e962817602993a178eda5039aa1d"
+      "bytes": 31342,
+      "sha256": "32eccfc51343984f8545dcbde6f9ac039e7a73aab6767f8f77f8421310447814"
     },
     {
       "path": "candidates/model_candidate_build_20261101/ModelCandidateTransformGateV1.scala",
-      "bytes": 4727,
-      "sha256": "eef29d07a5f3244a3b3d7aadd51a8e853071526cbc78163c3c4dc8b7862c5391"
+      "bytes": 4872,
+      "sha256": "cde4814fe9af0e6d8985164f04dbab398e71187d87caf86635f785663bcb69d2"
     },
     {
       "path": "candidates/model_candidate_build_20261101/OBSERVER_HOST_PORTS_122.json",
@@ -1679,8 +1689,8 @@
     },
     {
       "path": "candidates/model_candidate_build_20261101/candidate_diagnostic.py",
-      "bytes": 2374,
-      "sha256": "fe31dc2321cb187a19b366fc8f328ae3a2b643faaea5a2b22821563be2317615"
+      "bytes": 3382,
+      "sha256": "bf91ce15f2adc4ff407e1393f8e18d3c1a28146000d2775a199371b96746be58"
     },
     {
       "path": "candidates/model_candidate_build_20261101/candidate_generation_gate.py",
@@ -1714,8 +1724,8 @@
     },
     {
       "path": "candidates/model_candidate_build_20261101/materialize_model_binding.py",
-      "bytes": 8691,
-      "sha256": "15023a9f5fee25d272e54627e7db82d126da96def2ba94816c70a9fde5a21141"
+      "bytes": 8733,
+      "sha256": "8c8229f2c951e96c20ce096edb092073882a1c24b6b1aad52ed1c3834f9a418f"
     },
     {
       "path": "candidates/model_candidate_build_20261101/model_source_evidence.py",
@@ -1784,8 +1794,13 @@
     },
     {
       "path": "candidates/model_candidate_build_20261101/test_candidate_helpers.py",
-      "bytes": 5275,
-      "sha256": "c10e1024b6280e2c3a9ed461de08f9ca8e16b2639a495e8854f8d5cc785f38b3"
+      "bytes": 5471,
+      "sha256": "b09f077e71b7a308ffb6d20c8030bec7b7808d24c7f5f1e71f89f7e7a8f40970"
+    },
+    {
+      "path": "candidates/model_candidate_build_20261101/test_dense_diagnostic.py",
+      "bytes": 2723,
+      "sha256": "9df368c33f340ee2cf96a264e0fd98471aa52938ad572181c04be2e512f95337"
     },
     {
       "path": "candidates/model_candidate_build_20261101/test_model_build_contract.py",
@@ -1814,8 +1829,8 @@
     },
     {
       "path": "candidates/model_candidate_build_20261101/validate_model_launch.py",
-      "bytes": 3024,
-      "sha256": "6609dbbb08466eb4bc1babae34139c67a95292e35e54fec4c32b7fa529881647"
+      "bytes": 3018,
+      "sha256": "940928b1a54141caf3979531ab4600fce4a2571f8fb2bdc8520e149e69a3356f"
     },
     {
       "path": "candidates/moe_router_score_observation_20261030/driver/host_axi_driver_non_dpi.cpp",
@@ -2351,6 +2366,21 @@
       "path": "candidates/same_job_execution_20261030/controller/test_resources.py",
       "bytes": 1232,
       "sha256": "cd7a8720bfe25af446daa1fe22085013eb8fe4e11d3b83b76033a2b443913f20"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/evidence/dense_zero_closure_20261101/README.zh.md",
+      "bytes": 1935,
+      "sha256": "35d3c9a231e3f7a08701bdf9c63512b24a01e3283bbebd6a1a5ef8cd606966b8"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/evidence/dense_zero_closure_20261101/SAFE_EVIDENCE.json",
+      "bytes": 4133,
+      "sha256": "1784abea505864c23920827c8380b14ed38b9980e620a2cc448f7be14be2361a"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/evidence/dense_zero_closure_20261101/extract_prior_core.py",
+      "bytes": 1625,
+      "sha256": "78472bd8f57e5548bd85296d656f08cc842bb9ed64f61c9e3f06898fda11df07"
     },
     {
       "path": "candidates/same_job_execution_20261030/evidence/ordered_rms32_local_20261101/LOCAL_MODEL_EVIDENCE.json",

@@ -345,7 +345,7 @@ def verify_local_build(args,frozen):
 def runtime_abi_module():
     import importlib.util
     path=pathlib.Path(__file__).resolve().with_name('runtime_abi_owned.py')
-    need(sha(path)=='37d4fb63d8be037da2f6dd170863205e259677664348b94a380ef7eec22a5c8d','reviewed startup ABI module')
+    need(sha(path)=='695565c1baea1cc430ec6a64017a7525c2401c254696f1a670891edf9ecb5758','reviewed startup ABI module')
     spec=importlib.util.spec_from_file_location('pinned_startup_abi',path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);need(OWNED_ENVIRONMENT is not None,'explicit owned environment admission');m.configure_owned_environment(*OWNED_ENVIRONMENT)
     if WORKSPACE_LOADER is not None:m.configure_workspace_loader(*WORKSPACE_LOADER)
     return m

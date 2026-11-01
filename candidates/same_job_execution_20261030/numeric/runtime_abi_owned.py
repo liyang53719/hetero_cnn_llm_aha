@@ -88,7 +88,8 @@ def elf_info(path,require_interpreter=True):
    need(v<len(strings),'needed string offset');end=strings.find(b'\0',v);need(end>v,'needed terminator');n=strings[v:end].decode('ascii');need(re.fullmatch(r'[A-Za-z0-9_+.-]{1,128}',n)is not None,'plain SONAME only');names.append(n)
   need((0<len(names)if require_interpreter else 0<=len(names))and len(names)<=32 and len(set(names))==len(names),'needed dependency count')
  return {'interpreter':loader,'needed':names,'machine':'ELF64_LE_X86_64'}
-def parse_list(text):
+def parse_list(text,expected_interpreter=None):
+ need(expected_interpreter is None or expected_interpreter in INTERPRETERS,'explicit reviewed PT_INTERP alias')
  need(len(text.encode())<=65536,'bounded loader output');resolved={};vdso=0
  for line in text.splitlines():
   line=line.strip()
@@ -96,7 +97,12 @@ def parse_list(text):
   m=re.fullmatch(r'([A-Za-z0-9_+.-]+) => (/[^\s]+) \(0x[0-9a-f]+\)',line)
   if m:key,path=m.groups()
   else:
-   m=re.fullmatch(r'(/[^\s]+) \(0x[0-9a-f]+\)',line);need(m is not None,'unknown/unresolved loader output');path=m[1];key=P(path).name
+   alias=re.fullmatch(r'(/[^\s]+) => (/[^\s]+) \(0x[0-9a-f]+\)',line)
+   if alias is not None:
+    need(expected_interpreter is not None and alias[1]==expected_interpreter,'only actual workspace PT_INTERP alias')
+    key=P(expected_interpreter).name;path=alias[2]
+   else:
+    m=re.fullmatch(r'(/[^\s]+) \(0x[0-9a-f]+\)',line);need(m is not None,'unknown/unresolved loader output');path=m[1];key=P(path).name
   need(key not in resolved and re.fullmatch(r'/[A-Za-z0-9_./+\-]+',path),'unique safe resolved library');resolved[key]=path
  need(vdso==1 and 1<=len(resolved)<=64,'complete loader dependency list');return resolved
 
@@ -146,7 +152,7 @@ def execution_argv(binary,runtime,output,cycles):
 def prepare_workspace(binary,binary_sha,tool_manifest,tool_sha,out):
  binary=P(binary).resolve();tool_manifest=P(tool_manifest).resolve();out=P(out);need(not out.exists(),'fresh workspace ABI receipt')
  module,verified=workspace_verified(binary,binary_sha,tool_manifest,tool_sha);configs=config_pins();before=pin(binary,4<<30);environment=clean_env();owner=owned_environment_pin()
- text=_list(verified['loader']['resolved'],binary,module.prefix(verified));libraries=module.resolved_libraries(parse_list(text),verified,pin)
+ text=_list(verified['loader']['resolved'],binary,module.prefix(verified));libraries=module.resolved_libraries(parse_list(text,expected_interpreter=verified['elf']['interpreter']),verified,pin)
  _,after=workspace_verified(binary,binary_sha,tool_manifest,tool_sha)
  need(after==verified and pin(binary,4<<30)==before and clean_env()==environment and owned_environment_pin()==owner,'workspace ABI probe inputs changed');check_configs(configs)
  receipt=dict(schema='WORKSPACE_ELF_STARTUP_ABI_OWNED_ENV_V1',status='STARTUP_RESOLUTION_MATCHES_ORIGINAL_BUILDER_WORKSPACE_BYTES_NOT_DUT_EXECUTION',binary=before,tool_manifest={'path':str(tool_manifest),'sha256':tool_sha},elf=verified['elf'],loader=pin(verified['loader']['resolved']),libraries=libraries,configs=configs,owned_environment=owner,environment=environment,later_dlopen='NOT_QUALIFIED',loader_output_sha256=hashlib.sha256(text.encode()).hexdigest(),workspace_loader=verified['manifest'])

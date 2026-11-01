@@ -78,4 +78,38 @@ class Tests(unittest.TestCase):
   with tempfile.TemporaryDirectory()as t:
    p=pathlib.Path(t)/'adaptation';p.write_text('{}')
    with self.assertRaises(ValueError):m.adaptation_checker({'path':str(p),'bytes':p.stat().st_size,'sha256':'0'*64})
+
+class InterpreterAliasTests(unittest.TestCase):
+ INTERP='/lib64/ld-linux-x86-64.so.2'
+ ROOT='/reviewed/private/libs'
+ def text(self):
+  names=('libcrypto.so.3','libstdc++.so.6','libm.so.6','libgcc_s.so.1','libc.so.6')
+  return '\tlinux-vdso.so.1 (0x1234)\n'+''.join('\t'+n+' => '+self.ROOT+'/'+n+' (0x1234)\n'for n in names)+'\t'+self.INTERP+' => '+self.ROOT+'/ld-linux-x86-64.so.2 (0x1234)\n'
+ def test_full_seven_line_workspace_shape(self):
+  p=m.parse_list(self.text(),expected_interpreter=self.INTERP)
+  self.assertEqual(set(p),w.SONAMES);self.assertEqual(p['ld-linux-x86-64.so.2'],self.ROOT+'/ld-linux-x86-64.so.2')
+ def test_samehost_default_still_refuses_absolute_alias(self):
+  with self.assertRaises(ValueError):m.parse_list(self.text())
+ def test_only_exact_actual_interpreter_alias(self):
+  for wrong in ('/tmp/ld-linux-x86-64.so.2','/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2','/lib64/../lib64/ld-linux-x86-64.so.2','/lib64/libc.so.6'):
+   with self.subTest(wrong=wrong),self.assertRaises(ValueError):m.parse_list(self.text().replace(self.INTERP,wrong),expected_interpreter=self.INTERP)
+ def test_invalid_expected_interpreter_refused(self):
+  for bad in ('/tmp/ld-linux-x86-64.so.2','',False):
+   with self.assertRaises(ValueError):m.parse_list(self.text(),expected_interpreter=bad)
+ def test_duplicate_alias_soname_key_refused(self):
+  for extra in ('ld-linux-x86-64.so.2 => '+self.ROOT+'/ld-linux-x86-64.so.2 (0x1234)\n',self.INTERP+' => '+self.ROOT+'/ld-linux-x86-64.so.2 (0x1234)\n'):
+   with self.assertRaises(ValueError):m.parse_list(self.text()+extra,expected_interpreter=self.INTERP)
+ def test_malformed_rhs_or_extra_syntax_refused(self):
+  for rhs in ('not found','relative/path','/reviewed/bad;path','/reviewed/path extra'):
+   with self.assertRaises(ValueError):m.parse_list(self.text().replace(self.ROOT+'/ld-linux-x86-64.so.2',rhs),expected_interpreter=self.INTERP)
+ def test_original_plain_absolute_and_soname_still_accepted(self):
+  original=self.text().replace(self.INTERP+' => ','')
+  self.assertEqual(set(m.parse_list(original)),w.SONAMES)
+ def test_alias_does_not_waive_actual_resolved_path(self):
+  with tempfile.TemporaryDirectory()as t:
+   b,tool,v,text=Tests().fixture(pathlib.Path(t));alias=text.replace('ld-linux-x86-64.so.2 => ',self.INTERP+' => ')
+   p=m.parse_list(alias,expected_interpreter=self.INTERP);self.assertEqual(len(w.resolved_libraries(p,v,m.pin)),6)
+   p['ld-linux-x86-64.so.2']='/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2'
+   with self.assertRaises((ValueError,OSError)):w.resolved_libraries(p,v,m.pin)
+
 if __name__=='__main__':unittest.main()

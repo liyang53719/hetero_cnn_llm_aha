@@ -1,3 +1,10 @@
+## 2026-11-01 02:50 UTC：workspace loader 格式最小修复（SOURCE-ONLY / INCOMPLETE）
+
+- 云恢复身份 `9a315419-ee75-47c8-9df8-d9a24762df69` 在 startup_abi 原监督下 native=1，严格 cleanup/EOF 完整；未到 DUT。保留原失败，不重构 e015 ELF/SV/driver，不重复下载 70 权重或五份已核软件参考。
+- 实际原 loader 的 7 行 `--list` 输出含 PT_INTERP 绝对路径 `=>` workspace loader；旧 parser 不支持此格式而误拒。新增仅 workspace 显式调用的实际 PT_INTERP 精确别名；默认同主机 parser 规则不变，六库实际 resolved path/全 SHA 仍必须逐一符合原 builder。
+- 独立格式诊断的 outer file cap 曾覆盖只读大 ELF 导致其监督门失败；827 B 输出可作为格式观察，不能冒严格 ABI PASS。新 parser 对保留实际文本及当前六库字节验证通过，仅文本/静态资格；下一实际完整 startup_abi 必须重新 native=0、strict cleanup/EOF 与实际解析全哈希通过。
+- 本批仅源码轻测，不执行新 loader/DUT；硬件 4096 MAC、共享 Vector32 原定义、数值顺序/精度、五块 M128 刺激及所有资源/时间预算不改。完整模型数值/最终同刺激 RTL 仍 0/5，FULL 所需工程预算仍待实际进度证据。
+
 ## 2026-11-01 02:35 UTC：云端导入故障恢复（源码候选，尚未新执行）
 
 - 原 executor `5214a22` / builder `e01529` 实际云端任务已完成 70 个权重（3,531,306,272 字节）和五块完整 M128 官方软件参考；五参考基线/观测输出严格相等，未运行硬件。控制器随后因 `numeric_tail` 的 sibling `live_budget` 导入路径缺失退出 1；不是数值失败、资源超时或构建失败。

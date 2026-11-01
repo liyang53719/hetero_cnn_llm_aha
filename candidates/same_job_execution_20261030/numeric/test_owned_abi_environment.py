@@ -28,6 +28,20 @@ if interp:
  calls=[n for n in ast.walk(f)if isinstance(n,ast.Call)and isinstance(n.func,ast.Name)and n.func.id=='need'and len(n.args)==2 and isinstance(n.args[1],ast.Constant)and n.args[1].value=='needed dependency count'];test.assertEqual(len(calls),1)
  expected=ast.parse('(0<len(names)if require_interpreter else 0<=len(names))and len(names)<=32 and len(set(names))==len(names)',mode='eval').body
  test.assertEqual(dump(calls[0].args[0]),dump(expected));calls[0].args[0]=ast.parse('0<len(names)<=32 and len(set(names))==len(names)',mode='eval').body
+ f=functions['parse_list'];test.assertEqual([x.arg for x in f.args.args],['text','expected_interpreter']);test.assertEqual(list(map(dump,f.args.defaults)),[dump(ast.Constant(None))]);f.args=baseline['parse_list'].args
+ test.assertEqual(dump(f.body[0]),dump(ast.parse("need(expected_interpreter is None or expected_interpreter in INTERPRETERS,'explicit reviewed PT_INTERP alias')").body[0]));f.body=f.body[1:]
+ loop=next(n for n in f.body if isinstance(n,ast.For));oldloop=next(n for n in baseline['parse_list'].body if isinstance(n,ast.For))
+ branch=next(n for n in loop.body if isinstance(n,ast.If)and isinstance(n.test,ast.Name)and n.test.id=='m')
+ oldbranch=next(n for n in oldloop.body if isinstance(n,ast.If)and isinstance(n.test,ast.Name)and n.test.id=='m')
+ expected=ast.parse(r"""
+alias=re.fullmatch(r'(/[^\s]+) => (/[^\s]+) \(0x[0-9a-f]+\)',line)
+if alias is not None:
+ need(expected_interpreter is not None and alias[1]==expected_interpreter,'only actual workspace PT_INTERP alias')
+ key=P(expected_interpreter).name;path=alias[2]
+else:
+ m=re.fullmatch(r'(/[^\s]+) \(0x[0-9a-f]+\)',line);need(m is not None,'unknown/unresolved loader output');path=m[1];key=P(path).name
+""").body
+ test.assertEqual(list(map(dump,branch.orelse)),list(map(dump,expected)));branch.orelse=oldbranch.orelse
  return tree
 
 class T(unittest.TestCase):

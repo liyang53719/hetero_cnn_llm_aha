@@ -19,6 +19,7 @@ CATALOG_PATH = PREFIX + 'SOURCE_PINS.json'
 ALLOWED_PATHS = frozenset(PREFIX + x for x in (
     'cloud_budget.py', 'prepare_cloud_execution.py', 'controller/cloud_flow.py',
     'summarize_cloud_execution.py', 'executor_adaptation.py',
+    'numeric/test_p0_source_relocation.py',
     'numeric/artifact_handoff.py', 'numeric/runtime_abi_owned.py',
     'numeric/consumer_owned.py', 'numeric/numeric_tail.py', 'numeric/connect_owned.py',
     'numeric/driver_dependency_proof.py', 'numeric/consumption_proof.py',
@@ -27,7 +28,7 @@ ALLOWED_PATHS = frozenset(PREFIX + x for x in (
     'numeric/test_artifact_handoff.py',
     'runtime/retained_materials.py', 'runtime/test_retained_materials.py',
     'test_cloud_budget.py', 'test_cloud_controller.py', 'test_cloud_flow_mock.py',
-    'acceptance_tests/test_cloud_summary.py', 'acceptance_tests/test_original_initialize.py', 'acceptance_tests/test_lifecycle.py',
+    'acceptance_tests/test_cloud_summary.py', 'acceptance_tests/test_original_initialize.py', 'acceptance_tests/test_lifecycle.py', 'acceptance_tests/test_main_mock.py',
     'acceptance_tests/test_split_consumer_cli.py', 'acceptance_tests/test_consumer_memory.py',
     'numeric/test_builder_tool_paths.py', 'numeric/test_make_recipe_grammar.py',
     'numeric/ACTUAL_MAKE_CHECKER_REVIEW.json', 'numeric/test_workspace_loader.py',

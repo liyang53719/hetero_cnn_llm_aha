@@ -15,7 +15,39 @@ def corrector():
  need(sha(HERE/'LOCKED_SOURCE_CONTRACT.json')==CONTRACT_SHA,'reviewed independent contract')
  spec=importlib.util.spec_from_file_location('p0_locked_corrector_r2',p);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
 
-def source_links(manifest,policy,identity,common,evidence):
+def relocation_records(manifest,repo,current_pins,current_catalog):
+ """Pure byte/path projection, NOT execution approval. Caller admits invocation.
+ Never modifies frozen origin_path or any generation/consumption evidence.
+ """
+ root=pathlib.Path(repo);need(root.is_absolute()and root==root.resolve()and root.is_dir()and all(not p.is_symlink()for p in(root,*root.parents)),'canonical admitted executor source root')
+ need(sha(HERE/'LOCKED_SOURCE_CONTRACT.json')==CONTRACT_SHA,'locked original source contract')
+ locked=json.loads((HERE/'LOCKED_SOURCE_CONTRACT.json').read_text())['sources']
+ rows={}
+ for r in manifest['files']:
+  key=r['path'];rel=pathlib.PurePosixPath(key)
+  need(not rel.is_absolute()and key==str(rel)and '..'not in rel.parts and key not in rows,'unique canonical artifact source path');rows[key]=r
+ catalog={}
+ need(current_catalog['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1','actual executor source catalog')
+ for r in current_catalog['files']:
+  need(r['path']not in catalog,'unique actual executor source catalog');catalog[r['path']]=r
+ anchors=manifest['observation_policy_bindings']['P0']['anchors'];programs={'commands','descriptors','program_manifest'}
+ need(set(anchors)==set(locked)and len(set(anchors.values()))==12,'all original distinct locked anchor roles')
+ result={}
+ for name,key in anchors.items():
+  if name in programs:
+   row=rows[key];expected='RUNTIME_ONLY_CONTRACT'if name=='program_manifest'else'RUNTIME_EXPECTATION_NOT_BUILD_INPUT'
+   need(row['kind']==expected,'program anchors remain runtime-only, never relocated source')
+   continue
+  r=rows[key];need(r['kind']=='ACTUAL_BUILD_INPUT'and {k:r[k]for k in('bytes','sha256')}==locked[name],'exact locked actual source role')
+  origin=r['origin_path'];need(manifest['generation_input_pins'].get(origin)==r['sha256'],'original builder origin generation pin unchanged')
+  local=root/key;need(local.is_file()and local==local.resolve()and all(not p.is_symlink()for p in(local,*local.parents)),'canonical local source no aliases')
+  need(key in catalog and catalog[key]['bytes']==r['bytes']and catalog[key]['sha256']==r['sha256']and current_pins.get(str(local))==r['sha256'],'same independently admitted source catalog and pin')
+  row=dict(path=str(local),bytes=r['bytes'],sha256=r['sha256']);pin(row)
+  result[name]=dict(relative_path=key,origin_path=origin,local=row)
+ need(len(result)==9,'exact nine source anchors, no runtime programs relocated')
+ return result
+
+def source_links(manifest,policy,identity,common,evidence,source_relocation=None):
  proof_path=HERE/'consumption_proof.py';need(sha(proof_path)=='264d6cf3c832b6a492c8efd5276a0993fe3a5168b1082e8731509fafd63958a0','reviewed existing-producer consumption verifier')
  spec=importlib.util.spec_from_file_location('existing_producer_consumption',proof_path);proof=importlib.util.module_from_spec(spec);spec.loader.exec_module(proof)
  proof.validate(manifest,policy,identity,common,evidence)
@@ -29,12 +61,21 @@ def source_links(manifest,policy,identity,common,evidence):
  link=manifest['observation_policy_bindings']['P0']
  need(link['schema']=='P0_RESIDENT_OBSERVATION_SOURCE_LINK_V2' and link['contract_sha256']==CONTRACT_SHA and link['corrector_sha256']==CORRECTOR_SHA,'actual source manifest policy binding')
  anchors=link['anchors'];need(set(anchors)==set(policy['source_pins']),'all 12 actual artifact anchors')
+ if source_relocation is not None:
+  need(source_relocation['schema']=='ADMITTED_CLOUD_P0_SOURCE_RELOCATION_V1'and source_relocation['builder_source_commit']==identity['source_commit']and source_relocation['source_manifest_sha256']==common['source_manifest']['sha256'],'same independently admitted frozen source relocation')
+  need(set(source_relocation['anchors'])==set(anchors)-{'commands','descriptors','program_manifest'},'exact nine admitted source roles')
  for name,p in policy['source_pins'].items():
   key=anchors[name];need(key in files,'anchor missing actual source manifest file: '+name)
   r=files[key];need(r['bytes']==p['bytes'] and r['sha256']==p['sha256'],'actual artifact anchor identity: '+name)
   expected_kind='RUNTIME_EXPECTATION_NOT_BUILD_INPUT' if name in ('commands','descriptors') else ('RUNTIME_ONLY_CONTRACT' if name=='program_manifest' else 'ACTUAL_BUILD_INPUT')
   need(r['kind']==expected_kind,'actual versus runtime-only role '+name)
-  if name not in ('commands','descriptors','program_manifest'):need(r['origin_path']==p['path'],'actual source role path '+name)
+  if name not in ('commands','descriptors','program_manifest'):
+   if source_relocation is None:need(r['origin_path']==p['path'],'actual source role path '+name)
+   else:
+    local=source_relocation['anchors'][name]
+    need(local==dict(relative_path=key,origin_path=r['origin_path'],local=p),'exact admitted original/local source domains '+name)
+    need(manifest['generation_input_pins'].get(r['origin_path'])==r['sha256'],'original source generation pin '+name)
+    path=pin(p);need(path==path.resolve()and all(not q.is_symlink()for q in(path,*path.parents)),'actual local source remains canonical')
  program_record=files[anchors['program_manifest']]
  retained_program=manifest['p0_retained_evidence']['program_contract'];raw=retained_program['text'].encode()
  need(len(raw)==retained_program['bytes']==program_record['bytes'] and hashlib.sha256(raw).hexdigest()==retained_program['sha256']==program_record['sha256'],'actual retained program bytes/hash')
@@ -44,7 +85,7 @@ def source_links(manifest,policy,identity,common,evidence):
   row=files[anchors[name]];need(row['derived_from']==anchors['program_manifest'] and row['sha256']==program['table_sha256'][filename] and row['bytes']==program[hi]-program[lo],'runtime expected tables independently derived from original manifest')
  need(len(set(anchors.values()))==12,'12 distinct source/program anchors')
 
-def validate(profile,common,identity,bundle_root):
+def validate(profile,common,identity,bundle_root,source_relocation=None):
  extras={'observation_policy','original_runtime','consumption_evidence'}
  if profile['id']!=0:
   need(not (extras&set(profile)),'P1-P4 cannot waive observations')
@@ -75,5 +116,5 @@ def validate(profile,common,identity,bundle_root):
  source=pin(common['source_manifest']);need(source.stat().st_size<=16*1024**2,'source manifest size cap')
  evidence_path=pin(profile['consumption_evidence']);need(evidence_path.stat().st_size<=65536,'bounded retained evidence index')
  evidence=json.loads(evidence_path.read_text());need(pin(evidence['driver_dependency']).resolve().is_relative_to(root),'dependency metadata outside selected bundle output')
- source_links(json.loads(source.read_text()),policy,identity,common,evidence)
+ source_links(json.loads(source.read_text()),policy,identity,common,evidence,source_relocation)
  return dict(status='INCOMPLETE_REQUIRED_INTERNAL_GATES_UNOBSERVED',observation_policy=profile['observation_policy'],original_runtime=profile['original_runtime'],declared_ddr_observations=18,required_hidden_gates=required,coverage_acceptance=False,consumption_evidence=profile['consumption_evidence'],program_anchor_role='RUNTIME_ONLY_NOT_ELABORATION_INPUT')

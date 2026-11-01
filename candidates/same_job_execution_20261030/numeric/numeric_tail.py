@@ -106,7 +106,13 @@ def execution_command(generated,b,admission,profile):
   need(admission['mode']==execution_mode.FULL,'explicit execution mode')
   budget=b['full_block_budget'];argv+=['--full-block-budget',budget['path'],'--full-block-budget-sha256',budget['sha256']]
  if b.get('execution_context')=='CLOUD_EXECUTOR_V1':
-  invocation=b['controller_binding'];material.checked(invocation);argv+=['--cloud-binding',invocation['path'],'--cloud-binding-sha256',invocation['sha256']]
+  invocation=b['controller_binding'];material.checked(invocation)
+  flags=('--cloud-binding','--cloud-binding-sha256')
+  if any(flag in argv for flag in flags):
+   need(all(argv.count(flag)==1 for flag in flags),'exact one paired generated cloud invocation')
+   need(all(argv.index(flag)+1<len(argv)for flag in flags),'generated cloud invocation values')
+   need(argv[argv.index(flags[0])+1]==invocation['path']and argv[argv.index(flags[1])+1]==invocation['sha256'],'generated cloud invocation unchanged')
+  else:argv+=['--cloud-binding',invocation['path'],'--cloud-binding-sha256',invocation['sha256']]
  return argv,admission['profile_seconds'][str(profile)]+30
 
 

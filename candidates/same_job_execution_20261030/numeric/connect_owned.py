@@ -18,7 +18,7 @@ def base(old,profile):
  consumer.need(not {'original_runtime','observation_policy','consumption_evidence'}&set(old['profiles'][0]),'no preexisting exception')
  result=copy.deepcopy(old);result['schema']='SINGLE_PROFILE_RUNTIME_BUNDLE_V3';return result
 
-def hydrate_p0(args,out,frozen):
+def hydrate_p0(args,out,frozen,source_relocation=None):
  """Retain actual producer text metadata; bind regenerated runtime program paths."""
  source_row=frozen['common']['source_manifest'];source=consumer.pin(dict(source_row,path=str(args.artifact_manifest.resolve().parent/source_row['path'])))
  m=json.loads(source.read_text());embedded=m['p0_retained_evidence'];consumer.need(embedded['schema']=='P0_EMBEDDED_ACTUAL_BUILD_EVIDENCE_V1','actual producer retained evidence required')
@@ -26,7 +26,10 @@ def hydrate_p0(args,out,frozen):
  for name,key in anchors.items():
   if name in ('program_manifest','commands','descriptors'):
    fn={'program_manifest':'manifest.json','commands':'host_commands.bin','descriptors':'host_descriptors.bin'}[name];bindings[name]=str(out/'p0_provider/program'/fn)
-  else:bindings[name]=rows[key]['origin_path']
+  else:
+   if source_relocation is None:bindings[name]=rows[key]['origin_path']
+   else:
+    mapped=source_relocation['anchors'][name];consumer.need(mapped['relative_path']==key and mapped['origin_path']==rows[key]['origin_path'],'same admitted original anchor role');bindings[name]=mapped['local']['path']
  retained=out/'p0_retained_build_evidence';retained.mkdir()
  files={}
  for i,(original,v) in enumerate(sorted(embedded['files'].items())):
@@ -51,10 +54,11 @@ def connect(args,out):
  consumer.verify_frozen(args.artifact_manifest,args.artifact_manifest_sha256)
  frozen=json.loads(args.artifact_manifest.read_text());consumer.artifact_identity(frozen)
  provenance=consumer.verify_local_build(args,frozen)
+ source_relocation=consumer.approved_source_relocation(args,frozen)
  consumer.verify_runtime_abi(args,frozen)
  p0_fields=('p0_bindings','p0_bindings_sha256','consumption_evidence','consumption_evidence_sha256')
  if args.profile==0:
-  if all(getattr(args,k,None) is None for k in p0_fields):hydrate_p0(args,out,frozen)
+  if all(getattr(args,k,None) is None for k in p0_fields):hydrate_p0(args,out,frozen,source_relocation)
   consumer.need(all(getattr(args,k,None) is not None for k in p0_fields),'P0 requires independently pinned bindings and retained consumption evidence')
   consumer.verify_frozen(args.p0_bindings,args.p0_bindings_sha256)
   consumer.verify_frozen(args.consumption_evidence,args.consumption_evidence_sha256)
@@ -78,7 +82,7 @@ def connect(args,out):
  consumer.need(not final.exists() and not staged.exists(),'fresh V3 metadata only')
  with staged.open('x') as f:json.dump(result,f,indent=2);f.write('\n')
  # Fail closed on missing real source mapping/retained receipts/header evidence.
- consumer.load_binding(args.artifact_manifest,args.artifact_manifest_sha256,staged,args.profile)
+ consumer.load_binding(args.artifact_manifest,args.artifact_manifest_sha256,staged,args.profile,source_relocation)
  consumer.verify_local_build(args,frozen);consumer.pin(old_pin)
  os.link(staged,final);staged.unlink()
  argv=[sys.executable,str(HERE/'consumer_owned.py'),'--artifact-manifest',str(args.artifact_manifest),'--artifact-manifest-sha256',args.artifact_manifest_sha256,'--expected-run-id',str(args.expected_run_id),'--expected-launch-commit',args.expected_launch_commit,'--expected-source-commit',args.expected_source_commit,'--local-runtime-abi',str(abi_copy),'--local-runtime-abi-sha256',args.local_runtime_abi_sha256,'--owned-environment',str(args.owned_environment),'--owned-environment-sha256',args.owned_environment_sha256,'--runtime-bundle',str(final),'--profile',str(args.profile),'--output',str(out/'dut_result')]
@@ -86,8 +90,10 @@ def connect(args,out):
   argv+=['--local-build-result',str(args.local_build_result),'--local-build-result-sha256',args.local_build_result_sha256]
  else:
   argv+=['--builder-handoff',str(args.builder_handoff),'--builder-handoff-sha256',args.builder_handoff_sha256,'--executor-identity',str(args.executor_identity),'--executor-identity-sha256',args.executor_identity_sha256]
+  if getattr(args,'cloud_binding',None)is not None:argv+=['--cloud-binding',str(args.cloud_binding),'--cloud-binding-sha256',args.cloud_binding_sha256]
  argv+=['--strict-outer-supervised']
  receipt=dict(status='MATERIALIZED_AND_BOUND_NOT_DUT_EXECUTED',profile=args.profile,original_bundle=old_pin,runtime_bundle=pin(final),artifact_manifest_sha256=args.artifact_manifest_sha256,provenance=provenance,consumer_argv=argv,validate_only_argv=argv+['--validate-only'],hardware_executed=False,numerical_pass=False,raw_payloads_upload_allowed=False)
+ if source_relocation is not None:receipt['source_relocation']=source_relocation
  with (out/'CONSUMER_ARGV.json').open('x') as f:json.dump(receipt,f,indent=2);f.write('\n')
  return receipt
 
@@ -133,6 +139,7 @@ def preflight(args):
    consumer.verify_frozen(args.p0_bindings,args.p0_bindings_sha256);consumer.verify_frozen(args.consumption_evidence,args.consumption_evidence_sha256)
   source_pin=frozen['common']['source_manifest'];source=args.artifact_manifest.parent/source_pin['path'];consumer.pin(dict(source_pin,path=str(source.resolve())));m=json.loads(source.read_text())
   consumer.need('files' in m and 'P0' in m.get('observation_policy_bindings',{}) and 'p0_retained_evidence' in m,'P0 actual producer mapping absent or retained evidence missing; no expensive prep')
+  consumer.approved_source_relocation(args,frozen)
 
 def main():
  import argparse

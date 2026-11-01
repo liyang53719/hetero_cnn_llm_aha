@@ -225,14 +225,15 @@ def artifact_identity(frozen):
     need(not launch_path.is_absolute() and '..' not in launch_path.parts and len(launch_path.parts)==2 and launch_path.parts[0]=='ci_launch' and launch_path.suffix=='.json','single reviewed ci_launch JSON path')
     return identity
 
-def coverage_policy(profile,common,identity,bundle_root):
+def coverage_policy(profile,common,identity,bundle_root,source_relocation=None):
     import importlib.util
     path=pathlib.Path(__file__).resolve().with_name('observation_contract.py')
-    need(sha(path)=='d574d527c0aa01031116a4b2b23070ba266c76569b16bf923f1cff206fd74d58','reviewed observation contract module')
+    need(sha(path)=='0df19bcfc81f8c8f928807caf9d4ff5d7e770d2b1b260bf1e9b427ead4ecfb0e','reviewed observation contract module')
     spec=importlib.util.spec_from_file_location('required_observation_policy',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
-    return module.validate(profile,common,identity,bundle_root)
+    if source_relocation is None:return module.validate(profile,common,identity,bundle_root)
+    return module.validate(profile,common,identity,bundle_root,source_relocation)
 
-def load_binding(manifest,expected_sha,bundle_path,profile):
+def load_binding(manifest,expected_sha,bundle_path,profile,source_relocation=None):
     verify_frozen(manifest,expected_sha)
     frozen=json.loads(manifest.read_text())
     identity=artifact_identity(frozen);commit=identity['source_commit']
@@ -262,7 +263,7 @@ def load_binding(manifest,expected_sha,bundle_path,profile):
             f=pin(p[key]);need(f.resolve().is_relative_to(bundle_path.resolve().parent),'runtime/reference outside materialization output')
     b={k:frozen[k] for k in ('layer','matrix_macs','vector_lanes','moe_reference_contract')}
     b.update(common=common,profiles=bundle['profiles'],limits=bundle['limits'])
-    b['coverage_policy']=coverage_policy(bundle['profiles'][0],common,identity,bundle_path.resolve().parent)
+    b['coverage_policy']=coverage_policy(bundle['profiles'][0],common,identity,bundle_path.resolve().parent,source_relocation)
     return b,frozen
 
 
@@ -341,6 +342,29 @@ def verify_local_build(args,frozen):
     spec=importlib.util.spec_from_file_location('same_job_build_proof',module_path);local_build_proof=importlib.util.module_from_spec(spec);spec.loader.exec_module(local_build_proof)
     return local_build_proof.verify(args.local_build_result,args.local_build_result_sha256,args.artifact_manifest,args.artifact_manifest_sha256,frozen,args.expected_run_id,args.expected_launch_commit,args.expected_source_commit)
 
+
+def approved_source_relocation(args,frozen):
+    """Only the independently approved cloud invocation can authorize relocation.
+    No bundle field or user-supplied path map is an authority input.
+    """
+    if args.profile!=0 or getattr(args,'cloud_binding',None)is None:return None
+    binding=cloud_invocation(args)
+    if binding.get('executor_adaptation')is None:return None
+    import importlib.util
+    path=pathlib.Path(__file__).resolve().parent.parent/'cloud_budget.py'
+    need(binding['pins'].get(str(path))==sha(path),'admitted cloud budget source before relocation')
+    spec=importlib.util.spec_from_file_location('source_relocation_budget',path);budget=importlib.util.module_from_spec(spec);spec.loader.exec_module(budget)
+    admitted=budget.admit(binding)
+    need(admitted.get('executor_adaptation')==binding['executor_adaptation'],'independently approved adapter input for source relocation')
+    provenance=verify_local_build(args,frozen) # Live executor + complete adapter/catalog + immutable builder handoff.
+    adaptation=provenance.get('executor_adaptation');need(adaptation is not None,'verified distinct executor source adaptation')
+    source_row=frozen['common']['source_manifest'];source=pin(dict(source_row,path=str(args.artifact_manifest.resolve().parent/source_row['path'])))
+    need(source.stat().st_size<=16<<20,'bounded immutable builder source manifest');manifest=json.loads(source.read_text())
+    catalog=pin(binding['source_pins']);need(catalog.stat().st_size<=2<<20,'bounded actual executor catalog')
+    path=pathlib.Path(__file__).resolve().with_name('observation_contract.py');need(binding['pins'].get(str(path))==sha(path),'actual source mapping verifier pinned')
+    spec=importlib.util.spec_from_file_location('source_relocation_contract',path);contract=importlib.util.module_from_spec(spec);spec.loader.exec_module(contract)
+    anchors=contract.relocation_records(manifest,binding['repo'],binding['pins'],json.loads(catalog.read_text()))
+    return dict(schema='ADMITTED_CLOUD_P0_SOURCE_RELOCATION_V1',controller_binding=dict(path=str(args.cloud_binding),bytes=args.cloud_binding.stat().st_size,sha256=args.cloud_binding_sha256),executor_adaptation_sha256=binding['executor_adaptation']['sha256'],artifact_manifest_sha256=args.artifact_manifest_sha256,source_manifest_sha256=source_row['sha256'],builder_source_commit=frozen['artifact_identity']['source_commit'],executor_source_commit=provenance['executor_identity']['source_commit'],executor_source_pins_sha256=adaptation['executor_source_pins_sha256'],anchors=anchors)
 
 def runtime_abi_module():
     import importlib.util
@@ -461,7 +485,9 @@ def main():
     mode,admission=explicit_execution_admission(args)
     cloud_resources,resource_receipt=prepare_cloud_memory(args)
     require_outer_context(args.strict_outer_supervised)
-    b, frozen=load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile)
+    verify_frozen(args.artifact_manifest,args.artifact_manifest_sha256)
+    source_relocation=approved_source_relocation(args,json.loads(args.artifact_manifest.read_text()))
+    b, frozen=load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile,source_relocation)
     download=verify_local_build(args,frozen)
     abi=verify_runtime_abi(args,frozen)
     runtime_bundle_sha=sha(args.runtime_bundle)
@@ -514,12 +540,13 @@ def main():
         if invocation.get('executor_adaptation') is not None:
             summary['executor_adaptation_sha256']=invocation['executor_adaptation']['sha256']
             summary['workspace_loader_sha256']=invocation['workspace_loader']['sha256']
+    if source_relocation is not None:summary['source_relocation']=source_relocation
     summary['execution_admission']={'scope':'CALIBRATION_SAME_FULL_M128_STIMULUS' if admission['mode']==mode.CALIBRATION else 'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE', 'execution_mode':admission['mode'], 'reviewed_budget_sha256':admission['reviewed_budget_sha256'],'original_limits':dict(limits),'effective_limits':execution_limits,'outer_cleanup_proof_required':True,'peak_resource_qualification':'INCOMPLETE_SAMPLED','numerical_pass':False}
     for p,runtime,obs,want,route_ref in prepared:
         r=dict(profile=p['id'],complete_block_tokens=128,status='INCOMPLETE',numerical_pass=False,coverage_policy=b['coverage_policy']);summary['profiles'].append(r)
         try:
             # Reverify common frozen identity before AND after every process.
-            load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile)
+            load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile,source_relocation)
             verify_local_build(args,frozen)
             verify_runtime_abi(args,frozen)
             need(sha(args.runtime_bundle)==runtime_bundle_sha,'runtime bundle changed')
@@ -527,7 +554,7 @@ def main():
             target=args.output/('profile'+str(p['id']));log=args.output/('profile'+str(p['id'])+'.log')
             need(not target.exists() and not log.exists() and not log.with_suffix('.started.json').exists(),'fresh per-round observations')
             rc=execute(files['binary'],runtime,target,log,execution_limits);r['exit_code']=rc
-            load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile)
+            load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile,source_relocation)
             verify_local_build(args,frozen)
             verify_runtime_abi(args,frozen)
             need(sha(args.runtime_bundle)==runtime_bundle_sha,'runtime bundle changed')

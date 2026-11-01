@@ -1,3 +1,12 @@
+## 2026-11-01 03:18 UTC：P0 builder / executor 源路径命名域修复候选（未数值通过）
+
+- 实际 executor `1aa8dcbf` 恢复任务已结束：startup ABI、P0 initialize / rope / provider / transport 均有严格 native 0 收据；`p0_connect` 在读取 GitHub builder 的 `/home/runner/...` 原始源码路径时拒绝。未执行 DUT，五块 M128 硬件完整数值仍 **0/5**。
+- 九个源码锚的当前本地文件逐项满足原 builder 冻结 manifest、原 generation pins、独立 locked contract 与 executor catalog 的 bytes / SHA；错误是将原构建路径当成当前文件系统地址，不是硬件或参考数值差异。
+- 修复只允许独立批准 cloud binding / adapter / handoff 验证之后，在内部传递原始路径与本地路径的对应关系。原 builder manifest、编译 argv、GCC/header 证据、Scala / C++ / ELF / SV 字节不变；同 job 默认路径严格门保持，三个 runtime program 锚不参与迁移。
+- 新隔离 `actual_r2` 原四阶段输入 fixture 已全部 strict/native0，25.921s；原材料与源码前后字节校验通过。首轮 fixture 前置无回执原因未知，现场保留，不解释成数值失败。随后真实无 DUT 消费检查 strict/native0（0.652s），原 corrector / fixed155 / GCC/header/link consumption / coverage / consumer.load_binding / 全部 P0 final spans 均通过；gate/up 仍 mandatory、未观测，不继承旧 owner 活资格，不算模型或 RTL 数值 PASS。
+- 源码回归 497 项 normal / -O 全通过；696 源闭包逐项核验。上述实际离线检查使用闭包 `f416a26fd27813811af43e81bce558572283040b4d111139eb6613e4174557b2`；真实运行仍须新身份批准输入、fresh runtime 和 startup ABI 重验。
+- 本次不增加预算、资源或硬件，不重新构建 / 下载权重；五块仍使用同一 e015 构建产物。FULL 工程预算仍待实际 DUT 进度与资源证据，不是缺用户授权。
+
 ## 2026-11-01 03:00 UTC：真实 ABI 通过；物化依赖历史 pin 修复（SOURCE-ONLY，数值 0/5）
 
 - 新云端执行身份 `25a54e69-5286-4372-8270-048eeff37aa7` 的 startup_abi 已实际 native=0、8.609 秒、strict cleanup/EOF/gzip 完整；六库真实 resolved path/bytes/SHA 等于原 builder。仅启动 ABI 身份资格，未到 DUT 数值。

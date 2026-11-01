@@ -16,7 +16,7 @@ class MainTests(unittest.TestCase):
    profile=dict(id=3,runtime={'path':str(runtime)},views={'path':str(views)},reference_result={'path':str(ref)},provider_receipt={'path':str(receipt)})
    limits=dict(file_bytes=64*1024**2,max_active_cycles=1,wall_seconds=100,cpu_seconds=100,address_space_bytes=1024**3)
    b=dict(layer='CHISEL_EMITTED_SV_NUMERICAL_BACKEND',matrix_macs=4096,vector_lanes=32,moe_reference_contract='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE',common=pins,profiles=[profile],limits=limits,coverage_policy={})
-   args=types.SimpleNamespace(owned_environment=receipt,owned_environment_sha256='0'*64,expected_run_id=1,expected_launch_commit='1'*40,expected_source_commit='2'*40,strict_outer_supervised=True,artifact_manifest=receipt,artifact_manifest_sha256='0'*64,runtime_bundle=receipt,profile=3,calibration_wall_seconds=1,validate_only=False,output=root/'output',local_build_result_sha256='0'*64)
+   args=types.SimpleNamespace(owned_environment=receipt,owned_environment_sha256='0'*64,expected_run_id=1,expected_launch_commit='1'*40,expected_source_commit='2'*40,strict_outer_supervised=True,artifact_manifest=receipt,artifact_manifest_sha256=c.sha(receipt),runtime_bundle=receipt,profile=3,calibration_wall_seconds=1,validate_only=False,output=root/'output',local_build_result_sha256='0'*64)
    ids=b''.join(struct.pack('<q',i%8) for i in range(1024));weights=bytes(2048);logits=bytes(65536)
    route=b''.join(struct.pack('<Q',(i//8)<<34|(i%8)<<31|(i%8)<<23|i//8) for i in range(1024))
    def execute(binary,runtime,target,log,limits):
@@ -35,4 +35,10 @@ class MainTests(unittest.TestCase):
    result=json.loads((args.output/'RESULT.json').read_text());r=result['profiles'][0]
    self.assertNotIn('error',r);self.assertEqual(r['router']['raw_probability_diagnostics']['status'],'COMPARED_DIAGNOSTIC_ONLY')
    self.assertEqual(r['router']['raw_probability_diagnostics']['actual_selected_output']['status'],'COMPARED_ACTUAL_SELECTION_OUTPUT_DIAGNOSTIC_ONLY');self.assertEqual(r['missing_observations'],[]);self.assertEqual(r['status'],'INCOMPLETE');self.assertFalse(result['numerical_pass']);self.assertFalse(r['numerical_pass'])
+ def test_unknown_cloud_context_rejected_before_load_or_dut(self):
+  with tempfile.TemporaryDirectory() as tmp:
+   root=pathlib.Path(tmp);binding=root/'binding.json';binding.write_text(json.dumps({'execution_context':'UNKNOWN_CONTEXT'}))
+   args=types.SimpleNamespace(owned_environment=root/'unused-env',owned_environment_sha256='0'*64,expected_run_id=1,expected_launch_commit='1'*40,expected_source_commit='2'*40,cloud_binding=binding,cloud_binding_sha256=c.sha(binding))
+   with patch.object(c.argparse.ArgumentParser,'parse_args',return_value=args),patch.object(c,'load_binding',side_effect=AssertionError('must reject before binding')),patch.object(c,'execute',side_effect=AssertionError('must never execute')):
+    with self.assertRaisesRegex(ValueError,'same actual executor invocation'):c.main()
 if __name__=='__main__':unittest.main()

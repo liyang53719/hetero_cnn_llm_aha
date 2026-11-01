@@ -52,6 +52,22 @@ need(getattr(args,'builder_handoff_sha256',None) is None,'no unpaired handoff')
    current=[n for n in ast.walk(new[function])if isinstance(n,ast.Constant)and isinstance(n.value,str)and len(n.value)==64]
    self.assertEqual(len(previous),1,function);self.assertEqual(len(current),1,function)
    self.assertEqual(current[0].value,hashlib.sha256((D/dependency).read_bytes()).hexdigest(),function);previous[0].value=current[0].value
+  # Precisely normalize only this optional internal relocation context. It is
+  # never supplied by a bundle field; original None branch must be exact old AST.
+  for name in ('coverage_policy','load_binding'):
+   actual=new[name];prior=old[name]
+   self.assertEqual([arg.arg for arg in actual.args.args],[arg.arg for arg in prior.args.args]+['source_relocation'])
+   self.assertEqual(list(map(dump,actual.args.defaults)),list(map(dump,prior.args.defaults))+[dump(ast.Constant(value=None))])
+   actual.args.args.pop();actual.args.defaults.pop()
+  coverage=new['coverage_policy']
+  approved_tail=ast.parse("if source_relocation is None:return module.validate(profile,common,identity,bundle_root)\nreturn module.validate(profile,common,identity,bundle_root,source_relocation)").body
+  self.assertEqual(list(map(dump,coverage.body[-2:])),list(map(dump,approved_tail)))
+  coverage.body=coverage.body[:-2]+[old['coverage_policy'].body[-1]]
+  links=[n for n in ast.walk(new['load_binding'])if isinstance(n,ast.Call)and isinstance(n.func,ast.Name)and n.func.id=='coverage_policy']
+  prior_links=[n for n in ast.walk(old['load_binding'])if isinstance(n,ast.Call)and isinstance(n.func,ast.Name)and n.func.id=='coverage_policy']
+  self.assertEqual(len(links),1);self.assertEqual(len(prior_links),1)
+  self.assertEqual(list(map(dump,links[0].args)),list(map(dump,prior_links[0].args))+[dump(ast.Name(id='source_relocation',ctx=ast.Load()))])
+  links[0].args.pop()
   for name in old:
    if name not in ('main','compare','router_compare','classify_observed_profile'):self.assertEqual(dump(old[name]),dump(new[name]),name)
  def test_limits_only_wall_copy(self):

@@ -4,8 +4,8 @@
   "files": [
     {
       "path": ".github/workflows/hetero-five-m128-model-candidate-build.yml",
-      "bytes": 4055,
-      "sha256": "e5d001d96f3e407c2792b05b20b5fd43f111dbcbb8217a071f9f4a55d42a1aa0"
+      "bytes": 4060,
+      "sha256": "527b010a24d23e50112ad3d5b95484002f986537fb119d30c105e8d137172093"
     },
     {
       "path": ".github/workflows/hetero-five-m128-samejob-calibration-local-data.yml",
@@ -1054,8 +1054,8 @@
     },
     {
       "path": "candidates/fresh_original_top_recovery_20261028/source/HostOrderedRms32WiringV1.scala",
-      "bytes": 7448,
-      "sha256": "bd70e877d90a685bc497d88ab05ddfc63d4bca05041e99975daf71388b979af5"
+      "bytes": 7735,
+      "sha256": "b2f070af946db02b683757ecdfcaecab04117f65f08d27a9572a94878390ec5a"
     },
     {
       "path": "candidates/fresh_original_top_recovery_20261028/source/HostResidualCommands.scala",
@@ -1595,7 +1595,7 @@
     {
       "path": "candidates/model_candidate_build_20261101/GENERATION_CONTRACT.json",
       "bytes": 766,
-      "sha256": "f0013d290c66e36affb85ebfdda3babc1d169a1f5a65d79643416d98ba4478a7"
+      "sha256": "cc0b2e5b8bb74fa87d20bf00610c18d7492bd23579c95f2c462e3776e0adbc3e"
     },
     {
       "path": "candidates/model_candidate_build_20261101/MODEL_CANDIDATE_PRECONDITIONS.json",
@@ -1605,7 +1605,7 @@
     {
       "path": "candidates/model_candidate_build_20261101/MODEL_SOURCE_OVERLAY.json",
       "bytes": 45149,
-      "sha256": "3a2c69ab180b044bb379fc424a6770f0d4fe1c7d949edc8dfc6bc4b17d199167"
+      "sha256": "f9a04ed77ccb8cbeb756405dd23bd71580ba041cc46d25d6898b4c6e9e0b8641"
     },
     {
       "path": "candidates/model_candidate_build_20261101/ModelCandidateHighDescriptorV1.scala",
@@ -1675,7 +1675,7 @@
     {
       "path": "candidates/model_candidate_build_20261101/candidate_dependency_proof.py",
       "bytes": 27634,
-      "sha256": "d8f9f5a192a84eb111b4035d59fe9453dca88f8b6f7f0d376cddff508cd5cf5a"
+      "sha256": "0bb2f83f0d8396331a4f36e03c416f5fc2d6472862fe3934d55f13ff23c87b2f"
     },
     {
       "path": "candidates/model_candidate_build_20261101/candidate_diagnostic.py",
@@ -1685,7 +1685,7 @@
     {
       "path": "candidates/model_candidate_build_20261101/candidate_generation_gate.py",
       "bytes": 4578,
-      "sha256": "fe6d551de0f219ccd2c922cb9839327c7c6e1c86b777dded81ab8ede8b3b20ae"
+      "sha256": "19df9f8d3446cd5530da374b570d987be0a4207d23106b4713244138d20e14c7"
     },
     {
       "path": "candidates/model_candidate_build_20261101/candidate_observation.py",
@@ -1729,8 +1729,13 @@
     },
     {
       "path": "candidates/model_candidate_build_20261101/one_job_model_candidate.py",
-      "bytes": 18892,
-      "sha256": "049bacfe960a2afe54b04936a6d144c3b65a371613951b85dd3a8804d731ffb5"
+      "bytes": 19099,
+      "sha256": "ae5dd0847ee4dd9846f3376d624211024d40239296b4435efa99b7d6fcae1460"
+    },
+    {
+      "path": "candidates/model_candidate_build_20261101/original_ir_diagnostic.py",
+      "bytes": 11142,
+      "sha256": "2665c932f197573e72ca6915f285ca14fce9cf1a226dcb7be58464f63599e7bf"
     },
     {
       "path": "candidates/model_candidate_build_20261101/pack_model_candidate.py",
@@ -1750,7 +1755,7 @@
     {
       "path": "candidates/model_candidate_build_20261101/restore_model_inputs.py",
       "bytes": 5725,
-      "sha256": "bcd329977bc178e2c45c19d503279c1427c71f0ed7c6334c01464a8650585e2b"
+      "sha256": "a02fbe64866409e1b0acdd4c5a2fa8fe9b8bdc4c11e62b0e921094615ce21c2c"
     },
     {
       "path": "candidates/model_candidate_build_20261101/run_retained_o1_metadata_regression.py",
@@ -1793,6 +1798,11 @@
       "sha256": "1e6e493d1b630f1479cc5ea4c4bd441d774652f8ce41e5f692df175f156dd0e8"
     },
     {
+      "path": "candidates/model_candidate_build_20261101/test_original_ir_diagnostic.py",
+      "bytes": 4890,
+      "sha256": "cf7bf3fac1fc611e63d9897451b11da8432192ff4171aa71bab582c02a310589"
+    },
+    {
       "path": "candidates/model_candidate_build_20261101/test_pack_model_candidate.py",
       "bytes": 15315,
       "sha256": "64d40d2fbd891533d2dcffdd0a4d4a8239ea6c477ad811e24261883ae4ff8518"
@@ -1804,8 +1814,8 @@
     },
     {
       "path": "candidates/model_candidate_build_20261101/validate_model_launch.py",
-      "bytes": 3014,
-      "sha256": "07c1ec71b4341a3d7dc0e4294fa4915648a3f96415e69482aa042ce83bade754"
+      "bytes": 3024,
+      "sha256": "6609dbbb08466eb4bc1babae34139c67a95292e35e54fec4c32b7fa529881647"
     },
     {
       "path": "candidates/moe_router_score_observation_20261030/driver/host_axi_driver_non_dpi.cpp",
@@ -2371,6 +2381,31 @@
       "path": "candidates/same_job_execution_20261030/evidence/ordered_rms32_local_20261101/RuntimeRms32ModelTest.scala",
       "bytes": 14196,
       "sha256": "3ed58b0ae87aefffe7016d682c68576011d1cd352a78e796a2eef5be37869c1a"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/evidence/rms32_authority_feedback_20261101/README.zh.md",
+      "bytes": 1216,
+      "sha256": "b17d063cb76b747d751d8594dc20961463f1c4e1171ed051bcd1382a91ccf76b"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/evidence/rms32_authority_feedback_20261101/Rms32FaultFeedbackFixture.scala",
+      "bytes": 7481,
+      "sha256": "b3ff733e367d43cabdbd2d56b5a00efa75d010fb4e558aa36ed2114dcc119b1e"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/evidence/rms32_authority_feedback_20261101/Rms32FaultFeedbackLow.scala",
+      "bytes": 1268,
+      "sha256": "819d14b068d6c4bf0ded20b1098c72af35187a73e21f712a6825dad6f0b887c1"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/evidence/rms32_authority_feedback_20261101/Rms32FaultFeedbackProtocolTest.scala",
+      "bytes": 12338,
+      "sha256": "aaedd432602aab0c01826298541e7cfd70eb87b520d0fba8c2452e0adc2eeb28"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/evidence/rms32_authority_feedback_20261101/SAFE_EVIDENCE.json",
+      "bytes": 4211,
+      "sha256": "4217e4796019bea9f9301e6522dee2f1290143cabdc509c167c7afc9a801e44b"
     },
     {
       "path": "candidates/same_job_execution_20261030/execution_mode.py",
@@ -2960,7 +2995,7 @@
     {
       "path": "candidates/same_job_execution_20261030/test_common_observer_integration.py",
       "bytes": 4483,
-      "sha256": "1591cf2cd534a2641455b9916897d7c74c568e27285838ec1856b3a70b33774d"
+      "sha256": "4b7e0fb3b55fd90fb78b8e97b01a0963b7668fff9cd696e95a8079ed0bfbf0ed"
     },
     {
       "path": "candidates/same_job_execution_20261030/test_controller_mode.py",

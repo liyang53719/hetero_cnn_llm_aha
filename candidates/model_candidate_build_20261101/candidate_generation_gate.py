@@ -5,7 +5,7 @@ Observed IR/SV hashes cannot replace it or authorize executor admission.
 import hashlib,json,pathlib,re
 P=pathlib.Path
 D=P(__file__).resolve().parent
-GENERATION_CONTRACT_SHA256='f0013d290c66e36affb85ebfdda3babc1d169a1f5a65d79643416d98ba4478a7' # Independently reviewed generation inputs only; no numeric acceptance
+GENERATION_CONTRACT_SHA256='cc0b2e5b8bb74fa87d20bf00610c18d7492bd23579c95f2c462e3776e0adbc3e' # Independently reviewed generation inputs only; no numeric acceptance
 CONTRACT_FIELDS={'schema','scope','source_overlay_sha256','source_count','unchanged_module_contract_sha256','host_ports_sha256','driver_sha256','cpp_build_policy','matrix_macs','vector_lanes','tokens','profiles','numeric_execution_authorized','final_rtl_accepted'}
 def need(v,s):
  if not v:raise ValueError(s)

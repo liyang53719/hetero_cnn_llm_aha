@@ -141,6 +141,9 @@ def main():
   try:
    r=supervise.execute(argv,str(out/name),str(lock),caps,stage_env,stage_pins,resource_gate={'min_available_memory':(rss+1)*1024**3,'min_disk_free':1_500_000_000})
    print('BUILD_STAGE_DIAGNOSTIC '+build_stage_diagnostic(name,r,out/name/'RESULT.json'),flush=True)
+   if name=='original_high':
+    from original_ir_diagnostic import project as project_original_ir_diagnostic
+    print('MODEL_ORIGINAL_IR_DIAGNOSTIC '+project_original_ir_diagnostic(out/name,r),flush=True)
    if name in ('canonical_full','transform_new_toolchain','emit_host'):
     from candidate_diagnostic import read_projection
     print('MODEL_CANDIDATE_DIAGNOSTIC '+read_projection(out/name/'MODEL_CANDIDATE_DIAGNOSTIC.json',name),flush=True)

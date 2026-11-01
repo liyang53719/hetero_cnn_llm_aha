@@ -1,3 +1,13 @@
+## 2026-11-01：共享 Vector32 P0 租约当前故障反馈修复
+
+- 原候选构建已通过 JAR 全校验、159 源编译和 helper 编译；`original_high`（实际含官方 LOW 检查）native1、资源监控无错误且严格收尾。远端子异常当时未导出，不臆称已经拿到其原因。
+- 静态发现当前 authority 故障反射回同一请求 valid 的组合环。真实 adapter/lease 小模型用原官方 LOW 检查复现旧 `CheckCombLoops` 拒绝；只去反射并保留 owner 期间寄存 poison 后，同一检查 strict0。其他独立故障和 held 请求债规则不变。
+- 修后原9协议case在真实32-lane bank/原 scalar 的 Chisel→Verilator 局部模型全部通过；不据此宣称完整 Top 或五块 M128 数值通过。有限证据与3份可复现小模型源码在 `evidence/rms32_authority_feedback_20261101`。
+- 唯一硬件源变化是 `HostOrderedRms32WiringV1.scala` 的故障反馈；159 源选择/生成合同显式形成新身份。4096 Matrix、唯一32-lane bank、所有数值顺序与驱动保持，旧生产准入门不动，不以观测值自动填接受值。
+- 构建器新增原子阶段 native 失败的有限闭日志投影，保留固定阶段、有限异常类别与符号，不上传 rawlog。原7200/9000预算、O1严格 flags及七件传递范围不扩。下一次完整候选构建仍须真实结构复核和五块原验收，当前数值0/5。
+
+---
+
 ## 2026-11-01：候选模型 FULL 看门狗预算入口（仅执行端源码）
 
 - 此次不改正在构建的 `c50e7dd8`、159 源硬件、共享资源、SV 生成参数、驱动或编译 flags；保留已消费的 jarfix launch。构建与执行源码身份分别记录，不伪称同一全源码版本。

@@ -1,0 +1,100 @@
+{
+  "schema": "LOCAL_RMS32_AUTHORITY_FEEDBACK_EVIDENCE_V1",
+  "scope": "LOCAL_OFFICIAL_LOW_AND_PROTOCOL_ONLY_NOT_FULL_TOP_OR_FIVE_BLOCK_NUMERICAL_PASS",
+  "published_old_source_commit": "c50e7dd8ed23950ec58363f0bb4cb290f2ae0d5a",
+  "source_pins": {
+    "Rms32FaultFeedbackProtocolTest.scala": "aaedd432602aab0c01826298541e7cfd70eb87b520d0fba8c2452e0adc2eeb28",
+    "Rms32FaultFeedbackFixture.scala": "b3ff733e367d43cabdbd2d56b5a00efa75d010fb4e558aa36ed2114dcc119b1e",
+    "Rms32FaultFeedbackLow.scala": "819d14b068d6c4bf0ded20b1098c72af35187a73e21f712a6825dad6f0b887c1",
+    "HostOrderedRms32WiringV1.scala": "b2f070af946db02b683757ecdfcaecab04117f65f08d27a9572a94878390ec5a"
+  },
+  "old_official_low_category": "CHECK_COMB_LOOPS",
+  "original_remote_run_id": 41299356341,
+  "remote_child_exception_observed": false,
+  "remote_cause_equivalence_claimed": false,
+  "official_low_checks_disabled": false,
+  "protocol_assertions_changed": false,
+  "protocol_cases": 9,
+  "all_receipts": [
+    {
+      "phase": "old_compile",
+      "native_exit": 0,
+      "errors": [],
+      "elapsed_seconds": 13.45595282499562,
+      "observed_peak_rss": 282701824,
+      "receipt_sha256": "0c70119df7b44576b3548feebe18e05faf04b34ee1b063c40e51e4d150275d93",
+      "cleanup_complete": true,
+      "pipe_eof": true,
+      "gzip_finalized": true,
+      "raw_log_sha256": "533f0ae34cf92af5cfb9d6cdb8c2ed60aa5116d363373ea788cb604acf5a728d"
+    },
+    {
+      "phase": "old_low",
+      "native_exit": 1,
+      "errors": [],
+      "elapsed_seconds": 20.586176437995164,
+      "observed_peak_rss": 384618496,
+      "receipt_sha256": "a97f906a4abdfce44c5cdf6bab193b61c512e5c95359c4d9705e725934702d33",
+      "cleanup_complete": true,
+      "pipe_eof": true,
+      "gzip_finalized": true,
+      "raw_log_sha256": "6c9eddb95699e27f30c27c5c00c464a53614856bed00aa8e70b2b9c9b0622bbc"
+    },
+    {
+      "phase": "fixed_compile",
+      "native_exit": 0,
+      "errors": [],
+      "elapsed_seconds": 12.859865546983201,
+      "observed_peak_rss": 287735808,
+      "receipt_sha256": "e754ebe2c2dd3bef9feda88b4275433fc48dab0189f050eda0198a22fd14afdb",
+      "cleanup_complete": true,
+      "pipe_eof": true,
+      "gzip_finalized": true,
+      "raw_log_sha256": "533f0ae34cf92af5cfb9d6cdb8c2ed60aa5116d363373ea788cb604acf5a728d"
+    },
+    {
+      "phase": "fixed_low",
+      "native_exit": 0,
+      "errors": [],
+      "elapsed_seconds": 21.73312392801745,
+      "observed_peak_rss": 459956224,
+      "receipt_sha256": "49f559dc684c474beb126915ba1f4b0b3ad9625fd34228851600a2af2435226c",
+      "cleanup_complete": true,
+      "pipe_eof": true,
+      "gzip_finalized": true,
+      "raw_log_sha256": "ad6fbfe7a0923a965bfe7d1a472b4566740537e9e34f05d0f4f469e50206e3d3"
+    },
+    {
+      "phase": "compile_r1",
+      "native_exit": 0,
+      "errors": [],
+      "elapsed_seconds": 10.44357360500726,
+      "observed_peak_rss": 259366912,
+      "receipt_sha256": "1d3a5878e32a0f0549b6a95757faf4d40be89a354743c01133b4411e0a7663c8",
+      "cleanup_complete": true,
+      "pipe_eof": true,
+      "gzip_finalized": true,
+      "raw_log_sha256": "d9e1bfd19b37c5175cb4a828f4d4147b31af2420682776e912666202cf02c585"
+    },
+    {
+      "phase": "model_r1",
+      "native_exit": 0,
+      "errors": [],
+      "elapsed_seconds": 71.47349609498633,
+      "observed_peak_rss": 887857152,
+      "receipt_sha256": "5f5f4872fc0028fbb177e23329577898c417179c74d9ccf0420d638f098065a1",
+      "cleanup_complete": true,
+      "pipe_eof": true,
+      "gzip_finalized": true,
+      "raw_log_sha256": "3f00f5abea1bd001cb53ce5ce108763539e1bc3698c36402b15287c5510cf83a"
+    }
+  ],
+  "compiled_dependency_inputs_sha256": "1a7c8c6f234af6666d3597726aad24fbb5ab8b71668c7562492349e906110a62",
+  "original_compile_receipt_sha256": "1bb05b6794ad3904f32e12fdd7135f8502e66cbcc22793f41b357da403af3c0b",
+  "comparison_old_inputs_sha256": "ef5a31e8a2048afe3580b790f6fe181dc334965f93c301903353761d0e94b1ac",
+  "comparison_fixed_inputs_sha256": "addaa4001ecefddbb0050058458f7806b31675d6f8f8075c55aa972db6a69a55",
+  "protocol_inputs_sha256": "2f1c2545921fff9f1f758ee71f71cb8f5583677d7fb05e4339a006df5d196521",
+  "full_top_pass": false,
+  "numerical_pass": false,
+  "final_rtl_accepted": false
+}

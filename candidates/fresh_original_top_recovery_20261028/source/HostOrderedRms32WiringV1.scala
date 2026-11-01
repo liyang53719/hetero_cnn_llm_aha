@@ -81,7 +81,11 @@ object HostOrderedRms32WiringV1 {
     a.io.retire(11).valid:=(retire || prefix.vectorRetire.valid) && !eventConflict
     a.io.retire(11).bits.lease:=Mux(retire,lease,prefix.vectorRetire.bits.lease)
     a.io.retire(11).bits.status:=Mux(retire,retireStatus,prefix.vectorRetire.bits.status)
-    val firstFault=currentIndependentFault || poison || corePoison || contextChanged || eventConflict || g.io.localFault || authority.currentFault
+    // The current authority includes this adapter's own malformed/overrun
+    // reflection. Keep independent faults immediate; capture that reflection
+    // in poison rather than making request.valid depend on its own validity.
+    when((waiting || owned || routeP0) && authority.currentFault){poison:=true.B}
+    val firstFault=currentIndependentFault || poison || corePoison || contextChanged || eventConflict || g.io.localFault
     val p0Held=WireDefault(false.B)
     if(enableP0){
       val r=k.io.rmsVectorRequest.get;val result=k.io.rmsVectorResult.get

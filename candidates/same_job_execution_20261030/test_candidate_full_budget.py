@@ -27,11 +27,11 @@ class CandidateBudgetTests(unittest.TestCase):
    if pathlib.Path(module.__file__).resolve()==(E/'cloud_budget.py').resolve():
     module.admit=lambda binding:dict(execution_mode=mode.FULL,full_block_budget=binding['full_block_budget'])
   with patch.object(importlib.machinery.SourceFileLoader,'exec_module',load):return mode.admit(self.b)
- def test_adapter_only_four_reviewed_exact_allowlist_additions(self):
+ def test_adapter_only_nine_reviewed_exact_allowlist_additions(self):
   tree=ast.parse((E/'executor_adaptation.py').read_text())
   assignments=[n for n in tree.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name)and t.id=='ALLOWED_PATHS'for t in n.targets)]
   self.assertEqual(len(assignments),1)
-  added={'execution_mode.py','test_candidate_full_budget.py','test_disk_receipt.py','numeric/test_contract_domains.py'}
+  added={'execution_mode.py','test_candidate_full_budget.py','test_disk_receipt.py','numeric/test_contract_domains.py','evidence/contract_domain_20261101/ACTUAL_PURE_CHAIN_SAFE_RESULT.json','evidence/contract_domain_20261101/PURE_CHAIN_README.md','evidence/contract_domain_20261101/reproduce_pure_chain.py','numeric/candidate_observation_contract.py','numeric/test_candidate_observation_contract.py'}
   tuples=[n for n in ast.walk(assignments[0])if isinstance(n,ast.Tuple)and added <= {x.value for x in n.elts if isinstance(x,ast.Constant)}]
   self.assertEqual(len(tuples),1)
   for value in added:self.assertEqual(sum(isinstance(n,ast.Constant)and n.value==value for n in tuples[0].elts),1)

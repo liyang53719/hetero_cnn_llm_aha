@@ -1,3 +1,9 @@
+## 2026-11-01 17:58 UTC：精确 host adapter 已审路径清单闭包修复
+
+- `ad81c756` 云端接续入口 0.17 秒拒绝，尚未创建 binding/job、未 runtime/ABI/DUT。实际 adapter 全差异扫描发现五个此前已审 host-only 路径未列许可：contract-domain 三个小证据/复现工具，以及 candidate_observation_contract.py 与其旧测试；不是新硬件差异。
+- 仅将这五个精确相对路径加入受独立 review 约束的白名单，不使用目录前缀、不删完整 builder/executor catalog diff、实际字节和 review 绑定门。原首次失败保留。后续必须实际完整 adapter / handoff 前置验证所有差异后才生成新执行身份；不再逐首错误重跑。
+- 仍同 artifact `05046…` / ELF `709e…`，driver/SV/参考/输入/资源预算/五个300秒窗口不变；无新增 GitHub build 或 nonce。完整数值与最终 RTL 仍 0/5。
+
 ## 2026-11-01 17:48 UTC：候选 builder／executor 合同路径域接续修复（仅 host source）
 
 - 新候选实际 artifact `05046aa9…` / ELF `709e88d0…` 不重建、不改硬件。前一 `2e0b34cf` 云端身份 `3ffacfdc-4614-4919-bb29-40f6482ecfe4` 已通过原现场盘门、archives、三个 fresh runtime、实际 startup ABI、P0 initialize / rope / provider / transport；`p0_connect` native 1 且 strict cleanup / EOF 完整，DUT 未启动。

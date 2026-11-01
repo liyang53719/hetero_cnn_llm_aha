@@ -19,6 +19,11 @@ CATALOG_PATH = PREFIX + 'SOURCE_PINS.json'
 # No build producer, Scala, C++, SV, reference, provider or stimulus source may
 # change through this host adapter. Additional paths require source review.
 ALLOWED_PATHS = frozenset(PREFIX + x for x in (
+    'evidence/contract_domain_20261101/ACTUAL_PURE_CHAIN_SAFE_RESULT.json',
+    'evidence/contract_domain_20261101/PURE_CHAIN_README.md',
+    'evidence/contract_domain_20261101/reproduce_pure_chain.py',
+    'numeric/candidate_observation_contract.py',
+    'numeric/test_candidate_observation_contract.py',
     'execution_mode.py', 'test_candidate_full_budget.py', 'test_disk_receipt.py', 'numeric/test_contract_domains.py',
     'cloud_budget.py', 'prepare_cloud_execution.py', 'controller/cloud_flow.py',
     'summarize_cloud_execution.py', 'executor_adaptation.py',

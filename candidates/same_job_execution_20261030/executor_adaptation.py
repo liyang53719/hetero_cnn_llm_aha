@@ -31,7 +31,7 @@ ALLOWED_PATHS = frozenset(PREFIX + x for x in (
     'runtime/retained_materials.py', 'runtime/test_retained_materials.py',
     'controller/flow.py', 'runtime/runtime_reuse.py', 'runtime/install_job.py',
     'runtime/test_supervisor_return.py', 'runtime/test_install_supervisor_return.py',
-    'test_stage_return_retention.py',
+    'test_stage_return_retention.py', 'numeric/test_prelaunch.py',
     'test_cloud_budget.py', 'test_cloud_controller.py', 'test_cloud_flow_mock.py',
     'acceptance_tests/test_cloud_summary.py', 'acceptance_tests/test_original_initialize.py', 'acceptance_tests/test_lifecycle.py', 'acceptance_tests/test_main_mock.py',
     'acceptance_tests/test_split_consumer_cli.py', 'acceptance_tests/test_consumer_memory.py',

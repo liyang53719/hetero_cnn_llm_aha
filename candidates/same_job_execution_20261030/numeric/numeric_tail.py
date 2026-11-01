@@ -22,8 +22,32 @@ def module(name,path,pins):
 def complete(r):
  return (r.get('cleanup_proof') or {}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP' and (r.get('log_capture') or {}).get('pipe_eof_observed')is True and (r.get('log_capture') or {}).get('gzip_finalized')is True
 
-def require_cleanup(r,marker):
+PRELAUNCH_SUPERVISOR_SHA='c298efb15564b052c7aec7aaf42326de10f392f0e7d28c511fa5def1fcd97791'
+PRELAUNCH_ERRORS=('ValueError: locked memory gate','ValueError: locked disk gate','ValueError: prelaunch work deadline')
+def prelaunch_rejection(r,run_dir,supervisor_path):
+ # This exact supervisor tests these gates before mkdir/Popen. False worker_started
+ # alone is insufficient: Popen precedes the leader verification that sets it true.
+ if run_dir is None or supervisor_path is None or type(r)is not dict:return False
+ fields={'argv','caps','cleanup_proof','elapsed_seconds','errors','limitations','native_exit','observed_cpu_seconds','observed_peak_rss','observed_processes','peak_file_bytes','peak_tree_bytes','reader_join_barrier','scope','status','supervisor_cpu_scope','supervisor_cpu_seconds','worker_started'}
+ if set(r)!=fields or r['status']!='FAIL_OR_INCOMPLETE' or r['scope']!='ORIGINAL_PROCESS_GROUP_AND_OBSERVED_DESCENDANTS_ONLY':return False
+ if r['worker_started']is not False or r['native_exit']is not None or r['cleanup_proof']is not None or type(r['observed_processes'])is not list or r['observed_processes']!=[]:return False
+ if type(r['errors'])is not list or len(r['errors'])!=1 or r['errors'][0]not in PRELAUNCH_ERRORS:return False
+ barrier=r['reader_join_barrier']
+ if type(barrier)is not dict or set(barrier)!={'complete','alive','reader_finally_done'}or barrier['complete']is not True or barrier['alive']is not False or barrier['reader_finally_done']is not False:return False
+ if any(type(r[k])not in(int,float)or r[k]!=0 for k in ('observed_cpu_seconds','observed_peak_rss','peak_file_bytes','peak_tree_bytes')):return False
+ try:
+  output=P(run_dir);source=P(supervisor_path)
+  if not output.is_absolute()or output!=output.resolve()or not output.parent.is_dir()or any(p.is_symlink()for p in(output,*output.parents))or output.exists():return False
+  if not source.is_absolute()or source!=source.resolve()or any(p.is_symlink()for p in(source,*source.parents))or not source.is_file()or sha(source)!=PRELAUNCH_SUPERVISOR_SHA:return False
+ except (OSError,ValueError,RuntimeError):return False
+ return True
+
+def require_cleanup(r,marker,run_dir=None,supervisor_path=None):
  if not complete(r):
+  if prelaunch_rejection(r,run_dir,supervisor_path):
+   marker=P(marker)
+   save(marker.with_name('PRELAUNCH_REJECTED_'+marker.name),dict(status='INCOMPLETE',scope='TRUSTED_SUPERVISOR_PRELAUNCH_REJECTION_NOT_WORKER_CLEANUP',error_category=r['errors'][0].removeprefix('ValueError: '),worker_started=False,run_directory_absent=True,supervisor_sha256=PRELAUNCH_SUPERVISOR_SHA,numerical_pass=False))
+   raise ValueError('trusted supervisor rejected before worker launch; INCOMPLETE')
   save(marker,dict(status='HOLD_PARENT_LEASE_NO_CONTINUATION'))
   while True:signal.pause()
 
@@ -162,7 +186,7 @@ def run(b,binding_path,binding_sha):
   caps=dict(wall_seconds=seconds+30,cleanup_seconds=30,file_bytes=2<<30,tree_bytes=512<<20,log_bytes=64<<20,raw_log_bytes=128<<20,max_entries=100000,per_process_as_bytes=b['address_space_bytes'],per_process_cpu_seconds=18000 if name.endswith('_dut') else seconds+30,rss_bytes=b['rss_bytes'],cpu_seconds=seconds+30,extra_watch_roots=b['owned_roots'],min_free_disk_bytes=1_500_000_000,watch_tree_bytes=b['tree_cap'])
   r=supervisor.execute([b['python'],'-B',str(D/'locked_phase.py'),'--phase',str(phase),'--sha256',sha(phase)],str(run_dir),b['lock'],caps,e,localpins,resource_gate={'min_available_memory':b['rss_bytes']+(1<<30)+(b['reserved_other_owner_bytes']if cloud is not None else 0),'min_disk_free':8<<30})
   save(out/'phases'/(name+'_SUPERVISOR_RETURN.json'),r)
-  require_cleanup(r,out/('OWNERSHIP_INCOMPLETE_'+name+'.json'))
+  require_cleanup(r,out/('OWNERSHIP_INCOMPLETE_'+name+'.json'),run_dir,P(supervisor.__file__))
   allstage.append(dict(name=name,native_exit=r['native_exit'],receipt_sha256=sha(run_dir/'RESULT.json')))
   need(r['native_exit']in accepted and not r['errors'],'stage failed; no retry '+name)
   return r

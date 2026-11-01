@@ -1,7 +1,7 @@
 """Local return persistence only. No subprocess, DUT or real runtime import."""
 import ast,hashlib,json,pathlib,tempfile,types,unittest
 D=pathlib.Path(__file__).resolve().parent
-BASE_AST={'controller/cloud_flow.py': '69ba04c76f107bd2da183d15b752ba36b73cf696342fbffd65c6355d32dd520c', 'controller/flow.py': '6640f4a848fc6cbc4300bb774c6d1e8e6ed8f055c29cc23e868cfc73ceaccfcf', 'numeric/numeric_tail.py': '6e0d96456616c3c0186d4659041141d5776c9956c92ca2c305bbe8bbdbf34348'}
+BASE_AST={'controller/cloud_flow.py': '69ba04c76f107bd2da183d15b752ba36b73cf696342fbffd65c6355d32dd520c', 'controller/flow.py': '6640f4a848fc6cbc4300bb774c6d1e8e6ed8f055c29cc23e868cfc73ceaccfcf', 'numeric/numeric_tail.py': '0f3567b14af205ff5e480ea7dab60ba2dda79e35dfe7fe2281afe5b488dc0d7b'}
 EXPECTED={
  'controller/cloud_flow.py':"save(job / 'bindings' / (name + '_SUPERVISOR_RETURN.json'), r)",
  'controller/flow.py':"save(job / 'bindings' / (name + '_SUPERVISOR_RETURN.json'), r)",
@@ -37,7 +37,7 @@ class Test(unittest.TestCase):
    def pin(p):return {'bytes':p.stat().st_size}
    def cleanup(receipt,*args):
     if (receipt.get('cleanup_proof')or{}).get('status')!='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP':raise ValueError('original cleanup rejection')
-   ns=dict(job=root,out=root,name='profile0_dut',r=r,run_root=worker,run_dir=worker,save=save,pin=pin,sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest(),history=[],require_cleanup=cleanup)
+   ns=dict(P=pathlib.Path,supervisor=types.SimpleNamespace(__file__=__file__),job=root,out=root,name='profile0_dut',r=r,run_root=worker,run_dir=worker,save=save,pin=pin,sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest(),history=[],require_cleanup=cleanup)
    block=ast.fix_missing_locations(ast.Module(body=stage.body[ix+1:ix+3],type_ignores=[]))
    try:exec(compile(block,'<actual-stage-save-and-next-check>','exec'),ns)
    except (ValueError,FileNotFoundError):pass

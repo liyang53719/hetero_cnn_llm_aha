@@ -1,3 +1,13 @@
+## 2026-11-01 07:36 UTC：明确 prelaunch 内存拒绝；狭义退出修复（INCOMPLETE）
+
+795d实际新O1恢复的P0 provider返回已保存，精确 `ValueError: locked memory gate` / worker_started=false / native_exit=null / 无worker目录。此前archives、3runtime imports、startupABI、initialize、rope共7阶段原收据全部native0/cleanupEOF。未运行DUT，不是数值失败。旧require_cleanup将没有启动worker的拒绝也无限hold；本次仅精确session5387中断，工具实际exit130，原证据保留，未知旧owner5GiB预留不变。
+
+源码仅新增狭义可证明prelaunch分支：固定c298监督器源码SHA及其gate→mkdir→Popen→workerflag顺序、完整返回字段/精确3种前置错误/无owner与log/零采样/reader未启、实际输出目录不存在（含symlink拒）共同满足才写独立PRELAUNCH_REJECTED marker并raise INCOMPLETE。不能只凭workerFalse——Popen后的leader验证失败也可能尚未置True。已启动或未知cleanup缺失仍保持原hold，不伪cleanup PASS或数值通过。
+
+外部下一诊断预算拟经独审只将三处group RSS收紧到2GiB：dut_rss_bytes、install.rss_bytes、reference.rss_bytes。DUT及角色AS仍2.5GiB、consumer512MiB、旧owner5GiB+1GiB余量、五300/12900与所有运算/线程不变，内存准入门因此为8GiB。numeric_reserved_increment为磁盘增量，不改。此为更紧采样RSS条件诊断，非硬group隔离或完整执行足够保证；实际超限仍INCOMPLETE。源门本就支持，不修改cloud_budget源码，不通过缩硬件绕资源。
+
+同已实际构建的新O1 ELF df229/SV9a8c/driver343e保留，不重build；新source经过独审/CI后产生新可信executor与预算身份、fresh runtime/ABI/实际views验证。当前完整数值仍0/5，FULL预算缺工程完成证据而非用户授权。
+
 ## 2026-11-01 07:24 UTC：O1 构建成功；云端预启动失败与返回证据修复（INCOMPLETE）
 
 原诊断 build run41277679022 成功：新共同 O1 ELF df229150…（77,405,168 B），SV9a8c/driver343e实字节与原冻结相同，五编译实际收据已审。20阶段有限诊断均native0；这不倒推第一次 host_archive UNKNOWN 原因，也不构成五块数值通过。

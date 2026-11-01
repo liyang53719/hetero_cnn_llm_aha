@@ -22,7 +22,9 @@ def run(a):
  exits=json.loads(regular(front/'stage_exits.json',65536).read_text());need([x['name']for x in exits]==list(STAGES),'exact complete production stage sequence')
  for name in STAGES:rows[name]=strict(front/name/'RESULT.json')
  result=json.loads(regular(front/'BUILD_ONLY_RESULT.json',65536).read_text());need(result['status']=='UNREVIEWED_MODEL_BUILD','actual completed build')
- artifact=front/'frozen_artifact';payload=verify(artifact,identity,result['artifact']['manifest']['sha256']);need(result['artifact']['expanded_bytes']==payload['expanded_bytes'],'packed complete byte count')
+ artifact=front/'model_candidate_artifact'
+ need(result['artifact']['manifest']['path']==str((artifact/'frozen_artifact.json').resolve(strict=True)),'fixed candidate artifact manifest path')
+ payload=verify(artifact,identity,result['artifact']['manifest']['sha256']);need(result['artifact']['expanded_bytes']==payload['expanded_bytes'],'packed complete byte count')
  output=dict(schema='MODEL_CANDIDATE_SEVEN_FILE_EXPORT_V1',status='UNREVIEWED_MODEL_BUILD',artifact_identity=identity,source_pins_sha256=inv['source_pins_sha256'],payload=payload,stages=rows,transfer_approval_sha256=ACCEPTED_TRANSFER_APPROVAL_SHA256,numerical_pass=False,final_rtl_replay=False)
  raw=json.dumps(output,sort_keys=True,indent=2)+'\n';need(len(raw.encode())<=65536,'bounded safe summary')
  with a.output.open('x')as f:f.write(raw)

@@ -1,3 +1,7 @@
+## 2026-11-01 15:39 UTC：修复候选打包与导出目录接线
+
+原 packfix run 41314704781 已失败终态：20 构建阶段有限原收据均 native0/cleanup/EOF，构建步骤成功后 export 错读旧 frozen_artifact 目录；实际 candidate pack 输出 model_candidate_artifact。Artifacts API 为空，无可下载 ELF，不继承上次产物 PASS。当前只修固定路径并额外核 manifest.path 精确绑定，原七件非空、全部严格验证、9000/7200 秒和 O1 flags 不变。真实 subprocess CLI 已串联 record→pack→verify→export→workflow 七件目录夹具，normal/-O 新版 CLI0、旧版明确目录摘要拒绝，28严格合成阶段与9导出/5打包负例均过；先核805真实源pin，再用独立合成catalog实际执行所有验证。追加3证据后最终闭包另核，测试数据明确 synthetic，不冒实际候选结构或完整数值资格。完整 M128 与最终 RTL 均 0/5。
+
 ## 2026-11-01：编译完成后源码pin空文件兼容修复
 
 - 原candidate run41306209752实际20阶段全部native0且严格收尾，真实122端口门通过，host_archive约2933秒、host_link约15.56秒；失败发生在后续pack source pin检查。七件未导出，完整数值仍0/5，不把编译成功冒验收通过。

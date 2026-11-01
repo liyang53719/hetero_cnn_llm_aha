@@ -1,3 +1,11 @@
+## 2026-11-01：实际构建包接续云端执行（host-only 适配，非数值通过）
+
+实际 build-only run 41257805047 成功，七件 artifact 13064009898 已按授权下载、逐字节验证。原 e01529 硬件/driver/ELF/SV 不重建不改写；执行端采用独立真实源码身份与受审完整 catalog 差异。修复 Make recipe 双空格误拒，并将官方精确恢复的原 builder loader/六库置于 workspace，仍要求静态与真实启动 resolved 全部原 SHA；不使用当前系统不匹配库或放宽 ABI。尚未运行 loader/DUT，源码测试与静态字节匹配不能当数值通过。
+
+五块完整 M128 / 最终 RTL 仍 0/5；下一阶段沿原五 profile/runtime/reference/provider/consumer 链做真实资源准入后的有界校准，FULL 所需时限保持待实测速率。原 fixed4096、FP32/BF16 舍入与路由契约不变。本工作不认证 Vector 全链 II=1。
+
+本日云端只清理 341 个有完整已核副本的旧 JAR 缓存和已验证七件保留副本的原下载 ZIP，实际回收 612,630,528 B；保留所有唯一证据、tracked 旧仓库、权重、runtime tree 与 unknown owner 5 GiB 预留，无第二次清理。
+
 ## 2026-11-01 00:36 UTC — TEMP：七文件传递已批准，恢复唯一 build-only 构建
 
 用户00:35:33明确批准模拟ELF、同源SV、driver与4份metadata经GitHub Actions传入本云；不再重复询问同一范围。新增固定批准清单hash与guard/export精确绑定，原single-A/direct-parent/attempt1及9000s job / 7200s含prep构建预算保持。源提交不含launch；只有随后唯一激活会构建，不在GitHub跑完整验收。下载后先ZIP完整清单/sha/大小和静态readelf、资源审查，不对未准入ELF调用ldd/执行。不改硬件4096、C++、参考或精度。

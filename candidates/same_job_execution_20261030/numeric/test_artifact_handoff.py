@@ -1,6 +1,9 @@
 """SYNTHETIC seven tiny text files only. No ELF, download, execution or remote proof."""
 import copy,json,pathlib,tempfile,unittest
 import artifact_handoff as a
+import sys
+sys.path.insert(0,str(pathlib.Path(__file__).resolve().parent.parent))
+from test_executor_adaptation import Fixture
 
 class Tests(unittest.TestCase):
  def setUp(self):
@@ -84,4 +87,31 @@ class Tests(unittest.TestCase):
   with self.assertRaises(ValueError):self.verify()
  def test_untrusted_hash_refused(self):
   with self.assertRaises(ValueError):a.verify(self.handoff,'0'*64,self.manifest,a.sha(self.manifest),self.frozen,self.executor)
+ def adapted(self):
+  (self.base/'adapter').mkdir();fixture=Fixture(self.base/'adapter')
+  fixture.builder=self.builder;fixture.executor=dict(self.executor,source_commit='d'*40)
+  fixture.manifest=a.sha(self.manifest);fixture.refresh()
+  self.executor=fixture.executor;self.h['source_pins_sha256']=fixture.old_pin['sha256']
+  self.handoff.write_text(json.dumps(self.h))
+  return fixture
+ def verify_adapted(self,f):
+  return a.verify(self.handoff,a.sha(self.handoff),self.manifest,a.sha(self.manifest),self.frozen,self.executor,f.adaptation_pin,f.current_pin,f.root)
+ def test_adapted_full_handoff_chain(self):
+  f=self.adapted();r=self.verify_adapted(f)
+  self.assertEqual(r['builder_identity']['source_commit'],'a'*40)
+  self.assertEqual(r['executor_identity']['source_commit'],'d'*40)
+  self.assertEqual(r['executor_adaptation']['builder_source_pins_sha256'],self.h['source_pins_sha256'])
+  self.assertFalse(r['numerical_pass'])
+ def test_adapted_manifest_binding_reject(self):
+  f=self.adapted();f.manifest='0'*64;f.refresh()
+  with self.assertRaises(ValueError):self.verify_adapted(f)
+ def test_adapted_builder_catalog_binding_reject(self):
+  f=self.adapted();self.h['source_pins_sha256']='0'*64;self.handoff.write_text(json.dumps(self.h))
+  with self.assertRaises(ValueError):self.verify_adapted(f)
+ def test_adapted_external_pin_reject_before_import(self):
+  f=self.adapted();f.adaptation_pin['sha256']='0'*64
+  with self.assertRaises(ValueError):self.verify_adapted(f)
+ def test_adapted_checker_must_match_reviewed_catalog_before_import(self):
+  f=self.adapted();f.new['candidates/same_job_execution_20261030/executor_adaptation.py']=b'raise RuntimeError("must not import")';f.refresh()
+  with self.assertRaises(ValueError):self.verify_adapted(f)
 if __name__=='__main__':unittest.main()

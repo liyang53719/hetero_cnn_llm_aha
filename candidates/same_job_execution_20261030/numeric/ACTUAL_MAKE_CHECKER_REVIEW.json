@@ -1,0 +1,21 @@
+{
+  "actual_driver_dependency_json_sha256": "00b4aee23f25af800aef23ef654dea1246aa050416ec5dae7b52eae5d5354baf",
+  "actual_global_make_sha256": "74121398e5be12bf03721f1f0f5ce75e7c703635ec7e50920d43f9c4e31fcc0c",
+  "actual_host_make_sha256": "7d7537b14a8fafe92f2eb8a91a496ec69759df876ec2b4b6e31b09a33efb1044",
+  "actual_run_id": 41257805047,
+  "artifact_id": 13064009898,
+  "artifact_manifest_sha256": "e1f61b9edce9b2622afe7da07e38e38d1527b40395f9919a2d29cbdc519d5ff3",
+  "builder_source_commit": "e01529eb9681fc08a2790d2cc8c17735c986610f",
+  "difference": "Two ASCII spaces before -c in actual official generated recipe",
+  "elf_executed": false,
+  "new_executor_checker_sha256": "a803bae1cb8b77e49101c939afe07f7ba44fb493be0082678550698ee2a5c92f",
+  "new_verifier_actual_result": "FULL_DEPENDENCY_MAKE_LINK_CHAIN_ACCEPTED",
+  "numerical_pass": false,
+  "old_producer_and_verifier_sha256": "80186b8c5727eeb9054b9e5b284fb27ba6baa7388f491d4ba996409086daa5f4",
+  "old_verifier_actual_result": "REJECT_ACTUAL_EXPLICIT_DRIVER_COMPILE_RECIPE",
+  "original_artifact_bytes_changed": false,
+  "remaining_gates_unchanged": true,
+  "schema": "ACTUAL_BUILD_MAKE_RECIPE_CHECKER_REVIEW_V1",
+  "source_manifest_sha256": "1300439e75e47e82ddb7fa9f1ccec45d624a4efd36b01979182329d898db9ccd",
+  "status": "EXECUTOR_CHECKER_FIXTURE_VERIFIED_NOT_EXECUTION_ADMITTED"
+}

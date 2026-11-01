@@ -105,13 +105,6 @@ def run(b,binding_path,binding_sha):
   need(any(P(b[role]).resolve().is_relative_to(r)for r in roots),'unwatched required material '+role)
  build_pin=b['builder_handoff']if cloud is not None else b['build_result']
  need(any(P(build_pin['path']).resolve().is_relative_to(r)for r in roots),'unwatched build evidence')
- need(not out.exists() and out.is_relative_to(P(b['owner_root'])),'fresh output inside runtime owner');out.mkdir();(out/'runs').mkdir();(out/'phases').mkdir();(out/'cache_roots').mkdir()
- save(out/'REGISTERED_FIVE.json',dict(execution_policy=profile_policy.checked(b),profiles=b['profiles'],tokens=128,execution_mode=admission['mode'],profile_seconds=admission['profile_seconds'],full_budget_sha256=admission['reviewed_budget_sha256'],scope='CHISEL_EMITTED_SV_SIMULATION_NOT_FINAL_RTL',numeric_pass=False))
- sys.path.insert(0,b['supervisor_dir']);import supervise_multiroot as supervisor
- owner=module('admitted_runtime_owner',P(b['owner_module']),pins)
- owner_doc,_=owner.verify(b['owner_manifest']['path'],b['owner_manifest']['sha256'],b['owner_root'])
- need(owner_doc['schema']in(('SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3','IMPORTED_THREE_RUNTIME_OWNER_CLOUD_V1')if cloud is not None else('SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3',))and owner_doc['identity']==(cloud if cloud is not None else dict(run_id=b['run_id'],source_commit=b['source_commit'],launch_commit=b['launch_commit'])),'fresh CI owner exact same run/source/launch, never historical V2 receipt')
- profile_policy.require_same(b,owner_doc)
  if cloud is None:
   build=material.checked(b['build_result']);br=json.loads(build.read_text());manifest=material.checked(br['artifact']['manifest']);frozen=json.loads(manifest.read_text())
   proof=module('same_job_proof',D/'local_build_proof.py',pins)
@@ -119,7 +112,14 @@ def run(b,binding_path,binding_sha):
  else:
   build=None;manifest=material.checked(b['artifact_manifest']);frozen=json.loads(manifest.read_text())
   proof=module('split_build_proof',D/'artifact_handoff.py',pins)
-  proof.verify(b['builder_handoff']['path'],b['builder_handoff']['sha256'],manifest,sha(manifest),frozen,cloud)
+  proof.verify(b['builder_handoff']['path'],b['builder_handoff']['sha256'],manifest,sha(manifest),frozen,cloud,executor_adaptation=b.get('executor_adaptation'))
+ need(not out.exists() and out.is_relative_to(P(b['owner_root'])),'fresh output inside runtime owner');out.mkdir();(out/'runs').mkdir();(out/'phases').mkdir();(out/'cache_roots').mkdir()
+ save(out/'REGISTERED_FIVE.json',dict(execution_policy=profile_policy.checked(b),profiles=b['profiles'],tokens=128,execution_mode=admission['mode'],profile_seconds=admission['profile_seconds'],full_budget_sha256=admission['reviewed_budget_sha256'],scope='CHISEL_EMITTED_SV_SIMULATION_NOT_FINAL_RTL',numeric_pass=False))
+ sys.path.insert(0,b['supervisor_dir']);import supervise_multiroot as supervisor
+ owner=module('admitted_runtime_owner',P(b['owner_module']),pins)
+ owner_doc,_=owner.verify(b['owner_manifest']['path'],b['owner_manifest']['sha256'],b['owner_root'])
+ need(owner_doc['schema']in(('SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3','IMPORTED_THREE_RUNTIME_OWNER_CLOUD_V1')if cloud is not None else('SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3',))and owner_doc['identity']==(cloud if cloud is not None else dict(run_id=b['run_id'],source_commit=b['source_commit'],launch_commit=b['launch_commit'])),'fresh CI owner exact same run/source/launch, never historical V2 receipt')
+ profile_policy.require_same(b,owner_doc)
  common=frozen['common'];root=manifest.parent
  allstage=[];dut_records=[]
  def stage(name,argv,seconds=None,accepted=(0,),lease_out=None):
@@ -140,11 +140,16 @@ def run(b,binding_path,binding_sha):
  env_args=['--owned-environment',str(env_manifest),'--owned-environment-sha256',sha(env_manifest)]
  if cloud is not None:
   identity_pin=b['executor_identity_pin'];material.checked(identity_pin);need(json.loads(P(identity_pin['path']).read_text())==cloud,'actual executor identity bytes');env_args+=['--executor-identity',identity_pin['path'],'--executor-identity-sha256',identity_pin['sha256']]
+ abi_extra=[]
+ if b.get('workspace_loader') is not None:
+  for name in ('workspace_loader','executor_adaptation'):
+   row=b[name];material.checked(row);abi_extra+=['--'+name.replace('_','-'),row['path'],'--'+name.replace('_','-')+'-sha256',row['sha256']]
+  abi_extra+=['--artifact-manifest-sha256',sha(manifest)]
  abi=out/'STARTUP_ABI.json';tool=frozen['tool_manifest'];binary=common['binary']
- stage('startup_abi',[b['python'],'-B',str(D/'runtime_abi_owned.py'),'--binary',str(root/binary['path']),'--binary-sha256',binary['sha256'],'--tool-manifest',str(root/tool['path']),'--tool-manifest-sha256',tool['sha256'],'--output',str(abi),'--execute-reviewed-loader-list','--expected-run-id',str(b['run_id']),'--expected-source-commit',b['source_commit'],'--expected-launch-commit',b['launch_commit'],*env_args],120)
+ stage('startup_abi',[b['python'],'-B',str(D/'runtime_abi_owned.py'),'--binary',str(root/binary['path']),'--binary-sha256',binary['sha256'],'--tool-manifest',str(root/tool['path']),'--tool-manifest-sha256',tool['sha256'],'--output',str(abi),'--execute-reviewed-loader-list','--expected-run-id',str(b['run_id']),'--expected-source-commit',b['source_commit'],'--expected-launch-commit',b['launch_commit'],*env_args,*abi_extra],120)
  identity_args=['--artifact-manifest',str(manifest),'--artifact-manifest-sha256',sha(manifest),'--expected-run-id',str(b['run_id']),'--expected-launch-commit',b['launch_commit'],'--expected-source-commit',b['source_commit'],'--local-runtime-abi',str(abi),'--local-runtime-abi-sha256',sha(abi),*env_args]
  if cloud is None:identity_args+=['--local-build-result',str(build),'--local-build-result-sha256',b['build_result']['sha256']]
- else:identity_args+=['--builder-handoff',b['builder_handoff']['path'],'--builder-handoff-sha256',b['builder_handoff']['sha256']]
+ else:identity_args+=['--builder-handoff',b['builder_handoff']['path'],'--builder-handoff-sha256',b['builder_handoff']['sha256'],'--cloud-binding',b['controller_binding']['path'],'--cloud-binding-sha256',b['controller_binding']['sha256']]
  for i in profile_policy.eligible(b):
   lease_root=out/f'profile{i}';lease_root.mkdir();profile=lease_root/'material'
   with owner.lease(b['owner_manifest']['path'],b['owner_manifest']['sha256'],b['owner_root'],i,lease_root) as selected:
@@ -165,6 +170,7 @@ def run(b,binding_path,binding_sha):
    diagnostic=dut_evidence.verify(profile/'dut_result',i,sha(manifest),sha(bundle),binary['sha256'],runtime_sha,material.pin(out/'runs'/f'p{i}_dut'/'RESULT.json'))
    if cloud is not None:
     report=json.loads((profile/'dut_result/RESULT.json').read_text());need(report.get('executor_identity')==cloud and report.get('builder_handoff_sha256')==b['builder_handoff']['sha256'],'actual executor report not builder identity')
+    if b.get('executor_adaptation') is not None:need(report.get('executor_adaptation_sha256')==b['executor_adaptation']['sha256']and report.get('workspace_loader_sha256')==b['workspace_loader']['sha256'],'actual executor adapter/loader provenance')
    if admission['mode']==execution_mode.FULL:
     report=json.loads((profile/'dut_result/RESULT.json').read_text());actual=report['execution_admission']
     need(actual['execution_mode']==admission['mode']and actual['reviewed_budget_sha256']==admission['reviewed_budget_sha256'],'actual consumer full-mode budget identity')

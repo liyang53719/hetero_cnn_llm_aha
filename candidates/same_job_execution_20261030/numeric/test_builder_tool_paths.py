@@ -19,5 +19,6 @@ class Paths(unittest.TestCase):
   with self.assertRaises(ValueError):m.builder_tool_pin(dict(compile_tools={'cxx':'/a'},pins={}), 'cxx')
  def test_producer_copy_exact(self):
   p=D.parents[1]/'ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py'
-  self.assertEqual((D/'driver_dependency_proof.py').read_bytes(),p.read_bytes())
+  self.assertEqual(hashlib.sha256(p.read_bytes()).hexdigest(),m.PRODUCER_DEPENDENCY_CAPTURE_SHA)
+  self.assertEqual(m.PRODUCER_DEPENDENCY_CAPTURE_SHA,'80186b8c5727eeb9054b9e5b284fb27ba6baa7388f491d4ba996409086daa5f4')
 if __name__=='__main__':unittest.main()

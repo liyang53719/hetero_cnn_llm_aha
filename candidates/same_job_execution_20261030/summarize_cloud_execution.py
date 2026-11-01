@@ -31,6 +31,8 @@ def source_guard(binding):
   p=regular(repo/rel,32<<20);need(p.stat().st_size==r['bytes']and sha(p)==r['sha256'],'active source bytes');files[str(p)]=r['sha256']
  for p in (D/'executor_identity.py',D/'cloud_budget.py',D/'execution_mode.py',D/'profile_policy.py',D/'numeric/artifact_handoff.py',D/'numeric/dut_evidence.py',D/'numeric/required_acceptance.py',P(__file__).resolve()):
   need(files.get(str(p))==sha(p)and binding['pins'].get(str(p))==sha(p),'required helper in reviewed closure')
+ if binding.get('executor_adaptation') is not None:
+  p=D/'executor_adaptation.py';need(files.get(str(p))==sha(p)and binding['pins'].get(str(p))==sha(p),'reviewed executor adaptation source')
  return binding['source_pins']['sha256']
 
 # Only fixed actual supervisor result locations; never glob arbitrary files.
@@ -68,18 +70,30 @@ def project(job,binding_path,binding_sha):
   executor=load('summary_cloud_identity',D/'executor_identity.py').validate(b['identity'])
   handoff=load('summary_cloud_handoff',D/'numeric/artifact_handoff.py')
   manifest=checked(b['artifact_manifest']);frozen=read(manifest);builder=handoff.builder_identity(b['artifact_identity'])
-  need(builder==frozen['artifact_identity']and executor['source_commit']==builder['source_commit'],'separate same-source identities')
-  hp=checked(b['builder_handoff']);handoff_result=handoff.verify(hp,b['builder_handoff']['sha256'],manifest,b['artifact_manifest']['sha256'],frozen,executor)
-  need(handoff_result['source_pins_sha256']==source_sha,'builder reviewed source closure equals actual executor closure')
+  need(builder==frozen['artifact_identity'],'actual frozen builder identity')
+  adaptation=b.get('executor_adaptation');loader=b.get('workspace_loader')
+  hp=checked(b['builder_handoff'])
+  if adaptation is None:
+   need(loader is None and executor['source_commit']==builder['source_commit'],'legacy same-source identity without adaptation')
+   handoff_result=handoff.verify(hp,b['builder_handoff']['sha256'],manifest,b['artifact_manifest']['sha256'],frozen,executor)
+   need(handoff_result['source_pins_sha256']==source_sha,'builder reviewed source closure equals actual executor closure')
+  else:
+   checked(adaptation);checked(loader)
+   load('summary_executor_adaptation',D/'executor_adaptation.py').verify(adaptation,builder,executor,current_source_pins_pin=b['source_pins'],repo=D.parents[1])
+   handoff_result=handoff.verify(hp,b['builder_handoff']['sha256'],manifest,b['artifact_manifest']['sha256'],frozen,executor,executor_adaptation=adaptation)
   cloud_budget=load('summary_cloud_budget',D/'cloud_budget.py');cloud_admission=cloud_budget.admit(b)
+  need(cloud_admission.get('executor_adaptation')==adaptation and cloud_admission.get('workspace_loader')==loader,'approved adapter and loader identities')
+  source_identity=dict(builder_source_commit=builder['source_commit'],executor_source_commit=executor['source_commit'],executor_adaptation_sha256=adaptation['sha256']if adaptation is not None else None,workspace_loader_sha256=loader['sha256']if loader is not None else None)
   mode=load('summary_cloud_mode',D/'execution_mode.py');admission=mode.admit(b)
   need(cloud_admission['execution_mode']==admission['mode']and cloud_admission['full_block_budget']==b.get('full_block_budget'),'approved cloud mode and full budget')
   flow_path=job/'FLOW_RESULT.json'
   if not flow_path.exists()and not flow_path.is_symlink():
    result=dict(schema=unavailable['schema'],status='INCOMPLETE_EXECUTION',numerical_pass=False,final_rtl_executed=False,profile_qualification='UNKNOWN_NOT_INFERRED_FROM_PARTIAL_STAGES',profiles_registered=list(range(5)),stages=partial_stages(job),binding_sha256=binding_sha,source_pins_sha256=source_sha,builder_handoff_sha256=b['builder_handoff']['sha256'],execution_approval_sha256=b['execution_approval']['sha256'],cloud_budget_sha256=b['cloud_budget']['sha256'])
+   result.update(source_identity)
    need(len(json.dumps(result).encode())<=65536,'bounded incomplete summary');return result
   flow=read(flow_path);root=job/'materials/numeric';numeric_path=root/'RESULT.json';numeric=read(numeric_path)
   for key,value in [('identity',executor),('execution_approval',b['execution_approval']),('artifact_identity',builder),('execution_binding',pin(bp)),('builder_handoff',b['builder_handoff']),('artifact_manifest',b['artifact_manifest']),('numeric_result',pin(numeric_path))]:need(flow.get(key)==value,'fixed flow binding '+key)
+  if adaptation is not None:need(flow.get('executor_adaptation')==adaptation and flow.get('workspace_loader')==loader,'flow adapter and loader pins')
   need(flow.get('hardware_definitions')==1 and flow.get('profiles')==list(range(5)),'one fixed five profile hardware')
   need(flow.get('execution_mode')==admission['mode']and numeric.get('execution_mode')==admission['mode']and numeric.get('full_budget_sha256')==admission['reviewed_budget_sha256'],'mode budget binding')
   sys.path.insert(0,str(D/'numeric'))
@@ -93,6 +107,7 @@ def project(job,binding_path,binding_sha):
    need(record.get('profile')==i and all(record.get(k)==pin(p)for k,p in [('report',report_path),('startup',start_path),('outer',outer_path)]),'fixed profile receipt paths')
    consumer=read(report_path);started=read(start_path)
    need(consumer.get('executor_identity')==executor and consumer.get('artifact_identity')==builder and consumer.get('builder_handoff_sha256')==b['builder_handoff']['sha256'],'actual consumer dual identity')
+   if adaptation is not None:need(consumer.get('executor_adaptation_sha256')==adaptation['sha256']and consumer.get('workspace_loader_sha256')==loader['sha256'],'actual consumer approved adapter/loader identities')
    need(consumer.get('artifact_manifest_sha256')==b['artifact_manifest']['sha256']and started['binary_sha256']==frozen['common']['binary']['sha256'],'same actual artifact')
    ea=consumer.get('execution_admission',{})
    need(ea.get('execution_mode')==admission['mode']and ea.get('reviewed_budget_sha256')==admission['reviewed_budget_sha256']and ea.get('outer_cleanup_proof_required')is True,'actual consumer mode')
@@ -111,5 +126,6 @@ def project(job,binding_path,binding_sha):
   need(flow.get('qualification')==q and flow.get('status')==q['status'],'actual flow aggregate')
   transport=mode.transport_exit(admission['mode'],q);need(type(flow.get('transport_exit_code'))is int and flow['transport_exit_code']==transport,'actual transport scope')
   result=dict(schema=unavailable['schema'],status='VERIFIED_REAGGREGATED',executor_identity=executor,builder_identity=builder,numerical_pass=q['numerical_pass'],final_rtl_executed=False,execution_mode=admission['mode'],transport_exit_code=transport,qualification=q,profiles=profiles,binding_sha256=binding_sha,execution_approval_sha256=b['execution_approval']['sha256'],cloud_budget_sha256=b['cloud_budget']['sha256'],source_pins_sha256=source_sha,builder_handoff_sha256=b['builder_handoff']['sha256'],artifact_manifest_sha256=b['artifact_manifest']['sha256'],flow_receipt_sha256=sha(flow_path),numeric_receipt_sha256=sha(numeric_path))
+  result.update(source_identity)
   need(len(json.dumps(result).encode())<=65536,'bounded safe summary');return result
  except (ValueError,TypeError,KeyError,AttributeError,OSError,ImportError):return unavailable

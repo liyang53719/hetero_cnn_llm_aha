@@ -5,6 +5,51 @@ D=pathlib.Path(__file__).resolve().parent
 spec=importlib.util.spec_from_file_location('cloud_flow',D/'controller/cloud_flow.py');flow=importlib.util.module_from_spec(spec);spec.loader.exec_module(flow)
 spec=importlib.util.spec_from_file_location('cloud_prepare',D/'prepare_cloud_execution.py');prepare=importlib.util.module_from_spec(spec);spec.loader.exec_module(prepare)
 class Tests(unittest.TestCase):
+ def test_optional_adaptation_input_pair_rejected_before_loading(self):
+  a=types.SimpleNamespace(executor_adaptation=pathlib.Path('/nonexistent'))
+  with self.assertRaisesRegex(ValueError,'paired executor_adaptation'):prepare.adaptation_inputs(a,{})
+ def test_legacy_adaptation_inputs_empty(self):self.assertEqual(prepare.adaptation_inputs(types.SimpleNamespace(),{}),{})
+ def test_source_review_uses_explicit_adapter_not_equal_catalog(self):
+  identity={'source_commit':'b'*40};builder={'source_commit':'a'*40};record={}
+  def verify(*args,**kw):record.update(args=args,kw=kw)
+  with tempfile.TemporaryDirectory()as t:
+   manifest=pathlib.Path(t)/'SOURCE_PINS.json';manifest.write_text('{}');roles={'executor_adaptation':{'synthetic':True}}
+   with patch.object(prepare,'load',return_value=types.SimpleNamespace(verify=verify)):
+    prepare.reviewed_source({'builder_identity':builder,'source_pins_sha256':'old'},identity,roles,manifest,pathlib.Path(t))
+   self.assertEqual(record['args'],(roles['executor_adaptation'],builder,identity));self.assertEqual(record['kw']['current_source_pins_pin']['sha256'],prepare.sha(manifest))
+   with self.assertRaises(ValueError):prepare.reviewed_source({'source_pins_sha256':'old'},identity,{},manifest,pathlib.Path(t))
+ def test_real_admitted_inputs_adapted_handoff_and_fail_closed(self):
+  with tempfile.TemporaryDirectory()as t:
+   repo=pathlib.Path(t);e=repo/'E';controller=e/'controller';controller.mkdir(parents=True);(e/'numeric').mkdir()
+   for n in ('cloud_budget.py','executor_identity.py','execution_mode.py','executor_adaptation.py','numeric/artifact_handoff.py','numeric/workspace_loader.py','numeric/runtime_abi_owned.py','SOURCE_PINS.json'):(e/n).write_text('{}')
+   def put(n,d):
+    p=repo/n;p.write_text(json.dumps(d));return flow.pin(p)
+   identity=dict(source_commit='b'*40,started_monotonic=1);builder=dict(source_commit='a'*40)
+   budget={k:None for k in ('runtime_mode','archive_mode','runtime_reuse_manifest','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','reserved_other_owner_bytes','consumer_address_space_bytes','stage_resources','execution_mode','full_block_budget')}
+   budget.update(executor_adaptation=put('adapter',{}),workspace_loader=put('loader',{}))
+   b=dict(budget,execution_context='CLOUD_EXECUTOR_V1',identity=identity,executor_identity=identity,job_started_monotonic=1,artifact_identity=builder,repo=str(repo),pins={str(e/n):flow.sha(e/n)for n in ('cloud_budget.py','executor_identity.py','execution_mode.py','executor_adaptation.py','numeric/artifact_handoff.py','numeric/workspace_loader.py','numeric/runtime_abi_owned.py')},executor_identity_pin=put('identity',identity),artifact_manifest=put('artifact',{'common':{'binary':{'path':'host','sha256':'h'}},'tool_manifest':{'path':'tool','sha256':'t'}}),builder_handoff=put('handoff',{}),cloud_budget=put('budget',{'host_identity':{}}),source_pins=flow.pin(e/'SOURCE_PINS.json'))
+   seen=[];imported={'builder_identity':builder,'source_pins_sha256':'old-distinct-catalog'}
+   def handoff(*args,**kw):self.assertEqual(kw,{'executor_adaptation':b['executor_adaptation']});seen.append('handoff');return imported
+   def adaptation(*args,**kw):self.assertEqual(args,(b['executor_adaptation'],builder,identity));self.assertEqual(kw['current_source_pins_pin'],b['source_pins']);seen.append('adaptation')
+   verified=dict(root=str(repo/'libs'),artifact_manifest_sha256=b['artifact_manifest']['sha256'],builder_source_commit=builder['source_commit'])
+   def loader(*args):
+    self.assertEqual(args[:5],(b['workspace_loader'],repo/'host','h',repo/'tool','t'));seen.append('loader');return verified
+   modules={'actual_cloud_workspace_loader':types.SimpleNamespace(verify=loader),'actual_cloud_runtime_abi':types.SimpleNamespace(elf_info=lambda _:None),'actual_cloud_budget':types.SimpleNamespace(admit=lambda _:budget,verify_host=lambda *a:None),'actual_cloud_identity':types.SimpleNamespace(verify_current=lambda _:None),'actual_imported_artifact':types.SimpleNamespace(verify=handoff),'actual_executor_adaptation':types.SimpleNamespace(verify=adaptation)}
+   with patch.object(flow,'D',controller),patch.object(flow,'mod',side_effect=lambda name,path:modules[name]),patch.object(flow.subprocess,'check_output',return_value='b'*40):
+    self.assertEqual(flow.admitted_inputs(b),(budget,dict(imported,workspace_loader_verified=verified)));self.assertEqual(seen,['handoff','adaptation','loader'])
+    with patch.object(modules['actual_executor_adaptation'],'verify',side_effect=ValueError('forbidden source diff')):
+     with self.assertRaisesRegex(ValueError,'forbidden source diff'):flow.admitted_inputs(b)
+    b['workspace_loader']={'different':True}
+    with self.assertRaisesRegex(ValueError,'binding reviewed workspace_loader'):flow.admitted_inputs(b)
+ def test_upfront_disk_reserves_only_remaining_aggregate_growth(self):
+  snap=dict(schema='SAMPLED_OWNED_LIVE_BYTES_V1',complete=True,bytes=4<<30,free_bytes=20_180_000_000)
+  self.assertLess(snap['free_bytes'],flow.TREE+(8<<30))
+  result=flow.upfront_disk_admission(snap);self.assertEqual(result['required_free_bytes'],flow.TREE-(4<<30)+(8<<30))
+  for change in ({'bytes':flow.TREE+1},{'bytes':True},{'complete':False},{'free_bytes':result['required_free_bytes']-1}):
+   with self.assertRaises(ValueError):flow.upfront_disk_admission(dict(snap,**change))
+  with self.assertRaises(ValueError):flow.upfront_disk_admission(dict(snap,bytes=0))
+  full=dict(snap,bytes=flow.TREE,free_bytes=(8<<30)-1)
+  with self.assertRaises(ValueError):flow.upfront_disk_admission(full)
  def test_actual_budget_none_gate_precedes_process_and_work(self):
   pins={str(D/n):flow.sha(D/n) for n in ('cloud_budget.py','executor_identity.py','execution_mode.py')}
   with patch.object(flow.subprocess,'check_output',side_effect=AssertionError('no git yet')),patch.object(pathlib.Path,'mkdir',side_effect=AssertionError('no work')):

@@ -20,7 +20,7 @@ if cloud is not None:
     need(sha(path)=='HANDOFF_SHA','reviewed imported build verifier')
     spec=importlib.util.spec_from_file_location('verified_builder_handoff',path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
     need(frozen['artifact_identity']['run_id']==args.expected_run_id and frozen['artifact_identity']['launch_commit']==args.expected_launch_commit,'expected builder identity distinct from executor')
-    return m.verify(args.builder_handoff,args.builder_handoff_sha256,args.artifact_manifest,args.artifact_manifest_sha256,frozen,cloud)
+    return m.verify(args.builder_handoff,args.builder_handoff_sha256,args.artifact_manifest,args.artifact_manifest_sha256,frozen,cloud,executor_adaptation=cloud_invocation(args).get('executor_adaptation'))
 need(getattr(args,'builder_handoff_sha256',None) is None,'no unpaired handoff')
 """.replace('HANDOFF_SHA',hashlib.sha256((D/'artifact_handoff.py').read_bytes()).hexdigest())).body
   actual=new['verify_local_build'];self.assertEqual(list(map(dump,actual.body[1:4])),list(map(dump,expected)))
@@ -31,6 +31,10 @@ need(getattr(args,'builder_handoff_sha256',None) is None,'no unpaired handoff')
   new_with=next(n for n in new['execute'].body if isinstance(n,ast.With))
   wrapper=new_with.body[0]
   self.assertIsInstance(wrapper,ast.Try);self.assertEqual(wrapper.finalbody,[]);self.assertEqual(wrapper.orelse,[]);self.assertEqual(len(wrapper.body),1)
+  actual_argv=wrapper.body[0].value.args[0]
+  expected_argv=ast.parse("runtime_abi_module().execution_argv(binary,runtime,output,limits['max_active_cycles']) if WORKSPACE_LOADER is not None else [str(binary),str(runtime),str(output),str(limits['max_active_cycles'])]",mode='eval').body
+  self.assertEqual(dump(actual_argv),dump(expected_argv))
+  wrapper.body[0].value.args[0]=actual_argv.orelse
   self.assertEqual(dump(wrapper.body[0]),dump(old_with.body[0]))
   expected_handler=ast.parse('try:\n pass\nexcept BaseException:\n if CLOUD_MEMORY is not None:CLOUD_MEMORY.after_popen()\n raise').body[0].handlers
   self.assertEqual(list(map(dump,wrapper.handlers)),list(map(dump,expected_handler)))
@@ -40,6 +44,9 @@ need(getattr(args,'builder_handoff_sha256',None) is None,'no unpaired handoff')
   new_with.body=wrapper.body+new_with.body[1:]
   # Each approved dependency lock is the sole permitted constant change;
   # neither function's coverage/environment logic may change.
+  configured=new['runtime_abi_module']
+  expected_workspace=ast.parse('if WORKSPACE_LOADER is not None:m.configure_workspace_loader(*WORKSPACE_LOADER)').body[0]
+  self.assertEqual(dump(configured.body[-2]),dump(expected_workspace));configured.body.pop(-2)
   for function,dependency in [('runtime_abi_module','runtime_abi_owned.py'),('coverage_policy','observation_contract.py')]:
    previous=[n for n in ast.walk(old[function])if isinstance(n,ast.Constant)and isinstance(n.value,str)and len(n.value)==64]
    current=[n for n in ast.walk(new[function])if isinstance(n,ast.Constant)and isinstance(n.value,str)and len(n.value)==64]

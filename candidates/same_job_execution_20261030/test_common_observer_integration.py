@@ -25,7 +25,7 @@ class SourceIntegration(unittest.TestCase):
   self.assertEqual({k for k in old['sources'] if old['sources'][k]!=new['sources'][k]},{'host_top','host_commands','owner_kernel','resident','bridge','driver'})
   self.assertIn("actual_observation='UNOBSERVED'",(N/'correct_observation_policy.py').read_text())
  def test_producer_pins(self):
-  d=module('observer_dependency_proof',N/'driver_dependency_proof.py');self.assertEqual((N/'driver_dependency_proof.py').read_bytes(),(P/'driver_dependency_proof.py').read_bytes())
+  d=module('observer_dependency_proof',N/'driver_dependency_proof.py');self.assertEqual(sha(P/'driver_dependency_proof.py'),d.PRODUCER_DEPENDENCY_CAPTURE_SHA);self.assertEqual(d.PRODUCER_DEPENDENCY_CAPTURE_SHA,'80186b8c5727eeb9054b9e5b284fb27ba6baa7388f491d4ba996409086daa5f4')
   for name,h in d.PRODUCER_IMPLEMENTATION_PINS.items():self.assertEqual(h,sha(P/name))
   self.assertIn(sha(N/'driver_dependency_proof.py'),(N/'consumption_proof.py').read_text());self.assertIn(sha(N/'consumption_proof.py'),(N/'observation_contract.py').read_text());self.assertIn(sha(N/'observation_contract.py'),(N/'consumer_owned.py').read_text())
  def test_headers_actual_dependency(self):

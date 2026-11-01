@@ -175,7 +175,7 @@ def execute(binary, runtime, output, log, limits):
     binary_sha=sha(binary);runtime_sha=sha(runtime)
     with open(log,'xb') as f:
         try:
-            p=subprocess.Popen([str(binary),str(runtime),str(output),str(limits['max_active_cycles'])],stdout=f,stderr=subprocess.STDOUT,preexec_fn=bounded,env=runtime_abi_module().clean_env())
+            p=subprocess.Popen(runtime_abi_module().execution_argv(binary,runtime,output,limits['max_active_cycles']) if WORKSPACE_LOADER is not None else [str(binary),str(runtime),str(output),str(limits['max_active_cycles'])],stdout=f,stderr=subprocess.STDOUT,preexec_fn=bounded,env=runtime_abi_module().clean_env())
         except BaseException:
             if CLOUD_MEMORY is not None:CLOUD_MEMORY.after_popen()
             raise
@@ -228,7 +228,7 @@ def artifact_identity(frozen):
 def coverage_policy(profile,common,identity,bundle_root):
     import importlib.util
     path=pathlib.Path(__file__).resolve().with_name('observation_contract.py')
-    need(sha(path)=='f1601d232b515b6fdda5064d5ef56a12b2f8518681fbc1ff6eec4b5b47cf9db7','reviewed observation contract module')
+    need(sha(path)=='d574d527c0aa01031116a4b2b23070ba266c76569b16bf923f1cff206fd74d58','reviewed observation contract module')
     spec=importlib.util.spec_from_file_location('required_observation_policy',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
     return module.validate(profile,common,identity,bundle_root)
 
@@ -280,7 +280,14 @@ def verify_launch_proof(receipt,identity):
     launch=json.loads(raw)
     need(launch['source_sha']==identity['source_commit'],'launch manifest checked-out source_sha')
 
+def cloud_invocation(args):
+    path=getattr(args,'cloud_binding',None)
+    need(path is not None and path.is_absolute() and path.is_file() and all(not p.is_symlink()for p in(path,*path.parents)) and path.stat().st_size<=1<<20 and sha(path)==args.cloud_binding_sha256,'pinned actual cloud invocation')
+    return json.loads(path.read_text())
+
+
 def executor_context(args):
+    global WORKSPACE_LOADER
     path=getattr(args,'executor_identity',None);digest=getattr(args,'executor_identity_sha256',None)
     if path is None:
         need(digest is None and getattr(args,'builder_handoff',None) is None,'paired split execution identity')
@@ -292,7 +299,24 @@ def executor_context(args):
     need(sha(helper)=='e3011725f319f543c0d9ba08075efa9a9341eded6112187de4afe611d1987af4','reviewed cloud identity helper')
     spec=importlib.util.spec_from_file_location('actual_cloud_executor',helper);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
     identity=m.verify_owner(json.loads(path.read_text()))
-    need(identity['source_commit']==args.expected_source_commit,'executor source equals builder source')
+    if getattr(args,'cloud_binding',None) is None:
+        need(identity['source_commit']==args.expected_source_commit,'executor source equals builder source')
+        return identity
+    binding=cloud_invocation(args)
+    adaptation=binding.get('executor_adaptation')
+    if adaptation is None:
+        need(identity['source_commit']==args.expected_source_commit,'executor source equals builder source')
+    else:
+        helper=pathlib.Path(__file__).resolve().parent.parent/'executor_adaptation.py'
+        need(binding['pins'].get(str(helper))==sha(helper),'pinned host executor adaptation checker')
+        spec=importlib.util.spec_from_file_location('consumer_executor_adaptation',helper);adapter=importlib.util.module_from_spec(spec);spec.loader.exec_module(adapter)
+        verify_frozen(args.artifact_manifest,args.artifact_manifest_sha256);frozen=json.loads(args.artifact_manifest.read_text())
+        builder=frozen['artifact_identity'];need(builder['source_commit']==args.expected_source_commit,'actual immutable builder source')
+        adapter.verify(adaptation,builder,identity,binding['source_pins'],binding['repo'])
+        helper=helper.with_name('cloud_budget.py');need(binding['pins'].get(str(helper))==sha(helper),'pinned approved execution resource checker')
+        spec=importlib.util.spec_from_file_location('consumer_adapter_budget',helper);budget=importlib.util.module_from_spec(spec);spec.loader.exec_module(budget);budget.admit(binding)
+        row=binding['workspace_loader'];value=(row['path'],row['sha256'],args.expected_source_commit,args.artifact_manifest_sha256)
+        need(WORKSPACE_LOADER is None or WORKSPACE_LOADER==value,'immutable consumer workspace loader admission');WORKSPACE_LOADER=value
     return identity
 
 
@@ -307,10 +331,10 @@ def verify_local_build(args,frozen):
     if cloud is not None:
         need(getattr(args,'local_build_result',None) is None and getattr(args,'local_build_result_sha256',None) is None,'imported build is not same-job retained result')
         path=pathlib.Path(__file__).resolve().with_name('artifact_handoff.py')
-        need(sha(path)=='ec43e813c931451409c77ebd2bf6716175a652c82a776a580e98d7c94d55c0c4','reviewed imported build verifier')
+        need(sha(path)=='b68b3ea1162d4dabbb014a321689f47222d9d926e833bf520d0ac932e979dddc','reviewed imported build verifier')
         spec=importlib.util.spec_from_file_location('verified_builder_handoff',path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
         need(frozen['artifact_identity']['run_id']==args.expected_run_id and frozen['artifact_identity']['launch_commit']==args.expected_launch_commit,'expected builder identity distinct from executor')
-        return m.verify(args.builder_handoff,args.builder_handoff_sha256,args.artifact_manifest,args.artifact_manifest_sha256,frozen,cloud)
+        return m.verify(args.builder_handoff,args.builder_handoff_sha256,args.artifact_manifest,args.artifact_manifest_sha256,frozen,cloud,executor_adaptation=cloud_invocation(args).get('executor_adaptation'))
     need(getattr(args,'builder_handoff_sha256',None) is None,'no unpaired handoff')
     module_path=pathlib.Path(__file__).resolve().with_name('local_build_proof.py')
     need(sha(module_path)=='b58ebbff5578e641b58e7f2c4c1366a7c73f3a4861cf21e37cab7a01c46d8b56','reviewed local build proof')
@@ -321,8 +345,10 @@ def verify_local_build(args,frozen):
 def runtime_abi_module():
     import importlib.util
     path=pathlib.Path(__file__).resolve().with_name('runtime_abi_owned.py')
-    need(sha(path)=='cddd2344c6370915c389bf0bc5726b0e4b6bdd58b8961482ecf3386a811d2626','reviewed startup ABI module')
-    spec=importlib.util.spec_from_file_location('pinned_startup_abi',path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);need(OWNED_ENVIRONMENT is not None,'explicit owned environment admission');m.configure_owned_environment(*OWNED_ENVIRONMENT);return m
+    need(sha(path)=='37d4fb63d8be037da2f6dd170863205e259677664348b94a380ef7eec22a5c8d','reviewed startup ABI module')
+    spec=importlib.util.spec_from_file_location('pinned_startup_abi',path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);need(OWNED_ENVIRONMENT is not None,'explicit owned environment admission');m.configure_owned_environment(*OWNED_ENVIRONMENT)
+    if WORKSPACE_LOADER is not None:m.configure_workspace_loader(*WORKSPACE_LOADER)
+    return m
 
 def verify_runtime_abi(args,frozen):
     root=args.artifact_manifest.resolve().parent
@@ -335,6 +361,7 @@ def verify_runtime_abi(args,frozen):
     return result
 
 CLOUD_MEMORY=None
+WORKSPACE_LOADER=None
 
 def prepare_cloud_memory(args):
     global CLOUD_MEMORY
@@ -352,6 +379,7 @@ def prepare_cloud_memory(args):
 
 
 def explicit_execution_admission(args):
+    global WORKSPACE_LOADER
     import importlib.util
     path=pathlib.Path(__file__).resolve().parent.parent/'execution_mode.py'
     spec=importlib.util.spec_from_file_location('owned_execution_mode',path);mode=importlib.util.module_from_spec(spec);spec.loader.exec_module(mode)
@@ -364,6 +392,8 @@ def explicit_execution_admission(args):
         need(binding['execution_mode']==selected,'actual invocation selected mode')
         cloud_helper=path.parent/'cloud_budget.py';need(binding['pins'].get(str(cloud_helper))==sha(cloud_helper),'actual cloud resource helper source pin')
         spec=importlib.util.spec_from_file_location('actual_consumer_cloud_budget',cloud_helper);cloud=importlib.util.module_from_spec(spec);spec.loader.exec_module(cloud);cloud.admit(binding)
+        if binding.get('workspace_loader') is not None:
+            row=binding['workspace_loader'];WORKSPACE_LOADER=(row['path'],row['sha256'],args.expected_source_commit,args.artifact_manifest_sha256)
         admission=mode.admit(binding)
         if selected==mode.CALIBRATION:need(args.calibration_wall_seconds==admission['profile_seconds'][str(args.profile)],'actual cloud calibration window')
         else:
@@ -480,6 +510,10 @@ def main():
         summary['executor_identity']=executor_context(args)
         summary['builder_handoff_sha256']=args.builder_handoff_sha256
         summary['resource_admission']=resource_receipt
+        invocation=cloud_invocation(args)
+        if invocation.get('executor_adaptation') is not None:
+            summary['executor_adaptation_sha256']=invocation['executor_adaptation']['sha256']
+            summary['workspace_loader_sha256']=invocation['workspace_loader']['sha256']
     summary['execution_admission']={'scope':'CALIBRATION_SAME_FULL_M128_STIMULUS' if admission['mode']==mode.CALIBRATION else 'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE', 'execution_mode':admission['mode'], 'reviewed_budget_sha256':admission['reviewed_budget_sha256'],'original_limits':dict(limits),'effective_limits':execution_limits,'outer_cleanup_proof_required':True,'peak_resource_qualification':'INCOMPLETE_SAMPLED','numerical_pass':False}
     for p,runtime,obs,want,route_ref in prepared:
         r=dict(profile=p['id'],complete_block_tokens=128,status='INCOMPLETE',numerical_pass=False,coverage_policy=b['coverage_policy']);summary['profiles'].append(r)

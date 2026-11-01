@@ -16,6 +16,25 @@ class Budget(unittest.TestCase):
   p=self.d/n;p.write_text(json.dumps(v));return dict(path=str(p),bytes=p.stat().st_size,sha256=hashlib.sha256(p.read_bytes()).hexdigest())
  def reapprove(self):
   self.b['cloud_budget']=self.put('budget',self.doc);self.ap['budget_sha256']=self.b['cloud_budget']['sha256'];self.b['execution_approval']=self.put('approval',self.ap)
+ def adapt(self):
+  for k in ('executor_adaptation','workspace_loader'):
+   self.b[k]=self.put(k,{'synthetic':k});self.doc[k]=self.b[k];self.ap[k+'_sha256']=self.b[k]['sha256']
+  self.reapprove()
+ def test_adaptation_paired_reviewed_pins(self):
+  self.adapt();actual=m.admit(self.b)
+  for k in ('executor_adaptation','workspace_loader'):self.assertEqual(actual[k],self.b[k])
+ def test_adaptation_missing_pair(self):
+  self.adapt();del self.b['workspace_loader']
+  with self.assertRaisesRegex(ValueError,'paired'):m.admit(self.b)
+ def test_adaptation_approval_digest_mismatch(self):
+  self.adapt();self.ap['workspace_loader_sha256']='0'*64;self.reapprove()
+  with self.assertRaisesRegex(ValueError,'approved exact'):m.admit(self.b)
+ def test_adaptation_budget_binding_mismatch(self):
+  self.adapt();self.doc['workspace_loader']=self.put('different',{'different':True});self.reapprove()
+  with self.assertRaisesRegex(ValueError,'reviewed adaptation'):m.admit(self.b)
+ def test_old_approval_cannot_authorize_new_inputs(self):
+  self.adapt();del self.ap['executor_adaptation_sha256'];self.reapprove()
+  with self.assertRaisesRegex(ValueError,'exact independent'):m.admit(self.b)
  def test_readonly_reuse_manifest_must_be_bound_by_approved_budget(self):
   self.doc.update(runtime_mode='IMPORT_EXISTING_PINNED_RUNTIME',archive_mode='READ_EXISTING_PINNED_ARCHIVES',runtime_reuse_manifest=self.put('reuse',{'synthetic_inventory_not_qualification':True}));self.reapprove()
   actual=m.admit(self.b);self.assertEqual(actual['runtime_reuse_manifest'],self.doc['runtime_reuse_manifest'])

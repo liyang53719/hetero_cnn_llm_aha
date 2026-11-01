@@ -102,6 +102,58 @@ class Tests(unittest.TestCase):
   with tempfile.TemporaryDirectory()as t:
    job,bp=self.fixture(pathlib.Path(t));(job/'FLOW_RESULT.json').unlink()
    self.assertEqual(s.project(job,bp,s.sha(bp))['status'],'UNAVAILABLE')
+ def adaptation_fixture(self,root):
+  job,bp=self.fixture(root);(job/'FLOW_RESULT.json').unlink();b=json.loads(bp.read_text());b['identity']['source_commit']='9'*40
+  for key in ('executor_adaptation','workspace_loader'):
+   p=root/(key+'.json');p.write_text('{}');b[key]=s.pin(p)
+  b['source_pins']={'path':str(root/'SOURCE_PINS.json'),'bytes':1,'sha256':'f'*64};bp.write_text(json.dumps(b));return job,bp,b
+ def adapted_projection(self,job,bp,reject=False,budget_mismatch=False):
+  original=s.load;calls=[]
+  def loader(name,path):
+   if name=='summary_executor_adaptation':
+    def verify(*args,**kw):
+     calls.append((args,kw))
+     if reject:raise ValueError('synthetic forbidden source delta')
+    return types.SimpleNamespace(verify=verify)
+   m=original(name,path)
+   if name=='summary_cloud_handoff':
+    def verify(*args,**kw):
+     self.assertIn('executor_adaptation',kw);return dict(source_pins_sha256='8'*64)
+    m.verify=verify
+   if name=='summary_cloud_budget':m.admit=lambda b:dict(execution_mode=b['execution_mode'],full_block_budget=None,executor_adaptation=b['executor_adaptation'],workspace_loader=None if budget_mismatch else b['workspace_loader'],consumer_address_space_bytes=512<<20,dut_address_space_bytes=2<<30)
+   return m
+  with patch.object(s,'source_guard',return_value='f'*64),patch.object(s,'load',side_effect=loader):r=s.project(job,bp,s.sha(bp))
+  return r,calls
+ def complete_adapted_fixture(self,root):
+  job,bp,b=self.adaptation_fixture(root);n=job/'materials/numeric';records=[]
+  for i in range(5):
+   out=n/f'profile{i}/material/dut_result';rp=out/'RESULT.json';r=json.loads(rp.read_text());r.update(executor_identity=b['identity'],executor_adaptation_sha256=b['executor_adaptation']['sha256'],workspace_loader_sha256=b['workspace_loader']['sha256']);rp.write_text(json.dumps(r))
+   record=base.d.verify(out,i,b['artifact_manifest']['sha256'],base.H,base.H,base.H,s.pin(n/f'runs/p{i}_dut/RESULT.json'));(n/f'PROFILE_{i}_DIAGNOSTIC.json').write_text(json.dumps(record));records.append(record)
+  nf=n/'RESULT.json';nr=json.loads(nf.read_text());q=base.a.aggregate(records);nr.update(actual_dut_reports=records,qualification=q,status=q['status'],numerical_pass=q['numerical_pass']);nf.write_text(json.dumps(nr))
+  flow=dict(identity=b['identity'],execution_approval=b['execution_approval'],artifact_identity=b['artifact_identity'],execution_binding=s.pin(bp),builder_handoff=b['builder_handoff'],artifact_manifest=b['artifact_manifest'],numeric_result=s.pin(nf),hardware_definitions=1,profiles=list(range(5)),execution_mode='BOUNDED_CALIBRATION',transport_exit_code=2,qualification=q,status=q['status'],executor_adaptation=b['executor_adaptation'],workspace_loader=b['workspace_loader']);(job/'FLOW_RESULT.json').write_text(json.dumps(flow));return job,bp,b
+ def test_adapted_five_synthetic_original_evidence_chain(self):
+  with tempfile.TemporaryDirectory()as t:
+   job,bp,b=self.complete_adapted_fixture(pathlib.Path(t));r,calls=self.adapted_projection(job,bp)
+   self.assertEqual(r['status'],'VERIFIED_REAGGREGATED');self.assertTrue(r['numerical_pass']);self.assertEqual(len(r['profiles']),5);self.assertEqual(r['builder_source_commit'],'a'*40);self.assertEqual(r['executor_source_commit'],'9'*40);self.assertFalse(r['final_rtl_executed']);self.assertEqual(r['transport_exit_code'],2)
+ def test_any_consumer_adaptation_or_loader_drift_rebound_refused(self):
+  for i in range(5):
+   for key in ('executor_adaptation_sha256','workspace_loader_sha256'):
+    with tempfile.TemporaryDirectory()as t:
+     job,bp,b=self.complete_adapted_fixture(pathlib.Path(t));n=job/'materials/numeric';out=n/f'profile{i}/material/dut_result';rp=out/'RESULT.json';r=json.loads(rp.read_text());r[key]='0'*64;rp.write_text(json.dumps(r))
+     record=base.d.verify(out,i,b['artifact_manifest']['sha256'],base.H,base.H,base.H,s.pin(n/f'runs/p{i}_dut/RESULT.json'));(n/f'PROFILE_{i}_DIAGNOSTIC.json').write_text(json.dumps(record));nf=n/'RESULT.json';nr=json.loads(nf.read_text());nr['actual_dut_reports'][i]=record;nf.write_text(json.dumps(nr));ff=job/'FLOW_RESULT.json';flow=json.loads(ff.read_text());flow['numeric_result']=s.pin(nf);ff.write_text(json.dumps(flow))
+     result,_=self.adapted_projection(job,bp);self.assertEqual(result['status'],'UNAVAILABLE');self.assertFalse(result['numerical_pass'])
+ def test_adaptation_has_distinct_real_source_labels_no_pass(self):
+  with tempfile.TemporaryDirectory()as t:
+   job,bp,b=self.adaptation_fixture(pathlib.Path(t));r,calls=self.adapted_projection(job,bp)
+   self.assertEqual(r['status'],'INCOMPLETE_EXECUTION');self.assertFalse(r['numerical_pass']);self.assertEqual(r['builder_source_commit'],'a'*40);self.assertEqual(r['executor_source_commit'],'9'*40)
+   self.assertEqual(r['executor_adaptation_sha256'],b['executor_adaptation']['sha256']);self.assertEqual(r['workspace_loader_sha256'],b['workspace_loader']['sha256']);self.assertEqual(calls[0][1]['current_source_pins_pin'],b['source_pins']);self.assertEqual(calls[0][1]['repo'],s.D.parents[1])
+ def test_adaptation_catalog_or_loader_approval_failure_unavailable(self):
+  for reject,mismatch in ((True,False),(False,True)):
+   with tempfile.TemporaryDirectory()as t:
+    job,bp,b=self.adaptation_fixture(pathlib.Path(t));r,_=self.adapted_projection(job,bp,reject,mismatch);self.assertEqual(r['status'],'UNAVAILABLE')
+ def test_different_source_without_adapter_refused(self):
+  with tempfile.TemporaryDirectory()as t:
+   job,bp,b=self.adaptation_fixture(pathlib.Path(t));del b['executor_adaptation'];del b['workspace_loader'];bp.write_text(json.dumps(b));self.assertEqual(self.project(job,bp)['status'],'UNAVAILABLE')
  def test_unknown_full_budget_refused(self):
   with tempfile.TemporaryDirectory()as t:
    job,bp=self.fixture(pathlib.Path(t));b=json.loads(bp.read_text());b['execution_mode']='FULL_BLOCK_ACCEPTANCE';bp.write_text(json.dumps(b));self.assertEqual(self.project(job,bp)['status'],'UNAVAILABLE')

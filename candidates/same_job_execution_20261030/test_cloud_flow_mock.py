@@ -6,11 +6,12 @@ spec=importlib.util.spec_from_file_location('mocked_cloud_flow',D/'controller/cl
 class Tests(unittest.TestCase):
  def test_fresh_flow_orders_stages_without_any_build(self):self.exercise(False)
  def test_reuse_flow_orders_stages_without_any_build(self):self.exercise(True)
- def exercise(self,reuse):
+ def test_adapted_reuse_flow_transmits_distinct_sources(self):self.exercise(True,True)
+ def exercise(self,reuse,adapted=False):
   with tempfile.TemporaryDirectory()as t:
    base=pathlib.Path(t);repo=base/'repo';package=repo/'candidates/same_job_execution_20261030';controller=package/'controller';runtime=package/'runtime';numeric=package/'numeric';sup=repo/'supervisor';artifact=base/'artifact';job=base/'job'
    for p in(controller,runtime,numeric,sup,artifact):p.mkdir(parents=True)
-   files=[controller/'cloud_flow.py',package/'prepare_cloud_execution.py',sup/'supervise_multiroot.py',sup/'strict_cleanup.py',sup/'lossless_log.py',package/'python',base/'binding.json',artifact/'frozen_artifact.json',runtime/'runtime_reuse.py']
+   files=[controller/'cloud_flow.py',package/'prepare_cloud_execution.py',sup/'supervise_multiroot.py',sup/'strict_cleanup.py',sup/'lossless_log.py',package/'python',base/'binding.json',artifact/'frozen_artifact.json',runtime/'runtime_reuse.py',numeric/'live_budget.py']
    for p in files:p.write_text('{}')
    pins={str(p):f.sha(p)for p in files};seen=[]
    identity=dict(source_commit='a'*40,started_monotonic=time.monotonic());builder=dict(run_id=42,source_commit='a'*40,launch_commit='b'*40)
@@ -18,6 +19,9 @@ class Tests(unittest.TestCase):
    b=dict(execution_context='CLOUD_EXECUTOR_V1',schema='CLOUD_FIVE_M128_EXECUTION_BINDING_V1',job_budget_seconds=43200,job_started_monotonic=identity['started_monotonic'],identity=identity,artifact_identity=builder,profiles=list(range(5)),tokens=128,matrix_macs=4096,vector_lanes=32,payload_uploads=False,final_rtl_replay=False,repo=str(repo),job_root=str(job),pins=pins,runtime_package=str(runtime),numeric_package=str(numeric),python=str(package/'python'),supervisor_dir=str(sup),shared_runtime_helper='synthetic',materializer='synthetic',budgets=q,dut_rss_bytes=8<<30,dut_address_space_bytes=12<<30,stage_resources={'install':{'rss_bytes':2<<30,'as_bytes':2<<30},'reference':{'rss_bytes':2<<30,'as_bytes':2<<30}},consumer_address_space_bytes=512<<20,reserved_other_owner_bytes=5<<30,numeric_reserved_increment_bytes=512<<20,execution_mode='BOUNDED_CALIBRATION')
    for k in('artifact_manifest','builder_handoff','executor_identity_pin','cloud_budget','source_pins','execution_approval'):b[k]=f.pin(artifact/'frozen_artifact.json')
    b.update(runtime_mode='IMPORT_EXISTING_PINNED_RUNTIME'if reuse else'FRESH_ORIGINAL_RUNTIME_INSTALL',archive_mode='READ_EXISTING_PINNED_ARCHIVES'if reuse else'DOWNLOAD_ORIGINAL_ARCHIVES',runtime_reuse_manifest=f.pin(artifact/'frozen_artifact.json')if reuse else None)
+   if adapted:
+    builder['source_commit']='e'*40
+    for k in ('executor_adaptation','workspace_loader'):b[k]=f.pin(artifact/'frozen_artifact.json')
    imported=base/'readonly-runtime';imported.mkdir();cache=base/'readonly-cache';cache.mkdir();arc=cache/'synthetic.whl';arc.write_bytes(b'')
    inventory={'entries':{key:{'import_root':str(imported)}for key in ('qwen2','qwen35_08b','qwen35_35b')},'archives':[f.pin(arc)]}
    owner_module=str(runtime/('runtime_reuse.py'if reuse else'owner_fresh.py'))
@@ -37,6 +41,8 @@ class Tests(unittest.TestCase):
     r=dict(native_exit=0,errors=[],cleanup_proof={'status':'COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP'},log_capture=dict(pipe_eof_observed=True,gzip_finalized=True));(root/'RESULT.json').write_text(json.dumps(r));return r
    def install(binding,*args,**kw):
     seen.append('reuse'if reuse else'install');self.assertEqual(kw,{});self.assertEqual(binding['early_build_seconds'],0);self.assertEqual(binding['identity'],identity);self.assertEqual(binding['job_budget_seconds'],43200);self.assertEqual(binding['reserved_other_owner_bytes'],5<<30)
+    if adapted:
+     for k in ('executor_adaptation','workspace_loader'):self.assertEqual(binding[k],b[k])
     if reuse:
      self.assertEqual(binding['job_root'],str(job));self.assertEqual(binding['runtime_reuse_manifest'],b['runtime_reuse_manifest'])
      for key,path in [('archive_binding',job/'bindings/ARCHIVES.json'),('archive_validation_receipt',job/'runs/archives/RESULT.json'),('archive_output_manifest',job/'runs/archives/output/ARCHIVES.json')]:self.assertEqual(binding[key],f.pin(path))
@@ -47,14 +53,21 @@ class Tests(unittest.TestCase):
    def reference(binding,stage):seen.append('reference');self.assertEqual(binding['identity'],identity);self.assertEqual(binding['owner_module'],owner_module);return {str(i):{}for i in range(5)}
    def tail(binding,*args):
     seen.append('tail');self.assertEqual(binding['owner_module'],owner_module);self.assertEqual(binding['identity'],identity);self.assertEqual(binding['run_id'],42);self.assertNotIn('build_result',binding);self.assertEqual(binding['job_budget_seconds'],43200)
+    if adapted:
+     self.assertEqual(binding['source_commit'],'e'*40);self.assertEqual(binding['executor_identity']['source_commit'],'a'*40)
+     for k in ('executor_adaptation','workspace_loader'):self.assertEqual(binding[k],b[k])
     out=pathlib.Path(binding['output']);out.mkdir();(out/'RESULT.json').write_text(json.dumps(dict(actual_dut_reports=[],qualification=qualified,status='INCOMPLETE',numerical_pass=False)))
-   modules={'cloud_imported_runtime':types.SimpleNamespace(manifest=lambda _: (inventory,None)),'actual_runtime_revalidator':types.SimpleNamespace(run=install),'actual_fresh_installer':types.SimpleNamespace(run=install),'actual_original_references':types.SimpleNamespace(run=reference),'actual_five_diagnostics':types.SimpleNamespace(run=tail),'actual_full128_acceptance':types.SimpleNamespace(aggregate=lambda _:qualified)}
+   def census(roots,**kw):
+    self.assertEqual(kw,{'max_entries':150000,'max_seconds':60});self.assertNotIn(str(job),roots)
+    if adapted:self.assertIn(str(artifact),roots)
+    return dict(schema='SAMPLED_OWNED_LIVE_BYTES_V1',complete=True,bytes=4<<30,free_bytes=20<<30)
+   modules={'cloud_upfront_live_budget':types.SimpleNamespace(census=census),'cloud_imported_runtime':types.SimpleNamespace(manifest=lambda _: (inventory,None)),'actual_runtime_revalidator':types.SimpleNamespace(run=install),'actual_fresh_installer':types.SimpleNamespace(run=install),'actual_original_references':types.SimpleNamespace(run=reference),'actual_five_diagnostics':types.SimpleNamespace(run=tail),'actual_full128_acceptance':types.SimpleNamespace(aggregate=lambda _:qualified)}
    realpin=f.pin
    def synthetic_pin(p):
     r=realpin(p)
     if pathlib.Path(p).suffix=='.bin':r['bytes']=3531306272 if pathlib.Path(p).stem=='0' else 0
     return r
-   with patch.object(f,'D',controller),patch.object(f,'admitted_inputs',return_value=({},{})),patch.object(f,'execution_admission',return_value=dict(mode='BOUNDED_CALIBRATION',profile_seconds=q['calibration_seconds'])),patch.object(f.profile_policy,'require_source_pin'),patch.object(f.profile_policy,'require_cpu'),patch.object(f.subprocess,'check_output',return_value='a'*40),patch.object(f,'mod',side_effect=lambda name,path:modules[name]),patch.object(f,'pin',side_effect=synthetic_pin),patch.dict(sys.modules,{'supervise_multiroot':types.SimpleNamespace(execute=execute)}):
+   with patch.object(f,'D',controller),patch.object(f,'admitted_inputs',return_value=({},dict(workspace_loader_verified={'root':str(artifact)})if adapted else {})),patch.object(f,'execution_admission',return_value=dict(mode='BOUNDED_CALIBRATION',profile_seconds=q['calibration_seconds'])),patch.object(f.profile_policy,'require_source_pin'),patch.object(f.profile_policy,'require_cpu'),patch.object(f.subprocess,'check_output',return_value='a'*40),patch.object(f,'mod',side_effect=lambda name,path:modules[name]),patch.object(f,'pin',side_effect=synthetic_pin),patch.dict(sys.modules,{'supervise_multiroot':types.SimpleNamespace(execute=execute)}):
     # Disk only is mocked: phase resource admission calls above remain checked.
     import shutil
     with patch.object(shutil,'disk_usage',return_value=types.SimpleNamespace(free=100<<30)):code=f.run(b,base/'binding.json',f.sha(base/'binding.json'))

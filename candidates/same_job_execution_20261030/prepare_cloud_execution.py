@@ -27,13 +27,31 @@ def verify_source(repo):
   p=D/name;need(pins.get(str(p))==sha(p),'executor source role independently pinned')
  return repo,manifest,pins
 
+def adaptation_inputs(a,pins):
+ roles={}
+ for name in ('executor_adaptation','workspace_loader'):
+  path=getattr(a,name,None);digest=getattr(a,name+'_sha256',None)
+  need((path is None)==(digest is None),'paired '+name+' path/digest')
+  if path is not None:roles[name]=input_pin(path,digest,2<<20)
+ need(not roles or set(roles)=={'executor_adaptation','workspace_loader'},'paired adaptation and loader inputs')
+ if roles:
+  p=D/'executor_adaptation.py';need(pins.get(str(p))==sha(p),'adaptation verifier source pin')
+ return roles
+
+def reviewed_source(imported,identity,roles,manifest,repo):
+ if 'executor_adaptation'in roles:
+  load('entry_executor_adaptation',D/'executor_adaptation.py').verify(roles['executor_adaptation'],imported['builder_identity'],identity,current_source_pins_pin=dict(path=str(manifest),bytes=manifest.stat().st_size,sha256=sha(manifest)),repo=repo)
+ else:need(imported['source_pins_sha256']==sha(manifest),'reviewed imported source closure')
+
 def run(a):
  repo,manifest,pins=verify_source(a.repo)
  roles={name:input_pin(getattr(a,name),getattr(a,name+'_sha256'))for name in ('executor_identity','builder_handoff','artifact_manifest','cloud_budget','execution_approval')}
+ roles.update(adaptation_inputs(a,pins))
  identity=json.loads(P(roles['executor_identity']['path']).read_text())
  frozen=json.loads(P(roles['artifact_manifest']['path']).read_text())
  policy=load('cloud_profile_policy',D/'profile_policy.py');policy.require_source_pin(pins)
  b=dict(schema='CLOUD_FIVE_M128_EXECUTION_BINDING_V1',execution_context='CLOUD_EXECUTOR_V1',identity=identity,executor_identity=identity,source_pins=dict(path=str(manifest),bytes=manifest.stat().st_size,sha256=sha(manifest)),executor_identity_pin=roles['executor_identity'],builder_handoff=roles['builder_handoff'],artifact_manifest=roles['artifact_manifest'],cloud_budget=roles['cloud_budget'],execution_approval=roles['execution_approval'],artifact_identity=frozen['artifact_identity'],execution_policy=policy.policy(policy.FULL),profiles=list(range(5)),tokens=128,matrix_macs=4096,vector_lanes=32,payload_uploads=False,final_rtl_replay=False,job_started_monotonic=identity['started_monotonic'],repo=str(repo),job_root=str(a.work),pins=pins,runtime_package=str(D/'runtime'),numeric_package=str(D/'numeric'),python=str(P(sys.executable).resolve()),supervisor_dir=str(repo/'candidates/ci_frontend_pipeline_r2_20261029'),shared_runtime_helper=str(repo/'candidates/same_job_materialization_20261029/shared_runtime.py'),materializer=str(repo/'candidates/same_job_materialization_20261029'))
+ b.update({k:roles[k]for k in ('executor_adaptation','workspace_loader')if k in roles})
  budget=load('cloud_reviewed_budget',D/'cloud_budget.py').admit(b)
  for key in ('runtime_mode','archive_mode','runtime_reuse_manifest','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','reserved_other_owner_bytes','consumer_address_space_bytes','stage_resources','execution_mode','full_block_budget'):b[key]=budget[key]
  b['calibration_seconds']=b['budgets']['calibration_seconds']
@@ -52,6 +70,7 @@ def prepare_identity(a):
  repo,manifest,pins=verify_source(a.repo)
  host=input_pin(a.host_identity,a.host_identity_sha256)
  roles={name:input_pin(getattr(a,name),getattr(a,name+'_sha256'))for name in ('builder_handoff','artifact_manifest','cloud_budget','execution_approval')}
+ roles.update(adaptation_inputs(a,pins))
  approval=json.loads(P(roles['execution_approval']['path']).read_text())
  stat=P('/proc/self/stat').read_text().rsplit(')',1)[1].split()
  identity=dict(schema='CLOUD_EXECUTOR_IDENTITY_V1',source_commit=approval['source_commit'],execution_id=approval['execution_id'],host_identity_sha256=host['sha256'],boot_id=P('/proc/sys/kernel/random/boot_id').read_text().strip(),controller_pid=os.getpid(),start_tick=int(stat[19]),started_monotonic=time.monotonic())
@@ -67,8 +86,8 @@ def prepare_identity(a):
  mode=load('cloud_identity_mode',D/'execution_mode.py').admit(stub)
  _,_,total=load('cloud_identity_flow',D/'controller/cloud_flow.py').reservations(stub,mode)
  frozen=json.loads(P(roles['artifact_manifest']['path']).read_text())
- imported=load('cloud_identity_handoff',D/'numeric/artifact_handoff.py').verify(roles['builder_handoff']['path'],roles['builder_handoff']['sha256'],roles['artifact_manifest']['path'],roles['artifact_manifest']['sha256'],frozen,identity)
- need(imported['source_pins_sha256']==sha(manifest),'reviewed imported source closure')
+ imported=load('cloud_identity_handoff',D/'numeric/artifact_handoff.py').verify(roles['builder_handoff']['path'],roles['builder_handoff']['sha256'],roles['artifact_manifest']['path'],roles['artifact_manifest']['sha256'],frozen,identity,**({'executor_adaptation':roles['executor_adaptation']}if 'executor_adaptation'in roles else {}))
+ reviewed_source(imported,identity,roles,manifest,repo)
  need(time.monotonic()-identity['started_monotonic']+total<=admitted['job_budget_seconds'],'actual remaining cloud deadline before identity publication')
  work=P(a.work);need(work.is_absolute()and not work.exists()and all(not p.is_symlink()for p in(work,*work.parents)),'fresh canonical executor work')
  target=work.parent/(work.name+'-EXECUTOR_IDENTITY.json')
@@ -80,7 +99,7 @@ def main():
  p.add_argument('--repo',type=P,required=True);p.add_argument('--work',type=P,required=True)
  for role in ('builder-handoff','artifact-manifest','cloud-budget','execution-approval'):
   p.add_argument('--'+role,type=P,required=True);p.add_argument('--'+role+'-sha256',required=True)
- for role in ('executor-identity','host-identity'):
+ for role in ('executor-identity','host-identity','executor-adaptation','workspace-loader'):
   p.add_argument('--'+role,type=P);p.add_argument('--'+role+'-sha256')
  a=p.parse_args()
  if a.executor_identity is None:need(a.host_identity is not None and a.host_identity_sha256 is not None,'reviewed host pin required to form current executor identity')

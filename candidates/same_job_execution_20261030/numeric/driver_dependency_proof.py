@@ -53,9 +53,36 @@ def builder_tool_pin(tool,name):
  need(value in tool['pins'],'original builder tool pin required')
  return value
 
+# Builder e015 captured these bytes with the original collector. This executor
+# verifier is a separately reviewed adapter, NOT the producer's collection code.
+PRODUCER_DEPENDENCY_CAPTURE_SHA='80186b8c5727eeb9054b9e5b284fb27ba6baa7388f491d4ba996409086daa5f4'
+COMPILE_RECIPE_TOKENS=('$(OBJCACHE)','$(CXX)','$(CXXFLAGS)','$(CPPFLAGS)','$(OPT_FAST)','-c','-o','$@','$<')
+
+def verify_driver_compile_recipe(host,stem,driver):
+ """One exact generated target and recipe; ASCII horizontal whitespace only.
+ Does not evaluate Make or shell. Preserves actual text/hash elsewhere. Only the
+ observed separator multiplicity is insignificant; every command token remains.
+ """
+ need(isinstance(host,str)and '\r'not in host,'LF-only actual Make text')
+ lines=host.split('\n')
+ target=re.compile(re.escape(stem+'.o:')+r'[ \t]+'+re.escape(driver)+r'[ \t]*')
+ positions=[i for i,line in enumerate(lines)if target.fullmatch(line)]
+ need(len(positions)==1,'unique exact actual driver object target')
+ # Reject second alternative/rule for the same target, not only exact matches.
+ need(sum(bool(re.match(re.escape(stem+'.o')+r'[ \t]*:',line))for line in lines)==1,'no alternate driver target')
+ i=positions[0];need(i+1<len(lines),'actual compile recipe required')
+ line=lines[i+1];need(line.startswith('\t')and all(ord(c)<128 for c in line),'original tab-prefixed ASCII recipe')
+ tokens=tuple(re.split(r'[ \t]+',line.strip(' \t')))
+ need(tokens==COMPILE_RECIPE_TOKENS,'exact actual compile command tokens; no extra shell syntax')
+ for following in lines[i+2:]:
+  if not following.strip(' \t')or following.lstrip(' \t').startswith('#'):continue
+  need(not following.startswith('\t'),'no second driver compile recipe')
+  break
+ return dict(status='EXACT_GENERATED_DRIVER_RECIPE_ASCII_HORIZONTAL_WHITESPACE_ONLY',tokens=list(tokens))
+
 def verify(r,m,policy,common,build_receipt,producer_repo):
  need(r['schema']=='ACTUAL_FRESH_DRIVER_DEPENDENCY_V1','actual driver dependency schema')
- for name,want in dict(PRODUCER_IMPLEMENTATION_PINS,**{'driver_dependency_proof.py':sha(__file__)}).items():
+ for name,want in dict(PRODUCER_IMPLEMENTATION_PINS,**{'driver_dependency_proof.py':PRODUCER_DEPENDENCY_CAPTURE_SHA}).items():
   expected=str(P(producer_repo)/'candidates/ci_frontend_pipeline_r2_20261029'/name)
   matches=[path for path in m['generation_input_pins']if path.endswith('/candidates/ci_frontend_pipeline_r2_20261029/'+name)]
   need(matches==[expected] and m['generation_input_pins'][expected]==want,'actual reviewed producer collection code '+name)
@@ -78,7 +105,7 @@ def verify(r,m,policy,common,build_receipt,producer_repo):
  need(r['global_make']['sha256']==GLOBAL_MK_SHA and m['generation_input_pins'].get(r['global_make']['path'])==GLOBAL_MK_SHA,'exact official -MMD make source')
  need('-MMD' in globalmk and 'VK_USER_OBJS = $(addsuffix .o, $(VM_USER_CLASSES))' in globalmk,'official dependency emission/user object mapping')
  need(r['host_make']['path']==str(P(cwd)/'VHostBlockTopV4.mk') and r['make_closure_pins'].get(r['host_make']['path'])==r['host_make']['sha256'] and m['derived_generated_pins'].get(r['host_make']['path'])==r['host_make']['sha256'],'actual admitted Host make pin')
- need(stem+'.o: '+driver in host and '$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<' in host,'actual explicit driver compile recipe')
+ verify_driver_compile_recipe(host,stem,driver)
  receipt=r['host_link_receipt'];need(receipt['native_exit']==0 and receipt['errors']==[] and receipt['cleanup_proof']['status']=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP','actual host link completion')
  argv=receipt['argv'];need(argv==r['host_link_argv'] and argv[1:5]==['-C',cwd,'-f','VHostBlockTopV4.mk'] and argv[-1]=='VHostBlockTopV4','actual host link recipe identity')
  tool_path=P(common['build_receipt']['path']).parent/'tool_manifest.json';need(sha(tool_path)==build_receipt['tool_manifest_sha256'],'actual frozen compiler/tool manifest')

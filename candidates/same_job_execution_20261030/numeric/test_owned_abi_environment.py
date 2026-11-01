@@ -2,7 +2,34 @@ import argparse,ast,hashlib,importlib.util,json,os,pathlib,tempfile,unittest
 from unittest.mock import patch
 D=pathlib.Path(__file__).parent
 spec=importlib.util.spec_from_file_location('owned_abi',D/'runtime_abi_owned.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
-BASE=None
+BASE=D/'runtime_abi.py'
+def normalized_workspace(test,text):
+ tree=ast.parse(text);functions={n.name:n for n in tree.body if isinstance(n,ast.FunctionDef)}
+ baseline={n.name:n for n in ast.parse(BASE.read_text()).body if isinstance(n,ast.FunctionDef)}
+ dump=lambda node:ast.dump(node,include_attributes=False)
+ for name,call in [('prepare','prepare_workspace(binary,binary_sha,tool_manifest,tool_sha,out)'),('verify','verify_workspace(receipt,receipt_sha,binary,binary_sha,tool_manifest,tool_sha)')]:
+  f=functions[name];expected=ast.parse('if _WORKSPACE_LOADER_BINDING is not None:return '+call).body[0]
+  test.assertEqual(dump(f.body[0]),dump(expected));f.body=f.body[1:]
+ f=functions['_list'];test.assertEqual([x.arg for x in f.args.args],['loader','binary','workspace_prefix']);test.assertEqual(list(map(dump,f.args.defaults)),[dump(ast.Constant(None))]);f.args=baseline['_list'].args
+ calls=[n for n in ast.walk(f)if isinstance(n,ast.Call)and ast.unparse(n.func)=='subprocess.Popen'];test.assertEqual(len(calls),1)
+ expected=ast.parse("[str(loader),'--list',str(binary)]if workspace_prefix is None else [*workspace_prefix,'--list',str(binary)]",mode='eval').body
+ test.assertEqual(dump(calls[0].args[0]),dump(expected));calls[0].args[0]=expected.body
+ f=functions['elf_info'];test.assertEqual([x.arg for x in f.args.args],['path','require_interpreter']);test.assertEqual(list(map(dump,f.args.defaults)),[dump(ast.Constant(True))]);f.args=baseline['elf_info'].args
+ test.assertEqual(dump(f.body[0]),dump(ast.parse("need(type(require_interpreter)is bool,'explicit interpreter policy')").body[0]));f.body=f.body[1:]
+ block=next(n for n in f.body if isinstance(n,ast.With));oldblock=next(n for n in baseline['elf_info'].body if isinstance(n,ast.With))
+ expected=ast.parse("""
+interp=[q for q in ph if q[0]==3];need(len(interp)==1 if require_interpreter else len(interp)<=1,'bounded PT_INTERP count');loader=None
+if interp:
+ need(1<interp[0][5]<=4096,'bounded PT_INTERP');text=read(interp[0][2],interp[0][5]);need(text.endswith(b'\\0')and text.count(b'\\0')==1,'interpreter string');loader=text[:-1].decode('ascii');need(loader in INTERPRETERS,'reviewed system interpreter only')
+""").body
+ def index(body,name):return next(i for i,n in enumerate(body)if isinstance(n,ast.Assign)and any(isinstance(t,ast.Name)and t.id==name for t in n.targets))
+ start=index(block.body,'interp');stop=index(block.body,'dyn');test.assertEqual(list(map(dump,block.body[start:stop])),list(map(dump,expected)))
+ oldstart=index(oldblock.body,'interp');oldstop=index(oldblock.body,'dyn');block.body[start:stop]=oldblock.body[oldstart:oldstop]
+ calls=[n for n in ast.walk(f)if isinstance(n,ast.Call)and isinstance(n.func,ast.Name)and n.func.id=='need'and len(n.args)==2 and isinstance(n.args[1],ast.Constant)and n.args[1].value=='needed dependency count'];test.assertEqual(len(calls),1)
+ expected=ast.parse('(0<len(names)if require_interpreter else 0<=len(names))and len(names)<=32 and len(set(names))==len(names)',mode='eval').body
+ test.assertEqual(dump(calls[0].args[0]),dump(expected));calls[0].args[0]=ast.parse('0<len(names)<=32 and len(set(names))==len(names)',mode='eval').body
+ return tree
+
 class T(unittest.TestCase):
  def setUp(self):m._OWNED_ENV_BINDING=None
  def fixture(self,t):
@@ -41,13 +68,13 @@ class T(unittest.TestCase):
    with self.assertRaises(ValueError):m.configure_owned_environment(p,m.sha(p),i)
  def test_preserve_parser_and_library_checks(self):
   old={n.name:ast.dump(n,include_attributes=False)for n in ast.parse(BASE.read_text()).body if isinstance(n,ast.FunctionDef)}
-  new={n.name:ast.dump(n,include_attributes=False)for n in ast.parse((D/'runtime_abi_owned.py').read_text()).body if isinstance(n,ast.FunctionDef)}
+  new={n.name:ast.dump(n,include_attributes=False)for n in normalized_workspace(self,(D/'runtime_abi_owned.py').read_text()).body if isinstance(n,ast.FunctionDef)}
   for name in old:
    if name not in ('clean_env','prepare','verify','_list'):self.assertEqual(old[name],new[name],name)
  def test_only_declared_abi_deltas(self):
   old={n.name:ast.dump(n,include_attributes=False)for n in ast.parse(BASE.read_text()).body if isinstance(n,ast.FunctionDef)}
   text=(D/'runtime_abi_owned.py').read_text().replace("SAME_JOB_ELF_STARTUP_ABI_OWNED_ENV_V2","SAME_JOB_ELF_STARTUP_ABI_V1").replace("owned_environment=owned_environment_pin(),","").replace("r['owned_environment']==owned_environment_pin()and r['environment']==clean_env(),'same pinned owned execution environment contract'","r['environment']==clean_env(),'clean execution environment contract'").replace("tempfile.TemporaryFile(dir=clean_env()['TMPDIR'])","tempfile.TemporaryFile()")
-  new={n.name:ast.dump(n,include_attributes=False)for n in ast.parse(text).body if isinstance(n,ast.FunctionDef)}
+  new={n.name:ast.dump(n,include_attributes=False)for n in normalized_workspace(self,text).body if isinstance(n,ast.FunctionDef)}
   for name in ('prepare','verify','_list'):self.assertEqual(old[name],new[name],name)
  def test_loader_mock_uses_owned_temp_and_env(self):
   with tempfile.TemporaryDirectory()as t:

@@ -97,6 +97,7 @@ def add_arguments(ap):
  ap.add_argument('--local-build-result',type=P);ap.add_argument('--local-build-result-sha256')
  ap.add_argument('--builder-handoff',type=P);ap.add_argument('--builder-handoff-sha256')
  ap.add_argument('--executor-identity',type=P);ap.add_argument('--executor-identity-sha256')
+ ap.add_argument('--cloud-binding',type=P);ap.add_argument('--cloud-binding-sha256')
  ap.add_argument('--expected-run-id',type=int);ap.add_argument('--expected-launch-commit');ap.add_argument('--expected-source-commit')
  ap.add_argument('--local-runtime-abi',type=P);ap.add_argument('--local-runtime-abi-sha256')
  ap.add_argument('--p0-bindings',type=P);ap.add_argument('--p0-bindings-sha256')

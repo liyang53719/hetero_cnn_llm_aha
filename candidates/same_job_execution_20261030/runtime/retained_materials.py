@@ -30,6 +30,27 @@ def source(relative,old,b):
  need(str(op)in old['pins']and old['pins'][str(op)]==b['pins'].get(str(np)),'unchanged original material source/config')
  need(sha(regular(op,32<<20))==old['pins'][str(op)]and sha(regular(np,32<<20))==old['pins'][str(op)],'actual original and current source bytes')
  return op
+def material_artifact_identity(old,b):
+ # Python references and original tensors are data, not a cached ELF result.
+ # A different executable/build receipt may reuse them only for the exact same
+ # frozen SV and driver bytes. This is NOT compiler/ABI/DUT admission: the new
+ # independently pinned handoff, live owner and full numerical gates still run.
+ before=old['artifact_manifest'];after=b['artifact_manifest']
+ if before['sha256']==after['sha256']:return
+ docs=[]
+ for row in (before,after):
+  path=checked(row,65536);need(path.name=='frozen_artifact.json','fixed retained hardware manifest filename');doc=json.loads(path.read_text())
+  need(doc['schema']=='FROZEN_FIVE_PROFILE_DUT_ARTIFACT_V2'and doc['profiles']==list(range(5))and all(type(x)is int for x in doc['profiles'])and type(doc['matrix_macs'])is int and doc['matrix_macs']==4096 and type(doc['vector_lanes'])is int and doc['vector_lanes']==32,'same complete fixed hardware definition for material reuse')
+  need(doc['layer']=='CHISEL_EMITTED_SV_NUMERICAL_BACKEND'and doc['moe_reference_contract']=='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE','same frozen material interpretation and original routing contract')
+  files={}
+  for role,name in (('sv','hardware.sv'),('driver','driver.cpp')):
+   value=doc['common'][role];need(type(value)is dict and set(value)=={'path','bytes','sha256'}and value['path']==name,'fixed common source role for material reuse')
+   actual=dict(value,path=str(path.parent/name));checked(actual,1<<30);files[role]={k:value[k]for k in ('bytes','sha256')}
+  docs.append(files)
+ need(docs[0]==docs[1],'recompiled binary may not change actual frozen SV or driver')
+ checked(before,65536);checked(after,65536)
+ return str(P(before['path']).parent)
+
 def verify(manifest_pin,b):
  d=read(manifest_pin,1<<20)
  need(set(d)=={'schema','scope','old_controller_binding','old_executor_identity','weights_summary','weights_outer','references_manifest','weights','references','numerical_pass'}and d['schema']=='RETAINED_M128_MATERIALS_V1'and d['scope']==SCOPE and d['numerical_pass']is False,'retained material scope only')
@@ -40,7 +61,7 @@ def verify(manifest_pin,b):
  need(old['identity']==ident and old['executor_identity']==ident and old['executor_identity_pin']==d['old_executor_identity'],'original controller/executor immutable join')
  need(old['execution_context']=='CLOUD_EXECUTOR_V1'and old['profiles']==list(range(5))and old['tokens']==128 and old['matrix_macs']==4096,'original full five M128 inputs')
  need(b['identity']['execution_id']!=ident['execution_id']and b['identity']!=ident,'new execution cannot impersonate old owner')
- need(old['artifact_manifest']['sha256']==b['artifact_manifest']['sha256'],'same frozen builder hardware artifact')
+ previous_artifact_root=material_artifact_identity(old,b)
  job=P(old['job_root']);need(job.is_absolute()and job==job.resolve()and job.is_dir()and all(not p.is_symlink()for p in(job,*job.parents)),'canonical original job')
  need(P(d['old_controller_binding']['path'])==P(str(job)+'-CLOUD_BINDING.json')and P(d['old_executor_identity']['path'])==P(str(job)+'-EXECUTOR_IDENTITY.json'),'fixed original controller records')
  # Complete unchanged material-producing source/config subset of the original
@@ -94,4 +115,4 @@ def verify(manifest_pin,b):
   result[str(i)]=item['result']
  # Input metadata is rechecked after streaming all retained payloads.
  checked(manifest_pin,1<<20);checked(d['old_controller_binding']);checked(d['old_executor_identity'],65536)
- return dict(payload=str(payload),weights=weights,references=result,roots=[str(job),str(P(d['old_controller_binding']['path']).parent)],scope=SCOPE)
+ return dict(payload=str(payload),weights=weights,references=result,roots=[str(job),str(P(d['old_controller_binding']['path']).parent)]+([previous_artifact_root]if previous_artifact_root is not None else[]),scope=SCOPE)

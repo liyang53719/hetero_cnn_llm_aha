@@ -21,7 +21,7 @@ CATALOG_PATH = PREFIX + 'SOURCE_PINS.json'
 ALLOWED_PATHS = frozenset(PREFIX + x for x in (
     'cloud_budget.py', 'prepare_cloud_execution.py', 'controller/cloud_flow.py',
     'summarize_cloud_execution.py', 'executor_adaptation.py',
-    'numeric/test_p0_source_relocation.py',
+    'numeric/test_p0_source_relocation.py', 'test_backend_baseline_join.py',
     'numeric/artifact_handoff.py', 'numeric/runtime_abi_owned.py',
     'numeric/consumer_owned.py', 'numeric/numeric_tail.py', 'numeric/connect_owned.py',
     'numeric/driver_dependency_proof.py', 'numeric/consumption_proof.py',

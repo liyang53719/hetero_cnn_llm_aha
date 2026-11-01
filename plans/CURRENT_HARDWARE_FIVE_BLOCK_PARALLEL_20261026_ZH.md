@@ -1,3 +1,10 @@
+## 2026-11-01 04:25 UTC：O1构建已唯一启动；执行器纯输入跨编译复用修复（TEMP）
+
+- 原构建源码4255e062、唯一launch2f23f49d，O1 build-only run41272957145运行中；本次执行器修复不修改其源、flags、硬件或作业，不启动第二构建。
+- 发现原retained输入门误把整个ELF artifact SHA当参考数据身份：新O1 ELF不同会拒绝原70权重/五完整官方M128参考。现候选仅允许独立钉住的旧/新实际manifest在完整4096、五profile、32字段、原route/执行层级同一且SV与driver实际文件逐字节hash同一时重验并复用数据；仍核完整material-producing源码/配置与所有权重/参考tensor，不继承旧runtime owner或DUT结果。
+- 新ELF的真实构建策略、编译收据、远端artifact、loader/DSO、资源与全部五块数值门照常独立验证。相同SV/driver不是新ELF数值PASS；实际新产物尚未到，跨新产物资格仍待真实bytes。
+- 这是executor-only后续源码，builder4255冻结不变；保留已消费launch，不为输入门修复重复build。FULL工程预算仍待真实优化速率与资源，当前完整数值0/5。
+
 ## 2026-11-01 04:17 UTC：五块实际窗口已结束；共同 ELF 严格 O1 候选（TEMP）
 
 - 实际 executor dcc3 / builder e015 / 同一 ELF a8884d6e…，五块均完整4096资源、128 token配置，逐项真实启动。原收据与独立聚合：五项 STARTED_TIMEOUT_INCOMPLETE；0/5完整数值通过，尚无冻结后最终RTL回放。

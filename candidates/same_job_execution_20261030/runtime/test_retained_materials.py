@@ -94,4 +94,40 @@ class Tests(unittest.TestCase):
   with self.assertRaisesRegex(ValueError,'explicit cloud'):tail.retained_context({'retained_materials':self.f.mp})
  def test_tail_missing_controller_rejected(self):
   with self.assertRaises(KeyError):tail.retained_context({'execution_context':'CLOUD_EXECUTOR_V1','retained_materials':self.f.mp})
+class RecompiledMaterialTests(unittest.TestCase):
+ def setUp(self):self.t=tempfile.TemporaryDirectory();self.addCleanup(self.t.cleanup);self.f=Fixture(P(self.t.name))
+ def reject(self):
+  with self.assertRaises((ValueError,KeyError)):self.f.verify()
+ def manifests(self):
+  docs=[]
+  for label in ('old-artifact','new-artifact'):
+   root=self.f.base/label;root.mkdir();(root/'hardware.sv').write_bytes(b'SYNTHETIC IDENTICAL SV');(root/'driver.cpp').write_bytes(b'SYNTHETIC IDENTICAL DRIVER')
+   common={}
+   for role,name in (('sv','hardware.sv'),('driver','driver.cpp')):
+    common[role]=dict(self.f.pin(root/name),path=name)
+   doc=dict(schema='FROZEN_FIVE_PROFILE_DUT_ARTIFACT_V2',profiles=list(range(5)),matrix_macs=4096,vector_lanes=32,layer='CHISEL_EMITTED_SV_NUMERICAL_BACKEND',moe_reference_contract='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE',common=common,synthetic_binary_identity=label)
+   docs.append(self.f.write(root/'frozen_artifact.json',doc))
+  self.f.old['artifact_manifest']=docs[0];self.f.doc['old_controller_binding']=self.f.write(P(str(self.f.job)+'-CLOUD_BINDING.json'),self.f.old);self.f.b['artifact_manifest']=docs[1];self.f.save();return docs
+ def test_new_binary_same_source_inputs_full_revalidation(self):
+  old,new=self.manifests();self.assertNotEqual(old['sha256'],new['sha256']);r=self.f.verify();self.assertEqual(len(r['weights']),70);self.assertEqual(len(r['references']),5);self.assertEqual(r['scope'],m.SCOPE);self.assertIn(str(P(old['path']).parent),r['roots'])
+ def test_new_binary_changed_sv_rejected_even_rehashed(self):
+  old,new=self.manifests();path=P(new['path']);d=json.loads(path.read_text());sv=path.parent/'hardware.sv';sv.write_bytes(b'CHANGED HARDWARE');d['common']['sv']=dict(self.f.pin(sv),path=sv.name);self.f.b['artifact_manifest']=self.f.write(path,d);self.reject()
+ def test_new_binary_changed_driver_rejected_even_rehashed(self):
+  old,new=self.manifests();path=P(new['path']);d=json.loads(path.read_text());driver=path.parent/'driver.cpp';driver.write_bytes(b'CHANGED STIMULUS');d['common']['driver']=dict(self.f.pin(driver),path=driver.name);self.f.b['artifact_manifest']=self.f.write(path,d);self.reject()
+ def test_new_binary_actual_file_drift_rejected(self):
+  old,new=self.manifests();(P(new['path']).parent/'hardware.sv').write_bytes(b'TAMPER');self.reject()
+ def test_new_binary_changed_material_source_still_rejected(self):
+  self.manifests();next(self.f.current.rglob('run_reference.py')).write_bytes(b'NEW REF');self.reject()
+ def test_new_binary_still_rehashes_actual_reference(self):
+  self.manifests();(self.f.job/'materials/references/profile4/actual/reference/tensor.bin').write_bytes(b'y');self.reject()
+ def test_new_binary_does_not_admit_reduced_hardware(self):
+  old,new=self.manifests();path=P(new['path']);d=json.loads(path.read_text());d['matrix_macs']=512;self.f.b['artifact_manifest']=self.f.write(path,d);self.reject()
+ def test_new_binary_wrong_route_contract_rejected(self):
+  old,new=self.manifests();path=P(new['path']);d=json.loads(path.read_text());d['moe_reference_contract']='INJECTED_EXPERT_IDS';self.f.b['artifact_manifest']=self.f.write(path,d);self.reject()
+ def test_new_binary_wrong_common_path_rejected(self):
+  old,new=self.manifests();path=P(new['path']);d=json.loads(path.read_text());d['common']['sv']['path']='../hardware.sv';self.f.b['artifact_manifest']=self.f.write(path,d);self.reject()
+ def test_new_binary_missing_actual_manifest_rejected(self):
+  old,new=self.manifests();P(new['path']).unlink();self.reject()
+ def test_new_binary_manifest_pin_drift_rejected(self):
+  old,new=self.manifests();self.f.b['artifact_manifest']['sha256']='0'*64;self.reject()
 if __name__=='__main__':unittest.main()

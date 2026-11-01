@@ -5,6 +5,8 @@ are frozen in a separately source-pinned admission. No deadline is inferred.
 import hashlib,json,pathlib,re,importlib.util
 CALIBRATION='BOUNDED_CALIBRATION'
 FULL='FULL_BLOCK_ACCEPTANCE'
+STAGE='STAGE_COVERAGE_DIAGNOSTIC'
+STAGE_SCOPE='STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE'
 ACCEPTED_FULL_ADMISSION_SHA256=None
 FULL_POLICY='FULL_FIVE_ORIGINAL_HOST_POLICY'
 IDS=tuple(map(str,range(5)))
@@ -20,10 +22,61 @@ def pin(v,limit):
  need(type(v['sha256'])is str and re.fullmatch('[0-9a-f]{64}',v['sha256'])is not None and sha(p)==v['sha256'],'full budget/evidence exact hash')
  return p
 
+def stage_admission(binding):
+ """Execution path: actual candidate invocation authority is always verified first."""
+ helper_path=D/'numeric/candidate_admission.py'
+ need(binding['pins'].get(str(helper_path))==sha(helper_path),'stage candidate verifier source pin')
+ spec=importlib.util.spec_from_file_location('stage_candidate_review',helper_path);helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
+ review=helper.verify(binding.get('model_candidate_review'),binding)
+ return stage_document(binding,review)
+
+def stage_document(binding,review):
+ """Proposal-only pure document checks; does not authorize execution or call cloud admission."""
+ need(binding.get('execution_context')=='CLOUD_EXECUTOR_V1' and binding.get('execution_mode')==STAGE,'stage coverage requires explicit cloud invocation')
+ need(binding.get('full_block_budget') is None,'stage coverage is not full admission')
+ policy_path=D/'profile_policy.py'
+ need(binding['pins'].get(str(policy_path))==sha(policy_path),'stage profile policy source pin')
+ policy_spec=importlib.util.spec_from_file_location('stage_profile_policy',policy_path);policy=importlib.util.module_from_spec(policy_spec);policy_spec.loader.exec_module(policy)
+ policy.require_source_pin(binding['pins'])
+ need(policy.checked(binding)['mode']==FULL_POLICY,'stage requires all five original-host profiles')
+ artifact=json.loads(pin(binding.get('artifact_manifest'),65536).read_text())
+ need(artifact.get('schema')=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1','stage coverage requires model candidate')
+ need(review['scope']=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL' and review['artifact_manifest_sha256']==binding['artifact_manifest']['sha256'],'stage actual candidate review')
+ request=binding.get('stage_coverage_budget');doc=json.loads(pin(request,65536).read_text())
+ need(type(doc)is dict and set(doc)=={'schema','ready','scope','tokens','matrix_macs','vector_lanes','driver_sha256','artifact_manifest_sha256','model_candidate_review_sha256','basis','profiles'},'exact stage coverage budget')
+ need(doc['schema']=='MODEL_CANDIDATE_STAGE_COVERAGE_BUDGET_V1' and doc['ready']is True and doc['scope']==STAGE_SCOPE,'stage coverage budget scope')
+ need(all(type(doc[k])is int and doc[k]==v for k,v in [('tokens',128),('matrix_macs',4096),('vector_lanes',32)]),'unchanged stage hardware/stimulus')
+ need(doc['artifact_manifest_sha256']==binding['artifact_manifest']['sha256'] and doc['model_candidate_review_sha256']==binding['model_candidate_review']['sha256'],'stage reviewed artifact identity')
+ need(doc['driver_sha256']==sha(D.parent/'moe_router_score_observation_20261030/driver/host_axi_driver_non_dpi.cpp'),'stage unchanged numerical driver')
+ need(type(doc['basis'])is dict and set(doc['basis'])=={'calibration_summary','independent_budget_review'},'stage observed calibration and independent budget review')
+ for evidence in doc['basis'].values():pin(evidence,2<<20)
+ calibration=json.loads(pin(doc['basis']['calibration_summary'],2<<20).read_text())
+ need(calibration.get('schema')=='CLOUD_EXECUTION_SAFE_SUMMARY_V1' and calibration.get('status')=='VERIFIED_REAGGREGATED','stage verified calibration summary')
+ need(calibration.get('execution_mode')==CALIBRATION and type(calibration.get('transport_exit_code'))is int and calibration['transport_exit_code']==2,'stage basis must be original bounded calibration')
+ closed={'STARTED_TIMEOUT_INCOMPLETE','STARTED_NATIVE_FAILED','COMPLETE_TERMINAL_DIAGNOSTIC_NOT_PASS','COMPLETE_FULL128_EXACT_REFERENCE_NOT_FINAL_RTL','COMPLETE_EXACT_REFERENCE_FAILED'}
+ need(type(calibration.get('profiles'))is list and all(type(x)is dict and type(x.get('profile'))is int and x.get('state')in closed for x in calibration['profiles']),'stage all profiles verified closed terminal states')
+ need(type(calibration.get('profiles'))is list and len(calibration['profiles'])==5 and {x.get('profile')for x in calibration['profiles']}==set(range(5)),'stage all five closed profiles')
+ need(calibration.get('artifact_manifest_sha256')==doc['artifact_manifest_sha256'] and calibration.get('model_candidate_review_sha256')==doc['model_candidate_review_sha256'] and calibration.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL','stage calibration exact candidate provenance')
+ need(type(doc['profiles'])is dict and set(doc['profiles'])==set(IDS),'all five stage windows before execution')
+ windows={};cycles={}
+ for i in IDS:
+  row=doc['profiles'][i]
+  need(type(row)is dict and set(row)=={'wall_seconds','max_active_cycles','target_completed_commands'},'exact finite stage target')
+  need(all(type(v)is int and v>0 for v in row.values()),'stage budget unknown or invalid')
+  need(row['wall_seconds']<=18000 and row['max_active_cycles']<=1000000000 and row['target_completed_commands']<=256,'stage original watchdog ceilings and bounded target')
+  windows[i]=row['wall_seconds'];cycles[i]=row['max_active_cycles']
+ return dict(mode=STAGE,profile_seconds=windows,profile_max_active_cycles=cycles,reviewed_budget_sha256=request['sha256'])
+
 def admit(binding):
  mode=binding.get('execution_mode',CALIBRATION)
- need(mode in (CALIBRATION,FULL),'unknown execution mode')
+ need(mode in (CALIBRATION,FULL,STAGE),'unknown execution mode')
  request=binding.get('full_block_budget')
+ if mode==STAGE:
+  path=D/'cloud_budget.py';need(binding['pins'].get(str(path))==sha(path),'stage cloud verifier source pin')
+  spec=importlib.util.spec_from_file_location('stage_cloud_admission',path);cloud=importlib.util.module_from_spec(spec);spec.loader.exec_module(cloud)
+  approved=cloud.admit(binding);need(approved['execution_mode']==STAGE and approved['stage_coverage_budget']==binding.get('stage_coverage_budget'),'approved stage budget')
+  return stage_admission(binding)
+ need('stage_coverage_budget'not in binding,'stage budget forbidden in legacy modes')
  if mode==CALIBRATION:
   need(request is None,'full budget forbidden in calibration mode')
   windows=binding.get('calibration_seconds',binding.get('budgets',{}).get('calibration_seconds'))
@@ -88,15 +141,15 @@ def consumer_limits(original,admission,profile):
  i=str(profile);result=dict(original);wall=admission['profile_seconds'][i]
  need(type(wall)is int and 0<wall<=original['wall_seconds'],'explicit wall within original runtime bound')
  result['wall_seconds']=wall
- if admission['mode']==FULL:
+ if admission['mode']in(FULL,STAGE):
   cycles=admission['profile_max_active_cycles'][i]
   need(type(cycles)is int and 0<cycles<=original['max_active_cycles'],'explicit full cycles within original runtime bound')
   result['max_active_cycles']=cycles
  return result
 
 def transport_exit(mode,qualification):
- need(mode in (CALIBRATION,FULL),'unknown execution mode')
- if mode==CALIBRATION:return 2
+ need(mode in (CALIBRATION,FULL,STAGE),'unknown execution mode')
+ if mode in(CALIBRATION,STAGE):return 2
  need(type(qualification)is dict and type(qualification.get('numerical_pass'))is bool,'recomputed full qualification required')
  status=qualification.get('status')
  need(status in ('PASS_FIVE_FULL128_EXACT_REFERENCE','FAIL_EXACT_REFERENCE','INCOMPLETE'),'known aggregate qualification status')

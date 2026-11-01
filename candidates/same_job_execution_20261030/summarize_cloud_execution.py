@@ -93,6 +93,8 @@ def project(job,binding_path,binding_sha):
    handoff_result=handoff.verify(hp,b['builder_handoff']['sha256'],manifest,b['artifact_manifest']['sha256'],frozen,executor,executor_adaptation=adaptation,**candidate_kwargs)
   cloud_budget=load('summary_cloud_budget',D/'cloud_budget.py');cloud_admission=cloud_budget.admit(b)
   need(cloud_admission.get('executor_adaptation')==adaptation and cloud_admission.get('workspace_loader')==loader,'approved adapter and loader identities')
+  reuse=b.get('p0_provider_reuse');need(cloud_admission.get('p0_provider_reuse')==reuse,'approved P0 input-only reuse identity')
+  if reuse is not None:checked(reuse)
   retained=b.get('retained_materials')
   need(cloud_admission.get('retained_materials')==retained,'approved retained materials identity')
   if retained is not None:
@@ -101,9 +103,11 @@ def project(job,binding_path,binding_sha):
    need(type(retained_result)is dict and retained_result.get('scope')==retained_scope,'retained materials input-only scope')
   source_identity=dict(builder_source_commit=builder['source_commit'],executor_source_commit=executor['source_commit'],executor_adaptation_sha256=adaptation['sha256']if adaptation is not None else None,workspace_loader_sha256=loader['sha256']if loader is not None else None)
   if retained is not None:source_identity.update(retained_materials_sha256=retained['sha256'],retained_materials_scope=retained_scope)
+  if reuse is not None:source_identity.update(p0_provider_reuse_sha256=reuse['sha256'])
   if candidate:source_identity.update(candidate_scope=review['scope'],model_candidate_review_sha256=b['model_candidate_review']['sha256'],production_acceptance=False)
   mode=load('summary_cloud_mode',D/'execution_mode.py');admission=mode.admit(b)
   need(cloud_admission['execution_mode']==admission['mode']and cloud_admission['full_block_budget']==b.get('full_block_budget'),'approved cloud mode and full budget')
+  if admission['mode']==mode.STAGE:need(cloud_admission.get('stage_coverage_budget')==b.get('stage_coverage_budget')and b.get('stage_coverage_budget')is not None,'approved stage diagnostic budget')
   flow_path=job/'FLOW_RESULT.json'
   if not flow_path.exists()and not flow_path.is_symlink():
    result=dict(schema=unavailable['schema'],status='INCOMPLETE_EXECUTION',numerical_pass=False,final_rtl_executed=False,profile_qualification='UNKNOWN_NOT_INFERRED_FROM_PARTIAL_STAGES',profiles_registered=list(range(5)),stages=partial_stages(job),binding_sha256=binding_sha,source_pins_sha256=source_sha,builder_handoff_sha256=b['builder_handoff']['sha256'],execution_approval_sha256=b['execution_approval']['sha256'],cloud_budget_sha256=b['cloud_budget']['sha256'])
@@ -112,10 +116,14 @@ def project(job,binding_path,binding_sha):
   flow=read(flow_path);root=job/'materials/numeric';numeric_path=root/'RESULT.json';numeric=read(numeric_path)
   for key,value in [('identity',executor),('execution_approval',b['execution_approval']),('artifact_identity',builder),('execution_binding',pin(bp)),('builder_handoff',b['builder_handoff']),('artifact_manifest',b['artifact_manifest']),('numeric_result',pin(numeric_path))]:need(flow.get(key)==value,'fixed flow binding '+key)
   need(flow.get('retained_materials')==retained,'flow retained materials pin')
+  need(flow.get('p0_provider_reuse')==reuse,'flow P0 input-only reuse pin')
   if adaptation is not None:need(flow.get('executor_adaptation')==adaptation and flow.get('workspace_loader')==loader,'flow adapter and loader pins')
   if candidate:need(flow.get('model_candidate_review')==b['model_candidate_review']and flow.get('scope')==review['scope'],'actual flow candidate scope')
   need(flow.get('hardware_definitions')==1 and flow.get('profiles')==list(range(5)),'one fixed five profile hardware')
-  need(flow.get('execution_mode')==admission['mode']and numeric.get('execution_mode')==admission['mode']and numeric.get('full_budget_sha256')==admission['reviewed_budget_sha256'],'mode budget binding')
+  need(flow.get('execution_mode')==admission['mode']and numeric.get('execution_mode')==admission['mode'],'mode binding')
+  if admission['mode']==mode.STAGE:
+   need(flow.get('stage_coverage_budget')==b['stage_coverage_budget']and numeric.get('stage_budget_sha256')==admission['reviewed_budget_sha256']and numeric.get('full_budget_sha256')is None,'stage budget domain binding')
+  else:need(numeric.get('full_budget_sha256')==admission['reviewed_budget_sha256']and numeric.get('stage_budget_sha256')is None,'legacy mode budget binding')
   sys.path.insert(0,str(D/'numeric'))
   acceptance=load('required_acceptance',D/'numeric/required_acceptance.py');sys.modules['required_acceptance']=acceptance
   evidence=load('cloud_dut_evidence',D/'numeric/dut_evidence.py')
@@ -132,11 +140,13 @@ def project(job,binding_path,binding_sha):
    need(consumer.get('artifact_manifest_sha256')==b['artifact_manifest']['sha256']and started['binary_sha256']==frozen['common']['binary']['sha256'],'same actual artifact')
    ea=consumer.get('execution_admission',{})
    need(ea.get('execution_mode')==admission['mode']and ea.get('reviewed_budget_sha256')==admission['reviewed_budget_sha256']and ea.get('outer_cleanup_proof_required')is True,'actual consumer mode')
+   if admission['mode']==mode.STAGE:need(ea.get('stage_budget_sha256')==admission['reviewed_budget_sha256'],'actual consumer stage budget domain')
+   else:need(ea.get('stage_budget_sha256')is None,'legacy consumer cannot carry stage budget')
    need(ea.get('effective_limits')==cloud_budget.consumer_resource_limits(mode.consumer_limits(ea['original_limits'],admission,i),cloud_admission),'actual effective limits')
    parent_as=cloud_admission['consumer_address_space_bytes'];dut_as=cloud_admission['dut_address_space_bytes']
    expected_resource=dict(consumer_pre_fork_soft_bytes=parent_as,consumer_pre_fork_hard_bytes=dut_as,consumer_after_popen_hard_bytes=parent_as,dut_hard_address_space_bytes=dut_as,group_rss_is_sampled=True)
    need(consumer.get('resource_admission')==expected_resource and consumer['resource_admission'].get('group_rss_is_sampled') is True,'exact sampled group/resource admission')
-   scope='FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE'if admission['mode']==mode.FULL else'CALIBRATION_SAME_FULL_M128_STIMULUS'
+   scope={mode.FULL:'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE',mode.CALIBRATION:'CALIBRATION_SAME_FULL_M128_STIMULUS',mode.STAGE:'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE'}[admission['mode']]
    need(ea.get('scope')==scope,'actual consumer scope')
    actual=evidence.verify(out,i,consumer['artifact_manifest_sha256'],consumer['runtime_bundle_sha256'],started['binary_sha256'],started['runtime_sha256'],record['outer'])
    need(actual==record,'recomputed actual record');records.append(actual)
@@ -148,5 +158,13 @@ def project(job,binding_path,binding_sha):
   transport=mode.transport_exit(admission['mode'],q);need(type(flow.get('transport_exit_code'))is int and flow['transport_exit_code']==transport,'actual transport scope')
   result=dict(schema=unavailable['schema'],status='VERIFIED_REAGGREGATED',executor_identity=executor,builder_identity=builder,numerical_pass=q['numerical_pass'],final_rtl_executed=False,execution_mode=admission['mode'],transport_exit_code=transport,qualification=q,profiles=profiles,binding_sha256=binding_sha,execution_approval_sha256=b['execution_approval']['sha256'],cloud_budget_sha256=b['cloud_budget']['sha256'],source_pins_sha256=source_sha,builder_handoff_sha256=b['builder_handoff']['sha256'],artifact_manifest_sha256=b['artifact_manifest']['sha256'],flow_receipt_sha256=sha(flow_path),numeric_receipt_sha256=sha(numeric_path))
   result.update(source_identity)
+  if admission['mode']==mode.STAGE:
+   progress_path=D/'summary_progress.py';need(b['pins'].get(str(progress_path))==sha(progress_path),'stage progress helper source pin')
+   progress=load('stage_post_cleanup_progress',progress_path).project(job,builder,D/'numeric')
+   targets=read(checked(b['stage_coverage_budget']))['profiles'];coverage=[]
+   for row in progress['profiles']:
+    last=row.get('last');observed=last.get('completions')if type(last)is dict else None;target=targets[str(row['profile'])]['target_completed_commands']
+    coverage.append(dict(profile=row['profile'],target_completed_commands=target,observed_completed_commands=observed,target_observed=observed>=target if type(observed)is int else None,scope='POST_CLEANUP_COMMAND_RETIREMENT_ONLY_NOT_NUMERICAL_PASS'))
+   result.update(stage_budget_sha256=admission['reviewed_budget_sha256'],stage_coverage_scope='STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE',full_acceptance_mode=False,stage_coverage_observations=coverage)
   need(len(json.dumps(result).encode())<=65536,'bounded safe summary');return result
  except (ValueError,TypeError,KeyError,AttributeError,OSError,ImportError):return unavailable

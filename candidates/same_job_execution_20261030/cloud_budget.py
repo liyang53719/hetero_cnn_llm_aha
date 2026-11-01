@@ -33,11 +33,15 @@ def admit(b):
  need(b.get('execution_context')=='CLOUD_EXECUTOR_V1','explicit cloud executor context')
  need(b.get('execution_approval') is not None,'OPERATOR_APPROVED_EXECUTION_INPUT_REQUIRED')
  candidate=model_candidate_inputs(b)
+ stage=b.get('execution_mode')=='STAGE_COVERAGE_DIAGNOSTIC'
+ need(not stage or candidate,'stage diagnostic requires model candidate')
+ need(stage or 'stage_coverage_budget'not in b,'stage budget forbidden in legacy mode')
+ need('p0_provider_reuse'not in b or (stage and candidate),'P0 provider reuse requires stage candidate')
  adaptation_fields={'executor_adaptation','workspace_loader'}
  adapted=bool(adaptation_fields & set(b))
  need(not adapted or adaptation_fields<=set(b),'paired executor adaptation and workspace loader required')
  optional_fields=({'retained_materials'}if 'retained_materials'in b else set())|({'model_candidate_review'}if candidate else set())
- extra_fields=(adaptation_fields if adapted else set())|optional_fields
+ extra_fields=(adaptation_fields if adapted else set())|optional_fields|({'stage_coverage_budget'}if stage else set())|({'p0_provider_reuse'}if 'p0_provider_reuse'in b else set())
  approval_extra={k+'_sha256'for k in extra_fields}
  approval_path=pin(b['execution_approval'],65536);approval=json.loads(approval_path.read_text())
  need(set(approval)=={'schema','approved','authority','purpose','source_commit','budget_sha256','artifact_manifest_sha256','execution_id','host_identity_sha256','review_evidence'}|approval_extra,'exact independent execution approval')
@@ -68,9 +72,10 @@ def admit(b):
  need(type(q)is dict and set(q)==set(caps)|{'calibration_seconds'},'cloud no build phase/reservation')
  need(all(type(q[k])is int and 0<q[k]<=v for k,v in caps.items()),'original phase ceilings retained')
  need(type(q['calibration_seconds'])is dict and set(q['calibration_seconds'])==IDS and all(type(v)is int and 0<v<=300 for v in q['calibration_seconds'].values()),'only explicit up-to300s calibration windows')
- need(d['execution_mode']in('BOUNDED_CALIBRATION','FULL_BLOCK_ACCEPTANCE')and approval['purpose']==d['execution_mode'],'explicit approved cloud execution mode')
- if d['execution_mode']=='BOUNDED_CALIBRATION':
-  need(d['full_block_budget']is None and d['resource_scope']=='CURRENT_HOST_BOUNDED_RESOURCE_DIAGNOSTIC','explicit calibration diagnostic scope')
+ need(d['execution_mode']in('BOUNDED_CALIBRATION','FULL_BLOCK_ACCEPTANCE','STAGE_COVERAGE_DIAGNOSTIC')and approval['purpose']==d['execution_mode'],'explicit approved cloud execution mode')
+ need(stage==(d['execution_mode']=='STAGE_COVERAGE_DIAGNOSTIC'),'binding stage mode equals approved budget')
+ if d['execution_mode']in('BOUNDED_CALIBRATION','STAGE_COVERAGE_DIAGNOSTIC'):
+  need(d['full_block_budget']is None and d['resource_scope']==('CURRENT_HOST_STAGE_COVERAGE_DIAGNOSTIC'if stage else 'CURRENT_HOST_BOUNDED_RESOURCE_DIAGNOSTIC'),'explicit calibration diagnostic scope')
   need(type(d['dut_rss_bytes'])is int and type(d['dut_address_space_bytes'])is int and 0<d['dut_rss_bytes']<=2684354560 and 0<d['dut_address_space_bytes']<=2684354560,'current host diagnostic2.5GiB envelope, not original8/12GiB')
  else:
   need(d['resource_scope']=='FULL_BLOCK_MEASURED_RESOURCE_PLAN','full measured resource scope')
@@ -83,8 +88,8 @@ def admit(b):
  roles=d['stage_resources'];need(type(roles)is dict and set(roles)=={'install','reference'},'explicit installation/reference resource roles')
  for role in roles:
   values=roles[role];need(type(values)is dict and set(values)=={'rss_bytes','as_bytes'}and all(type(v)is int and v>0 for v in values.values()),'exact finite role resource limits')
-  rss_cap=2684354560 if d['execution_mode']=='BOUNDED_CALIBRATION'else 3<<30
-  as_cap=2684354560 if d['execution_mode']=='BOUNDED_CALIBRATION'else (4<<30 if role=='install'else 8<<30)
+  rss_cap=2684354560 if d['execution_mode']in('BOUNDED_CALIBRATION','STAGE_COVERAGE_DIAGNOSTIC')else 3<<30
+  as_cap=2684354560 if d['execution_mode']in('BOUNDED_CALIBRATION','STAGE_COVERAGE_DIAGNOSTIC')else (4<<30 if role=='install'else 8<<30)
   need(values['rss_bytes']<=rss_cap and values['as_bytes']<=as_cap,'no expanded role resource ceiling')
  need(type(d['reserved_other_owner_bytes'])is int and d['reserved_other_owner_bytes']==5<<30,'preserve unknown owner5GiB reservation')
  result={k:d[k]for k in('runtime_mode','archive_mode','runtime_reuse_manifest','stage_resources','consumer_address_space_bytes','reserved_other_owner_bytes','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','execution_mode','full_block_budget')}
@@ -94,6 +99,10 @@ def admit(b):
   spec=importlib.util.spec_from_file_location('budget_model_candidate_admission',path);helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
   reviewed=helper.verify(b['model_candidate_review'],b)
   need(reviewed['scope']==MODEL_SCOPE and reviewed['artifact_manifest_sha256']==b['artifact_manifest']['sha256'],'exact model candidate evaluation scope/artifact')
+ if stage:
+  path=D/'execution_mode.py';need(b['pins'].get(str(path))==sha(path),'stage mode verifier source pin')
+  spec=importlib.util.spec_from_file_location('cloud_stage_mode',path);mode=importlib.util.module_from_spec(spec);spec.loader.exec_module(mode)
+  mode.stage_admission(b) # pure: never recursively calls cloud admission
  return result
 
 

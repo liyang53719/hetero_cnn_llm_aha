@@ -1,0 +1,105 @@
+{
+  "schema": "ACTUAL_P0_READONLY_DATA_REUSE_PURE_CHAIN_EVIDENCE_V1",
+  "scope": "ACTUAL_INPUT_REUSE_FRESH_SAME_ROOT_PURE_CONNECTION_NOT_LIVE_ADMISSION",
+  "actual_source_catalog_count": 830,
+  "actual_source_catalog_sha256": "9be76d7c39da2abbb7f92b2724dfa6cf970e5cfc5533f54db35eb9b3d50f732e",
+  "final_published_catalog_not_claimed_executed": true,
+  "runner": {
+    "bytes": 8336,
+    "sha256": "c4b0f91fe4796d256d2d516e037d53b41d396627688105ccc2367b754c96e35e"
+  },
+  "core_sha256": "d57affb008ac58ed8024b2b38a40609b687be9061d01bf99c17fe450089409a5",
+  "actual_result_pin": {
+    "bytes": 7190,
+    "sha256": "8c81a8e68edbcaec268a6358a940f5dda5319d4ae32e848e61e1166f4846ec66"
+  },
+  "actual_safe_result_pin": {
+    "bytes": 1289,
+    "sha256": "45dae44bef1e33c73d4d48fceda3a6d21c68e02e132e3c23fd28bb0ff24bd46a"
+  },
+  "actual_strict": {
+    "native_exit": 0,
+    "errors": [],
+    "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+    "pipe_eof": true,
+    "gzip_finalized": true,
+    "reader_join_barrier": {
+      "complete": true,
+      "alive": false,
+      "reader_finally_done": true
+    },
+    "elapsed_seconds": 4.201950058020884,
+    "observed_peak_rss": 116805632
+  },
+  "actual_pure_result": {
+    "scope": "ACTUAL_INPUT_REUSE_FRESH_SAME_ROOT_PURE_CONNECTION_NOT_LIVE_ADMISSION",
+    "status": "PURE_REUSE_TO_BINDING_CHECKED",
+    "source_catalog_sha256": "9be76d7c39da2abbb7f92b2724dfa6cf970e5cfc5533f54db35eb9b3d50f732e",
+    "artifact_manifest_sha256": "05046aa9b694d2c785f08ee7f81ae3dc945acc7b7ecfee95be355f10dd382ca5",
+    "reuse_binding_sha256": "d3f8dac35f734d418e4766adc55b9f7efd76d5892c6e6c882370fd8c841168e9",
+    "candidate_review_sha256": "a684e2f01549e7d9d0d5bd1a6a3dfd77d6c5e581940212c9f76db9c209a5889c",
+    "bundle_sha256": "924bc4325e31b597156a2300a001c31db4c878bf84f1bb55ccd52b127d6d4090",
+    "fresh_same_materialization_root": true,
+    "program_paths_hand_rebased": false,
+    "common_ancestor_workaround": false,
+    "readonly_inputs_reused": 94916608,
+    "input_files_copied_or_aliased": 0,
+    "old_metadata_unchanged": true,
+    "actual_full_transform_and_raw_probes": true,
+    "actual_hydrate_corrector_assemble_load_binding": true,
+    "full_final_spans": [
+      {
+        "y": 786432,
+        "cache_k": 131072,
+        "cache_v": 131072
+      }
+    ],
+    "coverage_acceptance": false,
+    "startup_abi_copied_as_historical_bytes_only": true,
+    "execution_admitted": false,
+    "live_owner_checked": false,
+    "resource_admission_checked": false,
+    "dut_executed": false,
+    "numerical_pass": false
+  },
+  "negative_runner": {
+    "bytes": 2907,
+    "sha256": "0e419326de0483ab49269e39cb1a595aff74ac57cec6ea4dcadc85e8c116bb44"
+  },
+  "negative_normal_pin": {
+    "bytes": 692,
+    "sha256": "a6b3846a21f579a874460d5aba88662dbcc720a2cdb8550f2cdf5a47672773bf"
+  },
+  "negative_optimized_pin": {
+    "bytes": 692,
+    "sha256": "a6b3846a21f579a874460d5aba88662dbcc720a2cdb8550f2cdf5a47672773bf"
+  },
+  "negative_results": {
+    "scope": "ACTUAL_CORE_SMALL_NEGATIVE_GATES_ONLY",
+    "core_sha256": "d57affb008ac58ed8024b2b38a40609b687be9061d01bf99c17fe450089409a5",
+    "binding_sha256": "d3f8dac35f734d418e4766adc55b9f7efd76d5892c6e6c882370fd8c841168e9",
+    "cases": [
+      {
+        "case": "wrong_binding_digest_before_write",
+        "rejected": true,
+        "reason": "pin hash"
+      },
+      {
+        "case": "input_root",
+        "rejected": true,
+        "reason": "same admitted data binding"
+      },
+      {
+        "case": "program_hash",
+        "rejected": true,
+        "reason": "pin hash"
+      }
+    ],
+    "large_input_read_allowed": false,
+    "positive_provider_modified": false,
+    "dut_executed": false,
+    "numerical_pass": false
+  },
+  "numerical_pass": false,
+  "execution_admitted": false
+}

@@ -69,7 +69,7 @@ def retained_context(b):
  need(b['pins']==dict(controller['pins'],**{str(path):row['sha256']}),'tail pins are exact controller closure plus its binding')
  for key in ('identity','executor_identity','repo','artifact_manifest','builder_handoff','cloud_budget','execution_approval','retained_materials'):
   need(controller[key]==b[key],'retained tail/controller exact '+key)
- for key in ('executor_adaptation','workspace_loader','model_candidate_review'):
+ for key in ('executor_adaptation','workspace_loader','model_candidate_review','stage_coverage_budget','p0_provider_reuse'):
   need(controller.get(key)==b.get(key),'retained tail/controller optional '+key)
  if b.get('model_candidate_review')is not None:need(controller['source_pins']==b['source_pins'],'candidate tail/controller exact source catalog')
  budget=module('retained_tail_budget',D.parent/'cloud_budget.py',b['pins']);admitted=budget.admit(controller)
@@ -95,6 +95,9 @@ def cloud_context(b):
  need(b['reserved_other_owner_bytes']==admitted['reserved_other_owner_bytes']and b['job_budget_seconds']==admitted['job_budget_seconds']and b['rss_bytes']==admitted['dut_rss_bytes']and b['address_space_bytes']==admitted['dut_address_space_bytes'],'actual cloud resource admission')
  need(b['phase_extra_bytes']==admitted['numeric_reserved_increment_bytes']and b['provider_wall_seconds']==admitted['budgets']['provider']and b['consumer_address_space_bytes']==admitted['consumer_address_space_bytes'],'tail role budgets exactly approved')
  need(admitted.get('model_candidate_review')==b.get('model_candidate_review'),'tail exact approved candidate review')
+ need(admitted.get('stage_coverage_budget')==b.get('stage_coverage_budget'),'tail exact approved stage coverage budget')
+ need(admitted.get('p0_provider_reuse')==b.get('p0_provider_reuse'),'tail exact approved P0 input reuse')
+ if b.get('p0_provider_reuse')is not None:need(b['execution_mode']==execution_mode.STAGE and b.get('model_candidate_review')is not None,'P0 reuse only approved candidate stage coverage')
  if b.get('model_candidate_review')is not None:module('tail_model_candidate',D/'candidate_admission.py',b['pins']).verify(b['model_candidate_review'],b)
  need(b['execution_mode']==admitted['execution_mode']and b.get('full_block_budget')==admitted['full_block_budget']and b['calibration_seconds']==admitted['budgets']['calibration_seconds'],'tail approved mode and windows')
  retained_context(b)
@@ -126,9 +129,12 @@ def owned_environment(base,root):
 
 def execution_command(generated,b,admission,profile):
  need(generated[1]==str(D/'consumer_owned.py'),'explicit owned consumer handoff')
- need(not any(flag in generated for flag in ('--execution-mode','--calibration-wall-seconds','--full-block-budget','--full-block-budget-sha256')),'no stale or duplicate execution mode arguments')
+ need(not any(flag in generated for flag in ('--execution-mode','--calibration-wall-seconds','--full-block-budget','--full-block-budget-sha256','--stage-coverage-budget','--stage-coverage-budget-sha256')),'no stale or duplicate execution mode arguments')
  argv=list(generated)+['--execution-mode',admission['mode']]
  if admission['mode']==execution_mode.CALIBRATION:argv+=['--calibration-wall-seconds',str(admission['profile_seconds'][str(profile)])]
+ elif admission['mode']==execution_mode.STAGE:
+  need(b.get('execution_context')=='CLOUD_EXECUTOR_V1'and b.get('full_block_budget')is None,'stage coverage is cloud-only, not full acceptance')
+  budget=b['stage_coverage_budget'];argv+=['--stage-coverage-budget',budget['path'],'--stage-coverage-budget-sha256',budget['sha256']]
  else:
   need(admission['mode']==execution_mode.FULL,'explicit execution mode')
   budget=b['full_block_budget'];argv+=['--full-block-budget',budget['path'],'--full-block-budget-sha256',budget['sha256']]
@@ -142,6 +148,11 @@ def execution_command(generated,b,admission,profile):
   else:argv+=['--cloud-binding',invocation['path'],'--cloud-binding-sha256',invocation['sha256']]
  return argv,admission['profile_seconds'][str(profile)]+30
 
+
+def mode_budget_fields(admission):
+ if admission['mode']==execution_mode.STAGE:return dict(full_budget_sha256=None,stage_budget_sha256=admission['reviewed_budget_sha256'])
+ need(admission['mode']in(execution_mode.CALIBRATION,execution_mode.FULL),'explicit numeric execution mode')
+ return dict(full_budget_sha256=admission['reviewed_budget_sha256'])
 
 def report_effective_limits(original,b,admission,profile):
  expected=execution_mode.consumer_limits(original,admission,profile)
@@ -176,7 +187,7 @@ def run(b,binding_path,binding_sha):
   if candidate:kwargs.update(model_candidate_review=b.get('model_candidate_review'),current_source_pins_pin=b['source_pins'],repo=b['repo'])
   proof.verify(b['builder_handoff']['path'],b['builder_handoff']['sha256'],manifest,sha(manifest),frozen,cloud,**kwargs)
  need(not out.exists() and out.is_relative_to(P(b['owner_root'])),'fresh output inside runtime owner');out.mkdir();(out/'runs').mkdir();(out/'phases').mkdir();(out/'cache_roots').mkdir()
- save(out/'REGISTERED_FIVE.json',dict(execution_policy=profile_policy.checked(b),profiles=b['profiles'],tokens=128,execution_mode=admission['mode'],profile_seconds=admission['profile_seconds'],full_budget_sha256=admission['reviewed_budget_sha256'],scope='CHISEL_EMITTED_SV_SIMULATION_NOT_FINAL_RTL',numeric_pass=False))
+ save(out/'REGISTERED_FIVE.json',dict(execution_policy=profile_policy.checked(b),profiles=b['profiles'],tokens=128,execution_mode=admission['mode'],profile_seconds=admission['profile_seconds'],**mode_budget_fields(admission),scope='CHISEL_EMITTED_SV_SIMULATION_NOT_FINAL_RTL',numeric_pass=False))
  sys.path.insert(0,b['supervisor_dir']);import supervise_multiroot as supervisor
  owner=module('admitted_runtime_owner',P(b['owner_module']),pins)
  owner_doc,_=owner.verify(b['owner_manifest']['path'],b['owner_manifest']['sha256'],b['owner_root'])
@@ -224,7 +235,7 @@ def run(b,binding_path,binding_sha):
    initialization=out/'phases'/f'p{i}_initialize_input.json'
    save(initialization,dict(repo=b['repo'],materializer=b['materializer'],output=str(profile),profile=i,reference=b['references'][str(i)]))
    stage(f'p{i}_initialize',[b['python'],'-B',str(D/'provider_from_frozen.py'),'--initialize-binding',str(initialization),'--sha256',sha(initialization)],120,lease_out=lease_root)
-   material.prepare(b['repo'],b['materializer'],profile,i,runtime['wrapper'],b['payload'],b['references'][str(i)],provider_stage,pins)
+   material.prepare(b['repo'],b['materializer'],profile,i,runtime['wrapper'],b['payload'],b['references'][str(i)],provider_stage,pins,p0_provider_reuse=b.get('p0_provider_reuse')if i==0 else None)
    stage(f'p{i}_connect',[b['python'],'-B',str(D/'connect_owned.py'),'--existing-output',str(profile),'--profile',str(i),*identity_args],120,lease_out=lease_root)
    generated=json.loads((profile/'CONSUMER_ARGV.json').read_text())['consumer_argv']
    generated,outer_seconds=execution_command(generated,b,admission,i)
@@ -234,17 +245,19 @@ def run(b,binding_path,binding_sha):
    if cloud is not None:
     report=json.loads((profile/'dut_result/RESULT.json').read_text());need(report.get('executor_identity')==cloud and report.get('builder_handoff_sha256')==b['builder_handoff']['sha256'],'actual executor report not builder identity')
     if b.get('executor_adaptation') is not None:need(report.get('executor_adaptation_sha256')==b['executor_adaptation']['sha256']and report.get('workspace_loader_sha256')==b['workspace_loader']['sha256'],'actual executor adapter/loader provenance')
-   if admission['mode']==execution_mode.FULL:
+   if admission['mode']in(execution_mode.FULL,execution_mode.STAGE):
     report=json.loads((profile/'dut_result/RESULT.json').read_text());actual=report['execution_admission']
     need(actual['execution_mode']==admission['mode']and actual['reviewed_budget_sha256']==admission['reviewed_budget_sha256'],'actual consumer full-mode budget identity')
-    need(actual['scope']=='FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE'and actual['outer_cleanup_proof_required']is True,'actual full execution scope')
+    scope='STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE'if admission['mode']==execution_mode.STAGE else'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE'
+    need(actual['scope']==scope and actual['outer_cleanup_proof_required']is True,'actual explicit execution scope')
+    if admission['mode']==execution_mode.STAGE:need(actual.get('stage_budget_sha256')==admission['reviewed_budget_sha256'],'actual stage coverage budget identity')
     expected_limits=report_effective_limits(actual['original_limits'],b,admission,i)
     need(actual['effective_limits']==expected_limits,'actual full watchdog limits')
    dut_records.append(diagnostic)
    save(out/f'PROFILE_{i}_DIAGNOSTIC.json',diagnostic)
    weights(b,i)
  qualification=required_acceptance.aggregate(dut_records)
- save(out/'RESULT.json',dict(execution_mode=admission['mode'],full_budget_sha256=admission['reviewed_budget_sha256'],qualification=qualification,execution_policy=profile_policy.checked(b),status=qualification['status'],scope='CHISEL_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL',stages=allstage,profiles=b['profiles'],actual_dut_reports=dut_records,numerical_pass=qualification['numerical_pass'],moe_contract='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE',uploaded_payloads=False))
+ save(out/'RESULT.json',dict(execution_mode=admission['mode'],**mode_budget_fields(admission),qualification=qualification,execution_policy=profile_policy.checked(b),status=qualification['status'],scope='CHISEL_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL',stages=allstage,profiles=b['profiles'],actual_dut_reports=dut_records,numerical_pass=qualification['numerical_pass'],moe_contract='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE',uploaded_payloads=False))
 
 def main():
  a=argparse.ArgumentParser();a.add_argument('--binding',type=P,required=True);a.add_argument('--binding-sha256',required=True);v=a.parse_args();need(sha(v.binding)==v.binding_sha256,'independently reviewed binding');run(json.loads(v.binding.read_text()),v.binding.resolve(),v.binding_sha256)

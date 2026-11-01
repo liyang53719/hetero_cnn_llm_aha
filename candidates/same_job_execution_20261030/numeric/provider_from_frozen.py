@@ -34,7 +34,7 @@ def copy_reference(row,out,profile):
  need(sha(target/'RESULT.json')==row['sha256'],'original reference receipt preserved')
  return target
 
-def prepare(repo,materializer,out,profile,wrapper,payload,reference,stage,source_pins):
+def prepare(repo,materializer,out,profile,wrapper,payload,reference,stage,source_pins,p0_provider_reuse=None):
  """stage(name,argv) MUST be strict supervised and require complete cleanup/EOF.
  This function is called inside the parent's runtime lease, not in another session.
  All source files are explicitly admitted by source_pins before import/exec.
@@ -49,7 +49,14 @@ def prepare(repo,materializer,out,profile,wrapper,payload,reference,stage,source
  ref=out/'reference';need(sha(ref/'RESULT.json')==reference['sha256'],'frozen initialized reference')
  refs=out/'references';refs.mkdir();(refs/f'profile{profile}').symlink_to(ref,target_is_directory=True)
  argv_prefix=[str(wrapper)]
- if profile==0:
+ if p0_provider_reuse is not None:
+  need(profile==0,'input reuse restricted to original P0')
+  reuse_binding=checked(p0_provider_reuse)
+  numeric=P(__file__).resolve().parent
+  stage('p0_provider',argv_prefix+[source(numeric/'p0_provider_data_reuse.py'),'--binding',str(reuse_binding),'--sha256',p0_provider_reuse['sha256'],'--output',str(out/'p0_provider')])
+  stage('p0_transport',argv_prefix+[source(numeric/'emit_reused_p0_tsv.py'),'--payload',str(payload),'--provider',str(out/'p0_provider'),'--output',str(out/'p0_transport'),'--reuse-binding',str(reuse_binding),'--reuse-binding-sha256',p0_provider_reuse['sha256']])
+  d=out/'p0_transport';receipt=out/'p0_provider/RESULT.json'
+ elif profile==0:
   table=out/'rope';stage('p0_rope',argv_prefix+[source(materializer/'generate_p0_rope.py'),'--config',str(repo/'config/upstream/weight_headers/qwen2_1p5b/config.json'),'--reference',str(ref),'--output',str(table)])
   rope=table/'rope_fp32.bin';need(sha(rope)=='4060acc13a636cbd303e96552df99033cd348f238025f11bae1bc0fcab32c815','original RoPE identity')
   base=repo/'candidates/p0_newboundary_input_provider_20261028'

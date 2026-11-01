@@ -16,9 +16,33 @@ D = Path(__file__).resolve().parent
 PREFIX = 'candidates/same_job_execution_20261030/'
 ADAPTER_PATH = PREFIX + 'executor_adaptation.py'
 CATALOG_PATH = PREFIX + 'SOURCE_PINS.json'
-# No build producer, Scala, C++, SV, reference, provider or stimulus source may
-# change through this host adapter. Additional paths require source review.
+# No build producer, Scala, C++, SV, reference math, original input transformer
+# or stimulus source may change through this host adapter. The exact host-only
+# P0 data-reuse wrapper paths below require independent source/data review.
 ALLOWED_PATHS = frozenset(PREFIX + x for x in (
+    'test_stage_document.py',
+    'evidence/p0_data_reuse_20261101/README_CN.md',
+    'evidence/p0_data_reuse_20261101/SAFE_EVIDENCE.json',
+    'evidence/p0_data_reuse_20261101/negative_checks.py',
+    'evidence/p0_data_reuse_20261101/run_pure_chain.py',
+    'numeric/test_support_p0_reuse.py',
+    'numeric/test_p0_provider_data_reuse.py',
+    'numeric/fixtures/p0_reuse/program_commands.hex',
+    'numeric/fixtures/p0_reuse/program_descriptors.hex',
+    'numeric/fixtures/p0_reuse/program_manifest',
+    'numeric/fixtures/p0_reuse/source_config',
+    'numeric/fixtures/p0_reuse/source_convert',
+    'numeric/fixtures/p0_reuse/source_emit',
+    'numeric/fixtures/p0_reuse/source_pack',
+    'numeric/fixtures/p0_reuse/source_rebuild',
+    'numeric/fixtures/p0_reuse/source_reconstruct',
+    'test_stage_coverage.py',
+    'test_stage_summary.py',
+    'numeric/test_stage_numeric.py',
+    'numeric/provider_from_frozen.py',
+    'numeric/p0_provider_data_reuse.py',
+    'numeric/emit_reused_p0_tsv.py',
+    'numeric/test_p0_reuse_wiring.py',
     'evidence/contract_domain_20261101/ACTUAL_PURE_CHAIN_SAFE_RESULT.json',
     'evidence/contract_domain_20261101/PURE_CHAIN_README.md',
     'evidence/contract_domain_20261101/reproduce_pure_chain.py',

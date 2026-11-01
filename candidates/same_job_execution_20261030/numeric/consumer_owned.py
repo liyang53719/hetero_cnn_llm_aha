@@ -428,6 +428,8 @@ def explicit_execution_admission(args):
     spec=importlib.util.spec_from_file_location('owned_execution_mode',path);mode=importlib.util.module_from_spec(spec);spec.loader.exec_module(mode)
     selected=getattr(args,'execution_mode',mode.CALIBRATION)
     cloud_path=getattr(args,'cloud_binding',None)
+    stage_budget=getattr(args,'stage_coverage_budget',None);stage_sha=getattr(args,'stage_coverage_budget_sha256',None)
+    if selected!=mode.STAGE:need(stage_budget is None and stage_sha is None,'stage coverage budget forbidden in other modes')
     if cloud_path is not None:
         need(cloud_path.is_absolute()and cloud_path.is_file()and all(not p.is_symlink()for p in(cloud_path,*cloud_path.parents))and cloud_path.stat().st_size<=1<<20 and sha(cloud_path)==args.cloud_binding_sha256,'bounded independently pinned cloud invocation binding')
         binding=json.loads(cloud_path.read_text());need(binding.get('execution_context')=='CLOUD_EXECUTOR_V1'and binding['executor_identity']==executor_context(args),'same actual executor invocation')
@@ -439,9 +441,15 @@ def explicit_execution_admission(args):
             row=binding['workspace_loader'];WORKSPACE_LOADER=(row['path'],row['sha256'],args.expected_source_commit,args.artifact_manifest_sha256)
         admission=mode.admit(binding)
         if selected==mode.CALIBRATION:need(args.calibration_wall_seconds==admission['profile_seconds'][str(args.profile)],'actual cloud calibration window')
+        elif selected==mode.STAGE:
+            row=binding.get('stage_coverage_budget')
+            need(args.calibration_wall_seconds is None and args.full_block_budget is None and args.full_block_budget_sha256 is None,'no calibration/full flags in stage coverage')
+            need(type(row)is dict and stage_budget is not None and stage_sha is not None and str(stage_budget)==row['path']and stage_sha==row['sha256'],'actual stage coverage cloud budget flags')
         else:
+            need(selected==mode.FULL,'explicit cloud execution mode')
             need(args.calibration_wall_seconds is None and args.full_block_budget is not None and args.full_block_budget_sha256==binding['full_block_budget']['sha256']and str(args.full_block_budget)==binding['full_block_budget']['path'],'actual full cloud budget flags')
         return mode,admission
+    need(selected!=mode.STAGE,'stage coverage requires actual cloud invocation')
     need(getattr(args,'cloud_binding_sha256',None)is None and executor_context(args)is None,'cloud consumer requires actual invocation binding')
     budget=getattr(args,'full_block_budget',None);budget_sha=getattr(args,'full_block_budget_sha256',None)
     if selected==mode.FULL:
@@ -493,9 +501,11 @@ def main():
     a.add_argument('--validate-only',action='store_true')
     a.add_argument('--strict-outer-supervised',action='store_true')
     a.add_argument('--calibration-wall-seconds',type=int)
-    a.add_argument('--execution-mode',choices=('BOUNDED_CALIBRATION','FULL_BLOCK_ACCEPTANCE'),default='BOUNDED_CALIBRATION')
+    a.add_argument('--execution-mode',choices=('BOUNDED_CALIBRATION','FULL_BLOCK_ACCEPTANCE','STAGE_COVERAGE_DIAGNOSTIC'),default='BOUNDED_CALIBRATION')
     a.add_argument('--full-block-budget',type=pathlib.Path)
     a.add_argument('--full-block-budget-sha256')
+    a.add_argument('--stage-coverage-budget',type=pathlib.Path)
+    a.add_argument('--stage-coverage-budget-sha256')
     a.add_argument('--owned-environment',type=pathlib.Path,required=True)
     a.add_argument('--owned-environment-sha256',required=True)
     args=a.parse_args()
@@ -562,7 +572,8 @@ def main():
     if source_relocation is not None:
         summary['source_relocation']=source_relocation
         if source_relocation.get('candidate_scope') is not None:summary.update(model_candidate_review_sha256=source_relocation['model_candidate_review']['sha256'],candidate_scope=source_relocation['candidate_scope'])
-    summary['execution_admission']={'scope':'CALIBRATION_SAME_FULL_M128_STIMULUS' if admission['mode']==mode.CALIBRATION else 'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE', 'execution_mode':admission['mode'], 'reviewed_budget_sha256':admission['reviewed_budget_sha256'],'original_limits':dict(limits),'effective_limits':execution_limits,'outer_cleanup_proof_required':True,'peak_resource_qualification':'INCOMPLETE_SAMPLED','numerical_pass':False}
+    summary['execution_admission']={'scope':'CALIBRATION_SAME_FULL_M128_STIMULUS' if admission['mode']==mode.CALIBRATION else 'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE' if admission['mode']==mode.STAGE else 'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE', 'execution_mode':admission['mode'], 'reviewed_budget_sha256':admission['reviewed_budget_sha256'],'original_limits':dict(limits),'effective_limits':execution_limits,'outer_cleanup_proof_required':True,'peak_resource_qualification':'INCOMPLETE_SAMPLED','numerical_pass':False}
+    if admission['mode']==mode.STAGE:summary['execution_admission']['stage_budget_sha256']=admission['reviewed_budget_sha256']
     for p,runtime,obs,want,route_ref in prepared:
         r=dict(profile=p['id'],complete_block_tokens=128,status='INCOMPLETE',numerical_pass=False,coverage_policy=b['coverage_policy']);summary['profiles'].append(r)
         try:

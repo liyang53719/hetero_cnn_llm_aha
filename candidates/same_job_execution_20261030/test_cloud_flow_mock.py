@@ -16,7 +16,8 @@ class Tests(unittest.TestCase):
  def test_adapted_reuse_flow_transmits_distinct_sources(self):self.exercise(True,True)
  def test_retained_skips_acquisition_reference_preserves_fresh_runtime(self):self.exercise(True,True,True)
  def test_candidate_tail_binds_actual_source_catalog(self):self.exercise(True,True,True,True)
- def exercise(self,reuse,adapted=False,retained=False,candidate=False):
+ def test_stage_coverage_real_flow_transmits_budget_scope_and_fixed_exit2(self):self.exercise(True,True,True,True,True)
+ def exercise(self,reuse,adapted=False,retained=False,candidate=False,stage=False):
   with tempfile.TemporaryDirectory()as t:
    base=pathlib.Path(t);repo=base/'repo';package=repo/'candidates/same_job_execution_20261030';controller=package/'controller';runtime=package/'runtime';numeric=package/'numeric';sup=repo/'supervisor';artifact=base/'artifact';job=base/'job'
    for p in(controller,runtime,numeric,sup,artifact):p.mkdir(parents=True)
@@ -28,6 +29,9 @@ class Tests(unittest.TestCase):
    b=dict(execution_context='CLOUD_EXECUTOR_V1',schema='CLOUD_FIVE_M128_EXECUTION_BINDING_V1',job_budget_seconds=43200,job_started_monotonic=identity['started_monotonic'],identity=identity,artifact_identity=builder,profiles=list(range(5)),tokens=128,matrix_macs=4096,vector_lanes=32,payload_uploads=False,final_rtl_replay=False,repo=str(repo),job_root=str(job),pins=pins,runtime_package=str(runtime),numeric_package=str(numeric),python=str(package/'python'),supervisor_dir=str(sup),shared_runtime_helper='synthetic',materializer='synthetic',budgets=q,dut_rss_bytes=8<<30,dut_address_space_bytes=12<<30,stage_resources={'install':{'rss_bytes':2<<30,'as_bytes':2<<30},'reference':{'rss_bytes':2<<30,'as_bytes':2<<30}},consumer_address_space_bytes=512<<20,reserved_other_owner_bytes=5<<30,numeric_reserved_increment_bytes=512<<20,execution_mode='BOUNDED_CALIBRATION')
    for k in('artifact_manifest','builder_handoff','executor_identity_pin','cloud_budget','source_pins','execution_approval'):b[k]=f.pin(artifact/'frozen_artifact.json')
    b.update(runtime_mode='IMPORT_EXISTING_PINNED_RUNTIME'if reuse else'FRESH_ORIGINAL_RUNTIME_INSTALL',archive_mode='READ_EXISTING_PINNED_ARCHIVES'if reuse else'DOWNLOAD_ORIGINAL_ARCHIVES',runtime_reuse_manifest=f.pin(artifact/'frozen_artifact.json')if reuse else None)
+   if stage:
+    control=base/'independent_stage_control';control.mkdir();sp=control/'stage.json';sp.write_text('{"ALL_SYNTHETIC":true,"basis":{}}')
+    b.update(execution_mode='STAGE_COVERAGE_DIAGNOSTIC',stage_coverage_budget=f.pin(sp),full_block_budget=None)
    if adapted:
     builder['source_commit']='e'*40
     for k in ('executor_adaptation','workspace_loader'):b[k]=f.pin(artifact/'frozen_artifact.json')
@@ -64,6 +68,10 @@ class Tests(unittest.TestCase):
     root=pathlib.Path(binding['owner_root']);root.mkdir();p=root/'owner.json';p.write_text('{}');return None,None,p
    def reference(binding,stage):seen.append('reference');self.assertEqual(binding['identity'],identity);self.assertEqual(binding['owner_module'],owner_module);return {str(i):{}for i in range(5)}
    def tail(binding,*args):
+    if stage:
+     self.assertEqual(binding['execution_mode'],'STAGE_COVERAGE_DIAGNOSTIC');self.assertEqual(binding['stage_coverage_budget'],b['stage_coverage_budget']);self.assertIsNone(binding['full_block_budget'])
+     self.assertIn(str(control),binding['owned_roots'])
+    else:self.assertNotIn('stage_coverage_budget',binding)
     if candidate:
      self.assertEqual(binding['source_pins'],b['source_pins']);self.assertEqual(binding['model_candidate_review'],b['model_candidate_review']);self.assertEqual(binding['controller_binding'],f.pin(base/'binding.json'))
      self.assertEqual(json.loads(pathlib.Path(args[0]).read_text())['source_pins'],b['source_pins'])
@@ -85,9 +93,11 @@ class Tests(unittest.TestCase):
     r=realpin(p)
     if pathlib.Path(p).suffix=='.bin':r['bytes']=3531306272 if pathlib.Path(p).stem=='0' else 0
     return r
-   with patch.object(f,'D',controller),patch.object(f,'admitted_inputs',return_value=({},dict(**({'workspace_loader_verified':{'root':str(artifact)}}if adapted else {}),**({'retained_materials_verified':retained_data}if retained else {}),**({'model_candidate_verified':{'roots':[str(artifact)]}}if candidate else {})))),patch.object(f,'execution_admission',return_value=dict(mode='BOUNDED_CALIBRATION',profile_seconds=q['calibration_seconds'])),patch.object(f.profile_policy,'require_source_pin'),patch.object(f.profile_policy,'require_cpu'),patch.object(f.subprocess,'check_output',return_value='a'*40),patch.object(f,'mod',side_effect=lambda name,path:modules[name]),patch.object(f,'pin',side_effect=synthetic_pin),patch.dict(sys.modules,{'supervise_multiroot':types.SimpleNamespace(execute=execute)}):
+   with patch.object(f,'D',controller),patch.object(f,'admitted_inputs',return_value=({},dict(**({'workspace_loader_verified':{'root':str(artifact)}}if adapted else {}),**({'retained_materials_verified':retained_data}if retained else {}),**({'model_candidate_verified':{'roots':[str(artifact)]}}if candidate else {})))),patch.object(f,'execution_admission',return_value=dict(mode='STAGE_COVERAGE_DIAGNOSTIC'if stage else'BOUNDED_CALIBRATION',profile_seconds=dict.fromkeys(map(str,range(5)),4000)if stage else q['calibration_seconds'],profile_max_active_cycles=dict.fromkeys(map(str,range(5)),1000000)if stage else None,reviewed_budget_sha256=b['stage_coverage_budget']['sha256']if stage else None)),patch.object(f.profile_policy,'require_source_pin'),patch.object(f.profile_policy,'require_cpu'),patch.object(f.subprocess,'check_output',return_value='a'*40),patch.object(f,'mod',side_effect=lambda name,path:modules[name]),patch.object(f,'pin',side_effect=synthetic_pin),patch.dict(sys.modules,{'supervise_multiroot':types.SimpleNamespace(execute=execute)}):
     # Disk only is mocked: phase resource admission calls above remain checked.
     import shutil
     with patch.object(shutil,'disk_usage',return_value=types.SimpleNamespace(free=100<<30)):code=f.run(b,base/'binding.json',f.sha(base/'binding.json'))
    self.assertEqual(code,2);self.assertEqual(seen,['archives','reuse','tail']if retained else ['archives','reuse'if reuse else'install','weights','reference','tail']);result=json.loads((job/'FLOW_RESULT.json').read_text());self.assertEqual(result['identity'],identity);self.assertEqual(result['artifact_identity'],builder);self.assertFalse(result['qualification']['numerical_pass'])
+   if stage:
+    self.assertEqual(result['execution_mode'],'STAGE_COVERAGE_DIAGNOSTIC');self.assertEqual(result['stage_coverage_budget'],b['stage_coverage_budget']);self.assertEqual(result['stage_coverage_budget_sha256'],b['stage_coverage_budget']['sha256']);self.assertEqual(result['execution_scope'],'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE');self.assertEqual(result['execution_admission']['profile_seconds'],dict.fromkeys(map(str,range(5)),4000))
 if __name__=='__main__':unittest.main()

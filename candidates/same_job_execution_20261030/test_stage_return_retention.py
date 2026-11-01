@@ -8,11 +8,580 @@ EXPECTED={
  'controller/flow.py':"save(job / 'bindings' / (name + '_SUPERVISOR_RETURN.json'), r)",
  'numeric/numeric_tail.py':"save(out / 'phases' / (name + '_SUPERVISOR_RETURN.json'), r)",
 }
+REVIEWED_STAGE_INVERSE = {'controller/cloud_flow.py': [('ec28fb2ab41c8dc48e0a85a92172288f9b29736758e86ed7ae5e802effcec384',
+                               "if mode in ('BOUNDED_CALIBRATION', 'STAGE_COVERAGE_DIAGNOSTIC'):\n"
+                               '    return 2',
+                               "if mode == 'BOUNDED_CALIBRATION':\n    return 2"),
+                              ('f996f537187634ea5e4a0fe0ffc028e7e58b41181be65d18a118ab58b758f2bd',
+                               'def verified_p0_provider_reuse(b, budget, candidate):\n'
+                               "    if 'p0_provider_reuse' not in b:\n"
+                               '        return None\n'
+                               "    need(candidate and budget['execution_mode'] == "
+                               "'STAGE_COVERAGE_DIAGNOSTIC', 'P0 data reuse only approved candidate stage "
+                               "diagnostic')\n"
+                               "    need(b['p0_provider_reuse'] == budget.get('p0_provider_reuse'), 'P0 "
+                               "reuse equals independent approved pin')\n"
+                               "    reuse_path = D.parent / 'numeric/p0_provider_data_reuse.py'\n"
+                               "    need(b['pins'].get(str(reuse_path)) == sha(reuse_path), 'P0 pure data "
+                               "reuse verifier source pin')\n"
+                               "    reused = mod('actual_p0_provider_data_reuse', "
+                               "reuse_path).verify_metadata(b['p0_provider_reuse'], b)\n"
+                               "    need(reused['watch_scope'] == 'PURE_PROVIDER_AND_FINITE_EVIDENCE_V1' and "
+                               "reused['roots'] == [reused['provider_root'], reused['evidence_root']], 'only "
+                               "verified pure provider and finite evidence directories watched')\n"
+                               '    return reused\n'
+                               'def stage_budget_watch_coverage(b, roots):\n'
+                               "    if b.get('execution_mode') != 'STAGE_COVERAGE_DIAGNOSTIC':\n"
+                               '        return\n'
+                               "    row = b['stage_coverage_budget']\n"
+                               "    path = P(row['path'])\n"
+                               "    need(pin(path) == row, 'stage budget immutable before watch admission')\n"
+                               '    doc = json.loads(path.read_text())\n'
+                               "    for evidence in doc['basis'].values():\n"
+                               "        p = P(evidence['path'])\n"
+                               '        need(p.is_absolute() and p == p.resolve() and '
+                               "any((p.is_relative_to(P(root).resolve()) for root in roots)), 'stage "
+                               "calibration/review metadata must be inside admitted watched directories')\n"
+                               'def admitted_inputs(b):\n'
+                               "    need(b.get('execution_context') == 'CLOUD_EXECUTOR_V1', 'cloud execution "
+                               "context only')\n"
+                               "    for name in ('cloud_budget.py', 'executor_identity.py', "
+                               "'execution_mode.py'):\n"
+                               '        path = D.parent / name\n'
+                               "        need(b['pins'].get(str(path)) == sha(path), 'cloud admission helper "
+                               "source pin')\n"
+                               "    budget_module = mod('actual_cloud_budget', D.parent / "
+                               "'cloud_budget.py')\n"
+                               '    budget = budget_module.admit(b)\n'
+                               "    budget_document = json.loads(P(b['cloud_budget']['path']).read_text())\n"
+                               "    budget_module.verify_host(budget_document['host_identity'], "
+                               "b['identity'])\n"
+                               "    for k in ('runtime_mode', 'archive_mode', 'runtime_reuse_manifest', "
+                               "'job_budget_seconds', 'budgets', 'dut_rss_bytes', 'dut_address_space_bytes', "
+                               "'numeric_reserved_increment_bytes', 'reserved_other_owner_bytes', "
+                               "'consumer_address_space_bytes', 'stage_resources', 'execution_mode', "
+                               "'full_block_budget'):\n"
+                               "        need(b.get(k) == budget[k], 'binding must exactly preserve reviewed "
+                               "cloud budget ' + k)\n"
+                               "    if budget['execution_mode'] == 'STAGE_COVERAGE_DIAGNOSTIC':\n"
+                               "        need(b.get('stage_coverage_budget') is not None and "
+                               "b['stage_coverage_budget'] == budget.get('stage_coverage_budget'), 'binding "
+                               "reviewed stage coverage budget')\n"
+                               '    else:\n'
+                               "        need(b.get('stage_coverage_budget') is None and "
+                               "budget.get('stage_coverage_budget') is None, 'stage budget forbidden in "
+                               "other modes')\n"
+                               "    for k in ('executor_adaptation', 'workspace_loader', "
+                               "'retained_materials', 'model_candidate_review', 'p0_provider_reuse'):\n"
+                               '        if k in budget or k in b:\n'
+                               "            need(k in budget and b.get(k) == budget[k], 'binding reviewed ' "
+                               '+ k)\n'
+                               "    identity = b['identity']\n"
+                               "    need(b.get('executor_identity') == identity, 'one executor identity')\n"
+                               "    mod('actual_cloud_identity', D.parent / "
+                               "'executor_identity.py').verify_current(identity)\n"
+                               "    need(b['job_started_monotonic'] == identity['started_monotonic'], 'same "
+                               "executor clock never reset')\n"
+                               '\n'
+                               '    def checked(row, limit):\n'
+                               "        path = P(row['path'])\n"
+                               '        need(path.is_absolute() and path == path.resolve() and all((not '
+                               'q.is_symlink() for q in (path, *path.parents))) and path.is_file() and (0 < '
+                               "path.stat().st_size <= limit), 'bounded regular cloud input')\n"
+                               "        need(pin(path) == row, 'independent cloud input pin')\n"
+                               '        return path\n'
+                               "    identity_path = checked(b['executor_identity_pin'], 65536)\n"
+                               "    need(json.loads(identity_path.read_text()) == identity, 'executor "
+                               "receipt identity')\n"
+                               "    manifest = checked(b['artifact_manifest'], 65536)\n"
+                               '    frozen = json.loads(manifest.read_text())\n'
+                               "    handoff = checked(b['builder_handoff'], 65536)\n"
+                               "    candidate = frozen.get('schema') == "
+                               "'MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'\n"
+                               "    extra = {'executor_adaptation': b['executor_adaptation']} if "
+                               "'executor_adaptation' in b else {}\n"
+                               "    hpath = D.parent / 'numeric/artifact_handoff.py'\n"
+                               '    reviewed = None\n'
+                               '    if candidate:\n'
+                               "        need(b.get('model_candidate_review') is not None, "
+                               "'MODEL_CANDIDATE_REVIEW_REQUIRED')\n"
+                               "        path = D.parent / 'numeric/candidate_admission.py'\n"
+                               "        need(b['pins'].get(str(path)) == sha(path), 'model candidate "
+                               "admission source pin')\n"
+                               "        reviewed = mod('flow_model_candidate_admission', "
+                               "path).verify(b['model_candidate_review'], b)\n"
+                               "        need(reviewed['scope'] == "
+                               "'MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL' and "
+                               "reviewed['artifact_manifest_sha256'] == b['artifact_manifest']['sha256'], "
+                               "'actual candidate review scope/artifact')\n"
+                               "        hpath = D.parent / 'numeric/candidate_artifact_handoff.py'\n"
+                               "        extra.update(model_candidate_review=b['model_candidate_review'], "
+                               "current_source_pins_pin=b['source_pins'], repo=P(b['repo']))\n"
+                               '    else:\n'
+                               "        need('model_candidate_review' not in b, 'model review cannot relabel "
+                               "legacy artifact')\n"
+                               "    need(b['pins'].get(str(hpath)) == sha(hpath), 'handoff verifier source "
+                               "pin')\n"
+                               "    imported = mod('actual_imported_artifact', hpath).verify(handoff, "
+                               "b['builder_handoff']['sha256'], manifest, b['artifact_manifest']['sha256'], "
+                               'frozen, identity, **extra)\n'
+                               '    if reviewed is not None:\n'
+                               '        imported = dict(imported, model_candidate_verified=reviewed)\n'
+                               "    need(imported['builder_identity'] == b['artifact_identity'], 'separate "
+                               "actual builder identity')\n"
+                               "    sourcepins = D.parent / 'SOURCE_PINS.json'\n"
+                               "    need(pin(sourcepins) == b['source_pins'], 'actual executor source "
+                               "closure pin')\n"
+                               "    if 'executor_adaptation' in b:\n"
+                               "        apath = D.parent / 'executor_adaptation.py'\n"
+                               "        need(b['pins'].get(str(apath)) == sha(apath), 'adaptation verifier "
+                               "source pin')\n"
+                               "        mod('actual_executor_adaptation', "
+                               "apath).verify(b['executor_adaptation'], imported['builder_identity'], "
+                               "identity, current_source_pins_pin=b['source_pins'], repo=P(b['repo']))\n"
+                               "        loader_path = D.parent / 'numeric/workspace_loader.py'\n"
+                               "        abi_path = D.parent / 'numeric/runtime_abi_owned.py'\n"
+                               '        for path in (loader_path, abi_path):\n'
+                               "            need(b['pins'].get(str(path)) == sha(path), 'workspace ABI "
+                               "helper source pin')\n"
+                               '        artifact_root = manifest.parent\n'
+                               "        binary = frozen['common']['binary']\n"
+                               "        tool = frozen['tool_manifest']\n"
+                               "        verified = mod('actual_cloud_workspace_loader', "
+                               "loader_path).verify(b['workspace_loader'], artifact_root / binary['path'], "
+                               "binary['sha256'], artifact_root / tool['path'], tool['sha256'], "
+                               "mod('actual_cloud_runtime_abi', abi_path).elf_info)\n"
+                               "        need(verified['artifact_manifest_sha256'] == "
+                               "b['artifact_manifest']['sha256'] and verified['builder_source_commit'] == "
+                               "b['artifact_identity']['source_commit'], 'workspace loader actual "
+                               "builder/artifact binding')\n"
+                               '        imported = dict(imported, workspace_loader_verified=verified)\n'
+                               '    else:\n'
+                               "        need(imported['source_pins_sha256'] == sha(sourcepins), 'imported "
+                               "build reviewed source closure')\n"
+                               "    need(subprocess.check_output(['git', '-C', b['repo'], 'rev-parse', "
+                               "'HEAD'], text=True).strip() == identity['source_commit'], 'actual executor "
+                               "source commit')\n"
+                               "    if 'retained_materials' in b:\n"
+                               "        retained_path = D.parent / 'runtime/retained_materials.py'\n"
+                               "        need(b['pins'].get(str(retained_path)) == sha(retained_path), "
+                               "'retained materials verifier source pin')\n"
+                               "        retained = mod('actual_retained_materials', "
+                               "retained_path).verify(b['retained_materials'], b)\n"
+                               '        if candidate:\n'
+                               "            need(retained['scope'] == "
+                               "'DATA_REFERENCE_ONLY_NOT_NUMERICAL_ABI_OR_RUNTIME_PASS', 'candidate retained "
+                               "data/reference only')\n"
+                               '        imported = dict(imported, retained_materials_verified=retained)\n'
+                               '    reused = verified_p0_provider_reuse(b, budget, candidate)\n'
+                               '    if reused is not None:\n'
+                               '        imported = dict(imported, p0_provider_reuse_verified=reused)\n'
+                               '    return (budget, imported)',
+                               'def admitted_inputs(b):\n'
+                               "    need(b.get('execution_context') == 'CLOUD_EXECUTOR_V1', 'cloud execution "
+                               "context only')\n"
+                               "    for name in ('cloud_budget.py', 'executor_identity.py', "
+                               "'execution_mode.py'):\n"
+                               '        path = D.parent / name\n'
+                               "        need(b['pins'].get(str(path)) == sha(path), 'cloud admission helper "
+                               "source pin')\n"
+                               "    budget_module = mod('actual_cloud_budget', D.parent / "
+                               "'cloud_budget.py')\n"
+                               '    budget = budget_module.admit(b)\n'
+                               "    budget_document = json.loads(P(b['cloud_budget']['path']).read_text())\n"
+                               "    budget_module.verify_host(budget_document['host_identity'], "
+                               "b['identity'])\n"
+                               "    for k in ('runtime_mode', 'archive_mode', 'runtime_reuse_manifest', "
+                               "'job_budget_seconds', 'budgets', 'dut_rss_bytes', 'dut_address_space_bytes', "
+                               "'numeric_reserved_increment_bytes', 'reserved_other_owner_bytes', "
+                               "'consumer_address_space_bytes', 'stage_resources', 'execution_mode', "
+                               "'full_block_budget'):\n"
+                               "        need(b.get(k) == budget[k], 'binding must exactly preserve reviewed "
+                               "cloud budget ' + k)\n"
+                               "    for k in ('executor_adaptation', 'workspace_loader', "
+                               "'retained_materials', 'model_candidate_review'):\n"
+                               '        if k in budget or k in b:\n'
+                               "            need(k in budget and b.get(k) == budget[k], 'binding reviewed ' "
+                               '+ k)\n'
+                               "    identity = b['identity']\n"
+                               "    need(b.get('executor_identity') == identity, 'one executor identity')\n"
+                               "    mod('actual_cloud_identity', D.parent / "
+                               "'executor_identity.py').verify_current(identity)\n"
+                               "    need(b['job_started_monotonic'] == identity['started_monotonic'], 'same "
+                               "executor clock never reset')\n"
+                               '\n'
+                               '    def checked(row, limit):\n'
+                               "        path = P(row['path'])\n"
+                               '        need(path.is_absolute() and path == path.resolve() and all((not '
+                               'q.is_symlink() for q in (path, *path.parents))) and path.is_file() and (0 < '
+                               "path.stat().st_size <= limit), 'bounded regular cloud input')\n"
+                               "        need(pin(path) == row, 'independent cloud input pin')\n"
+                               '        return path\n'
+                               "    identity_path = checked(b['executor_identity_pin'], 65536)\n"
+                               "    need(json.loads(identity_path.read_text()) == identity, 'executor "
+                               "receipt identity')\n"
+                               "    manifest = checked(b['artifact_manifest'], 65536)\n"
+                               '    frozen = json.loads(manifest.read_text())\n'
+                               "    handoff = checked(b['builder_handoff'], 65536)\n"
+                               "    candidate = frozen.get('schema') == "
+                               "'MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'\n"
+                               "    extra = {'executor_adaptation': b['executor_adaptation']} if "
+                               "'executor_adaptation' in b else {}\n"
+                               "    hpath = D.parent / 'numeric/artifact_handoff.py'\n"
+                               '    reviewed = None\n'
+                               '    if candidate:\n'
+                               "        need(b.get('model_candidate_review') is not None, "
+                               "'MODEL_CANDIDATE_REVIEW_REQUIRED')\n"
+                               "        path = D.parent / 'numeric/candidate_admission.py'\n"
+                               "        need(b['pins'].get(str(path)) == sha(path), 'model candidate "
+                               "admission source pin')\n"
+                               "        reviewed = mod('flow_model_candidate_admission', "
+                               "path).verify(b['model_candidate_review'], b)\n"
+                               "        need(reviewed['scope'] == "
+                               "'MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL' and "
+                               "reviewed['artifact_manifest_sha256'] == b['artifact_manifest']['sha256'], "
+                               "'actual candidate review scope/artifact')\n"
+                               "        hpath = D.parent / 'numeric/candidate_artifact_handoff.py'\n"
+                               "        extra.update(model_candidate_review=b['model_candidate_review'], "
+                               "current_source_pins_pin=b['source_pins'], repo=P(b['repo']))\n"
+                               '    else:\n'
+                               "        need('model_candidate_review' not in b, 'model review cannot relabel "
+                               "legacy artifact')\n"
+                               "    need(b['pins'].get(str(hpath)) == sha(hpath), 'handoff verifier source "
+                               "pin')\n"
+                               "    imported = mod('actual_imported_artifact', hpath).verify(handoff, "
+                               "b['builder_handoff']['sha256'], manifest, b['artifact_manifest']['sha256'], "
+                               'frozen, identity, **extra)\n'
+                               '    if reviewed is not None:\n'
+                               '        imported = dict(imported, model_candidate_verified=reviewed)\n'
+                               "    need(imported['builder_identity'] == b['artifact_identity'], 'separate "
+                               "actual builder identity')\n"
+                               "    sourcepins = D.parent / 'SOURCE_PINS.json'\n"
+                               "    need(pin(sourcepins) == b['source_pins'], 'actual executor source "
+                               "closure pin')\n"
+                               "    if 'executor_adaptation' in b:\n"
+                               "        apath = D.parent / 'executor_adaptation.py'\n"
+                               "        need(b['pins'].get(str(apath)) == sha(apath), 'adaptation verifier "
+                               "source pin')\n"
+                               "        mod('actual_executor_adaptation', "
+                               "apath).verify(b['executor_adaptation'], imported['builder_identity'], "
+                               "identity, current_source_pins_pin=b['source_pins'], repo=P(b['repo']))\n"
+                               "        loader_path = D.parent / 'numeric/workspace_loader.py'\n"
+                               "        abi_path = D.parent / 'numeric/runtime_abi_owned.py'\n"
+                               '        for path in (loader_path, abi_path):\n'
+                               "            need(b['pins'].get(str(path)) == sha(path), 'workspace ABI "
+                               "helper source pin')\n"
+                               '        artifact_root = manifest.parent\n'
+                               "        binary = frozen['common']['binary']\n"
+                               "        tool = frozen['tool_manifest']\n"
+                               "        verified = mod('actual_cloud_workspace_loader', "
+                               "loader_path).verify(b['workspace_loader'], artifact_root / binary['path'], "
+                               "binary['sha256'], artifact_root / tool['path'], tool['sha256'], "
+                               "mod('actual_cloud_runtime_abi', abi_path).elf_info)\n"
+                               "        need(verified['artifact_manifest_sha256'] == "
+                               "b['artifact_manifest']['sha256'] and verified['builder_source_commit'] == "
+                               "b['artifact_identity']['source_commit'], 'workspace loader actual "
+                               "builder/artifact binding')\n"
+                               '        imported = dict(imported, workspace_loader_verified=verified)\n'
+                               '    else:\n'
+                               "        need(imported['source_pins_sha256'] == sha(sourcepins), 'imported "
+                               "build reviewed source closure')\n"
+                               "    need(subprocess.check_output(['git', '-C', b['repo'], 'rev-parse', "
+                               "'HEAD'], text=True).strip() == identity['source_commit'], 'actual executor "
+                               "source commit')\n"
+                               "    if 'retained_materials' in b:\n"
+                               "        retained_path = D.parent / 'runtime/retained_materials.py'\n"
+                               "        need(b['pins'].get(str(retained_path)) == sha(retained_path), "
+                               "'retained materials verifier source pin')\n"
+                               "        retained = mod('actual_retained_materials', "
+                               "retained_path).verify(b['retained_materials'], b)\n"
+                               '        if candidate:\n'
+                               "            need(retained['scope'] == "
+                               "'DATA_REFERENCE_ONLY_NOT_NUMERICAL_ABI_OR_RUNTIME_PASS', 'candidate retained "
+                               "data/reference only')\n"
+                               '        imported = dict(imported, retained_materials_verified=retained)\n'
+                               '    return (budget, imported)'),
+                              ('1009a961dc429317db183e83665aed262217b25b2eb70ba7f20ac0bb02b45ebe',
+                               'roots = list(dict.fromkeys([str(job), str(repo), '
+                               "*[str(P(b[k]['path']).parent) for k in ('artifact_manifest', "
+                               "'builder_handoff', 'executor_identity_pin', 'cloud_budget', "
+                               "'execution_approval', 'executor_adaptation', 'workspace_loader', "
+                               "'retained_materials', 'model_candidate_review', 'stage_coverage_budget') if "
+                               'k in b]]))',
+                               'roots = list(dict.fromkeys([str(job), str(repo), '
+                               "*[str(P(b[k]['path']).parent) for k in ('artifact_manifest', "
+                               "'builder_handoff', 'executor_identity_pin', 'cloud_budget', "
+                               "'execution_approval', 'executor_adaptation', 'workspace_loader', "
+                               "'retained_materials', 'model_candidate_review') if k in b]]))"),
+                              ('a61f49752ddbac36c2f6a02299341d529d1835dc3478e4228adce6da5d5c29ee',
+                               "if 'p0_provider_reuse' in b:\n"
+                               "    need('p0_provider_reuse_verified' in imported, 'P0 pure data roots "
+                               "verified before watch admission')\n"
+                               "    roots.extend(imported['p0_provider_reuse_verified']['roots'])\n"
+                               '    roots = list(dict.fromkeys(roots))',
+                               ''),
+                              ('c93b917ac25452255c0bff2a6fe2e87a30da7a9aca50a5ada89169ce0790693b',
+                               'stage_budget_watch_coverage(b, roots)',
+                               ''),
+                              ('9ae682655625975506e92a815f6c81f28148fef939c4df5d7ffaf22f8c78f755',
+                               "body.update({k: b[k] for k in ('executor_adaptation', 'workspace_loader', "
+                               "'retained_materials', 'model_candidate_review', 'p0_provider_reuse') if k in "
+                               'b})',
+                               "body.update({k: b[k] for k in ('executor_adaptation', 'workspace_loader', "
+                               "'retained_materials', 'model_candidate_review') if k in b})"),
+                              ('2affc2dd2b09bf620df526ef00c755ce5ff14ceaf7eb647d21a8343ff457c593',
+                               "if admission['mode'] == 'STAGE_COVERAGE_DIAGNOSTIC':\n"
+                               "    body['stage_coverage_budget'] = b['stage_coverage_budget']",
+                               ''),
+                              ('21646ac7f44373da3743a4aed6201ed3ca9f2413d9e861ab5c692f1ce0731d81',
+                               "save(job / 'FLOW_RESULT.json', dict(execution_context='CLOUD_EXECUTOR_V1', "
+                               'identity=identity, executor_identity=identity, artifact_identity=builder, '
+                               "builder_identity=builder, source_pins=b['source_pins'], "
+                               "executor_identity_pin=b['executor_identity_pin'], "
+                               "builder_handoff=b['builder_handoff'], "
+                               "artifact_manifest=b['artifact_manifest'], cloud_budget=b['cloud_budget'], "
+                               "execution_approval=b['execution_approval'], job_budget_seconds=limit, "
+                               'execution_binding=pin(binding_path), execution_admission=admission, '
+                               "execution_mode=admission['mode'], transport_exit_code=code, "
+                               'qualification=qualification, execution_policy=execution_policy, '
+                               "status=qualification['status'], "
+                               "scope='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL' if "
+                               "'model_candidate_review' in b else "
+                               "'CHISEL_TEST_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL', stages=history, "
+                               "retained_materials_scope=imported.get('retained_materials_verified', "
+                               "{}).get('scope'), upfront_disk_admission=disk_admission, "
+                               'numeric_result=pin(numeric_path), hardware_definitions=1, '
+                               'profiles=list(range(5)), uploaded_payloads=False, **{k: b[k] for k in '
+                               "('executor_adaptation', 'workspace_loader', 'retained_materials', "
+                               "'model_candidate_review', 'p0_provider_reuse') if k in b}, "
+                               "**dict(stage_coverage_budget=b['stage_coverage_budget'], "
+                               "stage_coverage_budget_sha256=b['stage_coverage_budget']['sha256'], "
+                               "execution_scope='STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE') if "
+                               "admission['mode'] == 'STAGE_COVERAGE_DIAGNOSTIC' else {}))",
+                               "save(job / 'FLOW_RESULT.json', dict(execution_context='CLOUD_EXECUTOR_V1', "
+                               'identity=identity, executor_identity=identity, artifact_identity=builder, '
+                               "builder_identity=builder, source_pins=b['source_pins'], "
+                               "executor_identity_pin=b['executor_identity_pin'], "
+                               "builder_handoff=b['builder_handoff'], "
+                               "artifact_manifest=b['artifact_manifest'], cloud_budget=b['cloud_budget'], "
+                               "execution_approval=b['execution_approval'], job_budget_seconds=limit, "
+                               'execution_binding=pin(binding_path), execution_admission=admission, '
+                               "execution_mode=admission['mode'], transport_exit_code=code, "
+                               'qualification=qualification, execution_policy=execution_policy, '
+                               "status=qualification['status'], "
+                               "scope='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL' if "
+                               "'model_candidate_review' in b else "
+                               "'CHISEL_TEST_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL', stages=history, "
+                               "retained_materials_scope=imported.get('retained_materials_verified', "
+                               "{}).get('scope'), upfront_disk_admission=disk_admission, "
+                               'numeric_result=pin(numeric_path), hardware_definitions=1, '
+                               'profiles=list(range(5)), uploaded_payloads=False, **{k: b[k] for k in '
+                               "('executor_adaptation', 'workspace_loader', 'retained_materials', "
+                               "'model_candidate_review') if k in b}))")],
+ 'numeric/numeric_tail.py': [('bdcea0b9485bc538800ae32c592d6a6c4249b1a1913f741bbccbe3a540492a0c',
+                              "for key in ('executor_adaptation', 'workspace_loader', "
+                              "'model_candidate_review', 'stage_coverage_budget', 'p0_provider_reuse'):\n"
+                              "    need(controller.get(key) == b.get(key), 'retained tail/controller "
+                              "optional ' + key)",
+                              "for key in ('executor_adaptation', 'workspace_loader', "
+                              "'model_candidate_review'):\n"
+                              "    need(controller.get(key) == b.get(key), 'retained tail/controller "
+                              "optional ' + key)"),
+                             ('bed00c36a34e5ccd3a72c41f9418cf2fe621c191907aa35e04166f1eb43760e6',
+                              "need(admitted.get('stage_coverage_budget') == b.get('stage_coverage_budget'), "
+                              "'tail exact approved stage coverage budget')\n"
+                              "need(admitted.get('p0_provider_reuse') == b.get('p0_provider_reuse'), 'tail "
+                              "exact approved P0 input reuse')\n"
+                              "if b.get('p0_provider_reuse') is not None:\n"
+                              "    need(b['execution_mode'] == execution_mode.STAGE and "
+                              "b.get('model_candidate_review') is not None, 'P0 reuse only approved "
+                              "candidate stage coverage')",
+                              ''),
+                             ('62abe71a79bdafe96809503b4f9bc5e99220c351dba8ab329721a93bf49e9b00',
+                              'def execution_command(generated, b, admission, profile):\n'
+                              "    need(generated[1] == str(D / 'consumer_owned.py'), 'explicit owned "
+                              "consumer handoff')\n"
+                              "    need(not any((flag in generated for flag in ('--execution-mode', "
+                              "'--calibration-wall-seconds', '--full-block-budget', "
+                              "'--full-block-budget-sha256', '--stage-coverage-budget', "
+                              "'--stage-coverage-budget-sha256'))), 'no stale or duplicate execution mode "
+                              "arguments')\n"
+                              "    argv = list(generated) + ['--execution-mode', admission['mode']]\n"
+                              "    if admission['mode'] == execution_mode.CALIBRATION:\n"
+                              "        argv += ['--calibration-wall-seconds', "
+                              "str(admission['profile_seconds'][str(profile)])]\n"
+                              "    elif admission['mode'] == execution_mode.STAGE:\n"
+                              "        need(b.get('execution_context') == 'CLOUD_EXECUTOR_V1' and "
+                              "b.get('full_block_budget') is None, 'stage coverage is cloud-only, not full "
+                              "acceptance')\n"
+                              "        budget = b['stage_coverage_budget']\n"
+                              "        argv += ['--stage-coverage-budget', budget['path'], "
+                              "'--stage-coverage-budget-sha256', budget['sha256']]\n"
+                              '    else:\n'
+                              "        need(admission['mode'] == execution_mode.FULL, 'explicit execution "
+                              "mode')\n"
+                              "        budget = b['full_block_budget']\n"
+                              "        argv += ['--full-block-budget', budget['path'], "
+                              "'--full-block-budget-sha256', budget['sha256']]\n"
+                              "    if b.get('execution_context') == 'CLOUD_EXECUTOR_V1':\n"
+                              "        invocation = b['controller_binding']\n"
+                              '        material.checked(invocation)\n'
+                              "        flags = ('--cloud-binding', '--cloud-binding-sha256')\n"
+                              '        if any((flag in argv for flag in flags)):\n'
+                              "            need(all((argv.count(flag) == 1 for flag in flags)), 'exact one "
+                              "paired generated cloud invocation')\n"
+                              '            need(all((argv.index(flag) + 1 < len(argv) for flag in flags)), '
+                              "'generated cloud invocation values')\n"
+                              "            need(argv[argv.index(flags[0]) + 1] == invocation['path'] and "
+                              "argv[argv.index(flags[1]) + 1] == invocation['sha256'], 'generated cloud "
+                              "invocation unchanged')\n"
+                              '        else:\n'
+                              "            argv += ['--cloud-binding', invocation['path'], "
+                              "'--cloud-binding-sha256', invocation['sha256']]\n"
+                              "    return (argv, admission['profile_seconds'][str(profile)] + 30)\n"
+                              'def mode_budget_fields(admission):\n'
+                              "    if admission['mode'] == execution_mode.STAGE:\n"
+                              '        return dict(full_budget_sha256=None, '
+                              "stage_budget_sha256=admission['reviewed_budget_sha256'])\n"
+                              "    need(admission['mode'] in (execution_mode.CALIBRATION, "
+                              "execution_mode.FULL), 'explicit numeric execution mode')\n"
+                              "    return dict(full_budget_sha256=admission['reviewed_budget_sha256'])",
+                              'def execution_command(generated, b, admission, profile):\n'
+                              "    need(generated[1] == str(D / 'consumer_owned.py'), 'explicit owned "
+                              "consumer handoff')\n"
+                              "    need(not any((flag in generated for flag in ('--execution-mode', "
+                              "'--calibration-wall-seconds', '--full-block-budget', "
+                              "'--full-block-budget-sha256'))), 'no stale or duplicate execution mode "
+                              "arguments')\n"
+                              "    argv = list(generated) + ['--execution-mode', admission['mode']]\n"
+                              "    if admission['mode'] == execution_mode.CALIBRATION:\n"
+                              "        argv += ['--calibration-wall-seconds', "
+                              "str(admission['profile_seconds'][str(profile)])]\n"
+                              '    else:\n'
+                              "        need(admission['mode'] == execution_mode.FULL, 'explicit execution "
+                              "mode')\n"
+                              "        budget = b['full_block_budget']\n"
+                              "        argv += ['--full-block-budget', budget['path'], "
+                              "'--full-block-budget-sha256', budget['sha256']]\n"
+                              "    if b.get('execution_context') == 'CLOUD_EXECUTOR_V1':\n"
+                              "        invocation = b['controller_binding']\n"
+                              '        material.checked(invocation)\n'
+                              "        flags = ('--cloud-binding', '--cloud-binding-sha256')\n"
+                              '        if any((flag in argv for flag in flags)):\n'
+                              "            need(all((argv.count(flag) == 1 for flag in flags)), 'exact one "
+                              "paired generated cloud invocation')\n"
+                              '            need(all((argv.index(flag) + 1 < len(argv) for flag in flags)), '
+                              "'generated cloud invocation values')\n"
+                              "            need(argv[argv.index(flags[0]) + 1] == invocation['path'] and "
+                              "argv[argv.index(flags[1]) + 1] == invocation['sha256'], 'generated cloud "
+                              "invocation unchanged')\n"
+                              '        else:\n'
+                              "            argv += ['--cloud-binding', invocation['path'], "
+                              "'--cloud-binding-sha256', invocation['sha256']]\n"
+                              "    return (argv, admission['profile_seconds'][str(profile)] + 30)"),
+                             ('14c45709306421c7eb9c1d7586bf2f0a7d73e60bbbbc44659fe65c77307a0667',
+                              "save(out / 'REGISTERED_FIVE.json', "
+                              "dict(execution_policy=profile_policy.checked(b), profiles=b['profiles'], "
+                              "tokens=128, execution_mode=admission['mode'], "
+                              "profile_seconds=admission['profile_seconds'], "
+                              '**mode_budget_fields(admission), '
+                              "scope='CHISEL_EMITTED_SV_SIMULATION_NOT_FINAL_RTL', numeric_pass=False))",
+                              "save(out / 'REGISTERED_FIVE.json', "
+                              "dict(execution_policy=profile_policy.checked(b), profiles=b['profiles'], "
+                              "tokens=128, execution_mode=admission['mode'], "
+                              "profile_seconds=admission['profile_seconds'], "
+                              "full_budget_sha256=admission['reviewed_budget_sha256'], "
+                              "scope='CHISEL_EMITTED_SV_SIMULATION_NOT_FINAL_RTL', numeric_pass=False))"),
+                             ('248fbf4be67bf4368a057bbf852337fd07575088a5c54d838fe4f402557e539a',
+                              "material.prepare(b['repo'], b['materializer'], profile, i, "
+                              "runtime['wrapper'], b['payload'], b['references'][str(i)], provider_stage, "
+                              "pins, p0_provider_reuse=b.get('p0_provider_reuse') if i == 0 else None)",
+                              "material.prepare(b['repo'], b['materializer'], profile, i, "
+                              "runtime['wrapper'], b['payload'], b['references'][str(i)], provider_stage, "
+                              'pins)'),
+                             ('11da7ba6b6bc4260b1e29ff4c005dfa915a4fffea63b4a69b7f7c23ee5c30b04',
+                              "if admission['mode'] in (execution_mode.FULL, execution_mode.STAGE):\n"
+                              "    report = json.loads((profile / 'dut_result/RESULT.json').read_text())\n"
+                              "    actual = report['execution_admission']\n"
+                              "    need(actual['execution_mode'] == admission['mode'] and "
+                              "actual['reviewed_budget_sha256'] == admission['reviewed_budget_sha256'], "
+                              "'actual consumer full-mode budget identity')\n"
+                              "    scope = 'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE' if "
+                              "admission['mode'] == execution_mode.STAGE else "
+                              "'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE'\n"
+                              "    need(actual['scope'] == scope and actual['outer_cleanup_proof_required'] "
+                              "is True, 'actual explicit execution scope')\n"
+                              "    if admission['mode'] == execution_mode.STAGE:\n"
+                              "        need(actual.get('stage_budget_sha256') == "
+                              "admission['reviewed_budget_sha256'], 'actual stage coverage budget "
+                              "identity')\n"
+                              "    expected_limits = report_effective_limits(actual['original_limits'], b, "
+                              'admission, i)\n'
+                              "    need(actual['effective_limits'] == expected_limits, 'actual full watchdog "
+                              "limits')",
+                              "if admission['mode'] == execution_mode.FULL:\n"
+                              "    report = json.loads((profile / 'dut_result/RESULT.json').read_text())\n"
+                              "    actual = report['execution_admission']\n"
+                              "    need(actual['execution_mode'] == admission['mode'] and "
+                              "actual['reviewed_budget_sha256'] == admission['reviewed_budget_sha256'], "
+                              "'actual consumer full-mode budget identity')\n"
+                              "    need(actual['scope'] == "
+                              "'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE' and "
+                              "actual['outer_cleanup_proof_required'] is True, 'actual full execution "
+                              "scope')\n"
+                              "    expected_limits = report_effective_limits(actual['original_limits'], b, "
+                              'admission, i)\n'
+                              "    need(actual['effective_limits'] == expected_limits, 'actual full watchdog "
+                              "limits')"),
+                             ('7ab78476782ee6a7a55c1fbfe868d9f131a7d019fb7a45a3e086710e4c11b930',
+                              "save(out / 'RESULT.json', dict(execution_mode=admission['mode'], "
+                              '**mode_budget_fields(admission), qualification=qualification, '
+                              "execution_policy=profile_policy.checked(b), status=qualification['status'], "
+                              "scope='CHISEL_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL', stages=allstage, "
+                              "profiles=b['profiles'], actual_dut_reports=dut_records, "
+                              "numerical_pass=qualification['numerical_pass'], "
+                              "moe_contract='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE', "
+                              'uploaded_payloads=False))',
+                              "save(out / 'RESULT.json', dict(execution_mode=admission['mode'], "
+                              "full_budget_sha256=admission['reviewed_budget_sha256'], "
+                              'qualification=qualification, execution_policy=profile_policy.checked(b), '
+                              "status=qualification['status'], "
+                              "scope='CHISEL_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL', stages=allstage, "
+                              "profiles=b['profiles'], actual_dut_reports=dut_records, "
+                              "numerical_pass=qualification['numerical_pass'], "
+                              "moe_contract='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE', "
+                              'uploaded_payloads=False))')]}
+
+# Exact inverse of the reviewed stage-coverage / P0 data-only additions.
+# Mandatory unique full-AST snippet matches; original historical whole-AST hashes
+# below remain unchanged. No arbitrary mode branch or dependency gate is skipped.
+def undo_reviewed_stage_delta(test,tree,relative):
+ import copy
+ for digest,new_text,old_text in REVIEWED_STAGE_INVERSE[relative]:
+  want=ast.parse(new_text).body;replacement=ast.parse(old_text).body
+  test.assertEqual(hashlib.sha256(ast.dump(ast.Module(body=want,type_ignores=[]),include_attributes=False).encode()).hexdigest(),digest)
+  count=0
+  def visit(node):
+   nonlocal count
+   for field,value in ast.iter_fields(node):
+    if isinstance(value,list):
+     i=0
+     while i<=len(value)-len(want):
+      if [ast.dump(n,include_attributes=False)for n in value[i:i+len(want)]]==[ast.dump(n,include_attributes=False)for n in want]:
+       value[i:i+len(want)]=copy.deepcopy(replacement);count+=1;i+=len(replacement)
+      else:i+=1
+     for item in value:
+      if isinstance(item,ast.AST):visit(item)
+    elif isinstance(value,ast.AST):visit(value)
+  visit(tree);test.assertEqual(count,1,'exact reviewed inverse snippet matched once: '+digest)
+ return tree
+
 class Test(unittest.TestCase):
  def tree(self,rel):return ast.parse((D/rel).read_text())
  def test_exact_save_and_reviewed_version_ast(self):
   for rel,wanted in EXPECTED.items():
    t=self.tree(rel)
+   if rel in REVIEWED_STAGE_INVERSE:t=undo_reviewed_stage_delta(self,t,rel)
    if rel=='controller/cloud_flow.py':
     # Undo only the separately reviewed finite prelaunch receipt, not arbitrary flow changes.
     fs=[n for n in ast.walk(t)if isinstance(n,ast.FunctionDef)and n.name=='upfront_disk_admission']
@@ -62,4 +631,22 @@ class Test(unittest.TestCase):
   for rel in EXPECTED:self.run_slice(rel,{'worker_started':True,'native_exit':1,'errors':[],'cleanup_proof':{}},True)
  def test_completed_return_remains_separate(self):
   for rel in EXPECTED:self.run_slice(rel,{'worker_started':True,'native_exit':0,'errors':[],'cleanup_proof':{'status':'COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP'}},True)
+class InverseNegativeTests(unittest.TestCase):
+ def test_reviewed_delta_mutation_and_duplicate_rejected(self):
+  for relative,rows in REVIEWED_STAGE_INVERSE.items():
+   root=D.parent if D.name=='numeric'else D
+   original=ast.parse((root/relative).read_text())
+   # An additional copy cannot silently disappear: unique match count must fail.
+   duplicate=ast.parse((root/relative).read_text());duplicate.body.extend(ast.parse(rows[0][1]).body)
+   with self.subTest(relative=relative,case='duplicate'),self.assertRaises(AssertionError):undo_reviewed_stage_delta(self,duplicate,relative)
+   # Mutating the stage discriminator anywhere is not accepted as the reviewed delta.
+   hit=False
+   for n in ast.walk(original):
+    if isinstance(n,ast.Constant)and n.value=='STAGE_COVERAGE_DIAGNOSTIC':n.value='UNREVIEWED_STAGE_MODE';hit=True
+   if not hit:
+    for n in ast.walk(original):
+     if isinstance(n,ast.Attribute)and n.attr=='STAGE':n.attr='UNREVIEWED_STAGE';hit=True
+   self.assertTrue(hit)
+   with self.subTest(relative=relative,case='changed gate'),self.assertRaises(AssertionError):undo_reviewed_stage_delta(self,original,relative)
+
 if __name__=='__main__':unittest.main()

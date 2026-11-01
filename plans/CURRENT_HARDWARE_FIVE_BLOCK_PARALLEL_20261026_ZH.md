@@ -1,3 +1,27 @@
+# 2026-11-01 18:52 UTC：同一候选硬件的连续阶段覆盖诊断（非 FULL 预算预测）
+
+本节为 host-only 工程接续；下方既有计划完整保留。实际候选 ELF `709e88d0…`、artifact `05046aa9…`、builder `128402f4…`、原 M128 输入、4096 Matrix MAC、唯一共享 32-lane bank、FP 运算及 driver 均不变，不重建硬件。
+
+## 已闭实际校准事实
+
+新候选五个 300 秒窗口已全部严格收尾，原验证器及摘要独立重算一致（`b85978dc…`）。P0–P4 活跃周期分别为 56,576 / 53,120 / 56,768 / 55,296 / 56,896；各仍 pc=0、completed commands=0、useful Matrix MAC=0。均为 STARTED_TIMEOUT_INCOMPLETE，数值通过 0/5，完整块周期分母未知。输入读写确有进展，但不能将写入字节数当已退休行数，亦不能用这些速度虚构后续 Matrix、QK 或 GDN 吞吐。
+
+## 新模式及明确上限
+
+新增 cloud candidate 专用 `STAGE_COVERAGE_DIAGNOSTIC`，独立版本化预算、校准来源、独立 review、实际 artifact/review、source catalog、审批 SHA 全部精确绑定。旧 CALIBRATION 与 FULL 模式的成功、预算和资源规则不被替代。
+
+每块连续进程最多 10,800 秒、1,500,000 活跃周期；五块整体 job 最多 65,400 秒（18 小时 10 分钟，含原材料准备、监督与收尾预留）。这些是 watchdog 上限，不是完成时间承诺，也不是 FULL 估计。后验 target_completed_commands=2 依据真实五份程序：pc0 input_norm，pc1 为首个 matrix（P0/P2/P4 q，P1/P3 qkv）。只有 driver 按原 clean completion 加 AXI drain 后真实退休才计入；不在线提前停止，不以写入量替代。更后的 QK 或 GDN 仅观察，不保证到达。
+
+## 纯 P0 数据复用与资源边界
+
+为避免重复生成已严格闭合的 P0 input_only，新增受审纯数据复用路径：逐 pin、形状、原 BF16 转置/扩展、输入/reference/rope、固定程序与原转换源码契约复验；实际读取旧纯 provider 数据，新的程序 metadata、TSV、runtime、连接、ABI、owner 和 DUT 输出仍隔离生成。不得读取或迁移旧 DUT 输出/数值 PASS。旧 metadata 的精确副本仅作来源证据，保留原路径语义，不伪造历史收据。
+
+TREE 与 8 GiB 获取余量不变，RSS 2 GiB、AS 2.5 GiB、consumer 512 MiB、未知旧 owner 5 GiB 与额外 1 GiB 预约不变。只将代码实际读取的目录纳入 census/watch，禁止添加无用旧 run 根来虚增 live bytes。最终新身份必须通过当场完整盘门与资源审查；源码或静态节省量不构成准入。
+
+实际双根纯链已在当时 830 源闭包执行：完整转置/扩展及原 probes、fresh program/TSV、hydrate/corrector/assemble/load_binding/spans 均通过，严格 native 0、4.202 秒、采样 RSS 116,805,632 B，94,916,608 B 输入未复制或 alias，未用共同祖先或手改程序路径；历史 ABI 仅作 schema 字节副本。三项真实小 metadata 负例均拒。该证据不授 live owner/新 ABI/DUT 资格；最终测试夹具/有限证据闭包变化另列。后续仅 host-only 发布/CI，不能把诊断结果自动提升成完整五块数值或最终 RTL 验收。
+
+---
+
 ## 2026-11-01 17:58 UTC：精确 host adapter 已审路径清单闭包修复
 
 - `ad81c756` 云端接续入口 0.17 秒拒绝，尚未创建 binding/job、未 runtime/ABI/DUT。实际 adapter 全差异扫描发现五个此前已审 host-only 路径未列许可：contract-domain 三个小证据/复现工具，以及 candidate_observation_contract.py 与其旧测试；不是新硬件差异。

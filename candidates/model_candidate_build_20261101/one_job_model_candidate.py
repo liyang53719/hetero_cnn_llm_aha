@@ -71,6 +71,22 @@ def build_stage_diagnostic(name,report,receipt_path):
  if len(raw.encode())>8192:raise ValueError('bounded diagnostic schema overflow')
  return raw
 
+def post_build_failure_diagnostic(phase,exc):
+ # Fixed bounded diagnostic only. Original exception still aborts the build.
+ import re
+ phases={'IDENTITY','SOURCE_PINS','OBSERVATION','STAGE_RECEIPTS','COMPILE_OUTPUTS','ENRICH','COPY','FINAL'}
+ reasons={'SOURCE_PIN_SET','SOURCE_PIN_HASH_FORMAT','SOURCE_PIN_PATH','SOURCE_PIN_SIZE','SOURCE_PIN_HASH_MISMATCH','STAGE_VALIDATION_FAILED'}
+ classes={'ValueError','TypeError','FileNotFoundError','PermissionError','OSError','JSONDecodeError','UnicodeDecodeError','OTHER'}
+ def enum(v,allowed,fallback):return v if type(v)is str and v in allowed else fallback
+ def integer(v,cap):return v if type(v)is int and 0<=v<=cap else None
+ def digest(v):return v if type(v)is str and re.fullmatch('[0-9a-f]{64}',v)is not None else None
+ raw=getattr(exc,'model_pack_diagnostic',None)
+ valid=type(raw)is dict and set(raw)=={'schema','phase','reason','exception_class','index','bytes','expected_sha256','actual_sha256'} and raw.get('schema')=='MODEL_PACK_FAILURE_V1'
+ r=raw if valid else {}
+ result=dict(schema='MODEL_POST_BUILD_FAILURE_DIAGNOSTIC_V1',phase=enum(phase,('admit_build','prepare','run','pack'),'UNKNOWN'),pack_phase=enum(r.get('phase'),phases,'UNKNOWN'),reason=enum(r.get('reason'),reasons,'UNCLASSIFIED'),exception_class=enum(r.get('exception_class'),classes,enum(type(exc).__name__,classes,'OTHER')),index=integer(r.get('index'),1000000),bytes=integer(r.get('bytes'),4<<30),expected_sha256=digest(r.get('expected_sha256')),actual_sha256=digest(r.get('actual_sha256')),numerical_pass=False,post_build_structure_accepted=False)
+ need(len(json.dumps(result,sort_keys=True).encode())<=2048,'bounded post-build diagnostic')
+ return result
+
 def main():
  ap=argparse.ArgumentParser();ap.add_argument('--binding',type=pathlib.Path,required=True);ap.add_argument('--binding-sha256',required=True);ap.add_argument('--execute-reviewed-once',action='store_true');a=ap.parse_args()
  b=load(pinned(a.binding,a.binding_sha256));need(b['schema']=='MODEL_CANDIDATE_BUILD_BINDING_V1','schema');generation=require_generation_binding(b)
@@ -200,6 +216,7 @@ def main():
    observation=collect_observation(b,out,host)
    artifact=pack(b,build_binding,built,host,manifest,out,disk_gate,observation)
   except Exception as exc:
+   print("MODEL_POST_BUILD_DIAGNOSTIC "+json.dumps(post_build_failure_diagnostic(phase,exc),sort_keys=True),flush=True)
    import re
    message=str(exc);raw=message.encode();digest=hashlib.sha256(raw).hexdigest()
    if re.search(r'(?i)(github_pat_|gh[pousr]_|bearer\s|authorization|\b(?:password|secret|token)\s*[=:])',message):message='REDACTED_UNSAFE'

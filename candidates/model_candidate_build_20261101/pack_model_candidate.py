@@ -32,9 +32,29 @@ def json_file(p,cap):
    need(k not in d,'duplicate JSON key');d[k]=v
   return d
  return json.loads(p.read_text(),object_pairs_hook=pairs,parse_constant=lambda _:(_ for _ in ()).throw(ValueError('nonfinite JSON')))
+PACK_PHASES=('IDENTITY','SOURCE_PINS','OBSERVATION','STAGE_RECEIPTS','COMPILE_OUTPUTS','ENRICH','COPY','FINAL')
+PACK_REASONS=('SOURCE_PIN_SET','SOURCE_PIN_HASH_FORMAT','SOURCE_PIN_PATH','SOURCE_PIN_SIZE','SOURCE_PIN_HASH_MISMATCH','STAGE_VALIDATION_FAILED')
+PACK_EXCEPTION_CLASSES=('ValueError','TypeError','FileNotFoundError','PermissionError','OSError','JSONDecodeError','UnicodeDecodeError','OTHER')
+class ModelPackFailure(ValueError):
+ def __init__(self,phase,reason,exception_class='ValueError',index=None,size=None,expected=None,actual=None):
+  super().__init__('model candidate pack rejected: '+reason)
+  self.model_pack_diagnostic=dict(schema='MODEL_PACK_FAILURE_V1',phase=phase,reason=reason,exception_class=exception_class if exception_class in PACK_EXCEPTION_CLASSES else 'OTHER',index=index,bytes=size if type(size)is int and 0<=size<=4<<30 else None,expected_sha256=expected,actual_sha256=actual)
 def check_pins(pins):
- need(type(pins)is dict and bool(pins),'nonempty source pins')
- for p,h in pins.items():need(re.fullmatch('[0-9a-f]{64}',h or '') is not None and sha(regular(p))==h,'source pin drift')
+ # Source/tool inputs may legitimately be empty; seven payload files still use
+ # unchanged regular()/pin()/json_file() nonempty gates. Never trust just size.
+ if type(pins)is not dict or not pins:raise ModelPackFailure('SOURCE_PINS','SOURCE_PIN_SET')
+ for index,(raw,h)in enumerate(pins.items()):
+  if type(h)is not str or re.fullmatch('[0-9a-f]{64}',h)is None:raise ModelPackFailure('SOURCE_PINS','SOURCE_PIN_HASH_FORMAT',index=index)
+  try:
+   if type(raw)is not str:raise ValueError('source path type')
+   p=P(raw).absolute()
+   if p!=p.resolve(strict=True)or not p.is_file()or p.is_symlink():raise ValueError('source regular path')
+   size=p.stat().st_size
+  except (ValueError,TypeError,OSError)as e:raise ModelPackFailure('SOURCE_PINS','SOURCE_PIN_PATH',type(e).__name__,index=index,expected=h)from e
+  if not 0<=size<=4<<30:raise ModelPackFailure('SOURCE_PINS','SOURCE_PIN_SIZE',index=index,size=size,expected=h)
+  try:actual=sha(p)
+  except OSError as e:raise ModelPackFailure('SOURCE_PINS','SOURCE_PIN_PATH',type(e).__name__,index=index,size=size,expected=h)from e
+  if actual!=h:raise ModelPackFailure('SOURCE_PINS','SOURCE_PIN_HASH_MISMATCH',index=index,size=size,expected=h,actual=actual)
 def identity(i):
  need(type(i)is dict and set(i)=={'run_id','artifact_name','source_commit','launch_commit','launch_manifest_path','launch_manifest_blob_sha'},'builder identity fields')
  need(type(i['run_id'])is int and i['run_id']>0,'actual run id')
@@ -121,7 +141,7 @@ def observation(row,original,host,overlay):
  need(o['source_closure']['source_commit']==original['repo_sha']and o['source_closure']['source_overlay']=={'bytes':overlay.stat().st_size,'sha256':sha(overlay)},'observed actual source and overlay')
  need(o['sv']['raw_sha256']==sha(host)and o['sv']['bytes']==host.stat().st_size,'observed actual emitted SV');return o
 
-def pack(original,b,built,host,overlay,out,budget_check,observation_pin):
+def _pack_impl(original,b,built,host,overlay,out,budget_check,observation_pin,_mark):
  """Inputs are checked candidate collector output; out is same-job stage root.
  New model_source_evidence.record supplies source-role evidence, not old P0 enrich.
  Export remains unreviewed even if all integrity checks succeed.
@@ -129,14 +149,18 @@ def pack(original,b,built,host,overlay,out,budget_check,observation_pin):
  identity(original['artifact_identity']);need(original['repo_sha']==original['artifact_identity']['source_commit'],'source identity')
  need(built.get('status')=='BUILT_UNQUALIFIED' and built.get('scope')=='ARCHIVE_LINK_ONLY_NOT_DUT_PASS','actual build only')
  for v in (b,b.get('admission',{}),built,built.get('plan',{})):need(v.get('cpp_build_policy')==CPP_POLICY and v.get('cpp_build_overrides')==CPP_OVERRIDES,'strict exact O1 policy')
+ _mark('SOURCE_PINS')
  check_pins(b['pins']);check_pins(b['admission']['make_closure_pins'])
+ _mark('OBSERVATION')
  out=P(out).resolve(strict=True);host=regular(host);overlay=regular(overlay);obs=observation(observation_pin,original,host,overlay)
  obs_hash=hashlib.sha256(canonical(obs)).hexdigest()
+ _mark('STAGE_RECEIPTS')
  actual_stages={};stage_texts={};stage_summary=[]
  for name in STAGES:
   p=regular(out/name/'RESULT.json',2<<20);r=json_file(p,2<<20);strict(r);actual_stages[name]=r;stage_texts[name]=dict(pin(p),text=p.read_text())
   stage_summary.append(dict(name=name,receipt_sha256=sha(p),native_exit=0,errors=[],cleanup_complete=True,pipe_eof_observed=True,gzip_finalized=True))
  need(obs['stage_receipts']==[dict(name=n,bytes=stage_texts[n]['bytes'],sha256=stage_texts[n]['sha256'])for n in STAGES],'observed complete20 receipt pins')
+ _mark('COMPILE_OUTPUTS')
  phases=built['phases'];plan=built['plan']['phases'];need(len(phases)==len(plan)==5,'five actual build phases');summaries=[]
  for actual,planned,name in zip(phases,plan,STAGES[-5:]):
   need(actual['phase']==planned['name']==name and actual['argv']==planned['argv'],'exact phase/argv')
@@ -146,6 +170,7 @@ def pack(original,b,built,host,overlay,out,budget_check,observation_pin):
   summaries.append(dict(phase=name,argv=actual['argv'],output_sha256=q['sha256'],native_exit=0,supervisor_receipt_sha256=hashlib.sha256(canonical(actual['supervisor'])).hexdigest()))
  need(built['binary']==phases[-1]['output'],'final linked binary');binary=regular(built['binary']['path'])
  with binary.open('rb')as f:need(f.read(6)==b'\x7fELF\x02\x01','actual ELF64LE')
+ _mark('ENRICH')
  driver=regular(original['driver']);need(sha(driver)==DRIVER_SHA,'frozen driver')
  source_path=regular(b['source_manifest'],16<<20);source=json_file(source_path,16<<20)
  need(source.get('source_commit')==original['repo_sha'],'source ledger commit')
@@ -163,6 +188,7 @@ def pack(original,b,built,host,overlay,out,budget_check,observation_pin):
   path=regular(path,cap);raw=path.read_bytes();need(b'\0'not in raw,'retained metadata text only');return dict(pin(path),text=raw.decode('utf-8'))
  source['model_candidate_build_evidence']={'schema':'MODEL_CANDIDATE_ACTUAL_BUILD_EVIDENCE_V1','driver_dependency':dep,'actual_stage_receipts':stage_texts,'fixed_source_overlay':retained_text(overlay,2<<20),'actual_host_header':retained_text(header_path,2<<20)}
  source['model_candidate_observation']=obs;enriched=(json.dumps(source,indent=2,allow_nan=False)+'\n').encode();need(len(enriched)<=16<<20,'source metadata16MiB')
+ _mark('COPY')
  copies={'binary':binary,'sv':host,'driver':driver,'tool_manifest':regular(b['tool_manifest'],32<<20)}
  before={k:pin(p)for k,p in copies.items()};source_before=pin(source_path)
  root=out/'model_candidate_artifact';need(not root.exists(),'fresh export directory')
@@ -176,9 +202,22 @@ def pack(original,b,built,host,overlay,out,budget_check,observation_pin):
  entries={k:dict(path=NAMES[k],bytes=p.stat().st_size,sha256=sha(p))for k,p in files.items()}
  manifest=dict(schema=MANIFEST_SCHEMA,status=STATUS,cpp_build_policy=CPP_POLICY,cpp_build_overrides=list(CPP_OVERRIDES),profiles=list(range(5)),layer='CHISEL_EMITTED_SV_NUMERICAL_BACKEND',matrix_macs=4096,vector_lanes=32,moe_reference_contract=ROUTE,artifact_identity=original['artifact_identity'],common={k:entries[k]for k in ('binary','sv','source_manifest','driver','build_receipt')},tool_manifest=entries['tool_manifest'],model_candidate_observation_sha256=obs_hash,numerical_pass=False,final_rtl_executed=False,model_numerical_evaluation_authorized=False,external_review_required=True)
  mf=root/'frozen_artifact.json';mf.write_text(json.dumps(manifest,sort_keys=True,indent=2)+'\n');need(mf.stat().st_size<=65536,'manifest64KiB')
+ _mark('FINAL')
  result=validate_export(root)
  check_pins(b['pins']);check_pins(b['admission']['make_closure_pins']);need(sha(regular(observation_pin['path']))==observation_pin['sha256'],'observation changed during pack');budget_check(0)
  return dict(manifest=pin(mf),files=7,expanded_bytes=result['expanded_bytes'],payload_identity=result['payload_identity'],scope='UNREVIEWED_MODEL_BUILD_BYTES_NOT_UPLOADED_NOT_EXECUTED')
+
+def pack(original,b,built,host,overlay,out,budget_check,observation_pin):
+ # Local, per-call diagnostics: no global mutable state or caller callback.
+ # Every failure still propagates; no diagnostic grants packaging acceptance.
+ phase=['IDENTITY']
+ def mark(value):
+  need(value in PACK_PHASES,'fixed internal pack phase');phase[0]=value
+ try:return _pack_impl(original,b,built,host,overlay,out,budget_check,observation_pin,mark)
+ except ModelPackFailure as e:
+  e.model_pack_diagnostic['phase']=phase[0];raise
+ except Exception as e:
+  raise ModelPackFailure(phase[0],'STAGE_VALIDATION_FAILED',type(e).__name__)from e
 
 def validate_export(root):
  root=P(root).resolve(strict=True);need(root.is_dir(),'artifact directory')

@@ -1,0 +1,112 @@
+{
+  "schema": "MODEL_CANDIDATE_EMPTY_SOURCE_PACK_E2E_SUMMARY_V1",
+  "scope": "ALL_SYNTHETIC_CANDIDATE_EVIDENCE_NOT_BUILD_OR_NUMERICAL_PASS",
+  "runner_sha256": "ed741a29cdc807c148d1edc9315cf052409b61a29c8e9f7e711e5eb309bc2b92",
+  "current_source_catalog_sha256": "78c3b4a4e5561cb0c223b796778a0e050a84d71a3f63739fe4c349d033dca921",
+  "current_source_catalog_count": 799,
+  "producer_implementation_pins": {
+    "candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py": "0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f",
+    "candidates/model_candidate_build_20261101/candidate_binary_producer.py": "d0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53",
+    "candidates/model_candidate_build_20261101/candidate_build_producer.py": "0cae3214256459cb2259d85402a78aec81bd064465834b8fe01d0893f8f0d495",
+    "candidates/model_candidate_build_20261101/candidate_conditional_admission.py": "d8c64a3eb04c342fbd0327f2a4519b7c99cbcd58f22235d0d7f33de8509e338c",
+    "candidates/model_candidate_build_20261101/candidate_generation_gate.py": "3dfe4bb10f1e8daed36fd5991090e465d34d9fc96463c06dee4a9a15e9cc37d5",
+    "candidates/model_candidate_build_20261101/model_source_evidence.py": "2798ac6a61b5f5424f968ff672fbc40bad95b9c1330125bdbbb4d93f04f83974",
+    "candidates/model_candidate_build_20261101/one_job_model_candidate.py": "db1b26561f0b63424a689a22053d79b88219266cecae55283694388db4fd81c5",
+    "candidates/model_candidate_build_20261101/pack_model_candidate.py": "5c999f3e7253acfac5f2a0f2af8dc112ecf90a033d970295060c49ecb7bc2124"
+  },
+  "record_sha256": "2798ac6a61b5f5424f968ff672fbc40bad95b9c1330125bdbbb4d93f04f83974",
+  "proof_sha256": "b5f2a4ca51a2026f0f5ebb13bb3eee9228c6a98b0a77f904671f35c48449ce0c",
+  "counts": {
+    "original_generation_inventory_count": 13529,
+    "original_tool_inventory_count": 11689,
+    "local_pin_count": 25230
+  },
+  "source_roles": {
+    "actual_source_files": 10,
+    "runtime_table_expectations": 2
+  },
+  "modes": {
+    "normal": {
+      "real_record_called": true,
+      "full_checker_without_mock": true,
+      "final_exact_files": 7,
+      "expanded_bytes": 11489749,
+      "negative_cases": [
+        {
+          "case": "wrong_empty_source_hash",
+          "error_type": "ModelPackFailure",
+          "reason": "model candidate pack rejected: SOURCE_PIN_HASH_MISMATCH"
+        },
+        {
+          "case": "missing_source",
+          "error_type": "ModelPackFailure",
+          "reason": "model candidate pack rejected: SOURCE_PIN_PATH"
+        },
+        {
+          "case": "empty_artifact_stays_forbidden",
+          "error_type": "ModelPackFailure",
+          "reason": "model candidate pack rejected: STAGE_VALIDATION_FAILED"
+        },
+        {
+          "case": "source_metadata_cap_unchanged",
+          "error_type": "ModelPackFailure",
+          "reason": "model candidate pack rejected: STAGE_VALIDATION_FAILED"
+        },
+        {
+          "case": "role_drift_even_when_general_pins_rehashed",
+          "error_type": "ModelPackFailure",
+          "reason": "model candidate pack rejected: STAGE_VALIDATION_FAILED"
+        }
+      ],
+      "synthetic_manifest_sha256": "3edf841cc4d345b83019212f5959ad9cbf7a2ac34044116f5f6826fe902dbb32"
+    },
+    "optimized": {
+      "real_record_called": true,
+      "full_checker_without_mock": true,
+      "final_exact_files": 7,
+      "expanded_bytes": 11525482,
+      "negative_cases": [
+        {
+          "case": "wrong_empty_source_hash",
+          "error_type": "ModelPackFailure",
+          "reason": "model candidate pack rejected: SOURCE_PIN_HASH_MISMATCH"
+        },
+        {
+          "case": "missing_source",
+          "error_type": "ModelPackFailure",
+          "reason": "model candidate pack rejected: SOURCE_PIN_PATH"
+        },
+        {
+          "case": "empty_artifact_stays_forbidden",
+          "error_type": "ModelPackFailure",
+          "reason": "model candidate pack rejected: STAGE_VALIDATION_FAILED"
+        },
+        {
+          "case": "source_metadata_cap_unchanged",
+          "error_type": "ModelPackFailure",
+          "reason": "model candidate pack rejected: STAGE_VALIDATION_FAILED"
+        },
+        {
+          "case": "role_drift_even_when_general_pins_rehashed",
+          "error_type": "ModelPackFailure",
+          "reason": "model candidate pack rejected: STAGE_VALIDATION_FAILED"
+        }
+      ],
+      "synthetic_manifest_sha256": "a66e28f4cccba1728ee0e6b0b614a9554126fc241d36e1ad89e8eda0bacb9b61"
+    }
+  },
+  "real_empty_source_causality": {
+    "idma_manifest_sha256": "a699b8074b8099e00859d5174c0a5fb6b5a171a28cad30bab8dd96226dc67b19",
+    "relative_path": "idma/target/rtl/include/.gitkeep",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "actual_manifest_entry_and_local_bytes_match": true,
+    "remote_failed_filename_observed": false
+  },
+  "source_slots_are_synthetic_not_runner_byte_revalidation": true,
+  "new_header_is_synthetic_not_original_builder_text": true,
+  "numerical_pass": false,
+  "final_rtl_pass": false,
+  "no_compiler_or_elf_execution": true,
+  "no_old_elf_or_sv_read": true
+}

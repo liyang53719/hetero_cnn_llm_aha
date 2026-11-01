@@ -45,7 +45,17 @@ class Tests(unittest.TestCase):
   r=copy.deepcopy(self.r);self.put('x');self.read();self.assertEqual(r,self.r)
  def test_caller_ast_preserved(self):
   tree=ast.parse((D/'one_job_model_candidate.py').read_text())
+  # The separately reviewed finite post-build projector is diagnostic-only.
+  # Require its exact AST before removing it; retain the original caller hash.
+  additions=[n for n in ast.walk(tree) if isinstance(n,ast.FunctionDef)and n.name=='post_build_failure_diagnostic']
+  self.assertEqual(len(additions),1);added=additions[0]
+  self.assertEqual(hashlib.sha256(ast.dump(added,include_attributes=False).encode()).hexdigest(),'97ab9c6aa36387fc2c32779c6a62744c37352f7d0c42b540b75e8d842312e31f')
+  expression=ast.parse('print("MODEL_POST_BUILD_DIAGNOSTIC "+json.dumps(post_build_failure_diagnostic(phase,exc),sort_keys=True),flush=True)').body[0]
+  expected=ast.dump(expression,include_attributes=False)
+  self.assertEqual(sum(ast.dump(n,include_attributes=False)==expected for n in ast.walk(tree)),1)
   class Strip(ast.NodeTransformer):
+   def visit_FunctionDef(self,n):return None if n.name=='post_build_failure_diagnostic'else self.generic_visit(n)
+   def visit_Expr(self,n):return None if ast.dump(n,include_attributes=False)==expected else self.generic_visit(n)
    def visit_If(self,n):
     if ast.unparse(n.test)=="name == 'original_high'"and any(isinstance(x,ast.ImportFrom)and x.module=='original_ir_diagnostic'for x in n.body):return None
     return self.generic_visit(n)

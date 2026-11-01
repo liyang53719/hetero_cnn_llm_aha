@@ -1,0 +1,17 @@
+{
+  "schema": "ACTUAL_PINNED_EMPTY_SOURCE_COMPATIBILITY_REPRO_V1",
+  "idma_manifest_sha256": "a699b8074b8099e00859d5174c0a5fb6b5a171a28cad30bab8dd96226dc67b19",
+  "actual_empty_sources": [
+    {
+      "relative_path": "idma/target/rtl/include/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "old_rejection": "bounded regular file",
+      "new_source_check_pass": true
+    }
+  ],
+  "old_pack_sha256": "bb0c0a5b43690d16c8c2d1ad76351814aca935d0224128dbd26e24ee35abe774",
+  "new_pack_sha256": "5c999f3e7253acfac5f2a0f2af8dc112ecf90a033d970295060c49ecb7bc2124",
+  "remote_exact_failed_path_observed": false,
+  "scope": "ACTUAL_READ_ONLY_SOURCE_BYTES_REPRO_NOT_REMOTE_RESULT_OR_NUMERICAL_PASS"
+}

@@ -19,6 +19,7 @@ CATALOG_PATH = PREFIX + 'SOURCE_PINS.json'
 # No build producer, Scala, C++, SV, reference, provider or stimulus source may
 # change through this host adapter. Additional paths require source review.
 ALLOWED_PATHS = frozenset(PREFIX + x for x in (
+    'execution_mode.py', 'test_candidate_full_budget.py',
     'cloud_budget.py', 'prepare_cloud_execution.py', 'controller/cloud_flow.py',
     'summarize_cloud_execution.py', 'executor_adaptation.py',
     'numeric/test_p0_source_relocation.py', 'test_backend_baseline_join.py',

@@ -42,14 +42,36 @@ def admit(binding):
  path=pin(request,65536)
  need(request['sha256']==expected_full,'full budget must equal independently reviewed admission')
  doc=json.loads(path.read_text())
- need(type(doc)is dict and set(doc)=={'schema','ready','scope','tokens','matrix_macs','vector_lanes','hardware_baseline_sha256','driver_sha256','basis','profiles'},'exact full admission fields')
- need(doc['schema']=='FIVE_M128_FULL_EXECUTION_BUDGET_V1'and doc['ready']is True and doc['scope']=='WATCHDOG_ADMISSION_ONLY_NOT_NUMERICAL_ACCEPTANCE','full admission not ready')
+ candidate=False
+ if binding.get('artifact_manifest') is not None:
+  artifact=json.loads(pin(binding['artifact_manifest'],65536).read_text())
+  candidate=artifact['schema']=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'
+ common_fields={'schema','ready','scope','tokens','matrix_macs','vector_lanes','driver_sha256','basis','profiles'}
+ if candidate:
+  need(binding.get('execution_context')=='CLOUD_EXECUTOR_V1','candidate full budget requires approved cloud invocation')
+  need(type(doc)is dict and set(doc)==common_fields|{'artifact_manifest_sha256','model_candidate_review_sha256'},'exact candidate full admission fields, no legacy baseline')
+  need(doc['schema']=='MODEL_CANDIDATE_FIVE_M128_FULL_EXECUTION_BUDGET_V1','candidate requires separate full budget version')
+  candidate_path=D/'numeric/candidate_admission.py'
+  need(binding['pins'].get(str(candidate_path))==sha(candidate_path),'candidate full admission verifier source pin')
+  candidate_spec=importlib.util.spec_from_file_location('actual_candidate_for_full',candidate_path);candidate_gate=importlib.util.module_from_spec(candidate_spec);candidate_spec.loader.exec_module(candidate_gate)
+  reviewed=candidate_gate.verify(binding.get('model_candidate_review'),binding)
+  need(reviewed['scope']=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL','candidate evaluation scope only')
+  need(doc['artifact_manifest_sha256']==binding['artifact_manifest']['sha256']==reviewed['artifact_manifest_sha256'],'full budget exact candidate artifact')
+  need(doc['model_candidate_review_sha256']==binding['model_candidate_review']['sha256']==reviewed['model_candidate_review_sha256'],'full budget exact independent candidate review')
+ else:
+  need(binding.get('model_candidate_review') is None,'candidate review cannot use legacy full budget')
+  need(type(doc)is dict and set(doc)==common_fields|{'hardware_baseline_sha256'},'exact full admission fields')
+  need(doc['schema']=='FIVE_M128_FULL_EXECUTION_BUDGET_V1','legacy full budget version')
+  need(doc['hardware_baseline_sha256']==sha(D.parent/'ci_frontend_materialization_r2_20261029/OBSERVER_BASELINE_ACCEPTANCE.json'),'same reviewed hardware observation baseline')
+ need(doc['ready']is True and doc['scope']=='WATCHDOG_ADMISSION_ONLY_NOT_NUMERICAL_ACCEPTANCE','full admission not ready')
  need(doc['tokens']==128 and doc['matrix_macs']==4096 and doc['vector_lanes']==32,'unchanged full hardware/stimulus')
  root=D.parent
- need(doc['hardware_baseline_sha256']==sha(root/'ci_frontend_materialization_r2_20261029/OBSERVER_BASELINE_ACCEPTANCE.json'),'same reviewed hardware observation baseline')
  need(doc['driver_sha256']==sha(root/'moe_router_score_observation_20261030/driver/host_axi_driver_non_dpi.cpp'),'unchanged calibrated numerical driver')
  need(type(doc['basis'])is dict and set(doc['basis'])=={'calibration_summary','independent_budget_review'},'actual calibration and independent budget review required')
  for evidence in doc['basis'].values():pin(evidence,2<<20)
+ if candidate:
+  calibration=json.loads(pin(doc['basis']['calibration_summary'],2<<20).read_text())
+  need(calibration.get('artifact_manifest_sha256')==doc['artifact_manifest_sha256'] and calibration.get('model_candidate_review_sha256')==doc['model_candidate_review_sha256'] and calibration.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL','actual calibration provenance must be this reviewed candidate')
  need(type(doc['profiles'])is dict and set(doc['profiles'])==set(IDS),'all five full budgets before any execution')
  windows={};cycles={}
  for i in IDS:

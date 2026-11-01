@@ -2374,13 +2374,13 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/execution_mode.py",
-      "bytes": 6127,
-      "sha256": "8261e5f26bc698115b315cb07ca040f72603a33e4177ad0c90ffebd8dd412aa3"
+      "bytes": 8323,
+      "sha256": "5af894ef67da74886782fb862c3d7d466ebd0122fdf675d37f88f81c30fb7a29"
     },
     {
       "path": "candidates/same_job_execution_20261030/executor_adaptation.py",
-      "bytes": 11470,
-      "sha256": "7faca0dbeed7f30633eccfb326d66f98cdc17b892dd65795d281c308898a0239"
+      "bytes": 11528,
+      "sha256": "689441c3c4cff2e9dc9cffe7ca05aa66982edb115210782cc9abc8faa67fa747"
     },
     {
       "path": "candidates/same_job_execution_20261030/executor_identity.py",
@@ -2395,7 +2395,7 @@
     {
       "path": "candidates/same_job_execution_20261030/numeric/CONNECTION_OWNED_SOURCE_PINS.json",
       "bytes": 2500,
-      "sha256": "cad6b2c02287124928ba10c825db1f1eba0e0153ba1f43de4671d746bc45bd53"
+      "sha256": "d8b0fad52cc72168814d996fc69f3b94f4c060f5795038b15be3a89d89a31e7f"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/CONSUMER_MANIFEST.json",
@@ -2926,6 +2926,11 @@
       "path": "candidates/same_job_execution_20261030/test_backend_baseline_join.py",
       "bytes": 6901,
       "sha256": "8a28166e00db7ac6d3b2358d2e3751e9433c69b66a6c8b4c34812159d2966ef6"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/test_candidate_full_budget.py",
+      "bytes": 7329,
+      "sha256": "5e260133623ad830b7df15e48ee4b376813ea93775be3dfe6704821dddd10b65"
     },
     {
       "path": "candidates/same_job_execution_20261030/test_candidate_relocation_producer.py",

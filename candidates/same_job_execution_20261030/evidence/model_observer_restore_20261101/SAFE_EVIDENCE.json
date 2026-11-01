@@ -1,0 +1,180 @@
+{
+  "schema": "MODEL_OBSERVER_RESTORE_LOCAL_EVIDENCE_V1",
+  "scope": "SOURCE_CHAIN_AND_EXTRACTED_TOP_IO_ONLY_NOT_FULL_TOP_OR_NUMERICAL",
+  "restoration": [
+    {
+      "path": "candidates/moe_router_score_observation_20261030/source/HostBlockTopV4.scala",
+      "baseline_sha256": "da22759883a9749c1706ff77ff78afcdabb7fe869aed19df90f817017ef89583",
+      "before_sha256": "ed0515fd6d5826ceeda0862d3ce30ab4bdaa6e0882c05c6194088e474aa72777",
+      "sha256": "3f32de4e2049721e2005687e61fea1215c388aa7fe93a7183a4151312fc38b9b",
+      "bytes": 27873
+    },
+    {
+      "path": "candidates/p0_resident_observation_20261030/source/QwenOwnerProtocol.scala",
+      "baseline_sha256": "78dfd535faefb30b70a60d3ef4f83fbe923f0e35a10c995a2830cdb772fa0af4",
+      "before_sha256": "62507033c0fef7e9250a43d128ec227e46dfd9b50477d9a9ab53fb7b5ed73c4a",
+      "sha256": "84dd372fe7a8dc13c90ff86c060dc2f44e375ed6e4343764619f323af8f46210",
+      "bytes": 93334
+    }
+  ],
+  "source_chain_audit": {
+    "path": "norm_rebase_audit_20261101T1205/RESULT.json",
+    "bytes": 1102,
+    "sha256": "51e109a54f5075afc5cc5d061fc8d0682a97a482b786076382c586757c482ad8"
+  },
+  "source_preserved_count": 148,
+  "observer_unchanged_count": 6,
+  "actual_cases": [
+    {
+      "actual_directory": "model_observer_restore_actual_20261101T1207",
+      "inputs_sha256": "ebe67aa24673ba1baf488be40b44dce0e45e21c5fce92caabe16950f6ca6ef9c",
+      "stages": [
+        {
+          "name": "compile_r1",
+          "receipt_sha256": "6d11ae52ca96d003e0855ac348c6e82070c98735701e6a97414b2cba5589e4a2",
+          "native_exit": 0,
+          "errors": [],
+          "elapsed_seconds": 48.42719511399628,
+          "sampled_peak_rss": 543776768,
+          "strict_cleanup": true,
+          "pipe_eof": true,
+          "gzip_finalized": true
+        },
+        {
+          "name": "io_low_r1",
+          "receipt_sha256": "31bb0166e0b805042d652b8c2c7506d1c9fc5c3299c336353318df90610b8cf9",
+          "native_exit": 1,
+          "errors": [],
+          "elapsed_seconds": 3.436218482995173,
+          "sampled_peak_rss": 152616960,
+          "strict_cleanup": true,
+          "pipe_eof": true,
+          "gzip_finalized": true
+        }
+      ]
+    },
+    {
+      "actual_directory": "model_observer_restore_actual_20261101T1211",
+      "inputs_sha256": "ae3f01f8f40126cb3e0c581fcc50faeb85ffad13b9d42d469908676a7c300ad8",
+      "stages": [
+        {
+          "name": "compile_r1",
+          "receipt_sha256": "028559893af0c4c6a0ea3c30a3d3786c76c500bc4e75d533a8216f774014eb01",
+          "native_exit": 0,
+          "errors": [],
+          "elapsed_seconds": 15.199013553006807,
+          "sampled_peak_rss": 281042944,
+          "strict_cleanup": true,
+          "pipe_eof": true,
+          "gzip_finalized": true
+        },
+        {
+          "name": "io_low_r1",
+          "receipt_sha256": "4b6afacf606c8888136ae4a55b721f8bef00e0ca3bcc76fca972001c5bc76ce6",
+          "native_exit": 1,
+          "errors": [],
+          "elapsed_seconds": 3.301143591001164,
+          "sampled_peak_rss": 152432640,
+          "strict_cleanup": true,
+          "pipe_eof": true,
+          "gzip_finalized": true
+        }
+      ]
+    },
+    {
+      "actual_directory": "model_observer_restore_actual_20261101T1212",
+      "inputs_sha256": "0938602a6612e663ab9af633772ec901cc42d893bdffe4c63d12375104f02625",
+      "stages": [
+        {
+          "name": "compile_r1",
+          "receipt_sha256": "56bbf84c0ae3f8a74691245342a2dd5e8e8a45ed5656d39e1600e4557c61ab6d",
+          "native_exit": 0,
+          "errors": [],
+          "elapsed_seconds": 8.566053970018402,
+          "sampled_peak_rss": 249221120,
+          "strict_cleanup": true,
+          "pipe_eof": true,
+          "gzip_finalized": true
+        },
+        {
+          "name": "io_low_r1",
+          "receipt_sha256": "e6ec88c0c3b34808e241340f90a7c8523ff3d44bbdbbe96ec115092b914eca7a",
+          "native_exit": 1,
+          "errors": [],
+          "elapsed_seconds": 3.2235335129953455,
+          "sampled_peak_rss": 152662016,
+          "strict_cleanup": true,
+          "pipe_eof": true,
+          "gzip_finalized": true
+        }
+      ]
+    },
+    {
+      "actual_directory": "model_observer_restore_actual_20261101T1213",
+      "inputs_sha256": "857c3269c242ffe9868f4bbc754a58a81b69d00072f03022e9531ff905bb93f7",
+      "stages": [
+        {
+          "name": "compile_r1",
+          "receipt_sha256": "ccccf47b752341636757ab169a87cf8b40851436ea9173ca25729e6c1e529717",
+          "native_exit": 0,
+          "errors": [],
+          "elapsed_seconds": 9.376476519013522,
+          "sampled_peak_rss": 249708544,
+          "strict_cleanup": true,
+          "pipe_eof": true,
+          "gzip_finalized": true
+        },
+        {
+          "name": "io_low_r1",
+          "receipt_sha256": "0689916df2dcd39be66e23e181cf1bfbe90e7d51bd6d9b2046040b0bd32bfd4b",
+          "native_exit": 0,
+          "errors": [],
+          "elapsed_seconds": 3.473276079981588,
+          "sampled_peak_rss": 152498176,
+          "strict_cleanup": true,
+          "pipe_eof": true,
+          "gzip_finalized": true
+        }
+      ]
+    }
+  ],
+  "source_compile_provenance": {
+    "norm11": "1207/compile_r1",
+    "latest_router_numeric_owner": "1211/compile_r1",
+    "final_io_fixture": "1213/compile_r1"
+  },
+  "first_failure_scope": {
+    "1207": "Historical1711 compiled RouterScoreObservation lacked kind/rank/last; actual LOW119. Real selected source added to compilation without production edits.",
+    "1211": "Actual LOW122 text matched; precise ujson comparison still failed.",
+    "1212": "Bounded firstdiff proved Direction.toString Input versus canonical input; production emitter shared defect; exact enum mapping added, expected unchanged."
+  },
+  "actual_final_port_count": 122,
+  "ordered_typed_ports_equal": true,
+  "driver_direction_width_equal": true,
+  "full_top_pass": false,
+  "numerical_pass": false,
+  "final_rtl_pass": false,
+  "actual_new_emitter_compile": {
+    "source_sha256": "be1aeef288c3ed299b98280668fc655cfa0051302b0d11f44e99b2468463d8c4",
+    "inputs_sha256": "412a5a9c1fab66f39e03c12ff55f300db7851f5c7f182d9ec71511ee02b3193f",
+    "receipt_sha256": "16b08fe3ca661f7388b10004581ac5f5d5c13e831354e172cefeb0ae6f90782d",
+    "native_exit": 0,
+    "errors": [],
+    "elapsed_seconds": 14.287427607021527,
+    "sampled_peak_rss": 280879104,
+    "strict_cleanup": true,
+    "pipe_eof": true,
+    "gzip_finalized": true,
+    "scope": "NEW_EMITTER_TYPECHECK_ONLY_NOT_FULL_TOP_OR_EMISSION"
+  },
+  "historical_class_source_join": {
+    "historical_source_selection_sha256": "fb30ac393d4ebfc172c94637fc5dba4608927cecf92c038a1c3a039894818c09",
+    "unchanged_source_count": 147,
+    "changed_or_added_norm_sources": 11,
+    "remaining_changed_observer_source": [
+      "UnifiedMoeRouterNumericalOwnerV2.scala"
+    ],
+    "remaining_source_recompiled_in": "1211/compile_r1",
+    "all159_source_roles_accounted": true
+  }
+}

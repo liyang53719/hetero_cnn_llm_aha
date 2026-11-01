@@ -353,6 +353,10 @@ object ModelCandidateHostSimulationEmitterV1 {
     ModelCandidateDiagnosticV1.phase("TOP_PORT_ABI")
     val ports=top.head.ports;require(ports.map(_.name).distinct.size==ports.size,"unique actual top ABI")
     val wide=Map("io_axi_r_bits_data"->Input,"io_axi_w_bits_data"->Output)
+    def direction(p:Port):String=p.direction match {
+      case Input=>"input"
+      case Output=>"output"
+    }
     def width(p:Port):Int=p.tpe match {
       case ClockType=>1
       case UIntType(IntWidth(w)) if w>0 && w<=64=>w.toInt
@@ -365,10 +369,10 @@ object ModelCandidateHostSimulationEmitterV1 {
     ModelCandidateDiagnosticV1.number("low_port_count",ports.size)
     val expectedPorts=preconditions("ports").obj
     require(ports.size==122 && expectedPorts.size==122 && ports.map(_.name).toSet==expectedPorts.keySet.toSet,"exact original122 top port names")
-    ports.foreach{p=>val expected=expectedPorts(p.name).arr;require(expected.size==2 && expected(0).str==p.direction.toString && expected(1).num==width(p).toDouble,"exact original top direction/width")}
-    val typedPorts=ujson.Arr.from(ports.map(p=>ujson.Obj("name"->p.name,"direction"->p.direction.toString,"type"->p.tpe.serialize,"width"->width(p))))
+    ports.foreach{p=>val expected=expectedPorts(p.name).arr;require(expected.size==2 && expected(0).str==direction(p) && expected(1).num==width(p).toDouble,"exact original top direction/width")}
+    val typedPorts=ujson.Arr.from(ports.map(p=>ujson.Obj("name"->p.name,"direction"->direction(p),"type"->p.tpe.serialize,"width"->width(p))))
     require(typedPorts==preconditions("typed_ports"),"full original typed122 ordered LOW ABI, including clock/reset types")
-    retain("actual_top_ports.tsv",ports.map(p=>s"${p.name}\t${p.direction}\t${width(p)}").mkString("","\n","\n"))
+    retain("actual_top_ports.tsv",ports.map(p=>s"${p.name}\t${direction(p)}\t${width(p)}").mkString("","\n","\n"))
     retain("HostBlockTopV4.sv",writer.toString)
     val lowBytes=low.circuit.serialize.getBytes(StandardCharsets.UTF_8)
     val svBytes=writer.toString.getBytes(StandardCharsets.UTF_8)

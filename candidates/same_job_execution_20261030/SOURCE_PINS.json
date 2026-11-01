@@ -4,8 +4,8 @@
   "files": [
     {
       "path": ".github/workflows/hetero-five-m128-model-candidate-build.yml",
-      "bytes": 4057,
-      "sha256": "7f3adcd658f341e494dea6e5e7ada5296fb6ff74eee2bb41389541241db6ae86"
+      "bytes": 4060,
+      "sha256": "34dfa3367c32fd91bdabd3a5a0119f8f52bb25f9cf1dd78313d04d58739f32b3"
     },
     {
       "path": ".github/workflows/hetero-five-m128-samejob-calibration-local-data.yml",
@@ -1605,7 +1605,7 @@
     {
       "path": "candidates/model_candidate_build_20261101/GENERATION_CONTRACT.json",
       "bytes": 766,
-      "sha256": "cc0b2e5b8bb74fa87d20bf00610c18d7492bd23579c95f2c462e3776e0adbc3e"
+      "sha256": "3354827c1c9d2ac167b3b325dc07acbd50ea663ddd384dddfea1b1d037ae3851"
     },
     {
       "path": "candidates/model_candidate_build_20261101/MODEL_CANDIDATE_PRECONDITIONS.json",
@@ -1615,7 +1615,7 @@
     {
       "path": "candidates/model_candidate_build_20261101/MODEL_SOURCE_OVERLAY.json",
       "bytes": 45149,
-      "sha256": "f9a04ed77ccb8cbeb756405dd23bd71580ba041cc46d25d6898b4c6e9e0b8641"
+      "sha256": "51621bbffc5ab0dfc97e88d66fee93722e66b6b1ed2a8c2ba7d0f588d9345472"
     },
     {
       "path": "candidates/model_candidate_build_20261101/ModelCandidateHighDescriptorV1.scala",
@@ -1624,8 +1624,8 @@
     },
     {
       "path": "candidates/model_candidate_build_20261101/ModelCandidateHostSimulationEmitterV1.scala",
-      "bytes": 31342,
-      "sha256": "32eccfc51343984f8545dcbde6f9ac039e7a73aab6767f8f77f8421310447814"
+      "bytes": 31440,
+      "sha256": "be1aeef288c3ed299b98280668fc655cfa0051302b0d11f44e99b2468463d8c4"
     },
     {
       "path": "candidates/model_candidate_build_20261101/ModelCandidateTransformGateV1.scala",
@@ -1685,7 +1685,7 @@
     {
       "path": "candidates/model_candidate_build_20261101/candidate_dependency_proof.py",
       "bytes": 27634,
-      "sha256": "0bb2f83f0d8396331a4f36e03c416f5fc2d6472862fe3934d55f13ff23c87b2f"
+      "sha256": "f9214082700139e244685ba4e04c84c6500d120111e000d4d89775602babb47b"
     },
     {
       "path": "candidates/model_candidate_build_20261101/candidate_diagnostic.py",
@@ -1695,7 +1695,7 @@
     {
       "path": "candidates/model_candidate_build_20261101/candidate_generation_gate.py",
       "bytes": 4578,
-      "sha256": "19df9f8d3446cd5530da374b570d987be0a4207d23106b4713244138d20e14c7"
+      "sha256": "3dfe4bb10f1e8daed36fd5991090e465d34d9fc96463c06dee4a9a15e9cc37d5"
     },
     {
       "path": "candidates/model_candidate_build_20261101/candidate_observation.py",
@@ -1723,6 +1723,16 @@
       "sha256": "3fbaf4a22155759fb66e1a5ff4e97fd4df1cba8365ceb931d1c472172262daa1"
     },
     {
+      "path": "candidates/model_candidate_build_20261101/fixtures/OBSERVER_BASELINE_155.json",
+      "bytes": 52306,
+      "sha256": "9be7810a372572e87b40d86d0b30245140c31cd40cdd6cf2f9cacead459beda2"
+    },
+    {
+      "path": "candidates/model_candidate_build_20261101/fixtures/OBSERVER_FIELDS_37.json",
+      "bytes": 2520,
+      "sha256": "dea7b8c076a03182b61363f1fcc7ac7ed4f29ae7d4f722cecaa29550358c78ef"
+    },
+    {
       "path": "candidates/model_candidate_build_20261101/materialize_model_binding.py",
       "bytes": 8733,
       "sha256": "8c8229f2c951e96c20ce096edb092073882a1c24b6b1aad52ed1c3834f9a418f"
@@ -1730,7 +1740,7 @@
     {
       "path": "candidates/model_candidate_build_20261101/model_source_evidence.py",
       "bytes": 3531,
-      "sha256": "783c2222bdffaa167d02ed49091ca5023921ed3dad37db392747955ec0750aed"
+      "sha256": "2798ac6a61b5f5424f968ff672fbc40bad95b9c1330125bdbbb4d93f04f83974"
     },
     {
       "path": "candidates/model_candidate_build_20261101/observe_model_sv.py",
@@ -1765,7 +1775,7 @@
     {
       "path": "candidates/model_candidate_build_20261101/restore_model_inputs.py",
       "bytes": 5725,
-      "sha256": "a02fbe64866409e1b0acdd4c5a2fa8fe9b8bdc4c11e62b0e921094615ce21c2c"
+      "sha256": "8f1dee208e97ee61b02f8b4e84ab572c228d4f9dced8a34b3ab490257d216aa5"
     },
     {
       "path": "candidates/model_candidate_build_20261101/run_retained_o1_metadata_regression.py",
@@ -1794,8 +1804,8 @@
     },
     {
       "path": "candidates/model_candidate_build_20261101/test_candidate_helpers.py",
-      "bytes": 5471,
-      "sha256": "b09f077e71b7a308ffb6d20c8030bec7b7808d24c7f5f1e71f89f7e7a8f40970"
+      "bytes": 6862,
+      "sha256": "c9cb3ea56dbe51b808160daeb55706456cb1eb8d231ae39cbcdb92041dc6dff3"
     },
     {
       "path": "candidates/model_candidate_build_20261101/test_dense_diagnostic.py",
@@ -1806,6 +1816,11 @@
       "path": "candidates/model_candidate_build_20261101/test_model_build_contract.py",
       "bytes": 4742,
       "sha256": "2a3822bce1267328d7aad48d6d0ac8654411968bcec6e88ad5c72b5a0110c7d9"
+    },
+    {
+      "path": "candidates/model_candidate_build_20261101/test_model_observer_chain.py",
+      "bytes": 7105,
+      "sha256": "fcd580cc81477d969bf01a3f10a0bca5e1100282f8e28adbbbdd20fe5d4d7680"
     },
     {
       "path": "candidates/model_candidate_build_20261101/test_model_zip_transport.py",
@@ -1829,8 +1844,8 @@
     },
     {
       "path": "candidates/model_candidate_build_20261101/validate_model_launch.py",
-      "bytes": 3018,
-      "sha256": "940928b1a54141caf3979531ab4600fce4a2571f8fb2bdc8520e149e69a3356f"
+      "bytes": 3024,
+      "sha256": "570225e1738cd7b7b1eb56e40bdfb9eaf86c87ab9c93a03e5da985408cd20b3e"
     },
     {
       "path": "candidates/moe_router_score_observation_20261030/driver/host_axi_driver_non_dpi.cpp",
@@ -1849,8 +1864,8 @@
     },
     {
       "path": "candidates/moe_router_score_observation_20261030/source/HostBlockTopV4.scala",
-      "bytes": 27468,
-      "sha256": "ed0515fd6d5826ceeda0862d3ce30ab4bdaa6e0882c05c6194088e474aa72777"
+      "bytes": 27873,
+      "sha256": "3f32de4e2049721e2005687e61fea1215c388aa7fe93a7183a4151312fc38b9b"
     },
     {
       "path": "candidates/moe_router_score_observation_20261030/source/UnifiedMoeRouterNumericalOwnerV2.scala",
@@ -1954,8 +1969,8 @@
     },
     {
       "path": "candidates/p0_resident_observation_20261030/source/QwenOwnerProtocol.scala",
-      "bytes": 93088,
-      "sha256": "62507033c0fef7e9250a43d128ec227e46dfd9b50477d9a9ab53fb7b5ed73c4a"
+      "bytes": 93334,
+      "sha256": "84dd372fe7a8dc13c90ff86c060dc2f44e375ed6e4343764619f323af8f46210"
     },
     {
       "path": "candidates/p1_p2_provider_reconstruction_20261028T2322/portable_v2/DEPENDENCIES.json",
@@ -2383,6 +2398,21 @@
       "sha256": "78472bd8f57e5548bd85296d656f08cc842bb9ed64f61c9e3f06898fda11df07"
     },
     {
+      "path": "candidates/same_job_execution_20261030/evidence/model_observer_restore_20261101/README.zh.md",
+      "bytes": 1843,
+      "sha256": "eab66b44d26b6bc627ecc82c7346ab7d6b5d3aa8a60538052aba6f8de6834dc5"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/evidence/model_observer_restore_20261101/RestoredObserverTopIoFixture.scala",
+      "bytes": 3182,
+      "sha256": "71f1ee2e9346938377b55430ccaa3fab72284c33b9e6d16e353fae22d06f70c3"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/evidence/model_observer_restore_20261101/SAFE_EVIDENCE.json",
+      "bytes": 6918,
+      "sha256": "ed8f83f5e1e52706cc2ffb914788967363885a8c368120ed27a310c3aa0753e2"
+    },
+    {
       "path": "candidates/same_job_execution_20261030/evidence/ordered_rms32_local_20261101/LOCAL_MODEL_EVIDENCE.json",
       "bytes": 6555,
       "sha256": "5f0758b842e7ce47399190dbf3878e9ece5cfb3a0e9f48b10080683e418ccb07"
@@ -2460,7 +2490,7 @@
     {
       "path": "candidates/same_job_execution_20261030/numeric/CONNECTION_OWNED_SOURCE_PINS.json",
       "bytes": 2500,
-      "sha256": "d8b0fad52cc72168814d996fc69f3b94f4c060f5795038b15be3a89d89a31e7f"
+      "sha256": "a91f637025cc53acd54e45f11f95d02dafcc014ee7f656c6a804cf8f8352c0a4"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/CONSUMER_MANIFEST.json",
@@ -2490,7 +2520,7 @@
     {
       "path": "candidates/same_job_execution_20261030/numeric/MODEL_P0_SOURCE_CONTRACT.json",
       "bytes": 1900,
-      "sha256": "e8c6f147b56f248d026d91a8e7564f328aa14a1b5f3e1ca8e73788318cbc2f4e"
+      "sha256": "7b46242a1206f651e8fac111436b6cb515b6a69f981b6f01c1e1f26bd7f51f13"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/REVIEWED_SOURCE_DELTAS.json",
@@ -2530,7 +2560,7 @@
     {
       "path": "candidates/same_job_execution_20261030/numeric/candidate_observation_contract.py",
       "bytes": 15953,
-      "sha256": "f485063cbdfaa08b0699bcc56edccedf6de37a92e914b329bc8aa91da5d87dd7"
+      "sha256": "7ed69b0683815842dee7ad41b5187b36cab6a48df580369fb13969d2a5d2b874"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/connect_owned.py",
@@ -2555,7 +2585,7 @@
     {
       "path": "candidates/same_job_execution_20261030/numeric/correct_model_observation_policy.py",
       "bytes": 11317,
-      "sha256": "74900afa30a38b9aaf6c40516479972b72aedf40da082964dde69e30b80d8705"
+      "sha256": "77e948cdf9fa9e923ae3861d3505a93f3ecb44b204b03d56bd19a19a8037bb86"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/correct_observation_policy.py",
@@ -3025,7 +3055,7 @@
     {
       "path": "candidates/same_job_execution_20261030/test_common_observer_integration.py",
       "bytes": 4483,
-      "sha256": "4b7e0fb3b55fd90fb78b8e97b01a0963b7668fff9cd696e95a8079ed0bfbf0ed"
+      "sha256": "387745bdafe6862e10419bb27cff37dee4df5b37f31fb2b27c2e06f960f261fb"
     },
     {
       "path": "candidates/same_job_execution_20261030/test_controller_mode.py",

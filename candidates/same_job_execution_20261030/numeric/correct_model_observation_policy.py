@@ -6,7 +6,7 @@ contracts. Reads source/metadata only; no weight or reference tensor payloads.
 import argparse, hashlib, json, pathlib, re, resource
 P=pathlib.Path
 HERE=P(__file__).resolve().parent
-CONTRACT_SHA='e8c6f147b56f248d026d91a8e7564f328aa14a1b5f3e1ca8e73788318cbc2f4e'
+CONTRACT_SHA='7b46242a1206f651e8fac111436b6cb515b6a69f981b6f01c1e1f26bd7f51f13'
 RUNTIME_SEMANTIC_SHA='184bd5c1785b8ef756838a60c90aa38906372041c018f0acce5e469b48e494f6'
 VIEWS_SEMANTIC_SHA='06ce2ef0332a5dc14385b353c15ad57a5d26c305a57cd38dc848e9d2c4c9bb0d'
 EXPECTED_SHAPE={'H':1536,'F':8960,'HEADS':12,'KVHEADS':2,'HD':128,'MAX_TOKENS':1024}

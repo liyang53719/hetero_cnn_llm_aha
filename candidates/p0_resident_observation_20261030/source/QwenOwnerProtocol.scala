@@ -170,6 +170,7 @@ class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boole
     // accepted/outputCommitted. Parent must bind this event to its Guard lease.
     val runtimePrepDoneFire=if(enableRuntimeRawPrep)Some(Output(Valid(new GdnRuntimeRawPrepResultV7)))else None
     val public21BackendReset=if(enablePublic21QkvReduction)Some(Input(Bool()))else None
+    val residentObservation=Output(Valid(new FfnResidentObservation))
     val resident=if(enableResidentFfn)Some(new FfnResidentPort)else None
     val residentHandoff=if(enableResidentFfn)Some(Output(Valid(new QwenOwnerJob)))else None
     val drain=if(enableFfnDrain && !enableResidentFfn)Some(new FfnDrainPort)else None
@@ -190,6 +191,9 @@ class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boole
     val pipelineIssues=Output(UInt(64.W));val pipelineStalls=Output(UInt(64.W))
   })
   val resident=if(enableResidentFfn)Some(Module(new FfnResidentCoordinator))else None
+  io.residentObservation.valid:=false.B
+  io.residentObservation.bits:=0.U.asTypeOf(new FfnResidentObservation)
+  resident.foreach(r=>io.residentObservation:=r.io.observation)
   val qkvRouter=if(enablePublic21QkvReduction)Some(Module(new Public21QkvReductionRouter))else None
   val ordinaryJob=if(enablePublic21QkvReduction)qkvRouter.get.io.ordinaryJob else io.job
   val ordinaryDone=if(enablePublic21QkvReduction)qkvRouter.get.io.ordinaryDone else io.done

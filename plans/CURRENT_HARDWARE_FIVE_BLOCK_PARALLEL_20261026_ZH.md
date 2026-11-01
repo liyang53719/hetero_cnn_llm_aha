@@ -1,3 +1,12 @@
+## 2026-11-01：恢复原观察链与严格122端口联检
+
+- 实际 Dense 新兼容变换已通过；后续 emit_host 明确观察到85而非原122端口并拒绝，原合同/驱动不放宽。源码审查确证新norm复基丢失原Top/Owner只读观察转接，现仅插回原baseline已有输出/default/profile/真实producer接线。
+- 完整159选择对旧基线逐字审：148未改源保持；原八观察override其中六个原样，另五norm替换逐删除审未见无关回退。新增保真测试固定完整Top IO与实际转接、148/6源、37观察字段和原driver，不只数端口。
+- 已真实复编11norm源并补编当前实际rawScore bundle来源；局部机械提取实际Top IO的Chisel官方LOW生成完整有序typed122，与原driver精确相等。历史classes缺3字段和方向枚举表示问题均明确归因并保留失败；小fixture不是完整Top或五块数值通过。
+- 同时修复候选emitter方向枚举表示：只Input/Output映射原canonical input/output，原122名称/类型/顺序门不变。后续完整候选仍需新实际产物结构复核、原五块M128全数值验收，当前0/5；原4096共享资源/7200及9000预算/编译flags/七件范围不扩。
+
+---
+
 ## 2026-11-01：Dense 仿真存储转换的严格结构匹配
 
 - 反馈修复后，实际原Top HIGH/官方LOW及candidate canonical已经通过（1058 modules / 9127 annotations）；后续变换明确报 `DENSE_ACC_LOCAL_SHAPE`，不是OOM/超时或数值失败。原stage严格收尾保留；缺少新HIGH正文，具体原require仍不冒确定。

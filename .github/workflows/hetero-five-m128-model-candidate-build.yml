@@ -2,7 +2,7 @@ name: hetero-five-m128-model-candidate-rms32-build-only
 on:
   push:
     branches: [main]
-    paths: [ci_launch/five_m128_model_candidate_rms32_densefix_20261101_once.json]
+    paths: [ci_launch/five_m128_model_candidate_rms32_observerfix_20261101_once.json]
 permissions:
   contents: read
   actions: read

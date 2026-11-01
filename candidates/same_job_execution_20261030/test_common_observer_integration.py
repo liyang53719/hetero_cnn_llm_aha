@@ -13,8 +13,8 @@ class SourceIntegration(unittest.TestCase):
   with self.assertRaisesRegex(ValueError,r'^fixed source bytes GdnRuntimeRmsNormOwnerV3\.scala$'):m.checked_paths(R,M/'FIXED_SOURCE_OVERLAY_R2.json',original)
  def test_reviewed_candidate159_actual_bytes(self):
   c=R/'candidates/model_candidate_build_20261101';m=module('reviewed_candidate_generation',c/'candidate_generation_gate.py')
-  contract=m.load_contract(c/'GENERATION_CONTRACT.json','cc0b2e5b8bb74fa87d20bf00610c18d7492bd23579c95f2c462e3776e0adbc3e')
-  self.assertEqual(contract['source_overlay_sha256'],'f9a04ed77ccb8cbeb756405dd23bd71580ba041cc46d25d6898b4c6e9e0b8641')
+  contract=m.load_contract(c/'GENERATION_CONTRACT.json','3354827c1c9d2ac167b3b325dc07acbd50ea663ddd384dddfea1b1d037ae3851')
+  self.assertEqual(contract['source_overlay_sha256'],'51621bbffc5ab0dfc97e88d66fee93722e66b6b1ed2a8c2ba7d0f588d9345472')
   original=json.loads((R/'candidates/fresh_original_top_recovery_20261028/SOURCE_AND_TOOLCHAIN_PINS.json').read_text());paths=m.checked_paths(R,c/'MODEL_SOURCE_OVERLAY.json',original,contract)
   self.assertEqual(len(paths),159);self.assertEqual(len({pathlib.Path(p).name for p in paths}),159)
  def test_tampered_selection_rejected(self):

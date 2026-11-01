@@ -37,6 +37,8 @@ class HostBlockTopV4(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=f
   require(!pipelined || (weightReadBeats==16 && s.matrixColumns==256))
   val io=IO(new Bundle {
     val launch=Flipped(Decoupled(new HostCommandLaunchV4));val result=Decoupled(new HostCommandResult)
+    val residentObservation=Output(Valid(new FfnResidentObservation))
+    val rawScoreObservation=Output(Valid(new UnifiedMoeRouterScoreObservationV1))
     val completion=Decoupled(UInt(56.W));val axi=new BlockAxiMaster
     val resetRequired=Output(Bool());val idmaTransfers=Output(UInt(64.W))
     val idmaStreamedWriteBeats=Output(UInt(64.W))
@@ -50,8 +52,12 @@ class HostBlockTopV4(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=f
   val cmd=Module(new HostBlockCommandsV4(s,bf16Weights=pipelined,bf16V=bf16V,bf16Qkv=bf16Qkv,bf16Gdn=bf16Gdn,bf16GdnCore=bf16GdnCore,bf16GdnBlock=bf16GdnBlock,bf16QkNormRope=bf16QkNormRope,bf16AttentionCore=bf16AttentionCore,bf16AttentionBlock=bf16AttentionBlock,enableTransposedDown=enableTransposedDown,enableResidentFfn=enableResidentFfn,numericPolicy=numericPolicy,enableRuntimeQkNorm=true,enableRuntimeRope=true,enableRuntimeKvAppend=true,enableRuntimeGqa=true,enableRuntimeOutput=true));val owner=Module(new QwenOwnerKernel(s,pipelined,burstWrites,overlapSilu,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock,enableTransposedDense=enableTransposedDown,enableTransposedSeed=enableTransposedDown,enableTransposedDown=enableTransposedDown,enableFfnTiles=enableResidentFfn,enableFfnWindow=enableResidentFfn,enableFfnDrain=enableResidentFfn,enableResidentFfn=enableResidentFfn,enablePublic21QkvReduction=enablePublic21QkvReduction,numericPolicy=numericPolicy,enableProductionPackedQk16=enableProductionPackedQk16,enableOrderedVectorQkFold=enableOrderedVectorQkFold,enableUnifiedScalarService=true,enableRuntimeRmsNorm=true,enableRuntimeConv=true,enableRuntimeRawPrep=true,enableRuntimeChunk=true,enableRuntimeGatedNorm=true,enableRuntimeQkNorm=true,enableRuntimeRope=true,enableRuntimeKvAppend=true,enableRuntimeGqa=true,enableRuntimeElementwise=true,enableOrderedRms32=Qwen2NumericPolicy.official(numericPolicy)))
   // Same ONE physical memory port/arbiter and one outstanding DMA transfer.
   // Five actual Chunk leaf users raise logical clients12->17 (5-bit selector).
+  // Fixed on every profile/constructor; reuse the retained command config.
+  io.residentObservation:=owner.io.residentObservation
+  io.residentObservation.bits.profile:=cmd.io.observationProfile
   val hub=Module(new SharedMemoryArbiter(17))
   val moeLoop=Module(new UnifiedMoeRuntimeExpertLoopV4)
+  io.rawScoreObservation:=moeLoop.io.rawScoreObservation
   val moeSigmoid=Module(new UnifiedMoeSharedGateSigmoidOwnerV5)
   val moeMerge=Module(new UnifiedMoePhaseMergeOwnerV5)
   val moeResidual=Module(new UnifiedMoePhaseResidualOwnerV5)

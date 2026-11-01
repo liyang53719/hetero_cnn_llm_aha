@@ -61,4 +61,24 @@ class ContractTests(unittest.TestCase):
   for start,end in [('  private def postHigh(', '  private def initializationGate('),('  private def initializationGate(', '  /** Official VerilogPrep'),('  private def finalBindings(', '  private def bitWidth('),('  private def verifyCanonicalLow(', '  private def retain(')]:
    expected=old[old.index(start):old.index(end)].replace('PortableHostDenseAccMemoryLowering.check(c)','CandidateDenseAccMemoryLoweringV2.check(c)')
    self.assertEqual(expected,new[new.index(start):new.index(end)])
+class ExactDirectionRepairTests(unittest.TestCase):
+ def test_only_direction_serialization_changed(self):
+  raw=(D/'ModelCandidateHostSimulationEmitterV1.scala').read_text()
+  added='    def direction(p:Port):String=p.direction match {\n      case Input=>"input"\n      case Output=>"output"\n    }\n'
+  self.assertEqual(raw.count(added),1)
+  self.assertEqual(raw.count('direction(p)'),3)
+  original=raw.replace(added,'').replace('direction(p)','p.direction.toString').replace('${p.direction.toString}\\t','${p.direction}\\t')
+  self.assertEqual(hashlib.sha256(original.encode()).hexdigest(),'32eccfc51343984f8545dcbde6f9ac039e7a73aab6767f8f77f8421310447814')
+ def test_direction_enum_is_not_case_insensitive_contract(self):
+  raw=(D/'ModelCandidateHostSimulationEmitterV1.scala').read_text()
+  self.assertNotIn('p.direction.toString',raw)
+  self.assertNotIn('expected(0).str.toLowerCase',raw)
+  self.assertIn('expected(0).str==direction(p)',raw)
+  self.assertIn('typedPorts==preconditions("typed_ports")',raw)
+ def test_original_typed_contract_remains_lowercase_exact(self):
+  ports=json.loads((D/'MODEL_CANDIDATE_PRECONDITIONS.json').read_text())['typed_ports']
+  self.assertEqual(len(ports),122)
+  self.assertEqual({p['direction'] for p in ports},{'input','output'})
+  for bad in ('Input','OUTPUT','in','output ','bidirectional'):
+   self.assertNotIn(bad,{p['direction'] for p in ports})
 if __name__=='__main__':unittest.main()

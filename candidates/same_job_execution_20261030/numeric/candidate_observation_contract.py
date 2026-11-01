@@ -1,8 +1,8 @@
 """Required P0 coverage contract; does not execute DUT or reference arithmetic."""
 import hashlib,importlib.util,json,pathlib,types
 HERE=pathlib.Path(__file__).resolve().parent
-CORRECTOR_SHA='74900afa30a38b9aaf6c40516479972b72aedf40da082964dde69e30b80d8705'
-CONTRACT_SHA='e8c6f147b56f248d026d91a8e7564f328aa14a1b5f3e1ca8e73788318cbc2f4e'
+CORRECTOR_SHA='77e948cdf9fa9e923ae3861d3505a93f3ecb44b204b03d56bd19a19a8037bb86'
+CONTRACT_SHA='7b46242a1206f651e8fac111436b6cb515b6a69f981b6f01c1e1f26bd7f51f13'
 def need(v,s):
  if not v:raise ValueError(s)
 def sha(p):

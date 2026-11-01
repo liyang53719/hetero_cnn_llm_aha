@@ -2,7 +2,7 @@
 import hashlib,json,pathlib
 P=pathlib.Path
 SCALA={'helper':'DiagnoseOriginalHostMoePhaseV5.scala','host_top':'HostBlockTopV4.scala','host_commands':'HostBlockCommandsV4.scala','owner_kernel':'QwenOwnerProtocol.scala','qkv_router':'Public21QkvReductionRouter.scala','resident':'FfnResidentCoordinator.scala','bridge':'FfnTileSiluBridge.scala'}
-CONTRACT_SHA='e8c6f147b56f248d026d91a8e7564f328aa14a1b5f3e1ca8e73788318cbc2f4e'
+CONTRACT_SHA='7b46242a1206f651e8fac111436b6cb515b6a69f981b6f01c1e1f26bd7f51f13'
 def need(v,m):
  if not v:raise ValueError(m)
 def sha(p):

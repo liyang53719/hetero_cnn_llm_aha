@@ -1,3 +1,11 @@
+## 2026-11-01 03:00 UTC：真实 ABI 通过；物化依赖历史 pin 修复（SOURCE-ONLY，数值 0/5）
+
+- 新云端执行身份 `25a54e69-5286-4372-8270-048eeff37aa7` 的 startup_abi 已实际 native=0、8.609 秒、strict cleanup/EOF/gzip 完整；六库真实 resolved path/bytes/SHA 等于原 builder。仅启动 ABI 身份资格，未到 DUT 数值。
+- 随后 p0_initialize 因物化 REPO_DEPENDENCIES 的旧参考源码 pin 退出 1。整表219项仅该项漂移：参考源码在更早 ad299 已加入同次官方 gate 只读观测，实际 e015 builder 与当前 executor 的源码字节完全相同，原 baseline 输出/cache 精确比较不变。本次不修改参考算法或 provider 代码，只同步该既有版本 pin 并补它已存在的 router_local_observer 依赖，上层 metadata 锁同步，历史旧表保留于 Git。
+- 继续整链审查：P0/P12/P34 源依赖、原 PROGRAM_PINS、实际生成 P1–P4 的12个 program 文件、numeric connection 与 consumer 硬锁核实；不把固定源审计冒运行时 provider 数值通过。新增受监督五原始 initialize 接线测试，仅复制已验证参考并生成原程序，不执行模型参考 forward、loader、DUT 或硬件构建。
+- 本轮五原始 initialize 已实际执行：P0–P4 全部 native=0、errors=[]、strict cleanup/EOF/gzip 真，总1.680秒；44,262,400字节参考 tensor 与45,449字节 RESULT 全部原字节复制，P1–P4原PROGRAM_PINS逐项相符，P0保持原空programs。未执行参考 forward、provider数学转换、loader、DUT或硬件构建；这是初始化接线资格，不是模型/RTL数值通过。
+- 恢复仍使用新执行身份、原 e015 4096 MAC 的同一 ELF/SV/driver，70权重/五参考逐字节重验保留、不重复下载/重算。旧 unknown owner 5 GiB、DUT 2.5 GiB、consumer 512 MiB及原实际执行预算不变。完整模型数值/最终 RTL 均 **0/5**，FULL 工程预算待实际 DUT 进度证据形成。
+
 ## 2026-11-01 02:50 UTC：workspace loader 格式最小修复（SOURCE-ONLY / INCOMPLETE）
 
 - 云恢复身份 `9a315419-ee75-47c8-9df8-d9a24762df69` 在 startup_abi 原监督下 native=1，严格 cleanup/EOF 完整；未到 DUT。保留原失败，不重构 e015 ELF/SV/driver，不重复下载 70 权重或五份已核软件参考。

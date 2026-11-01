@@ -1933,6 +1933,11 @@
       "sha256": "498ea8a7d296b3264a004d39b4d80cc1061346dc32bcc9f99761e0d3dc50edda"
     },
     {
+      "path": "candidates/same_job_execution_20261030/acceptance_tests/test_original_initialize.py",
+      "bytes": 10712,
+      "sha256": "1c9adc9a2978eeee7afeb29d323b4d46d8983ff8252ca974f05b9fa9290520ee"
+    },
+    {
       "path": "candidates/same_job_execution_20261030/acceptance_tests/test_projection_independent.py",
       "bytes": 4468,
       "sha256": "a915b31f5a9775fc57ad53d2d9025afeac4a7547cdc25b1dd0068c002399c62b"
@@ -2064,8 +2069,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/executor_adaptation.py",
-      "bytes": 10162,
-      "sha256": "cef908ad6f3aecd273868860909f0110da47451d3bbbc2a8b74c1d24cbed194b"
+      "bytes": 10371,
+      "sha256": "bedcb0dc4dca4a7aa4efcc53cde7a2a1225ea220911197f87c16565aa55c0ef6"
     },
     {
       "path": "candidates/same_job_execution_20261030/executor_identity.py",
@@ -2080,7 +2085,7 @@
     {
       "path": "candidates/same_job_execution_20261030/numeric/CONNECTION_OWNED_SOURCE_PINS.json",
       "bytes": 1982,
-      "sha256": "e7c0752290584e7d362111b812ec3adaf9275713b1857ddfb51f11e8845747ac"
+      "sha256": "4d24ac4888cd63b45429e43522f7d1166144a9edf9da16c2dcb9557c98d96b38"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/CONSUMER_MANIFEST.json",
@@ -2650,7 +2655,7 @@
     {
       "path": "candidates/same_job_materialization_20261029/CONNECTION_SOURCE_PINS.json",
       "bytes": 2049,
-      "sha256": "8721f1a18514019c48e7c2ab622986d734b036006ba5617559463f46f45b07b9"
+      "sha256": "ae7eeb33d4811575e78900609c0298f8c6b22ada980099138d8f7991dda758dd"
     },
     {
       "path": "candidates/same_job_materialization_20261029/DEPENDENCIES.json",
@@ -2664,8 +2669,8 @@
     },
     {
       "path": "candidates/same_job_materialization_20261029/REPO_DEPENDENCIES.json",
-      "bytes": 36661,
-      "sha256": "5193bc82461def8c42023c55caba59054ec02b6302cac00589f51349ccd40c2a"
+      "bytes": 36862,
+      "sha256": "354115277691ca23333901d0eab7b3f97d83303e88fa785d9aebc698c813e811"
     },
     {
       "path": "candidates/same_job_materialization_20261029/acquire_profile.py",

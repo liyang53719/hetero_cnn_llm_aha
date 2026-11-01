@@ -27,13 +27,15 @@ ALLOWED_PATHS = frozenset(PREFIX + x for x in (
     'numeric/test_artifact_handoff.py',
     'runtime/retained_materials.py', 'runtime/test_retained_materials.py',
     'test_cloud_budget.py', 'test_cloud_controller.py', 'test_cloud_flow_mock.py',
-    'acceptance_tests/test_cloud_summary.py', 'acceptance_tests/test_lifecycle.py',
+    'acceptance_tests/test_cloud_summary.py', 'acceptance_tests/test_original_initialize.py', 'acceptance_tests/test_lifecycle.py',
     'acceptance_tests/test_split_consumer_cli.py', 'acceptance_tests/test_consumer_memory.py',
     'numeric/test_builder_tool_paths.py', 'numeric/test_make_recipe_grammar.py',
     'numeric/ACTUAL_MAKE_CHECKER_REVIEW.json', 'numeric/test_workspace_loader.py',
     'numeric/test_workspace_abi_adapter.py', 'numeric/test_owned_abi_environment.py',
     'test_common_observer_integration.py', 'WORKSPACE_EXECUTOR_ADAPTATION.zh.md',
-)) | {'plans/CURRENT_HARDWARE_FIVE_BLOCK_PARALLEL_20261026_ZH.md'}
+)) | {'plans/CURRENT_HARDWARE_FIVE_BLOCK_PARALLEL_20261026_ZH.md',
+       'candidates/same_job_materialization_20261029/REPO_DEPENDENCIES.json',
+       'candidates/same_job_materialization_20261029/CONNECTION_SOURCE_PINS.json'}
 BUILDER_FIELDS = {'run_id', 'artifact_name', 'source_commit', 'launch_commit',
                   'launch_manifest_path', 'launch_manifest_blob_sha'}
 

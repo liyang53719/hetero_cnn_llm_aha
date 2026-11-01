@@ -1,3 +1,11 @@
+## 2026-11-01 02:35 UTC：云端导入故障恢复（源码候选，尚未新执行）
+
+- 原 executor `5214a22` / builder `e01529` 实际云端任务已完成 70 个权重（3,531,306,272 字节）和五块完整 M128 官方软件参考；五参考基线/观测输出严格相等，未运行硬件。控制器随后因 `numeric_tail` 的 sibling `live_budget` 导入路径缺失退出 1；不是数值失败、资源超时或构建失败。
+- 最小修复仅受控、逐源码 hash 核验的 numeric sibling 导入，并用干净 subprocess 的真实模块导入回归，避免 mock 掩盖接线错误。
+- 恢复使用新 executor 身份及独立预算输入。原 70 权重和五参考全部按原严格 native/cleanup/EOF/argv、冻结配置/来源和实际文件 hash 重验；原 receipt 仅作为数据/软件参考来源，不冒新安装、新参考执行或 DUT PASS。原 runtime / archives 仍重新执行当前身份下验证，旧 owner lease 不迁移。
+- 同一 4096 MAC 硬件、原 ELF / SV / driver、数值参考算法和 PyTorch 路由不改；不重新 build、不重复下载本次已核权重。保留失败任务完整证据；所有权重、参考、NPZ、原始日志仍不上传。
+- 五块模型完整数值及最终 RTL 均 **0/5**。每块 300 秒仍为有界诊断；FULL 工程预算待实际 DUT 速率/内存结果形成，不表示用户尚未授权完整验收。旧 unknown owner 5 GiB、DUT 2.5 GiB、consumer 512 MiB 与原磁盘/阶段门不扩。
+
 ## 2026-11-01：实际构建包接续云端执行（host-only 适配，非数值通过）
 
 实际 build-only run 41257805047 成功，七件 artifact 13064009898 已按授权下载、逐字节验证。原 e01529 硬件/driver/ELF/SV 不重建不改写；执行端采用独立真实源码身份与受审完整 catalog 差异。修复 Make recipe 双空格误拒，并将官方精确恢复的原 builder loader/六库置于 workspace，仍要求静态与真实启动 resolved 全部原 SHA；不使用当前系统不匹配库或放宽 ABI。尚未运行 loader/DUT，源码测试与静态字节匹配不能当数值通过。

@@ -23,21 +23,23 @@ def admit(b):
  adaptation_fields={'executor_adaptation','workspace_loader'}
  adapted=bool(adaptation_fields & set(b))
  need(not adapted or adaptation_fields<=set(b),'paired executor adaptation and workspace loader required')
- approval_extra={k+'_sha256'for k in adaptation_fields}if adapted else set()
+ optional_fields=({'retained_materials'}if 'retained_materials'in b else set())
+ extra_fields=(adaptation_fields if adapted else set())|optional_fields
+ approval_extra={k+'_sha256'for k in extra_fields}
  approval_path=pin(b['execution_approval'],65536);approval=json.loads(approval_path.read_text())
  need(set(approval)=={'schema','approved','authority','purpose','source_commit','budget_sha256','artifact_manifest_sha256','execution_id','host_identity_sha256','review_evidence'}|approval_extra,'exact independent execution approval')
  need(approval['schema']=='OPERATOR_REVIEWED_CLOUD_INVOCATION_V1'and approval['approved']is True and approval['authority']=='USER_AUTHORIZED_OPERATOR_REVIEW','independent review scope')
  need(approval['source_commit']==b['identity']['source_commit']and approval['execution_id']==b['identity']['execution_id']and approval['host_identity_sha256']==b['identity']['host_identity_sha256'],'approved exact execution/source/host')
  need(approval['artifact_manifest_sha256']==b['artifact_manifest']['sha256'],'approved actual build artifact')
  pin(approval['review_evidence'],2<<20)
- if adapted:
-  for k in adaptation_fields:
+ if extra_fields:
+  for k in extra_fields:
    pin(b[k],2<<20);need(approval[k+'_sha256']==b[k]['sha256'],'approved exact '+k)
  p=pin(b['cloud_budget'],65536);need(b['cloud_budget']['sha256']==approval['budget_sha256'],'externally approved exact cloud budget')
  d=json.loads(p.read_text())
- need(set(d)=={'schema','ready','source_commit','host_identity','artifact_manifest_sha256','basis','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','execution_mode','full_block_budget','reserved_other_owner_bytes','consumer_address_space_bytes','resource_scope','stage_resources','runtime_mode','archive_mode','runtime_reuse_manifest'}|(adaptation_fields if adapted else set()),'exact cloud lifecycle admission')
- if adapted:
-  for k in adaptation_fields:need(d[k]==b[k],'reviewed adaptation input '+k)
+ need(set(d)=={'schema','ready','source_commit','host_identity','artifact_manifest_sha256','basis','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','execution_mode','full_block_budget','reserved_other_owner_bytes','consumer_address_space_bytes','resource_scope','stage_resources','runtime_mode','archive_mode','runtime_reuse_manifest'}|extra_fields,'exact cloud lifecycle admission')
+ if extra_fields:
+  for k in extra_fields:need(d[k]==b[k],'reviewed adaptation input '+k)
  need(d['schema']=='FIVE_M128_CLOUD_LIFECYCLE_BUDGET_V1'and d['ready']is True,'cloud admission ready')
  need(d['source_commit']==b['identity']['source_commit'],'same frozen cloud source')
  host=pin(d['host_identity'],65536);host_observation(json.loads(host.read_text()),b['identity']);need(d['host_identity']['sha256']==b['identity']['host_identity_sha256'],'exact independently reviewed actual host identity')
@@ -73,7 +75,7 @@ def admit(b):
   need(values['rss_bytes']<=rss_cap and values['as_bytes']<=as_cap,'no expanded role resource ceiling')
  need(type(d['reserved_other_owner_bytes'])is int and d['reserved_other_owner_bytes']==5<<30,'preserve unknown owner5GiB reservation')
  result={k:d[k]for k in('runtime_mode','archive_mode','runtime_reuse_manifest','stage_resources','consumer_address_space_bytes','reserved_other_owner_bytes','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','execution_mode','full_block_budget')}
- if adapted:result.update({k:d[k]for k in adaptation_fields})
+ if extra_fields:result.update({k:d[k]for k in extra_fields})
  return result
 
 

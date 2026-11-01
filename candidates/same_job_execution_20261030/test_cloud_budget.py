@@ -16,6 +16,14 @@ class Budget(unittest.TestCase):
   p=self.d/n;p.write_text(json.dumps(v));return dict(path=str(p),bytes=p.stat().st_size,sha256=hashlib.sha256(p.read_bytes()).hexdigest())
  def reapprove(self):
   self.b['cloud_budget']=self.put('budget',self.doc);self.ap['budget_sha256']=self.b['cloud_budget']['sha256'];self.b['execution_approval']=self.put('approval',self.ap)
+ def test_retained_materials_explicit_approved_pin(self):
+  row=self.put('retained',{'synthetic':True});self.b['retained_materials']=row;self.doc['retained_materials']=row;self.ap['retained_materials_sha256']=row['sha256'];self.reapprove()
+  self.assertEqual(m.admit(self.b)['retained_materials'],row)
+  self.ap['retained_materials_sha256']='0'*64;self.reapprove()
+  with self.assertRaisesRegex(ValueError,'approved exact retained_materials'):m.admit(self.b)
+ def test_retained_old_approval_cannot_authorize(self):
+  self.b['retained_materials']=self.put('retained',{'synthetic':True})
+  with self.assertRaisesRegex(ValueError,'exact independent execution approval'):m.admit(self.b)
  def adapt(self):
   for k in ('executor_adaptation','workspace_loader'):
    self.b[k]=self.put(k,{'synthetic':k});self.doc[k]=self.b[k];self.ap[k+'_sha256']=self.b[k]['sha256']

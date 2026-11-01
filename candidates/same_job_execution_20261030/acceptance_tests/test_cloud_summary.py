@@ -62,6 +62,15 @@ class Tests(unittest.TestCase):
    binding=dict(source_pins=s.pin(manifest),pins=pins)
    with patch.object(s,'D',d),patch.object(s,'__file__',str(own)):
     self.assertEqual(s.source_guard(binding),s.sha(manifest))
+    binding['retained_materials']={'path':'synthetic-only','bytes':1,'sha256':'0'*64}
+    with self.assertRaises(ValueError):s.source_guard(binding)
+    helper=d/'runtime/retained_materials.py';helper.parent.mkdir();helper.write_text('synthetic retained verifier')
+    files.append(dict(path=str(helper.relative_to(root)),bytes=helper.stat().st_size,sha256=s.sha(helper)));manifest.write_text(json.dumps(dict(schema='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1',files=files)));binding['source_pins']=s.pin(manifest)
+    with self.assertRaises(ValueError):s.source_guard(binding)
+    pins[str(helper)]=s.sha(helper);self.assertEqual(s.source_guard(binding),s.sha(manifest))
+    helper.write_text('drift')
+    with self.assertRaises(ValueError):s.source_guard(binding)
+    del binding['retained_materials'];helper.write_text('synthetic retained verifier')
     (d/required[0]).write_text('drift')
     with self.assertRaises(ValueError):s.source_guard(binding)
  def test_approval_mismatch_refused(self):
@@ -98,6 +107,48 @@ class Tests(unittest.TestCase):
    job,bp=self.fixture(pathlib.Path(t));(job/'FLOW_RESULT.json').unlink();r=job/'materials/runs/qwen2/RESULT.json';r.parent.mkdir(parents=True);r.write_text(json.dumps(dict(native_exit=None,errors=['ValueError: sampled observed aggregate RSS cap'],cleanup_proof={},log_capture={})))
    result=self.project(job,bp);stage=next(x for x in result['stages']if x['name']=='qwen2');self.assertEqual(stage['resource_reason_codes'],['SAMPLED_RSS_CAP']);self.assertEqual(stage['status'],'RESOURCE_LIMIT_OBSERVED');self.assertFalse(result['numerical_pass'])
    r.write_text('{invalid');self.assertEqual(self.project(job,bp)['status'],'UNAVAILABLE')
+ def test_reference_actual_fixed_paths_only(self):
+  with tempfile.TemporaryDirectory()as t:
+   job,bp=self.fixture(pathlib.Path(t));(job/'FLOW_RESULT.json').unlink()
+   for i in range(5):
+    p=job/f'materials/references/profile{i}/actual/RESULT.json';p.parent.mkdir(parents=True);p.write_text(json.dumps(dict(native_exit=0,errors=[],cleanup_proof={},log_capture={},elapsed_seconds=i+1)))
+   for rel in ('runs/reference0/RESULT.json','materials/references/profile5/actual/RESULT.json','materials/references/profile0/not_actual/RESULT.json'):
+    p=job/rel;p.parent.mkdir(parents=True,exist_ok=True);p.write_text('not valid JSON and must not be read')
+   r=self.project(job,bp);self.assertEqual(r['status'],'INCOMPLETE_EXECUTION');rows=[x for x in r['stages']if x['name'].startswith('reference')];self.assertEqual([x['name']for x in rows],[f'reference{i}'for i in range(5)]);self.assertEqual([x['elapsed_seconds']for x in rows],[1,2,3,4,5]);self.assertFalse(r['numerical_pass'])
+ def retained_projection(self,job,bp,reject=False,budget_mismatch=False,wrong_scope=False):
+  original=s.load;calls=[]
+  def loader(name,path):
+   if name=='summary_retained_materials':
+    def verify(pin,b):
+     calls.append((pin,b))
+     if reject:raise ValueError('synthetic retained input evidence mismatch')
+     return dict(payload={},weights={},references={},roots=[],scope='WRONG'if wrong_scope else s.RETAINED_SCOPE)
+    return types.SimpleNamespace(verify=verify)
+   m=original(name,path)
+   if name=='summary_cloud_handoff':m.verify=lambda *args:dict(source_pins_sha256='f'*64)
+   if name=='summary_cloud_budget':m.admit=lambda b:dict(execution_mode=b['execution_mode'],full_block_budget=b.get('full_block_budget'),consumer_address_space_bytes=512<<20,dut_address_space_bytes=2<<30,retained_materials=None if budget_mismatch else b['retained_materials'])
+   return m
+  with patch.object(s,'source_guard',return_value='f'*64),patch.object(s,'load',side_effect=loader):r=s.project(job,bp,s.sha(bp))
+  return r,calls
+ def retained_fixture(self,root,complete=False):
+  job,bp=self.fixture(root);b=json.loads(bp.read_text());rp=root/'retained.json';rp.write_text('{}');b['retained_materials']=s.pin(rp);bp.write_text(json.dumps(b));fp=job/'FLOW_RESULT.json'
+  if complete:
+   f=json.loads(fp.read_text());f.update(execution_binding=s.pin(bp),retained_materials=b['retained_materials']);fp.write_text(json.dumps(f))
+  else:fp.unlink()
+  return job,bp,b
+ def test_retained_partial_input_scope_and_no_live_owner(self):
+  with tempfile.TemporaryDirectory()as t:
+   job,bp,b=self.retained_fixture(pathlib.Path(t))
+   with patch('os.getpid',side_effect=AssertionError('old owner must not be needed')):r,calls=self.retained_projection(job,bp)
+   self.assertEqual(r['status'],'INCOMPLETE_EXECUTION');self.assertFalse(r['numerical_pass']);self.assertEqual(r['retained_materials_sha256'],b['retained_materials']['sha256']);self.assertEqual(r['retained_materials_scope'],s.RETAINED_SCOPE);self.assertEqual(calls[0][0],b['retained_materials']);self.assertLessEqual(len(json.dumps(r).encode()),65536)
+ def test_retained_reverification_budget_scope_rejected(self):
+  for kwargs in (dict(reject=True),dict(budget_mismatch=True),dict(wrong_scope=True)):
+   with tempfile.TemporaryDirectory()as t:
+    job,bp,b=self.retained_fixture(pathlib.Path(t));r,_=self.retained_projection(job,bp,**kwargs);self.assertEqual(r['status'],'UNAVAILABLE');self.assertFalse(r['numerical_pass'])
+ def test_retained_full_original_receipts_and_flow_pin_drift(self):
+  with tempfile.TemporaryDirectory()as t:
+   job,bp,b=self.retained_fixture(pathlib.Path(t),complete=True);r,_=self.retained_projection(job,bp);self.assertEqual(r['status'],'VERIFIED_REAGGREGATED');self.assertEqual(len(r['profiles']),5)
+   fp=job/'FLOW_RESULT.json';f=json.loads(fp.read_text());f['retained_materials']['sha256']='0'*64;fp.write_text(json.dumps(f));r,_=self.retained_projection(job,bp);self.assertEqual(r['status'],'UNAVAILABLE');self.assertFalse(r['numerical_pass'])
  def test_missing_flow_requires_all_input_gates(self):
   with tempfile.TemporaryDirectory()as t:
    job,bp=self.fixture(pathlib.Path(t));(job/'FLOW_RESULT.json').unlink()

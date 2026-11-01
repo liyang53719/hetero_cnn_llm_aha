@@ -50,6 +50,20 @@ class Tests(unittest.TestCase):
   with self.assertRaises(ValueError):flow.upfront_disk_admission(dict(snap,bytes=0))
   full=dict(snap,bytes=flow.TREE,free_bytes=(8<<30)-1)
   with self.assertRaises(ValueError):flow.upfront_disk_admission(full)
+ def test_real_numeric_definition_import_in_clean_subprocess(self):
+  import subprocess,sys
+  code="""import pathlib,importlib.util,sys
+E=pathlib.Path(sys.argv[1]);s=importlib.util.spec_from_file_location('flow_under_test',E/'controller/cloud_flow.py');f=importlib.util.module_from_spec(s);s.loader.exec_module(f)
+pins={str(p):f.sha(p)for p in(E/'numeric').glob('*.py')};before=list(sys.path)
+m=f.numeric_module('numeric_definition_only',E/'numeric/numeric_tail.py',pins)
+if not callable(m.run) or sys.path!=before:raise RuntimeError('definition/path restoration failed')
+print('REAL_DEFINITION_IMPORT_ONLY_OK')
+"""
+  result=subprocess.run([sys.executable,'-B','-c',code,str(D)],capture_output=True,text=True,timeout=30,check=True)
+  self.assertEqual(result.stdout.strip(),'REAL_DEFINITION_IMPORT_ONLY_OK')
+ def test_numeric_sibling_pin_fail_before_import(self):
+  with patch.object(flow,'mod',side_effect=AssertionError('must not import')):
+   with self.assertRaisesRegex(ValueError,'numeric sibling source pin'):flow.numeric_module('no_import',D/'numeric/numeric_tail.py',{})
  def test_actual_budget_none_gate_precedes_process_and_work(self):
   pins={str(D/n):flow.sha(D/n) for n in ('cloud_budget.py','executor_identity.py','execution_mode.py')}
   with patch.object(flow.subprocess,'check_output',side_effect=AssertionError('no git yet')),patch.object(pathlib.Path,'mkdir',side_effect=AssertionError('no work')):

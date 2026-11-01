@@ -7,7 +7,8 @@ class Tests(unittest.TestCase):
  def test_fresh_flow_orders_stages_without_any_build(self):self.exercise(False)
  def test_reuse_flow_orders_stages_without_any_build(self):self.exercise(True)
  def test_adapted_reuse_flow_transmits_distinct_sources(self):self.exercise(True,True)
- def exercise(self,reuse,adapted=False):
+ def test_retained_skips_acquisition_reference_preserves_fresh_runtime(self):self.exercise(True,True,True)
+ def exercise(self,reuse,adapted=False,retained=False):
   with tempfile.TemporaryDirectory()as t:
    base=pathlib.Path(t);repo=base/'repo';package=repo/'candidates/same_job_execution_20261030';controller=package/'controller';runtime=package/'runtime';numeric=package/'numeric';sup=repo/'supervisor';artifact=base/'artifact';job=base/'job'
    for p in(controller,runtime,numeric,sup,artifact):p.mkdir(parents=True)
@@ -24,6 +25,8 @@ class Tests(unittest.TestCase):
     for k in ('executor_adaptation','workspace_loader'):b[k]=f.pin(artifact/'frozen_artifact.json')
    imported=base/'readonly-runtime';imported.mkdir();cache=base/'readonly-cache';cache.mkdir();arc=cache/'synthetic.whl';arc.write_bytes(b'')
    inventory={'entries':{key:{'import_root':str(imported)}for key in ('qwen2','qwen35_08b','qwen35_35b')},'archives':[f.pin(arc)]}
+   retained_data=dict(payload=str(cache),weights=[{'retained':True}],references={str(i):{'old_receipt_identity':'original'}for i in range(5)},roots=[str(cache)],scope='VERIFIED_RETAINED_INPUTS_NOT_CURRENT_NATIVE_PASS')
+   if retained:b['retained_materials']=f.pin(artifact/'frozen_artifact.json')
    owner_module=str(runtime/('runtime_reuse.py'if reuse else'owner_fresh.py'))
    qualified=dict(status='INCOMPLETE',numerical_pass=False)
    def execute(argv,runroot,*args,**kw):
@@ -52,6 +55,8 @@ class Tests(unittest.TestCase):
     root=pathlib.Path(binding['owner_root']);root.mkdir();p=root/'owner.json';p.write_text('{}');return None,None,p
    def reference(binding,stage):seen.append('reference');self.assertEqual(binding['identity'],identity);self.assertEqual(binding['owner_module'],owner_module);return {str(i):{}for i in range(5)}
    def tail(binding,*args):
+    if retained:
+     self.assertEqual(binding['weights'],retained_data['weights']);self.assertEqual(binding['references'],retained_data['references']);self.assertEqual(binding['retained_materials'],b['retained_materials'])
     seen.append('tail');self.assertEqual(binding['owner_module'],owner_module);self.assertEqual(binding['identity'],identity);self.assertEqual(binding['run_id'],42);self.assertNotIn('build_result',binding);self.assertEqual(binding['job_budget_seconds'],43200)
     if adapted:
      self.assertEqual(binding['source_commit'],'e'*40);self.assertEqual(binding['executor_identity']['source_commit'],'a'*40)
@@ -67,9 +72,9 @@ class Tests(unittest.TestCase):
     r=realpin(p)
     if pathlib.Path(p).suffix=='.bin':r['bytes']=3531306272 if pathlib.Path(p).stem=='0' else 0
     return r
-   with patch.object(f,'D',controller),patch.object(f,'admitted_inputs',return_value=({},dict(workspace_loader_verified={'root':str(artifact)})if adapted else {})),patch.object(f,'execution_admission',return_value=dict(mode='BOUNDED_CALIBRATION',profile_seconds=q['calibration_seconds'])),patch.object(f.profile_policy,'require_source_pin'),patch.object(f.profile_policy,'require_cpu'),patch.object(f.subprocess,'check_output',return_value='a'*40),patch.object(f,'mod',side_effect=lambda name,path:modules[name]),patch.object(f,'pin',side_effect=synthetic_pin),patch.dict(sys.modules,{'supervise_multiroot':types.SimpleNamespace(execute=execute)}):
+   with patch.object(f,'D',controller),patch.object(f,'admitted_inputs',return_value=({},dict(**({'workspace_loader_verified':{'root':str(artifact)}}if adapted else {}),**({'retained_materials_verified':retained_data}if retained else {})))),patch.object(f,'execution_admission',return_value=dict(mode='BOUNDED_CALIBRATION',profile_seconds=q['calibration_seconds'])),patch.object(f.profile_policy,'require_source_pin'),patch.object(f.profile_policy,'require_cpu'),patch.object(f.subprocess,'check_output',return_value='a'*40),patch.object(f,'mod',side_effect=lambda name,path:modules[name]),patch.object(f,'pin',side_effect=synthetic_pin),patch.dict(sys.modules,{'supervise_multiroot':types.SimpleNamespace(execute=execute)}):
     # Disk only is mocked: phase resource admission calls above remain checked.
     import shutil
     with patch.object(shutil,'disk_usage',return_value=types.SimpleNamespace(free=100<<30)):code=f.run(b,base/'binding.json',f.sha(base/'binding.json'))
-   self.assertEqual(code,2);self.assertEqual(seen,['archives','reuse'if reuse else'install','weights','reference','tail']);result=json.loads((job/'FLOW_RESULT.json').read_text());self.assertEqual(result['identity'],identity);self.assertEqual(result['artifact_identity'],builder);self.assertFalse(result['qualification']['numerical_pass'])
+   self.assertEqual(code,2);self.assertEqual(seen,['archives','reuse','tail']if retained else ['archives','reuse'if reuse else'install','weights','reference','tail']);result=json.loads((job/'FLOW_RESULT.json').read_text());self.assertEqual(result['identity'],identity);self.assertEqual(result['artifact_identity'],builder);self.assertFalse(result['qualification']['numerical_pass'])
 if __name__=='__main__':unittest.main()

@@ -33,10 +33,13 @@ def source_guard(binding):
   need(files.get(str(p))==sha(p)and binding['pins'].get(str(p))==sha(p),'required helper in reviewed closure')
  if binding.get('executor_adaptation') is not None:
   p=D/'executor_adaptation.py';need(files.get(str(p))==sha(p)and binding['pins'].get(str(p))==sha(p),'reviewed executor adaptation source')
+ if binding.get('retained_materials') is not None:
+  p=D/'runtime/retained_materials.py';need(str(p)in files and files.get(str(p))==sha(p)and binding['pins'].get(str(p))==sha(p),'reviewed retained materials source')
  return binding['source_pins']['sha256']
 
 # Only fixed actual supervisor result locations; never glob arbitrary files.
-STAGE_PATHS=tuple([(n,'runs/'+n+'/RESULT.json')for n in ('archives','weights',*('reference'+str(i)for i in range(5)))]+[(n,'materials/runs/'+n+'/RESULT.json')for n in ('qwen2','qwen35_08b','qwen35_35b','bind')]+[(n,'materials/numeric/runs/'+n+'/RESULT.json')for n in ('startup_abi','p0_p0_rope','p0_p0_provider','p0_p0_transport','p1_p12_provider','p2_p12_provider','p3_p34_provider','p4_p34_provider',*(f'p{i}_{phase}'for i in range(5)for phase in ('initialize','connect','dut')))])
+STAGE_PATHS=tuple([(n,'runs/'+n+'/RESULT.json')for n in ('archives','weights')]+[(f'reference{i}',f'materials/references/profile{i}/actual/RESULT.json')for i in range(5)]+[(n,'materials/runs/'+n+'/RESULT.json')for n in ('qwen2','qwen35_08b','qwen35_35b','bind')]+[(n,'materials/numeric/runs/'+n+'/RESULT.json')for n in ('startup_abi','p0_p0_rope','p0_p0_provider','p0_p0_transport','p1_p12_provider','p2_p12_provider','p3_p34_provider','p4_p34_provider',*(f'p{i}_{phase}'for i in range(5)for phase in ('initialize','connect','dut')))])
+RETAINED_SCOPE='REVALIDATED_DATA_AND_SOFTWARE_REFERENCES_NOT_RUNTIME_OR_DUT'
 RESOURCE_ERRORS={'ValueError: sampled observed aggregate RSS cap':'SAMPLED_RSS_CAP','ValueError: sampled observed aggregate CPU cap':'SAMPLED_CPU_CAP','ValueError: sampled disk reserve':'SAMPLED_DISK_RESERVE','ValueError: sampled aggregate writable-root cap':'SAMPLED_WRITABLE_ROOT_CAP','ValueError: sampled stage output tree cap':'SAMPLED_STAGE_TREE_CAP','ValueError: file cap':'FILE_CAP','ValueError: sampled log cap':'SAMPLED_LOG_CAP','ValueError: locked memory gate':'LOCKED_MEMORY_GATE','ValueError: locked disk gate':'LOCKED_DISK_GATE','ValueError: wall cap':'WALL_CAP'}
 
 def partial_stages(job):
@@ -83,7 +86,14 @@ def project(job,binding_path,binding_sha):
    handoff_result=handoff.verify(hp,b['builder_handoff']['sha256'],manifest,b['artifact_manifest']['sha256'],frozen,executor,executor_adaptation=adaptation)
   cloud_budget=load('summary_cloud_budget',D/'cloud_budget.py');cloud_admission=cloud_budget.admit(b)
   need(cloud_admission.get('executor_adaptation')==adaptation and cloud_admission.get('workspace_loader')==loader,'approved adapter and loader identities')
+  retained=b.get('retained_materials')
+  need(cloud_admission.get('retained_materials')==retained,'approved retained materials identity')
+  if retained is not None:
+   checked(retained)
+   retained_result=load('summary_retained_materials',D/'runtime/retained_materials.py').verify(retained,b)
+   need(type(retained_result)is dict and retained_result.get('scope')==RETAINED_SCOPE,'retained materials input-only scope')
   source_identity=dict(builder_source_commit=builder['source_commit'],executor_source_commit=executor['source_commit'],executor_adaptation_sha256=adaptation['sha256']if adaptation is not None else None,workspace_loader_sha256=loader['sha256']if loader is not None else None)
+  if retained is not None:source_identity.update(retained_materials_sha256=retained['sha256'],retained_materials_scope=RETAINED_SCOPE)
   mode=load('summary_cloud_mode',D/'execution_mode.py');admission=mode.admit(b)
   need(cloud_admission['execution_mode']==admission['mode']and cloud_admission['full_block_budget']==b.get('full_block_budget'),'approved cloud mode and full budget')
   flow_path=job/'FLOW_RESULT.json'
@@ -93,6 +103,7 @@ def project(job,binding_path,binding_sha):
    need(len(json.dumps(result).encode())<=65536,'bounded incomplete summary');return result
   flow=read(flow_path);root=job/'materials/numeric';numeric_path=root/'RESULT.json';numeric=read(numeric_path)
   for key,value in [('identity',executor),('execution_approval',b['execution_approval']),('artifact_identity',builder),('execution_binding',pin(bp)),('builder_handoff',b['builder_handoff']),('artifact_manifest',b['artifact_manifest']),('numeric_result',pin(numeric_path))]:need(flow.get(key)==value,'fixed flow binding '+key)
+  need(flow.get('retained_materials')==retained,'flow retained materials pin')
   if adaptation is not None:need(flow.get('executor_adaptation')==adaptation and flow.get('workspace_loader')==loader,'flow adapter and loader pins')
   need(flow.get('hardware_definitions')==1 and flow.get('profiles')==list(range(5)),'one fixed five profile hardware')
   need(flow.get('execution_mode')==admission['mode']and numeric.get('execution_mode')==admission['mode']and numeric.get('full_budget_sha256')==admission['reviewed_budget_sha256'],'mode budget binding')

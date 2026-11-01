@@ -17,6 +17,19 @@ def save(p,v):
 def mod(name,path):
  s=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
 
+def numeric_module(name,path,pins):
+ # Only the complete hash-checked sibling directory is added. Reject cached
+ # same-name foreign modules; do not silently reuse another checkout's code.
+ directory=P(path).parent
+ for sibling in directory.glob('*.py'):
+  need(pins.get(str(sibling))==sha(sibling),'numeric sibling source pin')
+  cached=sys.modules.get(sibling.stem)
+  if cached is not None:need(P(getattr(cached,'__file__','')).resolve()==sibling.resolve(),'foreign cached numeric sibling')
+ before=list(sys.path)
+ try:
+  sys.path.insert(0,str(directory));return mod(name,path)
+ finally:sys.path[:]=before
+
 def execution_admission(b):
  path=D.parent/'execution_mode.py'
  need(b['pins'].get(str(path))==sha(path),'execution mode source pin')
@@ -63,7 +76,7 @@ def admitted_inputs(b):
  budget_module.verify_host(budget_document['host_identity'],b['identity'])
  for k in ('runtime_mode','archive_mode','runtime_reuse_manifest','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','reserved_other_owner_bytes','consumer_address_space_bytes','stage_resources','execution_mode','full_block_budget'):
   need(b.get(k)==budget[k],'binding must exactly preserve reviewed cloud budget '+k)
- for k in ('executor_adaptation','workspace_loader'):
+ for k in ('executor_adaptation','workspace_loader','retained_materials'):
   if k in budget or k in b:need(k in budget and b.get(k)==budget[k],'binding reviewed '+k)
  identity=b['identity'];need(b.get('executor_identity')==identity,'one executor identity')
  mod('actual_cloud_identity',D.parent/'executor_identity.py').verify_current(identity)
@@ -88,6 +101,10 @@ def admitted_inputs(b):
   imported=dict(imported,workspace_loader_verified=verified)
  else:need(imported['source_pins_sha256']==sha(sourcepins),'imported build reviewed source closure')
  need(subprocess.check_output(['git','-C',b['repo'],'rev-parse','HEAD'],text=True).strip()==identity['source_commit'],'actual executor source commit')
+ if 'retained_materials'in b:
+  retained_path=D.parent/'runtime/retained_materials.py';need(b['pins'].get(str(retained_path))==sha(retained_path),'retained materials verifier source pin')
+  retained=mod('actual_retained_materials',retained_path).verify(b['retained_materials'],b)
+  imported=dict(imported,retained_materials_verified=retained)
  return budget,imported
 
 def upfront_disk_admission(snapshot):
@@ -116,9 +133,11 @@ def run(b,binding_path,binding_sha):
  need(sys.version_info[:2]==(3,12)and platform.machine()=='x86_64','original Python ABI before downloads or build');profile_policy.require_cpu(b,P('/proc/cpuinfo').read_text().split())
  repo=P(b['repo']).resolve();need(subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()==identity['source_commit'],'actual checked-out source')
  job=P(b['job_root']);need(not job.exists()and job.is_absolute()and not any(p.is_symlink()for p in(job,*job.parents)),'fresh canonical job root')
- roots=list(dict.fromkeys([str(job),str(repo),*[str(P(b[k]['path']).parent)for k in ('artifact_manifest','builder_handoff','executor_identity_pin','cloud_budget','execution_approval','executor_adaptation','workspace_loader')if k in b]]));pins=dict(b['pins']);pins[str(binding_path)]=binding_sha
+ roots=list(dict.fromkeys([str(job),str(repo),*[str(P(b[k]['path']).parent)for k in ('artifact_manifest','builder_handoff','executor_identity_pin','cloud_budget','execution_approval','executor_adaptation','workspace_loader','retained_materials')if k in b]]));pins=dict(b['pins']);pins[str(binding_path)]=binding_sha
  if 'workspace_loader'in b:
   need('workspace_loader_verified'in imported,'validated workspace loader root before watch admission');roots.append(imported['workspace_loader_verified']['root']);roots=list(dict.fromkeys(roots))
+ if 'retained_materials'in b:
+  need('retained_materials_verified'in imported,'retained material inputs verified before watch');roots.extend(imported['retained_materials_verified']['roots']);roots=list(dict.fromkeys(roots))
  for p,h in pins.items():need(sha(p)==h,'admitted complete source/tool drift')
  runtime=P(b['runtime_package']);numeric=P(b['numeric_package']);py=b['python'];supervisor_dir=b['supervisor_dir'];lock=str(job/'exclusive.lock')
  if b['runtime_mode']=='IMPORT_EXISTING_PINNED_RUNTIME':
@@ -168,27 +187,30 @@ def run(b,binding_path,binding_sha):
  ok(stage('archives',[py,'-B',archive_tool,'--binding',ab,'--binding-sha256',sha(ab)],q['archives'],.25,{str(ab):sha(ab)},archive_network))
  owner_root=job/'materials';ib=job/'bindings/INSTALL.json';archives_rows=json.loads((archives/'ARCHIVES.json').read_text())['archives'];ipins=dict(pins);ipins.update({r['path']:r['sha256']for r in archives_rows})
  install_binding=dict(execution_context='CLOUD_EXECUTOR_V1',reserved_other_owner_bytes=b['reserved_other_owner_bytes'],stage_resources=b['stage_resources'],job_budget_seconds=limit,execution_policy=execution_policy,schema='FRESH_JOB_RUNTIME_CONTROLLER_V1',identity=identity,repo=str(repo),owner_root=str(owner_root),python=py,helper=b['shared_runtime_helper'],supervisor_dir=supervisor_dir,lock=lock,owned_roots=roots,pins=ipins,archives=archives_rows,job_started_monotonic=started,install_wall_seconds=q['install'],metadata_wall_seconds=q['owner_bind'],early_build_seconds=0,remaining_job_reservation_seconds=q['weights']+30+5*(q['reference']+30)+tail_reserved)
- install_binding.update({k:b[k]for k in ('executor_adaptation','workspace_loader')if k in b})
+ install_binding.update({k:b[k]for k in ('executor_adaptation','workspace_loader','retained_materials')if k in b})
  if b['runtime_mode']=='IMPORT_EXISTING_PINNED_RUNTIME':
   install_binding.update(job_root=str(job),runtime_reuse_manifest=b['runtime_reuse_manifest'],source_dir=str(runtime/'source'),artifact_manifest=b['artifact_manifest'],cloud_budget=b['cloud_budget'],execution_approval=b['execution_approval'],archive_binding=pin(ab),archive_validation_receipt=pin(job/'runs/archives/RESULT.json'),archive_output_manifest=pin(archives/'ARCHIVES.json'))
   installer=mod('actual_runtime_revalidator',runtime/'runtime_reuse.py');owner_module=runtime/'runtime_reuse.py'
  else:
   installer=mod('actual_fresh_installer',runtime/'install_job.py');owner_module=runtime/'owner_fresh.py'
  save(ib,install_binding);_,_,owner=installer.run(json.loads(ib.read_text()),ib,sha(ib));owner_pin=pin(owner)
- payload=job/'runs/weights/output';acq=repo/'candidates/five_profile_acquisition_resume_20261028/acquire_resumable.py'
- ok(stage('weights',[py,'-B',acq,'--output',payload,'--execute'],q['weights'],.5,network=True))
- summary=json.loads((payload/'SUMMARY.json').read_text());need(summary['tensors']==70 and summary['tensor_bytes']==3_531_306_272,'one full70 tensor acquisition')
- weights=[]
- for receipt in sorted(payload.glob('*/*.receipt.json')):
-  r=json.loads(receipt.read_text());p=receipt.with_name(receipt.name.removesuffix('.receipt.json')+'.bin');need(p.stat().st_size==r['actual_bytes']and sha(p)==r['actual_sha256'],'actual acquired tensor bytes');weights.append(dict(model=receipt.parent.name,name=receipt.name.removesuffix('.receipt.json'),pin=pin(p)))
- need(len(weights)==70 and sum(x['pin']['bytes']for x in weights)==3_531_306_272,'all original five block tensors and bytes')
-
- reference=mod('actual_original_references',runtime/'reference_job.py')
- rb=dict(execution_context='CLOUD_EXECUTOR_V1',reserved_other_owner_bytes=b['reserved_other_owner_bytes'],stage_resources=b['stage_resources'],job_budget_seconds=limit,execution_policy=execution_policy,profiles=list(range(5)),tokens=128,identity=identity,repo=str(repo),output=str(owner_root/'references'),owner_root=str(owner_root),owner_module=str(owner_module),owner_manifest=owner_pin,pins=pins,payload=str(payload),wall_seconds=q['reference'])
- references=reference.run(rb,stage)
- tail=mod('actual_five_diagnostics',numeric/'numeric_tail.py');tb=job/'bindings/NUMERIC.json'
+ if 'retained_materials'in b:
+  retained=imported['retained_materials_verified'];payload=P(retained['payload']);weights=retained['weights'];references=retained['references']
+ else:
+  payload=job/'runs/weights/output';acq=repo/'candidates/five_profile_acquisition_resume_20261028/acquire_resumable.py'
+  ok(stage('weights',[py,'-B',acq,'--output',payload,'--execute'],q['weights'],.5,network=True))
+  summary=json.loads((payload/'SUMMARY.json').read_text());need(summary['tensors']==70 and summary['tensor_bytes']==3_531_306_272,'one full70 tensor acquisition')
+  weights=[]
+  for receipt in sorted(payload.glob('*/*.receipt.json')):
+   r=json.loads(receipt.read_text());p=receipt.with_name(receipt.name.removesuffix('.receipt.json')+'.bin');need(p.stat().st_size==r['actual_bytes']and sha(p)==r['actual_sha256'],'actual acquired tensor bytes');weights.append(dict(model=receipt.parent.name,name=receipt.name.removesuffix('.receipt.json'),pin=pin(p)))
+  need(len(weights)==70 and sum(x['pin']['bytes']for x in weights)==3_531_306_272,'all original five block tensors and bytes')
+ 
+  reference=mod('actual_original_references',runtime/'reference_job.py')
+  rb=dict(execution_context='CLOUD_EXECUTOR_V1',reserved_other_owner_bytes=b['reserved_other_owner_bytes'],stage_resources=b['stage_resources'],job_budget_seconds=limit,execution_policy=execution_policy,profiles=list(range(5)),tokens=128,identity=identity,repo=str(repo),output=str(owner_root/'references'),owner_root=str(owner_root),owner_module=str(owner_module),owner_manifest=owner_pin,pins=pins,payload=str(payload),wall_seconds=q['reference'])
+  references=reference.run(rb,stage)
+ tail=numeric_module('actual_five_diagnostics',numeric/'numeric_tail.py',pins);tb=job/'bindings/NUMERIC.json'
  body=dict(execution_policy=execution_policy,schema='SAME_JOB_FIVE_M128_DIAGNOSTIC_TAIL_V1',profiles=list(range(5)),tokens=128,matrix_macs=4096,vector_lanes=32,upload_payloads=False,final_rtl_replay=False,references=references,weights=weights,calibration_seconds=q['calibration_seconds'],job_started_monotonic=started,reserved_material_seconds=7*q['provider']+11*120,reserved_cleanup_seconds=1530,reserved_parent_seconds=q['parent'],tree_cap=TREE,rss_bytes=b['dut_rss_bytes'],address_space_bytes=b['dut_address_space_bytes'],reserved_other_owner_bytes=b['reserved_other_owner_bytes'],consumer_address_space_bytes=b['consumer_address_space_bytes'],phase_extra_bytes=b['numeric_reserved_increment_bytes'],provider_wall_seconds=q['provider'],pins=pins,output=str(owner_root/'numeric'),owned_roots=roots,owner_root=str(owner_root),owner_module=str(owner_module),owner_manifest=owner_pin,supervisor_dir=supervisor_dir,execution_context='CLOUD_EXECUTOR_V1',identity=identity,executor_identity=identity,executor_identity_pin=b['executor_identity_pin'],builder_handoff=b['builder_handoff'],artifact_manifest=b['artifact_manifest'],cloud_budget=b['cloud_budget'],execution_approval=b['execution_approval'],controller_binding=pin(binding_path),job_budget_seconds=limit,run_id=builder['run_id'],source_commit=builder['source_commit'],launch_commit=builder['launch_commit'],python=py,lock=lock,repo=str(repo),payload=str(payload),materializer=b['materializer'],environment={})
- body.update({k:b[k]for k in ('executor_adaptation','workspace_loader')if k in b})
+ body.update({k:b[k]for k in ('executor_adaptation','workspace_loader','retained_materials')if k in b})
  body.update(execution_mode=admission['mode'],full_block_budget=b.get('full_block_budget'))
  save(tb,body);tail.run(body,tb,sha(tb))
  numeric_path=owner_root/'numeric/RESULT.json';numeric_result=json.loads(numeric_path.read_text())
@@ -196,7 +218,7 @@ def run(b,binding_path,binding_sha):
  qualification=acceptance.aggregate(numeric_result['actual_dut_reports'])
  need(numeric_result.get('qualification')==qualification and numeric_result.get('status')==qualification['status'] and numeric_result.get('numerical_pass')is qualification['numerical_pass'],'recomputed actual numeric finalization')
  code=transport_code(admission['mode'],qualification)
- save(job/'FLOW_RESULT.json',dict(execution_context='CLOUD_EXECUTOR_V1',identity=identity,executor_identity=identity,artifact_identity=builder,builder_identity=builder,source_pins=b['source_pins'],executor_identity_pin=b['executor_identity_pin'],builder_handoff=b['builder_handoff'],artifact_manifest=b['artifact_manifest'],cloud_budget=b['cloud_budget'],execution_approval=b['execution_approval'],job_budget_seconds=limit,execution_binding=pin(binding_path),execution_admission=admission,execution_mode=admission['mode'],transport_exit_code=code,qualification=qualification,execution_policy=execution_policy,status=qualification['status'],scope='CHISEL_TEST_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL',stages=history,upfront_disk_admission=disk_admission,numeric_result=pin(numeric_path),hardware_definitions=1,profiles=list(range(5)),uploaded_payloads=False,**{k:b[k]for k in ('executor_adaptation','workspace_loader')if k in b}))
+ save(job/'FLOW_RESULT.json',dict(execution_context='CLOUD_EXECUTOR_V1',identity=identity,executor_identity=identity,artifact_identity=builder,builder_identity=builder,source_pins=b['source_pins'],executor_identity_pin=b['executor_identity_pin'],builder_handoff=b['builder_handoff'],artifact_manifest=b['artifact_manifest'],cloud_budget=b['cloud_budget'],execution_approval=b['execution_approval'],job_budget_seconds=limit,execution_binding=pin(binding_path),execution_admission=admission,execution_mode=admission['mode'],transport_exit_code=code,qualification=qualification,execution_policy=execution_policy,status=qualification['status'],scope='CHISEL_TEST_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL',stages=history,retained_materials_scope=imported.get('retained_materials_verified',{}).get('scope'),upfront_disk_admission=disk_admission,numeric_result=pin(numeric_path),hardware_definitions=1,profiles=list(range(5)),uploaded_payloads=False,**{k:b[k]for k in ('executor_adaptation','workspace_loader','retained_materials')if k in b}))
  return code
 if __name__=='__main__':
  a=argparse.ArgumentParser();a.add_argument('--binding',type=P,required=True);a.add_argument('--binding-sha256',required=True);v=a.parse_args();need(sha(v.binding)==v.binding_sha256,'independent top binding');code=run(json.loads(v.binding.read_text()),v.binding.resolve(),v.binding_sha256);raise SystemExit(code) # mode-specific transport follows recomputed qualification

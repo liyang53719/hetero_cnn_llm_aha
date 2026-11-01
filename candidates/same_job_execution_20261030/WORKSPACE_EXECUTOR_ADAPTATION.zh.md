@@ -11,3 +11,7 @@
 - 七件包传递已获用户批准，不重复询问。不得上传权重、NPZ、参考数据或原始日志；官方恢复库不夹带扩大这七件上传范围。
 
 磁盘首次准入复用原有界 census：已存在完整 watched roots 的去重逻辑字节 L 必须不超过原 TREE；仅预约最大未来新增 `TREE - L`，并保留额外 free 8 GiB。实际 loader 根亦计入 watch。原每阶段 free 8 GiB、aggregate TREE、文件/entry/增量门均不变；抽样不是未来峰值保证。
+
+
+### 2026-11-01 导入故障恢复
+原 5214a22 云端任务已完整生成五份 M128 软件参考后，因 numeric sibling 导入缺失终止；原硬件尚未执行。新 `retained_materials` 是经独立批准输入 pin 约束的纯字节/来源核验，不执行数学、不复用旧 owner lease。只允许原固定 70 权重和五参考，各原 supervisor / argv / 源码配置 / tensor hash 重新核验；新 runtime 当前身份验证仍必须完成。恢复记录原输入 provenance，不制造跳过阶段的新 native receipt。实际受控 import 用非 mock subprocess 回归，原冻结硬件/driver/ELF 不变。

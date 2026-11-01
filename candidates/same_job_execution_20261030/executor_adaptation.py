@@ -25,6 +25,7 @@ ALLOWED_PATHS = frozenset(PREFIX + x for x in (
     'numeric/observation_contract.py', 'numeric/CONNECTION_OWNED_SOURCE_PINS.json',
     'numeric/workspace_loader.py', 'test_executor_adaptation.py',
     'numeric/test_artifact_handoff.py',
+    'runtime/retained_materials.py', 'runtime/test_retained_materials.py',
     'test_cloud_budget.py', 'test_cloud_controller.py', 'test_cloud_flow_mock.py',
     'acceptance_tests/test_cloud_summary.py', 'acceptance_tests/test_lifecycle.py',
     'acceptance_tests/test_split_consumer_cli.py', 'acceptance_tests/test_consumer_memory.py',

@@ -36,6 +36,31 @@ def weights(b,i):
  for r in rows:
   p=material.checked(r['pin']);need(p.is_relative_to(P(b['payload'])),'owning shared payload')
 
+def retained_context(b):
+ if 'retained_materials'not in b:return None
+ need(b.get('execution_context')=='CLOUD_EXECUTOR_V1','retained references require explicit cloud execution')
+ row=b['controller_binding'];path=material.checked(row)
+ need(path==path.resolve()and all(not p.is_symlink()for p in(path,*path.parents))and path.stat().st_size<=1<<20,'bounded canonical original invocation binding')
+ controller=json.loads(path.read_text())
+ need(b['pins']==dict(controller['pins'],**{str(path):row['sha256']}),'tail pins are exact controller closure plus its binding')
+ for key in ('identity','executor_identity','repo','artifact_manifest','builder_handoff','cloud_budget','execution_approval','retained_materials'):
+  need(controller[key]==b[key],'retained tail/controller exact '+key)
+ for key in ('executor_adaptation','workspace_loader'):
+  need(controller.get(key)==b.get(key),'retained tail/controller optional '+key)
+ budget=module('retained_tail_budget',D.parent/'cloud_budget.py',b['pins']);admitted=budget.admit(controller)
+ need(admitted.get('retained_materials')==b['retained_materials'],'retained inputs explicitly approved for current invocation')
+ helper=module('retained_tail_materials',D.parent/'runtime/retained_materials.py',b['pins'])
+ verified=helper.verify(b['retained_materials'],controller)
+ need(verified['payload']==b['payload']and verified['weights']==b['weights']and verified['references']==b['references'],'tail exact revalidated material inputs')
+ return verified
+
+def reference_path(b,i,retained):
+ row=b['references'][str(i)];path=material.checked(row)
+ if retained is None:need(path.is_relative_to(P(b['owner_root'])),'reference belongs to owning job')
+ else:
+  need(b.get('execution_context')=='CLOUD_EXECUTOR_V1'and 'retained_materials'in b and retained['scope']=='REVALIDATED_DATA_AND_SOFTWARE_REFERENCES_NOT_RUNTIME_OR_DUT'and retained['references'][str(i)]==row,'reference is exact independently revalidated retained entry')
+ return path
+
 def cloud_context(b):
  if b.get('execution_context')!='CLOUD_EXECUTOR_V1':
   need('executor_identity'not in b and 'builder_handoff'not in b,'explicit split context required');return None
@@ -45,6 +70,7 @@ def cloud_context(b):
  need(b['reserved_other_owner_bytes']==admitted['reserved_other_owner_bytes']and b['job_budget_seconds']==admitted['job_budget_seconds']and b['rss_bytes']==admitted['dut_rss_bytes']and b['address_space_bytes']==admitted['dut_address_space_bytes'],'actual cloud resource admission')
  need(b['phase_extra_bytes']==admitted['numeric_reserved_increment_bytes']and b['provider_wall_seconds']==admitted['budgets']['provider']and b['consumer_address_space_bytes']==admitted['consumer_address_space_bytes'],'tail role budgets exactly approved')
  need(b['execution_mode']==admitted['execution_mode']and b.get('full_block_budget')==admitted['full_block_budget']and b['calibration_seconds']==admitted['budgets']['calibration_seconds'],'tail approved mode and windows')
+ retained_context(b)
  return identity
 
 def validate(b):
@@ -92,7 +118,7 @@ def report_effective_limits(original,b,admission,profile):
  return expected
 
 def run(b,binding_path,binding_sha):
- validate(b);cloud=cloud_context(b);admission=execution_mode.admit(b);profile_policy.require_source_pin(b['pins']);pins=dict(b['pins']);pins[str(binding_path)]=binding_sha
+ validate(b);cloud=cloud_context(b);retained=retained_context(b);admission=execution_mode.admit(b);profile_policy.require_source_pin(b['pins']);pins=dict(b['pins']);pins[str(binding_path)]=binding_sha
  need(pins.get(str(D.parent/'execution_mode.py'))==sha(D.parent/'execution_mode.py'),'execution mode source pin')
  need(not {r['pin']['path']for r in b['weights']} & set(pins),'large payload uses streaming pins, not supervisor read_bytes')
  for p,h in pins.items():need(sha(p)==h,'source pin drift')
@@ -155,7 +181,7 @@ def run(b,binding_path,binding_sha):
   with owner.lease(b['owner_manifest']['path'],b['owner_manifest']['sha256'],b['owner_root'],i,lease_root) as selected:
    weights(b,i)
    runtime=selected[('qwen2','qwen35_08b','qwen35_08b','qwen35_35b','qwen35_35b')[i]]
-   ref_path=material.checked(b['references'][str(i)]);need(ref_path.is_relative_to(P(b['owner_root'])),'reference belongs to owning job')
+   ref_path=reference_path(b,i,retained)
    ref_doc=json.loads(ref_path.read_text());need(ref_doc['runtime_receipt_sha256']==runtime['receipt']['sha256']and ref_doc['runtime_source_pins_sha256']==runtime['sidecar']['sha256'],'reference matches actual selected installed runtime/sidecar')
    def provider_stage(label,argv):return stage(f'p{i}_{label}',argv,lease_out=lease_root)
    initialization=out/'phases'/f'p{i}_initialize_input.json'

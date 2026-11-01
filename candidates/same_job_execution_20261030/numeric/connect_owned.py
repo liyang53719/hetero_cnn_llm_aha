@@ -1,5 +1,5 @@
 """Real original-provider V1 -> reviewed V3 connection. No DUT or reference math."""
-import copy,hashlib,importlib.util,json,os,pathlib,sys
+import copy,hashlib,importlib.util,json,os,pathlib,sys,types
 P=pathlib.Path
 HERE=P(__file__).resolve().parent
 sys.path.insert(0,str(HERE))
@@ -18,10 +18,34 @@ def base(old,profile):
  consumer.need(not {'original_runtime','observation_policy','consumption_evidence'}&set(old['profiles'][0]),'no preexisting exception')
  result=copy.deepcopy(old);result['schema']='SINGLE_PROFILE_RUNTIME_BUNDLE_V3';return result
 
+def candidate_contract(context):
+ if context is None or 'model_candidate_review'not in context:return None
+ consumer.need(context.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL','admitted model scope')
+ catalog_path=consumer.pin(context['current_source_pins_pin']);consumer.need(catalog_path.stat().st_size<=2<<20,'bounded actual source catalog')
+ catalog=json.loads(catalog_path.read_text());consumer.need(catalog['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1','current source catalog')
+ relative='candidates/same_job_execution_20261030/numeric/candidate_observation_contract.py'
+ rows=[r for r in catalog['files']if r['path']==relative];consumer.need(len(rows)==1,'one candidate observation implementation')
+ path=P(context['repo'])/relative;consumer.need(path==HERE/'candidate_observation_contract.py'and path==path.resolve()and all(not q.is_symlink()for q in(path,*path.parents)),'fixed local candidate observer')
+ raw=path.read_bytes();consumer.need(len(raw)==rows[0]['bytes']and hashlib.sha256(raw).hexdigest()==rows[0]['sha256'],'source-pinned candidate observation bytes')
+ module=types.ModuleType('p0_admitted_candidate_observation');module.__file__=str(path);exec(compile(raw,str(path),'exec'),module.__dict__)
+ module.admitted_context(context);return module
+
+def candidate_hydration_view(manifest,context):
+ module=candidate_contract(context)
+ if module is None:return manifest
+ result=module.source_view(manifest,context)
+ actual=manifest['model_candidate_build_evidence']
+ consumer.need(actual['schema']=='MODEL_CANDIDATE_ACTUAL_BUILD_EVIDENCE_V1','candidate retained real compilation metadata')
+ files={}
+ for row in actual['actual_stage_receipts'].values():
+  consumer.need(row['path']not in files,'unique actual candidate stage path');files[row['path']]=row
+ result['p0_retained_evidence']=dict(result['p0_retained_evidence'],schema='MODEL_CANDIDATE_EMBEDDED_BUILD_EVIDENCE_V1',files=files,driver_dependency=actual['driver_dependency'])
+ return result
+
 def hydrate_p0(args,out,frozen,source_relocation=None):
  """Retain actual producer text metadata; bind regenerated runtime program paths."""
  source_row=frozen['common']['source_manifest'];source=consumer.pin(dict(source_row,path=str(args.artifact_manifest.resolve().parent/source_row['path'])))
- m=json.loads(source.read_text());embedded=m['p0_retained_evidence'];consumer.need(embedded['schema']=='P0_EMBEDDED_ACTUAL_BUILD_EVIDENCE_V1','actual producer retained evidence required')
+ m=candidate_hydration_view(json.loads(source.read_text()),source_relocation);embedded=m['p0_retained_evidence'];consumer.need(embedded['schema']==('MODEL_CANDIDATE_EMBEDDED_BUILD_EVIDENCE_V1'if candidate_contract(source_relocation)is not None else'P0_EMBEDDED_ACTUAL_BUILD_EVIDENCE_V1'),'actual producer retained evidence required')
  rows={r['path']:r for r in m['files']};anchors=m['observation_policy_bindings']['P0']['anchors'];bindings={}
  for name,key in anchors.items():
   if name in ('program_manifest','commands','descriptors'):
@@ -40,7 +64,7 @@ def hydrate_p0(args,out,frozen,source_relocation=None):
  dependency_path=retained/'DRIVER_DEPENDENCY.json';dependency_raw=(json.dumps(embedded['driver_dependency'],indent=2)+'\n').encode()
  consumer.need(len(dependency_raw)<=2*1024**2,'bounded actual dependency metadata')
  with dependency_path.open('xb')as stream:stream.write(dependency_raw)
- evidence=dict(schema='P0_RETAINED_PRODUCER_EVIDENCE_V2',files=files,driver_dependency=pin(dependency_path))
+ evidence=dict(schema='MODEL_CANDIDATE_RETAINED_PRODUCER_EVIDENCE_V1'if candidate_contract(source_relocation)is not None else'P0_RETAINED_PRODUCER_EVIDENCE_V2',files=files,driver_dependency=pin(dependency_path))
  bp=retained/'BINDINGS.json';ep=retained/'EVIDENCE.json'
  for path,doc in ((bp,bindings),(ep,evidence)):
   raw=(json.dumps(doc,indent=2)+'\n').encode();consumer.need(len(raw)<=65536,'bounded P0 bindings/evidence index')
@@ -52,9 +76,15 @@ def connect(args,out):
  consumer.need(original.is_file() and not original.is_symlink(),'original fresh bundle required')
  old=json.loads(original.read_text());result=base(old,args.profile)
  consumer.verify_frozen(args.artifact_manifest,args.artifact_manifest_sha256)
- frozen=json.loads(args.artifact_manifest.read_text());consumer.artifact_identity(frozen)
- provenance=consumer.verify_local_build(args,frozen)
- source_relocation=consumer.approved_source_relocation(args,frozen)
+ frozen=json.loads(args.artifact_manifest.read_text())
+ if frozen.get('schema')=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1':
+  source_relocation=consumer.approved_source_relocation(args,frozen)
+  consumer.artifact_identity(frozen,source_relocation)
+  provenance=consumer.verify_local_build(args,frozen)
+ else:
+  consumer.artifact_identity(frozen)
+  provenance=consumer.verify_local_build(args,frozen)
+  source_relocation=consumer.approved_source_relocation(args,frozen)
  consumer.verify_runtime_abi(args,frozen)
  p0_fields=('p0_bindings','p0_bindings_sha256','consumption_evidence','consumption_evidence_sha256')
  if args.profile==0:
@@ -64,7 +94,10 @@ def connect(args,out):
   consumer.verify_frozen(args.consumption_evidence,args.consumption_evidence_sha256)
   bindings=json.loads(args.p0_bindings.read_text())
   # Locked original corrector validates all12 bytes/roles and exact20->18 delta.
-  import correct_observation_policy as correction
+  candidate=candidate_contract(source_relocation)
+  if candidate is None:
+   import correct_observation_policy as correction
+  else:correction=candidate.corrector(source_relocation)
   p=old['profiles'][0]
   correction.apply(p['runtime']['path'],p['runtime']['sha256'],p['views']['path'],p['views']['sha256'],bindings,out/'p0_observation_correction')
   policy=out/'p0_observation_correction/OBSERVATION_POLICY.json'
@@ -109,8 +142,8 @@ def add_arguments(ap):
  ap.add_argument('--p0-bindings',type=P);ap.add_argument('--p0-bindings-sha256')
  ap.add_argument('--consumption-evidence',type=P);ap.add_argument('--consumption-evidence-sha256')
 
-def preflight_artifact(args,frozen):
- root=args.artifact_manifest.resolve().parent;identity=consumer.artifact_identity(frozen)
+def preflight_artifact(args,frozen,source_relocation=None):
+ root=args.artifact_manifest.resolve().parent;identity=consumer.artifact_identity(frozen)if source_relocation is None else consumer.artifact_identity(frozen,source_relocation)
  consumer.need(set(frozen['common'])=={'binary','sv','source_manifest','driver','build_receipt'},'complete common identity')
  paths={}
  for name,row in dict(frozen['common'],tool_manifest=frozen['tool_manifest']).items():
@@ -129,7 +162,12 @@ def preflight(args):
  source_guard()
  for k in ('artifact_manifest','artifact_manifest_sha256','expected_run_id','expected_launch_commit','expected_source_commit','local_runtime_abi','local_runtime_abi_sha256'):consumer.need(getattr(args,k,None) is not None,'required same-job identity '+k)
  consumer.verify_frozen(args.artifact_manifest,args.artifact_manifest_sha256)
- frozen=json.loads(args.artifact_manifest.read_text());preflight_artifact(args,frozen);consumer.verify_local_build(args,frozen);consumer.verify_runtime_abi(args,frozen)
+ frozen=json.loads(args.artifact_manifest.read_text());source_relocation=None
+ if frozen.get('schema')=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1':
+  source_relocation=consumer.approved_source_relocation(args,frozen)
+  preflight_artifact(args,frozen,source_relocation)
+ else:preflight_artifact(args,frozen)
+ consumer.verify_local_build(args,frozen);consumer.verify_runtime_abi(args,frozen)
  consumer.need(frozen['profiles']==list(range(5)) and frozen['matrix_macs']==4096 and frozen['vector_lanes']==32,'same complete five-profile hardware')
  if args.profile!=0:consumer.need(all(getattr(args,k,None) is None for k in ('p0_bindings','p0_bindings_sha256','consumption_evidence','consumption_evidence_sha256')),'P1-P4 cannot request P0 exception BEFORE materialization')
  if args.profile==0:
@@ -138,8 +176,9 @@ def preflight(args):
   if all(supplied):
    consumer.verify_frozen(args.p0_bindings,args.p0_bindings_sha256);consumer.verify_frozen(args.consumption_evidence,args.consumption_evidence_sha256)
   source_pin=frozen['common']['source_manifest'];source=args.artifact_manifest.parent/source_pin['path'];consumer.pin(dict(source_pin,path=str(source.resolve())));m=json.loads(source.read_text())
+  m=candidate_hydration_view(m,source_relocation)
   consumer.need('files' in m and 'P0' in m.get('observation_policy_bindings',{}) and 'p0_retained_evidence' in m,'P0 actual producer mapping absent or retained evidence missing; no expensive prep')
-  consumer.approved_source_relocation(args,frozen)
+  if source_relocation is None:consumer.approved_source_relocation(args,frozen)
 
 def main():
  import argparse

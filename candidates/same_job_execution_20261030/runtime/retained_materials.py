@@ -51,6 +51,46 @@ def material_artifact_identity(old,b):
  checked(before,65536);checked(after,65536)
  return str(P(before['path']).parent)
 
+CANDIDATE_SCHEMA='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'
+CANDIDATE_SCOPE='DATA_REFERENCE_ONLY_NOT_NUMERICAL_ABI_OR_RUNTIME_PASS'
+REVIEW_SCOPE='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL'
+def domain_sha(value):
+ return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
+def candidate_material_contract(manifest_pin,d,old,b):
+ # Schema selection cannot use the old same-SV shortcut, even for equal pins.
+ after=read(b['artifact_manifest'],65536)
+ if after.get('schema')!=CANDIDATE_SCHEMA:
+  need(not b.get('model_candidate_review'),'candidate review requires candidate artifact schema')
+  return None
+ need(b.get('execution_context')=='CLOUD_EXECUTOR_V1'and b.get('model_candidate_review'),'independently admitted candidate review required')
+ helper=P(b['repo'])/'candidates/same_job_execution_20261030/numeric/candidate_admission.py'
+ need(b['pins'].get(str(helper))==sha(regular(helper,1<<20)),'candidate admission source pin')
+ spec=importlib.util.spec_from_file_location('retained_candidate_admission',helper);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+ review=module.verify(b['model_candidate_review'],b)
+ need(review['scope']==REVIEW_SCOPE,'candidate evaluation scope only')
+ c=review['data_reference_contract']
+ keys={'schema','scope','old_artifact_manifest_sha256','new_artifact_manifest_sha256','retained_materials_sha256','old_source_pins_sha256','reference_sources','weights_sha256','references_sha256','profiles','tokens','routing'}
+ need(type(c)is dict and set(c)==keys and c['schema']=='MODEL_CANDIDATE_DATA_REFERENCE_ONLY_V1'and c['scope']==CANDIDATE_SCOPE,'exact candidate data-only contract')
+ need(c['profiles']==list(range(5))and all(type(x)is int for x in c['profiles'])and type(c['tokens'])is int and c['tokens']==128 and c['routing']=='UNMODIFIED_OFFICIAL_TORCH_TOPK','unchanged all-five M128/routing')
+ for field,pin in (('old_artifact_manifest_sha256',old['artifact_manifest']),('new_artifact_manifest_sha256',b['artifact_manifest']),('retained_materials_sha256',manifest_pin),('old_source_pins_sha256',old['source_pins'])):
+  checked(pin,1<<20);need(c[field]==pin['sha256'],'candidate exact independent input binding')
+ need(c['weights_sha256']==domain_sha(d['weights'])and c['references_sha256']==domain_sha(d['references']),'candidate complete weight/reference domain binding')
+ before=read(old['artifact_manifest'],65536)
+ need(before['schema']=='FROZEN_FIVE_PROFILE_DUT_ARTIFACT_V2','original production data provenance')
+ for artifact in (before,after):
+  need(artifact['profiles']==list(range(5))and all(type(x)is int for x in artifact['profiles'])and type(artifact['matrix_macs'])is int and artifact['matrix_macs']==4096,'unchanged complete model resource contract')
+  need(artifact['moe_reference_contract']=='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE','unchanged original artifact routing')
+ drivers=[]
+ for pin,artifact in ((old['artifact_manifest'],before),(b['artifact_manifest'],after)):
+  driver=artifact['common']['driver'];need(set(driver)=={'path','bytes','sha256'}and driver['path']=='driver.cpp','fixed stimulus driver')
+  checked(dict(driver,path=str(P(pin['path']).parent/'driver.cpp')),1<<30);drivers.append(driver)
+ need(drivers[0]==drivers[1],'candidate may not change stimulus driver')
+ rows=c['reference_sources']
+ need(type(rows)is list and len(rows)==51 and len({r['path']for r in rows})==51,'exact51 unchanged reference sources')
+ for r in rows:
+  need(type(r)is dict and set(r)=={'path','bytes','sha256'}and type(r['bytes'])is int and r['bytes']>0,'exact reference source row')
+ return c
+
 def verify(manifest_pin,b):
  d=read(manifest_pin,1<<20)
  need(set(d)=={'schema','scope','old_controller_binding','old_executor_identity','weights_summary','weights_outer','references_manifest','weights','references','numerical_pass'}and d['schema']=='RETAINED_M128_MATERIALS_V1'and d['scope']==SCOPE and d['numerical_pass']is False,'retained material scope only')
@@ -61,7 +101,8 @@ def verify(manifest_pin,b):
  need(old['identity']==ident and old['executor_identity']==ident and old['executor_identity_pin']==d['old_executor_identity'],'original controller/executor immutable join')
  need(old['execution_context']=='CLOUD_EXECUTOR_V1'and old['profiles']==list(range(5))and old['tokens']==128 and old['matrix_macs']==4096,'original full five M128 inputs')
  need(b['identity']['execution_id']!=ident['execution_id']and b['identity']!=ident,'new execution cannot impersonate old owner')
- previous_artifact_root=material_artifact_identity(old,b)
+ candidate=candidate_material_contract(manifest_pin,d,old,b) if b.get('model_candidate_review') or b['artifact_manifest'].get('path') else None
+ previous_artifact_root=str(P(old['artifact_manifest']['path']).parent) if candidate is not None else material_artifact_identity(old,b)
  job=P(old['job_root']);need(job.is_absolute()and job==job.resolve()and job.is_dir()and all(not p.is_symlink()for p in(job,*job.parents)),'canonical original job')
  need(P(d['old_controller_binding']['path'])==P(str(job)+'-CLOUD_BINDING.json')and P(d['old_executor_identity']['path'])==P(str(job)+'-EXECUTOR_IDENTITY.json'),'fixed original controller records')
  # Complete unchanged material-producing source/config subset of the original
@@ -74,6 +115,9 @@ def verify(manifest_pin,b):
    need(not P(name).is_absolute()and '..'not in P(name).parts,'source relative path')
    p=source(name,old,b);need(p.stat().st_size==row['bytes']and sha(p)==row['sha256'],'historical source catalog exact');selected.append(name)
  need(all(x in selected for x in EXACT)and len(selected)==len(set(selected)),'complete original reference controller sources')
+ if candidate is not None:
+  actual=[r for r in catalog['files']if r['path']in selected]
+  need(sorted(actual,key=lambda r:r['path'])==sorted(candidate['reference_sources'],key=lambda r:r['path']),'candidate complete unchanged reference source subset')
  payload=job/'runs/weights/output';acq=source('candidates/five_profile_acquisition_resume_20261028/acquire_resumable.py',old,b)
  strict(at(d['weights_outer'],job/'runs/weights/RESULT.json'),[old['python'],'-B',acq,'--output',payload,'--execute'])
  summary=at(d['weights_summary'],payload/'SUMMARY.json')
@@ -115,4 +159,6 @@ def verify(manifest_pin,b):
   result[str(i)]=item['result']
  # Input metadata is rechecked after streaming all retained payloads.
  checked(manifest_pin,1<<20);checked(d['old_controller_binding']);checked(d['old_executor_identity'],65536)
- return dict(payload=str(payload),weights=weights,references=result,roots=[str(job),str(P(d['old_controller_binding']['path']).parent)]+([previous_artifact_root]if previous_artifact_root is not None else[]),scope=SCOPE)
+ if candidate is not None:
+  checked(b['model_candidate_review'],1<<20);checked(old['artifact_manifest'],65536);checked(b['artifact_manifest'],65536)
+ return dict(payload=str(payload),weights=weights,references=result,roots=[str(job),str(P(d['old_controller_binding']['path']).parent)]+([previous_artifact_root]if previous_artifact_root is not None else[]),scope=CANDIDATE_SCOPE if candidate is not None else SCOPE)

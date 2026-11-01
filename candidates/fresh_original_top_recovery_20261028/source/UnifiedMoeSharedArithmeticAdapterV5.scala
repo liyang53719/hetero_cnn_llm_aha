@@ -4,7 +4,7 @@ import chisel3._
 import chisel3.util._
 
 /** One fixed32 V4 bank shared by four raw scalar-format, two legacy raw16
-  * vector clients and one private ordinary raw16/format16 client. Four raw
+  * vector clients, one private ordinary16 client and one explicit RMS32 client. Four raw
   * Scalar clients borrow the EXISTING Core V3 endpoint;
   * ZERO Scalar/ALU/formatter primitives are added outside this one V4 bank.
   *
@@ -37,6 +37,8 @@ class UnifiedMoeSharedArithmeticAdapterV5 extends Module {
     val vectorResult=Vec(2,Decoupled(new UnifiedVectorResultV2))
     val ordinaryVectorRequest=Flipped(Decoupled(new UnifiedOrdinaryVectorRequestV5))
     val ordinaryVectorResult=Decoupled(new UnifiedOrdinaryVectorResultV5)
+    val rmsVectorRequest=Flipped(Decoupled(new UnifiedVectorElement32PayloadV4))
+    val rmsVectorResult=Decoupled(new UnifiedVectorElement32ResultPayloadV4)
     val coreScalar=Flipped(new QwenSharedScalarServiceV3)
     val externalPoison=Input(Bool()) // error-only; never authorization or drain
     val status=Output(Vec(N,new UnifiedMoeArithmeticClientStatusV5))
@@ -58,6 +60,7 @@ class UnifiedMoeSharedArithmeticAdapterV5 extends Module {
   for(i<-0 until 4){rawValid(scalarClients(i)):=io.scalar(i).request.valid;rawValid(formatClients(i)):=io.formatRequest(i).valid}
   for(i<-0 until 2)rawValid(vectorClients(i)):=io.vectorRequest(i).valid
   rawValid(UnifiedMoeArithmeticClientV5.OrdinaryChunkVector):=io.ordinaryVectorRequest.valid
+  rawValid(UnifiedMoeArithmeticClientV5.OrdinaryRmsVector32):=io.rmsVectorRequest.valid
   val ordinaryRaw=io.ordinaryVectorRequest.bits.payload
   val ordinaryFormatCanonical=ordinaryRaw.policy===0.U && !ordinaryRaw.multiply &&
     ordinaryRaw.b.map(x=>x===0.U).reduce(_&&_)
@@ -71,6 +74,12 @@ class UnifiedMoeSharedArithmeticAdapterV5 extends Module {
     ((ordinaryFormatRequested && ordinaryGradualRequested) ||
       (ordinaryFormatRequested && !ordinaryFormatCanonical) ||
       (ordinaryGradualRequested && !ordinaryGradualCanonical))
+  val rmsRaw=io.rmsVectorRequest.bits
+  val rmsRawLegal=(rmsRaw.policy===UnifiedVectorElement32PolicyV4.LegacyRaw.U && !rmsRaw.multiply) ||
+    (rmsRaw.policy===UnifiedVectorElement32PolicyV4.RawFp32FiniteGradual.U && rmsRaw.multiply) ||
+    (rmsRaw.policy===UnifiedVectorElement32PolicyV4.RawFp32MulBf16Rne.U && rmsRaw.multiply) ||
+    (rmsRaw.policy===UnifiedVectorElement32PolicyV4.RawFp32ToBf16Rne.U && !rmsRaw.multiply && rmsRaw.b.map(_===0.U).reduce(_&&_))
+  val rmsShapeBad=io.rmsVectorRequest.valid && !rmsRawLegal
   val countBad=VecInit((0 until N).map(i=>returned(i)>issued(i) || issued(i)>accepted(i) ||
     accepted(i)(32) || issued(i)(32) || returned(i)(32)))
   val overrun=VecInit((0 until N).map(i=>active(i) && !retiring(i) && rawValid(i) &&
@@ -121,8 +130,10 @@ class UnifiedMoeSharedArithmeticAdapterV5 extends Module {
   val ordinaryVectorFormat=ordinaryVectorClient && vPolicy===UnifiedVectorElement32PolicyV4.RawFp32ToBf16Rne.U
   val ordinaryVectorGradual=ordinaryVectorClient && vPolicy===UnifiedVectorElement32PolicyV4.RawFp32FiniteGradual.U
   // Format9 and ordinary format16 are NOT arithmetic. Never classify by >=6.
+  val rmsVectorClient=vClient===UnifiedMoeArithmeticClientV5.OrdinaryRmsVector32.U
+  val rmsVectorFormat=rmsVectorClient && vPolicy===UnifiedVectorElement32PolicyV4.RawFp32ToBf16Rne.U
   val vectorClientIsRaw=vectorClients.map(i=>vClient===i.U).reduce(_||_) ||
-    (ordinaryVectorClient && !ordinaryVectorFormat)
+    (ordinaryVectorClient && !ordinaryVectorFormat) || (rmsVectorClient && !rmsVectorFormat)
   val vectorIdentity=bank.io.result.bits.identity.asUInt===vTag.asUInt &&
     bank.io.result.bits.payload.policy===vPolicy &&
     bank.io.result.bits.payload.arithFlagsValid===vectorClientIsRaw &&
@@ -133,7 +144,8 @@ class UnifiedMoeSharedArithmeticAdapterV5 extends Module {
   val vectorConsumerReady=MuxLookup(vClient,false.B)(
     (0 until 4).map(i=>formatClients(i).U->io.formatResult(i).ready)++
     (0 until 2).map(i=>vectorClients(i).U->io.vectorResult(i).ready)++
-    Seq(UnifiedMoeArithmeticClientV5.OrdinaryChunkVector.U->io.ordinaryVectorResult.ready))
+    Seq(UnifiedMoeArithmeticClientV5.OrdinaryChunkVector.U->io.ordinaryVectorResult.ready,
+      UnifiedMoeArithmeticClientV5.OrdinaryRmsVector32.U->io.rmsVectorResult.ready))
   bank.io.result.ready:=vectorResponseOwned && vectorConsumerReady
   for(i<-0 until 4){
     io.formatResult(i).valid:=bank.io.result.valid && vectorResponseOwned && vClient===formatClients(i).U
@@ -163,6 +175,8 @@ class UnifiedMoeSharedArithmeticAdapterV5 extends Module {
   }
   io.ordinaryVectorResult.bits.payload.error:=bank.io.result.bits.payload.error ||
     (!ordinaryVectorFormat && vRawPolicy===3.U)
+  io.rmsVectorResult.valid:=bank.io.result.valid && vectorResponseOwned && rmsVectorClient
+  io.rmsVectorResult.bits:=bank.io.result.bits.payload
   val vectorIssue=bank.io.request.fire;val vectorReturn=bank.io.result.fire
   when(vectorIssue){
     vTag:=vPacket.identity;vClient:=vOfferClient;vPolicy:=vPacket.payload.policy
@@ -175,7 +189,7 @@ class UnifiedMoeSharedArithmeticAdapterV5 extends Module {
   val terminalError=io.retire.map(r=>r.valid && r.bits.status=/=Status.Ok.U).reduce(_||_)
   val serviceFault=countBad.asUInt.orR || overrun.asUInt.orR || unknownScalar ||
     unknownVector || coreIssueMalformed || io.coreScalar.status.resetRequired || numericalFault ||
-    terminalError || ordinaryShapeBad || io.externalPoison
+    terminalError || ordinaryShapeBad || rmsShapeBad || io.externalPoison
   val currentFault=eventFault || serviceFault
   when(currentFault){poison:=true.B}
   io.resetRequired:=poison || scalarQuarantine || vectorQuarantine || currentFault
@@ -199,8 +213,8 @@ class UnifiedMoeSharedArithmeticAdapterV5 extends Module {
   val scalarAccept=sarb.io.out.fire;val scalarAcceptClient=VecInit(scalarClients.map(_.U(4.W)))(sarb.io.chosen)
   when(scalarAccept){sPacket:=sarb.io.out.bits;sClient:=scalarAcceptClient;sOffer:=true.B}
 
-  val varb=Module(new RRArbiter(new UnifiedVectorElement32RequestV4,7))
-  for(i<-0 until 7){
+  val varb=Module(new RRArbiter(new UnifiedVectorElement32RequestV4,8))
+  for(i<-0 until 8){
     val client=bankClients(i)
     varb.io.in(i).valid:=rawValid(client) && clientMayAccept(client)
     varb.io.in(i).bits:=0.U.asTypeOf(new UnifiedVectorElement32RequestV4)
@@ -218,7 +232,7 @@ class UnifiedMoeSharedArithmeticAdapterV5 extends Module {
       varb.io.in(i).bits.payload.multiply:=raw.multiply
       for(j<-0 until 16){varb.io.in(i).bits.payload.a(j):=raw.a(j);varb.io.in(i).bits.payload.b(j):=raw.b(j)}
       io.vectorRequest(i-4).ready:=varb.io.in(i).ready && clientMayAccept(client)
-    }else{
+    }else if(i==6){
       val raw=io.ordinaryVectorRequest.bits.payload
       val format=io.ordinaryVectorRequest.bits.formatOnly
       val gradual=io.ordinaryVectorRequest.bits.gradual
@@ -231,10 +245,15 @@ class UnifiedMoeSharedArithmeticAdapterV5 extends Module {
         varb.io.in(i).bits.payload.b(j):=Mux(format,0.U,raw.b(j))
       }
       io.ordinaryVectorRequest.ready:=varb.io.in(i).ready && clientMayAccept(client) && !ordinaryShapeBad
+    }else{
+      varb.io.in(i).bits.payload:=io.rmsVectorRequest.bits
+      io.rmsVectorRequest.ready:=varb.io.in(i).ready && clientMayAccept(client) && !rmsShapeBad
     }
   }
   varb.io.out.ready:=(!vOffer || bank.io.request.ready) && admit
   val vectorAccept=varb.io.out.fire;val vectorAcceptClient=VecInit(bankClients.map(_.U(4.W)))(varb.io.chosen)
+  // New RMS32 has a direct V4 policy retained in vPolicy. Its legacy V2
+  // diagnostic-policy field stays zero; V4 gradual3 is NOT legacy raw3.
   val selectedRawPolicy=MuxLookup(varb.io.chosen,0.U(2.W))(
     Seq(4.U->io.vectorRequest(0).bits.policy,5.U->io.vectorRequest(1).bits.policy,
       6.U->io.ordinaryVectorRequest.bits.payload.policy))
@@ -254,7 +273,8 @@ class UnifiedMoeSharedArithmeticAdapterV5 extends Module {
       k===UnifiedArithmeticAuthorityKindV5.OrdinaryQkNorm.U ||
       k===UnifiedArithmeticAuthorityKindV5.OrdinaryRope.U ||
       k===UnifiedArithmeticAuthorityKindV5.OrdinaryGqa.U ||
-      k===UnifiedArithmeticAuthorityKindV5.OrdinaryElementwise.U
+      k===UnifiedArithmeticAuthorityKindV5.OrdinaryElementwise.U ||
+      k===UnifiedArithmeticAuthorityKindV5.OrdinaryRms32.U
     // Ordinary operations reuse their fixed slots within one transaction,
     // but only a STRICTLY later actual physical owner with the same epoch.
     val authorityContinuity=if(i<8) a.authorityKind===previous.authorityKind
@@ -272,9 +292,11 @@ class UnifiedMoeSharedArithmeticAdapterV5 extends Module {
     val ordinaryRope=a.authorityKind===UnifiedArithmeticAuthorityKindV5.OrdinaryRope.U
     val ordinaryGqa=a.authorityKind===UnifiedArithmeticAuthorityKindV5.OrdinaryGqa.U
     val ordinaryElementwise=a.authorityKind===UnifiedArithmeticAuthorityKindV5.OrdinaryElementwise.U
+    val ordinaryRms32=a.authorityKind===UnifiedArithmeticAuthorityKindV5.OrdinaryRms32.U
     val slotKindLegal=if(i==8) ordinaryKind(a.authorityKind)
-      else if(i==9) ordinaryKind(a.authorityKind) && !ordinaryChunk && !ordinaryQkNorm && !ordinaryRope && !ordinaryGqa
+      else if(i==9) ordinaryKind(a.authorityKind) && !ordinaryChunk && !ordinaryQkNorm && !ordinaryRope && !ordinaryGqa && !ordinaryRms32
       else if(i==10) ordinaryChunk
+      else if(i==11) ordinaryRms32
       else false.B
     val domainLegal=if(i<8) a.authorityKind===UnifiedArithmeticAuthorityKindV5.MoEAllocation.U &&
       a.allocationValid && a.allocationSequence=/=0.U
@@ -283,7 +305,8 @@ class UnifiedMoeSharedArithmeticAdapterV5 extends Module {
     val ordinaryRawPrep=a.authorityKind===UnifiedArithmeticAuthorityKindV5.OrdinaryRawPrep.U
     val ordinaryGatedNorm=a.authorityKind===UnifiedArithmeticAuthorityKindV5.OrdinaryGatedNorm.U
     val expectedStage=if(i<8) UnifiedMoeArithmeticClientV5.Stages(i).U
-      else Mux(ordinaryElementwise,UnifiedMoeArithmeticClientV5.OrdinaryElementwiseStage.U,
+      else if(i==11) UnifiedMoeArithmeticClientV5.OrdinaryRms32Stage.U
+      else Mux(ordinaryRms32,UnifiedMoeArithmeticClientV5.OrdinaryRms32Stage.U, Mux(ordinaryElementwise,UnifiedMoeArithmeticClientV5.OrdinaryElementwiseStage.U,
         Mux(ordinaryGqa,UnifiedMoeArithmeticClientV5.OrdinaryGqaStage.U,
         Mux(ordinaryRope,UnifiedMoeArithmeticClientV5.OrdinaryRopeStage.U,
         Mux(ordinaryQkNorm,UnifiedMoeArithmeticClientV5.OrdinaryQkNormStage.U,
@@ -291,13 +314,14 @@ class UnifiedMoeSharedArithmeticAdapterV5 extends Module {
         Mux(ordinaryChunk,UnifiedMoeArithmeticClientV5.OrdinaryChunkStage.U,
         Mux(ordinaryRawPrep,UnifiedMoeArithmeticClientV5.OrdinaryRawPrepStage.U,
           Mux(ordinaryConv,UnifiedMoeArithmeticClientV5.OrdinaryConvStage.U,
-            UnifiedMoeArithmeticClientV5.Stages(i).U))))))))
+            UnifiedMoeArithmeticClientV5.Stages(i).U)))))))))
     // Do not enlarge Norm, Conv, RawPrep, QKNorm, RoPE or any other count domain.
     // RawPrep's precise expected count is the parent's authenticated prepare
     // receipt after actual A_log DDR reads, NEVER the maximum below.
     val maximumOperations=if(i<8) UnifiedMoeArithmeticClientV5.MaximumOperations(i).U
+      else if(i==11) UnifiedMoeArithmeticClientV5.OrdinaryRms32MaximumOperations(1).U
       else if(i==10) UnifiedMoeArithmeticClientV5.OrdinaryChunkMaximumOperations(1).U
-      else Mux(ordinaryElementwise,UnifiedMoeArithmeticClientV5.OrdinaryElementwiseMaximumOperations(i-8).U,
+      else Mux(ordinaryRms32,(if(i==8) UnifiedMoeArithmeticClientV5.OrdinaryRms32MaximumOperations(0).U else 0.U), Mux(ordinaryElementwise,UnifiedMoeArithmeticClientV5.OrdinaryElementwiseMaximumOperations(i-8).U,
         Mux(ordinaryGqa,(if(i==8) UnifiedMoeArithmeticClientV5.OrdinaryGqaMaximumOperations.U else 0.U),
         Mux(ordinaryRope,(if(i==8) UnifiedMoeArithmeticClientV5.OrdinaryRopeMaximumOperations.U else 0.U),
         Mux(ordinaryQkNorm,(if(i==8) UnifiedMoeArithmeticClientV5.OrdinaryQkNormMaximumOperations.U else 0.U),
@@ -305,7 +329,7 @@ class UnifiedMoeSharedArithmeticAdapterV5 extends Module {
         Mux(ordinaryChunk,(if(i==8) UnifiedMoeArithmeticClientV5.OrdinaryChunkMaximumOperations(0).U else 0.U),
         Mux(ordinaryRawPrep,UnifiedMoeArithmeticClientV5.OrdinaryRawPrepMaximumOperations(i-8).U,
           Mux(ordinaryConv,UnifiedMoeArithmeticClientV5.OrdinaryConvMaximumOperations(i-8).U,
-            UnifiedMoeArithmeticClientV5.MaximumOperations(i).U))))))))
+            UnifiedMoeArithmeticClientV5.MaximumOperations(i).U)))))))))
     val legal=domainLegal && groupScope && id.stage===expectedStage &&
       a.lease.resource===UnifiedMoeArithmeticClientV5.Resources(i).U && id.ownerSequence=/="hffffffff".U &&
       a.lease.expectedOperations>0.U && a.lease.expectedOperations<=maximumOperations &&

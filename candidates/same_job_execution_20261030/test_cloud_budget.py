@@ -11,6 +11,7 @@ class Budget(unittest.TestCase):
   self.budget=self.put('budget',self.doc)
   self.ap=dict(schema='OPERATOR_REVIEWED_CLOUD_INVOCATION_V1',approved=True,authority='USER_AUTHORIZED_OPERATOR_REVIEW',purpose='BOUNDED_CALIBRATION',source_commit='a'*40,budget_sha256=self.budget['sha256'],artifact_manifest_sha256='c'*64,execution_id='b'*36,host_identity_sha256=self.host['sha256'],review_evidence=ev)
   self.b=dict(execution_context='CLOUD_EXECUTOR_V1',identity=self.identity,artifact_manifest={'sha256':'c'*64},cloud_budget=self.budget,execution_approval=self.put('approval',self.ap))
+  artifact=self.put('actual_artifact',{'schema':'FROZEN_FIVE_PROFILE_DUT_ARTIFACT_V2'});self.b['artifact_manifest']=artifact;self.doc['artifact_manifest_sha256']=artifact['sha256'];self.ap['artifact_manifest_sha256']=artifact['sha256'];self.reapprove()
  def tearDown(self):self.t.cleanup()
  def put(self,n,v):
   p=self.d/n;p.write_text(json.dumps(v));return dict(path=str(p),bytes=p.stat().st_size,sha256=hashlib.sha256(p.read_bytes()).hexdigest())

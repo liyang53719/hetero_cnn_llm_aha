@@ -4,7 +4,7 @@ The pin must be provided by the trusted invoker, never derived from this file.
 No JSON field authenticates its own author. Invocation records both external pins.
 Per-phase original safety ceilings remain; full numerical acceptance is elsewhere.
 """
-import hashlib,json,pathlib,re,math,platform,sys
+import hashlib,json,pathlib,re,math,platform,sys,importlib.util
 P=pathlib.Path;D=P(__file__).resolve().parent
 IDS=set(map(str,range(5)))
 def need(v,m):
@@ -17,13 +17,26 @@ def pin(v,limit):
  need(type(v['bytes'])is int and 0<v['bytes']<=limit and p.stat().st_size==v['bytes']and isinstance(v['sha256'],str)and re.fullmatch('[0-9a-f]{64}',v['sha256'])and sha(p)==v['sha256'],'bounded pinned cloud evidence')
  return p
 
+MODEL_SCHEMA='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'
+MODEL_SCOPE='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL'
+def model_candidate_inputs(b):
+ frozen=json.loads(pin(b['artifact_manifest'],65536).read_text())
+ candidate=frozen.get('schema')==MODEL_SCHEMA
+ if candidate:
+  need(frozen.get('status')=='UNREVIEWED_MODEL_BUILD','immutable unreviewed model artifact')
+  need(b.get('model_candidate_review')is not None,'MODEL_CANDIDATE_REVIEW_REQUIRED')
+  pin(b['model_candidate_review'],2<<20)
+ else:need('model_candidate_review'not in b,'model review cannot relabel legacy artifact')
+ return candidate
+
 def admit(b):
  need(b.get('execution_context')=='CLOUD_EXECUTOR_V1','explicit cloud executor context')
  need(b.get('execution_approval') is not None,'OPERATOR_APPROVED_EXECUTION_INPUT_REQUIRED')
+ candidate=model_candidate_inputs(b)
  adaptation_fields={'executor_adaptation','workspace_loader'}
  adapted=bool(adaptation_fields & set(b))
  need(not adapted or adaptation_fields<=set(b),'paired executor adaptation and workspace loader required')
- optional_fields=({'retained_materials'}if 'retained_materials'in b else set())
+ optional_fields=({'retained_materials'}if 'retained_materials'in b else set())|({'model_candidate_review'}if candidate else set())
  extra_fields=(adaptation_fields if adapted else set())|optional_fields
  approval_extra={k+'_sha256'for k in extra_fields}
  approval_path=pin(b['execution_approval'],65536);approval=json.loads(approval_path.read_text())
@@ -76,6 +89,11 @@ def admit(b):
  need(type(d['reserved_other_owner_bytes'])is int and d['reserved_other_owner_bytes']==5<<30,'preserve unknown owner5GiB reservation')
  result={k:d[k]for k in('runtime_mode','archive_mode','runtime_reuse_manifest','stage_resources','consumer_address_space_bytes','reserved_other_owner_bytes','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','execution_mode','full_block_budget')}
  if extra_fields:result.update({k:d[k]for k in extra_fields})
+ if candidate:
+  path=D/'numeric/candidate_admission.py';need(b['pins'].get(str(path))==sha(path),'model candidate admission source pin')
+  spec=importlib.util.spec_from_file_location('budget_model_candidate_admission',path);helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
+  reviewed=helper.verify(b['model_candidate_review'],b)
+  need(reviewed['scope']==MODEL_SCOPE and reviewed['artifact_manifest_sha256']==b['artifact_manifest']['sha256'],'exact model candidate evaluation scope/artifact')
  return result
 
 

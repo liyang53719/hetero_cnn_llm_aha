@@ -56,6 +56,43 @@ class Tests(unittest.TestCase):
   t.body=[old if isinstance(n,ast.FunctionDef)and n.name=='require_cleanup'else n for n in t.body]
   for n in ast.walk(t):
    if isinstance(n,ast.Call)and isinstance(n.func,ast.Name)and n.func.id=='require_cleanup':n.args=n.args[:2]
+  # Undo ONLY exact independently reviewed candidate additions. Each match is
+  # mandatory once; every remaining AST node is still checked by the old hash.
+  def replace_statements(new_text,old_text):
+   want=ast.parse(new_text).body;replacement=ast.parse(old_text).body;count=0
+   def visit(node):
+    nonlocal count
+    for field,value in ast.iter_fields(node):
+     if isinstance(value,list):
+      i=0
+      while i<=len(value)-len(want):
+       if list(map(lambda n:ast.dump(n,include_attributes=False),value[i:i+len(want)]))==list(map(lambda n:ast.dump(n,include_attributes=False),want)):
+        value[i:i+len(want)]=copy.deepcopy(replacement);count+=1;i+=len(replacement)
+       else:i+=1
+      for item in value:
+       if isinstance(item,ast.AST):visit(item)
+     elif isinstance(value,ast.AST):visit(value)
+   visit(t);self.assertEqual(count,1,new_text)
+  replace_statements("if b.get('model_candidate_review')is not None:need(controller['source_pins']==b['source_pins'],'candidate tail/controller exact source catalog')",'')
+  replace_statements("need(admitted.get('model_candidate_review')==b.get('model_candidate_review'),'tail exact approved candidate review')\nif b.get('model_candidate_review')is not None:module('tail_model_candidate',D/'candidate_admission.py',b['pins']).verify(b['model_candidate_review'],b)",'')
+  replace_statements("""
+candidate=frozen['schema']=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'
+proof=module('split_build_proof',D/('candidate_artifact_handoff.py'if candidate else'artifact_handoff.py'),pins)
+kwargs=dict(executor_adaptation=b.get('executor_adaptation'))
+if candidate:kwargs.update(model_candidate_review=b.get('model_candidate_review'),current_source_pins_pin=b['source_pins'],repo=b['repo'])
+proof.verify(b['builder_handoff']['path'],b['builder_handoff']['sha256'],manifest,sha(manifest),frozen,cloud,**kwargs)
+""","""
+proof=module('split_build_proof',D/'artifact_handoff.py',pins)
+proof.verify(b['builder_handoff']['path'],b['builder_handoff']['sha256'],manifest,sha(manifest),frozen,cloud,executor_adaptation=b.get('executor_adaptation'))
+""")
+  pairs=[("('executor_adaptation','workspace_loader','model_candidate_review')","('executor_adaptation','workspace_loader')"),("('DATA_REFERENCE_ONLY_NOT_NUMERICAL_ABI_OR_RUNTIME_PASS'if b.get('model_candidate_review')is not None else'REVALIDATED_DATA_AND_SOFTWARE_REFERENCES_NOT_RUNTIME_OR_DUT')","'REVALIDATED_DATA_AND_SOFTWARE_REFERENCES_NOT_RUNTIME_OR_DUT'")]
+  for new_text,old_text in pairs:
+   new=ast.parse(new_text,mode='eval').body;old=ast.parse(old_text,mode='eval').body;hits=[]
+   class Normalize(ast.NodeTransformer):
+    def visit(self,node):
+     if ast.dump(node,include_attributes=False)==ast.dump(new,include_attributes=False):hits.append(True);return copy.deepcopy(old)
+     return super().visit(node)
+   t=Normalize().visit(t);self.assertEqual(len(hits),1,new_text)
   self.assertEqual(hashlib.sha256(ast.dump(t,include_attributes=False).encode()).hexdigest(),'d9dac3f15753fab0b3a137a9baee460061b0f15c9a3a6a8d777631793573d171')
  def test_actual_stage_passes_real_output_and_supervisor_source(self):
   calls=[n for n in ast.walk(source)if isinstance(n,ast.Call)and isinstance(n.func,ast.Name)and n.func.id=='require_cleanup']

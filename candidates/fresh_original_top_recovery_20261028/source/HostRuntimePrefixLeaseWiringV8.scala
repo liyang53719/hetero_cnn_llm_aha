@@ -55,11 +55,19 @@ object HostRuntimePrefixLeaseWiringV8 {
     val kvReceipt=Valid(new HostRuntimeKvStagedReceiptV13)
     val postnormReceipt=Valid(new HostRuntimePostnormStagedReceiptV16)
     val ffnReceipt=Valid(new HostRuntimeFfnStagedReceiptV17)
+    val vectorAcquire=Valid(new UnifiedMoeArithmeticLeaseV5)
+    val vectorRetire=Valid(new UnifiedMoeArithmeticRetireV5)
+    val vectorRequest=Decoupled(new UnifiedVectorElement32PayloadV4)
+    val vectorResult=Flipped(Decoupled(new UnifiedVectorElement32ResultPayloadV4))
     val scalarAcquire=Valid(new UnifiedMoeArithmeticLeaseV5)
     val scalarRetire=Valid(new UnifiedMoeArithmeticRetireV5)
   }
   def connect(a:UnifiedMoeSharedArithmeticAdapterV5,g:HostRuntimeOwnerGuardV5,
       authority:HostRuntimeAuthoritySnapshotV4,k:QwenOwnerKernel,currentIndependentFault:Bool,scalarPort:UnifiedScalarClientV2,chunkReceipt:ValidIO[GdnRuntimeChunkStagedReceiptV10]):View={
+    connectPorts(Rms32PortRefsV1.arithmetic(a),Rms32PortRefsV1.guard(g),authority,Rms32PortRefsV1.owner(k),currentIndependentFault,scalarPort,chunkReceipt)
+  }
+  def connectPorts(a:Rms32PortRefsV1.Arithmetic,g:Rms32PortRefsV1.Guard,
+      authority:HostRuntimeAuthoritySnapshotV4,k:Rms32PortRefsV1.Owner,currentIndependentFault:Bool,scalarPort:UnifiedScalarClientV2,chunkReceipt:ValidIO[GdnRuntimeChunkStagedReceiptV10]):View={
     val out=Wire(new View)
     val logical=Reg(new QwenOwnerJob);val host=Reg(new HostCommandLaunchV4)
     val transaction=Reg(UInt(64.W));val physical=Reg(UInt(32.W))
@@ -316,7 +324,7 @@ object HostRuntimePrefixLeaseWiringV8 {
     val prepReceipt=Reg(new GdnRuntimeRawPrepReceiptV8)
     val slots=Seq(8,9)
     val busy=waiting || owned || awaitPrepare || acquirePending || retirePending || k.io.runtimePrepPrepare.get.valid ||
-      slots.map(i=>a.io.status(i).active || a.io.status(i).retiring).reduce(_||_)
+      (slots:+11).map(i=>a.io.status(i).active || a.io.status(i).retiring).reduce(_||_)
     val contextChanged=(waiting || owned) && (!authority.accepted ||
       authority.transaction=/=transaction || authority.launch.asUInt=/=host.asUInt)
     when(contextChanged || ((waiting || owned) &&
@@ -553,9 +561,10 @@ object HostRuntimePrefixLeaseWiringV8 {
     val expected=WireDefault(logical);expected.tag:=g.io.physicalJob.bits.tag
     val normShape=normCommon(logical) && normPostPhase===(logical.qkRole===3.U)
     val postnormShape=normShape && normPostPhase
-    val normScalarOperations=logical.m.pad(64)*Mux(logical.n===1024.U,5228.U,10412.U)
-    val normFormatOperations=logical.m.pad(64)*logical.n.pad(64)
-    val normMemoryOperations=normFormatOperations>>3
+    val normScalarOperations=logical.m.pad(64)*4.U
+    val normVectorOperations=logical.m.pad(64)*Mux(logical.n===1024.U,206.U,400.U)
+    val normFormatOperations=0.U(64.W)
+    val normMemoryOperations=(logical.m.pad(64)*logical.n.pad(64))>>3
     val convShape=logical.kind===QwenOwnerKind.GdnConv.U &&
       logical.activationBf16 && logical.weightBf16 && logical.outputBf16 &&
       logical.m>=1.U && logical.m<=128.U && logical.k===4.U &&
@@ -684,15 +693,15 @@ object HostRuntimePrefixLeaseWiringV8 {
     when(physicalOfferBad){poison:=true.B}
     val packets=(0 until 2).map{i=>
       val p=WireDefault(0.U.asTypeOf(new UnifiedMoeArithmeticLeaseV5))
-      p.authorityKind:=Mux(elementwiseShape,UnifiedArithmeticAuthorityKindV5.OrdinaryElementwise.U,Mux(gqaShape,UnifiedArithmeticAuthorityKindV5.OrdinaryGqa.U,Mux(ropeShape,UnifiedArithmeticAuthorityKindV5.OrdinaryRope.U,Mux(qkShape,UnifiedArithmeticAuthorityKindV5.OrdinaryQkNorm.U,Mux(gatedShape,UnifiedArithmeticAuthorityKindV5.OrdinaryGatedNorm.U,
-        Mux(convShape,UnifiedArithmeticAuthorityKindV5.OrdinaryConv.U,UnifiedArithmeticAuthorityKindV5.OrdinaryNorm.U))))))
+      p.authorityKind:=Mux(normShape,UnifiedArithmeticAuthorityKindV5.OrdinaryRms32.U,Mux(elementwiseShape,UnifiedArithmeticAuthorityKindV5.OrdinaryElementwise.U,Mux(gqaShape,UnifiedArithmeticAuthorityKindV5.OrdinaryGqa.U,Mux(ropeShape,UnifiedArithmeticAuthorityKindV5.OrdinaryRope.U,Mux(qkShape,UnifiedArithmeticAuthorityKindV5.OrdinaryQkNorm.U,Mux(gatedShape,UnifiedArithmeticAuthorityKindV5.OrdinaryGatedNorm.U,
+        Mux(convShape,UnifiedArithmeticAuthorityKindV5.OrdinaryConv.U,UnifiedArithmeticAuthorityKindV5.OrdinaryNorm.U)))))))
       p.allocationValid:=false.B;p.allocationSequence:=0.U // deliberately NOT a MoE allocation
       p.hostEpoch:=host.epoch;p.lease.identity.transactionId:=transaction
-      p.lease.identity.ownerSequence:=g.io.physicalJob.bits.tag;p.lease.identity.stage:=Mux(elementwiseShape,77.U,Mux(gqaShape,76.U,Mux(ropeShape,75.U,Mux(qkShape,74.U,Mux(gatedShape,73.U,Mux(convShape,70.U,69.U))))))
+      p.lease.identity.ownerSequence:=g.io.physicalJob.bits.tag;p.lease.identity.stage:=Mux(normShape,78.U,Mux(elementwiseShape,77.U,Mux(gqaShape,76.U,Mux(ropeShape,75.U,Mux(qkShape,74.U,Mux(gatedShape,73.U,Mux(convShape,70.U,69.U)))))))
       p.lease.resource:=(if(i==0)2 else 1).U
-      p.lease.expectedOperations:=Mux(elementwiseShape,(if(i==0)elementwiseScalarOperations(31,0) else elementwiseFormatOperations(31,0)),Mux(gqaShape,(if(i==0)gqaScalarOperations(31,0) else 0.U),logical.m.pad(32)*
+      p.lease.expectedOperations:=Mux(normShape,(if(i==0)normScalarOperations(31,0)else normVectorOperations(31,0)),Mux(elementwiseShape,(if(i==0)elementwiseScalarOperations(31,0) else elementwiseFormatOperations(31,0)),Mux(gqaShape,(if(i==0)gqaScalarOperations(31,0) else 0.U),logical.m.pad(32)*
         (if(i==0)Mux(ropeShape,logical.n.pad(32)*192.U,Mux(qkShape,logical.n.pad(32)*Mux(logical.qkNormPolicy==="hc2".U,1316.U,1290.U),Mux(gatedShape,logical.n.pad(32)*1284.U,Mux(convShape,logical.n.pad(32)*13.U,Mux(logical.n===1024.U,5228.U(32.W),10412.U(32.W))))))
-         else Mux(qkShape || ropeShape,0.U,Mux(gatedShape,logical.n.pad(32)*256.U,Mux(convShape,logical.n.pad(32)<<1,logical.n.pad(32)))))))
+         else Mux(qkShape || ropeShape,0.U,Mux(gatedShape,logical.n.pad(32)*256.U,Mux(convShape,logical.n.pad(32)<<1,logical.n.pad(32))))))))
       p
     }
     // This is distinct from provenance/identity: a held Guard job is still
@@ -845,7 +854,7 @@ object HostRuntimePrefixLeaseWiringV8 {
     val elementwiseEvent=k.io.runtimeElementwiseDoneFire.get
     val elementwiseExpected=GdnRuntimeElementwiseJobV15.fromOwner(retainedPhysical)
     val outputCountsExact=slots.indices.map{i=>
-      val r=a.io.status(slots(i))
+      val r=a.io.status(if(i==0)8.U else Mux(normShape,11.U,9.U))
       r.lease.asUInt===leases(i).asUInt && r.resourcesDrained &&
         r.counts.accepted===leases(i).lease.expectedOperations.pad(33) &&
         r.counts.issued===leases(i).lease.expectedOperations.pad(33) &&
@@ -867,7 +876,10 @@ object HostRuntimePrefixLeaseWiringV8 {
         elementwiseEvent.bits.memoryReturned===elementwiseEvent.bits.memoryAccepted))
     val normEvent=k.io.runtimeRmsDoneFire.get
     val normExpected=GdnRuntimeRmsNormJobV3.fromOwner(retainedPhysical)
-    val normTerminalExact=normEvent.bits.tag===physical && normEvent.bits.accepted.asUInt===normExpected.asUInt &&
+    val normDebtDrained=k.io.runtimeRms.get.resourcesDrained && normEvent.bits.resourcesDrained &&
+      (!leaseEventSubmitted || (a.io.status(8).resourcesDrained && a.io.status(11).resourcesDrained &&
+        a.io.status(8).lease.asUInt===leases(0).asUInt && a.io.status(11).lease.asUInt===leases(1).asUInt))
+    val normTerminalExact=normDebtDrained && normEvent.bits.tag===physical && normEvent.bits.accepted.asUInt===normExpected.asUInt &&
       normEvent.bits.status===g.io.physicalDone.bits.status && normEvent.bits.writeBytes===g.io.physicalDone.bits.writeBytes &&
       normEvent.bits.cycles===g.io.physicalDone.bits.cycles &&
       (normEvent.bits.status=/=Status.Ok.U || (leaseEventSubmitted && outputCountsExact &&
@@ -877,6 +889,8 @@ object HostRuntimePrefixLeaseWiringV8 {
         normEvent.bits.scalarReturned===normEvent.bits.scalarAccepted &&
         normEvent.bits.formatAccepted.pad(64)===normFormatOperations &&
         normEvent.bits.formatReturned===normEvent.bits.formatAccepted &&
+        normEvent.bits.vectorAccepted.pad(64)===normVectorOperations &&
+        normEvent.bits.vectorReturned===normEvent.bits.vectorAccepted &&
         normEvent.bits.memoryAccepted.pad(64)===normMemoryOperations &&
         normEvent.bits.memoryReturned===normEvent.bits.memoryAccepted))
     val terminalExact=g.io.physicalDone.bits.tag===physical && !contextChanged &&
@@ -1023,17 +1037,25 @@ object HostRuntimePrefixLeaseWiringV8 {
         out.scalarAcquire.valid:=acquirePending;out.scalarAcquire.bits:=leases(i)
         out.scalarRetire.valid:=retirePending;out.scalarRetire.bits.lease:=leases(i);out.scalarRetire.bits.status:=retireStatus
       }else{
-        a.io.acquire(slots(i)).valid:=acquirePending && !qkShape && !ropeShape && !gqaShape;a.io.acquire(slots(i)).bits:=leases(i)
-        a.io.retire(slots(i)).valid:=retirePending && !qkShape && !ropeShape && !gqaShape;a.io.retire(slots(i)).bits.lease:=leases(i)
+        a.io.acquire(slots(i)).valid:=acquirePending && !normShape && !qkShape && !ropeShape && !gqaShape;a.io.acquire(slots(i)).bits:=leases(i)
+        a.io.retire(slots(i)).valid:=retirePending && !normShape && !qkShape && !ropeShape && !gqaShape;a.io.retire(slots(i)).bits.lease:=leases(i)
         a.io.retire(slots(i)).bits.status:=retireStatus
       }
     }
+    out.vectorAcquire.valid:=acquirePending && normShape;out.vectorAcquire.bits:=leases(1)
+    out.vectorRetire.valid:=retirePending && normShape;out.vectorRetire.bits.lease:=leases(1)
+    out.vectorRetire.bits.status:=retireStatus
     // A leaf-local offer is not yet an exposed shared-service obligation.
     // Two bits preserve only previously published requests through late fault;
     // CURRENT independent fault blocks first publication without cancelling
     // a held request. Adapter's own current fault still blocks fresh captures
     // internally; feeding it back into these valid gates would form a cycle.
     val firstFault=currentIndependentFault || poison || contextChanged || physicalOfferBad || prepareBad || g.io.localFault
+    val vector=k.io.runtimeRms.get.vectorRequest
+    val vectorPublish=HeldDecoupledOffer(owned && normShape && vector.valid,out.vectorRequest.ready,firstFault)
+    out.vectorRequest.valid:=vectorPublish.valid;out.vectorRequest.bits:=vector.bits
+    vector.ready:=out.vectorRequest.ready && vectorPublish.valid
+    k.io.runtimeRms.get.vectorResult<>out.vectorResult
     val scalar=k.io.runtimeRms.get.scalar
     val scalarPublish=HeldDecoupledOffer(scalar.request.valid,scalarPort.request.ready,firstFault)
     scalarPort.request.valid:=scalarPublish.valid;scalarPort.request.bits:=scalar.request.bits
@@ -1062,8 +1084,8 @@ object HostRuntimePrefixLeaseWiringV8 {
     out.prepReceipt.valid:=prepReceiptValid && receiptCurrent && !receiptFault && !prepReplacement && !busy &&
       slots.map(i=>a.io.status(i).resourcesDrained).reduce(_&&_) && k.io.runtimeRms.get.resourcesDrained
     out.localFault:=poison || contextChanged || physicalOfferBad || prepareBad || outputLogicalOfferBad || denseOPhysicalBad || ffnDensePhysicalBad
-    out.eventsPending:=acquirePending || retirePending || awaitPrepare || prep.valid || scalarPublish.held || formatPublish.held || denseOWaiting || denseOBusy || ffnDenseWaiting || ffnDenseBusy
-    out.resourcesDrained:= !busy && !denseOWaiting && !denseOBusy && !ffnDenseWaiting && !ffnDenseBusy && !scalarPublish.held && !formatPublish.held && slots.map(i=>a.io.status(i).resourcesDrained).reduce(_&&_) &&
+    out.eventsPending:=acquirePending || retirePending || awaitPrepare || prep.valid || scalarPublish.held || formatPublish.held || vectorPublish.held || denseOWaiting || denseOBusy || ffnDenseWaiting || ffnDenseBusy
+    out.resourcesDrained:= !busy && !denseOWaiting && !denseOBusy && !ffnDenseWaiting && !ffnDenseBusy && !scalarPublish.held && !formatPublish.held && !vectorPublish.held && (slots:+11).map(i=>a.io.status(i).resourcesDrained).reduce(_&&_) &&
       k.io.runtimeRms.get.resourcesDrained
     out
   }

@@ -51,7 +51,7 @@ class BlockResult extends Bundle {val status=UInt(8.W);val phase=UInt(5.W);val e
   * Fifteen stages share the DDR request/ack interface. QK uses O(T) score SRAM.
   * Each successor starts only after the previous stage's final write ACK.
   */
-class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false, externalScalar:Boolean=false, enableGdnSoftplus:Boolean=false, externalElementwiseLoan:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableProductionPackedQk16:Boolean=false,enableOrderedVectorQkFold:Boolean=false,enableUnifiedScalarService:Boolean=false) extends Module {
+class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false, externalScalar:Boolean=false, enableGdnSoftplus:Boolean=false, externalElementwiseLoan:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableProductionPackedQk16:Boolean=false,enableOrderedVectorQkFold:Boolean=false,enableUnifiedScalarService:Boolean=false,enableOrderedRms32:Boolean=false) extends Module {
   require(!enableUnifiedScalarService || ownerDriven,"unified Scalar lending requires owner serialization")
   require(!enableOrderedVectorQkFold || (enableProductionPackedQk16 && s.headDim==128), "ordered vector QK fold requires selected production packed QK16 headDim128")
   require(!enableProductionPackedQk16 || (ownerDriven && externalMatrix && Qwen2NumericPolicy.official(numericPolicy)), "production QK16 requires the official external-Matrix owner; capacity stays 1024")
@@ -65,6 +65,7 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
   require(!externalMatrix || (s.retainedMatrix && s.matrixColumns==256))
   require(!s.nativeProfile || ownerDriven, "Qwen3.5 native subchains have no autonomous block route")
   require(!externalScalar || ownerDriven, "shared scalar requests require owner serialization")
+  require(!enableOrderedRms32 || (ownerDriven && officialBf16 && s.hidden==1536), "ordered RMS32 requires official1536 owner")
   val layout=new QwenBlockLayout(s)
   // Reuse each weight vector across up to sixteen token rows. No split-K:
   // each output still receives the identical increasing-K sequence of FMAs.
@@ -72,6 +73,12 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
   val denseColumns = if(s.retainedMatrix) s.matrixColumns else 16
   val denseBeatBits = math.max(1,log2Ceil(denseColumns/16))
   val io=IO(new Bundle {
+    val rmsVectorAbort=if(enableOrderedRms32)Some(Input(Bool()))else None
+    val rmsVectorPublished=if(enableOrderedRms32)Some(Input(Bool()))else None
+    val rmsVectorDrained=if(enableOrderedRms32)Some(Output(Bool()))else None
+    val rmsVectorResetRequired=if(enableOrderedRms32)Some(Output(Bool()))else None
+    val rmsVectorRequest=if(enableOrderedRms32)Some(Decoupled(new UnifiedVectorElement32PayloadV4))else None
+    val rmsVectorResult=if(enableOrderedRms32)Some(Flipped(Decoupled(new UnifiedVectorElement32ResultPayloadV4)))else None
     val launch=Flipped(Decoupled(new BlockLaunch));val result=Decoupled(new BlockResult)
     val matrixRequest=if(externalMatrix)Some(Decoupled(new WideMatrixStep(256)))else None
     val matrixResult=if(externalMatrix)Some(Flipped(Decoupled(new WideMatrixResult(256))))else None
@@ -95,6 +102,22 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
     val acknowledgedWriteBytes=Output(UInt(64.W))
     val resourcesDrained=Output(Bool()) // private actual core/service/SRAM retirement
   })
+  val rms32Abort=WireDefault(false.B)
+  val rms32ReadDrained=WireDefault(true.B)
+  val rms32ReadFault=WireDefault(false.B)
+  val rms32=if(enableOrderedRms32)Some(Module(new OrderedRms1536Reduction32))else None
+  rms32.foreach { r =>
+    r.io.abort:=rms32Abort
+    r.io.vectorPublished:=io.rmsVectorPublished.get
+    io.rmsVectorDrained.get:=r.io.drained && rms32ReadDrained
+    io.rmsVectorResetRequired.get:=r.io.resetRequired || rms32ReadFault
+    io.rmsVectorRequest.get <> r.io.vector
+    r.io.vectorResult <> io.rmsVectorResult.get
+    r.io.start.valid:=false.B;r.io.start.bits:=true.B
+    r.io.read.ready:=false.B;r.io.readResult.valid:=false.B
+    r.io.readResult.bits:=VecInit(Seq.fill(16)(0.U(32.W)))
+    r.io.result.ready:=false.B
+  }
   dontTouch(io) // Public ABI retained under the joint HardFloat elaboration.
   val names=Seq("idle","begin","memReq","memRsp","localReq","localRsp","localWrite","scalarReq","scalarRsp","advance","normLoad","normGot","normSquare","normReduce","normReduceDone","normMean","normEps","normSqrt","normInv","normEmit","normLocal","normGamma","normScale","normProduct","normWritten","denseLoad","denseGot","denseLoaded","denseLocal","denseWindowReq","denseWindowGot","denseWeight","denseWeightHi","denseWeightReady","denseCompute","denseBias","denseBiasGot","denseWrite","denseWritten","ropeStart","ropeEven","ropeOdd","ropeCos","ropeSin","ropeMul0","ropeMul1","ropeAdd0","ropeAdd1","ropeWrite0","ropeWrite1","ropeWritten","attQLoad","attQGot","attQStored","attKey","attLocal","attDot","attReduce","attReduceDone","attScore","attNextKey","attExpRead","attExpWait","attExpDiff","attExpResult","attExpSum","attInv","attPVStart","attProbRead","attProbWait","attProbScale","attPVCompute","attPVWrite","attPVWritten","siluRead","siluGate","siluUp","siluExp","siluDenom","siluInv","siluSign","siluGateMul","siluUpMul","siluNext","siluWritten","resIssue","resWait","finish","locked","biasRead","biasOperand","biasSum","biasWritten","normRetain","normOfficialRead","normOfficialSquare","normOfficialAdd","normOfficialTerm","normOfficialBlock","normOfficialResidue","normOfficialLane","attPackedIssue","attPackedSelect") ++ (if(enableOrderedVectorQkFold)Seq("attVectorScan","attVectorFold","attVectorScale","attVectorRetire")else Seq.empty[String])
   require(names.size<=128,"block state encoding remains seven bits")
@@ -361,10 +384,11 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
   val unexpectedScalarReturn=scalar.io.result.valid && state=/=st("scalarRsp") && !scalarExternalOwned && !scalarUnifiedOwned
   val idleMemoryOrSramReturn=state===st("idle") && (io.response.valid || f.rd_resp_valid_o.orR)
   val transportFault=unexpectedScalarReturn || scalarProtocolFault || scalarProtocolQuarantine || scalarUnifiedFault || unexpectedMatrixReturn || idleMemoryOrSramReturn
+  rms32Abort:=poisoned || transportFault || rms32ReadFault || io.rmsVectorAbort.getOrElse(false.B)
   val transportQuarantine=RegInit(false.B);when(transportFault){transportQuarantine:=true.B}
   scalarLendingAllowed:= !poisoned && !transportQuarantine && !transportFault &&
     !elementwiseExternalExclusive && matrixInternalQuiet && !packedBusy && !packedFeedDebt
-  io.resourcesDrained:=state===st("idle") && !poisoned && !transportQuarantine && !transportFault &&
+  io.resourcesDrained:=rms32.map(_.io.drained).getOrElse(true.B) && rms32ReadDrained && state===st("idle") && !poisoned && !transportQuarantine && !transportFault &&
     !scalarExternalExclusive && !scalarUnifiedExclusive && !scalarInFlight && !scalar.io.request.valid && !scalar.io.result.valid &&
     !elementwiseExternalExclusive && elem.io.job.ready && !elem.io.done.valid && !elem.io.memory.valid &&
     !elem.io.resetRequired && !io.memory.valid && !io.response.valid &&
@@ -372,8 +396,8 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
     matrixInternalQuiet && !packedBusy && !packedFeedDebt
   io.launch.ready:=(if(ownerDriven)false.B else state===st("idle")&& !poisoned && !transportQuarantine && !transportFault)
   if(ownerDriven){io.ownerJob.get.ready:=state===st("idle")&& !poisoned && !transportQuarantine && !transportFault && !scalarExternalExclusive && !scalarUnifiedExclusive && !elementwiseExternalExclusive}
-  io.result.valid:=state===st("finish") && !packedBusy && !packedFeedDebt;io.result.bits.status:=status;io.result.bits.phase:=phase;io.result.bits.epoch:=epoch;io.result.bits.cycles:=cycles;io.result.bits.macs:=macs;io.result.bits.executedMacs:=(physicalSteps-(if(s.retainedMatrix)physicalBase else 0.U))*(if(s.retainedMatrix)512.U else 16.U)
-  io.phase:=phase;io.stageCommit:=false.B;io.committedPhase:=phase;io.resetRequired:=poisoned||elem.io.resetRequired||transportQuarantine||transportFault;io.readBytes:=reads;io.writeBytes:=writes
+  io.result.valid:=state===st("finish") && rms32.map(_.io.drained).getOrElse(true.B) && rms32ReadDrained && !packedBusy && !packedFeedDebt;io.result.bits.status:=status;io.result.bits.phase:=phase;io.result.bits.epoch:=epoch;io.result.bits.cycles:=cycles;io.result.bits.macs:=macs;io.result.bits.executedMacs:=(physicalSteps-(if(s.retainedMatrix)physicalBase else 0.U))*(if(s.retainedMatrix)512.U else 16.U)
+  io.phase:=phase;io.stageCommit:=false.B;io.committedPhase:=phase;io.resetRequired:=rms32ReadFault||rms32.map(_.io.resetRequired).getOrElse(false.B)||poisoned||elem.io.resetRequired||transportQuarantine||transportFault;io.readBytes:=reads;io.writeBytes:=writes
   // Count memory visibility acknowledgements, not issued stores. The fence
   // observes both the block engine and the shared residual elementwise engine.
   val writeback = Module(new BlockWritebackFence)
@@ -465,7 +489,31 @@ class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolea
   // RMSNorm: row SRAM and fixed-order FP32 sum of squared FP32 products.
   when(state===st("normLoad")){read(base+nIn+((rowOffset(s.hidden.U)+col).pad(64)<<2),"normGot")}
   when(state===st("normGot")){av:=packet.asTypeOf(av);localWrite(col>>4,packet,if(officialBf16)"normRetain" else "normSquare")}
-  if(officialBf16){
+  if(officialBf16 && enableOrderedRms32){
+    val r=rms32.get
+    when(state===st("normRetain")){
+      when(col+16.U<s.hidden.U){col:=col+16.U;state:=st("normLoad")}.otherwise{
+        r.io.start.valid:=true.B
+        when(r.io.start.fire){sum:=0.U;state:=st("normOfficialRead")}
+      }
+    }
+    // Actual reusable debt bridge: core.fail cannot erase its state.
+    val bridge=Module(new OrderedRmsSramReadBridge32)
+    bridge.io.active:= !r.io.drained
+    bridge.io.externalUnexpected:=(f.rd_resp_valid_o & ~1.U(f.rd_resp_valid_o.getWidth.W)).orR
+    bridge.io.request<>r.io.read;r.io.readResult<>bridge.io.response
+    bridge.io.physicalRequest.ready:=f.rd_ready_o(0)
+    when(bridge.io.physicalRequest.valid){f.rd_valid_i:=1.U;f.rd_addr_i:=bridge.io.physicalRequest.bits}
+    bridge.io.physicalResponse.valid:=f.rd_resp_valid_o(0)
+    bridge.io.physicalResponse.bits:=f.rd_data_o(511,0)
+    when(bridge.io.physicalResponse.ready){f.rd_resp_ready_i:=1.U}
+    rms32ReadDrained:=bridge.io.drained;rms32ReadFault:=bridge.io.resetRequired
+    r.io.result.ready:=state===st("normOfficialRead") || poisoned
+    when(r.io.result.fire && !poisoned){
+      when(r.io.result.bits.error || r.io.resetRequired || rms32ReadFault){fail(Status.Numerical.U)}
+        .otherwise{sum:=r.io.result.bits.sum;state:=st("normMean")}
+    }
+  }else if(officialBf16){
     // Frozen Torch1536 index: b*512+t*32+r*8+l. Serialize independent
     // lanes without reassociation: 16 terms, then 3 blocks, 4 residues,
     // 8 lanes. Only three 32-bit partial registers; sum and row already exist.

@@ -41,7 +41,25 @@ def adaptation_inputs(a,pins):
  if path is not None:
   roles['retained_materials']=input_pin(path,digest,2<<20)
   p=D/'runtime/retained_materials.py';need(pins.get(str(p))==sha(p),'retained materials verifier source pin')
+ path=getattr(a,'model_candidate_review',None);digest=getattr(a,'model_candidate_review_sha256',None)
+ need((path is None)==(digest is None),'paired model candidate review path/digest')
+ if path is not None:
+  roles['model_candidate_review']=input_pin(path,digest,2<<20)
+  for name in ('candidate_admission.py','candidate_artifact_handoff.py'):
+   p=D/'numeric'/name;need(pins.get(str(p))==sha(p),'model candidate verifier source pin')
  return roles
+
+def imported_handoff(roles,frozen,identity,pins,manifest,repo):
+ candidate=frozen.get('schema')=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'
+ extra={'executor_adaptation':roles['executor_adaptation']}if 'executor_adaptation'in roles else {}
+ name='artifact_handoff.py'
+ if candidate:
+  need(roles.get('model_candidate_review')is not None,'MODEL_CANDIDATE_REVIEW_REQUIRED')
+  name='candidate_artifact_handoff.py'
+  extra.update(model_candidate_review=roles['model_candidate_review'],current_source_pins_pin=dict(path=str(manifest),bytes=manifest.stat().st_size,sha256=sha(manifest)),repo=repo)
+ else:need('model_candidate_review'not in roles,'model review cannot relabel legacy artifact')
+ path=D/'numeric'/name;need(pins.get(str(path))==sha(path),'actual selected artifact verifier source pin')
+ return load('entry_selected_handoff',path).verify(roles['builder_handoff']['path'],roles['builder_handoff']['sha256'],roles['artifact_manifest']['path'],roles['artifact_manifest']['sha256'],frozen,identity,**extra)
 
 def reviewed_source(imported,identity,roles,manifest,repo):
  if 'executor_adaptation'in roles:
@@ -56,7 +74,7 @@ def run(a):
  frozen=json.loads(P(roles['artifact_manifest']['path']).read_text())
  policy=load('cloud_profile_policy',D/'profile_policy.py');policy.require_source_pin(pins)
  b=dict(schema='CLOUD_FIVE_M128_EXECUTION_BINDING_V1',execution_context='CLOUD_EXECUTOR_V1',identity=identity,executor_identity=identity,source_pins=dict(path=str(manifest),bytes=manifest.stat().st_size,sha256=sha(manifest)),executor_identity_pin=roles['executor_identity'],builder_handoff=roles['builder_handoff'],artifact_manifest=roles['artifact_manifest'],cloud_budget=roles['cloud_budget'],execution_approval=roles['execution_approval'],artifact_identity=frozen['artifact_identity'],execution_policy=policy.policy(policy.FULL),profiles=list(range(5)),tokens=128,matrix_macs=4096,vector_lanes=32,payload_uploads=False,final_rtl_replay=False,job_started_monotonic=identity['started_monotonic'],repo=str(repo),job_root=str(a.work),pins=pins,runtime_package=str(D/'runtime'),numeric_package=str(D/'numeric'),python=str(P(sys.executable).resolve()),supervisor_dir=str(repo/'candidates/ci_frontend_pipeline_r2_20261029'),shared_runtime_helper=str(repo/'candidates/same_job_materialization_20261029/shared_runtime.py'),materializer=str(repo/'candidates/same_job_materialization_20261029'))
- b.update({k:roles[k]for k in ('executor_adaptation','workspace_loader','retained_materials')if k in roles})
+ b.update({k:roles[k]for k in ('executor_adaptation','workspace_loader','retained_materials','model_candidate_review')if k in roles})
  budget=load('cloud_reviewed_budget',D/'cloud_budget.py').admit(b)
  for key in ('runtime_mode','archive_mode','runtime_reuse_manifest','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','reserved_other_owner_bytes','consumer_address_space_bytes','stage_resources','execution_mode','full_block_budget'):b[key]=budget[key]
  b['calibration_seconds']=b['budgets']['calibration_seconds']
@@ -91,7 +109,7 @@ def prepare_identity(a):
  mode=load('cloud_identity_mode',D/'execution_mode.py').admit(stub)
  _,_,total=load('cloud_identity_flow',D/'controller/cloud_flow.py').reservations(stub,mode)
  frozen=json.loads(P(roles['artifact_manifest']['path']).read_text())
- imported=load('cloud_identity_handoff',D/'numeric/artifact_handoff.py').verify(roles['builder_handoff']['path'],roles['builder_handoff']['sha256'],roles['artifact_manifest']['path'],roles['artifact_manifest']['sha256'],frozen,identity,**({'executor_adaptation':roles['executor_adaptation']}if 'executor_adaptation'in roles else {}))
+ imported=imported_handoff(roles,frozen,identity,pins,manifest,repo)
  reviewed_source(imported,identity,roles,manifest,repo)
  need(time.monotonic()-identity['started_monotonic']+total<=admitted['job_budget_seconds'],'actual remaining cloud deadline before identity publication')
  work=P(a.work);need(work.is_absolute()and not work.exists()and all(not p.is_symlink()for p in(work,*work.parents)),'fresh canonical executor work')
@@ -104,7 +122,7 @@ def main():
  p.add_argument('--repo',type=P,required=True);p.add_argument('--work',type=P,required=True)
  for role in ('builder-handoff','artifact-manifest','cloud-budget','execution-approval'):
   p.add_argument('--'+role,type=P,required=True);p.add_argument('--'+role+'-sha256',required=True)
- for role in ('executor-identity','host-identity','executor-adaptation','workspace-loader','retained-materials'):
+ for role in ('executor-identity','host-identity','executor-adaptation','workspace-loader','retained-materials','model-candidate-review'):
   p.add_argument('--'+role,type=P);p.add_argument('--'+role+'-sha256')
  a=p.parse_args()
  if a.executor_identity is None:need(a.host_identity is not None and a.host_identity_sha256 is not None,'reviewed host pin required to form current executor identity')

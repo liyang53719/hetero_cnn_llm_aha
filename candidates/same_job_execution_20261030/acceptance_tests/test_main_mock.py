@@ -11,7 +11,7 @@ class MainTests(unittest.TestCase):
    data=struct.pack('<I',0x3b800000)*32768;raw=refdir/'reference_only/probs.bin';raw.write_bytes(data)
    rr=dict(profile={'profile':3},status='CAPTURED_FRESH_OFFICIAL_FULL_BLOCK_REFERENCE_ONLY',complete_block_tokens=128,exact_baseline_observer_output_equal=True,hardware_executed=False,numerical_comparison_with_hardware=False,router_policy='UNMODIFIED_OFFICIAL_TORCH_TOPK',raw_router_score_observation='ORIGINAL_FORWARD_LOCAL_RETURN_READONLY_PROFILE',no_reference_outputs_or_router_ids_allowed_in_hardware_stimulus=True,tensor_records={m.KEY:dict(shape=[128,256],dtype='torch.float32',bytes=len(data),file='reference_only/probs.bin',sha256=m.digest(data))})
    ref=refdir/'RESULT.json';ref.write_text(json.dumps(rr));views=root/'views';views.write_text('HEADER\n');runtime=root/'runtime';runtime.write_text('runtime')
-   receipt=root/'receipt';receipt.write_text(json.dumps(dict(config_only=False,software_arithmetic_substitution=False,**{k+'_sha256':'0'*64 for k in ('binary','sv','source_manifest','driver')})))
+   receipt=root/'receipt';receipt.write_text(json.dumps(dict(schema='FROZEN_FIVE_PROFILE_DUT_ARTIFACT_V2',config_only=False,software_arithmetic_substitution=False,**{k+'_sha256':'0'*64 for k in ('binary','sv','source_manifest','driver')})))
    pins={k:dict(path=str(receipt),bytes=receipt.stat().st_size,sha256='0'*64) for k in ('binary','sv','source_manifest','driver','build_receipt')}
    profile=dict(id=3,runtime={'path':str(runtime)},views={'path':str(views)},reference_result={'path':str(ref)},provider_receipt={'path':str(receipt)})
    limits=dict(file_bytes=64*1024**2,max_active_cycles=1,wall_seconds=100,cpu_seconds=100,address_space_bytes=1024**3)

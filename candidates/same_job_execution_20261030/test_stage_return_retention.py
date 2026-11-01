@@ -1,7 +1,8 @@
 """Local return persistence only. No subprocess, DUT or real runtime import."""
 import ast,hashlib,json,pathlib,tempfile,types,unittest
 D=pathlib.Path(__file__).resolve().parent
-BASE_AST={'controller/cloud_flow.py': '69ba04c76f107bd2da183d15b752ba36b73cf696342fbffd65c6355d32dd520c', 'controller/flow.py': '6640f4a848fc6cbc4300bb774c6d1e8e6ed8f055c29cc23e868cfc73ceaccfcf', 'numeric/numeric_tail.py': '0f3567b14af205ff5e480ea7dab60ba2dda79e35dfe7fe2281afe5b488dc0d7b'}
+# Candidate flow/tail branches independently reviewed 2026-11-01; not a save-only delta.
+BASE_AST={'controller/cloud_flow.py': '1d5f8f80511850394a4d8bb0bd2744c0ba3dfae82a6a98c65d981ded2691f9e4', 'controller/flow.py': '6640f4a848fc6cbc4300bb774c6d1e8e6ed8f055c29cc23e868cfc73ceaccfcf', 'numeric/numeric_tail.py': '4946ee900cd42024fd0f4e6c7589b29671fbc4b258c3a31906741c4e3bbb6232'}
 EXPECTED={
  'controller/cloud_flow.py':"save(job / 'bindings' / (name + '_SUPERVISOR_RETURN.json'), r)",
  'controller/flow.py':"save(job / 'bindings' / (name + '_SUPERVISOR_RETURN.json'), r)",
@@ -9,7 +10,7 @@ EXPECTED={
 }
 class Test(unittest.TestCase):
  def tree(self,rel):return ast.parse((D/rel).read_text())
- def test_only_exact_save_added(self):
+ def test_exact_save_and_reviewed_version_ast(self):
   for rel,wanted in EXPECTED.items():
    t=self.tree(rel)
    class Strip(ast.NodeTransformer):

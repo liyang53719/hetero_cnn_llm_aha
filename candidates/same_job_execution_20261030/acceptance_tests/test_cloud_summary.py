@@ -9,7 +9,7 @@ class Tests(unittest.TestCase):
  def fixture(self,root,ids=range(5)):
   job=root/'job';job.mkdir();base.Tests().setup_fixture(job,ids);n=job/'materials/numeric'
   executor=dict(schema='CLOUD_EXECUTOR_IDENTITY_V1',source_commit='a'*40,execution_id='11111111-2222-4333-8444-555555555555',boot_id='aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee',controller_pid=123,start_tick=456,host_identity_sha256='d'*64,started_monotonic=1)
-  builder=dict(base.ID);manifest=root/'frozen_artifact.json';manifest.write_text(json.dumps(dict(artifact_identity=builder,common={'binary':{'sha256':base.H}})));handoff=root/'HANDOFF.json';handoff.write_text('{}')
+  builder=dict(base.ID);manifest=root/'frozen_artifact.json';manifest.write_text(json.dumps(dict(schema='FROZEN_FIVE_PROFILE_DUT_ARTIFACT_V2',artifact_identity=builder,common={'binary':{'sha256':base.H}})));handoff=root/'HANDOFF.json';handoff.write_text('{}')
   approval=root/'APPROVAL.json';approval.write_text('{}');budget=root/'BUDGET.json';budget.write_text('{}')
   b=dict(job_root=str(job),identity=executor,execution_approval=s.pin(approval),cloud_budget=s.pin(budget),artifact_identity=builder,artifact_manifest=s.pin(manifest),builder_handoff=s.pin(handoff),execution_mode='BOUNDED_CALIBRATION',calibration_seconds={str(i):300 for i in range(5)})
   bp=root/'BINDING.json';bp.write_text(json.dumps(b));nf=n/'RESULT.json';nr=json.loads(nf.read_text())

@@ -41,7 +41,7 @@ class FullMainFixture(unittest.TestCase):
    provider=dump(root/'provider.json',dict(scope='SYNTHETIC MOCK PROVIDER'))
    profile=dict(id=1,runtime=pin(runtime),views=pin(views),reference_result=pin(ref),provider_receipt=pin(provider))
    bundle=dump(root/'bundle.json',dict(scope='SYNTHETIC MOCK BUNDLE'))
-   artifact=dump(root/'artifact.json',dict(scope='SYNTHETIC MOCK BUILD'))
+   artifact=dump(root/'artifact.json',dict(schema='FROZEN_FIVE_PROFILE_DUT_ARTIFACT_V2',scope='SYNTHETIC MOCK BUILD'))
    limits=dict(file_bytes=64*1024**2,max_active_cycles=1000,wall_seconds=100,cpu_seconds=100,address_space_bytes=1024**3)
    b=dict(layer=a.LAYER,matrix_macs=4096,vector_lanes=32,moe_reference_contract='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE',common=common,profiles=[profile],limits=limits,coverage_policy={})
    args=types.SimpleNamespace(owned_environment=provider,owned_environment_sha256=pin(provider)['sha256'],expected_run_id=1,expected_launch_commit='1'*40,expected_source_commit='2'*40,strict_outer_supervised=True,artifact_manifest=artifact,artifact_manifest_sha256=pin(artifact)['sha256'],runtime_bundle=bundle,profile=1,calibration_wall_seconds=1,validate_only=False,output=root/'output',local_build_result_sha256='3'*64)

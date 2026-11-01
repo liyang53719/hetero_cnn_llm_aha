@@ -35,6 +35,9 @@ def source_guard(binding):
   p=D/'executor_adaptation.py';need(files.get(str(p))==sha(p)and binding['pins'].get(str(p))==sha(p),'reviewed executor adaptation source')
  if binding.get('retained_materials') is not None:
   p=D/'runtime/retained_materials.py';need(str(p)in files and files.get(str(p))==sha(p)and binding['pins'].get(str(p))==sha(p),'reviewed retained materials source')
+ if binding.get('model_candidate_review')is not None:
+  for name in ('candidate_admission.py','candidate_artifact_handoff.py'):
+   p=D/'numeric'/name;need(files.get(str(p))==sha(p)and binding['pins'].get(str(p))==sha(p),'candidate helper in reviewed closure')
  return binding['source_pins']['sha256']
 
 # Only fixed actual supervisor result locations; never glob arbitrary files.
@@ -71,19 +74,23 @@ def project(job,binding_path,binding_sha):
   need(b['job_root']==str(job)and job.is_absolute()and job==job.resolve(),'owning fixed job root')
   source_sha=source_guard(b)
   executor=load('summary_cloud_identity',D/'executor_identity.py').validate(b['identity'])
-  handoff=load('summary_cloud_handoff',D/'numeric/artifact_handoff.py')
-  manifest=checked(b['artifact_manifest']);frozen=read(manifest);builder=handoff.builder_identity(b['artifact_identity'])
+  manifest=checked(b['artifact_manifest']);frozen=read(manifest);candidate=frozen['schema']=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'
+  handoff=load('summary_cloud_handoff',D/'numeric'/('candidate_artifact_handoff.py'if candidate else'artifact_handoff.py'));builder=handoff.builder_identity(b['artifact_identity'])
+  need(candidate==('model_candidate_review'in b),'candidate artifact requires explicit reviewed branch')
+  review=load('summary_candidate_admission',D/'numeric/candidate_admission.py').verify(b['model_candidate_review'],b)if candidate else None
+  candidate_kwargs=dict(model_candidate_review=b['model_candidate_review'],current_source_pins_pin=b['source_pins'],repo=b['repo'])if candidate else{}
+  retained_scope='DATA_REFERENCE_ONLY_NOT_NUMERICAL_ABI_OR_RUNTIME_PASS'if candidate else RETAINED_SCOPE
   need(builder==frozen['artifact_identity'],'actual frozen builder identity')
   adaptation=b.get('executor_adaptation');loader=b.get('workspace_loader')
   hp=checked(b['builder_handoff'])
   if adaptation is None:
    need(loader is None and executor['source_commit']==builder['source_commit'],'legacy same-source identity without adaptation')
-   handoff_result=handoff.verify(hp,b['builder_handoff']['sha256'],manifest,b['artifact_manifest']['sha256'],frozen,executor)
+   handoff_result=handoff.verify(hp,b['builder_handoff']['sha256'],manifest,b['artifact_manifest']['sha256'],frozen,executor,**candidate_kwargs)
    need(handoff_result['source_pins_sha256']==source_sha,'builder reviewed source closure equals actual executor closure')
   else:
    checked(adaptation);checked(loader)
    load('summary_executor_adaptation',D/'executor_adaptation.py').verify(adaptation,builder,executor,current_source_pins_pin=b['source_pins'],repo=D.parents[1])
-   handoff_result=handoff.verify(hp,b['builder_handoff']['sha256'],manifest,b['artifact_manifest']['sha256'],frozen,executor,executor_adaptation=adaptation)
+   handoff_result=handoff.verify(hp,b['builder_handoff']['sha256'],manifest,b['artifact_manifest']['sha256'],frozen,executor,executor_adaptation=adaptation,**candidate_kwargs)
   cloud_budget=load('summary_cloud_budget',D/'cloud_budget.py');cloud_admission=cloud_budget.admit(b)
   need(cloud_admission.get('executor_adaptation')==adaptation and cloud_admission.get('workspace_loader')==loader,'approved adapter and loader identities')
   retained=b.get('retained_materials')
@@ -91,9 +98,10 @@ def project(job,binding_path,binding_sha):
   if retained is not None:
    checked(retained)
    retained_result=load('summary_retained_materials',D/'runtime/retained_materials.py').verify(retained,b)
-   need(type(retained_result)is dict and retained_result.get('scope')==RETAINED_SCOPE,'retained materials input-only scope')
+   need(type(retained_result)is dict and retained_result.get('scope')==retained_scope,'retained materials input-only scope')
   source_identity=dict(builder_source_commit=builder['source_commit'],executor_source_commit=executor['source_commit'],executor_adaptation_sha256=adaptation['sha256']if adaptation is not None else None,workspace_loader_sha256=loader['sha256']if loader is not None else None)
-  if retained is not None:source_identity.update(retained_materials_sha256=retained['sha256'],retained_materials_scope=RETAINED_SCOPE)
+  if retained is not None:source_identity.update(retained_materials_sha256=retained['sha256'],retained_materials_scope=retained_scope)
+  if candidate:source_identity.update(candidate_scope=review['scope'],model_candidate_review_sha256=b['model_candidate_review']['sha256'],production_acceptance=False)
   mode=load('summary_cloud_mode',D/'execution_mode.py');admission=mode.admit(b)
   need(cloud_admission['execution_mode']==admission['mode']and cloud_admission['full_block_budget']==b.get('full_block_budget'),'approved cloud mode and full budget')
   flow_path=job/'FLOW_RESULT.json'
@@ -105,6 +113,7 @@ def project(job,binding_path,binding_sha):
   for key,value in [('identity',executor),('execution_approval',b['execution_approval']),('artifact_identity',builder),('execution_binding',pin(bp)),('builder_handoff',b['builder_handoff']),('artifact_manifest',b['artifact_manifest']),('numeric_result',pin(numeric_path))]:need(flow.get(key)==value,'fixed flow binding '+key)
   need(flow.get('retained_materials')==retained,'flow retained materials pin')
   if adaptation is not None:need(flow.get('executor_adaptation')==adaptation and flow.get('workspace_loader')==loader,'flow adapter and loader pins')
+  if candidate:need(flow.get('model_candidate_review')==b['model_candidate_review']and flow.get('scope')==review['scope'],'actual flow candidate scope')
   need(flow.get('hardware_definitions')==1 and flow.get('profiles')==list(range(5)),'one fixed five profile hardware')
   need(flow.get('execution_mode')==admission['mode']and numeric.get('execution_mode')==admission['mode']and numeric.get('full_budget_sha256')==admission['reviewed_budget_sha256'],'mode budget binding')
   sys.path.insert(0,str(D/'numeric'))
@@ -119,6 +128,7 @@ def project(job,binding_path,binding_sha):
    consumer=read(report_path);started=read(start_path)
    need(consumer.get('executor_identity')==executor and consumer.get('artifact_identity')==builder and consumer.get('builder_handoff_sha256')==b['builder_handoff']['sha256'],'actual consumer dual identity')
    if adaptation is not None:need(consumer.get('executor_adaptation_sha256')==adaptation['sha256']and consumer.get('workspace_loader_sha256')==loader['sha256'],'actual consumer approved adapter/loader identities')
+   if candidate:need(consumer.get('model_candidate_review_sha256')==b['model_candidate_review']['sha256']and consumer.get('candidate_scope')==review['scope'],'actual consumer candidate scope')
    need(consumer.get('artifact_manifest_sha256')==b['artifact_manifest']['sha256']and started['binary_sha256']==frozen['common']['binary']['sha256'],'same actual artifact')
    ea=consumer.get('execution_admission',{})
    need(ea.get('execution_mode')==admission['mode']and ea.get('reviewed_budget_sha256')==admission['reviewed_budget_sha256']and ea.get('outer_cleanup_proof_required')is True,'actual consumer mode')

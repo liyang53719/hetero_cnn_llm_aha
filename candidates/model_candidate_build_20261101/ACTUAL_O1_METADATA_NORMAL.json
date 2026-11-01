@@ -1,0 +1,49 @@
+{
+  "scope": "READ_ONLY_ACTUAL_OLD_O1_GCC_MAKE_DEPENDENCY_AND_FIVE_PHASE_METADATA_WITH_SYNTHETIC_CANDIDATE_SCHEMA_IMPLEMENTATION_MAP",
+  "actual_input_pins": {
+    "source_manifest.json": {
+      "bytes": 6562902,
+      "sha256": "663f9c63a8bd1738d908321643ae9023162ad9cd0d27874941b1a038dd7438b4"
+    },
+    "build_receipt.json": {
+      "bytes": 7731,
+      "sha256": "336471882ee266884a78fb3f4eb2021e0d3572ea8cfc208b1ad97fcb4c53d043"
+    },
+    "tool_manifest.json": {
+      "bytes": 1550064,
+      "sha256": "6192d4ea0ac421e52178b86d731334067ad124084c9dc8644da08703dca93126"
+    },
+    "frozen_artifact.json": {
+      "bytes": 1880,
+      "sha256": "84dd24abf3567370c51e3f065bb5f192eb723061a3506a2c30d981870107698b"
+    }
+  },
+  "actual_source_commit": "7824206be49e10c08a71cc1a9a3a33c64d2ed47b",
+  "actual_five_phase_policy_verified": {
+    "policy": "CPP_O1_STRICT_V1",
+    "make_overrides": [
+      "OPT_FAST=-O1",
+      "OPT_SLOW=-O1",
+      "OPT_GLOBAL=-O1",
+      "CXXFLAGS=-O1 -fno-fast-math -ffp-contract=off"
+    ],
+    "producer_source_commit": "7824206be49e10c08a71cc1a9a3a33c64d2ed47b",
+    "collector_sha256": "0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f",
+    "actual_compilation_phases": 5,
+    "scope": "COMPILATION_POLICY_ONLY_NOT_NUMERICAL"
+  },
+  "actual_sparse_header": {
+    "bytes": 1979,
+    "sha256": "63206761274600c98352aea72281cee305d33a96e406a74bc51f665484845368"
+  },
+  "actual_host_header_dependency_pin": {
+    "bytes": 19710,
+    "sha256": "180203fe5e9619e36ae67b485062ca431b044834d32009e07a7abfea93b9aaed"
+  },
+  "extra_flag_negative_rejected": true,
+  "host_header_text_not_present_in_old_artifact": true,
+  "new_candidate_compilation_pass": false,
+  "numerical_pass": false,
+  "elf_or_sv_read_or_executed": false,
+  "production_implementation_map_modified": false
+}

@@ -45,18 +45,24 @@ object UnifiedMoeArithmeticClientV5 {
   // Scalar cap is M128*F3584*6; format cap remains M128*Q16*256*2.
   // These are quota bounds, never completion or authorization evidence.
   val OrdinaryElementwiseMaximumOperations=Seq(2752512,1048576)
-  val Count=11
+  // New explicit RMS32 domain. Legacy scalar/format and Chunk16 contracts stay unchanged.
+  val OrdinaryRms32Scalar=8;val OrdinaryRmsVector32=11
+  val OrdinaryRms32Stage=78
+  // Upper bounds only: exact counts come from the accepted physical RMS job.
+  // All three reviewed recipes keep lane folds on Vector11; Scalar8 is four nodes/row.
+  val OrdinaryRms32MaximumOperations=Seq(512,51200)
+  val Count=12
   val ScalarClients=Seq(0,1,2,8);val FormatClients=Seq(3,4,5,9)
-  val VectorClients=Seq(6,7);val BankClients=FormatClients++VectorClients++Seq(OrdinaryChunkVector)
-  val Stages=Seq(64,65,66,64,65,66,67,68,69,69,72)
-  val Resources=Seq(2,2,2,1,1,1,1,1,2,1,1)
+  val VectorClients=Seq(6,7);val BankClients=FormatClients++VectorClients++Seq(OrdinaryChunkVector,OrdinaryRmsVector32)
+  val Stages=Seq(64,65,66,64,65,66,67,68,69,69,72,78)
+  val Resources=Seq(2,2,2,1,1,1,1,1,2,1,1,1)
   // Bounds, not authority or inferred success. Top supplies exact M/R counts.
-  val MaximumOperations=Seq(133120,393216,512,1024,131072,128,294912,16384,1332736,262144,42506240)
+  val MaximumOperations=Seq(133120,393216,512,1024,131072,128,294912,16384,1332736,262144,42506240,51200)
 }
 /** Authority domains are not capabilities inferred from raw request bits.
   * Original Top supplies these ONLY from its actual allocator/Guard events. */
 object UnifiedArithmeticAuthorityKindV5 {
-  val MoEAllocation=0;val OrdinaryNorm=1;val OrdinaryConv=2;val OrdinaryRawPrep=3;val OrdinaryChunk=4;val OrdinaryGatedNorm=5;val OrdinaryQkNorm=6;val OrdinaryRope=7;val OrdinaryGqa=8;val OrdinaryElementwise=9
+  val MoEAllocation=0;val OrdinaryNorm=1;val OrdinaryConv=2;val OrdinaryRawPrep=3;val OrdinaryChunk=4;val OrdinaryGatedNorm=5;val OrdinaryQkNorm=6;val OrdinaryRope=7;val OrdinaryGqa=8;val OrdinaryElementwise=9;val OrdinaryRms32=10
 }
 /** Delivered only by the original Top's actual accepted child start event,
   * under its actual allocator/Guard lease. Ordinary slots8..10 use the actual
@@ -72,6 +78,9 @@ object UnifiedArithmeticAuthorityKindV5 {
   * GQA kind8/stage76 also uses ONLY Scalar8 and its separate six-per-score cap.
   * Elementwise kind9/stage77 uses Scalar8/Format9 with separate bounds;
   * sigmoid and Add retain their exact runtime counts, never an inferred grant.
+  * RMS32 kind10/stage78 uses Scalar8/Vector11 ONLY, never Format9/Chunk10.
+  * Exact scalar/vector counts come from the original accepted RMS owner job;
+  * this new fixed slot adds a metadata ledger, not a bank or arithmetic units.
   * authorityKind is globally four bits in this shared Bundle for ALL profiles;
   * old kinds0..7 retain their values. This adds metadata/register bits, not a
   * numerical client, arithmetic bank, FPU or authority alias to kind7/RoPE.
@@ -124,3 +133,11 @@ class UnifiedOrdinaryVectorResultV5 extends Bundle {
   // invalid above. Consumer extracts bits31:16; it must not round again.
   val payload=new UnifiedVectorResultV2
 }
+
+/** RMS32 uses the existing V4 payload/result directly: no host grant and no
+  * raw owner tag. Adapter derives full tags from actual accepted RMS leases.
+  * policy0 Add preserves strict legacy Add flags; policy3 Mul permits gradual
+  * underflow; policy4 formats; policy5 rounds FP32 Mul then BF16. Unused lanes
+  * must contain finite +0 operands. No lane mask or independent lane issue.
+  * Existing ordinary16 and MoE16 types above remain unchanged.
+  */

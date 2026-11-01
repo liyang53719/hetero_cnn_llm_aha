@@ -4,11 +4,19 @@ from unittest.mock import patch
 D=pathlib.Path(__file__).parent.resolve()
 spec=importlib.util.spec_from_file_location('mocked_cloud_flow',D/'controller/cloud_flow.py');f=importlib.util.module_from_spec(spec);spec.loader.exec_module(f)
 class Tests(unittest.TestCase):
+ def setUp(self):
+  # Synthetic sibling lives in a fresh temporary tree. Isolate only fixture
+  # module cache, restoring any real module after each case; production keeps
+  # rejecting foreign cached siblings unchanged.
+  cache=patch.dict(sys.modules);cache.start();self.addCleanup(cache.stop)
+  sys.modules.pop('live_budget',None)
+
  def test_fresh_flow_orders_stages_without_any_build(self):self.exercise(False)
  def test_reuse_flow_orders_stages_without_any_build(self):self.exercise(True)
  def test_adapted_reuse_flow_transmits_distinct_sources(self):self.exercise(True,True)
  def test_retained_skips_acquisition_reference_preserves_fresh_runtime(self):self.exercise(True,True,True)
- def exercise(self,reuse,adapted=False,retained=False):
+ def test_candidate_tail_binds_actual_source_catalog(self):self.exercise(True,True,True,True)
+ def exercise(self,reuse,adapted=False,retained=False,candidate=False):
   with tempfile.TemporaryDirectory()as t:
    base=pathlib.Path(t);repo=base/'repo';package=repo/'candidates/same_job_execution_20261030';controller=package/'controller';runtime=package/'runtime';numeric=package/'numeric';sup=repo/'supervisor';artifact=base/'artifact';job=base/'job'
    for p in(controller,runtime,numeric,sup,artifact):p.mkdir(parents=True)
@@ -27,6 +35,7 @@ class Tests(unittest.TestCase):
    inventory={'entries':{key:{'import_root':str(imported)}for key in ('qwen2','qwen35_08b','qwen35_35b')},'archives':[f.pin(arc)]}
    retained_data=dict(payload=str(cache),weights=[{'retained':True}],references={str(i):{'old_receipt_identity':'original'}for i in range(5)},roots=[str(cache)],scope='VERIFIED_RETAINED_INPUTS_NOT_CURRENT_NATIVE_PASS')
    if retained:b['retained_materials']=f.pin(artifact/'frozen_artifact.json')
+   if candidate:b['model_candidate_review']=f.pin(artifact/'frozen_artifact.json')
    owner_module=str(runtime/('runtime_reuse.py'if reuse else'owner_fresh.py'))
    qualified=dict(status='INCOMPLETE',numerical_pass=False)
    def execute(argv,runroot,*args,**kw):
@@ -55,6 +64,10 @@ class Tests(unittest.TestCase):
     root=pathlib.Path(binding['owner_root']);root.mkdir();p=root/'owner.json';p.write_text('{}');return None,None,p
    def reference(binding,stage):seen.append('reference');self.assertEqual(binding['identity'],identity);self.assertEqual(binding['owner_module'],owner_module);return {str(i):{}for i in range(5)}
    def tail(binding,*args):
+    if candidate:
+     self.assertEqual(binding['source_pins'],b['source_pins']);self.assertEqual(binding['model_candidate_review'],b['model_candidate_review']);self.assertEqual(binding['controller_binding'],f.pin(base/'binding.json'))
+     self.assertEqual(json.loads(pathlib.Path(args[0]).read_text())['source_pins'],b['source_pins'])
+    else:self.assertNotIn('source_pins',binding)
     if retained:
      self.assertEqual(binding['weights'],retained_data['weights']);self.assertEqual(binding['references'],retained_data['references']);self.assertEqual(binding['retained_materials'],b['retained_materials'])
     seen.append('tail');self.assertEqual(binding['owner_module'],owner_module);self.assertEqual(binding['identity'],identity);self.assertEqual(binding['run_id'],42);self.assertNotIn('build_result',binding);self.assertEqual(binding['job_budget_seconds'],43200)
@@ -72,7 +85,7 @@ class Tests(unittest.TestCase):
     r=realpin(p)
     if pathlib.Path(p).suffix=='.bin':r['bytes']=3531306272 if pathlib.Path(p).stem=='0' else 0
     return r
-   with patch.object(f,'D',controller),patch.object(f,'admitted_inputs',return_value=({},dict(**({'workspace_loader_verified':{'root':str(artifact)}}if adapted else {}),**({'retained_materials_verified':retained_data}if retained else {})))),patch.object(f,'execution_admission',return_value=dict(mode='BOUNDED_CALIBRATION',profile_seconds=q['calibration_seconds'])),patch.object(f.profile_policy,'require_source_pin'),patch.object(f.profile_policy,'require_cpu'),patch.object(f.subprocess,'check_output',return_value='a'*40),patch.object(f,'mod',side_effect=lambda name,path:modules[name]),patch.object(f,'pin',side_effect=synthetic_pin),patch.dict(sys.modules,{'supervise_multiroot':types.SimpleNamespace(execute=execute)}):
+   with patch.object(f,'D',controller),patch.object(f,'admitted_inputs',return_value=({},dict(**({'workspace_loader_verified':{'root':str(artifact)}}if adapted else {}),**({'retained_materials_verified':retained_data}if retained else {}),**({'model_candidate_verified':{'roots':[str(artifact)]}}if candidate else {})))),patch.object(f,'execution_admission',return_value=dict(mode='BOUNDED_CALIBRATION',profile_seconds=q['calibration_seconds'])),patch.object(f.profile_policy,'require_source_pin'),patch.object(f.profile_policy,'require_cpu'),patch.object(f.subprocess,'check_output',return_value='a'*40),patch.object(f,'mod',side_effect=lambda name,path:modules[name]),patch.object(f,'pin',side_effect=synthetic_pin),patch.dict(sys.modules,{'supervise_multiroot':types.SimpleNamespace(execute=execute)}):
     # Disk only is mocked: phase resource admission calls above remain checked.
     import shutil
     with patch.object(shutil,'disk_usage',return_value=types.SimpleNamespace(free=100<<30)):code=f.run(b,base/'binding.json',f.sha(base/'binding.json'))

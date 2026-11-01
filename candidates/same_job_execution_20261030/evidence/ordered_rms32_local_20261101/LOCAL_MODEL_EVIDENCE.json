@@ -1,0 +1,133 @@
+{
+  "schema": "LOCAL_ORDERED_RMS32_EVIDENCE_V1",
+  "scope": "CHISEL_EMITTED_LOCAL_SV_VERILATOR_MODELS_NOT_FULL_BLOCK_OR_FINAL_RTL",
+  "profiles_full128_numerically_passed": 0,
+  "final_rtl_executed": false,
+  "source_overlay_sha256": "3a2c69ab180b044bb379fc424a6770f0d4fe1c7d949edc8dfc6bc4b17d199167",
+  "cases": {
+    "bridge": {
+      "original_inputs_sha256": "73c91cbd7fa8d50ca6991cd2c1cc3fbdadc7068407d957450382b99f50a0bc4a",
+      "source_pins": {
+        "OrderedRms1536Reduction32.scala": "ee2d3efe37dd619f29eb1963e8ec85a27cd3094d31f476800e20d6c84074c693",
+        "OrderedRmsSramReadBridge32.scala": "85b21ce1bc711e6c1dbc1997f05d97370c7163998bdd5a155777d49eb316102b",
+        "OrderedRms1536ModelTest.scala": "030818cbe2e2c53cec1a4a71f8f36f3837a9e3795dc3be5a0305372f0d8562d2"
+      },
+      "stages": {
+        "compile_r1": {
+          "receipt_sha256": "542b81f51413a1ae88327f84bd3ce86cd1c5ca4aac17f81e0681124072c52472",
+          "native_exit": 0,
+          "errors": [],
+          "elapsed_seconds": 13.90403917900403,
+          "observed_peak_rss": 287137792,
+          "cleanup_proof": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+          "pipe_eof_observed": true,
+          "gzip_finalized": true
+        },
+        "model_r1": {
+          "receipt_sha256": "e88e332ba54723acac1a65b9af469325acd20a5224ead453d46c9ff96fa9f362",
+          "native_exit": 0,
+          "errors": [],
+          "elapsed_seconds": 37.4763171300001,
+          "observed_peak_rss": 559599616,
+          "cleanup_proof": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+          "pipe_eof_observed": true,
+          "gzip_finalized": true
+        }
+      }
+    },
+    "runtime": {
+      "original_inputs_sha256": "5727afea38624a7924b0b9b504bd120800053eee52e7c7853bc7cf0a6b6df01d",
+      "source_pins": {
+        "GdnRuntimeRmsNormOwnerV3.scala": "e8ad079d7145efaa5adc9647ce5208cce2cb5073137f4b9d7bba7ed208d73c77",
+        "RuntimeRms32ModelTest.scala": "3ed58b0ae87aefffe7016d682c68576011d1cd352a78e796a2eef5be37869c1a"
+      },
+      "stages": {
+        "compile_r1": {
+          "receipt_sha256": "9e86eaa5b84e002849c90c6a4c93c32907fe673cb1738760ab8aa69e624e05c0",
+          "native_exit": 0,
+          "errors": [],
+          "elapsed_seconds": 18.028289125999436,
+          "observed_peak_rss": 308465664,
+          "cleanup_proof": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+          "pipe_eof_observed": true,
+          "gzip_finalized": true
+        },
+        "model_r1": {
+          "receipt_sha256": "dfde5eee2cc1ecf5cd04901303cb0b4c343977b138e4ac38f71667c85c12ecdd",
+          "native_exit": 0,
+          "errors": [],
+          "elapsed_seconds": 51.232938837987604,
+          "observed_peak_rss": 1004748800,
+          "cleanup_proof": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+          "pipe_eof_observed": true,
+          "gzip_finalized": true
+        }
+      }
+    },
+    "lease": {
+      "original_inputs_sha256": "fd119b31d2839d9592167cf42792ca3007be64bfc81992e15ea5d761fb517336",
+      "source_pins": {
+        "Rms32LeaseProtocolTest.scala": "6738d3dce38faeb6c94f0b2b473aae6a3e748635f263c93f4da4f6e40054ae9b"
+      },
+      "stages": {
+        "compile_r1": {
+          "receipt_sha256": "825022843390d3957a53227fc39a32f02ac3553b5ff10462f432c017ee914995",
+          "native_exit": 0,
+          "errors": [],
+          "elapsed_seconds": 11.041209642018657,
+          "observed_peak_rss": 260100096,
+          "cleanup_proof": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+          "pipe_eof_observed": true,
+          "gzip_finalized": true
+        },
+        "model_r1": {
+          "receipt_sha256": "532ff854a9b34a7071c97490f459d9e632e51e6d2946c8d5f2236ad1a3169572",
+          "native_exit": 0,
+          "errors": [],
+          "elapsed_seconds": 64.32874293302302,
+          "observed_peak_rss": 887857152,
+          "cleanup_proof": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+          "pipe_eof_observed": true,
+          "gzip_finalized": true
+        }
+      }
+    }
+  },
+  "coverage": {
+    "bridge": "Six finite rows: exact original ordered FP32 sum, actual SRAM bridge and single 32-lane bank; 111 packets/row.",
+    "runtime": "T=1 only, H=1024 and 2048: all intermediate vector/scalar values and final BF16, backpressure and held-memory fault.",
+    "lease": "Nine actual helper/adapter/bank protocol cases; corrected test distinguishes second accepted packet from third truly held offer.",
+    "not_covered": [
+      "five complete M128 blocks",
+      "full-model numerical reference acceptance",
+      "final frozen RTL replay",
+      "full workload throughput or II=1"
+    ]
+  },
+  "lease_reused_production_compile": {
+    "original_inputs_sha256": "1a7c8c6f234af6666d3597726aad24fbb5ab8b71668c7562492349e906110a62",
+    "source_pins": {
+      "UnifiedMoeSharedArithmeticProtocolV5.scala": "34352a90a3f90b704eae69b3f556acace47f91de067ddd8c8a57af4894349a76",
+      "UnifiedMoeSharedArithmeticAdapterV5.scala": "d2c24dc46c4f16dd0645dc52d416c3541f9582e4a18443dd9cfd14a969b18635",
+      "OrderedRms1536Reduction32.scala": "ee2d3efe37dd619f29eb1963e8ec85a27cd3094d31f476800e20d6c84074c693",
+      "Qwen2Block.scala": "5372bcf0efcd7f5a78c848c5de859e41d914dc9b0ac95e3a0b13314391ae4465",
+      "GdnRuntimeRmsNormOwnerV3.scala": "e8ad079d7145efaa5adc9647ce5208cce2cb5073137f4b9d7bba7ed208d73c77",
+      "QwenOwnerProtocol.scala": "62507033c0fef7e9250a43d128ec227e46dfd9b50477d9a9ab53fb7b5ed73c4a",
+      "HostRuntimePrefixLeaseWiringV8.scala": "b5589d803df8944c1d5d5cf108ef8ff4f3a4cc5a07f8e138a38bfb38508ff37b",
+      "HostBlockTopV4.scala": "ed0515fd6d5826ceeda0862d3ce30ab4bdaa6e0882c05c6194088e474aa72777",
+      "HostOrderedRms32WiringV1.scala": "bd70e877d90a685bc497d88ab05ddfc63d4bca05041e99975daf71388b979af5",
+      "OrderedRmsSramReadBridge32.scala": "85b21ce1bc711e6c1dbc1997f05d97370c7163998bdd5a155777d49eb316102b",
+      "Rms32PortRefsV1.scala": "44d63192e76baaf839a46b44503b76e392d3b1e21093b67817a8da12d32f7cc4",
+      "Rms32LeaseProtocolFixture.scala": "874da42e84e42cc4bd3a0526559bc850127dd028440ab4e8fbe083af8a8c486f",
+      "Rms32LeaseProtocolTest.scala": "9be052eaa98038abe8c188ede4762b0395a641dbd5833f9f04bd1f5e5b73a3fe"
+    },
+    "receipt_sha256": "1bb05b6794ad3904f32e12fdd7135f8502e66cbcc22793f41b357da403af3c0b",
+    "native_exit": 0,
+    "errors": [],
+    "elapsed_seconds": 42.98856323599466,
+    "observed_peak_rss": 530890752,
+    "cleanup_proof": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+    "pipe_eof_observed": true,
+    "gzip_finalized": true
+  }
+}

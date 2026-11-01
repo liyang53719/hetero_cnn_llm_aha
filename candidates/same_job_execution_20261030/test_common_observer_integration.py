@@ -8,9 +8,15 @@ class SourceIntegration(unittest.TestCase):
  def test_closure(self):
   rows=json.loads((D/'SOURCE_PINS.json').read_text())['files'];self.assertEqual(len(rows),len({r['path'] for r in rows}))
   for r in rows:self.assertEqual(((R/r['path']).stat().st_size,sha(R/r['path'])),(r['bytes'],r['sha256']))
- def test_shared155(self):
-  m=module('observer_fixed_sources',M/'fixed_sources.py');original=json.loads((R/'candidates/fresh_original_top_recovery_20261028/SOURCE_AND_TOOLCHAIN_PINS.json').read_text());paths=m.checked_paths(R,M/'FIXED_SOURCE_OVERLAY_R2.json',original)
-  self.assertEqual(len(paths),155);self.assertEqual(len({pathlib.Path(p).name for p in paths}),155)
+ def test_legacy_shared155_rejects_candidate_hardware(self):
+  m=module('observer_fixed_sources',M/'fixed_sources.py');original=json.loads((R/'candidates/fresh_original_top_recovery_20261028/SOURCE_AND_TOOLCHAIN_PINS.json').read_text())
+  with self.assertRaisesRegex(ValueError,r'^fixed source bytes GdnRuntimeRmsNormOwnerV3\.scala$'):m.checked_paths(R,M/'FIXED_SOURCE_OVERLAY_R2.json',original)
+ def test_reviewed_candidate159_actual_bytes(self):
+  c=R/'candidates/model_candidate_build_20261101';m=module('reviewed_candidate_generation',c/'candidate_generation_gate.py')
+  contract=m.load_contract(c/'GENERATION_CONTRACT.json','f0013d290c66e36affb85ebfdda3babc1d169a1f5a65d79643416d98ba4478a7')
+  self.assertEqual(contract['source_overlay_sha256'],'3a2c69ab180b044bb379fc424a6770f0d4fe1c7d949edc8dfc6bc4b17d199167')
+  original=json.loads((R/'candidates/fresh_original_top_recovery_20261028/SOURCE_AND_TOOLCHAIN_PINS.json').read_text());paths=m.checked_paths(R,c/'MODEL_SOURCE_OVERLAY.json',original,contract)
+  self.assertEqual(len(paths),159);self.assertEqual(len({pathlib.Path(p).name for p in paths}),159)
  def test_tampered_selection_rejected(self):
   m=module('observer_fixed_sources_negative',M/'fixed_sources.py')
   with self.assertRaises(ValueError):m.validate_overlay((M/'FIXED_SOURCE_OVERLAY_R2.json').read_bytes()+b' ',{})

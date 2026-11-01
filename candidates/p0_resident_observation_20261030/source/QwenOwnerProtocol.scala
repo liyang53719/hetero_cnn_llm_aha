@@ -54,6 +54,8 @@ class QwenRuntimeGqaPublicationV14 extends Bundle {
   val memory=Bool();val scalar=Bool() // actual private downstream valid, not a grant
 }
 class QwenRuntimeRmsClientV6 extends Bundle {
+  val vectorRequest=Decoupled(new UnifiedVectorElement32PayloadV4)
+  val vectorResult=Flipped(Decoupled(new UnifiedVectorElement32ResultPayloadV4))
   val scalar=new UnifiedScalarClientV2
   val formatRequest=Decoupled(new UnifiedRawFp32FormatRequestV3)
   val formatResult=Flipped(Decoupled(new UnifiedRawFp32FormatResultV3))
@@ -102,11 +104,12 @@ class QwenOwnerResult extends Bundle {
 /** No block launch is exposed. One decoded owner operation per transaction;
   * the arithmetic implementation must return instead of advancing to a phase.
   */
-class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableH2048RmsBorrower:Boolean=false,enableTransposedDense:Boolean=false,enableTransposedSeed:Boolean=false,enableTransposedDown:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,enableResidentFfn:Boolean=false,enablePublic21QkvReduction:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableProductionPackedQk16:Boolean=false,enableOrderedVectorQkFold:Boolean=false,enableUnifiedScalarService:Boolean=false,enableRuntimeRmsNorm:Boolean=false,enableRuntimeConv:Boolean=false,enableRuntimeRawPrep:Boolean=false,enableRuntimeChunk:Boolean=false,enableRuntimeGatedNorm:Boolean=false,enableRuntimeQkNorm:Boolean=false,enableRuntimeRope:Boolean=false,enableRuntimeKvAppend:Boolean=false,enableRuntimeGqa:Boolean=false,enableRuntimeElementwise:Boolean=false) extends Module {
+class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableH2048RmsBorrower:Boolean=false,enableTransposedDense:Boolean=false,enableTransposedSeed:Boolean=false,enableTransposedDown:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,enableResidentFfn:Boolean=false,enablePublic21QkvReduction:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableProductionPackedQk16:Boolean=false,enableOrderedVectorQkFold:Boolean=false,enableUnifiedScalarService:Boolean=false,enableRuntimeRmsNorm:Boolean=false,enableRuntimeConv:Boolean=false,enableRuntimeRawPrep:Boolean=false,enableRuntimeChunk:Boolean=false,enableRuntimeGatedNorm:Boolean=false,enableRuntimeQkNorm:Boolean=false,enableRuntimeRope:Boolean=false,enableRuntimeKvAppend:Boolean=false,enableRuntimeGqa:Boolean=false,enableRuntimeElementwise:Boolean=false,enableOrderedRms32:Boolean=false) extends Module {
   require(!enableRuntimeElementwise || (enableRuntimeGqa && enableRuntimeGatedNorm),"runtime output tail follows actual attention/GDN producers on the same scalar/format path")
   require(!enableRuntimeGqa || enableRuntimeKvAppend,"runtime GQA follows actual Q RoPE and KV append through the common Scalar8 and Matrix service")
   require(!enableRuntimeKvAppend || enableRuntimeRope,"runtime KV append follows actual K RoPE and V Dense on the same memory client")
   require(!enableRuntimeRope || enableRuntimeQkNorm,"runtime PartialRoPE follows acknowledged QKNorm on the same Scalar8")
+  require(!enableOrderedRms32 || (pipelined && Qwen2NumericPolicy.official(numericPolicy)), "ordered P0 RMS32 keeps original official owner")
   require(!enableRuntimeQkNorm || enableRuntimeRmsNorm,"runtime QKNorm uses the common shared Scalar8 path")
   require(!enableRuntimeGatedNorm || enableRuntimeChunk,"runtime GatedNorm follows the actual Chunk and shared ordinary arithmetic chain")
   require(!enableRuntimeChunk || enableRuntimeRawPrep,"runtime Chunk uses the real RawPrep and shared ordinary arithmetic chain")
@@ -143,6 +146,12 @@ class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boole
     // Compatibility switch only: a common five-profile top MUST set this true
     // once for every runtime profile, never specialize it by profileId.
     val sharedScalar=if(enableUnifiedScalarService)Some(new QwenSharedScalarServiceV3)else None
+    val rmsVectorAbort=if(enableOrderedRms32)Some(Input(Bool()))else None
+    val rmsVectorPublished=if(enableOrderedRms32)Some(Input(Bool()))else None
+    val rmsVectorDrained=if(enableOrderedRms32)Some(Output(Bool()))else None
+    val rmsVectorResetRequired=if(enableOrderedRms32)Some(Output(Bool()))else None
+    val rmsVectorRequest=if(enableOrderedRms32)Some(Decoupled(new UnifiedVectorElement32PayloadV4))else None
+    val rmsVectorResult=if(enableOrderedRms32)Some(Flipped(Decoupled(new UnifiedVectorElement32ResultPayloadV4)))else None
     val runtimeRms=if(enableRuntimeRmsNorm)Some(new QwenRuntimeRmsClientV6)else None
     val runtimeRmsPublished=if(enableRuntimeRmsNorm)Some(Input(new QwenRuntimeRmsPublicationV16))else None
     val runtimeRmsDoneFire=if(enableRuntimeRmsNorm)Some(Output(Valid(new GdnRuntimeRmsNormResultV16)))else None
@@ -161,7 +170,6 @@ class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boole
     // accepted/outputCommitted. Parent must bind this event to its Guard lease.
     val runtimePrepDoneFire=if(enableRuntimeRawPrep)Some(Output(Valid(new GdnRuntimeRawPrepResultV7)))else None
     val public21BackendReset=if(enablePublic21QkvReduction)Some(Input(Bool()))else None
-    val residentObservation=Output(Valid(new FfnResidentObservation))
     val resident=if(enableResidentFfn)Some(new FfnResidentPort)else None
     val residentHandoff=if(enableResidentFfn)Some(Output(Valid(new QwenOwnerJob)))else None
     val drain=if(enableFfnDrain && !enableResidentFfn)Some(new FfnDrainPort)else None
@@ -182,9 +190,6 @@ class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boole
     val pipelineIssues=Output(UInt(64.W));val pipelineStalls=Output(UInt(64.W))
   })
   val resident=if(enableResidentFfn)Some(Module(new FfnResidentCoordinator))else None
-  io.residentObservation.valid:=false.B
-  io.residentObservation.bits:=0.U.asTypeOf(new FfnResidentObservation)
-  resident.foreach(r=>io.residentObservation:=r.io.observation)
   val qkvRouter=if(enablePublic21QkvReduction)Some(Module(new Public21QkvReductionRouter))else None
   val ordinaryJob=if(enablePublic21QkvReduction)qkvRouter.get.io.ordinaryJob else io.job
   val ordinaryDone=if(enablePublic21QkvReduction)qkvRouter.get.io.ordinaryDone else io.done
@@ -203,7 +208,7 @@ class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boole
     r.io.residentHandoff:=resident.get.io.handoff;io.residentHandoff.get:=r.io.handoff
   }
   if(!pipelined){
-  val core=Module(new Qwen2ContinuousBlock(s,ownerDriven=true,numericPolicy=numericPolicy,enableUnifiedScalarService=enableUnifiedScalarService))
+  val core=Module(new Qwen2ContinuousBlock(s,ownerDriven=true,numericPolicy=numericPolicy,enableUnifiedScalarService=enableUnifiedScalarService,enableOrderedRms32=enableOrderedRms32))
   if(enableUnifiedScalarService){
     io.sharedScalar.get<>core.io.sharedScalar.get
     core.io.sharedScalarSchedulerAvailable.get:=true.B
@@ -221,7 +226,15 @@ class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boole
     io.pipelineIssues:=0.U;io.pipelineStalls:=0.U
   }else{
     require(s.matrixColumns==256 && s.retainedMatrix)
-    val core=Module(new Qwen2ContinuousBlock(s,ownerDriven=true,externalMatrix=true,externalScalar=bf16Gdn||bf16QkNormRope,enableGdnSoftplus=bf16GdnCore,externalElementwiseLoan=enableH2048RmsBorrower,numericPolicy=numericPolicy,enableProductionPackedQk16=enableProductionPackedQk16,enableOrderedVectorQkFold=enableOrderedVectorQkFold,enableUnifiedScalarService=enableUnifiedScalarService))
+    val core=Module(new Qwen2ContinuousBlock(s,ownerDriven=true,externalMatrix=true,externalScalar=bf16Gdn||bf16QkNormRope,enableGdnSoftplus=bf16GdnCore,externalElementwiseLoan=enableH2048RmsBorrower,numericPolicy=numericPolicy,enableProductionPackedQk16=enableProductionPackedQk16,enableOrderedVectorQkFold=enableOrderedVectorQkFold,enableUnifiedScalarService=enableUnifiedScalarService,enableOrderedRms32=enableOrderedRms32))
+    if(enableOrderedRms32){
+      core.io.rmsVectorAbort.get:=io.rmsVectorAbort.get
+      core.io.rmsVectorPublished.get:=io.rmsVectorPublished.get
+      io.rmsVectorDrained.get:=core.io.rmsVectorDrained.get
+      io.rmsVectorResetRequired.get:=core.io.rmsVectorResetRequired.get
+      io.rmsVectorRequest.get <> core.io.rmsVectorRequest.get
+      core.io.rmsVectorResult.get <> io.rmsVectorResult.get
+    }
     val sharedScalarAvailable=WireDefault(false.B)
     val sharedScalarOwned=io.sharedScalar.map(p=>p.status.heldRequest || p.status.pending || p.result.valid).getOrElse(false.B)
     val sharedScalarExclusive=sharedScalarOwned || io.sharedScalar.map(_.request.valid).getOrElse(false.B)
@@ -294,6 +307,13 @@ class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boole
     // profile constructor chooses a second numerical service.
     if(enableRuntimeRmsNorm){
       val port=io.runtimeRms.get
+      val rms=runtimeRms.get
+      port.vectorRequest.valid:=active && mode===8.U && rms.io.vectorRequest.valid
+      port.vectorRequest.bits:=rms.io.vectorRequest.bits
+      rms.io.vectorRequest.ready:=active && mode===8.U && port.vectorRequest.ready
+      rms.io.vectorResult.valid:=mode===8.U && port.vectorResult.valid
+      rms.io.vectorResult.bits:=port.vectorResult.bits
+      port.vectorResult.ready:=mode===8.U && rms.io.vectorResult.ready
       val clients=runtimeRms.toSeq.map(n=>(8,n.io.scalar,n.io.formatRequest,n.io.formatResult,n.io.resourcesDrained))++
         runtimeConv.toSeq.map(n=>(3,n.io.scalar,n.io.formatRequest,n.io.formatResult,n.io.resourcesDrained))++
         runtimeRawPrep.toSeq.map(n=>(4,n.io.scalar,n.io.formatRequest,n.io.formatResult,n.io.resourcesDrained))++
@@ -611,13 +631,14 @@ class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boole
       n.io.job.bits:=GdnRuntimeRmsNormJobV3.fromOwner(ordinaryJob.bits)
       val r=n.io.done.bits;val j=rmsAccepted.get
       val elems=j.tokens.pad(64)*j.hiddenWidth.pad(64)
-      val expectedScalar=j.tokens.pad(64)*Mux(j.hiddenWidth===1024.U,5228.U,10412.U)
+      val expectedScalar=j.tokens.pad(64)*4.U
+      val expectedVector=j.tokens.pad(64)*Mux(j.hiddenWidth===1024.U,206.U,400.U)
       val expectedMemory=(elems>>5)<<2
       val invalidCommit=r.status===Status.Ok.U && (!r.outputCommitted || !r.resourcesDrained ||
         r.accepted.asUInt=/=j.asUInt || r.tag=/=j.tag || r.outputAckBytes=/=r.writeBytes ||
         r.writeBytes=/=(elems<<1)(63,0) || r.scalarAccepted.pad(64)=/=expectedScalar ||
-        r.scalarReturned.pad(64)=/=expectedScalar || r.formatAccepted.pad(64)=/=elems ||
-        r.formatReturned.pad(64)=/=elems || r.memoryAccepted.pad(64)=/=expectedMemory ||
+        r.scalarReturned.pad(64)=/=expectedScalar || r.formatAccepted=/=0.U ||
+        r.formatReturned=/=0.U || r.vectorAccepted.pad(64)=/=expectedVector || r.vectorReturned.pad(64)=/=expectedVector || r.memoryAccepted.pad(64)=/=expectedMemory ||
         r.memoryReturned.pad(64)=/=expectedMemory)
       rmsValid:=n.io.done.valid;rmsDone.tag:=r.tag
       rmsDone.status:=Mux(invalidCommit,Status.Protocol.U,r.status)

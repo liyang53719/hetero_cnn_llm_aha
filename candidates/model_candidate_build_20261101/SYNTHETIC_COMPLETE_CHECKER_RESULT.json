@@ -1,0 +1,31 @@
+{
+  "scope": "ALL_SYNTHETIC_CANDIDATE_EVIDENCE_USING_OLD_METADATA_GRAMMAR_TEMPLATES_ONLY",
+  "proof": {
+    "policy": "CPP_O1_STRICT_V1",
+    "make_overrides": [
+      "OPT_FAST=-O1",
+      "OPT_SLOW=-O1",
+      "OPT_GLOBAL=-O1",
+      "CXXFLAGS=-O1 -fno-fast-math -ffp-contract=off"
+    ],
+    "producer_source_commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "collector_sha256": "0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f",
+    "actual_compilation_phases": 5,
+    "scope": "COMPILATION_POLICY_ONLY_NOT_NUMERICAL",
+    "status": "VERIFIED_MODEL_CANDIDATE_COMPILATION_NOT_NUMERICAL_ADMISSION",
+    "resolved_sparse_header": "/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/host_runtime_non_dpi_backend/source/sparse_write_memory.hpp",
+    "actual_stage_count": 20,
+    "actual_header_ports": 122,
+    "numerical_pass": false,
+    "final_rtl_executed": false,
+    "external_review_required": true
+  },
+  "seven": {
+    "manifest_sha256": "84a8382ae8820f70fe9b766b67a359768e57904a11e3c441c80b309539a8b0da",
+    "expanded_bytes": 10199670,
+    "files": 7,
+    "numerical_pass": false,
+    "final_rtl_replay": false
+  },
+  "new_candidate_build_pass": false
+}

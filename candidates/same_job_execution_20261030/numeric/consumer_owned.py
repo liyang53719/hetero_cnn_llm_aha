@@ -210,8 +210,10 @@ def verify_frozen(path,expected_sha):
     need(path.is_file() and not path.is_symlink() and path.stat().st_size<=65536,'bounded regular artifact manifest')
     need(sha(path)==expected_sha,'shared artifact manifest changed')
 
-def artifact_identity(frozen):
-    need(frozen['schema']=='FROZEN_FIVE_PROFILE_DUT_ARTIFACT_V2','frozen artifact schema')
+def artifact_identity(frozen,source_relocation=None):
+    if frozen['schema']=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1':
+        need(source_relocation is not None and source_relocation.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL' and source_relocation.get('builder_identity')==frozen['artifact_identity'],'independently admitted model candidate, not a legacy schema alias')
+    else:need(frozen['schema']=='FROZEN_FIVE_PROFILE_DUT_ARTIFACT_V2','frozen artifact schema')
     need(frozen['profiles']==list(range(5)),'artifact qualifies same hardware definition for all five, not a profile-specific build')
     identity=frozen['artifact_identity']
     need(set(identity)=={'run_id','artifact_name','launch_commit','source_commit','launch_manifest_path','launch_manifest_blob_sha'},'artifact provenance fields')
@@ -228,7 +230,9 @@ def artifact_identity(frozen):
 def coverage_policy(profile,common,identity,bundle_root,source_relocation=None):
     import importlib.util
     path=pathlib.Path(__file__).resolve().with_name('observation_contract.py')
-    need(sha(path)=='b8401fd6c8c238757103c3c093ea7dc6f3a0d37aab5f0d423e2a7edf2c293e71','reviewed observation contract module')
+    if source_relocation is not None and source_relocation.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL':
+        path=path.with_name('candidate_observation_contract.py');row=source_relocation['candidate_observation_checker'];need(pin(row)==path,'admitted candidate observation checker')
+    else:need(sha(path)=='b8401fd6c8c238757103c3c093ea7dc6f3a0d37aab5f0d423e2a7edf2c293e71','reviewed observation contract module')
     spec=importlib.util.spec_from_file_location('required_observation_policy',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
     if source_relocation is None:return module.validate(profile,common,identity,bundle_root)
     return module.validate(profile,common,identity,bundle_root,source_relocation)
@@ -236,7 +240,7 @@ def coverage_policy(profile,common,identity,bundle_root,source_relocation=None):
 def load_binding(manifest,expected_sha,bundle_path,profile,source_relocation=None):
     verify_frozen(manifest,expected_sha)
     frozen=json.loads(manifest.read_text())
-    identity=artifact_identity(frozen);commit=identity['source_commit']
+    identity=artifact_identity(frozen,source_relocation);commit=identity['source_commit']
     root=manifest.resolve().parent
     tool=frozen['tool_manifest'];rel=pathlib.Path(tool['path'])
     need(not rel.is_absolute() and '..' not in rel.parts,'relative tool manifest')
@@ -331,11 +335,16 @@ def verify_local_build(args,frozen):
     cloud=executor_context(args)
     if cloud is not None:
         need(getattr(args,'local_build_result',None) is None and getattr(args,'local_build_result_sha256',None) is None,'imported build is not same-job retained result')
-        path=pathlib.Path(__file__).resolve().with_name('artifact_handoff.py')
-        need(sha(path)=='06ac175b7c1f8ca5b1dc19891a52c09f58f17fec521ee96e0f581ca4011ef0c5','reviewed imported build verifier')
+        binding=cloud_invocation(args)
+        candidate=frozen['schema']=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'
+        path=pathlib.Path(__file__).resolve().with_name('candidate_artifact_handoff.py' if candidate else 'artifact_handoff.py')
+        if candidate:need(binding['pins'].get(str(path))==sha(path),'reviewed candidate build verifier source')
+        else:need(sha(path)=='06ac175b7c1f8ca5b1dc19891a52c09f58f17fec521ee96e0f581ca4011ef0c5','reviewed imported build verifier')
         spec=importlib.util.spec_from_file_location('verified_builder_handoff',path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
         need(frozen['artifact_identity']['run_id']==args.expected_run_id and frozen['artifact_identity']['launch_commit']==args.expected_launch_commit,'expected builder identity distinct from executor')
-        return m.verify(args.builder_handoff,args.builder_handoff_sha256,args.artifact_manifest,args.artifact_manifest_sha256,frozen,cloud,executor_adaptation=cloud_invocation(args).get('executor_adaptation'))
+        kwargs=dict(executor_adaptation=binding.get('executor_adaptation'))
+        if candidate:kwargs.update(current_source_pins_pin=binding['source_pins'],repo=binding['repo'],model_candidate_review=binding.get('model_candidate_review'))
+        return m.verify(args.builder_handoff,args.builder_handoff_sha256,args.artifact_manifest,args.artifact_manifest_sha256,frozen,cloud,**kwargs)
     need(getattr(args,'builder_handoff_sha256',None) is None,'no unpaired handoff')
     module_path=pathlib.Path(__file__).resolve().with_name('local_build_proof.py')
     need(sha(module_path)=='b58ebbff5578e641b58e7f2c4c1366a7c73f3a4861cf21e37cab7a01c46d8b56','reviewed local build proof')
@@ -347,7 +356,8 @@ def approved_source_relocation(args,frozen):
     """Only the independently approved cloud invocation can authorize relocation.
     No bundle field or user-supplied path map is an authority input.
     """
-    if args.profile!=0 or getattr(args,'cloud_binding',None)is None:return None
+    candidate=frozen['schema']=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'
+    if (args.profile!=0 and not candidate) or getattr(args,'cloud_binding',None)is None:return None
     binding=cloud_invocation(args)
     if binding.get('executor_adaptation')is None:return None
     import importlib.util
@@ -361,10 +371,19 @@ def approved_source_relocation(args,frozen):
     source_row=frozen['common']['source_manifest'];source=pin(dict(source_row,path=str(args.artifact_manifest.resolve().parent/source_row['path'])))
     need(source.stat().st_size<=16<<20,'bounded immutable builder source manifest');manifest=json.loads(source.read_text())
     catalog=pin(binding['source_pins']);need(catalog.stat().st_size<=2<<20,'bounded actual executor catalog')
-    path=pathlib.Path(__file__).resolve().with_name('observation_contract.py');need(binding['pins'].get(str(path))==sha(path),'actual source mapping verifier pinned')
+    context=None
+    if candidate:
+        path=pathlib.Path(__file__).resolve().with_name('candidate_admission.py');need(binding['pins'].get(str(path))==sha(path),'candidate admission source pin')
+        spec=importlib.util.spec_from_file_location('consumer_model_candidate_admission',path);candidate_gate=importlib.util.module_from_spec(spec);spec.loader.exec_module(candidate_gate)
+        reviewed=candidate_gate.verify(binding.get('model_candidate_review'),binding)
+        checker=path.with_name('candidate_observation_contract.py');need(binding['pins'].get(str(checker))==sha(checker),'candidate observation source pin')
+        context=dict(artifact_manifest=binding['artifact_manifest'],source_manifest_sha256=source_row['sha256'],candidate_scope=reviewed['scope'],model_candidate_review=binding['model_candidate_review'],model_source_contract=reviewed['source_contract'],builder_identity=frozen['artifact_identity'],repo=binding['repo'],current_source_pins_pin=binding['source_pins'],candidate_observation_checker=dict(path=str(checker),bytes=checker.stat().st_size,sha256=sha(checker)))
+    path=pathlib.Path(__file__).resolve().with_name('candidate_observation_contract.py'if candidate else'observation_contract.py');need(binding['pins'].get(str(path))==sha(path),'actual source mapping verifier pinned')
     spec=importlib.util.spec_from_file_location('source_relocation_contract',path);contract=importlib.util.module_from_spec(spec);spec.loader.exec_module(contract)
-    anchors=contract.relocation_records(manifest,binding['repo'],binding['pins'],json.loads(catalog.read_text()))
-    return dict(schema='ADMITTED_CLOUD_P0_SOURCE_RELOCATION_V1',controller_binding=dict(path=str(args.cloud_binding),bytes=args.cloud_binding.stat().st_size,sha256=args.cloud_binding_sha256),executor_adaptation_sha256=binding['executor_adaptation']['sha256'],artifact_manifest_sha256=args.artifact_manifest_sha256,source_manifest_sha256=source_row['sha256'],builder_source_commit=frozen['artifact_identity']['source_commit'],executor_source_commit=provenance['executor_identity']['source_commit'],executor_source_pins_sha256=adaptation['executor_source_pins_sha256'],anchors=anchors)
+    anchors=contract.relocation_records(manifest,binding['repo'],binding['pins'],json.loads(catalog.read_text()),context) if candidate and args.profile==0 else {} if candidate else contract.relocation_records(manifest,binding['repo'],binding['pins'],json.loads(catalog.read_text()))
+    result=dict(context or {})
+    result.update(schema='ADMITTED_CLOUD_P0_SOURCE_RELOCATION_V1',controller_binding=dict(path=str(args.cloud_binding),bytes=args.cloud_binding.stat().st_size,sha256=args.cloud_binding_sha256),executor_adaptation_sha256=binding['executor_adaptation']['sha256'],artifact_manifest_sha256=args.artifact_manifest_sha256,source_manifest_sha256=source_row['sha256'],builder_source_commit=frozen['artifact_identity']['source_commit'],executor_source_commit=provenance['executor_identity']['source_commit'],executor_source_pins_sha256=adaptation['executor_source_pins_sha256'],anchors=anchors)
+    return result
 
 def runtime_abi_module():
     import importlib.util
@@ -540,7 +559,9 @@ def main():
         if invocation.get('executor_adaptation') is not None:
             summary['executor_adaptation_sha256']=invocation['executor_adaptation']['sha256']
             summary['workspace_loader_sha256']=invocation['workspace_loader']['sha256']
-    if source_relocation is not None:summary['source_relocation']=source_relocation
+    if source_relocation is not None:
+        summary['source_relocation']=source_relocation
+        if source_relocation.get('candidate_scope') is not None:summary.update(model_candidate_review_sha256=source_relocation['model_candidate_review']['sha256'],candidate_scope=source_relocation['candidate_scope'])
     summary['execution_admission']={'scope':'CALIBRATION_SAME_FULL_M128_STIMULUS' if admission['mode']==mode.CALIBRATION else 'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE', 'execution_mode':admission['mode'], 'reviewed_budget_sha256':admission['reviewed_budget_sha256'],'original_limits':dict(limits),'effective_limits':execution_limits,'outer_cleanup_proof_required':True,'peak_resource_qualification':'INCOMPLETE_SAMPLED','numerical_pass':False}
     for p,runtime,obs,want,route_ref in prepared:
         r=dict(profile=p['id'],complete_block_tokens=128,status='INCOMPLETE',numerical_pass=False,coverage_policy=b['coverage_policy']);summary['profiles'].append(r)

@@ -1,3 +1,25 @@
+## 2026-11-01：保序 32-lane RMS 候选进入统一模型构建；完整数值仍为 0/5
+
+### 已完成且有实际证据
+- 原 O1 同一 4096-MAC 硬件的五个 M128 诊断窗全部真实启动并严格收尾，均为 `STARTED_TIMEOUT_INCOMPLETE`，不是数值失败或通过。active cycles 为 61,824 / 60,736 / 57,856 / 64,448 / 57,728，外层观测速率约 189.7–211.7 cycles/s；出现实际写回，但均未完成首命令。完整块总周期未知，不把短窗外推作完成承诺。
+- 原 P0 两次串行 norm 的静态周期下界为 4,464,640；按完整语义矩阵 MAC 分子，固定 4096 分母的静态利用率上界约 32.891%。这是当前基线的源码下界/上界分析，不是测得利用率；普通 C++ 优化不会改变硬件周期瓶颈。
+- 新候选复用唯一共享 32-lane bank，保留每条 FP32 归约链的逐项顺序和舍入，不新增第二算术 bank、不减少 4096 Matrix、不缩五 profile 或 M128。P0 保留 Div1536 和两处 BF16 物化；runtime 保留 reciprocal multiply、gamma=1+w 和最后 BF16 物化。P0 sum 新增 137×FP32=4384 bit 工作寄存器与 512 bit SRAM bridge 缓存及控制；仅 sum 借用 32-lane bank，normalize/gamma 原 16-lane 路径保留。新增寄存器/控制/握手不是免费资源。
+- 实际局部 Chisel→IR/SV→Verilator 回放已完成：P0 六行精确 sum（含真实 SRAM bridge）、runtime H1024/H2048 各 T1 的逐中间量与最终 BF16，以及实际共享 adapter/lease 的 9 类协议/背压/故障测试。11 个生产源类型检查通过。它们不代表五个完整 M128 模型通过，也不证明全链 II=1。
+
+### 本次源码的实际边界
+- 原固定 155 源清单/哈希准入门及旧 canonical/观察者生产准入门保留，并明确拒绝新硬件。独立 `MODEL_CANDIDATE` 入口以原顺序 155 源的 7 个精确替换和 4 个新增形成 159 源闭包；新构建仍使用原 20-stage 预算路径（首阶段版本化命名），7200 s 包含准备阶段，外层 9000 s，不扩大编译资源或 O1 flags。
+- 构建只收集实际 typed IR、ordered annotations、122 个 typed host ports、SV 及结构不变量；所有新产物永远标 `UNREVIEWED_MODEL_BUILD`。实际 Matrix 4096 / 唯一共享 bank / 五 profile 一致性必须经外部独审后才允许云端候选数值评估，不能把 observed hash 自动当 accepted hash。
+- 新七件仍仅 ELF、同源 SV、driver 与四份元数据；不上传权重、NPZ、参考数据、原始日志。source_manifest 总文件保持 16 MiB 上限，原其他单件/总包限制不扩。新候选必须使用真实新身份和完整编译证据，不继承旧 ELF 的数值、ABI 或性能资格。
+- 云端完整接线新增独立候选 review pin，从可信预算/调用贯通 prepare→flow→tail→handoff→consumer→summary；纯合成全链已实调完整 checker 并通过反例，不是实际新硬件准入。DATA_REFERENCE_ONLY 可复用严格重验的原 70 权重与五份官方参考，仍核全部 51 参考源、刺激和字节；它不迁移旧 DUT/ABI/runtime/数值 PASS，也不谎称新旧 SV 相同。
+- 原实际基线、失败收据和新测试初始失败全部保留。测试中的旧 155 预期改为精确拒新候选，新 159 门独立正验；不存在为了通过测试改写旧生产接受哈希。
+
+### 下一步与未闭环
+唯一 writer 在联合源码独审和源码 CI 后启动一次候选构建；真实七件到达后做结构/同源/工具/loader/资源账单独审，随后沿完整五 profile、M128、原参考与严格数值链执行。完整块工程预算必须依据新模型实际进度和资源形成，不能无条件套用 300 s，也不能把超时当完成。用户已授权该工程主线，不需要再次询问同范围许可。
+
+**当前：完整模型数值 0/5；最终冻结 RTL 验收 0/5；新整体候选尚无实际构建/结构/全块数值资格。**
+
+---
+
 ## 2026-11-01 07:36 UTC：明确 prelaunch 内存拒绝；狭义退出修复（INCOMPLETE）
 
 795d实际新O1恢复的P0 provider返回已保存，精确 `ValueError: locked memory gate` / worker_started=false / native_exit=null / 无worker目录。此前archives、3runtime imports、startupABI、initialize、rope共7阶段原收据全部native0/cleanupEOF。未运行DUT，不是数值失败。旧require_cleanup将没有启动worker的拒绝也无限hold；本次仅精确session5387中断，工具实际exit130，原证据保留，未知旧owner5GiB预留不变。

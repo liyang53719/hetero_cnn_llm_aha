@@ -16,11 +16,16 @@ class Tests(unittest.TestCase):
 cloud=executor_context(args)
 if cloud is not None:
     need(getattr(args,'local_build_result',None) is None and getattr(args,'local_build_result_sha256',None) is None,'imported build is not same-job retained result')
-    path=pathlib.Path(__file__).resolve().with_name('artifact_handoff.py')
-    need(sha(path)=='HANDOFF_SHA','reviewed imported build verifier')
+    binding=cloud_invocation(args)
+    candidate=frozen['schema']=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'
+    path=pathlib.Path(__file__).resolve().with_name('candidate_artifact_handoff.py' if candidate else 'artifact_handoff.py')
+    if candidate:need(binding['pins'].get(str(path))==sha(path),'reviewed candidate build verifier source')
+    else:need(sha(path)=='HANDOFF_SHA','reviewed imported build verifier')
     spec=importlib.util.spec_from_file_location('verified_builder_handoff',path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
     need(frozen['artifact_identity']['run_id']==args.expected_run_id and frozen['artifact_identity']['launch_commit']==args.expected_launch_commit,'expected builder identity distinct from executor')
-    return m.verify(args.builder_handoff,args.builder_handoff_sha256,args.artifact_manifest,args.artifact_manifest_sha256,frozen,cloud,executor_adaptation=cloud_invocation(args).get('executor_adaptation'))
+    kwargs=dict(executor_adaptation=binding.get('executor_adaptation'))
+    if candidate:kwargs.update(current_source_pins_pin=binding['source_pins'],repo=binding['repo'],model_candidate_review=binding.get('model_candidate_review'))
+    return m.verify(args.builder_handoff,args.builder_handoff_sha256,args.artifact_manifest,args.artifact_manifest_sha256,frozen,cloud,**kwargs)
 need(getattr(args,'builder_handoff_sha256',None) is None,'no unpaired handoff')
 """.replace('HANDOFF_SHA',hashlib.sha256((D/'artifact_handoff.py').read_bytes()).hexdigest())).body
   actual=new['verify_local_build'];self.assertEqual(list(map(dump,actual.body[1:4])),list(map(dump,expected)))
@@ -52,6 +57,25 @@ need(getattr(args,'builder_handoff_sha256',None) is None,'no unpaired handoff')
    current=[n for n in ast.walk(new[function])if isinstance(n,ast.Constant)and isinstance(n.value,str)and len(n.value)==64]
    self.assertEqual(len(previous),1,function);self.assertEqual(len(current),1,function)
    self.assertEqual(current[0].value,hashlib.sha256((D/dependency).read_bytes()).hexdigest(),function);previous[0].value=current[0].value
+  # Candidate selection must remain the exact reviewed branch; normalize only
+  # that branch to the unchanged original historical observation check.
+  coverage=new['coverage_policy']
+  expected_candidate=ast.parse("""
+if source_relocation is not None and source_relocation.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL':
+    path=path.with_name('candidate_observation_contract.py');row=source_relocation['candidate_observation_checker'];need(pin(row)==path,'admitted candidate observation checker')
+else:need(sha(path)=='OBS_SHA','reviewed observation contract module')
+""".replace('OBS_SHA',hashlib.sha256((D/'observation_contract.py').read_bytes()).hexdigest())).body[0]
+  self.assertEqual(dump(coverage.body[2]),dump(expected_candidate));coverage.body[2:3]=coverage.body[2].orelse
+  artifact=new['artifact_identity']
+  self.assertEqual([a.arg for a in artifact.args.args],['frozen','source_relocation']);self.assertEqual(list(map(dump,artifact.args.defaults)),[dump(ast.Constant(value=None))])
+  expected_identity=ast.parse("""
+if frozen['schema']=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1':
+    need(source_relocation is not None and source_relocation.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL' and source_relocation.get('builder_identity')==frozen['artifact_identity'],'independently admitted model candidate, not a legacy schema alias')
+else:need(frozen['schema']=='FROZEN_FIVE_PROFILE_DUT_ARTIFACT_V2','frozen artifact schema')
+""").body[0]
+  self.assertEqual(dump(artifact.body[0]),dump(expected_identity));artifact.body[:1]=artifact.body[0].orelse;artifact.args.args.pop();artifact.args.defaults.pop()
+  artifact_calls=[n for n in ast.walk(new['load_binding'])if isinstance(n,ast.Call)and isinstance(n.func,ast.Name)and n.func.id=='artifact_identity']
+  self.assertEqual(len(artifact_calls),1);self.assertEqual(list(map(dump,artifact_calls[0].args)),[dump(ast.Name(id='frozen',ctx=ast.Load())),dump(ast.Name(id='source_relocation',ctx=ast.Load()))]);artifact_calls[0].args.pop()
   # Precisely normalize only this optional internal relocation context. It is
   # never supplied by a bundle field; original None branch must be exact old AST.
   for name in ('coverage_policy','load_binding'):
@@ -70,6 +94,18 @@ need(getattr(args,'builder_handoff_sha256',None) is None,'no unpaired handoff')
   links[0].args.pop()
   for name in old:
    if name not in ('main','compare','router_compare','classify_observed_profile'):self.assertEqual(dump(old[name]),dump(new[name]),name)
+ def test_candidate_relocation_merges_context_without_duplicate_keywords(self):
+  # The candidate context already contains source_manifest_sha256. Preserve
+  # every reviewed context field, then explicitly set the authoritative common
+  # join fields; never pass overlapping **context and keyword arguments.
+  functions={n.name:n for n in ast.parse((D/'consumer_owned.py').read_text()).body if isinstance(n,ast.FunctionDef)}
+  expected=ast.parse("""
+result=dict(context or {})
+result.update(schema='ADMITTED_CLOUD_P0_SOURCE_RELOCATION_V1',controller_binding=dict(path=str(args.cloud_binding),bytes=args.cloud_binding.stat().st_size,sha256=args.cloud_binding_sha256),executor_adaptation_sha256=binding['executor_adaptation']['sha256'],artifact_manifest_sha256=args.artifact_manifest_sha256,source_manifest_sha256=source_row['sha256'],builder_source_commit=frozen['artifact_identity']['source_commit'],executor_source_commit=provenance['executor_identity']['source_commit'],executor_source_pins_sha256=adaptation['executor_source_pins_sha256'],anchors=anchors)
+return result
+""").body
+  dump=lambda n:ast.dump(n,include_attributes=False)
+  self.assertEqual(list(map(dump,functions['approved_source_relocation'].body[-3:])),list(map(dump,expected)))
  def test_limits_only_wall_copy(self):
   original=dict(wall_seconds=20000,cpu_seconds=18000,address_space_bytes=12*1024**3,file_bytes=64*1024**2,max_active_cycles=1000000000)
   actual=m.owned_execution_limits(original,120)

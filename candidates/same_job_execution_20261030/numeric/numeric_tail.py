@@ -69,8 +69,9 @@ def retained_context(b):
  need(b['pins']==dict(controller['pins'],**{str(path):row['sha256']}),'tail pins are exact controller closure plus its binding')
  for key in ('identity','executor_identity','repo','artifact_manifest','builder_handoff','cloud_budget','execution_approval','retained_materials'):
   need(controller[key]==b[key],'retained tail/controller exact '+key)
- for key in ('executor_adaptation','workspace_loader'):
+ for key in ('executor_adaptation','workspace_loader','model_candidate_review'):
   need(controller.get(key)==b.get(key),'retained tail/controller optional '+key)
+ if b.get('model_candidate_review')is not None:need(controller['source_pins']==b['source_pins'],'candidate tail/controller exact source catalog')
  budget=module('retained_tail_budget',D.parent/'cloud_budget.py',b['pins']);admitted=budget.admit(controller)
  need(admitted.get('retained_materials')==b['retained_materials'],'retained inputs explicitly approved for current invocation')
  helper=module('retained_tail_materials',D.parent/'runtime/retained_materials.py',b['pins'])
@@ -82,7 +83,7 @@ def reference_path(b,i,retained):
  row=b['references'][str(i)];path=material.checked(row)
  if retained is None:need(path.is_relative_to(P(b['owner_root'])),'reference belongs to owning job')
  else:
-  need(b.get('execution_context')=='CLOUD_EXECUTOR_V1'and 'retained_materials'in b and retained['scope']=='REVALIDATED_DATA_AND_SOFTWARE_REFERENCES_NOT_RUNTIME_OR_DUT'and retained['references'][str(i)]==row,'reference is exact independently revalidated retained entry')
+  need(b.get('execution_context')=='CLOUD_EXECUTOR_V1'and 'retained_materials'in b and retained['scope']==('DATA_REFERENCE_ONLY_NOT_NUMERICAL_ABI_OR_RUNTIME_PASS'if b.get('model_candidate_review')is not None else'REVALIDATED_DATA_AND_SOFTWARE_REFERENCES_NOT_RUNTIME_OR_DUT')and retained['references'][str(i)]==row,'reference is exact independently revalidated retained entry')
  return path
 
 def cloud_context(b):
@@ -93,6 +94,8 @@ def cloud_context(b):
  admitted=module('cloud_tail_budget',D.parent/'cloud_budget.py',b['pins']).admit(b)
  need(b['reserved_other_owner_bytes']==admitted['reserved_other_owner_bytes']and b['job_budget_seconds']==admitted['job_budget_seconds']and b['rss_bytes']==admitted['dut_rss_bytes']and b['address_space_bytes']==admitted['dut_address_space_bytes'],'actual cloud resource admission')
  need(b['phase_extra_bytes']==admitted['numeric_reserved_increment_bytes']and b['provider_wall_seconds']==admitted['budgets']['provider']and b['consumer_address_space_bytes']==admitted['consumer_address_space_bytes'],'tail role budgets exactly approved')
+ need(admitted.get('model_candidate_review')==b.get('model_candidate_review'),'tail exact approved candidate review')
+ if b.get('model_candidate_review')is not None:module('tail_model_candidate',D/'candidate_admission.py',b['pins']).verify(b['model_candidate_review'],b)
  need(b['execution_mode']==admitted['execution_mode']and b.get('full_block_budget')==admitted['full_block_budget']and b['calibration_seconds']==admitted['budgets']['calibration_seconds'],'tail approved mode and windows')
  retained_context(b)
  return identity
@@ -167,8 +170,11 @@ def run(b,binding_path,binding_sha):
   proof.verify(build,b['build_result']['sha256'],manifest,sha(manifest),frozen,b['run_id'],b['launch_commit'],b['source_commit'])
  else:
   build=None;manifest=material.checked(b['artifact_manifest']);frozen=json.loads(manifest.read_text())
-  proof=module('split_build_proof',D/'artifact_handoff.py',pins)
-  proof.verify(b['builder_handoff']['path'],b['builder_handoff']['sha256'],manifest,sha(manifest),frozen,cloud,executor_adaptation=b.get('executor_adaptation'))
+  candidate=frozen['schema']=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'
+  proof=module('split_build_proof',D/('candidate_artifact_handoff.py'if candidate else'artifact_handoff.py'),pins)
+  kwargs=dict(executor_adaptation=b.get('executor_adaptation'))
+  if candidate:kwargs.update(model_candidate_review=b.get('model_candidate_review'),current_source_pins_pin=b['source_pins'],repo=b['repo'])
+  proof.verify(b['builder_handoff']['path'],b['builder_handoff']['sha256'],manifest,sha(manifest),frozen,cloud,**kwargs)
  need(not out.exists() and out.is_relative_to(P(b['owner_root'])),'fresh output inside runtime owner');out.mkdir();(out/'runs').mkdir();(out/'phases').mkdir();(out/'cache_roots').mkdir()
  save(out/'REGISTERED_FIVE.json',dict(execution_policy=profile_policy.checked(b),profiles=b['profiles'],tokens=128,execution_mode=admission['mode'],profile_seconds=admission['profile_seconds'],full_budget_sha256=admission['reviewed_budget_sha256'],scope='CHISEL_EMITTED_SV_SIMULATION_NOT_FINAL_RTL',numeric_pass=False))
  sys.path.insert(0,b['supervisor_dir']);import supervise_multiroot as supervisor

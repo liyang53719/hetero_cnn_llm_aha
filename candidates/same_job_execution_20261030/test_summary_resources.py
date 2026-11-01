@@ -1,8 +1,8 @@
 import argparse,copy,hashlib,importlib.util,json,pathlib,shutil,tempfile,unittest
-P=pathlib.Path;D=P(__file__).resolve().parent
+P=pathlib.Path;D=P(__file__).resolve().parent;REPO=D.parents[1]
 class T(unittest.TestCase):
  def setUp(self):
-  self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.root=P(self.tmp.name);c=self.root/'candidates/same_job_execution_20261030';c.mkdir(parents=True);shutil.copyfile(D/'summarize_same_job.py',c/'summarize_same_job.py');m=self.root/'candidates/ci_frontend_materialization_r2_20261029';m.mkdir();shutil.copyfile(REPO/'candidates/ci_frontend_materialization_r2_20261029/frontend_telemetry.py',m/'frontend_telemetry.py');s=importlib.util.spec_from_file_location('newsummary',c/'summarize_same_job.py');self.m=importlib.util.module_from_spec(s);s.loader.exec_module(self.m)
+  self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.root=P(self.tmp.name);c=self.root/'candidates/same_job_execution_20261030';c.mkdir(parents=True);shutil.copyfile(D/'summarize_same_job.py',c/'summarize_same_job.py');shutil.copyfile(D/'profile_policy.py',c/'profile_policy.py');m=self.root/'candidates/ci_frontend_materialization_r2_20261029';m.mkdir();shutil.copyfile(REPO/'candidates/ci_frontend_materialization_r2_20261029/frontend_telemetry.py',m/'frontend_telemetry.py');s=importlib.util.spec_from_file_location('newsummary',c/'summarize_same_job.py');self.m=importlib.util.module_from_spec(s);s.loader.exec_module(self.m)
  def test_exact_two_known_reasons_and_resources(self):
   r=dict(errors=['ValueError: sampled aggregate writable-root cap']*2,peak_tree_bytes=12081306273,peak_file_bytes=1<<30,process_sample_count=3,process_sample_max_gap_seconds=8.5,caps=dict(watch_tree_bytes=12081306272,file_bytes=2<<30,per_process_cpu_seconds=180,per_process_as_bytes=4<<30),cleanup_proof=None,log_capture=None)
   v=self.m.stage_resources(r);self.assertEqual(v['supervisor_reason_codes'],['AGGREGATE_DISK_CAP']*2);self.assertEqual(v['peak_tree_bytes'],12081306273);self.assertEqual(v['caps']['file_bytes'],2<<30);self.assertEqual(v['cleanup_status'],'NOT_PROVEN');self.assertEqual(len(v['error_evidence']),2)

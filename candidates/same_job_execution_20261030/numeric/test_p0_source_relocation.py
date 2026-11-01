@@ -6,8 +6,11 @@ PATHS=dict(helper='candidates/fresh_original_top_recovery_20261028/source/Diagno
 class RelocationTests(unittest.TestCase):
  def setUp(self):
   self.t=tempfile.TemporaryDirectory();self.addCleanup(self.t.cleanup);self.root=P(self.t.name);repo=o.HERE.parents[2];locked=json.loads((o.HERE/'LOCKED_SOURCE_CONTRACT.json').read_text())['sources'];self.pins={};files=[];anchors={};generation={};catalog=[]
+  historical={'host_top':'HostBlockTopV4.scala.txt','owner_kernel':'QwenOwnerProtocol.scala.txt'}
   for name,rel in PATHS.items():
-   p=self.root/rel;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes((repo/rel).read_bytes());row=dict(path=rel,bytes=p.stat().st_size,sha256=o.sha(p),origin_path='/synthetic/builder/'+rel,kind='ACTUAL_BUILD_INPUT');self.assertEqual({k:row[k]for k in('bytes','sha256')},locked[name]);files.append(row);anchors[name]=rel;generation[row['origin_path']]=row['sha256'];self.pins[str(p)]=row['sha256'];catalog.append({k:row[k]for k in('path','bytes','sha256')})
+   origin=P(__file__).resolve().parents[1]/'acceptance_tests/fixtures/p0_legacy'/historical[name]if name in historical else repo/rel
+   # Frozen historical fixture bytes, never the new candidate hardware as old evidence.
+   p=self.root/rel;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(origin.read_bytes());row=dict(path=rel,bytes=p.stat().st_size,sha256=o.sha(p),origin_path='/synthetic/builder/'+rel,kind='ACTUAL_BUILD_INPUT');self.assertEqual({k:row[k]for k in('bytes','sha256')},locked[name]);files.append(row);anchors[name]=rel;generation[row['origin_path']]=row['sha256'];self.pins[str(p)]=row['sha256'];catalog.append({k:row[k]for k in('path','bytes','sha256')})
   for name in ('commands','descriptors','program_manifest'):anchors[name]='synthetic/'+name;files.append(dict(path=anchors[name],kind='RUNTIME_ONLY_CONTRACT'if name=='program_manifest'else'RUNTIME_EXPECTATION_NOT_BUILD_INPUT',**locked[name]))
   self.manifest=dict(files=files,generation_input_pins=generation,observation_policy_bindings={'P0':{'anchors':anchors}});self.catalog=dict(schema='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1',files=catalog)
  def run_map(self):return o.relocation_records(self.manifest,str(self.root),self.pins,self.catalog)
@@ -39,20 +42,20 @@ class RelocationTests(unittest.TestCase):
  def test_samejob_no_relocation(self):
   import consumer_owned as c
   from types import SimpleNamespace
-  self.assertIsNone(c.approved_source_relocation(SimpleNamespace(profile=0,cloud_binding=None),{}))
+  self.assertIsNone(c.approved_source_relocation(SimpleNamespace(profile=0,cloud_binding=None),{'schema':'FROZEN_FIVE_PROFILE_DUT_ARTIFACT_V2'}))
  def test_cloud_without_approved_adapter_no_relocation(self):
   import consumer_owned as c
   from types import SimpleNamespace
   from unittest.mock import patch
   with patch.object(c,'cloud_invocation',return_value={'source_relocation':{'anchors':'FORGED'}}):
-   self.assertIsNone(c.approved_source_relocation(SimpleNamespace(profile=0,cloud_binding=self.root/'unused'),{}))
+   self.assertIsNone(c.approved_source_relocation(SimpleNamespace(profile=0,cloud_binding=self.root/'unused'),{'schema':'FROZEN_FIVE_PROFILE_DUT_ARTIFACT_V2'}))
  def test_unapproved_invocation_fails_before_source_map_or_build_check(self):
   import consumer_owned as c
   from types import SimpleNamespace
   from unittest.mock import patch
   budget=o.HERE.parent/'cloud_budget.py';b={'executor_adaptation':{'unapproved':True},'pins':{str(budget):o.sha(budget)}}
   with patch.object(c,'cloud_invocation',return_value=b),patch.object(c,'verify_local_build',side_effect=AssertionError('must reject first')):
-   with self.assertRaises(ValueError):c.approved_source_relocation(SimpleNamespace(profile=0,cloud_binding=self.root/'unused'),{})
+   with self.assertRaises(ValueError):c.approved_source_relocation(SimpleNamespace(profile=0,cloud_binding=self.root/'unused'),{'schema':'FROZEN_FIVE_PROFILE_DUT_ARTIFACT_V2'})
  def test_program_anchor_cannot_become_actual_source(self):
   self.manifest['files'][-1]['kind']='ACTUAL_BUILD_INPUT';self.rejects()
  def test_same_bytes_wrong_current_relative_catalog_path(self):

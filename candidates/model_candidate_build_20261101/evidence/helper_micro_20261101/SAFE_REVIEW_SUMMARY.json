@@ -1,0 +1,151 @@
+{
+  "schema": "MODEL_CANDIDATE_HELPER_LIGHT_FIXTURE_V1",
+  "scope": "TEN_SOURCE_SCALA_TYPECHECK_AND_TWO_MODULE_TINY_AST_DESCRIPTOR_DIAGNOSTIC_ONLY",
+  "status": "STRICT_COMPLETE",
+  "helper_manifest_sha256": "5fac4833c57f1a853e2f67094ae5fa0218b7c2626f21dbede95484ab813eec53",
+  "sources": [
+    {
+      "name": "ModelCandidateHighDescriptorV1.scala",
+      "sha256": "e5311767bb4b40ee416f38d173e88fe4aff7b9c6fe3d7ecbd6b306499f6cdc90"
+    },
+    {
+      "name": "ModelCandidateHostSimulationEmitterV1.scala",
+      "sha256": "71c2437c5ae9c4d12f175bad9aa0ad555935e962817602993a178eda5039aa1d"
+    },
+    {
+      "name": "ModelCandidateTransformGateV1.scala",
+      "sha256": "eef29d07a5f3244a3b3d7aadd51a8e853071526cbc78163c3c4dc8b7862c5391"
+    },
+    {
+      "name": "CanonicalHighGate.scala",
+      "sha256": "46ff62a45a47ccb0099378ac27619b79a346b9e3c3ad415cafca77788c1ffabc"
+    },
+    {
+      "name": "PortableHostDenseAccMemoryLowering.scala",
+      "sha256": "12cb0c748e7cc80cb9ffdc34cf5f0f36effb6092badd5a2d7f4e815e1d05c5b2"
+    },
+    {
+      "name": "PortableHostMatrixResultFifoMemoryLowering.scala",
+      "sha256": "5b2b02984f7ae7a05417865e6ad9da37bdabf7ac93ce41f5ed492740e064dd2b"
+    },
+    {
+      "name": "RetainedBackendCircuitGate.scala",
+      "sha256": "0fda5f49c9d465a5dd00e933201d0b29921e25f50a07e4615fa9b80f7155012a"
+    },
+    {
+      "name": "RetainedEndpointPortContract.scala",
+      "sha256": "ed617ff27dd48c838b5efc6a10991abb0a3cd41cff71681601b155282462bdc6"
+    },
+    {
+      "name": "RetainedServicePhaseObserver.scala",
+      "sha256": "bd54a1c54cef1bd475e78794c826d245c0ae06b73a9e104229928c181a64e5d7"
+    },
+    {
+      "name": "ModelCandidateHelperFixture.scala",
+      "sha256": "cac69d8e69fca67e84666bb732a1c034005e25a4849c7b9edbf2b6fd8989d94b"
+    }
+  ],
+  "stages": [
+    {
+      "name": "compile_r1",
+      "receipt_sha256": "9094bc562247f605da01952c9c1c00d56e2d9b833c04671a7f5f20515ba03930",
+      "native_exit": 0,
+      "errors": [],
+      "elapsed_seconds": 17.30158395500621,
+      "sampled_group_peak_rss": 291667968,
+      "cleanup_complete": true,
+      "pipe_eof_observed": true,
+      "gzip_finalized": true,
+      "cpu_cap_seconds": 60,
+      "wall_cap_seconds": 90,
+      "rss_cap_bytes": 1073741824
+    },
+    {
+      "name": "tiny_success",
+      "receipt_sha256": "a9d2010d2caeb151077b71b66f2a3d9a96c8c174656fb60c4c875f8e6df4db23",
+      "native_exit": 0,
+      "errors": [],
+      "elapsed_seconds": 1.9314255150093231,
+      "sampled_group_peak_rss": 118784000,
+      "cleanup_complete": true,
+      "pipe_eof_observed": true,
+      "gzip_finalized": true,
+      "cpu_cap_seconds": 10,
+      "wall_cap_seconds": 30,
+      "rss_cap_bytes": 1073741824,
+      "finite_diagnostic": {
+        "schema": "MODEL_CANDIDATE_DIAGNOSTIC_V1",
+        "stage": "canonical_full",
+        "status": "OBSERVED_COMPLETE_UNREVIEWED",
+        "reason_code": "NONE",
+        "actual": {
+          "high_bytes": 142,
+          "high_sha256": "bb21b746b688f51071580ae423f7850a718307909233c37f89236b79f85b5d0c",
+          "annotation_bytes": 211,
+          "annotations_sha256": "2ff9183a4feeaf347de02fa0436833a8bdff07067baa18c4fbe701200bd157d4",
+          "module_count": 2,
+          "annotation_count": 2,
+          "target_dir_count": 1,
+          "canonical_sha256": "68d9b34d102465aee2d2a7eb08f52531bfd58eb29e493948440fd710d4472d60"
+        },
+        "numerical_pass": false,
+        "post_build_structure_accepted": false
+      }
+    },
+    {
+      "name": "tiny_failure",
+      "receipt_sha256": "ccef0aba9a44dcb422f399281d534328ff475d2048acf83530194189858d8089",
+      "native_exit": 0,
+      "errors": [],
+      "elapsed_seconds": 1.4710781509929802,
+      "sampled_group_peak_rss": 91336704,
+      "cleanup_complete": true,
+      "pipe_eof_observed": true,
+      "gzip_finalized": true,
+      "cpu_cap_seconds": 10,
+      "wall_cap_seconds": 30,
+      "rss_cap_bytes": 1073741824,
+      "finite_diagnostic": {
+        "schema": "MODEL_CANDIDATE_DIAGNOSTIC_V1",
+        "stage": "canonical_full",
+        "status": "REJECTED_UNREVIEWED",
+        "reason_code": "INPUT_BOUNDS_OR_PIN",
+        "actual": {},
+        "numerical_pass": false,
+        "post_build_structure_accepted": false
+      }
+    },
+    {
+      "name": "tiny_module_order",
+      "receipt_sha256": "be864e07a4245d7f0583a511ce84bde9decab60df5856c896395784bd98b711c",
+      "native_exit": 0,
+      "errors": [],
+      "elapsed_seconds": 1.7981496419815812,
+      "sampled_group_peak_rss": 113070080,
+      "cleanup_complete": true,
+      "pipe_eof_observed": true,
+      "gzip_finalized": true,
+      "cpu_cap_seconds": 10,
+      "wall_cap_seconds": 30,
+      "rss_cap_bytes": 1073741824,
+      "finite_diagnostic": {
+        "schema": "MODEL_CANDIDATE_DIAGNOSTIC_V1",
+        "stage": "transform_new_toolchain",
+        "status": "REJECTED_UNREVIEWED",
+        "reason_code": "CANONICAL_IDENTITY",
+        "actual": {
+          "high_bytes": 142,
+          "high_sha256": "bb21b746b688f51071580ae423f7850a718307909233c37f89236b79f85b5d0c"
+        },
+        "numerical_pass": false,
+        "post_build_structure_accepted": false
+      }
+    }
+  ],
+  "host_elaborated": false,
+  "hardware_generated": false,
+  "full_five_block_pass": false,
+  "post_build_structure_accepted": false,
+  "numerical_pass": false,
+  "negative_fixture_native0_means_expected_rejection_asserted": true
+}

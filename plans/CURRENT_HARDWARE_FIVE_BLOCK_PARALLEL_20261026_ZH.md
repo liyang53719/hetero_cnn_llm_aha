@@ -1,3 +1,9 @@
+## 2026-11-02 01:31 UTC+08：实际候选已接包，云端磁盘准入拒绝；只补有限回执
+
+GitHub 原 run 41323045817 成功，七件 artifact13093285720 已唯一下载并逐字节校验；新 manifest05046aa9…、ELF709e88d0…、SV3d148277…，原159源码/122ABI/4096MAC/唯一共享32bank 已作独立结构与来源审查，不是完整数值 PASS。新候选本地 UUID2e52b6f5…已在原 upfront disk 门失败退出1，job目录尚未建立，runtime/ABI/DUT未启动。后验 free9,453,305,856B、watched8,108,815,617B，原 TREE−L+8GiB 需12,562,425,247B，缺3,109,119,391B；后验数值不冒原瞬时快照。
+
+本小批仅给原upfront gate增加绑定原binding SHA的有限数值回执，原失败/成功判据、TREE、free8GiB及所有预算完全不变，不输出目录/rawerror，不新构建ELF或激活CI构建。下一executor如实独立source身份，保128402 builder与七件原bytes，完整旧输入来源/实际ABI/原参考数值门仍执行。可恢复临时文件单批归档清理另有独审，不删唯一证据/输入/引用中的Git对象。完整M128及最终RTL仍0/5。
+
 ## 2026-11-01 15:39 UTC：修复候选打包与导出目录接线
 
 原 packfix run 41314704781 已失败终态：20 构建阶段有限原收据均 native0/cleanup/EOF，构建步骤成功后 export 错读旧 frozen_artifact 目录；实际 candidate pack 输出 model_candidate_artifact。Artifacts API 为空，无可下载 ELF，不继承上次产物 PASS。当前只修固定路径并额外核 manifest.path 精确绑定，原七件非空、全部严格验证、9000/7200 秒和 O1 flags 不变。真实 subprocess CLI 已串联 record→pack→verify→export→workflow 七件目录夹具，normal/-O 新版 CLI0、旧版明确目录摘要拒绝，28严格合成阶段与9导出/5打包负例均过；先核805真实源pin，再用独立合成catalog实际执行所有验证。追加3证据后最终闭包另核，测试数据明确 synthetic，不冒实际候选结构或完整数值资格。完整 M128 与最终 RTL 均 0/5。

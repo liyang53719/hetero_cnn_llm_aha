@@ -13,6 +13,17 @@ class Test(unittest.TestCase):
  def test_exact_save_and_reviewed_version_ast(self):
   for rel,wanted in EXPECTED.items():
    t=self.tree(rel)
+   if rel=='controller/cloud_flow.py':
+    # Undo only the separately reviewed finite prelaunch receipt, not arbitrary flow changes.
+    fs=[n for n in ast.walk(t)if isinstance(n,ast.FunctionDef)and n.name=='upfront_disk_admission']
+    cs=[n for n in ast.walk(t)if isinstance(n,ast.Call)and isinstance(n.func,ast.Name)and n.func.id=='upfront_disk_admission']
+    ds=[n for n in ast.walk(t)if isinstance(n,ast.If)and ast.unparse(n.test)=='evidence_path is not None']
+    self.assertEqual((len(fs),len(cs),len(ds)),(1,1,1));f,c,d=fs[0],cs[0],ds[0]
+    self.assertIn(d,f.body)
+    self.assertEqual(ast.unparse(f.args),'snapshot, evidence_path=None, binding_sha=None')
+    self.assertEqual(ast.unparse(c),"upfront_disk_admission(snapshot, P(binding_path).with_name(P(binding_path).name + '.UPFRONT_DISK.json'), binding_sha)")
+    self.assertEqual(hashlib.sha256(ast.dump(d,include_attributes=False).encode()).hexdigest(),'c3bb48f0d043a3b02d43bfb69ab5a0a77a81b9938434cde2e836b573d72ba9ad')
+    f.args.args=f.args.args[:1];f.args.defaults=[];f.body.remove(d);c.args=c.args[:1]
    class Strip(ast.NodeTransformer):
     count=0
     def visit_Expr(self,n):

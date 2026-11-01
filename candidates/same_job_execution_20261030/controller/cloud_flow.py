@@ -120,7 +120,7 @@ def admitted_inputs(b):
   imported=dict(imported,retained_materials_verified=retained)
  return budget,imported
 
-def upfront_disk_admission(snapshot):
+def upfront_disk_admission(snapshot,evidence_path=None,binding_sha=None):
  # Existing read-only inputs already consume disk and TREE. Reserve only the
  # remaining possible aggregate growth, not TREE a second time. This is a
  # sampled planning gate; unchanged locked phase gates/watchers remain binding.
@@ -128,6 +128,12 @@ def upfront_disk_admission(snapshot):
  live=snapshot['bytes'];free=snapshot['free_bytes']
  need(type(live)is int and 0<=live<=TREE and type(free)is int and free>=0,'bounded existing watched bytes/free')
  incremental=TREE-live;required=incremental+(8<<30)
+ if evidence_path is not None:
+  # Local finite diagnostic only: no roots, arbitrary census strings or payload.
+  # It is written before the unchanged free-space rejection and outside job.
+  bounded=lambda v:v if type(v)is int and 0<=v<2**64 else None
+  digest=binding_sha if isinstance(binding_sha,str)and len(binding_sha)==64 and all(c in '0123456789abcdef'for c in binding_sha)else None
+  save(evidence_path,dict(schema='CLOUD_UPFRONT_DISK_OBSERVATION_V1',scope='SAMPLED_PLANNING_ONLY_PHASE_GATES_UNCHANGED',binding_sha256=digest,census_schema='SAMPLED_OWNED_LIVE_BYTES_V1',census_complete=True,existing_watched_bytes=bounded(live),maximum_additional_bytes=bounded(incremental),free_reserve_bytes=8<<30,required_free_bytes=bounded(required),observed_free_bytes=bounded(free),shortfall_bytes=bounded(max(0,required-free)),status='SUFFICIENT_SAMPLED_SPACE'if free>=required else'REJECTED_INSUFFICIENT_SAMPLED_SPACE',numerical_pass=False,job_created=False))
  need(free>=required,'remaining aggregate growth plus unchanged free8GiB')
  return dict(existing_watched_bytes=live,maximum_additional_bytes=incremental,free_reserve_bytes=8<<30,required_free_bytes=required,observed_free_bytes=free,scope='SAMPLED_PLANNING_ONLY_PHASE_GATES_UNCHANGED')
 
@@ -172,7 +178,7 @@ def run(b,binding_path,binding_sha):
  snapshot=mod('cloud_upfront_live_budget',census_path).census(existing_roots,max_entries=150000,max_seconds=60)
  import shutil
  snapshot=dict(snapshot,free_bytes=min(snapshot['free_bytes'],shutil.disk_usage(job.parent).free))
- disk_admission=upfront_disk_admission(snapshot)
+ disk_admission=upfront_disk_admission(snapshot,P(binding_path).with_name(P(binding_path).name+'.UPFRONT_DISK.json'),binding_sha)
  job.mkdir();(job/'runs').mkdir();(job/'env').mkdir();(job/'bindings').mkdir()
  sys.path.insert(0,supervisor_dir);import supervise_multiroot as supervisor
  history=[]

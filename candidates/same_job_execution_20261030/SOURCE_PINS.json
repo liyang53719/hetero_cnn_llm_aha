@@ -2369,8 +2369,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/controller/cloud_flow.py",
-      "bytes": 25543,
-      "sha256": "1233a26bd24e9d7f5e55e3099f764e0f719e4fc704fdb83631cbba0f418b6237"
+      "bytes": 26618,
+      "sha256": "261aa6f06cb213e88bcb57553b47a25a96fa40ba9640827a4690c8159dfd1f17"
     },
     {
       "path": "candidates/same_job_execution_20261030/controller/deduplicate_pack.py",
@@ -2549,8 +2549,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/executor_adaptation.py",
-      "bytes": 11528,
-      "sha256": "689441c3c4cff2e9dc9cffe7ca05aa66982edb115210782cc9abc8faa67fa747"
+      "bytes": 11552,
+      "sha256": "aea9a7ce2db5f666a340875dde84873b284189872c982cb9865ac54734973194"
     },
     {
       "path": "candidates/same_job_execution_20261030/executor_identity.py",
@@ -2565,7 +2565,7 @@
     {
       "path": "candidates/same_job_execution_20261030/numeric/CONNECTION_OWNED_SOURCE_PINS.json",
       "bytes": 2500,
-      "sha256": "a91f637025cc53acd54e45f11f95d02dafcc014ee7f656c6a804cf8f8352c0a4"
+      "sha256": "c87e0966ada0f51b8ffde2aa6421debcab1373aeebfcf596f9d8c0fd819df533"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/CONSUMER_MANIFEST.json",
@@ -3099,8 +3099,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/test_candidate_full_budget.py",
-      "bytes": 7329,
-      "sha256": "5e260133623ad830b7df15e48ee4b376813ea93775be3dfe6704821dddd10b65"
+      "bytes": 7363,
+      "sha256": "10287c255f9a8357160ecd0b1a15a602f1741f8783e7f2e57482ff169671e79d"
     },
     {
       "path": "candidates/same_job_execution_20261030/test_candidate_relocation_producer.py",
@@ -3146,6 +3146,11 @@
       "path": "candidates/same_job_execution_20261030/test_dedup_summary.py",
       "bytes": 5021,
       "sha256": "1689f9af393eb64ebb8cc7e30178ace75872ad5622a4676b4078aed1f296594a"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/test_disk_receipt.py",
+      "bytes": 4313,
+      "sha256": "2d4a42d71f05d532bbd11f8789f45eb73ad8d202ec4075a429f9448d8ed78b9b"
     },
     {
       "path": "candidates/same_job_execution_20261030/test_driver_progress_sampling.py",
@@ -3204,8 +3209,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/test_stage_return_retention.py",
-      "bytes": 4326,
-      "sha256": "ef28c54333463b24253494461ed841281f093375d39fdcb84b0c489600f33df4"
+      "bytes": 5398,
+      "sha256": "c3e2e0cb2a60a109f00e3cbbb1327fd8e9a571b5e15c90990e841997b94554c6"
     },
     {
       "path": "candidates/same_job_execution_20261030/test_summary_resources.py",

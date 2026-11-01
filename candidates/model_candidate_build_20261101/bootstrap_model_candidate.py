@@ -8,6 +8,95 @@ def need(x,m):
  if not x:raise ValueError(m)
 def sha(p):
  with pathlib.Path(p).open('rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
+# Safe finite projection only: never copy argv, raw errors, paths, compiler logs,
+# process rows, source bodies or arbitrary report keys to Actions stdout.
+BUILD_STAGE_NAMES=('jdk','compile_tools','jars','verilator','idma','matrix','fresh_host','binding')
+BUILD_ERROR_CODES={
+ 'ValueError: wall cap':'WALL_CAP',
+ 'InterruptedError: signal 14':'MONITOR_SIGALRM',
+ 'ValueError: prelaunch work deadline':'PRELAUNCH_DEADLINE',
+ 'ValueError: sampled observed aggregate RSS cap':'SAMPLED_RSS_CAP',
+ 'ValueError: sampled observed aggregate CPU cap':'SAMPLED_CPU_CAP',
+ 'ValueError: locked memory gate':'PRELAUNCH_MEMORY_GATE',
+ 'ValueError: locked disk gate':'PRELAUNCH_DISK_GATE',
+ 'ValueError: entry cap':'ENTRY_CAP',
+ 'ValueError: file cap':'FILE_CAP',
+ 'ValueError: sampled aggregate writable-root cap':'AGGREGATE_TREE_CAP',
+ 'ValueError: sampled stage output tree cap':'STAGE_TREE_CAP',
+ 'ValueError: sampled disk reserve':'DISK_RESERVE',
+ 'ValueError: sampled log cap':'LOG_CAP',
+ 'ValueError: log reader failure':'LOG_READER_FAILURE',
+ 'ValueError: log EOF missing after cleanup':'LOG_EOF_MISSING',
+ 'RuntimeError: capture missing EOF; no full log claim':'LOG_EOF_MISSING',
+ 'ValueError: reader completion deadline':'READER_DEADLINE',
+ 'ValueError: reader join deadline':'READER_DEADLINE',
+ 'ValueError: post-cleanup deadline':'POST_CLEANUP_DEADLINE',
+}
+def bootstrap_stage_diagnostic(name,report,receipt_path):
+ import math
+ def number(v):
+  return v if type(v)in(int,float)and 0<=v<=2**53 and math.isfinite(v) else None
+ def boolean(v):return v if type(v)is bool else None
+ def obj(v):return v if type(v)is dict else {}
+ r=obj(report);errors=r.get('errors');valid_errors=type(errors)is list
+ categories=sorted({BUILD_ERROR_CODES.get(e,'UNCLASSIFIED_SUPERVISOR_ERROR') if type(e)is str else 'MALFORMED_ERROR' for e in errors[:256]}) if valid_errors else ['MALFORMED_ERROR_LIST']
+ if valid_errors and len(errors)>256:categories.append('ERROR_LIST_TRUNCATED')
+ caps=obj(r.get('caps'));cleanup=obj(r.get('cleanup_proof'));capture=obj(r.get('log_capture'))
+ native=r.get('native_exit');native=native if type(native)is int and -128<=native<=255 else None
+ receipt_sha=None
+ try:
+  if receipt_path.is_file()and not receipt_path.is_symlink():receipt_sha=sha(receipt_path)
+ except OSError:pass
+ result=dict(schema='BOUNDED_BOOTSTRAP_STAGE_DIAGNOSTIC_V1',stage=name if name in BUILD_STAGE_NAMES else 'UNKNOWN_STAGE',receipt_sha256=receipt_sha,
+  worker_started=boolean(r.get('worker_started')),native_exit=native,error_count=min(len(errors),2**31-1) if valid_errors else None,error_categories=categories,
+  elapsed_seconds=number(r.get('elapsed_seconds')),observed_cpu_seconds=number(r.get('observed_cpu_seconds')),observed_peak_rss=number(r.get('observed_peak_rss')),peak_tree_bytes=number(r.get('peak_tree_bytes')),peak_file_bytes=number(r.get('peak_file_bytes')),
+  caps={k:number(caps.get(k)) for k in ('wall_seconds','cleanup_seconds','rss_bytes','cpu_seconds','per_process_as_bytes','per_process_cpu_seconds','file_bytes','tree_bytes','watch_tree_bytes','max_entries')},
+  cleanup_complete=cleanup.get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP',pipe_eof_observed=boolean(capture.get('pipe_eof_observed')),gzip_finalized=boolean(capture.get('gzip_finalized')),
+  numerical_pass=False,final_rtl_replay=False)
+ # native nonzero with no supervisor error is NOT classified as compiler/OOM.
+ raw=json.dumps(result,sort_keys=True,separators=(',',':'),allow_nan=False)
+ if len(raw.encode())>8192:raise ValueError('bounded diagnostic schema overflow')
+ return raw
+
+JAR_STATUS_REASONS={'SOURCE_OR_CONTRACT_REJECTED','JAR_INVENTORY_REJECTED','JAR_CACHE_REJECTED','JAR_MISSING','JAR_CONTENT_REJECTED','JAR_HTTP_ERROR','JAR_NETWORK_ERROR','JAR_TIMEOUT','JAR_IO_ERROR','UNCLASSIFIED_FAILURE'}
+def project_jar_status(d):
+ keys={'schema','status','reason','jar_index','http_status','source_count','required_jar_count','verified_jar_count','download_requested','verify_only','compiler_executed','numerical_pass'}
+ need(type(d)is dict and set(d)==keys,'jar status exact fields')
+ need(d['schema']=='MODEL_CANDIDATE_JAR_INPUT_STATUS_V1'and d['status']in {'INCOMPLETE','SOURCE_AND_ALL_JAR_BYTES_VERIFIED'},'jar bootstrap status')
+ need(d['download_requested']is True and d['verify_only']is False and d['compiler_executed']is False and d['numerical_pass']is False,'jar scope only')
+ need(type(d['required_jar_count'])is int and d['required_jar_count']==107 and type(d['verified_jar_count'])is int and 0<=d['verified_jar_count']<=107,'jar bounded counts')
+ need(d['source_count']is None or (type(d['source_count'])is int and d['source_count']==159),'jar source count')
+ need(d['jar_index']is None or (type(d['jar_index'])is int and 0<=d['jar_index']<107),'jar index')
+ need(d['http_status']is None or (type(d['http_status'])is int and 100<=d['http_status']<=599),'jar HTTP code')
+ if d['status']=='INCOMPLETE':need(type(d['reason'])is str and d['reason']in JAR_STATUS_REASONS,'jar finite failure')
+ else:need(d['reason']is None and d['jar_index']is None and d['http_status']is None and d['source_count']==159 and d['verified_jar_count']==107,'jar complete bytes not compiler pass')
+ need(d['http_status']is None or d['reason']=='JAR_HTTP_ERROR','HTTP category binding')
+ return d
+
+def read_jar_status(path):
+ try:
+  need(path.is_file()and all(not p.is_symlink()for p in(path,*path.parents))and 0<path.stat().st_size<=2048,'bounded jar metadata')
+  def unique(rows):
+   d={}
+   for k,v in rows:
+    need(k not in d,'duplicate jar field');d[k]=v
+   return d
+  result=project_jar_status(json.loads(path.read_text(),object_pairs_hook=unique))
+ except Exception:result={'schema':'MODEL_CANDIDATE_JAR_INPUT_STATUS_UNAVAILABLE_V1','compiler_executed':False,'numerical_pass':False}
+ raw=json.dumps(result,sort_keys=True,separators=(',',':'),allow_nan=False)
+ need(len(raw.encode())<=2048,'bounded safe jar projection');return raw
+
+def record_bootstrap_diagnostic(name,report,work):
+ # Projection only, not a replacement supervisor receipt or acceptance evidence.
+ raw=bootstrap_stage_diagnostic(name,report,work/('stage_'+name)/'RESULT.json')
+ print('BOOTSTRAP_STAGE_DIAGNOSTIC '+raw,flush=True)
+ if name=='jars':print('MODEL_JAR_STATUS '+read_jar_status(work/'MODEL_JAR_STATUS.json'),flush=True)
+ if name not in BUILD_STAGE_NAMES:return
+ try:
+  with (work/(name+'_SUPERVISOR_RETURN_DIAGNOSTIC.json')).open('x') as f:f.write(raw+'\n')
+ except OSError:
+  print('BOOTSTRAP_DIAGNOSTIC_LOCAL_WRITE_UNAVAILABLE',flush=True)
+
 def main():
  global D
  a=argparse.ArgumentParser()
@@ -47,7 +136,7 @@ def main():
  pins[str(pathlib.Path(__file__).resolve())]=sha(__file__)
  pins.update({py:sha(py),gh:sha(gh),'/usr/bin/dpkg-deb':sha('/usr/bin/dpkg-deb')})
  if fresh is not None:pins[str(v.fresh_host_contract.resolve())]=v.fresh_host_contract_sha256
- restore=R/'candidates/fresh_original_top_recovery_20261028/restore_inputs.py';pins[str(restore)]=sha(restore)
+ restore=C/'restore_model_inputs.py';pins[str(restore)]=sha(restore)
  stages=[];started=time.monotonic();fresh_aliases={}
  def parent_failure(phase,reason):
   if fresh is None:return
@@ -71,6 +160,7 @@ def main():
   caps=dict(wall_seconds=wall,cleanup_seconds=30,file_bytes=536870912,tree_bytes=12_081_306_272,log_bytes=16_777_216,raw_log_bytes=33_554_432,max_entries=100000,per_process_as_bytes=4*1024**3,per_process_cpu_seconds=wall,rss_bytes=rss*1024**3,cpu_seconds=wall,extra_watch_roots=[str(W),str(R),str(v.shared_owned_root.resolve())],min_free_disk_bytes=1_500_000_000,watch_tree_bytes=12_081_306_272)
   try:
    r=supervise.execute(argv,str(W/('stage_'+name)),str(W/'bootstrap.lock'),caps,e,pins,resource_gate={'min_available_memory':(rss+1)*1024**3,'min_disk_free':1_500_000_000})
+   record_bootstrap_diagnostic(name,r,W)
   finally:
    check_fresh_aliases()
   stages.append({k:r[k] for k in ['status','native_exit','elapsed_seconds','observed_peak_rss']});(W/'bootstrap_stages.json').write_text(json.dumps(stages,indent=2)+'\n')
@@ -82,7 +172,7 @@ def main():
   try:fresh_host.validate_compile_inventory(json.loads((W/'compile-tools.json').read_text()))
   except Exception:
    parent_failure('GNU_RUNTIME_ADMISSION','GNU_RUNTIME_DEPENDENCIES_UNQUALIFIED');raise
- stage('jars',[py,'-B',str(R/'candidates/fresh_original_top_recovery_20261028/restore_inputs.py'),'--download-jars'],600)
+ stage('jars',[py,'-B',str(C/'restore_model_inputs.py'),'--download-jars','--status-json',str(W/'MODEL_JAR_STATUS.json')],600)
  stage('verilator',[py,'-B',str(D/'materialize_verilator.py'),'--output',str(W/'verilator'),'--execute-reviewed-acquisition'])
  stage('idma',[py,'-B',str(D/'acquire_idma_artifact.py'),'--gh',gh,'--gh-sha256',sha(gh),'--output',str(W/'idma'),'--execute-reviewed-acquisition'],240,token=True)
  stage('matrix',[py,'-B',str(D/'recover_matrix_portable.py'),'--repo',str(R),'--output',str(W/'matrix')])

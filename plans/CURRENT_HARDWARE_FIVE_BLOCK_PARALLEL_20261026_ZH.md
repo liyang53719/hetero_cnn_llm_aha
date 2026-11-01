@@ -1,3 +1,17 @@
+## 2026-11-01 10:40 UTC：候选构建准备入口错接修复（TEMP，完整数值 0/5）
+
+候选源码 fd366 的唯一构建 run41297957281 于 bootstrap/jars 严格门失败，尚未进入 159 源编译、IR/SV 或数值。Actions 原日志只有 `bootstrap failed jars`，原子收据未上传，不能倒推网络/内存原因。冻结同源码、同 `--download-jars` CLI 已本地真实复现：旧 restore_inputs 在任何下载前先检查旧155源码，精确拒绝已替换的 GdnRuntimeRmsNormOwnerV3.scala；因此确认候选 bootstrap 错接旧生产恢复入口，旧锁本身正确。
+
+本次只新增候选专用 restore_model_inputs：先验原已审 159 generation contract/overlay，再使用原 107 条 JAR 记录（106 classpath + 1 plugin，plugin 文件兼列 classpath，共 106 个 distinct 文件）的同 URL、顺序、长度与 SHA，仍写原 cache 路径供既有 materializer/classpath 使用。不改旧 restore_inputs/155/canonical 生产锁，不改 11 个硬件源、driver、Matrix/Vector 物理资源、FP 顺序/BF16 或参考合同。
+
+同时补 bootstrap 八阶段原 supervisor 返回的有界诊断和 JAR 子进程固定枚举状态；不输出原始日志、argv、URL、路径或任意错误文本，不把诊断文件代 strict RESULT 或授权。原每阶段 wall/RSS/AS/cleanup、1800 s prep、7200 s 含 prep、9000 s whole 及七件类别/总大小限制均不变。原失败身份保留；新一次性 nonce 仅供经源码独审和 CI 后的同范围修复验证，不重试已消费 attempt。
+
+实际无网前置审查另核：新159源字节、原13 Matrix provider源码物化（43,047 B）、原 iDMA 全清单和308 provider lexical ABI、115 Verilator 操作文件哈希。它们不替代 fresh CI JDK/GNU/工具下载和完整 binding，更不代表新整体结构/数值通过。新 artifact 仍永久 UNREVIEWED，实际结构独审前不准入云端模型数值。
+
+**当前完整 M128 模型数值 0/5，最终冻结 RTL 0/5；本次是准备源码修复，不是数值或性能 PASS。**
+
+---
+
 ## 2026-11-01：保序 32-lane RMS 候选进入统一模型构建；完整数值仍为 0/5
 
 ### 已完成且有实际证据

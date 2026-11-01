@@ -4,8 +4,8 @@
   "files": [
     {
       "path": ".github/workflows/hetero-five-m128-model-candidate-build.yml",
-      "bytes": 4048,
-      "sha256": "39eab74da05b869829a2da33f1a0ec3790d37aca565eccf9af0d1fc812b75c9b"
+      "bytes": 4055,
+      "sha256": "e5d001d96f3e407c2792b05b20b5fd43f111dbcbb8217a071f9f4a55d42a1aa0"
     },
     {
       "path": ".github/workflows/hetero-five-m128-samejob-calibration-local-data.yml",
@@ -1638,6 +1638,11 @@
       "sha256": "0a3317c5792f506171e4f70c546576e363cc3a9c5c83813d0996febd2939460b"
     },
     {
+      "path": "candidates/model_candidate_build_20261101/RESTORE_MODEL_INPUTS_PREFLIGHT.json",
+      "bytes": 1517,
+      "sha256": "24ad75f35b864f941485e9b518f1bfaebc675bb79c309f30461c2aca43f86845"
+    },
+    {
       "path": "candidates/model_candidate_build_20261101/SCHEMA_SPEC.json",
       "bytes": 2492,
       "sha256": "8a5444a7de274f43054597d37098a51be5150e8b3f243421237c8cc0c3688078"
@@ -1649,8 +1654,8 @@
     },
     {
       "path": "candidates/model_candidate_build_20261101/bootstrap_model_candidate.py",
-      "bytes": 11470,
-      "sha256": "76265e038b60a6cc54fa240440030109301e44b986f5926b07464adcdf4acff9"
+      "bytes": 17980,
+      "sha256": "0be2393ab1ff748ad1e5a8139c8c127f9d5e604693849dcc189a27dd57d3629e"
     },
     {
       "path": "candidates/model_candidate_build_20261101/candidate_binary_producer.py",
@@ -1743,6 +1748,11 @@
       "sha256": "122e5d48d87f67c1ad75808aeca552dc2b931e727f374216c0527bf0f74050c6"
     },
     {
+      "path": "candidates/model_candidate_build_20261101/restore_model_inputs.py",
+      "bytes": 5725,
+      "sha256": "bcd329977bc178e2c45c19d503279c1427c71f0ed7c6334c01464a8650585e2b"
+    },
+    {
       "path": "candidates/model_candidate_build_20261101/run_retained_o1_metadata_regression.py",
       "bytes": 3978,
       "sha256": "f04d98539a660e76de914b07a9c23ff8b3486e626243ed69ad95ba45bbdc19c4"
@@ -1756,6 +1766,11 @@
       "path": "candidates/model_candidate_build_20261101/synthetic_complete_candidate_fixture.py",
       "bytes": 9078,
       "sha256": "46fbeed7a14b3d858d7a02397c3936fd12e7c1bf99d397efc6fa143e34dad541"
+    },
+    {
+      "path": "candidates/model_candidate_build_20261101/test_bootstrap_diagnostic.py",
+      "bytes": 6548,
+      "sha256": "2e0a1a4708bc77b5f2c706f4642f6fb19b3528604b9b147511e6354208399c3d"
     },
     {
       "path": "candidates/model_candidate_build_20261101/test_candidate_dependency_proof.py",
@@ -1783,9 +1798,14 @@
       "sha256": "64d40d2fbd891533d2dcffdd0a4d4a8239ea6c477ad811e24261883ae4ff8518"
     },
     {
+      "path": "candidates/model_candidate_build_20261101/test_restore_model_inputs.py",
+      "bytes": 5785,
+      "sha256": "06a7576301fbe6a1fa48b1e7370e8cf548d55a1e5d23bcf7eeb17474f26cb228"
+    },
+    {
       "path": "candidates/model_candidate_build_20261101/validate_model_launch.py",
-      "bytes": 3000,
-      "sha256": "88f13d8fbc4be949fb5fa652229dbee605634a8fb26e2377faeedcc6bf4a4f38"
+      "bytes": 3014,
+      "sha256": "07c1ec71b4341a3d7dc0e4294fa4915648a3f96415e69482aa042ce83bade754"
     },
     {
       "path": "candidates/moe_router_score_observation_20261030/driver/host_axi_driver_non_dpi.cpp",

@@ -17,7 +17,8 @@ class Tests(unittest.TestCase):
  def test_retained_skips_acquisition_reference_preserves_fresh_runtime(self):self.exercise(True,True,True)
  def test_candidate_tail_binds_actual_source_catalog(self):self.exercise(True,True,True,True)
  def test_stage_coverage_real_flow_transmits_budget_scope_and_fixed_exit2(self):self.exercise(True,True,True,True,True)
- def exercise(self,reuse,adapted=False,retained=False,candidate=False,stage=False):
+ def test_reference_reuse_propagates_cap_and_all_actual_bindings(self):self.exercise(True,True,True,True,True,True)
+ def exercise(self,reuse,adapted=False,retained=False,candidate=False,stage=False,reference_reuse=False):
   with tempfile.TemporaryDirectory()as t:
    base=pathlib.Path(t);repo=base/'repo';package=repo/'candidates/same_job_execution_20261030';controller=package/'controller';runtime=package/'runtime';numeric=package/'numeric';sup=repo/'supervisor';artifact=base/'artifact';job=base/'job'
    for p in(controller,runtime,numeric,sup,artifact):p.mkdir(parents=True)
@@ -32,6 +33,8 @@ class Tests(unittest.TestCase):
    if stage:
     control=base/'independent_stage_control';control.mkdir();sp=control/'stage.json';sp.write_text('{"ALL_SYNTHETIC":true,"basis":{}}')
     b.update(execution_mode='STAGE_COVERAGE_DIAGNOSTIC',stage_coverage_budget=f.pin(sp),full_block_budget=None)
+   if reference_reuse:
+    b.update(reference_data_reuse=f.pin(sp),aggregate_tree_cap_bytes=12037043872)
    if adapted:
     builder['source_commit']='e'*40
     for k in ('executor_adaptation','workspace_loader'):b[k]=f.pin(artifact/'frozen_artifact.json')
@@ -44,6 +47,7 @@ class Tests(unittest.TestCase):
    qualified=dict(status='INCOMPLETE',numerical_pass=False)
    def execute(argv,runroot,*args,**kw):
     root=pathlib.Path(runroot);root.mkdir(parents=True);seen.append(root.name)
+    self.assertEqual(args[1]['watch_tree_bytes'],12037043872 if reference_reuse else f.TREE)
     self.assertIn('min_available_memory',kw['resource_gate']);self.assertEqual(kw['resource_gate']['min_disk_free'],8<<30);self.assertEqual(kw['resource_gate']['min_available_memory'],(256<<20 if root.name=='archives'else 512<<20)+(1<<30)+(5<<30))
     out=root/'output';out.mkdir()
     if root.name=='archives':
@@ -57,6 +61,10 @@ class Tests(unittest.TestCase):
     r=dict(native_exit=0,errors=[],cleanup_proof={'status':'COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP'},log_capture=dict(pipe_eof_observed=True,gzip_finalized=True));(root/'RESULT.json').write_text(json.dumps(r));return r
    def install(binding,*args,**kw):
     seen.append('reuse'if reuse else'install');self.assertEqual(kw,{});self.assertEqual(binding['early_build_seconds'],0);self.assertEqual(binding['identity'],identity);self.assertEqual(binding['job_budget_seconds'],43200);self.assertEqual(binding['reserved_other_owner_bytes'],5<<30)
+    if stage:
+     for k in ('execution_mode','stage_coverage_budget','full_block_budget'):self.assertEqual(binding[k],b[k])
+    if reference_reuse:
+     for k in ('reference_data_reuse','aggregate_tree_cap_bytes'):self.assertEqual(binding[k],b[k])
     if adapted:
      for k in ('executor_adaptation','workspace_loader'):self.assertEqual(binding[k],b[k])
     if reuse:
@@ -68,6 +76,8 @@ class Tests(unittest.TestCase):
     root=pathlib.Path(binding['owner_root']);root.mkdir();p=root/'owner.json';p.write_text('{}');return None,None,p
    def reference(binding,stage):seen.append('reference');self.assertEqual(binding['identity'],identity);self.assertEqual(binding['owner_module'],owner_module);return {str(i):{}for i in range(5)}
    def tail(binding,*args):
+    self.assertEqual(binding['tree_cap'],12037043872 if reference_reuse else f.TREE)
+    if reference_reuse:self.assertEqual(binding['reference_data_reuse'],b['reference_data_reuse']);self.assertEqual(binding['aggregate_tree_cap_bytes'],12037043872)
     if stage:
      self.assertEqual(binding['execution_mode'],'STAGE_COVERAGE_DIAGNOSTIC');self.assertEqual(binding['stage_coverage_budget'],b['stage_coverage_budget']);self.assertIsNone(binding['full_block_budget'])
      self.assertIn(str(control),binding['owned_roots'])
@@ -93,11 +103,12 @@ class Tests(unittest.TestCase):
     r=realpin(p)
     if pathlib.Path(p).suffix=='.bin':r['bytes']=3531306272 if pathlib.Path(p).stem=='0' else 0
     return r
-   with patch.object(f,'D',controller),patch.object(f,'admitted_inputs',return_value=({},dict(**({'workspace_loader_verified':{'root':str(artifact)}}if adapted else {}),**({'retained_materials_verified':retained_data}if retained else {}),**({'model_candidate_verified':{'roots':[str(artifact)]}}if candidate else {})))),patch.object(f,'execution_admission',return_value=dict(mode='STAGE_COVERAGE_DIAGNOSTIC'if stage else'BOUNDED_CALIBRATION',profile_seconds=dict.fromkeys(map(str,range(5)),4000)if stage else q['calibration_seconds'],profile_max_active_cycles=dict.fromkeys(map(str,range(5)),1000000)if stage else None,reviewed_budget_sha256=b['stage_coverage_budget']['sha256']if stage else None)),patch.object(f.profile_policy,'require_source_pin'),patch.object(f.profile_policy,'require_cpu'),patch.object(f.subprocess,'check_output',return_value='a'*40),patch.object(f,'mod',side_effect=lambda name,path:modules[name]),patch.object(f,'pin',side_effect=synthetic_pin),patch.dict(sys.modules,{'supervise_multiroot':types.SimpleNamespace(execute=execute)}):
+   with patch.object(f,'D',controller),patch.object(f,'admitted_inputs',return_value=({'aggregate_tree_cap_bytes':12037043872}if reference_reuse else {},dict(**({'reference_data_reuse_verified':{'roots':[str(cache)]}}if reference_reuse else {}),**({'workspace_loader_verified':{'root':str(artifact)}}if adapted else {}),**({'retained_materials_verified':retained_data}if retained else {}),**({'model_candidate_verified':{'roots':[str(artifact)]}}if candidate else {})))),patch.object(f,'execution_admission',return_value=dict(mode='STAGE_COVERAGE_DIAGNOSTIC'if stage else'BOUNDED_CALIBRATION',profile_seconds=dict.fromkeys(map(str,range(5)),4000)if stage else q['calibration_seconds'],profile_max_active_cycles=dict.fromkeys(map(str,range(5)),1000000)if stage else None,reviewed_budget_sha256=b['stage_coverage_budget']['sha256']if stage else None)),patch.object(f.profile_policy,'require_source_pin'),patch.object(f.profile_policy,'require_cpu'),patch.object(f.subprocess,'check_output',return_value='a'*40),patch.object(f,'mod',side_effect=lambda name,path:modules[name]),patch.object(f,'pin',side_effect=synthetic_pin),patch.dict(sys.modules,{'supervise_multiroot':types.SimpleNamespace(execute=execute)}):
     # Disk only is mocked: phase resource admission calls above remain checked.
     import shutil
     with patch.object(shutil,'disk_usage',return_value=types.SimpleNamespace(free=100<<30)):code=f.run(b,base/'binding.json',f.sha(base/'binding.json'))
    self.assertEqual(code,2);self.assertEqual(seen,['archives','reuse','tail']if retained else ['archives','reuse'if reuse else'install','weights','reference','tail']);result=json.loads((job/'FLOW_RESULT.json').read_text());self.assertEqual(result['identity'],identity);self.assertEqual(result['artifact_identity'],builder);self.assertFalse(result['qualification']['numerical_pass'])
+   if reference_reuse:self.assertEqual(result['aggregate_tree_cap_bytes'],12037043872);self.assertEqual(result['reference_data_reuse'],b['reference_data_reuse'])
    if stage:
     self.assertEqual(result['execution_mode'],'STAGE_COVERAGE_DIAGNOSTIC');self.assertEqual(result['stage_coverage_budget'],b['stage_coverage_budget']);self.assertEqual(result['stage_coverage_budget_sha256'],b['stage_coverage_budget']['sha256']);self.assertEqual(result['execution_scope'],'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE');self.assertEqual(result['execution_admission']['profile_seconds'],dict.fromkeys(map(str,range(5)),4000))
 if __name__=='__main__':unittest.main()

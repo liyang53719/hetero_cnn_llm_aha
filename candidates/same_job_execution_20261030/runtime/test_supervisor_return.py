@@ -27,6 +27,20 @@ class Preservation(unittest.TestCase):
   expected=ast.parse("save(root/'results'/(key+'_SUPERVISOR_RETURN.json'),receipt)").body[0]
   self.assertEqual(ast.dump(loop.body[start+1]),ast.dump(expected))
   del loop.body[start+1]
+  # Invert only the independently reviewed reference-reuse cap branch.
+  # Every statement must match exactly before removing it; old BASE stays fixed.
+  admit=next(x for x in tree.body if isinstance(x,ast.FunctionDef)and x.name=='admit')
+  expected=ast.parse("if 'aggregate_tree_cap_bytes'in b or 'aggregate_tree_cap_bytes'in budget:\n need(type(b.get('aggregate_tree_cap_bytes'))is int and b['aggregate_tree_cap_bytes']==budget.get('aggregate_tree_cap_bytes')==12037043872,'runtime exact reviewed aggregate cap')").body[0]
+  self.assertEqual(ast.dump(admit.body[-2]),ast.dump(expected));del admit.body[-2]
+  caps=next(x for x in tree.body if isinstance(x,ast.FunctionDef)and x.name=='phase_caps')
+  expected=ast.parse("tree_cap=12_081_306_272\nif 'aggregate_tree_cap_bytes'in b:\n tree_cap=admit(b)['aggregate_tree_cap_bytes']").body
+  self.assertEqual([ast.dump(x)for x in caps.body[2:4]],[ast.dump(x)for x in expected]);del caps.body[2:4]
+  call=caps.body[-1].value
+  self.assertIsInstance(call,ast.Call)
+  for name in ('tree_bytes','watch_tree_bytes'):
+   value=next(k for k in call.keywords if k.arg==name)
+   self.assertEqual(ast.dump(value.value),ast.dump(ast.Name(id='tree_cap',ctx=ast.Load())))
+   value.value=ast.Constant(value=12_081_306_272)
   self.assertEqual(hashlib.sha256(ast.dump(tree,include_attributes=False).encode()).hexdigest(),BASE_AST_SHA)
  def exercise(self,receipt,worker_result,success):
   with tempfile.TemporaryDirectory()as temp:

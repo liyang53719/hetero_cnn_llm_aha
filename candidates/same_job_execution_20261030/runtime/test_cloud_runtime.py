@@ -82,3 +82,11 @@ class Tests(unittest.TestCase):
   b={'identity':{'run_id':123,'source_commit':'a'*40,'launch_commit':'b'*40}}
   with patch.dict(os.environ,{'GITHUB_RUN_ID':'123','GITHUB_SHA':'b'*40,'GITHUB_RUN_ATTEMPT':'1'},clear=True):self.assertEqual(installer.verify_controller_identity(b),21000)
 if __name__=='__main__':unittest.main()
+
+class ReferenceReuseLimits(unittest.TestCase):
+ def test_fresh_install_rejects_reference_reuse_not_old_stage(self):
+  b=fixture();b['execution_mode']='STAGE_COVERAGE_DIAGNOSTIC'
+  self.assertEqual(installer.aggregate_tree_cap(b),12_081_306_272)
+  for key,value in [('reference_data_reuse',{}),('aggregate_tree_cap_bytes',12037043872)]:
+   with self.subTest(key=key),self.assertRaises(ValueError):installer.aggregate_tree_cap(dict(b,**{key:value}))
+  self.assertEqual(installer.aggregate_tree_cap({}),12_081_306_272)

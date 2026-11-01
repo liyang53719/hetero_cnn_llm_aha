@@ -69,7 +69,7 @@ def retained_context(b):
  need(b['pins']==dict(controller['pins'],**{str(path):row['sha256']}),'tail pins are exact controller closure plus its binding')
  for key in ('identity','executor_identity','repo','artifact_manifest','builder_handoff','cloud_budget','execution_approval','retained_materials'):
   need(controller[key]==b[key],'retained tail/controller exact '+key)
- for key in ('executor_adaptation','workspace_loader','model_candidate_review','stage_coverage_budget','p0_provider_reuse'):
+ for key in ('executor_adaptation','workspace_loader','model_candidate_review','stage_coverage_budget','p0_provider_reuse','reference_data_reuse','aggregate_tree_cap_bytes'):
   need(controller.get(key)==b.get(key),'retained tail/controller optional '+key)
  if b.get('model_candidate_review')is not None:need(controller['source_pins']==b['source_pins'],'candidate tail/controller exact source catalog')
  budget=module('retained_tail_budget',D.parent/'cloud_budget.py',b['pins']);admitted=budget.admit(controller)
@@ -97,11 +97,21 @@ def cloud_context(b):
  need(admitted.get('model_candidate_review')==b.get('model_candidate_review'),'tail exact approved candidate review')
  need(admitted.get('stage_coverage_budget')==b.get('stage_coverage_budget'),'tail exact approved stage coverage budget')
  need(admitted.get('p0_provider_reuse')==b.get('p0_provider_reuse'),'tail exact approved P0 input reuse')
+ need(admitted.get('reference_data_reuse')==b.get('reference_data_reuse'),'tail exact approved reference reuse')
+ need(b['tree_cap']==admitted.get('aggregate_tree_cap_bytes',live_budget.TREE_CAP),'tail exact approved aggregate tree cap')
+ if b.get('reference_data_reuse')is not None:need(b['execution_mode']==execution_mode.STAGE and b.get('model_candidate_review')is not None,'reference reuse only approved candidate stage coverage')
  if b.get('p0_provider_reuse')is not None:need(b['execution_mode']==execution_mode.STAGE and b.get('model_candidate_review')is not None,'P0 reuse only approved candidate stage coverage')
  if b.get('model_candidate_review')is not None:module('tail_model_candidate',D/'candidate_admission.py',b['pins']).verify(b['model_candidate_review'],b)
  need(b['execution_mode']==admitted['execution_mode']and b.get('full_block_budget')==admitted['full_block_budget']and b['calibration_seconds']==admitted['budgets']['calibration_seconds'],'tail approved mode and windows')
  retained_context(b)
  return identity
+
+def verify_reference_with_deadline(b,helper,profile,i,context):
+ # No reset or extension: byte verification shares the original controller clock.
+ need(0<=time.monotonic()-b['job_started_monotonic']<=b['job_budget_seconds'],'reference verification original job deadline')
+ result=helper.verify_materialized(b['references'][str(i)],profile,i,b['reference_data_reuse'],context)
+ need(0<=time.monotonic()-b['job_started_monotonic']<=b['job_budget_seconds'],'reference verification exceeded original job deadline')
+ return result
 
 def validate(b):
  need(b['schema']=='SAME_JOB_FIVE_M128_DIAGNOSTIC_TAIL_V1','explicit samejob tail')
@@ -112,7 +122,8 @@ def validate(b):
  need(b['job_started_monotonic']<=time.monotonic(),'owning job start clock, not reset after build')
  need(sum(admission['profile_seconds'].values())+b['reserved_material_seconds']+b['reserved_cleanup_seconds']+b['reserved_parent_seconds'] <= (b['job_budget_seconds']if cloud is not None else 21000)-(time.monotonic()-b['job_started_monotonic']),'whole five round exceeds remaining job')
  need(b['reserved_material_seconds']>=7*b['provider_wall_seconds']+11*120 and b['reserved_cleanup_seconds']>=23*60+5*30 and b['reserved_parent_seconds']>0,'all seven provider/five connect/ABI and twenty-three cleanup plus DUT/parent reservations')
- need(b['tree_cap']==12_081_306_272,'unchanged aggregate tree cap')
+ if b.get('reference_data_reuse')is None:need(b['tree_cap']==live_budget.TREE_CAP,'unchanged aggregate tree cap')
+ else:need(cloud is not None and b['execution_mode']==execution_mode.STAGE and b['tree_cap']==12_037_043_872,'exact reference-data-only tree reduction')
  for k in ('rss_bytes','address_space_bytes','phase_extra_bytes','provider_wall_seconds'):
   need(type(b[k])is int and b[k]>0,'explicit reviewed resource bound '+k)
  need(b['rss_bytes']<=12*1024**3 and (b['address_space_bytes']>0 if cloud is not None else b['address_space_bytes']>=12*1024**3) and b['address_space_bytes']<=16*1024**3,'runner resource maxima')
@@ -193,12 +204,20 @@ def run(b,binding_path,binding_sha):
  owner_doc,_=owner.verify(b['owner_manifest']['path'],b['owner_manifest']['sha256'],b['owner_root'])
  need(owner_doc['schema']in(('SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3','IMPORTED_THREE_RUNTIME_OWNER_CLOUD_V1')if cloud is not None else('SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3',))and owner_doc['identity']==(cloud if cloud is not None else dict(run_id=b['run_id'],source_commit=b['source_commit'],launch_commit=b['launch_commit'])),'fresh CI owner exact same run/source/launch, never historical V2 receipt')
  profile_policy.require_same(b,owner_doc)
+ reference_reuse=None;reference_reuse_context=None;reference_reuse_source_pin=None
+ if b.get('reference_data_reuse')is not None:
+  reference_reuse=module('tail_reference_data_reuse',D/'reference_data_reuse.py',pins)
+  reference_reuse_context={key:b[key]for key in ('repo','artifact_manifest','retained_materials')}
+  reference_reuse_source_pin=material.pin(D/'reference_data_reuse.py')
+  verified_reference=reference_reuse.verify_metadata(b['reference_data_reuse'],reference_reuse_context)
+  need(verified_reference['tree_cap']==b['tree_cap'],'actual reference reuse tree cap')
+  need(all(any(P(p).resolve().is_relative_to(r)for r in roots)for p in verified_reference['roots']),'all reference data and evidence watched')
  common=frozen['common'];root=manifest.parent
  allstage=[];dut_records=[]
  def stage(name,argv,seconds=None,accepted=(0,),lease_out=None):
   seconds=seconds or b['provider_wall_seconds'];phase=out/'phases'/(name+'.json');run_dir=out/'runs'/name
   cache_root=out/'cache_roots'/name;e=owned_environment(b['environment'],cache_root)
-  body=dict(argv=list(map(str,argv)),pins=pins,owned_roots=b['owned_roots'],extra_bytes=b['phase_extra_bytes'],seconds=seconds,job_started=b['job_started_monotonic'],job_budget_seconds=b['job_budget_seconds']if cloud is not None else 21000,write_file_bytes=128<<20,environment=e,cache_root=str(cache_root),admission_output=str(run_dir/'LIVE_ADMISSION.json'))
+  body=dict(argv=list(map(str,argv)),pins=pins,owned_roots=b['owned_roots'],extra_bytes=b['phase_extra_bytes'],seconds=seconds,job_started=b['job_started_monotonic'],job_budget_seconds=b['job_budget_seconds']if cloud is not None else 21000,write_file_bytes=128<<20,tree_cap=b['tree_cap'],environment=e,cache_root=str(cache_root),admission_output=str(run_dir/'LIVE_ADMISSION.json'))
   save(phase,body);localpins=dict(pins);localpins[str(phase)]=sha(phase)
   caps=dict(wall_seconds=seconds+30,cleanup_seconds=30,file_bytes=2<<30,tree_bytes=512<<20,log_bytes=64<<20,raw_log_bytes=128<<20,max_entries=100000,per_process_as_bytes=b['address_space_bytes'],per_process_cpu_seconds=18000 if name.endswith('_dut') else seconds+30,rss_bytes=b['rss_bytes'],cpu_seconds=seconds+30,extra_watch_roots=b['owned_roots'],min_free_disk_bytes=1_500_000_000,watch_tree_bytes=b['tree_cap'])
   r=supervisor.execute([b['python'],'-B',str(D/'locked_phase.py'),'--phase',str(phase),'--sha256',sha(phase)],str(run_dir),b['lock'],caps,e,localpins,resource_gate={'min_available_memory':b['rss_bytes']+(1<<30)+(b['reserved_other_owner_bytes']if cloud is not None else 0),'min_disk_free':8<<30})
@@ -233,13 +252,17 @@ def run(b,binding_path,binding_sha):
    ref_doc=json.loads(ref_path.read_text());need(ref_doc['runtime_receipt_sha256']==runtime['receipt']['sha256']and ref_doc['runtime_source_pins_sha256']==runtime['sidecar']['sha256'],'reference matches actual selected installed runtime/sidecar')
    def provider_stage(label,argv):return stage(f'p{i}_{label}',argv,lease_out=lease_root)
    initialization=out/'phases'/f'p{i}_initialize_input.json'
-   save(initialization,dict(repo=b['repo'],materializer=b['materializer'],output=str(profile),profile=i,reference=b['references'][str(i)]))
+   initialize_body=dict(repo=b['repo'],materializer=b['materializer'],output=str(profile),profile=i,reference=b['references'][str(i)])
+   if reference_reuse is not None:initialize_body.update(reference_data_reuse=b['reference_data_reuse'],reference_reuse_context=reference_reuse_context,reference_reuse_source_pin=reference_reuse_source_pin)
+   save(initialization,initialize_body)
    stage(f'p{i}_initialize',[b['python'],'-B',str(D/'provider_from_frozen.py'),'--initialize-binding',str(initialization),'--sha256',sha(initialization)],120,lease_out=lease_root)
    material.prepare(b['repo'],b['materializer'],profile,i,runtime['wrapper'],b['payload'],b['references'][str(i)],provider_stage,pins,p0_provider_reuse=b.get('p0_provider_reuse')if i==0 else None)
    stage(f'p{i}_connect',[b['python'],'-B',str(D/'connect_owned.py'),'--existing-output',str(profile),'--profile',str(i),*identity_args],120,lease_out=lease_root)
    generated=json.loads((profile/'CONSUMER_ARGV.json').read_text())['consumer_argv']
    generated,outer_seconds=execution_command(generated,b,admission,i)
+   if reference_reuse is not None:verify_reference_with_deadline(b,reference_reuse,profile,i,reference_reuse_context)
    dut_outer=stage(f'p{i}_dut',generated,outer_seconds,accepted=(1,2),lease_out=lease_root)
+   if reference_reuse is not None:verify_reference_with_deadline(b,reference_reuse,profile,i,reference_reuse_context)
    bundle=profile/'runtime_bundle.v3.json';bundle_doc=json.loads(bundle.read_text());runtime_sha=bundle_doc['profiles'][0]['runtime']['sha256']
    diagnostic=dut_evidence.verify(profile/'dut_result',i,sha(manifest),sha(bundle),binary['sha256'],runtime_sha,material.pin(out/'runs'/f'p{i}_dut'/'RESULT.json'))
    if cloud is not None:

@@ -9,7 +9,7 @@ p=load('policy_under_test',PKG/'profile_policy.py')
 r=load('reference_under_test',PKG/'runtime/reference_job.py')
 o=load('owner_under_test',PKG/'runtime/owner_fresh.py')
 f=load('flow_under_test',PKG/'controller/flow.py')
-with patch.dict(sys.modules,{k:types.ModuleType(k)for k in ['live_budget','dut_evidence','provider_from_frozen']}):n=load('numeric_under_test',PKG/'numeric/numeric_tail.py')
+with patch.dict(sys.modules,dict(live_budget=load('profile_policy_actual_live_budget',PKG/'numeric/live_budget.py'),**{k:types.ModuleType(k)for k in ['dut_evidence','provider_from_frozen']})):n=load('numeric_under_test',PKG/'numeric/numeric_tail.py')
 B={'execution_policy':p.policy(p.DEFER)}
 summary=load('safe_summary_under_test',PKG/'summarize_same_job.py')
 class Tests(unittest.TestCase):

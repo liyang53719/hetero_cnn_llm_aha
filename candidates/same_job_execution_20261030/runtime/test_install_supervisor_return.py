@@ -13,6 +13,14 @@ def callsite(body):
 class Tests(unittest.TestCase):
  def test_only_two_saves_added(self):
   t=tree();count=0
+  helper=next(n for n in t.body if isinstance(n,ast.FunctionDef)and n.name=='aggregate_tree_cap')
+  self.assertEqual(hashlib.sha256(ast.dump(helper,include_attributes=False).encode()).hexdigest(),'f86cc56633da9f34f4483dd720e29dbdbd825f2f53bf5b94814ff17817221ac2')
+  t.body.remove(helper)
+  identity=next(n for n in t.body if isinstance(n,ast.FunctionDef)and n.name=='verify_controller_identity')
+  cloud=identity.body[1]
+  self.assertIsInstance(cloud,ast.If)
+  self.assertEqual(ast.dump(cloud.body[1],include_attributes=False),ast.dump(ast.parse('aggregate_tree_cap(b)').body[0],include_attributes=False))
+  del cloud.body[1]
   for parent in ast.walk(t):
    for name,value in ast.iter_fields(parent):
     if isinstance(value,list):

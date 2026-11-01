@@ -246,3 +246,75 @@ class IdentityEntryTests(unittest.TestCase):
    helper=D/'numeric/artifact_handoff.py';pins={str(helper):flow.sha(helper)}
    with patch.object(prepare,'verify_source',return_value=(root,manifest,pins)),patch.object(prepare,'load',side_effect=lambda name,path:modules[name]),patch.object(prepare.subprocess,'check_output',return_value='a'*40):prepare.prepare_identity(a)
    identity=json.loads(a.executor_identity.read_text());self.assertEqual(identity['controller_pid'],os.getpid());self.assertEqual(identity,observed[0]);self.assertEqual(identity['host_identity_sha256'],a.host_identity_sha256);self.assertNotIn('run_id',identity);self.assertEqual(flow.sha(a.executor_identity),a.executor_identity_sha256)
+
+class ReferenceReuseEntry(unittest.TestCase):
+ def test_reference_pair_and_approved_tree_cap(self):
+  import argparse,tempfile,pathlib
+  with tempfile.TemporaryDirectory()as t:
+   p=pathlib.Path(t)/'input.json';p.write_text('{}')
+   a=argparse.Namespace(stage_coverage_budget=p,stage_coverage_budget_sha256=prepare.sha(p),reference_data_reuse=p,reference_data_reuse_sha256=prepare.sha(p))
+   b=prepare.stage_coverage_input(a);self.assertEqual(b['reference_data_reuse'],prepare.input_pin(p,prepare.sha(p)))
+   approved=dict(b,aggregate_tree_cap_bytes=12037043872)
+   prepare.preserve_stage_coverage_input(b,approved);self.assertEqual(b['aggregate_tree_cap_bytes'],12037043872)
+   a.reference_data_reuse_sha256=None
+   with self.assertRaises(ValueError):prepare.stage_coverage_input(a)
+   a.reference_data_reuse_sha256=prepare.sha(p);a.stage_coverage_budget=None;a.stage_coverage_budget_sha256=None
+   with self.assertRaises(ValueError):prepare.stage_coverage_input(a)
+
+class ActualRuntimeBudgetJoin(unittest.TestCase):
+ def test_generated_install_mode_fields_real_budget_and_reuse_admit(self):
+  import shutil,test_stage_coverage
+  h=test_stage_coverage.Stage();h.setUp();self.addCleanup(h.tearDown)
+  r=h.e/'runtime';r.mkdir();shutil.copyfile(D/'runtime/runtime_reuse.py',r/'runtime_reuse.py')
+  # Sole mocked authority is process liveness. Cloud/mode admission is actual.
+  identity=h.e/'executor_identity.py';identity.write_text('def verify_owner(i):pass\ndef verify_current(i):pass\n')
+  h.b['identity']['started_monotonic']=time.monotonic();h.b['job_started_monotonic']=h.b['identity']['started_monotonic']
+  row=h.h.put('reference_reuse',{'ALL_SYNTHETIC':True});runtime=h.h.put('runtime_manifest',{'ALL_SYNTHETIC':True})
+  h.b['reference_data_reuse']=row;h.doc['reference_data_reuse']=row;h.ap['reference_data_reuse_sha256']=row['sha256'];h.doc['aggregate_tree_cap_bytes']=12037043872
+  h.doc.update(runtime_mode='IMPORT_EXISTING_PINNED_RUNTIME',archive_mode='READ_EXISTING_PINNED_ARCHIVES',runtime_reuse_manifest=runtime)
+  h.b['pins'].update({str(p):flow.sha(p)for p in (identity,r/'runtime_reuse.py')});h.reapprove()
+  admitted=h.cloud.admit(h.b);h.b.update(admitted)
+  base={k:h.b[k]for k in ('execution_context','identity','job_started_monotonic','job_budget_seconds','pins','cloud_budget','execution_approval','artifact_manifest','stage_resources','reserved_other_owner_bytes','runtime_reuse_manifest')}
+  # Execute the production INSTALL construction and its actual reuse update,
+  # not a separately invented field list. No runtime/stage process is invoked.
+  h.b['shared_runtime_helper']='synthetic';job=h.h.d/'job';job.mkdir();(job/'runs/archives/output').mkdir(parents=True)
+  ab=job/'ARCHIVES_BINDING.json';ab.write_text('{}')
+  for name in ('RESULT.json','output/ARCHIVES.json'):(job/'runs/archives'/name).write_text('{}')
+  tree=ast.parse((D/'controller/cloud_flow.py').read_text());run=next(n for n in tree.body if isinstance(n,ast.FunctionDef)and n.name=='run')
+  idx=next(i for i,n in enumerate(run.body)if isinstance(n,ast.Assign)and any(isinstance(t,ast.Name)and t.id=='install_binding'for t in n.targets))
+  branch=run.body[idx+2];self.assertIsInstance(branch,ast.If)
+  env=dict(flow.__dict__,b=h.b,execution_policy=flow.profile_policy.policy(flow.profile_policy.FULL),identity=h.b['identity'],limit=h.b['job_budget_seconds'],repo=h.h.d,owner_root=job/'materials',py='synthetic',supervisor_dir='synthetic',lock='synthetic',roots=[],ipins=h.b['pins'],archives_rows=[],started=h.b['job_started_monotonic'],q=h.b['budgets'],tail_reserved=1,job=job,runtime=r,ab=ab,archives=job/'runs/archives/output')
+  exec(compile(ast.Module(body=[run.body[idx],run.body[idx+1],branch.body[0]],type_ignores=[]),'actual_install_binding','exec'),env)
+  install=env['install_binding']
+  reuse=flow.mod('real_runtime_admission_fixture',r/'runtime_reuse.py')
+  self.assertEqual(reuse.admit(install)['aggregate_tree_cap_bytes'],12037043872)
+  install.update(install_wall_seconds=180,owned_roots=[])
+  self.assertEqual(reuse.phase_caps(install)['watch_tree_bytes'],12037043872)
+  for missing in ('execution_mode','stage_coverage_budget','reference_data_reuse'):
+   broken=dict(install);del broken[missing]
+   with self.subTest(missing=missing),self.assertRaises((ValueError,KeyError)):reuse.admit(broken)
+  broken=dict(install,aggregate_tree_cap_bytes=12037043873)
+  with self.assertRaises(ValueError):reuse.admit(broken)
+ def test_tighter_census_does_not_lower_free_reserve(self):
+  cap=12037043872;s=dict(schema='SAMPLED_OWNED_LIVE_BYTES_V1',complete=True,bytes=100,free_bytes=cap-100+(8<<30))
+  got=flow.upfront_disk_admission(s,tree_cap=cap);self.assertEqual(got['free_reserve_bytes'],8<<30)
+  s['free_bytes']-=1
+  with self.assertRaises(ValueError):flow.upfront_disk_admission(s,tree_cap=cap)
+  for invalid in (True,12037043873):
+   with self.assertRaises(ValueError):flow.upfront_disk_admission(s,tree_cap=invalid)
+
+class ActualReferenceMetadataJoin(unittest.TestCase):
+ def test_source_pinned_metadata_roots_are_actual_five_reference_dirs(self):
+  helper=flow.mod('reference_metadata_fixture',D/'numeric/test_reference_data_reuse.py')
+  with tempfile.TemporaryDirectory()as tmp:
+   doc,row,b,out,save=helper.fixture(pathlib.Path(tmp))
+   path=D/'numeric/reference_data_reuse.py';b.update(reference_data_reuse=row,pins={str(path):flow.sha(path)})
+   budget=dict(execution_mode='STAGE_COVERAGE_DIAGNOSTIC',reference_data_reuse=row,aggregate_tree_cap_bytes=12037043872)
+   actual=flow.verified_reference_data_reuse(b,budget,True)
+   self.assertEqual(set(actual['roots']),{str(pathlib.Path(v['path']).parent)for v in doc['references'].values()})
+   self.assertNotIn(str(pathlib.Path(row['path']).parent),actual['roots'])
+   for bad in (dict(budget,reference_data_reuse=dict(row,sha256='0'*64)),dict(budget,aggregate_tree_cap_bytes=12037043873)):
+    with self.assertRaises(ValueError):flow.verified_reference_data_reuse(b,bad,True)
+   with self.assertRaises(ValueError):flow.verified_reference_data_reuse(b,budget,False)
+   doc['references']['0']['path']=str(pathlib.Path(tmp)/'bogus.json');save();b['reference_data_reuse']=helper.core.pin(row['path']);budget['reference_data_reuse']=b['reference_data_reuse']
+   with self.assertRaises((ValueError,FileNotFoundError)):flow.verified_reference_data_reuse(b,budget,True)

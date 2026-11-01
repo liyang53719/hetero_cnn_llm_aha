@@ -37,11 +37,14 @@ def admit(b):
  need(not stage or candidate,'stage diagnostic requires model candidate')
  need(stage or 'stage_coverage_budget'not in b,'stage budget forbidden in legacy mode')
  need('p0_provider_reuse'not in b or (stage and candidate),'P0 provider reuse requires stage candidate')
+ reference_reuse='reference_data_reuse'in b
+ need(not reference_reuse or (stage and candidate),'reference data reuse requires stage candidate')
+ need(reference_reuse or 'aggregate_tree_cap_bytes'not in b,'tree cap requires reference data reuse')
  adaptation_fields={'executor_adaptation','workspace_loader'}
  adapted=bool(adaptation_fields & set(b))
  need(not adapted or adaptation_fields<=set(b),'paired executor adaptation and workspace loader required')
  optional_fields=({'retained_materials'}if 'retained_materials'in b else set())|({'model_candidate_review'}if candidate else set())
- extra_fields=(adaptation_fields if adapted else set())|optional_fields|({'stage_coverage_budget'}if stage else set())|({'p0_provider_reuse'}if 'p0_provider_reuse'in b else set())
+ extra_fields=(adaptation_fields if adapted else set())|optional_fields|({'stage_coverage_budget'}if stage else set())|({'p0_provider_reuse'}if 'p0_provider_reuse'in b else set())|({'reference_data_reuse'}if reference_reuse else set())
  approval_extra={k+'_sha256'for k in extra_fields}
  approval_path=pin(b['execution_approval'],65536);approval=json.loads(approval_path.read_text())
  need(set(approval)=={'schema','approved','authority','purpose','source_commit','budget_sha256','artifact_manifest_sha256','execution_id','host_identity_sha256','review_evidence'}|approval_extra,'exact independent execution approval')
@@ -54,15 +57,20 @@ def admit(b):
    pin(b[k],2<<20);need(approval[k+'_sha256']==b[k]['sha256'],'approved exact '+k)
  p=pin(b['cloud_budget'],65536);need(b['cloud_budget']['sha256']==approval['budget_sha256'],'externally approved exact cloud budget')
  d=json.loads(p.read_text())
- need(set(d)=={'schema','ready','source_commit','host_identity','artifact_manifest_sha256','basis','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','execution_mode','full_block_budget','reserved_other_owner_bytes','consumer_address_space_bytes','resource_scope','stage_resources','runtime_mode','archive_mode','runtime_reuse_manifest'}|extra_fields,'exact cloud lifecycle admission')
+ need(set(d)=={'schema','ready','source_commit','host_identity','artifact_manifest_sha256','basis','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','execution_mode','full_block_budget','reserved_other_owner_bytes','consumer_address_space_bytes','resource_scope','stage_resources','runtime_mode','archive_mode','runtime_reuse_manifest'}|extra_fields|({'aggregate_tree_cap_bytes'}if reference_reuse else set()),'exact cloud lifecycle admission')
  if extra_fields:
   for k in extra_fields:need(d[k]==b[k],'reviewed adaptation input '+k)
+ if reference_reuse:
+  need(type(d['aggregate_tree_cap_bytes'])is int and d['aggregate_tree_cap_bytes']==12037043872,'exact reduced reference reuse aggregate tree cap')
+  need('aggregate_tree_cap_bytes'not in b or (type(b['aggregate_tree_cap_bytes'])is int and b['aggregate_tree_cap_bytes']==d['aggregate_tree_cap_bytes']),'binding exact reduced aggregate tree cap')
  need(d['schema']=='FIVE_M128_CLOUD_LIFECYCLE_BUDGET_V1'and d['ready']is True,'cloud admission ready')
  need(d['source_commit']==b['identity']['source_commit'],'same frozen cloud source')
  host=pin(d['host_identity'],65536);host_observation(json.loads(host.read_text()),b['identity']);need(d['host_identity']['sha256']==b['identity']['host_identity_sha256'],'exact independently reviewed actual host identity')
  need(d['artifact_manifest_sha256']==b['artifact_manifest']['sha256'],'actual received binary manifest admission')
  need(set(d['basis'])=={'resource_audit','independent_review'},'actual resource audit and independent review')
  for v in d['basis'].values():pin(v,2<<20)
+ if reference_reuse:
+  need(d['runtime_mode']=='IMPORT_EXISTING_PINNED_RUNTIME' and d['archive_mode']=='READ_EXISTING_PINNED_ARCHIVES','reference reuse requires original pinned runtime and archive import')
  if d['runtime_mode']=='IMPORT_EXISTING_PINNED_RUNTIME':
   need(d['archive_mode']=='READ_EXISTING_PINNED_ARCHIVES','reuse runtime requires exact existing archive revalidation')
   pin(d['runtime_reuse_manifest'],65536)
@@ -94,6 +102,7 @@ def admit(b):
  need(type(d['reserved_other_owner_bytes'])is int and d['reserved_other_owner_bytes']==5<<30,'preserve unknown owner5GiB reservation')
  result={k:d[k]for k in('runtime_mode','archive_mode','runtime_reuse_manifest','stage_resources','consumer_address_space_bytes','reserved_other_owner_bytes','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','execution_mode','full_block_budget')}
  if extra_fields:result.update({k:d[k]for k in extra_fields})
+ if reference_reuse:result['aggregate_tree_cap_bytes']=d['aggregate_tree_cap_bytes']
  if candidate:
   path=D/'numeric/candidate_admission.py';need(b['pins'].get(str(path))==sha(path),'model candidate admission source pin')
   spec=importlib.util.spec_from_file_location('budget_model_candidate_admission',path);helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)

@@ -15,7 +15,16 @@ def checked(v):
  p=P(v['path']);need(p.is_absolute() and p.is_file() and not p.is_symlink() and p.stat().st_size==v['bytes'] and sha(p)==v['sha256'],'pinned input drift');return p
 def save(p,v):
  with P(p).open('x') as f:json.dump(v,f,indent=2);f.write('\n')
-def copy_reference(row,out,profile):
+def reference_reuse_module(source_pin):
+ path=P(__file__).resolve().with_name('reference_data_reuse.py')
+ need(source_pin is not None and checked(source_pin)==path and path==path.resolve()and all(not q.is_symlink()for q in(path,*path.parents)),'fixed reference reuse source pin')
+ spec=importlib.util.spec_from_file_location('reviewed_reference_data_reuse',path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
+
+def copy_reference(row,out,profile,reference_data_reuse=None,reuse_context=None,reuse_source_pin=None):
+ if reference_data_reuse is not None:
+  need(reuse_context is not None,'explicit reference reuse context')
+  return reference_reuse_module(reuse_source_pin).link_reference(row,out,profile,reference_data_reuse,reuse_context)
+ need(reuse_context is None and reuse_source_pin is None,'no implicit reference reuse authority')
  src=checked(row);r=json.loads(src.read_text())
  need(r['profile']['profile']==profile and r['complete_block_tokens']==128 and r['exact_baseline_observer_output_equal'] is True and r['hardware_executed'] is False,'full original independent reference')
  need(r['router_policy']=='UNMODIFIED_OFFICIAL_TORCH_TOPK','unchanged routing reference')
@@ -76,10 +85,10 @@ def prepare(repo,materializer,out,profile,wrapper,payload,reference,stage,source
  return out/'runtime_bundle.json'
 
 
-def initialize(repo,materializer,out,profile,reference):
+def initialize(repo,materializer,out,profile,reference,reference_data_reuse=None,reuse_context=None,reuse_source_pin=None):
  repo=P(repo).resolve();materializer=P(materializer).resolve();out=P(out).resolve()
  need(not out.exists() and profile in range(5),'fresh supervised material initialization');out.mkdir()
- copy_reference(reference,out,profile)
+ copy_reference(reference,out,profile,reference_data_reuse,reuse_context,reuse_source_pin)
  spec=importlib.util.spec_from_file_location('unchanged_original_materializer',materializer/'prepare.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
  m.sources(repo);m.programs(repo,out/'programs',profile)
  save(out/'INITIALIZED.json',dict(profile=profile,reference=reference))
@@ -88,4 +97,4 @@ if __name__=='__main__':
  import argparse
  a=argparse.ArgumentParser();a.add_argument('--initialize-binding',type=P,required=True);a.add_argument('--sha256',required=True);v=a.parse_args()
  need(sha(v.initialize_binding)==v.sha256,'admitted initialization binding');b=json.loads(v.initialize_binding.read_text())
- initialize(b['repo'],b['materializer'],b['output'],b['profile'],b['reference'])
+ initialize(b['repo'],b['materializer'],b['output'],b['profile'],b['reference'],b.get('reference_data_reuse'),b.get('reference_reuse_context'),b.get('reference_reuse_source_pin'))

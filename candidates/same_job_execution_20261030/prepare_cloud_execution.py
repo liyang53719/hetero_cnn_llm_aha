@@ -36,9 +36,17 @@ def stage_coverage_input(a):
  if reuse is not None:
   need(path is not None,'P0 provider reuse requires explicit stage budget')
   roles['p0_provider_reuse']=input_pin(reuse,reuse_sha,2<<20)
+ reuse=getattr(a,'reference_data_reuse',None);reuse_sha=getattr(a,'reference_data_reuse_sha256',None)
+ need((reuse is None)==(reuse_sha is None),'paired reference data reuse path/digest')
+ if reuse is not None:
+  need(path is not None,'reference data reuse requires explicit stage budget')
+  roles['reference_data_reuse']=input_pin(reuse,reuse_sha,2<<20)
  return roles
 
 def preserve_stage_coverage_input(binding,approved):
+ if 'reference_data_reuse'in binding or 'reference_data_reuse'in approved:
+  need(approved['execution_mode']=='STAGE_COVERAGE_DIAGNOSTIC' and binding.get('reference_data_reuse')is not None and binding['reference_data_reuse']==approved.get('reference_data_reuse'),'explicit reference reuse equals independently approved stage input')
+  binding['aggregate_tree_cap_bytes']=approved['aggregate_tree_cap_bytes']
  if approved['execution_mode']=='STAGE_COVERAGE_DIAGNOSTIC':
   need(binding.get('stage_coverage_budget')is not None and binding['stage_coverage_budget']==approved.get('stage_coverage_budget'),'explicit CLI stage budget equals independently approved input')
  else:need(binding.get('stage_coverage_budget')is None and approved.get('stage_coverage_budget')is None,'stage budget forbidden in other modes')
@@ -92,7 +100,7 @@ def run(a):
  frozen=json.loads(P(roles['artifact_manifest']['path']).read_text())
  policy=load('cloud_profile_policy',D/'profile_policy.py');policy.require_source_pin(pins)
  b=dict(schema='CLOUD_FIVE_M128_EXECUTION_BINDING_V1',execution_context='CLOUD_EXECUTOR_V1',identity=identity,executor_identity=identity,source_pins=dict(path=str(manifest),bytes=manifest.stat().st_size,sha256=sha(manifest)),executor_identity_pin=roles['executor_identity'],builder_handoff=roles['builder_handoff'],artifact_manifest=roles['artifact_manifest'],cloud_budget=roles['cloud_budget'],execution_approval=roles['execution_approval'],artifact_identity=frozen['artifact_identity'],execution_policy=policy.policy(policy.FULL),profiles=list(range(5)),tokens=128,matrix_macs=4096,vector_lanes=32,payload_uploads=False,final_rtl_replay=False,job_started_monotonic=identity['started_monotonic'],repo=str(repo),job_root=str(a.work),pins=pins,runtime_package=str(D/'runtime'),numeric_package=str(D/'numeric'),python=str(P(sys.executable).resolve()),supervisor_dir=str(repo/'candidates/ci_frontend_pipeline_r2_20261029'),shared_runtime_helper=str(repo/'candidates/same_job_materialization_20261029/shared_runtime.py'),materializer=str(repo/'candidates/same_job_materialization_20261029'))
- b.update({k:roles[k]for k in ('executor_adaptation','workspace_loader','retained_materials','model_candidate_review','stage_coverage_budget','execution_mode','p0_provider_reuse')if k in roles})
+ b.update({k:roles[k]for k in ('executor_adaptation','workspace_loader','retained_materials','model_candidate_review','stage_coverage_budget','execution_mode','p0_provider_reuse','reference_data_reuse')if k in roles})
  budget=load('cloud_reviewed_budget',D/'cloud_budget.py').admit(b)
  preserve_stage_coverage_input(b,budget)
  for key in ('runtime_mode','archive_mode','runtime_reuse_manifest','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','reserved_other_owner_bytes','consumer_address_space_bytes','stage_resources','execution_mode','full_block_budget'):b[key]=budget[key]
@@ -127,6 +135,9 @@ def prepare_identity(a):
  load('cloud_identity_live',D/'executor_identity.py').verify_current(identity)
  need(subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()==identity['source_commit'],'actual immutable executor source commit')
  mode=load('cloud_identity_mode',D/'execution_mode.py').admit(stub)
+ if 'reference_data_reuse'in stub:
+  reuse_path=D/'numeric/reference_data_reuse.py';need(pins.get(str(reuse_path))==sha(reuse_path),'reference reuse verifier source pin')
+  load('entry_reference_data_reuse',reuse_path).verify_metadata(stub['reference_data_reuse'],dict(stub,repo=str(repo)))
  if 'p0_provider_reuse'in stub:
   reuse_path=D/'numeric/p0_provider_data_reuse.py';need(pins.get(str(reuse_path))==sha(reuse_path),'P0 pure data reuse verifier source pin')
   load('entry_p0_provider_data_reuse',reuse_path).verify_metadata(stub['p0_provider_reuse'],dict(stub,repo=str(repo)))
@@ -145,7 +156,7 @@ def main():
  p.add_argument('--repo',type=P,required=True);p.add_argument('--work',type=P,required=True)
  for role in ('builder-handoff','artifact-manifest','cloud-budget','execution-approval'):
   p.add_argument('--'+role,type=P,required=True);p.add_argument('--'+role+'-sha256',required=True)
- for role in ('executor-identity','host-identity','executor-adaptation','workspace-loader','retained-materials','model-candidate-review','stage-coverage-budget','p0-provider-reuse'):
+ for role in ('executor-identity','host-identity','executor-adaptation','workspace-loader','retained-materials','model-candidate-review','stage-coverage-budget','p0-provider-reuse','reference-data-reuse'):
   p.add_argument('--'+role,type=P);p.add_argument('--'+role+'-sha256')
  a=p.parse_args()
  if a.executor_identity is None:need(a.host_identity is not None and a.host_identity_sha256 is not None,'reviewed host pin required to form current executor identity')

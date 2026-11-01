@@ -20,6 +20,20 @@ CATALOG_PATH = PREFIX + 'SOURCE_PINS.json'
 # or stimulus source may change through this host adapter. The exact host-only
 # P0 data-reuse wrapper paths below require independent source/data review.
 ALLOWED_PATHS = frozenset(PREFIX + x for x in (
+    'test_profile_policy.py',
+    'runtime/test_cloud_runtime.py',
+    'evidence/reference_data_reuse_20261101/README_CN.md',
+    'evidence/reference_data_reuse_20261101/SAFE_EVIDENCE.json',
+    'evidence/reference_data_reuse_20261101/run_all_reference_links.py',
+    'evidence/reference_data_reuse_20261101/run_reference_pure_chain.py',
+
+    'test_reference_tree_budget.py',
+    'numeric/reference_data_reuse.py',
+    'numeric/test_reference_data_reuse.py',
+    'numeric/test_reference_numeric.py',
+    'numeric/locked_phase.py',
+    'numeric/live_budget.py',
+
     'test_stage_document.py',
     'evidence/p0_data_reuse_20261101/README_CN.md',
     'evidence/p0_data_reuse_20261101/SAFE_EVIDENCE.json',

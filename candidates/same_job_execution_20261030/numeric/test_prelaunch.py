@@ -182,7 +182,134 @@ REVIEWED_STAGE_INVERSE = {'numeric/numeric_tail.py': [('bdcea0b9485bc538800ae32c
 # Exact inverse of the reviewed stage-coverage / P0 data-only additions.
 # Mandatory unique full-AST snippet matches; original historical whole-AST hashes
 # below remain unchanged. No arbitrary mode branch or dependency gate is skipped.
+# Reference data-only delta: restore exact 82bafa AST before the prior reviewed inverse.
+REVIEWED_REFERENCE_INVERSE = {'numeric/numeric_tail.py': [('ff7ac986fb69d6c04a1e20365c402d0823a056f0c4c5c3d01b69e40972a6ba2a',
+                              "for key in ('executor_adaptation', 'workspace_loader', "
+                              "'model_candidate_review', 'stage_coverage_budget', 'p0_provider_reuse', "
+                              "'reference_data_reuse', 'aggregate_tree_cap_bytes'):\n"
+                              "    need(controller.get(key) == b.get(key), 'retained tail/controller "
+                              "optional ' + key)",
+                              "for key in ('executor_adaptation', 'workspace_loader', "
+                              "'model_candidate_review', 'stage_coverage_budget', 'p0_provider_reuse'):\n"
+                              "    need(controller.get(key) == b.get(key), 'retained tail/controller "
+                              "optional ' + key)"),
+                             ('f335c3a3d68bcc37f034a8b2cccfcff13c899b44a5aa2e05f4bf022913265cd2',
+                              "need(admitted.get('reference_data_reuse') == b.get('reference_data_reuse'), "
+                              "'tail exact approved reference reuse')\n"
+                              "need(b['tree_cap'] == admitted.get('aggregate_tree_cap_bytes', "
+                              "live_budget.TREE_CAP), 'tail exact approved aggregate tree cap')\n"
+                              "if b.get('reference_data_reuse') is not None:\n"
+                              "    need(b['execution_mode'] == execution_mode.STAGE and "
+                              "b.get('model_candidate_review') is not None, 'reference reuse only approved "
+                              "candidate stage coverage')\n"
+                              "if b.get('p0_provider_reuse') is not None:\n"
+                              "    need(b['execution_mode'] == execution_mode.STAGE and "
+                              "b.get('model_candidate_review') is not None, 'P0 reuse only approved "
+                              "candidate stage coverage')",
+                              "if b.get('p0_provider_reuse') is not None:\n"
+                              "    need(b['execution_mode'] == execution_mode.STAGE and "
+                              "b.get('model_candidate_review') is not None, 'P0 reuse only approved "
+                              "candidate stage coverage')"),
+                             ('19116881868d986c6fed893e53f49280c6736435da7813c791f06fc1ebade015',
+                              'def verify_reference_with_deadline(b, helper, profile, i, context):\n'
+                              "    need(0 <= time.monotonic() - b['job_started_monotonic'] <= "
+                              "b['job_budget_seconds'], 'reference verification original job deadline')\n"
+                              "    result = helper.verify_materialized(b['references'][str(i)], profile, i, "
+                              "b['reference_data_reuse'], context)\n"
+                              "    need(0 <= time.monotonic() - b['job_started_monotonic'] <= "
+                              "b['job_budget_seconds'], 'reference verification exceeded original job "
+                              "deadline')\n"
+                              '    return result',
+                              ''),
+                             ('f8e3f7ae3c34b699d8fb1cf52f3a910a759af807eee7e774d93bf9eb603263dc',
+                              "if b.get('reference_data_reuse') is None:\n"
+                              "    need(b['tree_cap'] == live_budget.TREE_CAP, 'unchanged aggregate tree "
+                              "cap')\n"
+                              'else:\n'
+                              "    need(cloud is not None and b['execution_mode'] == execution_mode.STAGE "
+                              "and (b['tree_cap'] == 12037043872), 'exact reference-data-only tree "
+                              "reduction')",
+                              "need(b['tree_cap'] == 12081306272, 'unchanged aggregate tree cap')"),
+                             ('201b58c658b66b8c1185628dcb13b51ab3de16464225a0a32aa1275f6335ec07',
+                              'reference_reuse = None\n'
+                              'reference_reuse_context = None\n'
+                              'reference_reuse_source_pin = None\n'
+                              "if b.get('reference_data_reuse') is not None:\n"
+                              "    reference_reuse = module('tail_reference_data_reuse', D / "
+                              "'reference_data_reuse.py', pins)\n"
+                              "    reference_reuse_context = {key: b[key] for key in ('repo', "
+                              "'artifact_manifest', 'retained_materials')}\n"
+                              "    reference_reuse_source_pin = material.pin(D / 'reference_data_reuse.py')\n"
+                              '    verified_reference = '
+                              "reference_reuse.verify_metadata(b['reference_data_reuse'], "
+                              'reference_reuse_context)\n'
+                              "    need(verified_reference['tree_cap'] == b['tree_cap'], 'actual reference "
+                              "reuse tree cap')\n"
+                              '    need(all((any((P(p).resolve().is_relative_to(r) for r in roots)) for p in '
+                              "verified_reference['roots'])), 'all reference data and evidence watched')\n"
+                              "common = frozen['common']",
+                              "common = frozen['common']"),
+                             ('3a5a60397c12265515b40e77e449f94a146a7b5ff60c2d565ee02fa5271c504e',
+                              'body = dict(argv=list(map(str, argv)), pins=pins, '
+                              "owned_roots=b['owned_roots'], extra_bytes=b['phase_extra_bytes'], "
+                              "seconds=seconds, job_started=b['job_started_monotonic'], "
+                              "job_budget_seconds=b['job_budget_seconds'] if cloud is not None else 21000, "
+                              "write_file_bytes=128 << 20, tree_cap=b['tree_cap'], environment=e, "
+                              'cache_root=str(cache_root), admission_output=str(run_dir / '
+                              "'LIVE_ADMISSION.json'))",
+                              'body = dict(argv=list(map(str, argv)), pins=pins, '
+                              "owned_roots=b['owned_roots'], extra_bytes=b['phase_extra_bytes'], "
+                              "seconds=seconds, job_started=b['job_started_monotonic'], "
+                              "job_budget_seconds=b['job_budget_seconds'] if cloud is not None else 21000, "
+                              'write_file_bytes=128 << 20, environment=e, cache_root=str(cache_root), '
+                              "admission_output=str(run_dir / 'LIVE_ADMISSION.json'))"),
+                             ('38c41794e611a978593454d007b5a4a75a109ba1af12a9dd6a993fec91d907b2',
+                              "initialize_body = dict(repo=b['repo'], materializer=b['materializer'], "
+                              "output=str(profile), profile=i, reference=b['references'][str(i)])\n"
+                              'if reference_reuse is not None:\n'
+                              "    initialize_body.update(reference_data_reuse=b['reference_data_reuse'], "
+                              'reference_reuse_context=reference_reuse_context, '
+                              'reference_reuse_source_pin=reference_reuse_source_pin)\n'
+                              'save(initialization, initialize_body)',
+                              "save(initialization, dict(repo=b['repo'], materializer=b['materializer'], "
+                              "output=str(profile), profile=i, reference=b['references'][str(i)]))"),
+                             ('eed756aaaf62d528bf183c6399782a41e1656d60f073eb82f23092fdae5b2508',
+                              'if reference_reuse is not None:\n'
+                              '    verify_reference_with_deadline(b, reference_reuse, profile, i, '
+                              'reference_reuse_context)\n'
+                              "dut_outer = stage(f'p{i}_dut', generated, outer_seconds, accepted=(1, 2), "
+                              'lease_out=lease_root)',
+                              "dut_outer = stage(f'p{i}_dut', generated, outer_seconds, accepted=(1, 2), "
+                              'lease_out=lease_root)'),
+                             ('aef4df3c3e76a5bee55665609e38bc90cc45f8ccb1c7cfeb60ddf9903d2925e0',
+                              'if reference_reuse is not None:\n'
+                              '    verify_reference_with_deadline(b, reference_reuse, profile, i, '
+                              'reference_reuse_context)\n'
+                              "bundle = profile / 'runtime_bundle.v3.json'",
+                              "bundle = profile / 'runtime_bundle.v3.json'")]}
+def undo_reviewed_reference_delta(test,tree,relative):
+ import copy
+ for digest,new_text,old_text in REVIEWED_REFERENCE_INVERSE[relative]:
+  want=ast.parse(new_text).body;replacement=ast.parse(old_text).body
+  test.assertEqual(hashlib.sha256(ast.dump(ast.Module(body=want,type_ignores=[]),include_attributes=False).encode()).hexdigest(),digest)
+  count=0
+  def visit(node):
+   nonlocal count
+   for field,value in ast.iter_fields(node):
+    if isinstance(value,list):
+     i=0
+     while i<=len(value)-len(want):
+      if [ast.dump(n,include_attributes=False)for n in value[i:i+len(want)]]==[ast.dump(n,include_attributes=False)for n in want]:
+       value[i:i+len(want)]=copy.deepcopy(replacement);count+=1;i+=len(replacement)
+      else:i+=1
+     for item in value:
+      if isinstance(item,ast.AST):visit(item)
+    elif isinstance(value,ast.AST):visit(value)
+  visit(tree);test.assertEqual(count,1,'exact reviewed inverse snippet matched once: '+digest)
+ return tree
+
 def undo_reviewed_stage_delta(test,tree,relative):
+ tree=undo_reviewed_reference_delta(test,tree,relative)
  import copy
  for digest,new_text,old_text in REVIEWED_STAGE_INVERSE[relative]:
   want=ast.parse(new_text).body;replacement=ast.parse(old_text).body
@@ -312,5 +439,18 @@ class InverseNegativeTests(unittest.TestCase):
      if isinstance(n,ast.Attribute)and n.attr=='STAGE':n.attr='UNREVIEWED_STAGE';hit=True
    self.assertTrue(hit)
    with self.subTest(relative=relative,case='changed gate'),self.assertRaises(AssertionError):undo_reviewed_stage_delta(self,original,relative)
+
+class ReferenceInverseNegativeTests(unittest.TestCase):
+ def test_reference_gate_mutation_and_duplicate_rejected(self):
+  for relative,rows in REVIEWED_REFERENCE_INVERSE.items():
+   root=D.parent if D.name=='numeric'else D
+   original=ast.parse((root/relative).read_text())
+   duplicate=ast.parse((root/relative).read_text());duplicate.body.extend(ast.parse(rows[0][1]).body)
+   with self.subTest(relative=relative,case='duplicate'),self.assertRaises(AssertionError):undo_reviewed_reference_delta(self,duplicate,relative)
+   hit=False
+   for n in ast.walk(original):
+    if isinstance(n,ast.Constant)and n.value=='reference_data_reuse':n.value='UNREVIEWED_REFERENCE_REUSE';hit=True
+   self.assertTrue(hit)
+   with self.subTest(relative=relative,case='changed gate'),self.assertRaises(AssertionError):undo_reviewed_reference_delta(self,original,relative)
 
 if __name__=='__main__':unittest.main()

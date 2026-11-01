@@ -1,3 +1,19 @@
+# 2026-11-01 19:28 UTC：只读参考共享与更紧 TREE（host-only）
+
+当前实际候选仍为 builder 128402 / ELF 709e88…，不重建硬件。上轮五个 300 秒校准全部严格闭合为 INCOMPLETE，0/5 完整数值，完整周期分母未知。新阶段覆盖窗口 10800 秒×5、每块 1,500,000 active cycles、目标 clean completed commands=2，整体 65400 秒（18h10）仅工程上限，不是完成预测或 FULL 资格；尚未启动。
+
+本次修复 INSTALL binding 将新模式及 stage/P0/reference 预算 pin 传到实际 runtime_reuse 原准入；参考分支仅 IMPORT_EXISTING_PINNED_RUNTIME + READ_EXISTING_PINNED_ARCHIVES。旧 CAL/FULL 与无参考复用 STAGE 的合法分支保持。
+
+新增显式参考数据 hardlink：五块 122 tensor 共 44,262,400 B 在 fresh reference 目录共享已验旧 inode，RESULT 和所有输出/验证收据独立。EXDEV 拒绝，无 copy fallback；不 chmod/truncate/写共享 tensor。驱动只 O_RDONLY/PROT_READ/MAP_PRIVATE 读映射，DUT 写独立输出。hardlink 不是 OS 强制不可变保护；运行前后在原父监督/原 job clock 下逐 hash/inode 检查，超时或变化严格失败。
+
+新 aggregate TREE=12,037,043,872 B，是比原 12,081,306,272 B 更严格的工程 cap，不能称旧预算已有已证参考分项或已知峰值安全。实际按 dev/inode 去重，避免重复 44,262,400 B 分配；8 GiB 磁盘 reserve、未知 owner 5 GiB、RSS/AS/CPU/墙时不变。全部 upfront/安装复用/监督/数值 phase 同 cap；最终真实 roots census 才决定准入。不得再清理或加入未消费 root 凑余量。
+
+真实有界纯链已完成：839-source snapshot，all5 link 验证 2.646 秒、P0 完整同根数据/transport/corrector/load_binding 验证 3.943 秒，两原 RESULT native0/errors[]/严格 cleanup EOF。全5前后 hash+同 inode、fresh RESULT 已核；P0 原94,916,608 B输入不复制，reference同 fresh-root原 containment 通过。该纯链没有 live owner/DUT，历史 ABI 仅 schema，coverage false，不迁移数值资格。最终 catalog新增测试/证据不冒本次839执行身份。
+
+待源码CI与新实际source、独立adapter/handoff、reference/P0数据 pin、fresh import/ABI与完整资源审批；1906未启动 proposal 保留，不偷换其已签身份。下面完整保留上一版计划正文。
+
+---
+
 # 2026-11-01 18:52 UTC：同一候选硬件的连续阶段覆盖诊断（非 FULL 预算预测）
 
 本节为 host-only 工程接续；下方既有计划完整保留。实际候选 ELF `709e88d0…`、artifact `05046aa9…`、builder `128402f4…`、原 M128 输入、4096 Matrix MAC、唯一共享 32-lane bank、FP 运算及 driver 均不变，不重建硬件。

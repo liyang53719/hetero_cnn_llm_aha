@@ -76,6 +76,16 @@ def verified_p0_provider_reuse(b,budget,candidate):
  need(reused['watch_scope']=='PURE_PROVIDER_AND_FINITE_EVIDENCE_V1' and reused['roots']==[reused['provider_root'],reused['evidence_root']],'only verified pure provider and finite evidence directories watched')
  return reused
 
+def verified_reference_data_reuse(b,budget,candidate):
+ if 'reference_data_reuse'not in b:return None
+ need(candidate and budget['execution_mode']=='STAGE_COVERAGE_DIAGNOSTIC','reference reuse only approved candidate stage')
+ need(b['reference_data_reuse']==budget.get('reference_data_reuse'),'reference reuse independently approved pin')
+ path=D.parent/'numeric/reference_data_reuse.py';need(b['pins'].get(str(path))==sha(path),'reference data reuse checker source pin')
+ reused=mod('actual_reference_data_reuse',path).verify_metadata(b['reference_data_reuse'],b)
+ need(reused['scope']=='READONLY_REFERENCE_TENSOR_HARDLINKS_NOT_DUT_PASS' and reused['tree_cap']==budget.get('aggregate_tree_cap_bytes')==12037043872,'reference reuse exact approved scope/tree')
+ need(len(reused['roots'])==5 and len(set(reused['roots']))==5,'five distinct verified reference roots')
+ return reused
+
 def stage_budget_watch_coverage(b,roots):
  if b.get('execution_mode')!='STAGE_COVERAGE_DIAGNOSTIC':return
  row=b['stage_coverage_budget'];path=P(row['path']);need(pin(path)==row,'stage budget immutable before watch admission')
@@ -96,7 +106,7 @@ def admitted_inputs(b):
  if budget['execution_mode']=='STAGE_COVERAGE_DIAGNOSTIC':
   need(b.get('stage_coverage_budget')is not None and b['stage_coverage_budget']==budget.get('stage_coverage_budget'),'binding reviewed stage coverage budget')
  else:need(b.get('stage_coverage_budget')is None and budget.get('stage_coverage_budget')is None,'stage budget forbidden in other modes')
- for k in ('executor_adaptation','workspace_loader','retained_materials','model_candidate_review','p0_provider_reuse'):
+ for k in ('executor_adaptation','workspace_loader','retained_materials','model_candidate_review','p0_provider_reuse','reference_data_reuse','aggregate_tree_cap_bytes'):
   if k in budget or k in b:need(k in budget and b.get(k)==budget[k],'binding reviewed '+k)
  identity=b['identity'];need(b.get('executor_identity')==identity,'one executor identity')
  mod('actual_cloud_identity',D.parent/'executor_identity.py').verify_current(identity)
@@ -138,18 +148,25 @@ def admitted_inputs(b):
   retained=mod('actual_retained_materials',retained_path).verify(b['retained_materials'],b)
   if candidate:need(retained['scope']=='DATA_REFERENCE_ONLY_NOT_NUMERICAL_ABI_OR_RUNTIME_PASS','candidate retained data/reference only')
   imported=dict(imported,retained_materials_verified=retained)
+ reused_refs=verified_reference_data_reuse(b,budget,candidate)
+ if reused_refs is not None:imported=dict(imported,reference_data_reuse_verified=reused_refs)
+ if 'reference_data_reuse'in b:need(budget['runtime_mode']=='IMPORT_EXISTING_PINNED_RUNTIME'and budget['archive_mode']=='READ_EXISTING_PINNED_ARCHIVES','reference reuse requires explicitly revalidated retained runtime')
  reused=verified_p0_provider_reuse(b,budget,candidate)
  if reused is not None:imported=dict(imported,p0_provider_reuse_verified=reused)
  return budget,imported
 
-def upfront_disk_admission(snapshot,evidence_path=None,binding_sha=None):
+def runtime_admission_fields(b):
+ return {k:b[k]for k in ('execution_mode','full_block_budget','stage_coverage_budget','p0_provider_reuse','reference_data_reuse','aggregate_tree_cap_bytes','executor_adaptation','workspace_loader','retained_materials','model_candidate_review')if k in b}
+
+def upfront_disk_admission(snapshot,evidence_path=None,binding_sha=None,tree_cap=TREE):
+ need(type(tree_cap)is int and tree_cap in (TREE,12037043872),'explicit reviewed unchanged or tighter aggregate cap')
  # Existing read-only inputs already consume disk and TREE. Reserve only the
  # remaining possible aggregate growth, not TREE a second time. This is a
  # sampled planning gate; unchanged locked phase gates/watchers remain binding.
  need(snapshot.get('schema')=='SAMPLED_OWNED_LIVE_BYTES_V1'and snapshot.get('complete')is True,'complete upfront watched-root census')
  live=snapshot['bytes'];free=snapshot['free_bytes']
- need(type(live)is int and 0<=live<=TREE and type(free)is int and free>=0,'bounded existing watched bytes/free')
- incremental=TREE-live;required=incremental+(8<<30)
+ need(type(live)is int and 0<=live<=tree_cap and type(free)is int and free>=0,'bounded existing watched bytes/free')
+ incremental=tree_cap-live;required=incremental+(8<<30)
  if evidence_path is not None:
   # Local finite diagnostic only: no roots, arbitrary census strings or payload.
   # It is written before the unchanged free-space rejection and outside job.
@@ -162,6 +179,8 @@ def upfront_disk_admission(snapshot,evidence_path=None,binding_sha=None):
 def run(b,binding_path,binding_sha):
  # Budget/identity/source/artifact gates occur before any owned directory or stage.
  budget,imported=admitted_inputs(b)
+ tree_cap=budget.get('aggregate_tree_cap_bytes',TREE)
+ need(b.get('aggregate_tree_cap_bytes',TREE)==tree_cap,'same approved aggregate cap')
  profile_policy.require_source_pin(b['pins']);execution_policy=profile_policy.checked(b)
  need(execution_policy['mode']==profile_policy.FULL,'all five original profiles on cloud executor')
  admission=execution_admission(b)
@@ -177,6 +196,8 @@ def run(b,binding_path,binding_sha):
  roots=list(dict.fromkeys([str(job),str(repo),*[str(P(b[k]['path']).parent)for k in ('artifact_manifest','builder_handoff','executor_identity_pin','cloud_budget','execution_approval','executor_adaptation','workspace_loader','retained_materials','model_candidate_review','stage_coverage_budget')if k in b]]));pins=dict(b['pins']);pins[str(binding_path)]=binding_sha
  if 'model_candidate_review'in b:
   need('model_candidate_verified'in imported,'reviewed candidate before watch');roots.extend(imported['model_candidate_verified']['roots']);roots=list(dict.fromkeys(roots))
+ if 'reference_data_reuse'in b:
+  need('reference_data_reuse_verified'in imported,'reference roots verified before watch admission');roots.extend(imported['reference_data_reuse_verified']['roots']);roots=list(dict.fromkeys(roots))
  if 'p0_provider_reuse'in b:
   need('p0_provider_reuse_verified'in imported,'P0 pure data roots verified before watch admission');roots.extend(imported['p0_provider_reuse_verified']['roots']);roots=list(dict.fromkeys(roots))
  if 'workspace_loader'in b:
@@ -203,7 +224,7 @@ def run(b,binding_path,binding_sha):
  snapshot=mod('cloud_upfront_live_budget',census_path).census(existing_roots,max_entries=150000,max_seconds=60)
  import shutil
  snapshot=dict(snapshot,free_bytes=min(snapshot['free_bytes'],shutil.disk_usage(job.parent).free))
- disk_admission=upfront_disk_admission(snapshot,P(binding_path).with_name(P(binding_path).name+'.UPFRONT_DISK.json'),binding_sha)
+ disk_admission=upfront_disk_admission(snapshot,P(binding_path).with_name(P(binding_path).name+'.UPFRONT_DISK.json'),binding_sha,tree_cap=tree_cap)
  job.mkdir();(job/'runs').mkdir();(job/'env').mkdir();(job/'bindings').mkdir()
  sys.path.insert(0,supervisor_dir);import supervise_multiroot as supervisor
  history=[]
@@ -219,7 +240,7 @@ def run(b,binding_path,binding_sha):
    for key in ('HTTPS_PROXY','HTTP_PROXY','ALL_PROXY','NO_PROXY'):
     if key in os.environ:env[key]=os.environ[key]
   stagepins=dict(pins);stagepins.update(extra_pins or {})
-  caps=dict(wall_seconds=seconds,cleanup_seconds=30,file_bytes=2<<30,tree_bytes=policy['output_bytes'],watch_tree_bytes=TREE,extra_watch_roots=roots,min_free_disk_bytes=1_500_000_000,log_bytes=64<<20,raw_log_bytes=128<<20,max_entries=150000,per_process_as_bytes=policy['as_bytes'],per_process_cpu_seconds=policy['cpu_seconds'],rss_bytes=policy['rss_bytes'],cpu_seconds=policy['cpu_seconds'])
+  caps=dict(wall_seconds=seconds,cleanup_seconds=30,file_bytes=2<<30,tree_bytes=policy['output_bytes'],watch_tree_bytes=tree_cap,extra_watch_roots=roots,min_free_disk_bytes=1_500_000_000,log_bytes=64<<20,raw_log_bytes=128<<20,max_entries=150000,per_process_as_bytes=policy['as_bytes'],per_process_cpu_seconds=policy['cpu_seconds'],rss_bytes=policy['rss_bytes'],cpu_seconds=policy['cpu_seconds'])
   r=supervisor.execute(list(map(str,argv)),str(run_root),lock,caps,env,stagepins,resource_gate={'min_available_memory':policy['rss_bytes']+(1<<30)+b['reserved_other_owner_bytes'],'min_disk_free':8<<30})
   save(job/'bindings'/(name+'_SUPERVISOR_RETURN.json'),r)
   history.append(dict(name=name,native_exit=r['native_exit'],receipt=pin(run_root/'RESULT.json')))
@@ -235,7 +256,7 @@ def run(b,binding_path,binding_sha):
  ok(stage('archives',[py,'-B',archive_tool,'--binding',ab,'--binding-sha256',sha(ab)],q['archives'],.25,{str(ab):sha(ab)},archive_network))
  owner_root=job/'materials';ib=job/'bindings/INSTALL.json';archives_rows=json.loads((archives/'ARCHIVES.json').read_text())['archives'];ipins=dict(pins);ipins.update({r['path']:r['sha256']for r in archives_rows})
  install_binding=dict(execution_context='CLOUD_EXECUTOR_V1',reserved_other_owner_bytes=b['reserved_other_owner_bytes'],stage_resources=b['stage_resources'],job_budget_seconds=limit,execution_policy=execution_policy,schema='FRESH_JOB_RUNTIME_CONTROLLER_V1',identity=identity,repo=str(repo),owner_root=str(owner_root),python=py,helper=b['shared_runtime_helper'],supervisor_dir=supervisor_dir,lock=lock,owned_roots=roots,pins=ipins,archives=archives_rows,job_started_monotonic=started,install_wall_seconds=q['install'],metadata_wall_seconds=q['owner_bind'],early_build_seconds=0,remaining_job_reservation_seconds=q['weights']+30+5*(q['reference']+30)+tail_reserved)
- install_binding.update({k:b[k]for k in ('executor_adaptation','workspace_loader','retained_materials','model_candidate_review')if k in b})
+ install_binding.update(runtime_admission_fields(b))
  if b['runtime_mode']=='IMPORT_EXISTING_PINNED_RUNTIME':
   install_binding.update(job_root=str(job),runtime_reuse_manifest=b['runtime_reuse_manifest'],source_dir=str(runtime/'source'),artifact_manifest=b['artifact_manifest'],cloud_budget=b['cloud_budget'],execution_approval=b['execution_approval'],archive_binding=pin(ab),archive_validation_receipt=pin(job/'runs/archives/RESULT.json'),archive_output_manifest=pin(archives/'ARCHIVES.json'))
   installer=mod('actual_runtime_revalidator',runtime/'runtime_reuse.py');owner_module=runtime/'runtime_reuse.py'
@@ -257,8 +278,8 @@ def run(b,binding_path,binding_sha):
   rb=dict(execution_context='CLOUD_EXECUTOR_V1',reserved_other_owner_bytes=b['reserved_other_owner_bytes'],stage_resources=b['stage_resources'],job_budget_seconds=limit,execution_policy=execution_policy,profiles=list(range(5)),tokens=128,identity=identity,repo=str(repo),output=str(owner_root/'references'),owner_root=str(owner_root),owner_module=str(owner_module),owner_manifest=owner_pin,pins=pins,payload=str(payload),wall_seconds=q['reference'])
   references=reference.run(rb,stage)
  tail=numeric_module('actual_five_diagnostics',numeric/'numeric_tail.py',pins);tb=job/'bindings/NUMERIC.json'
- body=dict(execution_policy=execution_policy,schema='SAME_JOB_FIVE_M128_DIAGNOSTIC_TAIL_V1',profiles=list(range(5)),tokens=128,matrix_macs=4096,vector_lanes=32,upload_payloads=False,final_rtl_replay=False,references=references,weights=weights,calibration_seconds=q['calibration_seconds'],job_started_monotonic=started,reserved_material_seconds=7*q['provider']+11*120,reserved_cleanup_seconds=1530,reserved_parent_seconds=q['parent'],tree_cap=TREE,rss_bytes=b['dut_rss_bytes'],address_space_bytes=b['dut_address_space_bytes'],reserved_other_owner_bytes=b['reserved_other_owner_bytes'],consumer_address_space_bytes=b['consumer_address_space_bytes'],phase_extra_bytes=b['numeric_reserved_increment_bytes'],provider_wall_seconds=q['provider'],pins=pins,output=str(owner_root/'numeric'),owned_roots=roots,owner_root=str(owner_root),owner_module=str(owner_module),owner_manifest=owner_pin,supervisor_dir=supervisor_dir,execution_context='CLOUD_EXECUTOR_V1',identity=identity,executor_identity=identity,executor_identity_pin=b['executor_identity_pin'],builder_handoff=b['builder_handoff'],artifact_manifest=b['artifact_manifest'],cloud_budget=b['cloud_budget'],execution_approval=b['execution_approval'],controller_binding=pin(binding_path),job_budget_seconds=limit,run_id=builder['run_id'],source_commit=builder['source_commit'],launch_commit=builder['launch_commit'],python=py,lock=lock,repo=str(repo),payload=str(payload),materializer=b['materializer'],environment={})
- body.update({k:b[k]for k in ('executor_adaptation','workspace_loader','retained_materials','model_candidate_review','p0_provider_reuse')if k in b})
+ body=dict(execution_policy=execution_policy,schema='SAME_JOB_FIVE_M128_DIAGNOSTIC_TAIL_V1',profiles=list(range(5)),tokens=128,matrix_macs=4096,vector_lanes=32,upload_payloads=False,final_rtl_replay=False,references=references,weights=weights,calibration_seconds=q['calibration_seconds'],job_started_monotonic=started,reserved_material_seconds=7*q['provider']+11*120,reserved_cleanup_seconds=1530,reserved_parent_seconds=q['parent'],tree_cap=tree_cap,rss_bytes=b['dut_rss_bytes'],address_space_bytes=b['dut_address_space_bytes'],reserved_other_owner_bytes=b['reserved_other_owner_bytes'],consumer_address_space_bytes=b['consumer_address_space_bytes'],phase_extra_bytes=b['numeric_reserved_increment_bytes'],provider_wall_seconds=q['provider'],pins=pins,output=str(owner_root/'numeric'),owned_roots=roots,owner_root=str(owner_root),owner_module=str(owner_module),owner_manifest=owner_pin,supervisor_dir=supervisor_dir,execution_context='CLOUD_EXECUTOR_V1',identity=identity,executor_identity=identity,executor_identity_pin=b['executor_identity_pin'],builder_handoff=b['builder_handoff'],artifact_manifest=b['artifact_manifest'],cloud_budget=b['cloud_budget'],execution_approval=b['execution_approval'],controller_binding=pin(binding_path),job_budget_seconds=limit,run_id=builder['run_id'],source_commit=builder['source_commit'],launch_commit=builder['launch_commit'],python=py,lock=lock,repo=str(repo),payload=str(payload),materializer=b['materializer'],environment={})
+ body.update({k:b[k]for k in ('executor_adaptation','workspace_loader','retained_materials','model_candidate_review','p0_provider_reuse','reference_data_reuse','aggregate_tree_cap_bytes')if k in b})
  if 'model_candidate_review'in b:body['source_pins']=b['source_pins']
  body.update(execution_mode=admission['mode'],full_block_budget=b.get('full_block_budget'))
  if admission['mode']=='STAGE_COVERAGE_DIAGNOSTIC':body['stage_coverage_budget']=b['stage_coverage_budget']
@@ -268,7 +289,7 @@ def run(b,binding_path,binding_sha):
  qualification=acceptance.aggregate(numeric_result['actual_dut_reports'])
  need(numeric_result.get('qualification')==qualification and numeric_result.get('status')==qualification['status'] and numeric_result.get('numerical_pass')is qualification['numerical_pass'],'recomputed actual numeric finalization')
  code=transport_code(admission['mode'],qualification)
- save(job/'FLOW_RESULT.json',dict(execution_context='CLOUD_EXECUTOR_V1',identity=identity,executor_identity=identity,artifact_identity=builder,builder_identity=builder,source_pins=b['source_pins'],executor_identity_pin=b['executor_identity_pin'],builder_handoff=b['builder_handoff'],artifact_manifest=b['artifact_manifest'],cloud_budget=b['cloud_budget'],execution_approval=b['execution_approval'],job_budget_seconds=limit,execution_binding=pin(binding_path),execution_admission=admission,execution_mode=admission['mode'],transport_exit_code=code,qualification=qualification,execution_policy=execution_policy,status=qualification['status'],scope='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL'if 'model_candidate_review'in b else 'CHISEL_TEST_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL',stages=history,retained_materials_scope=imported.get('retained_materials_verified',{}).get('scope'),upfront_disk_admission=disk_admission,numeric_result=pin(numeric_path),hardware_definitions=1,profiles=list(range(5)),uploaded_payloads=False,**{k:b[k]for k in ('executor_adaptation','workspace_loader','retained_materials','model_candidate_review','p0_provider_reuse')if k in b},**(dict(stage_coverage_budget=b['stage_coverage_budget'],stage_coverage_budget_sha256=b['stage_coverage_budget']['sha256'],execution_scope='STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE')if admission['mode']=='STAGE_COVERAGE_DIAGNOSTIC'else {})))
+ save(job/'FLOW_RESULT.json',dict(execution_context='CLOUD_EXECUTOR_V1',identity=identity,executor_identity=identity,artifact_identity=builder,builder_identity=builder,source_pins=b['source_pins'],executor_identity_pin=b['executor_identity_pin'],builder_handoff=b['builder_handoff'],artifact_manifest=b['artifact_manifest'],cloud_budget=b['cloud_budget'],execution_approval=b['execution_approval'],job_budget_seconds=limit,execution_binding=pin(binding_path),execution_admission=admission,execution_mode=admission['mode'],transport_exit_code=code,qualification=qualification,execution_policy=execution_policy,status=qualification['status'],scope='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL'if 'model_candidate_review'in b else 'CHISEL_TEST_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL',stages=history,retained_materials_scope=imported.get('retained_materials_verified',{}).get('scope'),upfront_disk_admission=disk_admission,numeric_result=pin(numeric_path),hardware_definitions=1,profiles=list(range(5)),uploaded_payloads=False,**{k:b[k]for k in ('executor_adaptation','workspace_loader','retained_materials','model_candidate_review','p0_provider_reuse','reference_data_reuse','aggregate_tree_cap_bytes')if k in b},**(dict(stage_coverage_budget=b['stage_coverage_budget'],stage_coverage_budget_sha256=b['stage_coverage_budget']['sha256'],execution_scope='STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE')if admission['mode']=='STAGE_COVERAGE_DIAGNOSTIC'else {})))
  return code
 if __name__=='__main__':
  a=argparse.ArgumentParser();a.add_argument('--binding',type=P,required=True);a.add_argument('--binding-sha256',required=True);v=a.parse_args();need(sha(v.binding)==v.binding_sha256,'independent top binding');code=run(json.loads(v.binding.read_text()),v.binding.resolve(),v.binding_sha256);raise SystemExit(code) # mode-specific transport follows recomputed qualification

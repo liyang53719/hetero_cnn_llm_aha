@@ -1,0 +1,162 @@
+{
+  "schema": "FINITE_REFERENCE_REUSE_PURE_EVIDENCE_V1",
+  "actual_source_catalog_sha256": "195406b8388f667cd0ff34e12beed040125c4eb44b2bc45a3058af539ee60210",
+  "actual_source_catalog_count": 839,
+  "receipts": {
+    "all5_links": {
+      "receipt_sha256": "0bd8586276876fe3deb9987d04cea8ac7bc7c664db2e4ee64428c222a77d741d",
+      "native_exit": 0,
+      "errors": [],
+      "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+      "reader_join_barrier": {
+        "complete": true,
+        "alive": false,
+        "reader_finally_done": true
+      },
+      "log_capture": {
+        "format": "gzip-lossless",
+        "raw_bytes": 1048,
+        "compressed_bytes": 486,
+        "raw_sha256": "18e6df2e4ea99ec9d30956daaa3bca9672c66741555f2e5926b931ca20db2c83",
+        "compressed_sha256": "9513daca8536a260064c11dba33fa894ec4573d0400b453692095c4922236f8e",
+        "lines": 1,
+        "warning_histogram": {},
+        "error_lines": 0,
+        "pipe_eof_observed": true,
+        "gzip_finalized": true,
+        "capture_cap_hit": false,
+        "scope": "Exact captured prefix; full process completion additionally requires native exit and normal supervisor result. Raw cap overshoot bounded by one64KiB read."
+      },
+      "elapsed_seconds": 2.646082346996991,
+      "sampled_peak_rss": 12529664,
+      "aggregate_sampled_cpu": 0.86,
+      "plan_sha256": "f2e763884facf4ceaa8bc3dd471f2d34950eba17345649077574693a531997ae"
+    },
+    "p0_chain": {
+      "receipt_sha256": "6d63570286ac1576a99b60182cb83f1e7f573948978825dc8b40cc6cd3d0ae55",
+      "native_exit": 0,
+      "errors": [],
+      "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+      "reader_join_barrier": {
+        "complete": true,
+        "alive": false,
+        "reader_finally_done": true
+      },
+      "log_capture": {
+        "format": "gzip-lossless",
+        "raw_bytes": 1389,
+        "compressed_bytes": 838,
+        "raw_sha256": "d7ec98855440d42f492bcb192088b1b8c7ae43cc06a323a8d2ca55ed14798c8d",
+        "compressed_sha256": "e53a0d75bb17d2bb890957df9f0637000c0269d9924769f337c4d706d7b2161e",
+        "lines": 1,
+        "warning_histogram": {},
+        "error_lines": 0,
+        "pipe_eof_observed": true,
+        "gzip_finalized": true,
+        "capture_cap_hit": false,
+        "scope": "Exact captured prefix; full process completion additionally requires native exit and normal supervisor result. Raw cap overshoot bounded by one64KiB read."
+      },
+      "elapsed_seconds": 3.942854143009754,
+      "sampled_peak_rss": 88793088,
+      "aggregate_sampled_cpu": 2.0,
+      "plan_sha256": "825a5628a40c77244b5732a5a3de2db4bf4d1baaed5ce184141a109a6baaf338"
+    }
+  },
+  "all5": {
+    "scope": "ACTUAL_FIVE_REFERENCE_HARDLINKS_ONLY_NO_DUT",
+    "source_catalog_sha256": "195406b8388f667cd0ff34e12beed040125c4eb44b2bc45a3058af539ee60210",
+    "source_catalog_count": 839,
+    "binding_sha256": "3416900ab6c14732972a807b465ebab570d0e6142db54ffe106e165dc9d33e07",
+    "core_sha256": "59ef714f04996e224ba618d2bcef77aaa03fe0baab5369a621389651a14d8609",
+    "profiles": [
+      {
+        "profile": 0,
+        "tensor_files": 24,
+        "tensor_bytes": 10650624,
+        "same_inode": true,
+        "fresh_result": true
+      },
+      {
+        "profile": 1,
+        "tensor_files": 19,
+        "tensor_bytes": 6439936,
+        "same_inode": true,
+        "fresh_result": true
+      },
+      {
+        "profile": 2,
+        "tensor_files": 26,
+        "tensor_bytes": 7259136,
+        "same_inode": true,
+        "fresh_result": true
+      },
+      {
+        "profile": 3,
+        "tensor_files": 23,
+        "tensor_bytes": 9563136,
+        "same_inode": true,
+        "fresh_result": true
+      },
+      {
+        "profile": 4,
+        "tensor_files": 30,
+        "tensor_bytes": 10349568,
+        "same_inode": true,
+        "fresh_result": true
+      }
+    ],
+    "tensor_files": 122,
+    "tensor_bytes": 44262400,
+    "pre_and_post_full_hash_inode_checks": true,
+    "numerical_pass": false,
+    "dut_executed": false,
+    "execution_admitted": false
+  },
+  "p0": {
+    "scope": "ACTUAL_INPUT_REUSE_FRESH_SAME_ROOT_PURE_CONNECTION_NOT_LIVE_ADMISSION",
+    "status": "PURE_REUSE_TO_BINDING_CHECKED",
+    "source_catalog_sha256": "195406b8388f667cd0ff34e12beed040125c4eb44b2bc45a3058af539ee60210",
+    "artifact_manifest_sha256": "05046aa9b694d2c785f08ee7f81ae3dc945acc7b7ecfee95be355f10dd382ca5",
+    "reuse_binding_sha256": "a7d118e67223705e8a842594e9a7c53c72c3fc4352dbc2b5fd50b25b9c2c3ed8",
+    "candidate_review_sha256": "a684e2f01549e7d9d0d5bd1a6a3dfd77d6c5e581940212c9f76db9c209a5889c",
+    "bundle_sha256": "be184c77fec5f0f3476706f087a9a912faa0fb4df37cc57d8f33ec00bceed693",
+    "fresh_same_materialization_root": true,
+    "reference_data_reuse_sha256": "3416900ab6c14732972a807b465ebab570d0e6142db54ffe106e165dc9d33e07",
+    "reference_tensors_linked_and_rehashed": true,
+    "reference_metadata_fresh": true,
+    "program_paths_hand_rebased": false,
+    "common_ancestor_workaround": false,
+    "readonly_inputs_reused": 94916608,
+    "input_files_copied_or_aliased": 0,
+    "old_metadata_unchanged": true,
+    "actual_full_transform_and_raw_probes": true,
+    "actual_hydrate_corrector_assemble_load_binding": true,
+    "full_final_spans": [
+      {
+        "y": 786432,
+        "cache_k": 131072,
+        "cache_v": 131072
+      }
+    ],
+    "coverage_acceptance": false,
+    "startup_abi_copied_as_historical_bytes_only": true,
+    "execution_admitted": false,
+    "live_owner_checked": false,
+    "resource_admission_checked": false,
+    "dut_executed": false,
+    "numerical_pass": false
+  },
+  "limits": {
+    "cpu_seconds": 180,
+    "wall_seconds": 210,
+    "rss_bytes": 2147483648,
+    "as_bytes": 2684354560,
+    "aggregate_tree_cap_bytes": 12037043872,
+    "reserved_old_owner_bytes": 5368709120,
+    "min_disk_free_bytes": 8589934592
+  },
+  "hardlinks_are_os_enforced_readonly": false,
+  "actual_dut_executed": false,
+  "execution_admitted": false,
+  "numerical_pass": false
+}

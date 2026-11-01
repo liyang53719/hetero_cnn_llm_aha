@@ -26,6 +26,11 @@ def job_limit(b):
  need(type(value)is int and 0<value<=2**31-1,'finite admitted cloud job budget')
  return value
 
+def aggregate_tree_cap(b):
+ if b.get('execution_context')!='CLOUD_EXECUTOR_V1':return 12_081_306_272
+ need('aggregate_tree_cap_bytes'not in b and 'reference_data_reuse'not in b,'tighter reference cap requires reviewed stage runtime reuse')
+ return 12_081_306_272
+
 def install_resources(b):
  if b.get('execution_context')!='CLOUD_EXECUTOR_V1':return dict(rss_bytes=3<<30,as_bytes=4<<30)
  roles=b.get('stage_resources');need(type(roles)is dict and set(roles)=={'install','reference'},'explicit cloud resource roles')
@@ -41,7 +46,7 @@ def bind_resource_gate(b,bindcaps):
 def verify_controller_identity(b):
  limit=job_limit(b)
  if b.get('execution_context')=='CLOUD_EXECUTOR_V1':
-  install_resources(b)
+  install_resources(b);aggregate_tree_cap(b)
   path=D.parent/'executor_identity.py'
   need(path.is_file()and not path.is_symlink()and b['pins'].get(str(path))==sha(path),'executor identity helper source pin')
   spec=importlib.util.spec_from_file_location('runtime_executor_identity',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)

@@ -1,3 +1,13 @@
+## 2026-11-01 07:24 UTC：O1 构建成功；云端预启动失败与返回证据修复（INCOMPLETE）
+
+原诊断 build run41277679022 成功：新共同 O1 ELF df229150…（77,405,168 B），SV9a8c/driver343e实字节与原冻结相同，五编译实际收据已审。20阶段有限诊断均native0；这不倒推第一次 host_archive UNKNOWN 原因，也不构成五块数值通过。
+
+本云新7824206 executor/新O1实例在 fresh runtime import 的第三08B阶段早期拒绝。archives、35B、Qwen2原收据均native0/cleanupEOF完整；08B无worker目录，原返回未保存，因此具体类别UNKNOWN，不据当前内存倒推OOM。未到startupABI或DUT。70原权重/五软件参考已全hash重验，未重下载/重forward；原输入、旧两次失败及七件保留。
+
+本次最小host-only修复：复用runtime、fresh安装及bind、cloud/CI controller stage、numeric tail在supervisor返回后、原检查前，各向已存在本地results/bindings/phases写独立`*_SUPERVISOR_RETURN.json`原调用返回。所有runtime/ABI/initialize/provider/connect/DUT主链阶段由此覆盖；不把它当worker RESULT、不放宽成功门、不修改callback/order/finally/caps。仅本地诊断，无新增上传或原日志外传。bootstrap/build不在本云执行链；原构建20stage已有有限stdout诊断，未为了本修复重新编译。
+
+原2.5GiB/consumer512MiB/旧owner5GiB+1GiB余量、五300秒/12900保持。已结束身份不续作owner，新executor源码经审查/CI后生成新可信身份并fresh runtime/ABI/实际views重验，复用同新O1 ELF而不重复build。当前完整数值0/5，FULL工程预算仍需实际速度/资源，并非缺用户授权。
+
 ## 2026-11-01 05:33 UTC：O1 构建失败与一次同约束诊断（INCOMPLETE）
 
 - 原 O1 run `41272957145` / source `4255e062f90e62b7c54ebde3fa09bb39021dfa45` 在 `host_archive` 返回后被严格门拒绝。前3子 archive 仅有控制流进入后续阶段的证据，不冒完整可下载收据 PASS。7件导出/上传跳过，无新 ELF。原因类别 **UNKNOWN**：失败时原 RESULT 留在已不可恢复的 runner；整个 build step 3767.803 秒不能当 host_archive 耗时，也不判 OOM、wall 或编译器错误。

@@ -174,7 +174,9 @@ def run(b,binding_path,binding_sha):
     if key in os.environ:env[key]=os.environ[key]
   stagepins=dict(pins);stagepins.update(extra_pins or {})
   caps=dict(wall_seconds=seconds,cleanup_seconds=30,file_bytes=2<<30,tree_bytes=policy['output_bytes'],watch_tree_bytes=TREE,extra_watch_roots=roots,min_free_disk_bytes=1_500_000_000,log_bytes=64<<20,raw_log_bytes=128<<20,max_entries=150000,per_process_as_bytes=policy['as_bytes'],per_process_cpu_seconds=policy['cpu_seconds'],rss_bytes=policy['rss_bytes'],cpu_seconds=policy['cpu_seconds'])
-  r=supervisor.execute(list(map(str,argv)),str(run_root),lock,caps,env,stagepins,resource_gate={'min_available_memory':policy['rss_bytes']+(1<<30)+b['reserved_other_owner_bytes'],'min_disk_free':8<<30});history.append(dict(name=name,native_exit=r['native_exit'],receipt=pin(run_root/'RESULT.json')))
+  r=supervisor.execute(list(map(str,argv)),str(run_root),lock,caps,env,stagepins,resource_gate={'min_available_memory':policy['rss_bytes']+(1<<30)+b['reserved_other_owner_bytes'],'min_disk_free':8<<30})
+  save(job/'bindings'/(name+'_SUPERVISOR_RETURN.json'),r)
+  history.append(dict(name=name,native_exit=r['native_exit'],receipt=pin(run_root/'RESULT.json')))
   return r
  def ok(r):need(r['native_exit']==0 and not r['errors']and(r.get('cleanup_proof')or{}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP'and(r.get('log_capture')or{}).get('pipe_eof_observed')is True and(r.get('log_capture')or{}).get('gzip_finalized')is True,'phase failed/incomplete; no retry')
  q=b['budgets']

@@ -166,6 +166,7 @@ def run(b,binding_path,binding_sha,after_first_install=None):
    gate={'min_available_memory':4<<30,'min_disk_free':8<<30}
    if b.get('execution_context')=='CLOUD_EXECUTOR_V1':gate['min_available_memory']=resource_limits['rss_bytes']+(1<<30)+b['reserved_other_owner_bytes']
    r=supervisor.execute(owner_binding['runtimes'][k]['argv'],str(root/'runs'/k),b['lock'],caps,env,execution_pins,resource_gate=gate)
+   save(root/'results'/(k+'_SUPERVISOR_RETURN.json'),r)
   finally:
    snapshot(root,k,'after',b,live.census,pending-1,r)
   need(complete(r)and r['native_exit']==0 and not r['errors'],'actual install/cleanup failure; no retry')
@@ -184,6 +185,7 @@ def run(b,binding_path,binding_sha,after_first_install=None):
  bindcaps=dict(caps,wall_seconds=b['metadata_wall_seconds'],per_process_cpu_seconds=b['metadata_wall_seconds'],cpu_seconds=b['metadata_wall_seconds'],rss_bytes=256<<20,per_process_as_bytes=1<<30,tree_bytes=64<<20)
  bindrun=root/'runs/bind'
  r=supervisor.execute([b['python'],'-B',str(D/'bind_phase.py'),'--binding',str(metadata),'--sha256',sha(metadata)],str(bindrun),b['lock'],bindcaps,env,bindpins,resource_gate=bind_resource_gate(b,bindcaps))
+ save(root/'results'/'bind_SUPERVISOR_RETURN.json',r)
  need(complete(r)and r['native_exit']==0 and not r['errors'],'owner bind failed; preserve actual identity')
  owner=owner_output/'SHARED_RUNTIMES_FRESH_JOB_V3.json';doc=json.loads(owner.read_text());need(doc['schema']=='SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3'and doc['identity']==b['identity']and context_fields(doc)==context_fields(b),'actual fresh owner schema/identity')
  profile_policy.require_same(b,doc)

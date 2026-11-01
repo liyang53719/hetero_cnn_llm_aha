@@ -161,6 +161,7 @@ def run(b,binding_path,binding_sha):
   save(phase,body);localpins=dict(pins);localpins[str(phase)]=sha(phase)
   caps=dict(wall_seconds=seconds+30,cleanup_seconds=30,file_bytes=2<<30,tree_bytes=512<<20,log_bytes=64<<20,raw_log_bytes=128<<20,max_entries=100000,per_process_as_bytes=b['address_space_bytes'],per_process_cpu_seconds=18000 if name.endswith('_dut') else seconds+30,rss_bytes=b['rss_bytes'],cpu_seconds=seconds+30,extra_watch_roots=b['owned_roots'],min_free_disk_bytes=1_500_000_000,watch_tree_bytes=b['tree_cap'])
   r=supervisor.execute([b['python'],'-B',str(D/'locked_phase.py'),'--phase',str(phase),'--sha256',sha(phase)],str(run_dir),b['lock'],caps,e,localpins,resource_gate={'min_available_memory':b['rss_bytes']+(1<<30)+(b['reserved_other_owner_bytes']if cloud is not None else 0),'min_disk_free':8<<30})
+  save(out/'phases'/(name+'_SUPERVISOR_RETURN.json'),r)
   require_cleanup(r,out/('OWNERSHIP_INCOMPLETE_'+name+'.json'))
   allstage.append(dict(name=name,native_exit=r['native_exit'],receipt_sha256=sha(run_dir/'RESULT.json')))
   need(r['native_exit']in accepted and not r['errors'],'stage failed; no retry '+name)

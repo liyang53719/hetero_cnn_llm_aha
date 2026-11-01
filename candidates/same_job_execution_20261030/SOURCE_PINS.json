@@ -2044,8 +2044,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/controller/cloud_flow.py",
-      "bytes": 23865,
-      "sha256": "c48c06513a6086c69e0c7809edb263c754f4382cd2c979fadccce95e40eea4bd"
+      "bytes": 23925,
+      "sha256": "79f658bc0eca6fff3c1fea6056a02edb6c1d486386d68473c86ec43d8d0b4313"
     },
     {
       "path": "candidates/same_job_execution_20261030/controller/deduplicate_pack.py",
@@ -2054,8 +2054,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/controller/flow.py",
-      "bytes": 16641,
-      "sha256": "2b13d6e650c742008921cf8bdbe7711b18cfefb12a45cf7dfcfa9d2a6f765728"
+      "bytes": 16701,
+      "sha256": "dcea1d822734986844dcadfb5d6819ef9f5fb1bda0ca488216e1bd86f2c6942e"
     },
     {
       "path": "candidates/same_job_execution_20261030/controller/test_deduplicate.py",
@@ -2084,8 +2084,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/executor_adaptation.py",
-      "bytes": 11237,
-      "sha256": "9d1e5da3518ee1dae2e0756537cb34e0cfff7cf354fe970a43427c8b8474190d"
+      "bytes": 11441,
+      "sha256": "fed3c562ce53806329af55ff054c4482194dafc759d35155dba77fcc9b41a684"
     },
     {
       "path": "candidates/same_job_execution_20261030/executor_identity.py",
@@ -2100,7 +2100,7 @@
     {
       "path": "candidates/same_job_execution_20261030/numeric/CONNECTION_OWNED_SOURCE_PINS.json",
       "bytes": 1982,
-      "sha256": "87b0e49734c6e65da5d66d22050f01cb496d14852407c59ae38ea0c6c55b6ca9"
+      "sha256": "7caf2036f8af668bbcb70b191bd30742a0ab7c3315871879bf2579fafe0745eb"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/CONSUMER_MANIFEST.json",
@@ -2209,8 +2209,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/numeric_tail.py",
-      "bytes": 21151,
-      "sha256": "9567ca2b6a1036bd94ac29d1a2737b44b823984eec29a19010cbe16708b4cd68"
+      "bytes": 21207,
+      "sha256": "6fa2cdf18962b6523160e433f62d7a444b3c278e0723991d5d32d1dde6c21def"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/observation_contract.py",
@@ -2399,8 +2399,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/runtime/install_job.py",
-      "bytes": 17102,
-      "sha256": "e2d7000421d0235e5889b36c1cb54cf08c93531c348891543abae7c692518115"
+      "bytes": 17212,
+      "sha256": "d3ac4642f2f4172c1981a958fc88c4976dada6353675a941817d9102405fd929"
     },
     {
       "path": "candidates/same_job_execution_20261030/runtime/owner_fresh.py",
@@ -2434,8 +2434,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/runtime/runtime_reuse.py",
-      "bytes": 16392,
-      "sha256": "77ac08ac469f76ae52ac152f84c6b9964c32f702d462e9d892e1115c71c28a48"
+      "bytes": 16541,
+      "sha256": "e77172fc8cd1002d9cdd2846ad22ba9aaa9eefad2e56e89a4f85b4158e1f9291"
     },
     {
       "path": "candidates/same_job_execution_20261030/runtime/runtime_reuse_phase.py",
@@ -2523,6 +2523,11 @@
       "sha256": "81886f2b2c475f79bdf89e74fcabe35ce9a8a31b9bac28dd02c4e9f0e67b82e2"
     },
     {
+      "path": "candidates/same_job_execution_20261030/runtime/test_install_supervisor_return.py",
+      "bytes": 3927,
+      "sha256": "f77e5d685e70b917bce0896251d5e20c3c96e8b09d7c736e0131ab55591a5bac"
+    },
+    {
       "path": "candidates/same_job_execution_20261030/runtime/test_owner_fresh.py",
       "bytes": 8424,
       "sha256": "a940aefd6494bd1f7d101b2ca418b42b8df7363f71cf15bc0631b41d33d771a2"
@@ -2553,6 +2558,11 @@
       "sha256": "adcb93d6e8eb6ce502bdd070f19c9c7c6f4bfb10018ba43f085659390de858b6"
     },
     {
+      "path": "candidates/same_job_execution_20261030/runtime/test_supervisor_return.py",
+      "bytes": 3802,
+      "sha256": "7b398d66d198075c72581a59b412286fe8e6afc6c9d5994000842c3d4cea66f3"
+    },
+    {
       "path": "candidates/same_job_execution_20261030/summarize_cloud_execution.py",
       "bytes": 14282,
       "sha256": "9927c6f81aa18ae74f3f258ed1c42a470bd4a5d4a41415f16d8a68566b8ad147"
@@ -2574,8 +2584,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/test_backend_baseline_join.py",
-      "bytes": 6770,
-      "sha256": "f824b857eef97f7d83b8e367a64925c605d036f6e6fc72799654a1ffb2898582"
+      "bytes": 6901,
+      "sha256": "8a28166e00db7ac6d3b2358d2e3751e9433c69b66a6c8b4c34812159d2966ef6"
     },
     {
       "path": "candidates/same_job_execution_20261030/test_cloud_budget.py",
@@ -2666,6 +2676,11 @@
       "path": "candidates/same_job_execution_20261030/test_samejob_launch.py",
       "bytes": 8810,
       "sha256": "ddcd9745ce636b158fd92017201fc4fb9f2154b5b24d26a1794d43577bc86442"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/test_stage_return_retention.py",
+      "bytes": 4156,
+      "sha256": "6ab9e5b20883e07c3344cf35c7c68e33c838c4d82d2c4b3ac44a4f9a11bf16f3"
     },
     {
       "path": "candidates/same_job_execution_20261030/test_summary_resources.py",

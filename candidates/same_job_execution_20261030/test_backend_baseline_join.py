@@ -45,9 +45,9 @@ class Tests(unittest.TestCase):
  def test_preserve_consumed_activation_no_new_launch(self):
   historical=R/'ci_launch/five_m128_observer_backend_freshhost_20261030_once.json'
   self.assertEqual(hashlib.sha256(historical.read_bytes()).hexdigest(),'648461463d548ad60900e0501f28c626d9a726606fe2d51989971878626cbcb8')
-  # Preserve both independently verified, already consumed build-only launches.
+  # Preserve all three independently verified, already consumed build-only launches.
   # Do not confuse preserving history with creating a new launch.
-  consumed={'five_m128_split_build_only_20261031_once.json': 'e71a2bf0a1cb84e5c6c4fdef00a99959a993a8c3f062709173858d8026a25d00', 'five_m128_split_build_o1_strict_20261101_once.json': '69811d3d462e1df7385f43917a93cd4af3cc4c6a9d84e6403fc068888bea4902'}
+  consumed={'five_m128_split_build_only_20261031_once.json': 'e71a2bf0a1cb84e5c6c4fdef00a99959a993a8c3f062709173858d8026a25d00', 'five_m128_split_build_o1_strict_20261101_once.json': '69811d3d462e1df7385f43917a93cd4af3cc4c6a9d84e6403fc068888bea4902', 'five_m128_split_build_o1_diagnostic_20261101_once.json': 'd5028d60f05dcd331ba7c76e6d3c0fdf7418d9704385fdc1a0b0844fd49343b4'}
   actual={p.name:hashlib.sha256(p.read_bytes()).hexdigest()for p in (R/'ci_launch').glob('*.json')if 'cloud'in p.name or 'split'in p.name}
   self.assertEqual(actual,consumed)
  def test_unchanged_resource_mode(self):

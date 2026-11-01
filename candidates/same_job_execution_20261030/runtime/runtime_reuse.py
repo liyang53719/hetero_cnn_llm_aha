@@ -169,6 +169,8 @@ def run(b,binding_path,binding_sha):
   argv=[b['python'],'-S','-B',str(D/'runtime_reuse_phase.py'),'--binding',str(phasepath),'--binding-sha256',phasepin['sha256'],'--runtime',key]
   output=root/'runs'/key
   receipt=supervisor.execute(argv,str(output),b['lock'],caps,env,pins,resource_gate=dict(min_available_memory=caps['rss_bytes']+(1<<30)+b['reserved_other_owner_bytes'],min_disk_free=8<<30))
+  # Local diagnostic call-return only; never a substitute for runs/<key>/RESULT.json.
+  save(root/'results'/(key+'_SUPERVISOR_RETURN.json'),receipt)
   need(complete(receipt),'fresh import validation failed or incomplete, no reuse of old PASS')
   entries[key]=dict(entry=m['entries'][key],argv=argv,caps=caps,validation_receipt=pin(output/'RESULT.json'),validation_result=pin(root/'results'/(key+'_IMPORT_VALIDATED.json')))
  out=root/'owner';out.mkdir();(out/'OWNER.lock').touch()

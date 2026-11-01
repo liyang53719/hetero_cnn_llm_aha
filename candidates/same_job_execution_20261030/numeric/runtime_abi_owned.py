@@ -196,7 +196,7 @@ def verify(receipt,receipt_sha,binary,binary_sha,tool_manifest,tool_sha):
  for v in [r['loader'],*r['libraries'].values()]:need(pin(v['path'])==v and pins.get(v['resolved'])==v['sha256'],'startup library/alias drift')
  need(elf_info(binary)==r['elf'],'ELF identity drift');check_configs(r['configs']);return {'status':'PASS_STARTUP_ABI_IDENTITY_ONLY','receipt_sha256':receipt_sha,'libraries':len(r['libraries'])}
 
-HANDOFF_HELPER_SHA256='b68b3ea1162d4dabbb014a321689f47222d9d926e833bf520d0ac932e979dddc'
+HANDOFF_HELPER_SHA256='6cda2ea4bd34c6790d869ea2c7e9b2aa50eda9908b26d070f3c7f25283b816fe'
 
 def adaptation_checker(contract):
  # Bootstrap checker source trust before any adapter code executes. The hard-pinned

@@ -7,7 +7,8 @@ import hashlib,json,re,shlex,struct,os
 TOP='VHostBlockTopV4'
 CHILDREN=('bf16_context_lane_cluster16_rev8b_b_candidate_d','qwen2_matrix_command_endpoint_0','TransposedDenseDownOwner')
 DRIVER_SHA='343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61'
-O0=['OPT_FAST=-O0','OPT_SLOW=-O0','OPT_GLOBAL=-O0','CXXFLAGS=-O0']
+CPP_POLICY='CPP_O1_STRICT_V1'
+CPP_OVERRIDES=['OPT_FAST=-O1','OPT_SLOW=-O1','OPT_GLOBAL=-O1','CXXFLAGS=-O1 -fno-fast-math -ffp-contract=off']
 def need(x,m):
  if not x: raise ValueError(m)
 def sha(p):
@@ -42,7 +43,8 @@ def prepare(b):
  need(b['source_commit']==b['admission']['source_commit'],'source mismatch')
  need(b['admission']['status']=='ACTUAL_MAKE_CLOSURE_REVIEWED','actual Host make review missing')
  check_aliases(b);check_pins(b['pins']); a=b['admission'];check_pins(a['make_closure_pins'])
- need(a['no_implicit_frontend'] is True and a['uniform_O0_no_fast_math'] is True,'make review incomplete')
+ need(a['no_implicit_frontend'] is True and 'uniform_O0_no_fast_math'not in a,'explicit current C++ policy admission, no legacy approval alias')
+ need(b['cpp_build_policy']==a['cpp_build_policy']==CPP_POLICY and b['cpp_build_overrides']==a['cpp_build_overrides']==CPP_OVERRIDES,'exact independently reviewed strict O1 policy')
  need(a['header_122_observation_ports_and_driver_ABI_reviewed'] is True,'actual header/driver ABI review missing')
  need(sha(b['driver'])==DRIVER_SHA,'real V3 driver required')
  obj=Path(b['obj']).resolve();need(obj.is_dir(),'actual generated object tree absent')
@@ -70,7 +72,7 @@ def prepare(b):
  flags_text=' '.join(assignment(host,'VM_USER_CFLAGS'))
  need(not re.search(r'HOST_DRIVER_CONFIG_ONLY|fast-math|Ofast|ffp-contract=fast|flto|(?:^|\s)-O[^0\s]',flags_text),'unsafe flags')
  phases=[]
- common=['-j1','VM_HIER_VERILATION_INCLUDED=1',*O0,'CXX='+b['cxx'],'LINK='+b['cxx'],'AR='+b['ar'],'RANLIB='+b['compile_tools']['ranlib'],'PERL='+b['compile_tools']['perl'],'PYTHON3='+b['compile_tools']['python'],'OBJCACHE=','OPT=','USER_CPPFLAGS=','USER_LDLIBS=','USER_LDFLAGS=']
+ common=['-j1','VM_HIER_VERILATION_INCLUDED=1',*CPP_OVERRIDES,'CXX='+b['cxx'],'LINK='+b['cxx'],'AR='+b['ar'],'RANLIB='+b['compile_tools']['ranlib'],'PERL='+b['compile_tools']['perl'],'PYTHON3='+b['compile_tools']['python'],'OBJCACHE=','OPT=','USER_CPPFLAGS=','USER_LDLIBS=','USER_LDFLAGS=']
  for n in CHILDREN:
   d=obj/('V'+n);mk=d/('V'+n+'.mk');txt=mk.read_text()
   need(target(txt,'lib'+n+'.a'),'missing actual child archive target')
@@ -82,7 +84,7 @@ def prepare(b):
   budget=b['budgets'][p['name']]
   need(0<budget['seconds']<=3600 and 0<budget['rss_gib']<=8 and 0<budget['tree_bytes']<=b['shared_tree_cap'],'budget admission required')
   p['budget']=budget
- return dict(schema='SERIAL_REAL_BINARY_PLAN_V1',scope='BUILD_LINK_ONLY_NOT_NUMERICAL',phases=phases,VM_HIER_LIBS=libs,pins=b['pins'],make_closure_pins=a['make_closure_pins'])
+ return dict(schema='SERIAL_REAL_BINARY_PLAN_V1',cpp_build_policy=CPP_POLICY,cpp_build_overrides=list(CPP_OVERRIDES),scope='BUILD_LINK_ONLY_NOT_NUMERICAL',phases=phases,VM_HIER_LIBS=libs,pins=b['pins'],make_closure_pins=a['make_closure_pins'])
 
 def run(b,stage):
  from observer_baseline_gate import require_accepted_baseline
@@ -106,11 +108,11 @@ def run(b,stage):
   row=dict(phase=p['name'],argv=p['argv'],output=output,supervisor=r)
   if p['name']=='host_link':
    from driver_dependency_proof import capture
-   row['driver_dependency']=capture(b,p,r)
+   row['driver_dependency']=capture(b,p,r,receipts)
   receipts.append(row)
   (Path(b['build_evidence_dir'])/'completed_build_phases.json').write_text(json.dumps(receipts,indent=2)+'\n')
   check_aliases(b);check_pins(plan['pins']);check_pins(plan['make_closure_pins'])
- return dict(status='BUILT_UNQUALIFIED',scope='ARCHIVE_LINK_ONLY_NOT_DUT_PASS',phases=receipts,binary=receipts[-1]['output'],plan=plan)
+ return dict(status='BUILT_UNQUALIFIED',cpp_build_policy=CPP_POLICY,cpp_build_overrides=list(CPP_OVERRIDES),scope='ARCHIVE_LINK_ONLY_NOT_DUT_PASS',phases=receipts,binary=receipts[-1]['output'],plan=plan)
 
 def validate_identity(identity):
  need(set(identity)=={'run_id','artifact_name','source_commit','launch_commit','launch_manifest_path','launch_manifest_blob_sha'},'V2 identity fields')
@@ -132,6 +134,7 @@ def artifact_manifest(root,identity,files,build_receipt):
  for k in ('binary','sv','source_manifest','driver'):
   need(receipt[k+'_sha256']==entries[k]['sha256'],'receipt identity mismatch '+k)
  need(receipt['tool_manifest_sha256']==entries['tool_manifest']['sha256'] and receipt['source_commit']==identity['source_commit'] and receipt['launch_commit']==identity['launch_commit'],'receipt tools/source/launch mismatch')
+ need(receipt['cpp_build_policy']==build_receipt['cpp_build_policy']==CPP_POLICY and receipt['cpp_build_overrides']==build_receipt['cpp_build_overrides']==CPP_OVERRIDES,'frozen exact current C++ compilation policy')
  need(receipt['config_only'] is False and receipt['software_arithmetic_substitution'] is False,'invalid execution layer')
  need(entries['binary']['sha256']==build_receipt['binary']['sha256'],'actual binary mismatch')
- return dict(schema='FROZEN_FIVE_PROFILE_DUT_ARTIFACT_V2',profiles=list(range(5)),layer='CHISEL_EMITTED_SV_NUMERICAL_BACKEND',matrix_macs=4096,vector_lanes=32,moe_reference_contract='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE',artifact_identity=identity,common={k:entries[k] for k in ('binary','sv','source_manifest','driver','build_receipt')},tool_manifest=entries['tool_manifest'])
+ return dict(schema='FROZEN_FIVE_PROFILE_DUT_ARTIFACT_V2',cpp_build_policy=CPP_POLICY,cpp_build_overrides=list(CPP_OVERRIDES),profiles=list(range(5)),layer='CHISEL_EMITTED_SV_NUMERICAL_BACKEND',matrix_macs=4096,vector_lanes=32,moe_reference_contract='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE',artifact_identity=identity,common={k:entries[k] for k in ('binary','sv','source_manifest','driver','build_receipt')},tool_manifest=entries['tool_manifest'])

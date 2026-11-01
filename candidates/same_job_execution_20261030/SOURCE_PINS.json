@@ -9,8 +9,8 @@
     },
     {
       "path": ".github/workflows/hetero-five-m128-split-build-only.yml",
-      "bytes": 3987,
-      "sha256": "2268e4d67cca302491c9e55d5ef89b934d092bf4eab2851cc8ed8da7492f542d"
+      "bytes": 3992,
+      "sha256": "7a0d99ffa6d11579731bf04570c97510062d0ae278fa294111fcfb26a5743616"
     },
     {
       "path": "candidates/attention_policy_count_fix_20261029T0054/source/HostBlockCommandsV4.scala",
@@ -244,8 +244,8 @@
     },
     {
       "path": "candidates/ci_frontend_pipeline_r2_20261029/build_producer.py",
-      "bytes": 10201,
-      "sha256": "83af62741237d0c75741ec767dafda29c15ffa8d5ceaf1976ae671d498bdce21"
+      "bytes": 10935,
+      "sha256": "2af6a461efc0009bcd0727bd21e98a47a0f7c7ce1a488f5adad0a3b043500667"
     },
     {
       "path": "candidates/ci_frontend_pipeline_r2_20261029/check_contract.py",
@@ -259,8 +259,8 @@
     },
     {
       "path": "candidates/ci_frontend_pipeline_r2_20261029/conditional_admission.py",
-      "bytes": 13426,
-      "sha256": "55476aad5c0f645101f9050c98d28c2948768b49bccbc4dfb241d2e33b96ae37"
+      "bytes": 13639,
+      "sha256": "5f3aaed6267b599baa468c5b2bae7f4bb1946c81cbeab67b926822cf09803513"
     },
     {
       "path": "candidates/ci_frontend_pipeline_r2_20261029/conditional_binary_producer.py",
@@ -269,8 +269,8 @@
     },
     {
       "path": "candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py",
-      "bytes": 11035,
-      "sha256": "80186b8c5727eeb9054b9e5b284fb27ba6baa7388f491d4ba996409086daa5f4"
+      "bytes": 21392,
+      "sha256": "0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f"
     },
     {
       "path": "candidates/ci_frontend_pipeline_r2_20261029/inventory_compile_tools.py",
@@ -309,8 +309,8 @@
     },
     {
       "path": "candidates/ci_frontend_pipeline_r2_20261029/pack_frozen_artifact.py",
-      "bytes": 5709,
-      "sha256": "fdea250492dd0ea7493ffec0ecf8b639a9ba5d4026419c5025701066a69a97eb"
+      "bytes": 6032,
+      "sha256": "5af02d7c4fc153cb3b2b580b227c6f4251c046678e31374ead996ec4b6981944"
     },
     {
       "path": "candidates/ci_frontend_pipeline_r2_20261029/prepare_fma_subset.py",
@@ -329,8 +329,13 @@
     },
     {
       "path": "candidates/ci_frontend_pipeline_r2_20261029/supervise_multiroot.py",
-      "bytes": 15394,
-      "sha256": "8cbc6858c71feb821723ee1954902b59f046c31bfe2d1fa561529dc422035684"
+      "bytes": 15617,
+      "sha256": "c298efb15564b052c7aec7aaf42326de10f392f0e7d28c511fa5def1fcd97791"
+    },
+    {
+      "path": "candidates/ci_frontend_pipeline_r2_20261029/test_supervisor_lowobject.py",
+      "bytes": 6245,
+      "sha256": "60e7afa5b9e997d7aae688a104a1283c8f25b8733b003221ff20523195527803"
     },
     {
       "path": "candidates/ci_single_profile_runtime_20261029/BASELINE_LINEAGE.json",
@@ -1848,6 +1853,11 @@
       "sha256": "94e8fc72e5add45f81c3f1f8ff4ea85a8596d8920875fb02aecfb0ce31abd0e6"
     },
     {
+      "path": "candidates/same_job_execution_20261030/CPP_O1_DIAGNOSTIC_PLAN.zh.md",
+      "bytes": 3461,
+      "sha256": "bc60ebdb135d254b545f70258e05ef77d86f823b11f34faa463c95b58800d36b"
+    },
+    {
       "path": "candidates/same_job_execution_20261030/DRIVER_PROGRESS_SAMPLING_SOURCE_SUMMARY.json",
       "bytes": 1981,
       "sha256": "9b51e6074f668d28ad11b42b16b3e2e66cc98dd58b7063156c2aec134585bb84"
@@ -1974,8 +1984,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/acceptance_tests/test_stream_supervisor_hash.py",
-      "bytes": 1140,
-      "sha256": "914a35e76f083a3bd8f5dae5234ff5f2321ae522f3e4ab050073719a82155c72"
+      "bytes": 1830,
+      "sha256": "2e75dcf4356100378e429f99771961f1bf73a2dc736c861b8b2610cf9410a79b"
     },
     {
       "path": "candidates/same_job_execution_20261030/cloud_budget.py",
@@ -2069,8 +2079,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/executor_adaptation.py",
-      "bytes": 10453,
-      "sha256": "2f999703bb2412e8d98cbc851b5659113b99cce28058bd49f8fb155005724f35"
+      "bytes": 11204,
+      "sha256": "0ce45bbabaed5b3f23136e492aadc9e8a3e67cbd460e5bcb52a474c477720eab"
     },
     {
       "path": "candidates/same_job_execution_20261030/executor_identity.py",
@@ -2085,7 +2095,7 @@
     {
       "path": "candidates/same_job_execution_20261030/numeric/CONNECTION_OWNED_SOURCE_PINS.json",
       "bytes": 1982,
-      "sha256": "b6344b917b934f4b6d511abf6bc9a5a921f6df3a5bf48dbc75691d39c52dfc93"
+      "sha256": "1f10d969a49e73e73ad28eaf928afe1b28f2e181674e7bc98b625d40767805a1"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/CONSUMER_MANIFEST.json",
@@ -2129,8 +2139,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/artifact_handoff.py",
-      "bytes": 8045,
-      "sha256": "b68b3ea1162d4dabbb014a321689f47222d9d926e833bf520d0ac932e979dddc"
+      "bytes": 9612,
+      "sha256": "6cda2ea4bd34c6790d869ea2c7e9b2aa50eda9908b26d070f3c7f25283b816fe"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/attach_bundle.py",
@@ -2150,12 +2160,12 @@
     {
       "path": "candidates/same_job_execution_20261030/numeric/consumer_owned.py",
       "bytes": 45845,
-      "sha256": "dbd60f1eefecceb4f6b5bea3b8ff651c6b8f089f70a06f26647354a8ed4c5796"
+      "sha256": "fe55b3748b809d622895b39b28f89e3e7a023d14be4f5561cd8c2996f62bf172"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/consumption_proof.py",
       "bytes": 8208,
-      "sha256": "264d6cf3c832b6a492c8efd5276a0993fe3a5168b1082e8731509fafd63958a0"
+      "sha256": "e411d553b56014c38c89c2007ea9df112b6219e6526912d2f8954ba62507961e"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/correct_observation_policy.py",
@@ -2164,8 +2174,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/driver_dependency_proof.py",
-      "bytes": 12758,
-      "sha256": "a803bae1cb8b77e49101c939afe07f7ba44fb493be0082678550698ee2a5c92f"
+      "bytes": 21515,
+      "sha256": "efb0b0b7d14f25369fa42171f83f12bd1049edabc9f7e83bf2d2020987cc9582"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/dut_evidence.py",
@@ -2200,7 +2210,7 @@
     {
       "path": "candidates/same_job_execution_20261030/numeric/observation_contract.py",
       "bytes": 11258,
-      "sha256": "0df19bcfc81f8c8f928807caf9d4ff5d7e770d2b1b260bf1e9b427ead4ecfb0e"
+      "sha256": "7c318019845ec61d2841a18111f5ff64b8ea3cf4969cb5ee178054ccdaa1ba78"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/provider_from_frozen.py",
@@ -2230,17 +2240,17 @@
     {
       "path": "candidates/same_job_execution_20261030/numeric/runtime_abi_owned.py",
       "bytes": 23219,
-      "sha256": "695565c1baea1cc430ec6a64017a7525c2401c254696f1a670891edf9ecb5758"
+      "sha256": "3887a57c982e1489848e431a6b0543204019aecc4282c1fc269e0ed2976116d5"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/test_artifact_handoff.py",
-      "bytes": 8193,
-      "sha256": "8c454fea185ad198bb241db1322a93b7b30a15de50097fffebcacdf34b369bd6"
+      "bytes": 8521,
+      "sha256": "083f5991ec65bd81ef0b77961b7a5f2655f731c4cfb75d009d72303562bf0e69"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/test_builder_tool_paths.py",
-      "bytes": 1721,
-      "sha256": "4a85b13d4e79b0d65a142f28dcf4623b9dbc76e384a0693768b7b3e3994d0e90"
+      "bytes": 1845,
+      "sha256": "df8b256eaaa3ddc25b60ac78cf128c810634b39b2d9c228b893573629fd44d2f"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/test_cleanup_none.py",
@@ -2258,6 +2268,11 @@
       "sha256": "9fdda5e3802b615cfae7c8f84cd9201a21e43f6d6fa79e0f48a06fac00dc2e3b"
     },
     {
+      "path": "candidates/same_job_execution_20261030/numeric/test_cpp_build_policy.py",
+      "bytes": 26894,
+      "sha256": "09dbd79006ade61c80d378928b32e35534cc7b7b41c705ed8890ef8d532049ac"
+    },
+    {
       "path": "candidates/same_job_execution_20261030/numeric/test_dut_evidence.py",
       "bytes": 3310,
       "sha256": "c47371ba778c5f31ee9c44a294b55dff3db5dcde8b1d00fa3c8fa2e613a11bca"
@@ -2269,8 +2284,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/test_make_recipe_grammar.py",
-      "bytes": 2691,
-      "sha256": "c4d4c8df833be302659144e252c896ca2059635c69d59c1ac21f555bb9d29398"
+      "bytes": 2818,
+      "sha256": "a628e51a765f97b224aca2f1e89545f1e2dbed06ed2b903e9fc386cca41b161f"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/test_owned_abi_environment.py",
@@ -2579,8 +2594,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/test_common_observer_integration.py",
-      "bytes": 3736,
-      "sha256": "8ef77e7a67f86e4f355f217a7dff3573adb47f5d804a21d7749a00ef2e14569d"
+      "bytes": 3742,
+      "sha256": "2fb83352bdf3459dd5afb7802d6cd457dadfc2e39ad79fed70eb410df51fc38f"
     },
     {
       "path": "candidates/same_job_execution_20261030/test_controller_mode.py",
@@ -2614,8 +2629,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/test_executor_adaptation.py",
-      "bytes": 6241,
-      "sha256": "baa04a519cb49e7fc12257c06a69166aa1daa0e2e9233ab8d61ccdb9d9b31377"
+      "bytes": 7608,
+      "sha256": "a074eea4fce8fee37647a8c1b77679e0e4f30ea13d00a58464a3614b97713d9a"
     },
     {
       "path": "candidates/same_job_execution_20261030/test_executor_identity.py",
@@ -2804,8 +2819,8 @@
     },
     {
       "path": "candidates/split_build_only_20261031/validate_launch.py",
-      "bytes": 2961,
-      "sha256": "edd66c7591ec8200b535aec8f430d7bb7e173d89b5042ac78b64effcd534bb6d"
+      "bytes": 2971,
+      "sha256": "bf4a189706601444d59e0377cfca49c3acf5dc3d03abcd95c1d027ef3a508998"
     },
     {
       "path": "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py",

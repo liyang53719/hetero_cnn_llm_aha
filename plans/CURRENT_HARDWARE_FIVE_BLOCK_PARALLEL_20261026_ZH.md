@@ -1,3 +1,13 @@
+## 2026-11-01 04:17 UTC：五块实际窗口已结束；共同 ELF 严格 O1 候选（TEMP）
+
+- 实际 executor dcc3 / builder e015 / 同一 ELF a8884d6e…，五块均完整4096资源、128 token配置，逐项真实启动。原收据与独立聚合：五项 STARTED_TIMEOUT_INCOMPLETE；0/5完整数值通过，尚无冻结后最终RTL回放。
+- 最后 active cycles：P0 16704 / P1 17344 / P2 16960 / P3 17472 / P4 17216；约54–56 active cycles/外层秒。全为首命令pc0，暂无完整输出；不据此称死锁或数值FAIL。完整block周期分母、MAC利用率与剩余时间仍未知。
+- 原实际编译统一O0已经实际argv证实。本批准备明确 CPP_O1_STRICT_V1：所有child/global/host/driver统一 -O1，并显式 -fno-fast-math -ffp-contract=off；无native ISA/LTO/PGO，生成SV/driver/硬件/FP32与每步BF16参考契约不改。新ELF需真实新构建身份、完整五phase编译收据、ABI与五块全部重测；不能迁移旧性能或数值PASS。
+- 原build7200秒（包含更紧prep1800）、workflow9000秒及每stage资源上限不扩大。新O1实际峰值与耗时未知，不能凭原O0采样保证完成。源码CI、mock/轻测不冒实际构建或模型通过。
+- 监督候选保留全roots每轮census、fresh lstat、所有限额/cleanup，仅降低路径对象开销。已闭实际树一次只读对照旧4.404秒/新0.601秒，计量7,635,776,266字节一致；有先后缓存混杂，不当DUT倍速证明。
+- 同源builder/executor使用显式原loader时，允许仅在完整catalog字节相同、空diff与独立review全部绑定后走同源分支，不为满足旧异源条件制造第二commit；绝不免除ABI、liveowner与资源门。
+- FULL工程预算仍待优化后实际速率/资源形成，非缺用户授权。不得继续用无解释300秒循环替代完整M128主线。本批尚未启动新重构建，原e015七件与全部失败/结束收据保留。
+
 ## 2026-11-01 03:18 UTC：P0 builder / executor 源路径命名域修复候选（未数值通过）
 
 - 实际 executor `1aa8dcbf` 恢复任务已结束：startup ABI、P0 initialize / rope / provider / transport 均有严格 native 0 收据；`p0_connect` 在读取 GitHub builder 的 `/home/runner/...` 原始源码路径时拒绝。未执行 DUT，五块 M128 硬件完整数值仍 **0/5**。

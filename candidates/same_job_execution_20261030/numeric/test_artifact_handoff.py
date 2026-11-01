@@ -1,5 +1,6 @@
 """SYNTHETIC seven tiny text files only. No ELF, download, execution or remote proof."""
 import copy,json,pathlib,tempfile,unittest
+from unittest.mock import patch
 import artifact_handoff as a
 import sys
 sys.path.insert(0,str(pathlib.Path(__file__).resolve().parent.parent))
@@ -7,6 +8,9 @@ from test_executor_adaptation import Fixture
 
 class Tests(unittest.TestCase):
  def setUp(self):
+  # These original tests cover seven-file/identity/adaptation boundaries only.
+  # Real policy gate has separate unmocked retained-byte and five-phase tests.
+  gate=patch.object(a,"verify_compilation_policy",return_value={"policy":"SYNTHETIC_LAYER_ONLY"});gate.start();self.addCleanup(gate.stop)
   self.tmp=tempfile.TemporaryDirectory();self.base=pathlib.Path(self.tmp.name);self.root=self.base/'seven';self.root.mkdir()
   self.builder=dict(run_id=123,artifact_name='synthetic',source_commit='a'*40,launch_commit='b'*40,launch_manifest_path='ci_launch/synthetic.json',launch_manifest_blob_sha='c'*40)
   self.executor=dict(schema='CLOUD_EXECUTOR_IDENTITY_V1',source_commit='a'*40,execution_id='11111111-2222-4333-8444-555555555555',boot_id='aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee',controller_pid=123,start_tick=456,host_identity_sha256='d'*64,started_monotonic=1)

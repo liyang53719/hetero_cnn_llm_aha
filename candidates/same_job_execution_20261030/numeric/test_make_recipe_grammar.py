@@ -29,5 +29,6 @@ class Grammar(unittest.TestCase):
  def test_producer_old_verifier_separate(self):
   p=P(__file__).resolve().parents[2]/'ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py'
 
-  self.assertEqual(d.sha(p),d.PRODUCER_DEPENDENCY_CAPTURE_SHA);self.assertNotEqual(d.sha(d.__file__),d.PRODUCER_DEPENDENCY_CAPTURE_SHA)
+  self.assertEqual(d.sha(p),d.O1_PRODUCER_DEPENDENCY_CAPTURE_SHA);self.assertNotEqual(d.sha(d.__file__),d.O1_PRODUCER_DEPENDENCY_CAPTURE_SHA)
+  self.assertEqual(d.PRODUCER_DEPENDENCY_CAPTURE_SHA,"80186b8c5727eeb9054b9e5b284fb27ba6baa7388f491d4ba996409086daa5f4")
 if __name__=='__main__':unittest.main()

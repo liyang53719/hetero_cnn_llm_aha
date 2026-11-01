@@ -1,7 +1,7 @@
 """Verilator 5.032 exact supported make grammar; source-only until caller executes stages."""
 from pathlib import Path
 import re,json,os,copy,shlex,hashlib
-from build_producer import need,sha,check_pins,CHILDREN,TOP,DRIVER_SHA
+from build_producer import need,sha,check_pins,CHILDREN,TOP,DRIVER_SHA,CPP_POLICY,CPP_OVERRIDES
 D=Path(__file__).parent
 
 def lines(s):
@@ -118,6 +118,7 @@ def admit_build(b,obj,host,frontend_receipt,out):
  for inc in re.findall(r'^include\s+\$\(VERILATOR_ROOT\)/([^\s]+)',globalmk.read_text(),re.M):
   p=root/inc;need(str(p) in b['pins'],'unbound tool make include');makepins[str(p)]=sha(p)
  bb=copy.deepcopy(b);bb.update(schema='FIXED_BINARY_BUILD_BINDING_V1',source_commit=b['repo_sha'],obj=str(obj),sv=str(Path(host).resolve()),make=tools['make'],cxx=tools['cxx'],ar=tools['ar'])
+ bb['cpp_build_policy']=CPP_POLICY;bb['cpp_build_overrides']=list(CPP_OVERRIDES)
  bb['compile_aliases']=b.get('compile_aliases',{})
  bb['pins']={**b['pins'],**b['verified_gate_pins'],**b['compile_tool_pins'],**derived}
  identity_path=Path(b['sv_identity_receipt']).resolve();serial_path=Path(b['serial_frontend_receipt']).resolve();subset=Path(b['fma_subset']).resolve()
@@ -147,10 +148,10 @@ def admit_build(b,obj,host,frontend_receipt,out):
  physical_closure=dict(top_raw_sha256=sha(host),top_normalized_sha256=normalized,sv_identity_receipt_sha256=sha(identity_path),fma_subset=dict(path=str(subset),sha256=sha(subset),bytes=subset.stat().st_size),provider_sources={p:b['pins'][p] for p in b['provider_sources']},idma_include_dirs=b['idma_include_dirs'],idma_defines=b['idma_defines'],native_plan_manifest_sha256=sha(native_plan),initial_frontend_argv=b['initial_frontend_argv'],native_plan=semantics,matching_wrapper_pins=wrappers,matching_wrapper_aggregate_sha256=wrapper_aggregate,serial_frontend_receipt_sha256=sha(serial_path))
  bb['pins'][str(native_plan)]=sha(native_plan)
  source_manifest=out/'source_manifest.json'
- source_manifest.write_text(json.dumps(dict(schema='FIXED_COMMON_SOURCE_IDENTITY_V1',source_commit=b['repo_sha'],matrix_macs=4096,vector_lanes=32,sv_sha256=sha(host),driver_sha256=sha(b['driver']),source_pins={p:h for p,h in b['pins'].items() if p.startswith(b['repo']+'/') and Path(p).suffix in ('.scala','.sv','.v','.cpp','.h')},verified_gate_pins=b['verified_gate_pins'],provider_source_pins={p:b['pins'][p] for p in b['provider_sources']},generation_input_pins=b['pins'],derived_generated_pins=derived,fixed_source_overlay=b['fixed_source_overlay'],canonical_manifest_sha256=b['canonical_manifest_sha256'],physical_closure=physical_closure),indent=2)+'\n')
+ source_manifest.write_text(json.dumps(dict(schema='FIXED_COMMON_SOURCE_IDENTITY_V1',cpp_build_policy=CPP_POLICY,cpp_build_overrides=list(CPP_OVERRIDES),source_commit=b['repo_sha'],matrix_macs=4096,vector_lanes=32,sv_sha256=sha(host),driver_sha256=sha(b['driver']),source_pins={p:h for p,h in b['pins'].items() if p.startswith(b['repo']+'/') and Path(p).suffix in ('.scala','.sv','.v','.cpp','.h')},verified_gate_pins=b['verified_gate_pins'],provider_source_pins={p:b['pins'][p] for p in b['provider_sources']},generation_input_pins=b['pins'],derived_generated_pins=derived,fixed_source_overlay=b['fixed_source_overlay'],canonical_manifest_sha256=b['canonical_manifest_sha256'],physical_closure=physical_closure),indent=2)+'\n')
  bb['source_manifest']=str(source_manifest.resolve());bb['tool_manifest']=str(Path(b['compile_tool_manifest']).resolve())
  bb['pins'].update({bb['source_manifest']:sha(source_manifest),bb['tool_manifest']:sha(bb['tool_manifest'])})
- bb['admission']=dict(status='ACTUAL_MAKE_CLOSURE_REVIEWED',method='CONDITIONAL_V5032_EXACT_TEMPLATE',source_commit=b['repo_sha'],make_closure_pins=makepins,no_implicit_frontend=True,uniform_O0_no_fast_math=True,header_122_observation_ports_and_driver_ABI_reviewed=True)
+ bb['admission']=dict(status='ACTUAL_MAKE_CLOSURE_REVIEWED',method='CONDITIONAL_V5032_EXACT_TEMPLATE',source_commit=b['repo_sha'],make_closure_pins=makepins,no_implicit_frontend=True,cpp_build_policy=CPP_POLICY,cpp_build_overrides=list(CPP_OVERRIDES),header_122_observation_ports_and_driver_ABI_reviewed=True)
  (out/'derived_admission.json').write_text(json.dumps(bb['admission'],indent=2)+'\n')
  (out/'derived_input_pins.json').write_text(json.dumps(bb['pins'],indent=2)+'\n')
  return bb

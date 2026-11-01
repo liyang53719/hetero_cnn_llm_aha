@@ -68,22 +68,26 @@ def execute(argv,run,lock_path,caps,env,pins,inject_monitor_error=False,resource
   unique=[]
   for root in sorted(set(roots),key=lambda p:len(p.parts)):
    if not any(root.is_relative_to(q) for q in unique):unique.append(root)
-  seen=set()
+  seen=set();run_parts=run.parts
   for root in unique:
    for base,dirs,files in os.walk(root,followlinks=False):
+    base_parts=Path(base).parts
+    base_in_stage=base_parts[:len(run_parts)]==run_parts
+    base_is_stage_parent=base_parts==run_parts[:-1]
     for name in dirs+files:
-     p=Path(base)/name
-     try:s=p.lstat()
+     p=os.path.join(base,name)
+     in_stage=base_in_stage or (base_is_stage_parent and name==run_parts[-1])
+     try:s=os.lstat(p)
      except FileNotFoundError:continue
      count+=1;need(count<=caps['max_entries'],'entry cap')
      if stat.S_ISLNK(s.st_mode):
-      need(not p.is_relative_to(run),'output link forbidden');continue
+      need(not in_stage,'output link forbidden');continue
      need(stat.S_ISDIR(s.st_mode) or stat.S_ISREG(s.st_mode),'nonregular output')
      if stat.S_ISREG(s.st_mode):
       key=(s.st_dev,s.st_ino)
       if key not in seen:
        seen.add(key);total+=s.st_size;largest=max(largest,s.st_size)
-       if p.is_relative_to(run):stage_total+=s.st_size
+       if in_stage:stage_total+=s.st_size
   for root in unique:
    if root.exists():need(shutil.disk_usage(root).free>=caps.get('min_free_disk_bytes',0),'sampled disk reserve')
   report['peak_tree_bytes']=max(report['peak_tree_bytes'],total);report['peak_file_bytes']=max(report['peak_file_bytes'],largest)

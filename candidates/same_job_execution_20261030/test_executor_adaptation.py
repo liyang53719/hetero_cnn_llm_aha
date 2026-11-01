@@ -41,6 +41,17 @@ class Tests(unittest.TestCase):
  def test_review_numerical_pass(self):self.f.review['numerical_pass']=True;self.f.doc['review']=self.f.write(self.f.review_path,self.f.review);self.f.save();self.reject()
  def test_extra_doc_field(self):self.f.doc['ignored']='no';self.f.save();self.reject()
  def test_same_source_not_adaptation(self):self.f.executor['source_commit']='a'*40;self.f.refresh();self.reject()
+ def test_same_source_identical_catalog_and_review(self):
+  self.f.executor['source_commit']=self.f.builder['source_commit'];self.f.old=copy.deepcopy(self.f.new);self.f.refresh()
+  r=self.f.verify();self.assertEqual(r['changed_paths'],[]);self.assertEqual(r['builder_source_commit'],r['executor_source_commit']);self.assertIs(r['numerical_pass'],False)
+ def test_same_source_empty_self_report_with_actual_diff_rejected(self):
+  self.f.executor['source_commit']=self.f.builder['source_commit'];self.f.refresh();self.f.doc['changes']=[];self.f.save();self.reject()
+ def test_same_source_stale_independent_review_rejected(self):
+  self.f.executor['source_commit']=self.f.builder['source_commit'];self.f.old=copy.deepcopy(self.f.new);self.f.refresh();self.f.review['executor_source_commit']='d'*40;self.f.doc['review']=self.f.write(self.f.review_path,self.f.review);self.f.save();self.reject()
+ def test_distinct_source_empty_catalog_diff_rejected(self):
+  self.f.old=copy.deepcopy(self.f.new);self.f.refresh();self.reject()
+ def test_same_source_catalog_metadata_drift_rejected(self):
+  self.f.executor['source_commit']=self.f.builder['source_commit'];self.f.old=copy.deepcopy(self.f.new);self.f.refresh();doc=self.f.catalog(self.f.old);doc['original_source_commit']='0'*40;self.f.doc['builder_source_pins']=self.f.write(self.f.old_path,doc);self.f.save();self.reject()
  def test_builder_wrong_identity(self):self.f.builder=copy.deepcopy(self.f.builder);self.f.builder['run_id']=2;self.reject()
  def test_executor_wrong_identity(self):self.f.executor={'source_commit':'0'*40};self.reject()
  def test_deletion(self):del self.f.new[a.PREFIX+'numeric/runtime_abi_owned.py'];self.f.refresh();self.reject()

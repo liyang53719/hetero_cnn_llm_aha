@@ -3,7 +3,9 @@
 The external adaptation pin must come from the trusted invocation, not from this
 JSON itself. Builder source/ELF/SV/driver remain immutable. A different executor
 commit is disclosed and its complete catalog must differ by exactly the reviewed
-host-only allowlist; neither this check nor a source review is numerical PASS.
+host-only allowlist. An identical builder/executor commit instead requires exact
+complete catalog equality and an independently reviewed empty diff. Neither
+branch nor a source review is numerical PASS.
 """
 import hashlib
 import json
@@ -134,9 +136,9 @@ def verify(adaptation_pin, builder_identity, executor_identity,
          'actual distinct builder six-field identity')
     need(doc['builder_identity'] == builder_identity, 'adaptation belongs to exact actual builder')
     need(type(executor_identity) is dict and hex_value(executor_identity.get('source_commit'), 40) and
-         doc['executor_source_commit'] == executor_identity['source_commit'] and
-         doc['executor_source_commit'] != builder_identity['source_commit'],
-         'distinct truthful executor source commit')
+         doc['executor_source_commit'] == executor_identity['source_commit'],
+         'truthful executor source commit')
+    same_source = doc['executor_source_commit'] == builder_identity['source_commit']
     need(hex_value(doc['artifact_manifest_sha256'], 64), 'frozen artifact manifest identity')
     old = catalog(doc['builder_source_pins'])
     new = catalog(doc['executor_source_pins'])
@@ -164,7 +166,17 @@ def verify(adaptation_pin, builder_identity, executor_identity,
         new_sha = new[name]['sha256']
         need(old_sha != new_sha, 'catalog size drift without source change')
         calculated.append(dict(path=name, old_sha256=old_sha, new_sha256=new_sha))
-    need(calculated and type(doc['changes']) is list and doc['changes'] == calculated,
+    # A newly built artifact may already contain the reviewed host adapter.
+    # Do not manufacture a second commit just to use its exact loader closure.
+    # Same-source admission requires identical complete catalog bytes, no diff,
+    # and the same independent review binding as the distinct-source branch.
+    if same_source:
+        need(not calculated and old == new and
+             doc['builder_source_pins']['sha256'] == doc['executor_source_pins']['sha256'],
+             'same-source requires identical complete catalogs and empty diff')
+    else:
+        need(bool(calculated), 'distinct-source requires actual reviewed host diff')
+    need(type(doc['changes']) is list and doc['changes'] == calculated,
          'exact complete reviewed source diff required')
     review_path = checked(doc['review'], 65536)
     review = json.loads(review_path.read_text())

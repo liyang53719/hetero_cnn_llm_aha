@@ -4,7 +4,7 @@ source/run/artifact verification. A self-authored JSON is NOT authentication.
 Caller validates/verifies the live executor separately before calling verify.
 Original seven bytes stay unchanged; no same-job result is manufactured.
 """
-import hashlib,json,pathlib,re,types
+import hashlib,json,pathlib,re,types,importlib.util
 P=pathlib.Path
 NAMES={'binary':'dut.bin','sv':'hardware.sv','driver':'driver.cpp','source_manifest':'source_manifest.json','tool_manifest':'tool_manifest.json','build_receipt':'build_receipt.json'}
 FIELDS={'run_id','artifact_name','source_commit','launch_commit','launch_manifest_path','launch_manifest_blob_sha'}
@@ -38,6 +38,21 @@ def adaptation_module(adaptation_pin):
  path=regular(P(__file__).resolve().parent.parent/'executor_adaptation.py',1<<20);raw=path.read_bytes()
  need(type(rows[0].get('bytes'))is int and len(raw)==rows[0]['bytes']and hashlib.sha256(raw).hexdigest()==rows[0]['sha256'],'reviewed adaptation checker bytes before import')
  module=types.ModuleType('reviewed_executor_adaptation');module.__file__=str(path);exec(compile(raw,str(path),'exec'),module.__dict__);return module
+
+def verify_compilation_policy(frozen,root,receipt):
+ # This is common to all five profiles, not merely the P0 observation exception.
+ path=P(__file__).resolve().with_name('driver_dependency_proof.py')
+ need(sha(path)=='efb0b0b7d14f25369fa42171f83f12bd1049edabc9f7e83bf2d2020987cc9582','reviewed exact compilation policy verifier')
+ raw=path.read_bytes();module=types.ModuleType('all_profile_compilation_policy');module.__file__=str(path);exec(compile(raw,str(path),'exec'),module.__dict__)
+ source=json.loads((root/'source_manifest.json').read_text());tool=json.loads((root/'tool_manifest.json').read_text())
+ need(source['source_commit']==receipt['source_commit']==frozen['artifact_identity']['source_commit'],'same actual frozen builder compilation source')
+ need(source['sv_sha256']==frozen['common']['sv']['sha256']and source['driver_sha256']==frozen['common']['driver']['sha256'],'unchanged actual generated hardware and driver bytes')
+ dependency=source['p0_retained_evidence']['driver_dependency']
+ checked=module.verify_compilation_policy(dependency,source,receipt,tool)
+ fields={'cpp_build_policy','cpp_build_overrides'}
+ if checked['policy']==module.CPP_O0_POLICY:need(not(fields&set(frozen)),'historical O0 artifact must not acquire a new policy label')
+ else:need(frozen.get('cpp_build_policy')==checked['policy']and frozen.get('cpp_build_overrides')==checked['make_overrides'],'frozen exact reviewed strict O1 compilation policy')
+ return checked
 
 def verify(handoff_path,handoff_sha,manifest,manifest_sha,frozen,executor_identity,executor_adaptation=None,current_source_pins_pin=None,repo=None):
  h=read_pin(handoff_path,handoff_sha)
@@ -73,4 +88,5 @@ def verify(handoff_path,handoff_sha,manifest,manifest_sha,frozen,executor_identi
  phases=receipt['phases'];need(type(phases)is list and [p['phase']for p in phases]==['archive_bf16_context_lane_cluster16_rev8b_b_candidate_d','archive_qwen2_matrix_command_endpoint_0','archive_TransposedDenseDownOwner','host_archive','host_link'],'exact full archive/link chain')
  need(all(type(p['native_exit'])is int and p['native_exit']==0 and hex64(p['output_sha256'])and hex64(p['supervisor_receipt_sha256'])for p in phases),'build native receipt identities')
  need(phases[-1]['output_sha256']==rows['binary']['sha256'],'actual linked binary')
- return dict(status='VERIFIED_IMPORTED_BUILD_BYTES_NOT_NUMERICAL',builder_identity=i,executor_identity=executor_identity,handoff_sha256=handoff_sha,artifact_manifest_sha256=manifest_sha,source_pins_sha256=h['source_pins_sha256'],executor_adaptation=adaptation,remote_receipt=r,numerical_pass=False,final_rtl_executed=False)
+ compilation=verify_compilation_policy(frozen,root,receipt)
+ return dict(compilation_policy=compilation,status='VERIFIED_IMPORTED_BUILD_BYTES_NOT_NUMERICAL',builder_identity=i,executor_identity=executor_identity,handoff_sha256=handoff_sha,artifact_manifest_sha256=manifest_sha,source_pins_sha256=h['source_pins_sha256'],executor_adaptation=adaptation,remote_receipt=r,numerical_pass=False,final_rtl_executed=False)

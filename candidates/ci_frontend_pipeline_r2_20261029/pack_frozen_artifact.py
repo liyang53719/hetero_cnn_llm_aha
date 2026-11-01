@@ -1,6 +1,6 @@
 """Flat seven-file frozen binary artifact; no weights, inputs, references or DUT run."""
 import pathlib,json,shutil,hashlib,re
-from build_producer import need,check_pins,artifact_manifest,DRIVER_SHA
+from build_producer import need,check_pins,artifact_manifest,DRIVER_SHA,CPP_POLICY,CPP_OVERRIDES
 
 def sha(p):
  with pathlib.Path(p).open('rb')as f:return hashlib.file_digest(f,'sha256').hexdigest()
@@ -26,6 +26,7 @@ def pack(original,b,built,host,overlay,out,budget_check):
  need(built['scope']=='ARCHIVE_LINK_ONLY_NOT_DUT_PASS','build-only scope')
  check_pins(b['pins']);check_pins(b['admission']['make_closure_pins'])
  need(original['artifact_identity']['source_commit']==original['repo_sha'],'source commit identity')
+ for policy_holder in (b,b['admission'],built,built['plan']):need(policy_holder['cpp_build_policy']==CPP_POLICY and policy_holder['cpp_build_overrides']==CPP_OVERRIDES,'one reviewed actual compilation policy')
  phases=built['phases'];plan=built['plan']['phases']
  need(len(phases)==len(plan)>0,'complete planned build phases')
  summaries=[]
@@ -33,7 +34,7 @@ def pack(original,b,built,host,overlay,out,budget_check):
   need(actual['phase']==planned['name']and actual['argv']==planned['argv'],'actual phase identity')
   r=actual['supervisor'];need(r['native_exit']==0 and not r['errors']and r.get('cleanup_proof',{}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP','native success and cleanup required')
   q=actual['output'];need(pin(q['path'])==q,'archive/binary stable after build')
-  summaries.append(dict(phase=actual['phase'],output_sha256=q['sha256'],native_exit=0,observed_cpu_seconds=r.get('observed_cpu_seconds'),elapsed_seconds=r.get('elapsed_seconds'),observed_peak_rss=r.get('observed_peak_rss'),supervisor_receipt_sha256=hashlib.sha256(json.dumps(r,sort_keys=True,separators=(',',':')).encode()).hexdigest()))
+  summaries.append(dict(phase=actual['phase'],argv=actual['argv'],output_sha256=q['sha256'],native_exit=0,observed_cpu_seconds=r.get('observed_cpu_seconds'),elapsed_seconds=r.get('elapsed_seconds'),observed_peak_rss=r.get('observed_peak_rss'),supervisor_receipt_sha256=hashlib.sha256(json.dumps(r,sort_keys=True,separators=(',',':')).encode()).hexdigest()))
  need(built['binary']==phases[-1]['output'],'final planned binary')
  source=pathlib.Path(built['binary']['path'])
  with source.open('rb')as f:need(f.read(6)==b'\x7fELF\x02\x01','actual ELF64 LE binary')
@@ -54,7 +55,7 @@ def pack(original,b,built,host,overlay,out,budget_check):
   need(pin(path)==before,'original source/file unchanged '+key);files[key]=target
  files['binary'].chmod(0o700)
  need(sum(p.stat().st_size for p in root.iterdir())<=4*1024**3,'artifact expanded bound')
- receipt=dict(status='BINARY_BUILD_ONLY_NO_NUMERICS',config_only=False,software_arithmetic_substitution=False,source_commit=original['artifact_identity']['source_commit'],launch_commit=original['artifact_identity']['launch_commit'],tool_manifest_sha256=sha(files['tool_manifest']),**{k+'_sha256':sha(files[k])for k in ('binary','sv','source_manifest','driver')},phases=summaries,admission_method=b['admission']['method'],scope='CHISEL_TEST_BACKEND_NOT_FINAL_RTL_REPLAY')
+ receipt=dict(status='BINARY_BUILD_ONLY_NO_NUMERICS',cpp_build_policy=CPP_POLICY,cpp_build_overrides=list(CPP_OVERRIDES),config_only=False,software_arithmetic_substitution=False,source_commit=original['artifact_identity']['source_commit'],launch_commit=original['artifact_identity']['launch_commit'],tool_manifest_sha256=sha(files['tool_manifest']),**{k+'_sha256':sha(files[k])for k in ('binary','sv','source_manifest','driver')},phases=summaries,admission_method=b['admission']['method'],scope='CHISEL_TEST_BACKEND_NOT_FINAL_RTL_REPLAY')
  receipt_raw=json.dumps(receipt,indent=2)+'\n';need(len(receipt_raw.encode())<=65536,'build receipt64KiB')
  files['build_receipt']=root/'build_receipt.json';files['build_receipt'].write_text(receipt_raw)
  manifest=artifact_manifest(root,original['artifact_identity'],files,built)

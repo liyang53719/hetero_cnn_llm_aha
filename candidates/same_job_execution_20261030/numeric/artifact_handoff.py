@@ -42,7 +42,7 @@ def adaptation_module(adaptation_pin):
 def verify_compilation_policy(frozen,root,receipt):
  # This is common to all five profiles, not merely the P0 observation exception.
  path=P(__file__).resolve().with_name('driver_dependency_proof.py')
- need(sha(path)=='efb0b0b7d14f25369fa42171f83f12bd1049edabc9f7e83bf2d2020987cc9582','reviewed exact compilation policy verifier')
+ need(sha(path)=='a23ff2ae8583168776c8911545bf0bd0624339294418c92eb23382c3be214989','reviewed exact compilation policy verifier')
  raw=path.read_bytes();module=types.ModuleType('all_profile_compilation_policy');module.__file__=str(path);exec(compile(raw,str(path),'exec'),module.__dict__)
  source=json.loads((root/'source_manifest.json').read_text());tool=json.loads((root/'tool_manifest.json').read_text())
  need(source['source_commit']==receipt['source_commit']==frozen['artifact_identity']['source_commit'],'same actual frozen builder compilation source')

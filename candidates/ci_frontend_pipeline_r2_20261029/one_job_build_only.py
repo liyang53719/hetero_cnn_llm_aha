@@ -19,6 +19,56 @@ def sha(p):
 def load(p):return json.loads(pathlib.Path(p).read_text())
 def pinned(p,h):
  p=pathlib.Path(p).absolute();need(p.is_file() and not p.is_symlink() and sha(p)==h,'pin mismatch '+str(p));return p
+# Safe finite projection only: never copy argv, raw errors, paths, compiler logs,
+# process rows, source bodies or arbitrary report keys to Actions stdout.
+BUILD_STAGE_NAMES=('compile155','helper_compile','original_high','canonical_micro','canonical_full','transform_new_toolchain','emit_host','sv_identity','emit_fma','subset','frontend','frontend_native_Vbf16_context_lane_cluster16_rev8b_b_candidate_d','frontend_native_Vqwen2_matrix_command_endpoint_0','frontend_native_VTransposedDenseDownOwner','frontend_native_VHostBlockTopV4','archive_bf16_context_lane_cluster16_rev8b_b_candidate_d','archive_qwen2_matrix_command_endpoint_0','archive_TransposedDenseDownOwner','host_archive','host_link')
+BUILD_ERROR_CODES={
+ 'ValueError: wall cap':'WALL_CAP',
+ 'InterruptedError: signal 14':'MONITOR_SIGALRM',
+ 'ValueError: prelaunch work deadline':'PRELAUNCH_DEADLINE',
+ 'ValueError: sampled observed aggregate RSS cap':'SAMPLED_RSS_CAP',
+ 'ValueError: sampled observed aggregate CPU cap':'SAMPLED_CPU_CAP',
+ 'ValueError: locked memory gate':'PRELAUNCH_MEMORY_GATE',
+ 'ValueError: locked disk gate':'PRELAUNCH_DISK_GATE',
+ 'ValueError: entry cap':'ENTRY_CAP',
+ 'ValueError: file cap':'FILE_CAP',
+ 'ValueError: sampled aggregate writable-root cap':'AGGREGATE_TREE_CAP',
+ 'ValueError: sampled stage output tree cap':'STAGE_TREE_CAP',
+ 'ValueError: sampled disk reserve':'DISK_RESERVE',
+ 'ValueError: sampled log cap':'LOG_CAP',
+ 'ValueError: log reader failure':'LOG_READER_FAILURE',
+ 'ValueError: log EOF missing after cleanup':'LOG_EOF_MISSING',
+ 'RuntimeError: capture missing EOF; no full log claim':'LOG_EOF_MISSING',
+ 'ValueError: reader completion deadline':'READER_DEADLINE',
+ 'ValueError: reader join deadline':'READER_DEADLINE',
+ 'ValueError: post-cleanup deadline':'POST_CLEANUP_DEADLINE',
+}
+def build_stage_diagnostic(name,report,receipt_path):
+ import math
+ def number(v):
+  return v if type(v)in(int,float)and 0<=v<=2**53 and math.isfinite(v) else None
+ def boolean(v):return v if type(v)is bool else None
+ def obj(v):return v if type(v)is dict else {}
+ r=obj(report);errors=r.get('errors');valid_errors=type(errors)is list
+ categories=sorted({BUILD_ERROR_CODES.get(e,'UNCLASSIFIED_SUPERVISOR_ERROR') if type(e)is str else 'MALFORMED_ERROR' for e in errors[:256]}) if valid_errors else ['MALFORMED_ERROR_LIST']
+ if valid_errors and len(errors)>256:categories.append('ERROR_LIST_TRUNCATED')
+ caps=obj(r.get('caps'));cleanup=obj(r.get('cleanup_proof'));capture=obj(r.get('log_capture'))
+ native=r.get('native_exit');native=native if type(native)is int and -128<=native<=255 else None
+ receipt_sha=None
+ try:
+  if receipt_path.is_file()and not receipt_path.is_symlink():receipt_sha=sha(receipt_path)
+ except OSError:pass
+ result=dict(schema='BOUNDED_BUILD_STAGE_DIAGNOSTIC_V1',stage=name if name in BUILD_STAGE_NAMES else 'UNKNOWN_STAGE',receipt_sha256=receipt_sha,
+  worker_started=boolean(r.get('worker_started')),native_exit=native,error_count=min(len(errors),2**31-1) if valid_errors else None,error_categories=categories,
+  elapsed_seconds=number(r.get('elapsed_seconds')),observed_cpu_seconds=number(r.get('observed_cpu_seconds')),observed_peak_rss=number(r.get('observed_peak_rss')),peak_tree_bytes=number(r.get('peak_tree_bytes')),peak_file_bytes=number(r.get('peak_file_bytes')),
+  caps={k:number(caps.get(k)) for k in ('wall_seconds','cleanup_seconds','rss_bytes','cpu_seconds','per_process_as_bytes','per_process_cpu_seconds','file_bytes','tree_bytes','watch_tree_bytes','max_entries')},
+  cleanup_complete=cleanup.get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP',pipe_eof_observed=boolean(capture.get('pipe_eof_observed')),gzip_finalized=boolean(capture.get('gzip_finalized')),
+  numerical_pass=False,final_rtl_replay=False)
+ # native nonzero with no supervisor error is NOT classified as compiler/OOM.
+ raw=json.dumps(result,sort_keys=True,separators=(',',':'),allow_nan=False)
+ if len(raw.encode())>8192:raise ValueError('bounded diagnostic schema overflow')
+ return raw
+
 def main():
  ap=argparse.ArgumentParser();ap.add_argument('--binding',type=pathlib.Path,required=True);ap.add_argument('--binding-sha256',required=True);ap.add_argument('--execute-reviewed-once',action='store_true');a=ap.parse_args()
  from observer_baseline_gate import require_accepted_baseline
@@ -97,6 +147,7 @@ def main():
   stage_env=dict(env);stage_env.update(env_override or {});stage_pins=dict(b['pins']);stage_pins.update(extra_pins or {})
   try:
    r=supervise.execute(argv,str(out/name),str(lock),caps,stage_env,stage_pins,resource_gate={'min_available_memory':(rss+1)*1024**3,'min_disk_free':1_500_000_000})
+   print('BUILD_STAGE_DIAGNOSTIC '+build_stage_diagnostic(name,r,out/name/'RESULT.json'),flush=True)
   finally:
    for path,target in b.get('fresh_host_aliases',{}).items():need(str(pathlib.Path(path).resolve(strict=True))==target,'fresh runtime alias drift after stage')
   stages.append(dict(name=name,status=r['status'],native_exit=r['native_exit'],rss=r['observed_peak_rss'],elapsed=r['elapsed_seconds']));(out/'stage_exits.json').write_text(json.dumps(stages,indent=2)+'\n')

@@ -2,7 +2,7 @@ name: hetero-five-m128-split-build-only-seven-files
 on:
   push:
     branches: [main]
-    paths: [ci_launch/five_m128_split_build_o1_strict_20261101_once.json]
+    paths: [ci_launch/five_m128_split_build_o1_diagnostic_20261101_once.json]
 permissions:
   contents: read
   actions: read

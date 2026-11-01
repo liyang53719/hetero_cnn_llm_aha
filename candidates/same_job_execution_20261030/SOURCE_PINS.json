@@ -9,8 +9,8 @@
     },
     {
       "path": ".github/workflows/hetero-five-m128-split-build-only.yml",
-      "bytes": 3992,
-      "sha256": "7a0d99ffa6d11579731bf04570c97510062d0ae278fa294111fcfb26a5743616"
+      "bytes": 3996,
+      "sha256": "9ba777ffa4a5f4ca88af4c8d93aebdec2c1c6daf93bc3e3fee833cb66701c886"
     },
     {
       "path": "candidates/attention_policy_count_fix_20261029T0054/source/HostBlockCommandsV4.scala",
@@ -294,8 +294,8 @@
     },
     {
       "path": "candidates/ci_frontend_pipeline_r2_20261029/one_job_build_only.py",
-      "bytes": 14997,
-      "sha256": "d00767427ce2a51e83cd22181cb931342541c235b7f757a2b0b3c0aa5545f951"
+      "bytes": 19104,
+      "sha256": "ef5977abd0c5721985c4f3a0125321c04fdcb5fc2292542474c3ebf577e407d6"
     },
     {
       "path": "candidates/ci_frontend_pipeline_r2_20261029/one_job_entry_fixed_r2.py",
@@ -331,6 +331,11 @@
       "path": "candidates/ci_frontend_pipeline_r2_20261029/supervise_multiroot.py",
       "bytes": 15617,
       "sha256": "c298efb15564b052c7aec7aaf42326de10f392f0e7d28c511fa5def1fcd97791"
+    },
+    {
+      "path": "candidates/ci_frontend_pipeline_r2_20261029/test_build_stage_diagnostic.py",
+      "bytes": 4073,
+      "sha256": "5a341bd0a0c71b6c1833729a31683b6651489c368b88ce4c91724745e59e3817"
     },
     {
       "path": "candidates/ci_frontend_pipeline_r2_20261029/test_supervisor_lowobject.py",
@@ -1854,8 +1859,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/CPP_O1_DIAGNOSTIC_PLAN.zh.md",
-      "bytes": 3461,
-      "sha256": "bc60ebdb135d254b545f70258e05ef77d86f823b11f34faa463c95b58800d36b"
+      "bytes": 5107,
+      "sha256": "cf0b0c0cc516e8bfeba18038986a90eb9f7adb88419692027d81dfaa8de4b582"
     },
     {
       "path": "candidates/same_job_execution_20261030/DRIVER_PROGRESS_SAMPLING_SOURCE_SUMMARY.json",
@@ -2095,7 +2100,7 @@
     {
       "path": "candidates/same_job_execution_20261030/numeric/CONNECTION_OWNED_SOURCE_PINS.json",
       "bytes": 1982,
-      "sha256": "9cedf05a29b8d10359bed4c95aa820ebe65bff709b2bdf30502540bb14925f66"
+      "sha256": "87b0e49734c6e65da5d66d22050f01cb496d14852407c59ae38ea0c6c55b6ca9"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/CONSUMER_MANIFEST.json",
@@ -2140,7 +2145,7 @@
     {
       "path": "candidates/same_job_execution_20261030/numeric/artifact_handoff.py",
       "bytes": 9612,
-      "sha256": "6cda2ea4bd34c6790d869ea2c7e9b2aa50eda9908b26d070f3c7f25283b816fe"
+      "sha256": "06ac175b7c1f8ca5b1dc19891a52c09f58f17fec521ee96e0f581ca4011ef0c5"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/attach_bundle.py",
@@ -2160,12 +2165,12 @@
     {
       "path": "candidates/same_job_execution_20261030/numeric/consumer_owned.py",
       "bytes": 45845,
-      "sha256": "fe55b3748b809d622895b39b28f89e3e7a023d14be4f5561cd8c2996f62bf172"
+      "sha256": "5a5d53bb615b405aa5395cf77819376b5d77b44173a3449178ca485c09e6439d"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/consumption_proof.py",
       "bytes": 8208,
-      "sha256": "e411d553b56014c38c89c2007ea9df112b6219e6526912d2f8954ba62507961e"
+      "sha256": "1d16c82897653535f0c363b6fc57b4cdce3f12b4edc1c4af97cc82a10a2b713e"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/correct_observation_policy.py",
@@ -2175,7 +2180,7 @@
     {
       "path": "candidates/same_job_execution_20261030/numeric/driver_dependency_proof.py",
       "bytes": 21515,
-      "sha256": "efb0b0b7d14f25369fa42171f83f12bd1049edabc9f7e83bf2d2020987cc9582"
+      "sha256": "a23ff2ae8583168776c8911545bf0bd0624339294418c92eb23382c3be214989"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/dut_evidence.py",
@@ -2210,7 +2215,7 @@
     {
       "path": "candidates/same_job_execution_20261030/numeric/observation_contract.py",
       "bytes": 11258,
-      "sha256": "7c318019845ec61d2841a18111f5ff64b8ea3cf4969cb5ee178054ccdaa1ba78"
+      "sha256": "b8401fd6c8c238757103c3c093ea7dc6f3a0d37aab5f0d423e2a7edf2c293e71"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/provider_from_frozen.py",
@@ -2240,7 +2245,7 @@
     {
       "path": "candidates/same_job_execution_20261030/numeric/runtime_abi_owned.py",
       "bytes": 23219,
-      "sha256": "3887a57c982e1489848e431a6b0543204019aecc4282c1fc269e0ed2976116d5"
+      "sha256": "961eba84a34b9c3ba0f529b904ccbd27ad2994a81b2753fd4b698c8776cc57ef"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/test_artifact_handoff.py",
@@ -2819,8 +2824,8 @@
     },
     {
       "path": "candidates/split_build_only_20261031/validate_launch.py",
-      "bytes": 2971,
-      "sha256": "bf4a189706601444d59e0377cfca49c3acf5dc3d03abcd95c1d027ef3a508998"
+      "bytes": 2979,
+      "sha256": "39c92a345ca5436837f78bf55a0e0e16fab66adfa36126c874cd85d7deabe5c9"
     },
     {
       "path": "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py",

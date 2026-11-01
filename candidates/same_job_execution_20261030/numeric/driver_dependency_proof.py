@@ -84,7 +84,7 @@ def verify_driver_compile_recipe(host,stem,driver):
   break
  return dict(status='EXACT_GENERATED_DRIVER_RECIPE_ASCII_HORIZONTAL_WHITESPACE_ONLY',tokens=list(tokens))
 
-O1_PRODUCER_IMPLEMENTATION_PINS={'build_producer.py': '2af6a461efc0009bcd0727bd21e98a47a0f7c7ce1a488f5adad0a3b043500667', 'conditional_admission.py': '5f3aaed6267b599baa468c5b2bae7f4bb1946c81cbeab67b926822cf09803513', 'one_job_build_only.py': 'd00767427ce2a51e83cd22181cb931342541c235b7f757a2b0b3c0aa5545f951', 'pack_frozen_artifact.py': '5af02d7c4fc153cb3b2b580b227c6f4251c046678e31374ead996ec4b6981944', 'p0_source_evidence.py': '88dd9877813027c1b32a6de2f253109a53884b0d52bce481df39ebc2aa01f32f'}
+O1_PRODUCER_IMPLEMENTATION_PINS={'build_producer.py': '2af6a461efc0009bcd0727bd21e98a47a0f7c7ce1a488f5adad0a3b043500667', 'conditional_admission.py': '5f3aaed6267b599baa468c5b2bae7f4bb1946c81cbeab67b926822cf09803513', 'one_job_build_only.py': 'ef5977abd0c5721985c4f3a0125321c04fdcb5fc2292542474c3ebf577e407d6', 'pack_frozen_artifact.py': '5af02d7c4fc153cb3b2b580b227c6f4251c046678e31374ead996ec4b6981944', 'p0_source_evidence.py': '88dd9877813027c1b32a6de2f253109a53884b0d52bce481df39ebc2aa01f32f'}
 O1_PRODUCER_DEPENDENCY_CAPTURE_SHA='0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f'
 def o1_collector_sha():return O1_PRODUCER_DEPENDENCY_CAPTURE_SHA
 

@@ -48,7 +48,7 @@ def relocation_records(manifest,repo,current_pins,current_catalog):
  return result
 
 def source_links(manifest,policy,identity,common,evidence,source_relocation=None):
- proof_path=HERE/'consumption_proof.py';need(sha(proof_path)=='e411d553b56014c38c89c2007ea9df112b6219e6526912d2f8954ba62507961e','reviewed existing-producer consumption verifier')
+ proof_path=HERE/'consumption_proof.py';need(sha(proof_path)=='1d16c82897653535f0c363b6fc57b4cdce3f12b4edc1c4af97cc82a10a2b713e','reviewed existing-producer consumption verifier')
  spec=importlib.util.spec_from_file_location('existing_producer_consumption',proof_path);proof=importlib.util.module_from_spec(spec);spec.loader.exec_module(proof)
  proof.validate(manifest,policy,identity,common,evidence)
  need(manifest['source_commit']==identity['source_commit'],'actual shared artifact source commit')

@@ -228,7 +228,7 @@ def artifact_identity(frozen):
 def coverage_policy(profile,common,identity,bundle_root,source_relocation=None):
     import importlib.util
     path=pathlib.Path(__file__).resolve().with_name('observation_contract.py')
-    need(sha(path)=='7c318019845ec61d2841a18111f5ff64b8ea3cf4969cb5ee178054ccdaa1ba78','reviewed observation contract module')
+    need(sha(path)=='b8401fd6c8c238757103c3c093ea7dc6f3a0d37aab5f0d423e2a7edf2c293e71','reviewed observation contract module')
     spec=importlib.util.spec_from_file_location('required_observation_policy',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
     if source_relocation is None:return module.validate(profile,common,identity,bundle_root)
     return module.validate(profile,common,identity,bundle_root,source_relocation)
@@ -332,7 +332,7 @@ def verify_local_build(args,frozen):
     if cloud is not None:
         need(getattr(args,'local_build_result',None) is None and getattr(args,'local_build_result_sha256',None) is None,'imported build is not same-job retained result')
         path=pathlib.Path(__file__).resolve().with_name('artifact_handoff.py')
-        need(sha(path)=='6cda2ea4bd34c6790d869ea2c7e9b2aa50eda9908b26d070f3c7f25283b816fe','reviewed imported build verifier')
+        need(sha(path)=='06ac175b7c1f8ca5b1dc19891a52c09f58f17fec521ee96e0f581ca4011ef0c5','reviewed imported build verifier')
         spec=importlib.util.spec_from_file_location('verified_builder_handoff',path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
         need(frozen['artifact_identity']['run_id']==args.expected_run_id and frozen['artifact_identity']['launch_commit']==args.expected_launch_commit,'expected builder identity distinct from executor')
         return m.verify(args.builder_handoff,args.builder_handoff_sha256,args.artifact_manifest,args.artifact_manifest_sha256,frozen,cloud,executor_adaptation=cloud_invocation(args).get('executor_adaptation'))
@@ -369,7 +369,7 @@ def approved_source_relocation(args,frozen):
 def runtime_abi_module():
     import importlib.util
     path=pathlib.Path(__file__).resolve().with_name('runtime_abi_owned.py')
-    need(sha(path)=='3887a57c982e1489848e431a6b0543204019aecc4282c1fc269e0ed2976116d5','reviewed startup ABI module')
+    need(sha(path)=='961eba84a34b9c3ba0f529b904ccbd27ad2994a81b2753fd4b698c8776cc57ef','reviewed startup ABI module')
     spec=importlib.util.spec_from_file_location('pinned_startup_abi',path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);need(OWNED_ENVIRONMENT is not None,'explicit owned environment admission');m.configure_owned_environment(*OWNED_ENVIRONMENT)
     if WORKSPACE_LOADER is not None:m.configure_workspace_loader(*WORKSPACE_LOADER)
     return m

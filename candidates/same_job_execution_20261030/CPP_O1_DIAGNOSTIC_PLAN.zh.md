@@ -1,3 +1,10 @@
+## 2026-11-01 05:33 UTC：O1 构建失败与一次同约束诊断（INCOMPLETE）
+
+- 原 O1 run `41272957145` / source `4255e062f90e62b7c54ebde3fa09bb39021dfa45` 在 `host_archive` 返回后被严格门拒绝。前3子 archive 仅有控制流进入后续阶段的证据，不冒完整可下载收据 PASS。7件导出/上传跳过，无新 ELF。原因类别 **UNKNOWN**：失败时原 RESULT 留在已不可恢复的 runner；整个 build step 3767.803 秒不能当 host_archive 耗时，也不判 OOM、wall 或编译器错误。
+- 最小新增：每个原构建阶段返回后、严格检查前，将固定≤8KiB有限诊断输出到原 Actions stdout，含 native/有限错误类别/原 caps/实际耗时CPU/RSS/tree/file/cleanup/EOF及原 RESULT SHA；无 argv、路径、任意错误正文、编译器日志或数据。原严格门不变，诊断本身永远不是数值通过。
+- 下一唯一诊断构建只为恢复具体失败类别：仍 `CPP_O1_STRICT_V1`，原 build7200/whole9000、host_archive3600秒/RSS8GiB/AS15GiB不增加；同4096/SV/driver/五块M128数据和FP契约不改。不声称实际编译问题已经修复。新nonce不复用已消费strict launch；不得无新信息反复重跑。
+- 当前五块完整数值仍0/5，旧O0五块仅实际300秒有界INCOMPLETE。P0已独审静态两norm≥4,464,640周期，完整语义矩阵MAC6,014,828,544给固定4096完整block利用率上界32.890983%；仅当前P0架构上界，非实测、非其余四块。O1不会改善该硬件周期瓶颈，80/90%仍需后续架构整改并重验。先恢复可执行共同ELF和真实数值主线，不偷改当前冻结硬件。
+
 # O1 同硬件共同 ELF 改进：待源码独审，非数值 PASS
 
 ## 已闭环的五块实际有界诊断

@@ -29,7 +29,16 @@ def admitted_context(context):
  review_path=pin(context['model_candidate_review']);need(review_path.stat().st_size<=2<<20,'bounded independent review')
  review=json.loads(review_path.read_text())
  contract=pin(context['model_source_contract'])
- need(contract==HERE/'MODEL_P0_SOURCE_CONTRACT.json'and sha(contract)==CONTRACT_SHA,'fixed reviewed candidate source contract')
+ # The external review pins builder provenance; the executor's fixed local role
+ # is independently source-catalogued. Equal bytes do not rewrite either path.
+ need(sha(contract)==CONTRACT_SHA,'fixed reviewed candidate source contract')
+ local=HERE/'MODEL_P0_SOURCE_CONTRACT.json';relative='candidates/same_job_execution_20261030/numeric/MODEL_P0_SOURCE_CONTRACT.json'
+ need(pathlib.Path(context['repo'])/relative==local,'fixed executor contract source role')
+ local_pin=dict(path=str(local),bytes=context['model_source_contract']['bytes'],sha256=CONTRACT_SHA);pin(local_pin)
+ catalog_path=pin(context['current_source_pins_pin']);need(catalog_path.stat().st_size<=2<<20,'bounded admitted contract catalog')
+ catalog=json.loads(catalog_path.read_text());need(catalog['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1','reviewed current contract source catalog')
+ rows=[r for r in catalog['files']if r['path']==relative]
+ need(len(rows)==1 and set(rows[0])=={'path','bytes','sha256'}and rows[0]['bytes']==local_pin['bytes']and rows[0]['sha256']==CONTRACT_SHA,'exact admitted local contract bytes')
  need(review['scope']==SCOPE and review['source_contract']==context['model_source_contract']and review['builder_identity']['source_commit']==context['builder_identity']['source_commit']and review['source_manifest_sha256']==context['source_manifest_sha256'],'same independently reviewed source domain')
  return review
 

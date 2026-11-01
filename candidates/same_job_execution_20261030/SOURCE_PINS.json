@@ -2403,6 +2403,21 @@
       "sha256": "cd7a8720bfe25af446daa1fe22085013eb8fe4e11d3b83b76033a2b443913f20"
     },
     {
+      "path": "candidates/same_job_execution_20261030/evidence/contract_domain_20261101/ACTUAL_PURE_CHAIN_SAFE_RESULT.json",
+      "bytes": 1712,
+      "sha256": "a887afa647c71b56cdf8f007a72b9b37c2dc5414668c46bf8649621b2a2772de"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/evidence/contract_domain_20261101/PURE_CHAIN_README.md",
+      "bytes": 1568,
+      "sha256": "0c54220f1e9c49c7d5ce4c38792fc25e43f376da08d01dcacd32b209dfbf7d46"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/evidence/contract_domain_20261101/reproduce_pure_chain.py",
+      "bytes": 5133,
+      "sha256": "52bdfec880fb524c3cface7657208d518febc202bd10bacee764850350984470"
+    },
+    {
       "path": "candidates/same_job_execution_20261030/evidence/dense_zero_closure_20261101/README.zh.md",
       "bytes": 1935,
       "sha256": "35d3c9a231e3f7a08701bdf9c63512b24a01e3283bbebd6a1a5ef8cd606966b8"
@@ -2549,8 +2564,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/executor_adaptation.py",
-      "bytes": 11552,
-      "sha256": "aea9a7ce2db5f666a340875dde84873b284189872c982cb9865ac54734973194"
+      "bytes": 11588,
+      "sha256": "4a6e24f5a6b1ad5f51805bd54f28b677d5d47e471b2ebcff9961c911e94c3722"
     },
     {
       "path": "candidates/same_job_execution_20261030/executor_identity.py",
@@ -2565,7 +2580,7 @@
     {
       "path": "candidates/same_job_execution_20261030/numeric/CONNECTION_OWNED_SOURCE_PINS.json",
       "bytes": 2500,
-      "sha256": "c87e0966ada0f51b8ffde2aa6421debcab1373aeebfcf596f9d8c0fd819df533"
+      "sha256": "b08f07384d6a4bb4523eb72772b124507b3c9172abe8ec74caecf6cd53a4be75"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/CONSUMER_MANIFEST.json",
@@ -2634,8 +2649,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/candidate_observation_contract.py",
-      "bytes": 15953,
-      "sha256": "7ed69b0683815842dee7ad41b5187b36cab6a48df580369fb13969d2a5d2b874"
+      "bytes": 16919,
+      "sha256": "760e1090f0b68fa5691f32556b418069ff5f7f481616abeecc39f2d08635af35"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/connect_owned.py",
@@ -2754,8 +2769,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/test_candidate_observation_contract.py",
-      "bytes": 10284,
-      "sha256": "f07d902e95a5eabe628a0b9c3ac4a905b22bdef655aecc1f6a8584a8256c9aea"
+      "bytes": 10596,
+      "sha256": "a83681addb6c859d1cb1e1f300b192a7c86296b5b34602eefd8dd51471a85262"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/test_cleanup_none.py",
@@ -2771,6 +2786,11 @@
       "path": "candidates/same_job_execution_20261030/numeric/test_consumer_owned.py",
       "bytes": 398,
       "sha256": "9fdda5e3802b615cfae7c8f84cd9201a21e43f6d6fa79e0f48a06fac00dc2e3b"
+    },
+    {
+      "path": "candidates/same_job_execution_20261030/numeric/test_contract_domains.py",
+      "bytes": 4594,
+      "sha256": "5ebef0c6155d7f53e114abf7129e9beeacf74f4d0c4366444cff8d782dc64513"
     },
     {
       "path": "candidates/same_job_execution_20261030/numeric/test_cpp_build_policy.py",
@@ -3099,8 +3119,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/test_candidate_full_budget.py",
-      "bytes": 7363,
-      "sha256": "10287c255f9a8357160ecd0b1a15a602f1741f8783e7f2e57482ff169671e79d"
+      "bytes": 7397,
+      "sha256": "91ff1ef858f8751d933b6cdb6a05cfdd98672454ae296764034cc4524ac79228"
     },
     {
       "path": "candidates/same_job_execution_20261030/test_candidate_relocation_producer.py",

@@ -1,3 +1,10 @@
+## 2026-11-01 17:48 UTC：候选 builder／executor 合同路径域接续修复（仅 host source）
+
+- 新候选实际 artifact `05046aa9…` / ELF `709e88d0…` 不重建、不改硬件。前一 `2e0b34cf` 云端身份 `3ffacfdc-4614-4919-bb29-40f6482ecfe4` 已通过原现场盘门、archives、三个 fresh runtime、实际 startup ABI、P0 initialize / rope / provider / transport；`p0_connect` native 1 且 strict cleanup / EOF 完整，DUT 未启动。
+- 原闭日志确证：外部独审 review 的 source contract 固定在 builder 的真实路径，而 checker 错要求它就是 executor 本地路径；二者实际合同字节相同。最小修复保留外部 review / context 原 pin 等式及 immutable artifact，不改外部来源；单独核 executor 的固定 HERE 合同角色、无 symlink、唯一当前 catalog 行、实际大小与硬锁 SHA 全相同。
+- 实际只读 P0 纯链已通过：新 checker 的九源映射、hydrate 原构建证据、corrector、assemble、consumer.load_binding 及完整 candidate compile proof / source_links，最终 y 786432 / K 131072 / V 131072 spans 与 anti-oracle 原门。fixture 为保旧材料只读使用共同祖先 root 与原 program 路径；这不是生产 material containment、live owner、资源或 DUT 执行资格，原两次 fixture 路径拒绝保留。
+- 只发布 host-only checker / 精确测试与必要闭包，不改预算、driver、SV、参考、输入或任何 nonce；后续新 executor 诚实采用独立 adapter 身份沿同一七件。局部 pure source projection 不代 live owner 或 numerical admission；完整 M128 数值与最终 RTL 仍 0/5，FULL 工程预算须实际候选进度支持。
+
 ## 2026-11-02 01:31 UTC+08：实际候选已接包，云端磁盘准入拒绝；只补有限回执
 
 GitHub 原 run 41323045817 成功，七件 artifact13093285720 已唯一下载并逐字节校验；新 manifest05046aa9…、ELF709e88d0…、SV3d148277…，原159源码/122ABI/4096MAC/唯一共享32bank 已作独立结构与来源审查，不是完整数值 PASS。新候选本地 UUID2e52b6f5…已在原 upfront disk 门失败退出1，job目录尚未建立，runtime/ABI/DUT未启动。后验 free9,453,305,856B、watched8,108,815,617B，原 TREE−L+8GiB 需12,562,425,247B，缺3,109,119,391B；后验数值不冒原瞬时快照。

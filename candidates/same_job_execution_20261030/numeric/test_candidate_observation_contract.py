@@ -16,11 +16,12 @@ class Tests(unittest.TestCase):
    kind='RUNTIME_EXPECTATION_NOT_BUILD_INPUT'if role in('commands','descriptors')else'RUNTIME_ONLY_CONTRACT'if role=='program_manifest'else'ACTUAL_BUILD_INPUT'
    self.rows.append(dict(path=key,origin_path='/builder/'+key,kind=kind,**self.sources[role]));self.generation['/builder/'+key]=pin['sha256'];self.pins[str(p)]=pin['sha256'];self.catalog['files'].append(dict(path=key,**self.sources[role]))
   contract=self.write(self.here/'MODEL_P0_SOURCE_CONTRACT.json',{'schema':'MODEL_CANDIDATE_P0_OBSERVATION_CONTRACT_V1','sources':self.sources})
+  self.catalog['files'].append(dict(path='candidates/same_job_execution_20261030/numeric/MODEL_P0_SOURCE_CONTRACT.json',bytes=contract['bytes'],sha256=contract['sha256']))
   self.cp=mock.patch.object(m,'CONTRACT_SHA',contract['sha256']);self.cp.start();self.addCleanup(self.cp.stop)
   self.evidence=dict(schema='MODEL_CANDIDATE_P0_SOURCE_EVIDENCE_V1',contract=dict(contract,text=P(contract['path']).read_text()),files=self.rows,anchors=self.anchors,program_contract={'text':'synthetic'})
   self.manifest=dict(source_commit='a'*40,generation_input_pins=self.generation,model_source_evidence=self.evidence)
   self.review=dict(scope=m.SCOPE,source_contract=contract,builder_identity={'source_commit':'a'*40},source_manifest_sha256='b'*64)
-  self.context=dict(candidate_scope=m.SCOPE,model_source_contract=contract,model_candidate_review=self.write(self.root/'review.json',self.review),builder_identity={'source_commit':'a'*40},source_manifest_sha256='b'*64)
+  self.context=dict(repo=str(self.repo),current_source_pins_pin=self.write(self.root/'catalog.json',self.catalog),candidate_scope=m.SCOPE,model_source_contract=contract,model_candidate_review=self.write(self.root/'review.json',self.review),builder_identity={'source_commit':'a'*40},source_manifest_sha256='b'*64)
  def pin(self,p):return dict(path=str(p),bytes=p.stat().st_size,sha256=m.sha(p))
  def write(self,p,v):p.write_text(json.dumps(v));return self.pin(p)
  def project(self):return m.relocation_records(self.manifest,str(self.repo),self.pins,self.catalog,self.context)
@@ -56,6 +57,7 @@ class Tests(unittest.TestCase):
   self.evidence['contract']['text']='{}'
   with self.assertRaises(ValueError):self.project()
  def test_bundle_cannot_supply_checker_without_source_catalog(self):
+  self.context.pop('current_source_pins_pin')
   with self.assertRaises(KeyError):m.reviewed_module('candidate_artifact_handoff',self.context)
  def test_default_profile_nonp0_no_authority(self):
   with self.assertRaises(ValueError):m.validate({'id':1},{},{},self.root,None)

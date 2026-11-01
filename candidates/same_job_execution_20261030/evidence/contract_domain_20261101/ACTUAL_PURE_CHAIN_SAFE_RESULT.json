@@ -1,0 +1,45 @@
+{
+  "scope": "ACTUAL_INPUT_AND_PROVENANCE_ONLY_NOT_LIVE_ADMISSION",
+  "status": "PURE_COMPLETE_P0_CONNECTION_CHECKED",
+  "source_catalog": {
+    "bytes": 166433,
+    "sha256": "32da5b016e19f2e961ab7e8ca84cce5b23a8a2b93f02fa01709419542641322d"
+  },
+  "artifact_manifest": {
+    "bytes": 2188,
+    "sha256": "05046aa9b694d2c785f08ee7f81ae3dc945acc7b7ecfee95be355f10dd382ca5"
+  },
+  "model_candidate_review": {
+    "bytes": 14353,
+    "sha256": "a684e2f01549e7d9d0d5bd1a6a3dfd77d6c5e581940212c9f76db9c209a5889c"
+  },
+  "bundle": {
+    "bytes": 2741,
+    "sha256": "dcd934f6e2ff55fa268304001096b97999a220bedc4bec6325cac0c17311064e"
+  },
+  "actual_source_roles": 9,
+  "full_final_spans": [
+    {
+      "y": 786432,
+      "cache_k": 131072,
+      "cache_v": 131072
+    }
+  ],
+  "original_bundle_unchanged": true,
+  "real_hydrate_corrector_assemble_load_binding": true,
+  "pure_fixture_common_ancestor_root_not_production_materialization": true,
+  "program_paths_retained_readonly_from_actual_views": true,
+  "execution_admitted": false,
+  "live_owner_checked": false,
+  "resource_admission_checked": false,
+  "dut_executed": false,
+  "numerical_pass": false,
+  "fixture_failures_preserved": [
+    "R1 copied program path differs from unchanged views",
+    "R2 new bundle parent excludes original readonly material"
+  ],
+  "production_material_containment_verified": false,
+  "actual_pure_runner_sha256": "d9f8a42941a84e7d04cf5c72b1d0fbaad67852db5fefc931341a19f0ef6f46e6",
+  "portable_runner_sha256": "52bdfec880fb524c3cface7657208d518febc202bd10bacee764850350984470",
+  "portable_runner_post_actual_hardening": "explicit checks under -O and exclusive bundle create; actual R3 used separately pinned original runner"
+}

@@ -1,3 +1,7 @@
+## 2026-11-01 00:35 UTC 更新：七文件传递已获用户明确批准
+
+仅解除所列七文件经 GitHub Actions artifact 传到本云的许可门；不包括权重/NPZ/输入/参考/rawlog，不授予未审ELF自动执行。固定批准清单由 build-only guard/export 精确SHA校验。仍须single-A/direct-parent唯一launch，9000秒job/7200秒含prep构建预算不变。本文下方旧“待批准/None”是上一源码候选历史状态，现以本段及固定清单为准。尚无真实构建/数值新PASS。
+
 # GitHub 构建 / 本云执行分层接入（TEMP，源码候选，未发布/未执行）
 
 用户 2026-10-31 13:32 明确要求 GitHub 不再承担完整验收。本候选沿原真实路径拆开构建者和执行者，绝不以 GitHub 源码/构建 PASS 冒模型或 RTL 数值 PASS。

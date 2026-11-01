@@ -1,0 +1,27 @@
+{
+  "approved": true,
+  "automatic_elf_execution": false,
+  "excluded": [
+    "weights",
+    "npz",
+    "inputs",
+    "references",
+    "raw_logs",
+    "classes",
+    "raw_ir"
+  ],
+  "expanded_bytes_limit": 4294967296,
+  "files": [
+    "dut.bin",
+    "hardware.sv",
+    "driver.cpp",
+    "source_manifest.json",
+    "tool_manifest.json",
+    "build_receipt.json",
+    "frozen_artifact.json"
+  ],
+  "github_numerical_execution": false,
+  "recorded_user_approval_utc": "2026-11-01T00:35:33Z",
+  "schema": "USER_APPROVED_SEVEN_FILE_TRANSFER_V1",
+  "scope": "GITHUB_ACTIONS_BUILD_ARTIFACT_TO_OWNED_CLOUD_ONLY"
+}

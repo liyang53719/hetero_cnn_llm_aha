@@ -90,7 +90,7 @@ class Export(unittest.TestCase):
   write(work/'BUILD_INVOCATION.json',dict(artifact_identity=self.i,source_pins_sha256='f'*64,job_started_monotonic=time.monotonic()))
   identity=self.root/'identity.json';write(identity,self.i);output=self.root/'summary.json';gh=self.root/'ghout'
   a=types.SimpleNamespace(repo=self.root,work=work,identity=identity,output=output)
-  with patch.object(export_build,'source_pins',return_value='f'*64),patch.object(export_build,'ACCEPTED_TRANSFER_APPROVAL_SHA256','e'*64),patch.dict(os.environ,dict(GITHUB_RUN_ID='9',GITHUB_SHA='b'*40,GITHUB_RUN_ATTEMPT='1',GITHUB_OUTPUT=str(gh))):
+  with patch.object(export_build,'source_pins',return_value='f'*64),patch.object(export_build,'ACCEPTED_TRANSFER_APPROVAL_SHA256',guard.ACCEPTED_TRANSFER_APPROVAL_SHA256),patch.dict(os.environ,dict(GITHUB_RUN_ID='9',GITHUB_SHA='b'*40,GITHUB_RUN_ATTEMPT='1',GITHUB_OUTPUT=str(gh))):
    export_build.run(a)
   result=json.loads(output.read_text());self.assertEqual(len(result['stages']),28);self.assertFalse(result['numerical_pass']);self.assertIn('artifact_name=hetero-common-dut-9',gh.read_text())
 
@@ -100,8 +100,9 @@ class Launch(unittest.TestCase):
  def call(self,**kw):
   args=dict(event=self.event,manifest=self.man,attempt='1',head='b'*40,parent='a'*40,diff='A\t'+guard.LAUNCH+'\n');args.update(kw);return guard.validate(**args)
  def test_pending_approval_rejects(self):
-  self.assertIsNone(guard.ACCEPTED_TRANSFER_APPROVAL_SHA256)
-  with self.assertRaises(ValueError):self.call()
+  self.assertEqual(guard.require_transfer_approval(),guard.ACCEPTED_TRANSFER_APPROVAL_SHA256)
+  with patch.object(guard,'ACCEPTED_TRANSFER_APPROVAL_SHA256',None):
+   with self.assertRaises(ValueError):self.call()
  def test_synthetic_approved_and_directparent(self):
   with patch.object(guard,'ACCEPTED_TRANSFER_APPROVAL_SHA256','f'*64):
    self.assertEqual(self.call(),'a'*40)

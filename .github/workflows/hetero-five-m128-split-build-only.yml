@@ -82,7 +82,7 @@ jobs:
           overwrite: false
           compression-level: 0
 # Source-only dormant candidate. No launch file is published.
-# Transfer approval pin remains None: launch and export both fail closed.
+# Transfer approval is explicitly source-pinned; guard/export verify its exact receipt.
 # Whole 150min, declared steps147min; build7200s inclusive of original prep1800s.
 # Per-stage caps and strict cleanup unchanged; worst-case all-stage maxima do NOT
 # fit7200s. Original remaining-time guards may refuse later stages (INCOMPLETE).

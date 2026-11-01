@@ -2,7 +2,7 @@
 import argparse,json,os,pathlib,time
 from seven_files import need,sha,regular,verify
 from prepare_build import source_pins,WHOLE_SECONDS
-from validate_launch import ACCEPTED_TRANSFER_APPROVAL_SHA256
+from validate_launch import ACCEPTED_TRANSFER_APPROVAL_SHA256,require_transfer_approval
 P=pathlib.Path
 PREP=('jdk','compile_tools','jars','verilator','idma','matrix','fresh_host','binding')
 STAGES=('compile155','helper_compile','original_high','canonical_micro','canonical_full','transform_new_toolchain','emit_host','sv_identity','emit_fma','subset','frontend','frontend_native_Vbf16_context_lane_cluster16_rev8b_b_candidate_d','frontend_native_Vqwen2_matrix_command_endpoint_0','frontend_native_VTransposedDenseDownOwner','frontend_native_VHostBlockTopV4','archive_bf16_context_lane_cluster16_rev8b_b_candidate_d','archive_qwen2_matrix_command_endpoint_0','archive_TransposedDenseDownOwner','host_archive','host_link')
@@ -11,6 +11,7 @@ def strict(path):
  need(type(r.get('native_exit'))is int and r['native_exit']==0 and r.get('errors')==[]and(r.get('cleanup_proof')or{}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP'and(r.get('log_capture')or{}).get('pipe_eof_observed')is True and(r.get('log_capture')or{}).get('gzip_finalized')is True,'strict original stage completion')
  return dict(receipt_sha256=sha(path),native_exit=0,strict_cleanup_eof=True)
 def run(a):
+ require_transfer_approval()
  identity=json.loads(regular(a.identity,65536).read_text());inv=json.loads(regular(a.work/'BUILD_INVOCATION.json',65536).read_text())
  need(inv['artifact_identity']==identity and inv['source_pins_sha256']==source_pins(a.repo),'unchanged builder invocation/source')
  need(str(identity['run_id'])==os.environ['GITHUB_RUN_ID']and identity['launch_commit']==os.environ['GITHUB_SHA']and os.environ['GITHUB_RUN_ATTEMPT']=='1','actual original run')

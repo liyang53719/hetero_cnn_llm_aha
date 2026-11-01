@@ -2,7 +2,7 @@
 
 本包只接原始单份 4096 Matrix MAC 硬件的 BUILD_ONLY 路径；122 ABI、原始 Chisel/HIGH/canonical/SV、编译选项、archive/link 和严格监管不改。32 vector 标签不构成实际 II=1 证据。GitHub 不运行 Python 模型参考、模型权重获取、DUT 或完整数值验收。
 
-**当前不可启动/不可传输**：`validate_launch.ACCEPTED_TRANSFER_APPROVAL_SHA256=None`，launch 与 export 双门拒绝；没有新增 `ci_launch` 文件。需要用户对七文件传输明确批准后，由独立审查的小批源码提交绑定真实授权回执 SHA，再创建唯一直接父提交、single-A、attempt1 启动。manifest 自填布尔值不是授权。
+**2026-11-01 00:35:33 UTC 用户已明确批准上述七文件传递。** 固定 `TRANSFER_APPROVAL.json` SHA `e8326625484725b0597ee87c831bbc8e77f7b50fd9bc09ba58a02cdde486cafc` 由 guard/export 校验。授权不包括权重、NPZ、输入、参考或原始日志；不将接收等同执行权限。源码发布后仍须唯一直接父提交、single-A、attempt1 启动；不重用已消费nonce。此源码提交本身没有launch文件。
 
 ## 预算（不扩大原阶段上限）
 
@@ -20,4 +20,4 @@
 
 ## 轻测范围
 
-17项 synthetic normal/-O：七件原样接收、0600、错误ZIP/API/run/过期/大小拒绝、路径穿越/symlink/额外payload/漂移拒绝、严格receipt失败、待批launch拒绝、mock批准后的direct-parent/single-A/attempt检查、预算常量及mock来源/授权的完整28receipt→实际七文件validator→export链。fixture仅伪ELF字节，不是实际编译、链接、硬件或完整数值PASS。实际源码闭包由集成owner最终重算，最终包需另一审查者交叉确认。
+17项 synthetic normal/-O：七件原样接收、0600、错误ZIP/API/run/过期/大小拒绝、路径穿越/symlink/额外payload/漂移拒绝、严格receipt失败、批准receipt核验及缺批准launch拒绝、mock批准后的direct-parent/single-A/attempt检查、预算常量及mock来源/授权的完整28receipt→实际七文件validator→export链。fixture仅伪ELF字节，不是实际编译、链接、硬件或完整数值PASS。实际源码闭包由集成owner最终重算，最终包需另一审查者交叉确认。

@@ -9,8 +9,8 @@
     },
     {
       "path": ".github/workflows/hetero-five-m128-split-build-only.yml",
-      "bytes": 3973,
-      "sha256": "27aee9a391d75abd7167adaf36a5ae8d2299b4d135684e390d8770a795f73e3e"
+      "bytes": 3987,
+      "sha256": "2268e4d67cca302491c9e55d5ef89b934d092bf4eab2851cc8ed8da7492f542d"
     },
     {
       "path": "candidates/attention_policy_count_fix_20261029T0054/source/HostBlockCommandsV4.scala",
@@ -1844,8 +1844,8 @@
     },
     {
       "path": "candidates/same_job_execution_20261030/CLOUD_EXECUTION.zh.md",
-      "bytes": 6857,
-      "sha256": "4a0df0780ec640041ffff654de894f2247f5d3b7ab430d88b08f055c3e338279"
+      "bytes": 7383,
+      "sha256": "94e8fc72e5add45f81c3f1f8ff4ea85a8596d8920875fb02aecfb0ce31abd0e6"
     },
     {
       "path": "candidates/same_job_execution_20261030/DRIVER_PROGRESS_SAMPLING_SOURCE_SUMMARY.json",
@@ -2709,13 +2709,18 @@
     },
     {
       "path": "candidates/split_build_only_20261031/README.zh.md",
-      "bytes": 3501,
-      "sha256": "8decc6991927355833e844f87a6ac6a413432cbc5b7473319b1653d34fb07e6b"
+      "bytes": 3587,
+      "sha256": "9bd849c17792358e0b54bf8c88e12a4642ba5f4888669c12fe3aa757ec06c729"
+    },
+    {
+      "path": "candidates/split_build_only_20261031/TRANSFER_APPROVAL.json",
+      "bytes": 608,
+      "sha256": "e8326625484725b0597ee87c831bbc8e77f7b50fd9bc09ba58a02cdde486cafc"
     },
     {
       "path": "candidates/split_build_only_20261031/export_build.py",
-      "bytes": 3551,
-      "sha256": "04b7d1fe96150f68fdfebb0756f1a21414bf0c5eac67ceb4cfdffab77cc82513"
+      "bytes": 3606,
+      "sha256": "762efc5dfc42759e37c5720b0980c0dbfeb5532997bf89f88f4bf4844e514f7d"
     },
     {
       "path": "candidates/split_build_only_20261031/prepare_build.py",
@@ -2734,13 +2739,13 @@
     },
     {
       "path": "candidates/split_build_only_20261031/test_build_only.py",
-      "bytes": 8164,
-      "sha256": "91b0e3a01bd60ef9d99e07e3265f7b40f4ebdf0866830348647498958645b9a9"
+      "bytes": 8300,
+      "sha256": "482fc0ebec1e5d5cf87ed1cc0c2dd10bbb5b5f39c8ecd4b599c3b52dfadb40b7"
     },
     {
       "path": "candidates/split_build_only_20261031/validate_launch.py",
-      "bytes": 2469,
-      "sha256": "0d72b36a83e46901b8b70334132837c1494c02d3f8808badbb42d21182d83bbb"
+      "bytes": 2961,
+      "sha256": "edd66c7591ec8200b535aec8f430d7bb7e173d89b5042ac78b64effcd534bb6d"
     },
     {
       "path": "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py",

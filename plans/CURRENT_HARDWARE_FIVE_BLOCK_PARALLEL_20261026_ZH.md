@@ -1,3 +1,9 @@
+## 2026-11-01 00:36 UTC — TEMP：七文件传递已批准，恢复唯一 build-only 构建
+
+用户00:35:33明确批准模拟ELF、同源SV、driver与4份metadata经GitHub Actions传入本云；不再重复询问同一范围。新增固定批准清单hash与guard/export精确绑定，原single-A/direct-parent/attempt1及9000s job / 7200s含prep构建预算保持。源提交不含launch；只有随后唯一激活会构建，不在GitHub跑完整验收。下载后先ZIP完整清单/sha/大小和静态readelf、资源审查，不对未准入ELF调用ldd/执行。不改硬件4096、C++、参考或精度。
+
+当前SOURCE-ONLY：许可门解除不代表构建或数值通过。五块M128完整数值0/5、最终同刺激RTL0/5；实际ELF/ABI/运行资源仍待本次真实构建产物核验。
+
 ## 2026-10-31 14:17 UTC — TEMP：GitHub 构建 / 本云数值执行分层（源码候选，未启动）
 
 用户明确 GitHub 不做完整验收；same-job 是原项目实现限制，不是用户要求。新增独立 cloud executor 身份/批准预算/完整入口，复用原 providers、原参考、完整 M128、严格逐项验收与 cleanup；builder 原六字段、七文件真实产物 SHA 和 executor PID/boot/UUID 分别绑定。GitHub 源码/构建 PASS 不计五块数值 PASS。

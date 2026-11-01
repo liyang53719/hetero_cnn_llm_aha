@@ -1,11 +1,11 @@
-"""Build-only single-A launch. Transport stays disabled pending explicit approval."""
+"""Build-only single-A launch. Transfer scope bound to the recorded explicit user approval."""
 import hashlib,json,os,pathlib,re,subprocess
 LAUNCH='ci_launch/five_m128_split_build_only_20261031_once.json'
 NONCE='five_m128_split_build_only_20261031_once'
 SCHEMA='FIXED4096_SPLIT_BUILD_ONLY_SEVEN_FILE_ONE_SHOT_V1'
 # Only a separately reviewed source publication may bind the user's actual
 # seven-file transfer approval receipt. No manifest boolean supplies authority.
-ACCEPTED_TRANSFER_APPROVAL_SHA256=None
+ACCEPTED_TRANSFER_APPROVAL_SHA256='e8326625484725b0597ee87c831bbc8e77f7b50fd9bc09ba58a02cdde486cafc'
 
 def need(v,m):
  if not v:raise ValueError(m)
@@ -18,7 +18,14 @@ def validate(event,manifest,attempt,head,parent,diff):
  need(diff=='A\t'+LAUNCH+'\n','only single new launch path')
  return sha
 
+def require_transfer_approval():
+ path=pathlib.Path(__file__).resolve().with_name('TRANSFER_APPROVAL.json')
+ need(path.is_file()and not path.is_symlink()and path.stat().st_size<=4096,'bounded fixed approval receipt')
+ need(hashlib.sha256(path.read_bytes()).hexdigest()==ACCEPTED_TRANSFER_APPROVAL_SHA256,'exact recorded explicit transfer approval')
+ return ACCEPTED_TRANSFER_APPROVAL_SHA256
+
 def main():
+ require_transfer_approval()
  event=json.loads(pathlib.Path(os.environ['GITHUB_EVENT_PATH']).read_text());manifest=json.loads(pathlib.Path(LAUNCH).read_text())
  parents=subprocess.check_output(['git','rev-list','--parents','-n','1','HEAD'],text=True).split();need(len(parents)==2,'single parent')
  diff=subprocess.check_output(['git','diff-tree','--no-commit-id','--name-status','-r','HEAD'],text=True)

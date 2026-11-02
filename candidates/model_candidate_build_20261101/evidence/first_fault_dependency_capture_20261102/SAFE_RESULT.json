@@ -1,0 +1,157 @@
+{
+  "schema": "FIRST_FAULT_REAL_DEPENDENCY_CAPTURE_PACK_EXPORT_E2E_V1",
+  "scope": "ACTUAL_PYTHON_PRODUCER_GATES_AND_GCC_PREPROCESSOR_WITH_SYNTHETIC_BUILD_STAGES_NOT_COMPILER_OR_NUMERICAL_PASS",
+  "source_catalog_count": 879,
+  "source_catalog_sha256": "440d872b0980ec541bc84210f4ba84db1e32a8584044f5773bb95c597d0de172",
+  "runner_sha256": "cf3250cdd28d891ff5003f4b6491e54d0fe91d6653fcc811b5d09d075cce38b2",
+  "frozen_plan_sha256": "1c2a4edea9328e22b2847dc07641924238500092629b5ad3e273b65f09030cf0",
+  "producer_source_sha256": "ad794f49f2b6d9274ebcda8110a82467847b358b80c569a716614695c276c36f",
+  "capture_source_sha256": "65616afa30e55ff9b4aae92d5ed45efed056f99d9e0991861bdbe2cf394e15fb",
+  "outer": {
+    "native_exit": 0,
+    "errors": [],
+    "elapsed_seconds": 13.98716580501059,
+    "observed_peak_rss": 87285760,
+    "cleanup_complete": true,
+    "pipe_eof_observed": true,
+    "gzip_finalized": true
+  },
+  "gcc_preprocessor": {
+    "native_exit": 0,
+    "elapsed_seconds": 0.2153186759678647,
+    "compiler_sha256": "6b3696e4dcb85e1c949c732a02befa50e3983ecf94ce7e8e58d9d503b954b79d",
+    "raw_count": 16,
+    "unique_count": 15,
+    "repeated_count": 1
+  },
+  "dependency_file": {
+    "bytes": 2762,
+    "sha256": "f2863c928576f02f5c9006bcfeaeece2af31db083d8507587858d8ede5cae149",
+    "repeated_basenames": {
+      "VHostBlockTopV4.h": 2
+    },
+    "raw_text_unchanged_in_capture": true,
+    "full_unique_pin_set_preserved": true
+  },
+  "dependency_capture_policy": "GCC_MMD_EXACT_REPEATED_PREREQUISITES_V1",
+  "true_python_producer_run": true,
+  "prepare_mocked": false,
+  "capture_mocked": false,
+  "build_stages_synthetic": true,
+  "quoted_include_closure_count": 11,
+  "quoted_include_closure_sha256": "37d40ac15eaeaf83fbbc24d9f412dbfaa7f95622ddf639d35a538da8f9636b41",
+  "export_cli_native_exit": 0,
+  "export_summary_sha256": "f2511a56235fd68c453e0e33276292ab18d573377c96f0430557761d6b102ea4",
+  "verified_seven": {
+    "manifest_sha256": "51bd20f4227d71ff8001021b469d78ad675fd5e132fc1666839a2d3fecf8309a",
+    "expanded_bytes": 228182180,
+    "files": 7,
+    "numerical_pass": false,
+    "final_rtl_replay": false
+  },
+  "negative_results": [
+    {
+      "case": "raw_extra_unpinned_dependency",
+      "reason": "non-system dependency versus original generation/derived pin"
+    },
+    {
+      "case": "missing_unique_source_pin",
+      "reason": "non-system dependency versus original generation/derived pin"
+    },
+    {
+      "case": "different_token_same_normalized_path",
+      "reason": "readonly dependency NORMALIZED_COLLISION"
+    },
+    {
+      "case": "raw_token_limit_4097_even_duplicates",
+      "reason": "readonly dependency TOKEN_LIMIT"
+    },
+    {
+      "case": "wrong_dependency_policy",
+      "reason": "explicit readonly GCC prerequisite policy"
+    },
+    {
+      "case": "missing_actual_root_header_dependency",
+      "reason": "actual unique GCC readonly header dependency"
+    },
+    {
+      "case": "missing_actual_readonly_helper_dependency",
+      "reason": "actual readonly host helper dependency beside driver"
+    },
+    {
+      "case": "wrong_fixed_sv",
+      "reason": "exact unchanged actual hardware SV"
+    },
+    {
+      "case": "missing_config",
+      "reason": "original hierarchy plus one exact readonly frontend config"
+    },
+    {
+      "case": "wrong_fixed_contract",
+      "reason": "artifact contract bytes joined"
+    },
+    {
+      "case": "new_policy_in_legacy_artifact",
+      "reason": "legacy dependency rule unchanged"
+    },
+    {
+      "case": "capture_missing_unique_pin",
+      "reason": "all actual non-system dependencies were prebuild pinned"
+    }
+  ],
+  "single_original_sv_copy_bytes": 224341716,
+  "previous_fixture_failures": [
+    {
+      "native_exit": 1,
+      "phase": "PRODUCER_PREPARE",
+      "reason": "SYNTHETIC_VM_USER_DIR_LAYOUT",
+      "gcc_started": false,
+      "sv_copy_started": false
+    },
+    {
+      "native_exit": 1,
+      "phase": "GCC_PREPROCESSOR_CALLBACK",
+      "reason": "MISSING_FIXTURE_TRANSITIVE_AFFINE_HEADER",
+      "capture_started": false,
+      "sv_copy_started": false
+    }
+  ],
+  "remote_run41441028806_actual_depfile_observed": false,
+  "full_driver_cpp_compiled": false,
+  "dut_executed": false,
+  "numerical_pass": false,
+  "final_rtl_pass": false,
+  "prior_failure_evidence": [
+    {
+      "name": "INITIAL_PREPARE_FAILURE.json",
+      "bytes": 494,
+      "sha256": "435b407e25d102a603206ae99b04fe47cf882b41eb9037d12ad8a400f18a48f0"
+    },
+    {
+      "name": "SECOND_PREPROCESS_FIXTURE_FAILURE.json",
+      "bytes": 464,
+      "sha256": "419351cd8385b77049be255062e7de617c7f8b1bcd270e62e13866909cdf692e"
+    },
+    {
+      "name": "SUPERVISOR_RETURN.json",
+      "bytes": 5438,
+      "sha256": "62092b2260ab2b62363adaf856e5d1128c830650eff314d66c192edb79fdeafd"
+    },
+    {
+      "name": "recovery_r2/SUPERVISOR_RETURN.json",
+      "bytes": 5820,
+      "sha256": "3bb2d36930f4afbe33bc6780f3cbaad7d8c8aa836a7b497dd607627b5cfe0549"
+    }
+  ],
+  "successful_outer_receipt_sha256": "3ebd748768915cd538d8604143b0936cdf62a36402acf603c2afba1e740fc5cb",
+  "final_files": [
+    "dut.bin",
+    "hardware.sv",
+    "driver.cpp",
+    "source_manifest.json",
+    "tool_manifest.json",
+    "build_receipt.json",
+    "frozen_artifact.json"
+  ],
+  "test_execution_mode": "NORMAL_ONLY_FULL_CHAIN; optimized_help_and_syntax_only"
+}

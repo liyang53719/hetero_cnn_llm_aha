@@ -108,7 +108,10 @@ def run(b,stage):
   need(raw[:8]==b'!<arch>\n' if p['name']!='host_link' else raw[:6]==b'\x7fELF\x02\x01' and len(raw)==20 and struct.unpack('<H',raw[16:18])[0] in (2,3),'wrong archive/ELF output')
   row=dict(phase=p['name'],argv=p['argv'],output=output,supervisor=r)
   if p['name']=='host_link':
-   from driver_dependency_proof import capture
+   if "first_fault_driver_contract" in b:
+    from first_fault_compilation import capture
+   else:
+    from driver_dependency_proof import capture
    row['driver_dependency']=capture(b,p,r,receipts)
   receipts.append(row)
   (Path(b['build_evidence_dir'])/'completed_build_phases.json').write_text(json.dumps(receipts,indent=2)+'\n')

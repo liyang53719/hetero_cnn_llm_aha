@@ -115,7 +115,7 @@ FIRST_FAULT_REQUIRED_IMPLEMENTATIONS=CANDIDATE_REQUIRED_IMPLEMENTATIONS|{
  'candidates/model_candidate_build_20261101/first_fault_probe.py',
  'candidates/model_candidate_build_20261101/first_fault_compilation.py',
 }
-FIRST_FAULT_IMPLEMENTATION_PINS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f', 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53', 'candidates/model_candidate_build_20261101/candidate_build_producer.py': '6650680872d1cfe06b485d6d0a59d5ba79092bbafbc100b66201fe336bcd3264', 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': '4eeb7d204f8401f2d886f4240b3b1d19fc427e1776b44860a4531cd3b58e325c', 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': '92a0155d5317a6a74a66feee1caf18fc85d7331b1633327caffcda802254114d', 'candidates/model_candidate_build_20261101/first_fault_compilation.py': '4f56f27bb77c4bb40c16656403cb92b3f6fe189956c2849aa252dfb74b4535de', 'candidates/model_candidate_build_20261101/first_fault_policy.py': 'cbf72b35085959b2b4b774390ed37b76c033c20eee6e90d7096004b4eba9c1e4', 'candidates/model_candidate_build_20261101/first_fault_probe.py': '6ce53ee4a74fd5ba9b533a7051fd1737aed215caa1ed1c3a314a4d0f79ce0766', 'candidates/model_candidate_build_20261101/model_source_evidence.py': 'ab07b41bbfb201e9b58146bac6d202405ac2e606f1d22bff0ef78fc9be98a523', 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': '4c3f08a599394d34f3706dae381880f104887155d5223fbc9f00c82eff6c40e2', 'candidates/model_candidate_build_20261101/pack_model_candidate.py': '91db9d870922de6126a6f28b2d394656e951c0f75ff0033cfc8e5f9f51500e5c'}
+FIRST_FAULT_IMPLEMENTATION_PINS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f', 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53', 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'ad794f49f2b6d9274ebcda8110a82467847b358b80c569a716614695c276c36f', 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': '4eeb7d204f8401f2d886f4240b3b1d19fc427e1776b44860a4531cd3b58e325c', 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': '92a0155d5317a6a74a66feee1caf18fc85d7331b1633327caffcda802254114d', 'candidates/model_candidate_build_20261101/first_fault_compilation.py': '65616afa30e55ff9b4aae92d5ed45efed056f99d9e0991861bdbe2cf394e15fb', 'candidates/model_candidate_build_20261101/first_fault_policy.py': 'cbf72b35085959b2b4b774390ed37b76c033c20eee6e90d7096004b4eba9c1e4', 'candidates/model_candidate_build_20261101/first_fault_probe.py': '6ce53ee4a74fd5ba9b533a7051fd1737aed215caa1ed1c3a314a4d0f79ce0766', 'candidates/model_candidate_build_20261101/model_source_evidence.py': 'ab07b41bbfb201e9b58146bac6d202405ac2e606f1d22bff0ef78fc9be98a523', 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': '4c3f08a599394d34f3706dae381880f104887155d5223fbc9f00c82eff6c40e2', 'candidates/model_candidate_build_20261101/pack_model_candidate.py': '91db9d870922de6126a6f28b2d394656e951c0f75ff0033cfc8e5f9f51500e5c'}
 LOCAL_PACK_READER_SHA='91db9d870922de6126a6f28b2d394656e951c0f75ff0033cfc8e5f9f51500e5c'
 
 COLLECTOR_PATH='candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py'
@@ -132,7 +132,11 @@ def compilation_policy(r,m,build_receipt,manifest=None):
  else:
   need('readonly_probe'not in m and 'readonly_probe_contract_sha256'not in build_receipt and (manifest is None or 'readonly_probe_contract'not in manifest),'readonly proof requires explicit new actual manifest')
   readonly=None
- if readonly is None:return CPP_O1_POLICY,list(CPP_O1_OVERRIDES),dict(OLD_CANDIDATE_IMPLEMENTATION_PINS)
+ if readonly is None:
+  need('dependency_rule_policy'not in r,'legacy dependency rule unchanged')
+  return CPP_O1_POLICY,list(CPP_O1_OVERRIDES),dict(OLD_CANDIDATE_IMPLEMENTATION_PINS)
+ from first_fault_compilation import DEPENDENCY_RULE_POLICY
+ need(r.get('dependency_rule_policy')==DEPENDENCY_RULE_POLICY,'explicit readonly GCC prerequisite policy')
  need(set(FIRST_FAULT_IMPLEMENTATION_PINS)==FIRST_FAULT_REQUIRED_IMPLEMENTATIONS and all(type(h)is str and re.fullmatch('[0-9a-f]{64}',h)for h in FIRST_FAULT_IMPLEMENTATION_PINS.values()),'readonly producer implementation contract not frozen')
  need(FIRST_FAULT_IMPLEMENTATION_PINS[COLLECTOR_PATH]==O1_PRODUCER_DEPENDENCY_CAPTURE_SHA,'original capture bytes unchanged for readonly')
  return CPP_O1_POLICY,list(CPP_O1_OVERRIDES),dict(FIRST_FAULT_IMPLEMENTATION_PINS)
@@ -191,7 +195,7 @@ def verify_compilation_policy(r,m,build_receipt,tool,producer_repo=None,manifest
    output=record['output'];need(set(output)=={'path','bytes','sha256'}and type(output['bytes'])is int and output['bytes']>0 and output['sha256']==summary['output_sha256'],'actual archive/output identity')
    need(output['path']==str(P(argv[2])/argv[-1]),'actual exact target product')
   need(actual[-1]['supervisor']==host and actual[-1]['output']==r['binary'],'same real host link product')
- return dict(policy=policy,make_overrides=overrides,producer_source_commit=m['source_commit'],collector_sha256=implementations[COLLECTOR_PATH],actual_compilation_phases=5 if policy==CPP_O1_POLICY else None,scope='COMPILATION_POLICY_ONLY_NOT_NUMERICAL')
+ return dict(policy=policy,make_overrides=overrides,producer_source_commit=m['source_commit'],collector_sha256=implementations['candidates/model_candidate_build_20261101/first_fault_compilation.py']if r.get('dependency_rule_policy')else implementations[COLLECTOR_PATH],actual_compilation_phases=5 if policy==CPP_O1_POLICY else None,scope='COMPILATION_POLICY_ONLY_NOT_NUMERICAL')
 
 def verify(r,m,policy,common,build_receipt,producer_repo,manifest=None):
  selected_policy,selected_overrides,implementations=compilation_policy(r,m,build_receipt,manifest)
@@ -202,8 +206,13 @@ def verify(r,m,policy,common,build_receipt,producer_repo,manifest=None):
  driver=r['driver'];cwd=r['cwd'];stem=P(driver).stem
  for path in (driver,cwd):need(P(path).is_absolute() and posixpath.normpath(path)==path and re.fullmatch(r'/[A-Za-z0-9_./+\-]+',path)is not None,'canonical original producer driver/cwd')
  need(P(cwd).is_absolute() and r['depfile']['path']==str(P(cwd)/(stem+'.d')) and r['object']['path']==str(P(cwd)/(stem+'.o')),'actual object/depfile location')
- text=check_text(r['depfile'],1024**2);selected=parse_dep(text,cwd,driver);header=r['resolved_sparse_header']
- dependencies=parse_dependencies(text,cwd,driver);need(set(r['dependencies'])==set(dependencies),'complete actual non-system dependency set')
+ text=check_text(r['depfile'],1024**2)
+ if manifest is not None and manifest.get('schema')=='MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1':
+  from first_fault_compilation import parse_dependencies as readonly_parse_dependencies
+  dependencies=readonly_parse_dependencies(text,cwd,driver)
+ else:dependencies=parse_dependencies(text,cwd,driver)
+ selected=next(p for p in dependencies if P(p).name=='sparse_write_memory.hpp');header=r['resolved_sparse_header']
+ need(set(r['dependencies'])==set(dependencies),'complete actual non-system dependency set')
  known={**m['generation_input_pins'],**m['derived_generated_pins']}
  verify_observer_dependencies(dependencies,driver,known)
  for p,v in r['dependencies'].items():need(v['path']==p and v['bytes']>0 and known.get(p)==v['sha256'],'non-system dependency versus original generation/derived pin')

@@ -1,7 +1,7 @@
 """Build-only single-A launch. Transfer scope bound to the recorded explicit user approval."""
 import hashlib,json,os,pathlib,re,subprocess
-LAUNCH='ci_launch/five_m128_model_candidate_firstfault_20261102_once.json'
-NONCE='five_m128_model_candidate_firstfault_20261102_once'
+LAUNCH='ci_launch/five_m128_model_candidate_firstfault_deps_20261102_once.json'
+NONCE='five_m128_model_candidate_firstfault_deps_20261102_once'
 SCHEMA='FIXED4096_SPLIT_BUILD_ONLY_SEVEN_FILE_ONE_SHOT_V1'
 # Only a separately reviewed source publication may bind the user's actual
 # seven-file transfer approval receipt. No manifest boolean supplies authority.

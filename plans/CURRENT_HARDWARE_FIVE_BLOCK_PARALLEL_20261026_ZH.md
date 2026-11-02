@@ -1,3 +1,15 @@
+# 2026-11-02：首故障构建后处理的依赖规则兼容恢复
+
+- 原唯一 build run 41441028806 已失败：Actions 有限投影显示 20 个阶段直到 host_link 均 native 0、无监督错误、cleanup/EOF/gzip 完整；随后原 GCC .d 解析器在“非空、原 token 唯一、≤4096”合并谓词拒绝。七件上传被跳过，实际 artifacts 数为 0，没有可继承的新 ELF 验收，也没有新 P0 执行。保留完整本地日志和有限阶段证据；有限投影不是已下载的原 worker 收据。
+- 原远端 .d 未取得，所以具体失败子条件及重复路径仍未知。已有严格闭合 tiny GCC 产物和新的真实 GCC 小预处理证明完全相同 prerequisite 可以合法重复；这只是确定的解析兼容性缺口，不等同原 P0 resetRequired 因果已找到。
+- 本批仅在显式 first-fault readonly candidate 域新增版本化 capture/parser。原 .d 全文及 SHA 保留，原 1 MiB 文本和 4096 原词上界先执行，只稳定折叠完全相同词；多规则、非纯路径、父级遍历、不同词归一碰撞仍拒绝。全部唯一实际依赖仍逐原 pin 核验，driver/sparse/observer/root/accessor/helper 与五编译阶段 strict 门不删。旧 P collector、旧 C parser、旧 artifact 实现锁不改，旧实际七件用新 checker 的完整编译证明仍通过。
+- 新依赖记录显式 GCC_MMD_EXACT_REPEATED_PREREQUISITES_V1；新 artifact 必须选择新 capture/验证语义并报告真实 collector 源 SHA，旧 artifact 拒绝携带新 policy。失败诊断仅固定原因枚举和词计数，不透出原始路径/日志。硬件、159 源、122 IO、driver、只读信号 schema/config/算法和原预算均不变。
+- 受监督完整夹具 R3 已严格退出 0：实际 Python producer.run/prepare/完整 pins → 新 capture → pack/full proof → 真实 exporter CLI → 精确七件目录；真实原诊断 driver 仅执行 GCC -E/-MMD，原始 16 token/15 唯一依赖，全文和完整 15 pin 不丢。12 项拒绝反例均通过，并恢复最终完整 proof。五构建阶段、ELF、身份/收据明确 synthetic，未编译或运行 DUT，不能冒充真实新二进制资格。独立审查已核原监督回执、日志、依赖 pins、export 七件。
+- 此夹具沿 879 源快照执行，与最终 nonce/测试/有限证据包装分开记账。此前两次夹具因合成 Make 目录和缺传递 header 被原门拒绝，现场保留；修的是夹具输入闭包，不是放宽产品校验。原输入/SV 未改，只有成功轮一次有界 SV 复制。
+- 接续只允许完成源码审查/CI 后，以新独立 nonce 启动一次同约束完整构建；不从已失败 run 迁移 ELF PASS，不加第八件，不上传原始日志/权重/参考数据。实际新七件仍须完整证明、独立 review、ABI、资源与磁盘门之后，才可按前述 10800 秒/1500000 cycles 单 P0 诊断提案执行。整体数值目标仍 0/5，禁止把格式小例或协议 B 当数值完成。
+
+以下完整保留此前主计划正文：
+
 # 2026-11-02：P0 首故障只读诊断的宿主执行接线（非执行批准）
 
 ## 当前事实与本批范围

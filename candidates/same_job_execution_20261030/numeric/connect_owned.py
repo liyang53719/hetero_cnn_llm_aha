@@ -79,7 +79,7 @@ def connect(args,out):
  old=json.loads(original.read_text());result=base(old,args.profile)
  consumer.verify_frozen(args.artifact_manifest,args.artifact_manifest_sha256)
  frozen=json.loads(args.artifact_manifest.read_text())
- if frozen.get('schema')=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1':
+ if frozen.get('schema')in('MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1',consumer.FIRST_FAULT_SCHEMA):
   source_relocation=consumer.approved_source_relocation(args,frozen)
   consumer.artifact_identity(frozen,source_relocation)
   provenance=consumer.verify_local_build(args,frozen)
@@ -167,7 +167,7 @@ def preflight(args):
  for k in ('artifact_manifest','artifact_manifest_sha256','expected_run_id','expected_launch_commit','expected_source_commit','local_runtime_abi','local_runtime_abi_sha256'):consumer.need(getattr(args,k,None) is not None,'required same-job identity '+k)
  consumer.verify_frozen(args.artifact_manifest,args.artifact_manifest_sha256)
  frozen=json.loads(args.artifact_manifest.read_text());source_relocation=None
- if frozen.get('schema')=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1':
+ if frozen.get('schema')in('MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1',consumer.FIRST_FAULT_SCHEMA):
   source_relocation=consumer.approved_source_relocation(args,frozen)
   preflight_artifact(args,frozen,source_relocation)
  else:preflight_artifact(args,frozen)

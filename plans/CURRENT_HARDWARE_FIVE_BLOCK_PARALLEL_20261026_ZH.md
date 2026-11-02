@@ -1,3 +1,16 @@
+# 2026-11-02：实际新 ELF 已过 ABI，P0 connect 新 schema 路由恢复
+
+- 原唯一 `cloud_execution_p0_first_fault_20261102T1538` 入口已严格退出 1。实际 8 个前置阶段 native 0 / errors[] / cleanup EOF（archives、三 runtime、startup ABI、P0 initialize/provider/transport），P0 connect native 1 / errors[] / cleanup EOF，收据 b5d4147e51f7619d10926c3a801338f9762cc539499fddd5da6c73984f355b49。DUT 数值模型未启动；不能说新 ELF 完全未执行，fresh ABI 已实际执行。
+- 原闭合 2042 B 日志及 raw/gzip SHA 全留存。准确拒绝点为 `connect_owned.preflight` 只识别旧 FIVE_PROFILE artifact，导致新 FIRST_FAULT artifact 未带独立 source_relocation 进入原 `artifact_identity` 而被拒。`connect` 本体存在相同分支，需一并修复，不能只跨过第一门再重复入口。
+- 本批只将这两个 selector 显式扩为两个已审 artifact schema。必须先调用原 `approved_source_relocation` 再使用原 identity/driver/ABI/proof 门；不削弱任何独立审批、P0-only、原刺激、source/hash 或数值校验。测试应覆盖实际 `preflight→connect→load_binding` 调用链，而非只直接调用底层 load_binding。
+- 完整实际调用链离线回归 R3 已严格 native 0 / errors[] / cleanup EOF，20.731 秒，sampled RSS 126,636,032 B；原回执 SHA 0a51adf97f400738b234059e07cd7ab4c9c1a332184cfd03679841aafde47e93。同一真实七件/参考/程序及全部生产 validators 下，旧 preflight 与旧 connect 完整函数均按原错误拒，新 preflight→connect→consumer.main --validate-only 通过。只有离线 source/owner 的 proc/time 与 ABI authority/cache metadata 是明确 synthetic；历史实际 ABI 原字节保留，不能称新 ABI 或 DUT PASS。R1 缺 fixture mode 拒、R2 材料错放 stage 内触原 symlink 门均保留；R3 使用生产同构 sibling material 全 watch，512 MiB 只约束阶段 run/log，材料受原 aggregate TREE/file/entries/disk 门，不改监督器。
+- 实际 7a99 artifact / b89a ELF / 3d148 SV / abed driver 保持不变；仅 host-only source CI 与新 executor 适配，不另建硬件、不重复传递。所有旧失败、原闭回执及前次纯联测范围保留。新 source 正式输入仍须新的实际身份/adapter/resource 与 fresh 原门，旧 runtime/ABI 资格不得偷迁。
+- 本地 UTC+08 2026-11-03 的唯一受审 24-file 保全批已严格闭合：21 gzip 完整解压 SHA 核验、3 原 SV 同字节 hardlink，归档 80,044,807 B，实际释放 1,818,570,752 B；原结果/日志/输入及所有唯一字节均保留或可完整恢复。本日不再追加清理。此前原入口实际 upfront 磁盘门通过，后续仍以新身份实际重核，不继承余量快照。
+- 完整调用链读域复核另发现：旧 1538 adapter 实际读取 builder 的 SOURCE_PINS 小 metadata，而原 watched roots 未覆盖该旧 E 父域。保留这一覆盖遗漏，不追认旧资源清单完整；下一正式 control 将原 b029 catalog 原字节副本置于实际 watched control，并同步 adapter pin / 独立 review，不以扩大无关根目录凑磁盘。
+- 单 P0 原 10800 秒 / 1,500,000 active cycles / 整轮 22200 秒工程诊断预算不变，不是完成预测；原 RSS 2 GiB、AS 2.5 GiB、未知 owner 5 GiB、非 DUT 1 GiB、TREE 与 8 GiB 磁盘 reserve 不降。完整数值仍 0/5 INCOMPLETE，故障原因尚未由新只读记录定位。
+
+---
+
 # 2026-11-02：实际首 fault 七件接收与执行前 catalog 形状兼容恢复
 
 ## 已闭合的真实构建与传递

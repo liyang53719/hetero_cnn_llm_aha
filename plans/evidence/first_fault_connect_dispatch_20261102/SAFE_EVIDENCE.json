@@ -1,0 +1,111 @@
+{
+  "schema": "ACTUAL_FIRST_FAULT_CONNECT_DISPATCH_PURE_REGRESSION_V1",
+  "scope": "ACTUAL_ARTIFACT_FULL_CONNECT_WITH_SYNTHETIC_OFFLINE_AUTHORITY",
+  "actual_result": {
+    "bytes": 8554,
+    "sha256": "0a51adf97f400738b234059e07cd7ab4c9c1a332184cfd03679841aafde47e93"
+  },
+  "actual_finite_result": {
+    "bytes": 1823,
+    "sha256": "84543fc8fb492794dc6bcfd485ba9b1d80c37754c56f8e3fe47a28cf5e875926"
+  },
+  "runner": {
+    "bytes": 11961,
+    "sha256": "96c727b3227b4d79a2697303d58255809411e23b0cc9cdb3863056c606c93f5c"
+  },
+  "actual_source_catalog_count": 882,
+  "original_runner_r1": {
+    "bytes": 11944,
+    "sha256": "08f5a8be41a80b5b7b4d01b58127cb9767dd0b47e701b5783026c551728ccc7f"
+  },
+  "strict": {
+    "native_exit": 0,
+    "errors": [],
+    "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+    "reader_join_barrier": {
+      "complete": true,
+      "alive": false,
+      "reader_finally_done": true
+    },
+    "pipe_eof": true,
+    "gzip_finalized": true,
+    "elapsed_seconds": 20.731096478004474,
+    "observed_peak_rss": 126636032
+  },
+  "evidence": {
+    "scope": "ACTUAL_ARTIFACT_FULL_CONNECT_WITH_SYNTHETIC_OFFLINE_AUTHORITY",
+    "actual_artifact_manifest": {
+      "bytes": 2410,
+      "sha256": "7a99c2c8bbc0df2f2b63c14d8163c13b3923aea41c28181661016f7a4540d24c"
+    },
+    "actual_closed_abi": {
+      "bytes": 5872,
+      "sha256": "98e20a6ff09ad47e9f26652e72a688060413af295b93465ab84a53231d29f8c9"
+    },
+    "source_catalog": {
+      "bytes": 181832,
+      "sha256": "2b4860eeaeec4fa09a5bb4fe397a8f8443f5728108c6b4bbf467a7562a3f0764"
+    },
+    "synthetic_source_commit": "49ba737a322e4a0ad9dd4181e90b38b1dddc2705",
+    "synthetic_authority": true,
+    "proc_time_only_io_simulation": {
+      "stat": 21,
+      "boot": 21,
+      "clock": 21
+    },
+    "verifier_functions_mocked": false,
+    "old_complete_function_missing_context_rejections": [
+      "preflight",
+      "connect"
+    ],
+    "complete_preflight": true,
+    "complete_connect": true,
+    "complete_consumer_validate_only": true,
+    "reference_and_program_fresh_containment": true,
+    "derived_abi_only_authority_environment_changed": true,
+    "derived_abi_changed_keys": [
+      "owned_environment",
+      "environment"
+    ],
+    "derived_abi_changed_environment_keys": [
+      "HF_HOME",
+      "HF_HUB_CACHE",
+      "HOME",
+      "MPLCONFIGDIR",
+      "NUMBA_CACHE_DIR",
+      "TMPDIR",
+      "TORCH_HOME",
+      "TRANSFORMERS_CACHE",
+      "XDG_CACHE_HOME"
+    ],
+    "new_runtime_abi_pass": false,
+    "dut_executed": false,
+    "numerical_pass": false,
+    "execution_admitted": false
+  },
+  "earlier_attempts": [
+    {
+      "attempt": "R1",
+      "receipt": {
+        "bytes": 8477,
+        "sha256": "b5e83b88b651d0987d6975bbc5746a55fd67643a205fc73c1b78fe48be084589"
+      },
+      "native_exit": 1,
+      "safe_category": "FIXTURE_REFERENCE_CONTEXT_MISSING_EXECUTION_MODE",
+      "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+      "retained": true
+    },
+    {
+      "attempt": "R2",
+      "receipt": {
+        "bytes": 8629,
+        "sha256": "ad69637baff5c914fb24a5455c3b284eff7c7f0b8b7d0aa4ea52b88fef69a0e9"
+      },
+      "native_exit": null,
+      "safe_category": "FIXTURE_MATERIAL_INSIDE_STRICT_STAGE_SYMLINK_REJECTED",
+      "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+      "retained": true
+    }
+  ],
+  "final_catalog_after_evidence_not_claimed_executed": true
+}

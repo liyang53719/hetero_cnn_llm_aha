@@ -35,4 +35,24 @@ class Tests(unittest.TestCase):
   with self.assertRaises(ValueError):m.candidate_material_contract(material,data,old,b)
   bad=dict(contract,readonly_driver_contract_sha256='0'*64);sign(bad)
   with self.assertRaises(ValueError):m.candidate_material_contract(material,data,old,b)
+
+class RealConnectDispatchTests(unittest.TestCase):
+ def test_two_exact_candidate_schemas_select_admission_in_both_functions(self):
+  import ast,types
+  tree=ast.parse((D/'connect_owned.py').read_text())
+  for name in ('preflight','connect'):
+   fn=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name==name)
+   branches=[n for n in fn.body if isinstance(n,ast.If) and 'MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1' in ast.unparse(n.test)]
+   self.assertEqual(len(branches),1)
+   pred=compile(ast.Expression(body=branches[0].test),'<actual connect predicate>','eval')
+   for schema,expected in [('MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1',True),('MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1',True),('FROZEN_FIVE_PROFILE_DUT_ARTIFACT_V2',False),('UNKNOWN',False),(None,False)]:
+    self.assertIs(eval(pred,{'frozen':{'schema':schema},'consumer':types.SimpleNamespace(FIRST_FAULT_SCHEMA='MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1')}),expected)
+   self.assertIn('approved_source_relocation',ast.unparse(branches[0].body[0]))
+ def test_two_predicates_only_inverse_complete_previous_connect_ast(self):
+  import ast
+  raw=(D/'connect_owned.py').read_text();old="frozen.get('schema')=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'";new="frozen.get('schema')in('MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1',consumer.FIRST_FAULT_SCHEMA)"
+  self.assertEqual(raw.count(new),2);self.assertNotIn(old,raw)
+  restored=ast.dump(ast.parse(raw.replace(new,old)),include_attributes=False)
+  self.assertEqual(hashlib.sha256(restored.encode()).hexdigest(),'291272f6c9811e3ca59b419600d728a216d0acda298432fb4980b74ba59bcb43')
+
 if __name__=='__main__':unittest.main()

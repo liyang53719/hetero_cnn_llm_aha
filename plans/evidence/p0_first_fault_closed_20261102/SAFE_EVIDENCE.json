@@ -1,0 +1,1620 @@
+{
+  "schema": "SAFE_CLOSED_P0_FIRST_FAULT_EVIDENCE_V1",
+  "scope": "FINITE_CONTROL_SNAPSHOT_AND_CLOSED_LOCAL_NORM_ONLY_NOT_FULL_NUMERICAL_ACCEPTANCE",
+  "artifact_manifest": {
+    "bytes": 2410,
+    "sha256": "7a99c2c8bbc0df2f2b63c14d8163c13b3923aea41c28181661016f7a4540d24c"
+  },
+  "artifact_members": {
+    "binary": {
+      "bytes": 77709912,
+      "sha256": "b89a701b262e7edb575b19d03a058fc37ae10030ecce040a4895d6a9e143ebe0"
+    },
+    "build_receipt": {
+      "bytes": 13133,
+      "sha256": "f75e1e84db20aca53821d09715e7585ac2576553603007075193620173205c33"
+    },
+    "driver": {
+      "bytes": 27486,
+      "sha256": "abedbe2a3a25d6b02c4b4dc03f6f4a852c63415ca981f26d29930273a0f9f420"
+    },
+    "source_manifest": {
+      "bytes": 7802409,
+      "sha256": "03115065eba09a3aaf5c68fd2e2d066fae22e7f866f7c7ed99a7c416c2b8852c"
+    },
+    "sv": {
+      "bytes": 224341716,
+      "sha256": "3d148277114ff5d968d0e200f4ab117839a3b6c0c0d33e5388e6e5268d42d029"
+    }
+  },
+  "builder_source_commit": "3c38f04890bb30a4204334f9df4f8800128beb31",
+  "executor_source_commit": "1a50c6d9736bb17f43badc1239df4e62a640aaa9",
+  "builder_run_id": 41454910027,
+  "builder_launch_commit": "15ae4e95abceb26bc34c88e4f243f6a939467c75",
+  "receipt_pins": {
+    "final_actual_cloud_summary": {
+      "bytes": 11678,
+      "sha256": "18d9c23c5ceff666d416b811c83b02023b68e9bd63ae7359a6fea8a35c8823d2"
+    },
+    "dut_outer": {
+      "bytes": 7991,
+      "sha256": "a0e2fa84c3f0f948fbaa69391879df6fd98fd065c3328dec3c551245a3405895"
+    },
+    "flow": {
+      "bytes": 7850,
+      "sha256": "42ffd9ab4c407250d7785d551c385b723b405a18706c8d8aed2bd0a265db3fdd"
+    },
+    "numeric": {
+      "bytes": 5300,
+      "sha256": "e87fbe5249fc5cec7ee528fc9dfc4bc3c4f6236e09ba0dc3def3b65b5d1e9850"
+    },
+    "nine_prerequisite_review": {
+      "bytes": 2525,
+      "sha256": "04617731d1fdab7383b333f8580772983de9a9bc0288026c83408ab35c592a05"
+    }
+  },
+  "joins": {
+    "binding_sha256": "ada36a70d8f50965293121806c0e309470b71a39a195f13e9983fb29c2f1cf47",
+    "execution_approval_sha256": "eef1842bd8eaa70f220d7f63e5301e9cffb55eca224fd9c72fc211b091db24a3",
+    "cloud_budget_sha256": "42358f3b4cb69b8be35a9347502811eb4d653e5cc14e3dc5b1c9b7e142e0edee",
+    "source_pins_sha256": "2b4860eeaeec4fa09a5bb4fe397a8f8443f5728108c6b4bbf467a7562a3f0764",
+    "builder_handoff_sha256": "4b76286a9cb31946e7d62d5d3564c6f1ae2776fd39006f31ce7d8152dc52cd20",
+    "artifact_manifest_sha256": "7a99c2c8bbc0df2f2b63c14d8163c13b3923aea41c28181661016f7a4540d24c",
+    "flow_receipt_sha256": "42ffd9ab4c407250d7785d551c385b723b405a18706c8d8aed2bd0a265db3fdd",
+    "numeric_receipt_sha256": "e87fbe5249fc5cec7ee528fc9dfc4bc3c4f6236e09ba0dc3def3b65b5d1e9850",
+    "executor_adaptation_sha256": "d34f5c441f0c9278091e965b4df84455665637bb6a0780d42f2d1db3573e905b",
+    "workspace_loader_sha256": "ccccb447593e4f17b34c63c06a7f773f265c721df78bb5895a60b72c328460df",
+    "retained_materials_sha256": "cbc32aa82d56d0d40da33061df7003ce453b319d2a18eeedf7a393daac740c75",
+    "p0_provider_reuse_sha256": "694583a8e969f7a56bfb8431a3ea03db4dd6c61a7e5c5cb8c8339df9b78bb700",
+    "model_candidate_review_sha256": "d1fb4cb63f7ca227577d8f0c218f62d232536b5ae8a619c94fcd4927bdb1ed95",
+    "first_fault_document_sha256": "781c6dc7ce2603bcedc2a948b94f01fbc9571063a5d31b279e87db7de6be27bc"
+  },
+  "execution_mode": "P0_FIRST_FAULT_DIAGNOSTIC",
+  "transport_exit_code": 2,
+  "dut_native_exit": 1,
+  "profile_states": {
+    "0": "STARTED_NATIVE_FAILED",
+    "1": "NOT_SELECTED",
+    "2": "NOT_SELECTED",
+    "3": "NOT_SELECTED",
+    "4": "NOT_SELECTED"
+  },
+  "prerequisites": [
+    {
+      "stage": "archives",
+      "sha256": "48e21045a57d3117e7dad5e0e8ee7861f42dad7756668e32b86c839353618dda",
+      "elapsed_seconds": 2.8009399179718457,
+      "native_exit": 0,
+      "errors": [],
+      "strict_cleanup_and_eof": true
+    },
+    {
+      "stage": "qwen2",
+      "sha256": "2cdab270a0753d852f7793d116e9d3a07a6d8c93bd9cb52d1bed26fd83117dd0",
+      "elapsed_seconds": 17.033338832028676,
+      "native_exit": 0,
+      "errors": [],
+      "strict_cleanup_and_eof": true
+    },
+    {
+      "stage": "qwen35_08b",
+      "sha256": "99cb1ea7f745f9223caf572659e582dd00948cf1e3c7a0f173746120b7810034",
+      "elapsed_seconds": 24.752982106001582,
+      "native_exit": 0,
+      "errors": [],
+      "strict_cleanup_and_eof": true
+    },
+    {
+      "stage": "qwen35_35b",
+      "sha256": "d4e03e4f0e434fc17e8859dbd16bbf348070916b809c985c54a82d56d4bd24b5",
+      "elapsed_seconds": 29.76365022402024,
+      "native_exit": 0,
+      "errors": [],
+      "strict_cleanup_and_eof": true
+    },
+    {
+      "stage": "startup_abi",
+      "sha256": "87a0328d43083ffc5d87b52e9cce625daff2cec7f615cd3a125a93424b728b60",
+      "elapsed_seconds": 3.2702024590107612,
+      "native_exit": 0,
+      "errors": [],
+      "strict_cleanup_and_eof": true
+    },
+    {
+      "stage": "p0_initialize",
+      "sha256": "472896f4abd85a5e1fc74b167cbb0e75a6825f19b9fabf2101c9114b6caec0e1",
+      "elapsed_seconds": 2.314981695031747,
+      "native_exit": 0,
+      "errors": [],
+      "strict_cleanup_and_eof": true
+    },
+    {
+      "stage": "p0_p0_provider",
+      "sha256": "b53cdbe30917815a3fda6661b282a67962d077950151779c9d995c151aa08b48",
+      "elapsed_seconds": 2.4789384870091453,
+      "native_exit": 0,
+      "errors": [],
+      "strict_cleanup_and_eof": true
+    },
+    {
+      "stage": "p0_p0_transport",
+      "sha256": "02d1e78edcaa254852eaefdc8979aff585c04fdbd6a4e2842d1a0ae75e91c21c",
+      "elapsed_seconds": 3.1200409790035337,
+      "native_exit": 0,
+      "errors": [],
+      "strict_cleanup_and_eof": true
+    },
+    {
+      "stage": "p0_connect",
+      "sha256": "9f8d563e0c060b287f4198ce00a0a92e0289cdab972a96e8ce0c2c131c7d91f5",
+      "elapsed_seconds": 12.170151742000598,
+      "native_exit": 0,
+      "errors": [],
+      "strict_cleanup_and_eof": true
+    }
+  ],
+  "outer": {
+    "native_exit": 2,
+    "errors": [],
+    "elapsed_seconds": 6036.662749301002,
+    "sampled_peak_rss_bytes": 248307712,
+    "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+    "pipe_eof": true,
+    "gzip_finalized": true,
+    "reader_join_barrier": {
+      "complete": true,
+      "alive": false,
+      "reader_finally_done": true
+    }
+  },
+  "watchdog": {
+    "configured": {
+      "wall_seconds": 10800,
+      "max_active_cycles": 1500000
+    },
+    "terminal_reason": "RESET_REQUIRED",
+    "watchdog_triggered": false
+  },
+  "snapshot": {
+    "schema_sha256": "75088081cf6c3425eba9af3b44c78244f8c62697b4390f992ad63e21f16c7de4",
+    "record_count": 3,
+    "record_bytes": 824,
+    "sample_count": 2,
+    "signal_count": 114,
+    "value_order": "PINNED_SCHEMA_SIGNALS_ORDER",
+    "signal_mapping": [
+      {
+        "index": 0,
+        "symbol_key": "HostBlockTopV4__io_resetRequired",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 1,
+        "symbol_key": "HostBlockTopV4__owner_io_resetRequired",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 2,
+        "symbol_key": "HostBlockTopV4__hub_io_resetRequired",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 3,
+        "symbol_key": "HostBlockTopV4__runtimeGuard_io_localFault",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 4,
+        "symbol_key": "HostBlockTopV4__dmaPoison",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 5,
+        "symbol_key": "HostBlockTopV4__physicalFault",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 6,
+        "symbol_key": "HostBlockTopV4__numericalFault",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 7,
+        "symbol_key": "HostBlockTopV4__ordinaryAdmissionFault",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 8,
+        "symbol_key": "HostRuntimeOwnerGuardV5__io_resetRequired",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 9,
+        "symbol_key": "HostRuntimeOwnerGuardV5__state",
+        "width_bits": 2,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 10,
+        "symbol_key": "HostRuntimeOwnerGuardV5__quarantine",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 11,
+        "symbol_key": "HostRuntimeOwnerGuardV5__poisoned",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 12,
+        "symbol_key": "HostRuntimeOwnerGuardV5__heldPhysicalSequence",
+        "width_bits": 32,
+        "validity": {
+          "kind": "RAW_ONLY_NOT_ACTIVE_TAG_PROOF",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 13,
+        "symbol_key": "HostRuntimeOwnerGuardV5__unknownReply",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 14,
+        "symbol_key": "HostRuntimeOwnerGuardV5__wrongReply",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 15,
+        "symbol_key": "HostRuntimeOwnerGuardV5__contextChanged",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 16,
+        "symbol_key": "HostRuntimeOwnerGuardV5__reservationContextChanged",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 17,
+        "symbol_key": "HostRuntimeOwnerGuardV5__wrongRelease",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 18,
+        "symbol_key": "HostRuntimeOwnerGuardV5__wrongPhaseOffer",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 19,
+        "symbol_key": "HostRuntimeOwnerGuardV5__faultNow",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 20,
+        "symbol_key": "HostRuntimeOwnerGuardV5__ownedAuthorityFault",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 21,
+        "symbol_key": "MatrixPipelineService__io_port_step_ready",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 22,
+        "symbol_key": "MatrixPipelineService__io_port_step_valid",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 23,
+        "symbol_key": "MatrixPipelineService__io_port_step_bits_context",
+        "width_bits": 3,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__io_port_step_valid"
+          ]
+        }
+      },
+      {
+        "index": 24,
+        "symbol_key": "MatrixPipelineService__io_port_step_bits_clear",
+        "width_bits": 1,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__io_port_step_valid"
+          ]
+        }
+      },
+      {
+        "index": 25,
+        "symbol_key": "MatrixPipelineService__io_port_step_bits_last",
+        "width_bits": 1,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__io_port_step_valid"
+          ]
+        }
+      },
+      {
+        "index": 26,
+        "symbol_key": "MatrixPipelineService__io_port_step_bits_finish",
+        "width_bits": 1,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__io_port_step_valid"
+          ]
+        }
+      },
+      {
+        "index": 27,
+        "symbol_key": "MatrixPipelineService__io_port_step_bits_emit",
+        "width_bits": 1,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__io_port_step_valid"
+          ]
+        }
+      },
+      {
+        "index": 28,
+        "symbol_key": "MatrixPipelineService__io_resetRequired",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 29,
+        "symbol_key": "MatrixPipelineService__tags_io_deq_ready",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 30,
+        "symbol_key": "MatrixPipelineService__tags_io_deq_valid",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 31,
+        "symbol_key": "MatrixPipelineService__tags_io_deq_bits_context",
+        "width_bits": 3,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__tags_io_deq_valid"
+          ]
+        }
+      },
+      {
+        "index": 32,
+        "symbol_key": "MatrixPipelineService__tags_io_deq_bits_last",
+        "width_bits": 1,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__tags_io_deq_valid"
+          ]
+        }
+      },
+      {
+        "index": 33,
+        "symbol_key": "MatrixPipelineService__tags_io_deq_bits_finish",
+        "width_bits": 1,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__tags_io_deq_valid"
+          ]
+        }
+      },
+      {
+        "index": 34,
+        "symbol_key": "MatrixPipelineService__tags_io_deq_bits_emit",
+        "width_bits": 1,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__tags_io_deq_valid"
+          ]
+        }
+      },
+      {
+        "index": 35,
+        "symbol_key": "MatrixPipelineService__leaves_0_out_valid_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 36,
+        "symbol_key": "MatrixPipelineService__leaves_0_out_context_o",
+        "width_bits": 3,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__leaves_0_out_valid_o"
+          ]
+        }
+      },
+      {
+        "index": 37,
+        "symbol_key": "MatrixPipelineService__leaves_0_out_last_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__leaves_0_out_valid_o"
+          ]
+        }
+      },
+      {
+        "index": 38,
+        "symbol_key": "MatrixPipelineService__leaves_0_completion_valid_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 39,
+        "symbol_key": "MatrixPipelineService__leaves_0_protocol_error_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 40,
+        "symbol_key": "MatrixPipelineService__leaves_0_seed_reset_required_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 41,
+        "symbol_key": "MatrixPipelineService__leaves_1_out_valid_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 42,
+        "symbol_key": "MatrixPipelineService__leaves_1_out_context_o",
+        "width_bits": 3,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__leaves_1_out_valid_o"
+          ]
+        }
+      },
+      {
+        "index": 43,
+        "symbol_key": "MatrixPipelineService__leaves_1_out_last_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__leaves_1_out_valid_o"
+          ]
+        }
+      },
+      {
+        "index": 44,
+        "symbol_key": "MatrixPipelineService__leaves_1_completion_valid_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 45,
+        "symbol_key": "MatrixPipelineService__leaves_1_protocol_error_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 46,
+        "symbol_key": "MatrixPipelineService__leaves_1_seed_reset_required_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 47,
+        "symbol_key": "MatrixPipelineService__leaves_2_out_valid_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 48,
+        "symbol_key": "MatrixPipelineService__leaves_2_out_context_o",
+        "width_bits": 3,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__leaves_2_out_valid_o"
+          ]
+        }
+      },
+      {
+        "index": 49,
+        "symbol_key": "MatrixPipelineService__leaves_2_out_last_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__leaves_2_out_valid_o"
+          ]
+        }
+      },
+      {
+        "index": 50,
+        "symbol_key": "MatrixPipelineService__leaves_2_completion_valid_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 51,
+        "symbol_key": "MatrixPipelineService__leaves_2_protocol_error_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 52,
+        "symbol_key": "MatrixPipelineService__leaves_2_seed_reset_required_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 53,
+        "symbol_key": "MatrixPipelineService__leaves_3_out_valid_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 54,
+        "symbol_key": "MatrixPipelineService__leaves_3_out_context_o",
+        "width_bits": 3,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__leaves_3_out_valid_o"
+          ]
+        }
+      },
+      {
+        "index": 55,
+        "symbol_key": "MatrixPipelineService__leaves_3_out_last_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__leaves_3_out_valid_o"
+          ]
+        }
+      },
+      {
+        "index": 56,
+        "symbol_key": "MatrixPipelineService__leaves_3_completion_valid_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 57,
+        "symbol_key": "MatrixPipelineService__leaves_3_protocol_error_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 58,
+        "symbol_key": "MatrixPipelineService__leaves_3_seed_reset_required_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 59,
+        "symbol_key": "MatrixPipelineService__leaves_4_out_valid_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 60,
+        "symbol_key": "MatrixPipelineService__leaves_4_out_context_o",
+        "width_bits": 3,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__leaves_4_out_valid_o"
+          ]
+        }
+      },
+      {
+        "index": 61,
+        "symbol_key": "MatrixPipelineService__leaves_4_out_last_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__leaves_4_out_valid_o"
+          ]
+        }
+      },
+      {
+        "index": 62,
+        "symbol_key": "MatrixPipelineService__leaves_4_completion_valid_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 63,
+        "symbol_key": "MatrixPipelineService__leaves_4_protocol_error_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 64,
+        "symbol_key": "MatrixPipelineService__leaves_4_seed_reset_required_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 65,
+        "symbol_key": "MatrixPipelineService__leaves_5_out_valid_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 66,
+        "symbol_key": "MatrixPipelineService__leaves_5_out_context_o",
+        "width_bits": 3,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__leaves_5_out_valid_o"
+          ]
+        }
+      },
+      {
+        "index": 67,
+        "symbol_key": "MatrixPipelineService__leaves_5_out_last_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__leaves_5_out_valid_o"
+          ]
+        }
+      },
+      {
+        "index": 68,
+        "symbol_key": "MatrixPipelineService__leaves_5_completion_valid_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 69,
+        "symbol_key": "MatrixPipelineService__leaves_5_protocol_error_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 70,
+        "symbol_key": "MatrixPipelineService__leaves_5_seed_reset_required_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 71,
+        "symbol_key": "MatrixPipelineService__leaves_6_out_valid_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 72,
+        "symbol_key": "MatrixPipelineService__leaves_6_out_context_o",
+        "width_bits": 3,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__leaves_6_out_valid_o"
+          ]
+        }
+      },
+      {
+        "index": 73,
+        "symbol_key": "MatrixPipelineService__leaves_6_out_last_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__leaves_6_out_valid_o"
+          ]
+        }
+      },
+      {
+        "index": 74,
+        "symbol_key": "MatrixPipelineService__leaves_6_completion_valid_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 75,
+        "symbol_key": "MatrixPipelineService__leaves_6_protocol_error_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 76,
+        "symbol_key": "MatrixPipelineService__leaves_6_seed_reset_required_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 77,
+        "symbol_key": "MatrixPipelineService__leaves_7_out_valid_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 78,
+        "symbol_key": "MatrixPipelineService__leaves_7_out_context_o",
+        "width_bits": 3,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__leaves_7_out_valid_o"
+          ]
+        }
+      },
+      {
+        "index": 79,
+        "symbol_key": "MatrixPipelineService__leaves_7_out_last_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "MatrixPipelineService__leaves_7_out_valid_o"
+          ]
+        }
+      },
+      {
+        "index": 80,
+        "symbol_key": "MatrixPipelineService__leaves_7_completion_valid_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 81,
+        "symbol_key": "MatrixPipelineService__leaves_7_protocol_error_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 82,
+        "symbol_key": "MatrixPipelineService__leaves_7_seed_reset_required_o",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 83,
+        "symbol_key": "MatrixPipelineService__seedController_reset",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 84,
+        "symbol_key": "MatrixPipelineService__seedController_io_resetRequired",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 85,
+        "symbol_key": "MatrixPipelineService__state",
+        "width_bits": 3,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 86,
+        "symbol_key": "MatrixPipelineService__group_tag",
+        "width_bits": 32,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 87,
+        "symbol_key": "MatrixPipelineService__event_",
+        "width_bits": 16,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 88,
+        "symbol_key": "MatrixPipelineService__poison",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 89,
+        "symbol_key": "MatrixPipelineService__endIssued",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 90,
+        "symbol_key": "MatrixPipelineService__seen",
+        "width_bits": 5,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 91,
+        "symbol_key": "MatrixPipelineService__closed",
+        "width_bits": 5,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 92,
+        "symbol_key": "MatrixPipelineService__wideSteps",
+        "width_bits": 64,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 93,
+        "symbol_key": "MatrixPipelineService__allOutValid",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 94,
+        "symbol_key": "MatrixPipelineService__allCompletion",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 95,
+        "symbol_key": "MatrixPipelineService__legalStep",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 96,
+        "symbol_key": "MatrixPipelineService__consumeOutput",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 97,
+        "symbol_key": "MatrixPipelineService__outputBad",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 98,
+        "symbol_key": "MatrixPipelineService__endpointError",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 99,
+        "symbol_key": "MatrixPipelineService__completionBad",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 100,
+        "symbol_key": "MatrixPipelineService__anyLeafFault",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 101,
+        "symbol_key": "MatrixPipelineService__idleUnexpected",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 102,
+        "symbol_key": "MatrixPipelineService__lifetimeQuarantine",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 103,
+        "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_window_result_bits_ng",
+        "width_bits": 16,
+        "validity": {
+          "kind": "RAW_ONLY_NO_COMPLETION_CLAIM",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 104,
+        "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_window_result_bits_slot",
+        "width_bits": 2,
+        "validity": {
+          "kind": "RAW_ONLY_NO_COMPLETION_CLAIM",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 105,
+        "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_window_result_bits_status",
+        "width_bits": 8,
+        "validity": {
+          "kind": "RAW_ONLY_NO_COMPLETION_CLAIM",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 106,
+        "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_window_result_bits_producedBeats",
+        "width_bits": 11,
+        "validity": {
+          "kind": "RAW_ONLY_NO_COMPLETION_CLAIM",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 107,
+        "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_done_bits_status",
+        "width_bits": 8,
+        "validity": {
+          "kind": "RAW_ONLY_NO_COMPLETION_CLAIM",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 108,
+        "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_matrix_result_ready",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 109,
+        "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_matrix_result_valid",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      },
+      {
+        "index": 110,
+        "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_matrix_result_bits_context",
+        "width_bits": 3,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "QwenOwnerKernel__TransposedDenseDownOwner_io_matrix_result_valid"
+          ]
+        }
+      },
+      {
+        "index": 111,
+        "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_matrix_result_bits_last",
+        "width_bits": 1,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "QwenOwnerKernel__TransposedDenseDownOwner_io_matrix_result_valid"
+          ]
+        }
+      },
+      {
+        "index": 112,
+        "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_matrix_result_bits_error",
+        "width_bits": 1,
+        "validity": {
+          "kind": "PAYLOAD_VALID",
+          "all_true_symbol_keys": [
+            "QwenOwnerKernel__TransposedDenseDownOwner_io_matrix_result_valid"
+          ]
+        }
+      },
+      {
+        "index": 113,
+        "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_resetRequired",
+        "width_bits": 1,
+        "validity": {
+          "kind": "RAW_SNAPSHOT",
+          "all_true_symbol_keys": []
+        }
+      }
+    ],
+    "samples": {
+      "previous_healthy": {
+        "cycle": 852611,
+        "active_cycle": 852606,
+        "completions": 1,
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          1,
+          1,
+          1,
+          0,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          1,
+          3,
+          0,
+          1,
+          31,
+          31,
+          12800,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          160,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          1,
+          0,
+          0
+        ]
+      },
+      "current_fault": {
+        "cycle": 852612,
+        "active_cycle": 852607,
+        "completions": 1,
+        "values": [
+          1,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          1,
+          1,
+          2,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          1,
+          2,
+          1,
+          0,
+          1,
+          1,
+          2,
+          1,
+          0,
+          0,
+          0,
+          1,
+          2,
+          1,
+          0,
+          0,
+          0,
+          1,
+          2,
+          1,
+          0,
+          0,
+          0,
+          1,
+          2,
+          1,
+          0,
+          0,
+          0,
+          1,
+          2,
+          1,
+          0,
+          0,
+          0,
+          1,
+          2,
+          1,
+          0,
+          0,
+          0,
+          1,
+          2,
+          1,
+          0,
+          0,
+          0,
+          1,
+          2,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          1,
+          3,
+          0,
+          1,
+          31,
+          31,
+          12800,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          160,
+          0,
+          8,
+          0,
+          8,
+          1,
+          1,
+          1,
+          1,
+          0,
+          1
+        ]
+      }
+    },
+    "validity_must_be_applied": true,
+    "extra_eval_or_clock": false,
+    "payload_data_or_addresses": false,
+    "missing_signals_not_zero_filled": [
+      "MatrixPipelineService.seedPoison",
+      "QwenOwnerKernel.TransposedDenseDownOwner_io_issueCycles"
+    ],
+    "fault_observed": true,
+    "fault_cause_established": false
+  },
+  "status_decode": {
+    "source": {
+      "bytes": 3123,
+      "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783"
+    },
+    "Numerical": 8,
+    "raw_status_not_a_completed_event": true
+  },
+  "local_n0": {
+    "summary_pin": {
+      "bytes": 4208,
+      "sha256": "9a7472af3e7f328fd15adc460922b140958274fc7d932a40e79fb91da032f5b8"
+    },
+    "scope": "CLOSED_P0_M128_N0_ONLY_NOT_FULL_BLOCK_OR_FINAL_RTL_PASS",
+    "status": "EXACT_LOCAL_NORM_OUTPUT_MATCH",
+    "shape": [
+      1,
+      128,
+      1536
+    ],
+    "elements": 196608,
+    "conversion": "BF16 uint16 <<16 into little-endian uint32; exact,no rounding",
+    "comparison": {
+      "bytes": 786432,
+      "byte_mismatches": 0,
+      "first_mismatch_byte": null,
+      "actual_sha256": "ddee5fd75094777c51ef1104c7a18dfe527fef9de2a24646aad1d83160a6e421",
+      "expected_layout_sha256": "ddee5fd75094777c51ef1104c7a18dfe527fef9de2a24646aad1d83160a6e421",
+      "actual_nonfinite_elements": 0,
+      "reference_nonfinite_elements": 0
+    },
+    "word_mismatches": 0,
+    "actual_low16_nonzero": 0,
+    "completion": {
+      "pc": 0,
+      "cycles": 607643,
+      "bytes": 786432
+    },
+    "original_reference_tensor_sha256": "a36384e92190d53a89d39d0f738fdab47f3a4a1f6af9c6244b533c77fe93e5bc",
+    "independent_review_status": "INDEPENDENT_LOCAL_COMPARISON_VERIFIED",
+    "independent_review_pin": {
+      "bytes": 371,
+      "sha256": "ae9625ab47cf692b5de66e01d769e80700c5b25d8480e4e070138a4f063f1e18"
+    },
+    "binary_rehashed_by_comparison": false,
+    "full_block_numerical_pass": false
+  },
+  "numerical_pass": false,
+  "full_block_acceptance": false,
+  "production_acceptance": false,
+  "final_rtl_executed": false,
+  "utilization_qualification": "UNMEASURED",
+  "unique_root_cause_established": false,
+  "last_periodic_progress": {
+    "source_pin": {
+      "bytes": 925,
+      "sha256": "89c1bc47f7aaf88acc4c2b2e6d2966c0b33757ba9cd2002e9fa01de8b18d865f"
+    },
+    "scope": "LAST_PERIODIC_SAMPLE_NOT_FAULT_EDGE",
+    "log_sha256": "65692f6a36cdbfa9d97dd051bac6342ad6570b858ec78cc5fcf40ee73e05fcb1",
+    "log_bytes": 2375049,
+    "last_periodic_sample": {
+      "cycles": 852549,
+      "active_cycles": 852544,
+      "pc": 1,
+      "completions": 1,
+      "read_bursts": 49687,
+      "read_beats": 49687,
+      "read_acks": 49687,
+      "write_bursts": 12416,
+      "write_beats": 13568,
+      "write_acks": 13568,
+      "write_ack_bytes": 868352,
+      "pipeline_issues": 12739,
+      "pipeline_stalls": 0,
+      "idma_transfers": 62103,
+      "idma_cache_hits": 0,
+      "idma_streamed_read_beats": 25088,
+      "idma_streamed_write_beats": 1280,
+      "owner_jobs": 2,
+      "useful_macs": 0,
+      "executed_macs": 0,
+      "host_write_bytes": 786432,
+      "memory_accepted_0": 23,
+      "memory_returned_0": 23,
+      "memory_accepted_1": 36864,
+      "memory_returned_1": 36864,
+      "reset_required": 0
+    },
+    "numerical_pass": false
+  },
+  "unobserved_fault_details": [
+    "specific_return_data_word",
+    "faulting_lane",
+    "actual_nan_or_inf_value",
+    "padding_causal_role"
+  ]
+}

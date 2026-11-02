@@ -1,3 +1,14 @@
+# 2026-11-02：真实 4096 MAC / 原 P0 首 fault 两槽观测已闭合，尚未修复
+
+- 原唯一 `cloud_execution_p0_first_fault_connectfix_20261102T1635` / session 44518 已退出 2；新 executor 1a50、实际 artifact 7a99 / ELF b89a / 原同字节 SV 3d148 / 只读 driver abed。九个前置阶段严格 0，包括 fresh ABI 与真实完整 connect；随后单 P0 DUT 因 `resetRequired` 退出 1，outer native 2 / errors[] / strict cleanup / EOF。P0 阶段耗时 6036.663 秒，sampled RSS 248,307,712 B；不是 10800 秒墙时或 1,500,000 active cycles 上限耗尽，采样 RSS 不冒连续峰值保证。
+- 原完整 `summarize_cloud_execution.project` 经过真实 source、七件编译 proof、retained、原 DUT evidence 与 acceptance 门，重聚合为 VERIFIED_REAGGREGATED；摘要 SHA 18d9c23c5ceff666d416b811c83b02023b68e9bd63ae7359a6fea8a35c8823d2。只选 P0，其余四块 NOT_SELECTED；完整数值及 final RTL 资格仍 false，不将本诊断当五块验收。
+- 114 字段固定 schema 的三行只读记录为 PRESENT_VALID，原 profile0.log 全字节投影时 SHA 65692f6a36cdbfa9d97dd051bac6342ad6570b858ec78cc5fcf40ee73e05fcb1。上一健康槽 cycle 852611 / active 852606，到首 fault 槽 cycle 852612 / active 852607，均完成 1 条命令；Matrix wideSteps 为 12800，DownOwner 原窗口 ng 投影为 160。ng/status 不是有效窗口完成凭证，任何 payload 位仍必须带其 valid 限定。
+- 首变包含 DownOwner status 0→8 与 reset 0→1；原 Protocol.scala 明确 Numerical=8、Protocol=7。Matrix 已观察 poison/outputBad/endpointError/completionBad/seed reset 位在两槽为 0；Guard ownedAuthorityFault 与 Top physical/ordinaryAdmission 同拍升高，原接线存在下游反射路径，不将多个同拍 bit 当多个独立首因。独立源码可达性审查进一步排除另外两个 Numerical 路径：drainActive 会使 result.ready=0，与前健康槽实际 ready=1 冲突；真实 ng160/K[0,1024) 的终端读取必须等最后 half 良好 DDR 响应完成，其后 outstanding 已清、nextLoadK=end 禁止新 prefetch，window 不进入 prefix restore，因而终端返回时 sourceFinite 的 burstResponse.fire 不可成立。结合前拍 context0 result.fire/status0 与下一拍 status8，可作“源码不变量推导定位”：DownOwner 终端 context0 返回的 finite 门失败。实际 FP32 Kwindow 不启用 BF16 物化阈值，M128 检查全部 16×256 返回字，因此推导至少一字非 finite。不是直接采到 finite 位或数值 payload；坏 lane、NaN/Inf 分类、有效输出还是 padding、具体算术/存储来源仍未知，不宣布底层根因已查明或修复。
+- 新已闭 n0 局部输出 128×1536 / 786432 B，与官方 BF16 input_layernorm 按 uint16<<16 展开为 FP32 storage 逐 196608 word 全 bit 相等，SHA ddee5fd75094777c51ef1104c7a18dfe527fef9de2a24646aad1d83160a6e421，0 差、无 nonfinite。只证明该已完成 norm 局部，不能推出后续 Dense、整块 y/K/V 或其余内部 gate 已通过。
+- 本批只发布无本机路径的有限闭态/控制观测证据与计划，不含 raw log、tensor、权重、ELF、额外 artifact，不改变硬件、驱动、资源门、catalog 或 nonce；不自动重跑、不再追加 mock 层、不盲目扩预算。原失败/完整七件与所有闭回执保留，下一步在这些真实观测基础上收束 Numerical 的有效触发来源。
+
+---
+
 # 2026-11-02：实际新 ELF 已过 ABI，P0 connect 新 schema 路由恢复
 
 - 原唯一 `cloud_execution_p0_first_fault_20261102T1538` 入口已严格退出 1。实际 8 个前置阶段 native 0 / errors[] / cleanup EOF（archives、三 runtime、startup ABI、P0 initialize/provider/transport），P0 connect native 1 / errors[] / cleanup EOF，收据 b5d4147e51f7619d10926c3a801338f9762cc539499fddd5da6c73984f355b49。DUT 数值模型未启动；不能说新 ELF 完全未执行，fresh ABI 已实际执行。

@@ -29,6 +29,12 @@ class CandidateBudgetTests(unittest.TestCase):
   with patch.object(importlib.machinery.SourceFileLoader,'exec_module',load):return mode.admit(self.b)
  def test_adapter_only_reviewed_exact_host_allowlist_additions(self):
   tree=ast.parse((E/'executor_adaptation.py').read_text())
+  # Only the reviewed exact two/three-key catalog predicate is reversed.
+  catalog_fn=[n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='catalog']
+  self.assertEqual(len(catalog_fn),1)
+  matches=[n for n in catalog_fn[0].body if hashlib.sha256(ast.dump(n,include_attributes=False).encode()).hexdigest()=='1eeb32729ad104c2496c43566677fcdc72004e720a22ec285dcec4be45ebbfeb']
+  self.assertEqual(len(matches),1)
+  catalog_fn[0].body[catalog_fn[0].body.index(matches[0])]=ast.parse("need(type(doc) is dict and set(doc) == {'schema', 'original_source_commit', 'files'} and\n         doc['schema'] == 'REVIEWED_RELATIVE_SOURCE_CLOSURE_V1' and\n         hex_value(doc['original_source_commit'], 40), 'source catalog schema')").body[0]
   # Exact first-fault host-only additions; retain the complete previous adapter AST.
   first_fault_added={'evidence/first_fault_summary_join_20261102/README_CN.md','evidence/first_fault_summary_join_20261102/SYNTHETIC_FULL_SUMMARY_JOIN.json','evidence/first_fault_summary_join_20261102/test_full_summary_join.py','numeric/FIXED_NONHIER_SCHEMA.json','numeric/candidate_admission.py','numeric/candidate_artifact_handoff.py','numeric/first_fault_driver_contract.py','numeric/first_fault_records.py','numeric/p0_first_fault_contract.py','numeric/test_first_fault_contract.py','numeric/test_first_fault_gate_paths.py','numeric/test_first_fault_p0_reuse.py','numeric/test_first_fault_records.py','numeric/test_support_first_fault.py','test_first_fault_controller.py','test_first_fault_execution.py','test_first_fault_pipeline_join.py','test_first_fault_real_join.py','test_first_fault_summary_projection.py','test_model_candidate_inputs.py'}
   first_fault_tuples=[n for n in ast.walk(tree)if isinstance(n,ast.Tuple)and first_fault_added <= {x.value for x in n.elts if isinstance(x,ast.Constant)}]

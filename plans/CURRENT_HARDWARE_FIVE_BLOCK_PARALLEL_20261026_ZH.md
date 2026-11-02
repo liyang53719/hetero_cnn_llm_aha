@@ -1,3 +1,19 @@
+# 2026-11-02：实际首 fault 七件接收与执行前 catalog 形状兼容恢复
+
+## 已闭合的真实构建与传递
+- 唯一 run 41454910027 已 SUCCESS，20 个真实原阶段收据均 strict native 0，七件唯一接收并完整编译/依赖 proof 通过。ZIP 311,448,009 B，SHA256 8252ada74983e1eaddcef77c52b943f7d0fe1d6e88fe829fc917fd37ab4a8385。
+- 新 manifest 7a99c2c8bbc0df2f2b63c14d8163c13b3923aea41c28181661016f7a4540d24c；新 ELF b89a701b262e7edb575b19d03a058fc37ae10030ecce040a4895d6a9e143ebe0。同源 SV 精确保持 3d148277…，只读 driver 精确为 abedbe2a…；实际 159 硬件源、4096 MAC、单 32-lane bank、122 端口不变。
+- 实际 114 个只读 probe mappings、root header/accessor/config、全部 16 个唯一依赖均核。此次真实 `.d` 有 17 个词，Top header 同词两次；这证明本次新处理保留完整依赖，不追认前次未取得的 `.d` 具体子因。
+
+## 当前阻塞及本批边界
+- 新实际 candidate review、DATA/reference 源与独立工程 watchdog 已形成；完整执行前 adapter/handoff 门在 catalog schema 拒绝，尚未到资源 census，未执行新 ELF。真实 builder b029 catalog 是 exact `{schema,files}`，旧 adapter 只接受带 `original_source_commit` 的三字段形状。不得修改已构建七件或给旧 catalog 补字段偷换身份。
+- 本批仅 host-only adapter 支持两个明确 exact 形状；旧三字段若存在仍严格 40 位十六进制，未知字段仍拒。builder/executor commit、独立 catalog SHA、全部实际文件/完整差异白名单及 review 身份门不变，不将缺字段视为省略身份验证。补真实新七件 adapter→handoff 全链，而不只测试单个 schema 常量。
+- 本批不触硬件、SV、driver、C 构建代码、运行预算、nonce 或 workflow；只源码提交和 source CI，不重建、不重复下载。实际执行继续使用新 b89a ELF，但必须通过新 executor 适配、完整实际 handoff、资源/磁盘准入和 fresh ABI。
+- 原单 P0 工程诊断上限 10800 秒 / 1,500,000 active cycles，整轮 22200 秒，不是完成预测；旧 1935 五块结果仅历史依据，不迁移为新 ELF 校准或数值通过。原 RSS/AS、未知 owner 5 GiB、非 DUT 1 GiB、8 GiB 磁盘 reserve 和 aggregate TREE 门不降低。
+- 当前完整数值仍 0/5 INCOMPLETE；新构建成功不等于 P0 fault 原因已定位，也不等于新数值验收。
+
+---
+
 # 2026-11-02：首故障构建后处理的依赖规则兼容恢复
 
 - 原唯一 build run 41441028806 已失败：Actions 有限投影显示 20 个阶段直到 host_link 均 native 0、无监督错误、cleanup/EOF/gzip 完整；随后原 GCC .d 解析器在“非空、原 token 唯一、≤4096”合并谓词拒绝。七件上传被跳过，实际 artifacts 数为 0，没有可继承的新 ELF 验收，也没有新 P0 执行。保留完整本地日志和有限阶段证据；有限投影不是已下载的原 worker 收据。

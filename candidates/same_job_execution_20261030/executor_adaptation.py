@@ -159,9 +159,10 @@ def relative(value):
 def catalog(value):
     path = checked(value)
     doc = json.loads(path.read_text())
-    need(type(doc) is dict and set(doc) == {'schema', 'original_source_commit', 'files'} and
+    need(type(doc) is dict and set(doc) in ({'schema', 'files'}, {'schema', 'original_source_commit', 'files'}) and
          doc['schema'] == 'REVIEWED_RELATIVE_SOURCE_CLOSURE_V1' and
-         hex_value(doc['original_source_commit'], 40), 'source catalog schema')
+         ('original_source_commit' not in doc or hex_value(doc['original_source_commit'], 40)),
+         'source catalog schema')
     need(type(doc['files']) is list and 0 < len(doc['files']) <= 4096,
          'bounded complete source catalog')
     rows = {}

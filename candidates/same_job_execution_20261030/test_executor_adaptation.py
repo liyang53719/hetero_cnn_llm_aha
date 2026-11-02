@@ -69,4 +69,33 @@ class Tests(unittest.TestCase):
  def test_repo_symlink_rejected(self):
   alias=P(self.tmp.name)/'alias';alias.symlink_to(self.f.root)
   with self.assertRaises(ValueError):a.verify(self.f.adaptation_pin,self.f.builder,self.f.executor,self.f.current_pin,alias)
+
+class TwoFieldFixture(Fixture):
+ def catalog(self,files):
+  d=super().catalog(files);del d['original_source_commit'];return d
+class CatalogShapeTests(unittest.TestCase):
+ def setUp(self):
+  self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.f=TwoFieldFixture(P(self.tmp.name))
+ def test_two_field_distinct_full_verifier(self):
+  r=self.f.verify();self.assertEqual(r['executor_source_commit'],'d'*40);self.assertFalse(r['numerical_pass'])
+ def test_two_field_same_source_full_verifier(self):
+  self.f.executor['source_commit']=self.f.builder['source_commit'];self.f.old=copy.deepcopy(self.f.new);self.f.refresh()
+  self.assertEqual(self.f.verify()['changed_paths'],[])
+ def test_two_field_identity_still_required(self):
+  self.f.executor={'source_commit':'0'*40}
+  with self.assertRaises(ValueError):self.f.verify()
+ def test_two_field_hardware_change_still_rejected(self):
+  self.f.new['hardware/fixed.scala']=b'changed';self.f.refresh()
+  with self.assertRaises(ValueError):self.f.verify()
+ def test_exact_shapes_only(self):
+  original=self.f.catalog(self.f.new)
+  for bad in [dict(original,extra=1),dict(original,original_source_commit=None),dict(original,original_source_commit=True),dict(original,original_source_commit='g'*40),dict(original,original_source_commit='a'*39),{'schema':original['schema']},{'files':original['files']}]:
+   with self.subTest(keys=list(bad)),self.assertRaises(ValueError):a.catalog(self.f.write(self.f.current,bad))
+  for good in [original,dict(original,original_source_commit='a'*40)]:
+   self.assertEqual(set(a.catalog(self.f.write(self.f.current,good))),set(self.f.new))
+ def test_actual_adjacent_catalog_shape_and_rows(self):
+  p=P(a.__file__).with_name('SOURCE_PINS.json');d=json.loads(p.read_text())
+  self.assertIn(set(d),({'schema','files'},{'schema','original_source_commit','files'}))
+  self.assertEqual(len(a.catalog(a.pin(p))),len(d['files']))
+
 if __name__=='__main__':unittest.main()

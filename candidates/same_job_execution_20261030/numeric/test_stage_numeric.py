@@ -1,8 +1,9 @@
 """Synthetic wiring tests, not model admission, ABI, arithmetic, or DUT execution."""
 import ast,hashlib,importlib.util,json,pathlib,tempfile,types,unittest
 from unittest import mock
-D=pathlib.Path(__file__).resolve().parent
-CAL='BOUNDED_CALIBRATION';FULL='FULL_BLOCK_ACCEPTANCE';STAGE='STAGE_COVERAGE_DIAGNOSTIC'
+import os
+D=pathlib.Path(os.environ.get('FIRST_FAULT_LEGACY_TEST_SOURCE',str(pathlib.Path(__file__).resolve().parent.parent)))/'numeric'
+CAL='BOUNDED_CALIBRATION';FULL='FULL_BLOCK_ACCEPTANCE';STAGE='STAGE_COVERAGE_DIAGNOSTIC';FIRST_FAULT='P0_FIRST_FAULT_DIAGNOSTIC'
 def need(value,message):
  if not value:raise ValueError(message)
 def sha(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
@@ -13,7 +14,7 @@ def extract(file,names,namespace):
 class StageNumericTests(unittest.TestCase):
  def setUp(self):
   self.t=tempfile.TemporaryDirectory();self.addCleanup(self.t.cleanup);self.root=pathlib.Path(self.t.name).resolve()
-  self.mode=types.SimpleNamespace(CALIBRATION=CAL,FULL=FULL,STAGE=STAGE)
+  self.mode=types.SimpleNamespace(CALIBRATION=CAL,FULL=FULL,STAGE=STAGE,FIRST_FAULT=FIRST_FAULT)
   self.n=extract('numeric_tail.py',{'execution_command','mode_budget_fields'},{'D':D,'need':need,'execution_mode':self.mode,'material':types.SimpleNamespace(checked=lambda p:p)})
   self.admit=dict(mode=STAGE,profile_seconds={str(i):1000+i for i in range(5)},profile_max_active_cycles={str(i):10000 for i in range(5)},reviewed_budget_sha256='e'*64)
   self.b=dict(execution_context='CLOUD_EXECUTOR_V1',full_block_budget=None,stage_coverage_budget=dict(path=str(self.root/'stage.json'),sha256='e'*64),controller_binding=dict(path=str(self.root/'binding.json'),sha256='c'*64))
@@ -43,7 +44,7 @@ class StageNumericTests(unittest.TestCase):
   args=types.SimpleNamespace(execution_mode=mode,cloud_binding=binding if cloud else None,cloud_binding_sha256=sha(binding)if cloud else None,artifact_manifest_sha256='a'*64,builder_handoff_sha256='b'*64,expected_source_commit='s',profile=0,calibration_wall_seconds=None,full_block_budget=None,full_block_budget_sha256=None,stage_coverage_budget=pathlib.Path(self.b['stage_coverage_budget']['path']),stage_coverage_budget_sha256='e'*64,validate_only=True)
   for key,value in updates.items():setattr(args,key,value)
   actual=extract('consumer_owned.py',{'explicit_execution_admission'},{'__file__':str(D/'consumer_owned.py'),'pathlib':pathlib,'json':json,'need':need,'sha':lambda p:'helperhash'if p==helper else sha(p),'executor_context':lambda args:doc['executor_identity']if cloud else None})
-  mode_module=types.SimpleNamespace(CALIBRATION=CAL,FULL=FULL,STAGE=STAGE,admit=lambda b:dict(self.admit,mode=mode))
+  mode_module=types.SimpleNamespace(CALIBRATION=CAL,FULL=FULL,STAGE=STAGE,FIRST_FAULT=FIRST_FAULT,admit=lambda b:dict(self.admit,mode=mode))
   cloud_module=types.SimpleNamespace(admit=lambda b:b)
   spec=lambda name,path:types.SimpleNamespace(loader=types.SimpleNamespace(exec_module=lambda m:None),name=name,path=path)
   with mock.patch.object(importlib.util,'spec_from_file_location',side_effect=spec),mock.patch.object(importlib.util,'module_from_spec',side_effect=lambda s:mode_module if s.name=='owned_execution_mode'else cloud_module):
@@ -61,10 +62,10 @@ class StageNumericTests(unittest.TestCase):
   t=ast.parse((D/'consumer_owned.py').read_text());main=next(n for n in t.body if isinstance(n,ast.FunctionDef)and n.name=='main')
   assignments=[n for n in ast.walk(main)if isinstance(n,ast.Assign)and ast.unparse(n.targets[0])=="summary['execution_admission']"]
   self.assertEqual(len(assignments),1);value=assignments[0].value;scope=value.values[[k.value for k in value.keys].index('scope')]
-  for selected,expected in((CAL,'CALIBRATION_SAME_FULL_M128_STIMULUS'),(FULL,'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE'),(STAGE,'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE')):
+  for selected,expected in((CAL,'CALIBRATION_SAME_FULL_M128_STIMULUS'),(FULL,'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE'),(STAGE,'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE'),(FIRST_FAULT,'P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE')):
    self.assertEqual(eval(compile(ast.Expression(scope),'scope','eval'),dict(admission={'mode':selected},mode=self.mode)),expected)
   choices=[n.keywords for n in ast.walk(main)if isinstance(n,ast.Call)and n.args and isinstance(n.args[0],ast.Constant)and n.args[0].value=='--execution-mode'][0]
-  self.assertEqual(ast.literal_eval(next(k.value for k in choices if k.arg=='choices')),(CAL,FULL,STAGE))
+  self.assertEqual(ast.literal_eval(next(k.value for k in choices if k.arg=='choices')),(CAL,FULL,STAGE,FIRST_FAULT))
  def test_published_process_and_cleanup_bodies_unchanged(self):
   expected=BASELINE_FUNCTIONS
   for file,rows in expected.items():

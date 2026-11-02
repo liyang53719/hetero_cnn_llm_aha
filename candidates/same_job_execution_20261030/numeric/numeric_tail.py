@@ -99,8 +99,8 @@ def cloud_context(b):
  need(admitted.get('p0_provider_reuse')==b.get('p0_provider_reuse'),'tail exact approved P0 input reuse')
  need(admitted.get('reference_data_reuse')==b.get('reference_data_reuse'),'tail exact approved reference reuse')
  need(b['tree_cap']==admitted.get('aggregate_tree_cap_bytes',live_budget.TREE_CAP),'tail exact approved aggregate tree cap')
- if b.get('reference_data_reuse')is not None:need(b['execution_mode']==execution_mode.STAGE and b.get('model_candidate_review')is not None,'reference reuse only approved candidate stage coverage')
- if b.get('p0_provider_reuse')is not None:need(b['execution_mode']==execution_mode.STAGE and b.get('model_candidate_review')is not None,'P0 reuse only approved candidate stage coverage')
+ if b.get('reference_data_reuse')is not None:need(b['execution_mode']in(execution_mode.STAGE,execution_mode.FIRST_FAULT) and b.get('model_candidate_review')is not None,'reference reuse only approved candidate stage coverage')
+ if b.get('p0_provider_reuse')is not None:need(b['execution_mode']in(execution_mode.STAGE,execution_mode.FIRST_FAULT) and b.get('model_candidate_review')is not None,'P0 reuse only approved candidate stage coverage')
  if b.get('model_candidate_review')is not None:module('tail_model_candidate',D/'candidate_admission.py',b['pins']).verify(b['model_candidate_review'],b)
  need(b['execution_mode']==admitted['execution_mode']and b.get('full_block_budget')==admitted['full_block_budget']and b['calibration_seconds']==admitted['budgets']['calibration_seconds'],'tail approved mode and windows')
  retained_context(b)
@@ -123,7 +123,7 @@ def validate(b):
  need(sum(admission['profile_seconds'].values())+b['reserved_material_seconds']+b['reserved_cleanup_seconds']+b['reserved_parent_seconds'] <= (b['job_budget_seconds']if cloud is not None else 21000)-(time.monotonic()-b['job_started_monotonic']),'whole five round exceeds remaining job')
  need(b['reserved_material_seconds']>=7*b['provider_wall_seconds']+11*120 and b['reserved_cleanup_seconds']>=23*60+5*30 and b['reserved_parent_seconds']>0,'all seven provider/five connect/ABI and twenty-three cleanup plus DUT/parent reservations')
  if b.get('reference_data_reuse')is None:need(b['tree_cap']==live_budget.TREE_CAP,'unchanged aggregate tree cap')
- else:need(cloud is not None and b['execution_mode']==execution_mode.STAGE and b['tree_cap']==12_037_043_872,'exact reference-data-only tree reduction')
+ else:need(cloud is not None and b['execution_mode']in(execution_mode.STAGE,execution_mode.FIRST_FAULT) and b['tree_cap']==12_037_043_872,'exact reference-data-only tree reduction')
  for k in ('rss_bytes','address_space_bytes','phase_extra_bytes','provider_wall_seconds'):
   need(type(b[k])is int and b[k]>0,'explicit reviewed resource bound '+k)
  need(b['rss_bytes']<=12*1024**3 and (b['address_space_bytes']>0 if cloud is not None else b['address_space_bytes']>=12*1024**3) and b['address_space_bytes']<=16*1024**3,'runner resource maxima')
@@ -138,11 +138,20 @@ def owned_environment(base,root):
   p=root/name.lower();p.mkdir();e[name]=str(p)
  return e
 
+def execution_profiles(b,admission):
+ selected=profile_policy.eligible(b)
+ if admission['mode']==execution_mode.FIRST_FAULT:
+  need(selected==list(range(5))and admission.get('diagnostic_profiles')==[0]and type(admission['diagnostic_profiles'][0])is int,'registered hardware unchanged; only integer P0 selected')
+  return [0]
+ return selected
+
 def execution_command(generated,b,admission,profile):
  need(generated[1]==str(D/'consumer_owned.py'),'explicit owned consumer handoff')
  need(not any(flag in generated for flag in ('--execution-mode','--calibration-wall-seconds','--full-block-budget','--full-block-budget-sha256','--stage-coverage-budget','--stage-coverage-budget-sha256')),'no stale or duplicate execution mode arguments')
  argv=list(generated)+['--execution-mode',admission['mode']]
  if admission['mode']==execution_mode.CALIBRATION:argv+=['--calibration-wall-seconds',str(admission['profile_seconds'][str(profile)])]
+ elif admission['mode']==execution_mode.FIRST_FAULT:
+  need(profile==0 and admission.get('diagnostic_profiles')==[0]and b.get('execution_context')=='CLOUD_EXECUTOR_V1'and b.get('full_block_budget')is None and b.get('stage_coverage_budget')is None,'only approved P0 first-fault diagnostic')
  elif admission['mode']==execution_mode.STAGE:
   need(b.get('execution_context')=='CLOUD_EXECUTOR_V1'and b.get('full_block_budget')is None,'stage coverage is cloud-only, not full acceptance')
   budget=b['stage_coverage_budget'];argv+=['--stage-coverage-budget',budget['path'],'--stage-coverage-budget-sha256',budget['sha256']]
@@ -161,6 +170,7 @@ def execution_command(generated,b,admission,profile):
 
 
 def mode_budget_fields(admission):
+ if admission['mode']==execution_mode.FIRST_FAULT:return dict(full_budget_sha256=None,stage_budget_sha256=None,first_fault_document_sha256=admission['reviewed_budget_sha256'],diagnostic_profiles=[0],not_selected_profiles=[1,2,3,4])
  if admission['mode']==execution_mode.STAGE:return dict(full_budget_sha256=None,stage_budget_sha256=admission['reviewed_budget_sha256'])
  need(admission['mode']in(execution_mode.CALIBRATION,execution_mode.FULL),'explicit numeric execution mode')
  return dict(full_budget_sha256=admission['reviewed_budget_sha256'])
@@ -192,7 +202,7 @@ def run(b,binding_path,binding_sha):
   proof.verify(build,b['build_result']['sha256'],manifest,sha(manifest),frozen,b['run_id'],b['launch_commit'],b['source_commit'])
  else:
   build=None;manifest=material.checked(b['artifact_manifest']);frozen=json.loads(manifest.read_text())
-  candidate=frozen['schema']=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'
+  candidate=frozen['schema']in('MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1','MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1')
   proof=module('split_build_proof',D/('candidate_artifact_handoff.py'if candidate else'artifact_handoff.py'),pins)
   kwargs=dict(executor_adaptation=b.get('executor_adaptation'))
   if candidate:kwargs.update(model_candidate_review=b.get('model_candidate_review'),current_source_pins_pin=b['source_pins'],repo=b['repo'])
@@ -208,6 +218,7 @@ def run(b,binding_path,binding_sha):
  if b.get('reference_data_reuse')is not None:
   reference_reuse=module('tail_reference_data_reuse',D/'reference_data_reuse.py',pins)
   reference_reuse_context={key:b[key]for key in ('repo','artifact_manifest','retained_materials')}
+  if admission['mode']==execution_mode.FIRST_FAULT:reference_reuse_context['execution_mode']=execution_mode.FIRST_FAULT
   reference_reuse_source_pin=material.pin(D/'reference_data_reuse.py')
   verified_reference=reference_reuse.verify_metadata(b['reference_data_reuse'],reference_reuse_context)
   need(verified_reference['tree_cap']==b['tree_cap'],'actual reference reuse tree cap')
@@ -243,7 +254,7 @@ def run(b,binding_path,binding_sha):
  identity_args=['--artifact-manifest',str(manifest),'--artifact-manifest-sha256',sha(manifest),'--expected-run-id',str(b['run_id']),'--expected-launch-commit',b['launch_commit'],'--expected-source-commit',b['source_commit'],'--local-runtime-abi',str(abi),'--local-runtime-abi-sha256',sha(abi),*env_args]
  if cloud is None:identity_args+=['--local-build-result',str(build),'--local-build-result-sha256',b['build_result']['sha256']]
  else:identity_args+=['--builder-handoff',b['builder_handoff']['path'],'--builder-handoff-sha256',b['builder_handoff']['sha256'],'--cloud-binding',b['controller_binding']['path'],'--cloud-binding-sha256',b['controller_binding']['sha256']]
- for i in profile_policy.eligible(b):
+ for i in execution_profiles(b,admission):
   lease_root=out/f'profile{i}';lease_root.mkdir();profile=lease_root/'material'
   with owner.lease(b['owner_manifest']['path'],b['owner_manifest']['sha256'],b['owner_root'],i,lease_root) as selected:
    weights(b,i)
@@ -268,12 +279,13 @@ def run(b,binding_path,binding_sha):
    if cloud is not None:
     report=json.loads((profile/'dut_result/RESULT.json').read_text());need(report.get('executor_identity')==cloud and report.get('builder_handoff_sha256')==b['builder_handoff']['sha256'],'actual executor report not builder identity')
     if b.get('executor_adaptation') is not None:need(report.get('executor_adaptation_sha256')==b['executor_adaptation']['sha256']and report.get('workspace_loader_sha256')==b['workspace_loader']['sha256'],'actual executor adapter/loader provenance')
-   if admission['mode']in(execution_mode.FULL,execution_mode.STAGE):
+   if admission['mode']in(execution_mode.FULL,execution_mode.STAGE,execution_mode.FIRST_FAULT):
     report=json.loads((profile/'dut_result/RESULT.json').read_text());actual=report['execution_admission']
     need(actual['execution_mode']==admission['mode']and actual['reviewed_budget_sha256']==admission['reviewed_budget_sha256'],'actual consumer full-mode budget identity')
-    scope='STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE'if admission['mode']==execution_mode.STAGE else'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE'
+    scope='P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE'if admission['mode']==execution_mode.FIRST_FAULT else'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE'if admission['mode']==execution_mode.STAGE else'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE'
     need(actual['scope']==scope and actual['outer_cleanup_proof_required']is True,'actual explicit execution scope')
     if admission['mode']==execution_mode.STAGE:need(actual.get('stage_budget_sha256')==admission['reviewed_budget_sha256'],'actual stage coverage budget identity')
+    if admission['mode']==execution_mode.FIRST_FAULT:need(actual.get('first_fault_document_sha256')==admission['reviewed_budget_sha256']and actual.get('stage_budget_sha256')is None,'actual first-fault document identity')
     expected_limits=report_effective_limits(actual['original_limits'],b,admission,i)
     need(actual['effective_limits']==expected_limits,'actual full watchdog limits')
    dut_records.append(diagnostic)

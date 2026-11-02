@@ -23,11 +23,49 @@ def check(row,cap=2<<20,content=True):
  return p
 def load(row):return json.loads(check(row).read_text())
 def makepin(p):return dict(path=str(p),bytes=p.stat().st_size,sha256=digest(p))
+FIRST_FAULT_MODE='P0_FIRST_FAULT_DIAGNOSTIC'
+FIRST_FAULT_SCHEMA='P0_DATA_REUSE_FIRST_FAULT_BINDING_V1'
+def first_fault_relation(d,b,artifact,prior):
+ """Pure reviewed data lineage, never live execution or historical ABI admission."""
+ import types
+ need(b.get('execution_mode')==FIRST_FAULT_MODE,'explicit first fault data reuse')
+ repo=Path(b['repo']);catalog=load(b['source_pins']);need(catalog['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1','reviewed current catalog')
+ rows=catalog['files'];need(len({r['path']for r in rows})==len(rows),'unique current source paths')
+ pins={}
+ for row in rows:
+  rel=Path(row['path']);need(not rel.is_absolute()and '..'not in rel.parts,'relative catalog source')
+  pins[str(repo/rel)]=row['sha256']
+ def source(name):
+  rel='candidates/same_job_execution_20261030/numeric/'+name+'.py';p=repo/rel;matches=[r for r in rows if r['path']==rel]
+  need(len(matches)==1,'unique required source role');row=matches[0];check(dict(path=str(p),bytes=row['bytes'],sha256=row['sha256']),1<<20)
+  m=types.ModuleType('reuse_'+name);m.__file__=str(p);exec(compile(p.read_bytes(),str(p),'exec'),m.__dict__);return m
+ candidate=source('candidate_admission');review=candidate.verify_review(b['model_candidate_review'],b['artifact_manifest'],artifact['artifact_identity'],repo=str(repo),current_source_pins_pin=b['source_pins'])
+ ctx=dict(b,execution_context='CLOUD_EXECUTOR_V1',full_block_budget=None,pins=pins)
+ document=source('p0_first_fault_contract');document.verify_document(ctx,review)
+ probe=source('first_fault_driver_contract').verify_probe(review,b['artifact_manifest'],str(repo),b['source_pins'])
+ doc=load(review['first_fault_diagnostic']);history=load(doc['basis']['historical_stage_binding'])
+ need(prior['artifact_manifest']==history['artifact_manifest']and prior['artifact_manifest']!=b['artifact_manifest'],'exact historical provider artifact, not new identity')
+ need(prior['retained_materials']==b['retained_materials'],'same complete retained data inventory')
+ old=load(prior['artifact_manifest']);need(old['schema']=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'and artifact['schema']=='MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1','explicit original and diagnostic artifacts')
+ for item in (old,artifact):
+  need(item['profiles']==list(range(5))and item['matrix_macs']==4096,'unchanged complete hardware resource contract')
+  need(item['common']['sv']['sha256']=='3d148277114ff5d968d0e200f4ab117839a3b6c0c0d33e5388e6e5268d42d029','exact original raw SV')
+ need(old['common']['sv']==artifact['common']['sv'],'identical raw SV path/size/digest')
+ driver=old['common']['driver'];need(driver['path']=='driver.cpp'and driver['bytes']==27317 and driver['sha256']=='343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61','original stimulus driver')
+ check(dict(driver,path=str(Path(prior['artifact_manifest']['path']).parent/'driver.cpp')),1<<20)
+ for key,target in(('manifest','program_manifest'),('commands','commands'),('descriptors','descriptors')):
+  need(all(d['program'][key][field]==doc['stimulus'][target][field]for field in('bytes','sha256')),'same full original P0 program bytes')
+ roots={str(Path(prior['artifact_manifest']['path']).parent),str(Path(b['model_candidate_review']['path']).parent),*review['roots'],*probe['roots'],*document.document_roots(ctx,review)}
+ return sorted(roots)
+
 def verify_metadata(reuse_pin,b):
  d=load(reuse_pin)
  need(set(d)=={'schema','scope','profile','tokens','context','prior_controller_binding','provider_root','closed_stage','metadata','program','inputs','raw_weights','source_contract','rope','reference_result','numerical_pass','evidence_root','evidence_origins'},'exact reuse schema fields')
- need(d['schema']=='P0_DATA_REUSE_BINDING_V1'and d['scope']=='PURE_INPUT_DATA_ONLY_NO_DUT_OR_RUNTIME_PASS'and d['profile']==0 and d['tokens']==128 and d['numerical_pass']is False,'data-only P0 contract')
- need(set(d['context'])=={'repo','artifact_manifest','retained_materials'},'context domain')
+ first_fault=d['schema']==FIRST_FAULT_SCHEMA
+ need((first_fault or d['schema']=='P0_DATA_REUSE_BINDING_V1')and d['scope']=='PURE_INPUT_DATA_ONLY_NO_DUT_OR_RUNTIME_PASS'and d['profile']==0 and d['tokens']==128 and d['numerical_pass']is False,'data-only P0 contract')
+ fields={'repo','artifact_manifest','retained_materials'}
+ if first_fault:fields|={'execution_mode','model_candidate_review','source_pins'}
+ need(set(d['context'])==fields,'context domain')
  need(all(d['context'][k]==b[k]for k in d['context']),'current context mismatch')
  evidence=Path(d['evidence_root']);need(evidence.is_absolute()and evidence==evidence.resolve()and evidence.is_dir()and all(not q.is_symlink()for q in (evidence,*evidence.parents)),'canonical evidence root')
  copies={'prior':d['prior_controller_binding'],'phase':d['closed_stage']['phase'],'receipt':d['closed_stage']['receipt'],'rope':d['rope']}
@@ -39,7 +77,8 @@ def verify_metadata(reuse_pin,b):
   need(Path(row['path'])==evidence/(key+('.bin'if key=='rope'else'.json')),'exact copied evidence path')
  need({p.name for p in evidence.iterdir()}=={'prior.json','phase.json','receipt.json','rope.bin'},'finite evidence inventory')
  artifact=load(b['artifact_manifest']);prior=load(d['prior_controller_binding'])
- need(prior['artifact_manifest']==b['artifact_manifest'],'same artifact bytes for retained P0 data')
+ additional_roots=first_fault_relation(d,b,artifact,prior)if first_fault else []
+ if not first_fault:need(prior['artifact_manifest']==b['artifact_manifest'],'same artifact bytes for retained P0 data')
  retained=load(b['retained_materials']);need(retained['references']['0']['result']==d['reference_result'],'same admitted original software reference')
  ref=load(d['reference_result']);need(ref['complete_block_tokens']==128 and ref['hardware_executed']is False and ref['exact_baseline_observer_output_equal']is True and ref['router_policy']=='UNMODIFIED_OFFICIAL_TORCH_TOPK','reference domain')
  root=Path(d['provider_root']);need(root.is_absolute()and root==root.resolve()and root.is_dir()and all(not q.is_symlink()for q in (root,*root.parents)),'provider root')
@@ -92,7 +131,9 @@ def verify_metadata(reuse_pin,b):
    h=ref['tensor_records']['hidden_storage'];need(h['file']=='input_only/hidden_storage.bin'and h['sha256']==d['inputs'][n]['sha256']and d['inputs'][n]['bytes']==786432,'same FP32 hidden input')
   else:
    check(d['rope'],1<<20,False);need(d['rope']['sha256']==d['inputs'][n]['sha256']=='4060acc13a636cbd303e96552df99033cd348f238025f11bae1bc0fcab32c815'and d['inputs'][n]['bytes']==d['rope']['bytes']==524288,'exact original rope')
- return dict(watch_scope='PURE_PROVIDER_AND_FINITE_EVIDENCE_V1',roots=[str(root),str(evidence)],provider_root=str(root),evidence_root=str(evidence),input_root=str(inputroot),inputs=d['inputs'],program=d['program'],metadata=d['metadata'],artifact_manifest_sha256=b['artifact_manifest']['sha256'],reuse_binding_sha256=reuse_pin['sha256'],source_contract_pins=d['source_contract'],reference_result_sha256=d['reference_result']['sha256'],rope_sha256=d['rope']['sha256'])
+ result=dict(watch_scope='PURE_PROVIDER_AND_FINITE_EVIDENCE_V1',roots=[str(root),str(evidence),*additional_roots],provider_root=str(root),evidence_root=str(evidence),input_root=str(inputroot),inputs=d['inputs'],program=d['program'],metadata=d['metadata'],artifact_manifest_sha256=b['artifact_manifest']['sha256'],reuse_binding_sha256=reuse_pin['sha256'],source_contract_pins=d['source_contract'],reference_result_sha256=d['reference_result']['sha256'],rope_sha256=d['rope']['sha256'])
+ if first_fault:result.update(watch_scope='PURE_PROVIDER_FINITE_EVIDENCE_AND_DIAGNOSTIC_AUTHORITY_V1',authority_roots=additional_roots)
+ return result
 
 def compare_mapping(raw,logical,shape,transpose):
  """Full independent bytes comparison, bounded 32-row chunks; no writes."""

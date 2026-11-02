@@ -54,12 +54,15 @@ def material_artifact_identity(old,b):
 CANDIDATE_SCHEMA='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'
 CANDIDATE_SCOPE='DATA_REFERENCE_ONLY_NOT_NUMERICAL_ABI_OR_RUNTIME_PASS'
 REVIEW_SCOPE='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL'
+FIRST_FAULT_SCHEMA='MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1'
+FIRST_FAULT_SCOPE='P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE'
 def domain_sha(value):
  return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
 def candidate_material_contract(manifest_pin,d,old,b):
  # Schema selection cannot use the old same-SV shortcut, even for equal pins.
  after=read(b['artifact_manifest'],65536)
- if after.get('schema')!=CANDIDATE_SCHEMA:
+ first_fault=after.get('schema')==FIRST_FAULT_SCHEMA
+ if after.get('schema')!=CANDIDATE_SCHEMA and not first_fault:
   need(not b.get('model_candidate_review'),'candidate review requires candidate artifact schema')
   return None
  need(b.get('execution_context')=='CLOUD_EXECUTOR_V1'and b.get('model_candidate_review'),'independently admitted candidate review required')
@@ -67,10 +70,11 @@ def candidate_material_contract(manifest_pin,d,old,b):
  need(b['pins'].get(str(helper))==sha(regular(helper,1<<20)),'candidate admission source pin')
  spec=importlib.util.spec_from_file_location('retained_candidate_admission',helper);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
  review=module.verify(b['model_candidate_review'],b)
- need(review['scope']==REVIEW_SCOPE,'candidate evaluation scope only')
+ need(review['scope']==(FIRST_FAULT_SCOPE if first_fault else REVIEW_SCOPE),'candidate evaluation scope only')
  c=review['data_reference_contract']
  keys={'schema','scope','old_artifact_manifest_sha256','new_artifact_manifest_sha256','retained_materials_sha256','old_source_pins_sha256','reference_sources','weights_sha256','references_sha256','profiles','tokens','routing'}
- need(type(c)is dict and set(c)==keys and c['schema']=='MODEL_CANDIDATE_DATA_REFERENCE_ONLY_V1'and c['scope']==CANDIDATE_SCOPE,'exact candidate data-only contract')
+ if first_fault:keys=keys|{'readonly_driver_contract_sha256'}
+ need(type(c)is dict and set(c)==keys and c['schema']==('MODEL_CANDIDATE_DATA_REFERENCE_ONLY_READONLY_DRIVER_V1'if first_fault else'MODEL_CANDIDATE_DATA_REFERENCE_ONLY_V1')and c['scope']==CANDIDATE_SCOPE,'exact candidate data-only contract')
  need(c['profiles']==list(range(5))and all(type(x)is int for x in c['profiles'])and type(c['tokens'])is int and c['tokens']==128 and c['routing']=='UNMODIFIED_OFFICIAL_TORCH_TOPK','unchanged all-five M128/routing')
  for field,pin in (('old_artifact_manifest_sha256',old['artifact_manifest']),('new_artifact_manifest_sha256',b['artifact_manifest']),('retained_materials_sha256',manifest_pin),('old_source_pins_sha256',old['source_pins'])):
   checked(pin,1<<20);need(c[field]==pin['sha256'],'candidate exact independent input binding')
@@ -84,7 +88,10 @@ def candidate_material_contract(manifest_pin,d,old,b):
  for pin,artifact in ((old['artifact_manifest'],before),(b['artifact_manifest'],after)):
   driver=artifact['common']['driver'];need(set(driver)=={'path','bytes','sha256'}and driver['path']=='driver.cpp','fixed stimulus driver')
   checked(dict(driver,path=str(P(pin['path']).parent/'driver.cpp')),1<<30);drivers.append(driver)
- need(drivers[0]==drivers[1],'candidate may not change stimulus driver')
+ if first_fault:
+  probe=module.first_fault_module(b['repo'],b['source_pins']).verify_probe(review,b['artifact_manifest'],b['repo'],b['source_pins'])
+  need(drivers[0]['sha256']=='343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61'and drivers[0]['bytes']==27317 and drivers[1]['sha256']==probe['driver_sha256']and c['readonly_driver_contract_sha256']==probe['readonly_driver_contract_sha256'],'independent exact readonly stimulus relation')
+ else:need(drivers[0]==drivers[1],'candidate may not change stimulus driver')
  rows=c['reference_sources']
  need(type(rows)is list and len(rows)==51 and len({r['path']for r in rows})==51,'exact51 unchanged reference sources')
  for r in rows:

@@ -1,0 +1,2037 @@
+{
+  "schema": "FIXED_NONHIER_PRETHROW_SCHEMA_V1",
+  "status": "SOURCE_ONLY_PENDING_REVIEW_NOT_EXECUTED",
+  "root_module": "HostBlockTopV4",
+  "snapshot_point": "AFTER_EXISTING_CLOCK0_EVAL_BEFORE_EXISTING_RESETREQUIRED_THROW",
+  "extra_eval_or_clock": false,
+  "read_hier_child_internals": false,
+  "payload_data_or_addresses": false,
+  "generated_cpp_member_paths_known": false,
+  "missing_not_zero_filled": [
+    "MatrixPipelineService.seedPoison",
+    "QwenOwnerKernel.TransposedDenseDownOwner_io_issueCycles"
+  ],
+  "inputs": {
+    "FIXED_CANDIDATE_SIGNALS.json": "0ae90793f6bf56add566dcfb45051bfdb47549c0b7309423d41bfe5865a06f55",
+    "NONHIER_BOUNDARY_SIGNALS.json": "cd8f01282a079f228a8853523a51716f3100e107904db08d3ddf299c35926b27"
+  },
+  "signals": [
+    {
+      "module": "HostBlockTopV4",
+      "instance_path": "",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "io_resetRequired",
+      "width_bits": 1,
+      "sv_line": 1283150,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/moe_router_score_observation_20261030/source/HostBlockTopV4.scala 38:12]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "HostBlockTopV4__io_resetRequired",
+      "sv_var": "io_resetRequired",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "HostBlockTopV4",
+      "instance_path": "",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "owner_io_resetRequired",
+      "width_bits": 1,
+      "sv_line": 1289574,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/moe_router_score_observation_20261030/source/HostBlockTopV4.scala 52:510]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "HostBlockTopV4__owner_io_resetRequired",
+      "sv_var": "owner_io_resetRequired",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "HostBlockTopV4",
+      "instance_path": "",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "hub_io_resetRequired",
+      "width_bits": 1,
+      "sv_line": 1289824,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/moe_router_score_observation_20261030/source/HostBlockTopV4.scala 58:17]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "HostBlockTopV4__hub_io_resetRequired",
+      "sv_var": "hub_io_resetRequired",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "HostBlockTopV4",
+      "instance_path": "",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "runtimeGuard_io_localFault",
+      "width_bits": 1,
+      "sv_line": 1294584,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/moe_router_score_observation_20261030/source/HostBlockTopV4.scala 84:26]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "HostBlockTopV4__runtimeGuard_io_localFault",
+      "sv_var": "runtimeGuard_io_localFault",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "HostBlockTopV4",
+      "instance_path": "",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "dmaPoison",
+      "width_bits": 1,
+      "sv_line": 1297236,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/moe_router_score_observation_20261030/source/HostBlockTopV4.scala 342:14 79:21]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "HostBlockTopV4__dmaPoison",
+      "sv_var": "dmaPoison",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "HostBlockTopV4",
+      "instance_path": "",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "physicalFault",
+      "width_bits": 1,
+      "sv_line": 1297253,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/moe_router_score_observation_20261030/source/HostBlockTopV4.scala 99:68]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "HostBlockTopV4__physicalFault",
+      "sv_var": "physicalFault",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "HostBlockTopV4",
+      "instance_path": "",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "numericalFault",
+      "width_bits": 1,
+      "sv_line": 1305319,
+      "source": "实际SV声明，见sv_line",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "HostBlockTopV4__numericalFault",
+      "sv_var": "numericalFault",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "HostBlockTopV4",
+      "instance_path": "",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "ordinaryAdmissionFault",
+      "width_bits": 1,
+      "sv_line": 1317691,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/moe_router_score_observation_20261030/source/HostBlockTopV4.scala 170:53]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "HostBlockTopV4__ordinaryAdmissionFault",
+      "sv_var": "ordinaryAdmissionFault",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "HostRuntimeOwnerGuardV5",
+      "instance_path": "runtimeGuard",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "io_resetRequired",
+      "width_bits": 1,
+      "sv_line": 1272919,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/HostRuntimeOwnerGuardV5.scala 51:12]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "HostRuntimeOwnerGuardV5__io_resetRequired",
+      "sv_var": "io_resetRequired",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "HostRuntimeOwnerGuardV5",
+      "instance_path": "runtimeGuard",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "state",
+      "width_bits": 2,
+      "sv_line": 1273192,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/HostRuntimeOwnerGuardV5.scala 69:20]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "HostRuntimeOwnerGuardV5__state",
+      "sv_var": "state",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "HostRuntimeOwnerGuardV5",
+      "instance_path": "runtimeGuard",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "quarantine",
+      "width_bits": 1,
+      "sv_line": 1273193,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/HostRuntimeOwnerGuardV5.scala 69:49]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "HostRuntimeOwnerGuardV5__quarantine",
+      "sv_var": "quarantine",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "HostRuntimeOwnerGuardV5",
+      "instance_path": "runtimeGuard",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "poisoned",
+      "width_bits": 1,
+      "sv_line": 1273194,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/HostRuntimeOwnerGuardV5.scala 69:79]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "HostRuntimeOwnerGuardV5__poisoned",
+      "sv_var": "poisoned",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "HostRuntimeOwnerGuardV5",
+      "instance_path": "runtimeGuard",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "heldPhysicalSequence",
+      "width_bits": 32,
+      "sv_line": 1273260,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/HostRuntimeOwnerGuardV5.scala 72:31]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。只描述Guard持有寄存值，是否为当前活跃tag必须结合state/握手；不能伪造tag。",
+      "symbol_key": "HostRuntimeOwnerGuardV5__heldPhysicalSequence",
+      "sv_var": "heldPhysicalSequence",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_ONLY_NOT_ACTIVE_TAG_PROOF",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "HostRuntimeOwnerGuardV5",
+      "instance_path": "runtimeGuard",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "unknownReply",
+      "width_bits": 1,
+      "sv_line": 1273672,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/HostRuntimeOwnerGuardV5.scala 90:42]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "HostRuntimeOwnerGuardV5__unknownReply",
+      "sv_var": "unknownReply",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "HostRuntimeOwnerGuardV5",
+      "instance_path": "runtimeGuard",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "wrongReply",
+      "width_bits": 1,
+      "sv_line": 1273674,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/HostRuntimeOwnerGuardV5.scala 91:59]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "HostRuntimeOwnerGuardV5__wrongReply",
+      "sv_var": "wrongReply",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "HostRuntimeOwnerGuardV5",
+      "instance_path": "runtimeGuard",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "contextChanged",
+      "width_bits": 1,
+      "sv_line": 1273675,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/HostRuntimeOwnerGuardV5.scala 93:35]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "HostRuntimeOwnerGuardV5__contextChanged",
+      "sv_var": "contextChanged",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "HostRuntimeOwnerGuardV5",
+      "instance_path": "runtimeGuard",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "reservationContextChanged",
+      "width_bits": 1,
+      "sv_line": 1273676,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/HostRuntimeOwnerGuardV5.scala 94:44]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "HostRuntimeOwnerGuardV5__reservationContextChanged",
+      "sv_var": "reservationContextChanged",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "HostRuntimeOwnerGuardV5",
+      "instance_path": "runtimeGuard",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "wrongRelease",
+      "width_bits": 1,
+      "sv_line": 1273686,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/HostRuntimeOwnerGuardV5.scala 101:37]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "HostRuntimeOwnerGuardV5__wrongRelease",
+      "sv_var": "wrongRelease",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "HostRuntimeOwnerGuardV5",
+      "instance_path": "runtimeGuard",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "wrongPhaseOffer",
+      "width_bits": 1,
+      "sv_line": 1273783,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/HostRuntimeOwnerGuardV5.scala 107:41]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "HostRuntimeOwnerGuardV5__wrongPhaseOffer",
+      "sv_var": "wrongPhaseOffer",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "HostRuntimeOwnerGuardV5",
+      "instance_path": "runtimeGuard",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "faultNow",
+      "width_bits": 1,
+      "sv_line": 1273784,
+      "source": "实际SV声明，见sv_line",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "HostRuntimeOwnerGuardV5__faultNow",
+      "sv_var": "faultNow",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "HostRuntimeOwnerGuardV5",
+      "instance_path": "runtimeGuard",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "ownedAuthorityFault",
+      "width_bits": 1,
+      "sv_line": 1273786,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/HostRuntimeOwnerGuardV5.scala 110:56]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "HostRuntimeOwnerGuardV5__ownedAuthorityFault",
+      "sv_var": "ownedAuthorityFault",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "io_port_step_ready",
+      "width_bits": 1,
+      "sv_line": 838336,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 33:12]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__io_port_step_ready",
+      "sv_var": "io_port_step_ready",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "io_port_step_valid",
+      "width_bits": 1,
+      "sv_line": 838337,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 33:12]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__io_port_step_valid",
+      "sv_var": "io_port_step_valid",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "io_port_step_bits_context",
+      "width_bits": 3,
+      "sv_line": 838610,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 33:12]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅io_port_step_valid为真时解释请求；fire需再合ready。",
+      "symbol_key": "MatrixPipelineService__io_port_step_bits_context",
+      "sv_var": "io_port_step_bits_context",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__io_port_step_valid"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "io_port_step_bits_clear",
+      "width_bits": 1,
+      "sv_line": 838611,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 33:12]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅io_port_step_valid为真时解释请求；fire需再合ready。",
+      "symbol_key": "MatrixPipelineService__io_port_step_bits_clear",
+      "sv_var": "io_port_step_bits_clear",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__io_port_step_valid"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "io_port_step_bits_last",
+      "width_bits": 1,
+      "sv_line": 838612,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 33:12]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅io_port_step_valid为真时解释请求；fire需再合ready。",
+      "symbol_key": "MatrixPipelineService__io_port_step_bits_last",
+      "sv_var": "io_port_step_bits_last",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__io_port_step_valid"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "io_port_step_bits_finish",
+      "width_bits": 1,
+      "sv_line": 838613,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 33:12]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅io_port_step_valid为真时解释请求；fire需再合ready。",
+      "symbol_key": "MatrixPipelineService__io_port_step_bits_finish",
+      "sv_var": "io_port_step_bits_finish",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__io_port_step_valid"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "io_port_step_bits_emit",
+      "width_bits": 1,
+      "sv_line": 838614,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 33:12]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅io_port_step_valid为真时解释请求；fire需再合ready。",
+      "symbol_key": "MatrixPipelineService__io_port_step_bits_emit",
+      "sv_var": "io_port_step_bits_emit",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__io_port_step_valid"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "io_resetRequired",
+      "width_bits": 1,
+      "sv_line": 842748,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 33:12]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__io_resetRequired",
+      "sv_var": "io_resetRequired",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "tags_io_deq_ready",
+      "width_bits": 1,
+      "sv_line": 842781,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 55:18]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__tags_io_deq_ready",
+      "sv_var": "tags_io_deq_ready",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "tags_io_deq_valid",
+      "width_bits": 1,
+      "sv_line": 842782,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 55:18]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__tags_io_deq_valid",
+      "sv_var": "tags_io_deq_valid",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "tags_io_deq_bits_context",
+      "width_bits": 3,
+      "sv_line": 842783,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 55:18]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅tags_io_deq_valid为真时解释FIFO头内容；fire需再合ready。",
+      "symbol_key": "MatrixPipelineService__tags_io_deq_bits_context",
+      "sv_var": "tags_io_deq_bits_context",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__tags_io_deq_valid"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "tags_io_deq_bits_last",
+      "width_bits": 1,
+      "sv_line": 842784,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 55:18]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅tags_io_deq_valid为真时解释FIFO头内容；fire需再合ready。",
+      "symbol_key": "MatrixPipelineService__tags_io_deq_bits_last",
+      "sv_var": "tags_io_deq_bits_last",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__tags_io_deq_valid"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "tags_io_deq_bits_finish",
+      "width_bits": 1,
+      "sv_line": 842785,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 55:18]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅tags_io_deq_valid为真时解释FIFO头内容；fire需再合ready。",
+      "symbol_key": "MatrixPipelineService__tags_io_deq_bits_finish",
+      "sv_var": "tags_io_deq_bits_finish",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__tags_io_deq_valid"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "tags_io_deq_bits_emit",
+      "width_bits": 1,
+      "sv_line": 842786,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 55:18]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅tags_io_deq_valid为真时解释FIFO头内容；fire需再合ready。",
+      "symbol_key": "MatrixPipelineService__tags_io_deq_bits_emit",
+      "sv_var": "tags_io_deq_bits_emit",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__tags_io_deq_valid"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_0_out_valid_o",
+      "width_bits": 1,
+      "sv_line": 851004,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_0_out_valid_o",
+      "sv_var": "leaves_0_out_valid_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_0_out_context_o",
+      "width_bits": 3,
+      "sv_line": 851006,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅同叶out_valid_o为真时解释返回标签；没有载荷/内部读取。",
+      "symbol_key": "MatrixPipelineService__leaves_0_out_context_o",
+      "sv_var": "leaves_0_out_context_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__leaves_0_out_valid_o"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_0_out_last_o",
+      "width_bits": 1,
+      "sv_line": 851007,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅同叶out_valid_o为真时解释返回标签；没有载荷/内部读取。",
+      "symbol_key": "MatrixPipelineService__leaves_0_out_last_o",
+      "sv_var": "leaves_0_out_last_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__leaves_0_out_valid_o"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_0_completion_valid_o",
+      "width_bits": 1,
+      "sv_line": 851009,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_0_completion_valid_o",
+      "sv_var": "leaves_0_completion_valid_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_0_protocol_error_o",
+      "width_bits": 1,
+      "sv_line": 851012,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_0_protocol_error_o",
+      "sv_var": "leaves_0_protocol_error_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_0_seed_reset_required_o",
+      "width_bits": 1,
+      "sv_line": 851033,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_0_seed_reset_required_o",
+      "sv_var": "leaves_0_seed_reset_required_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_1_out_valid_o",
+      "width_bits": 1,
+      "sv_line": 851049,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_1_out_valid_o",
+      "sv_var": "leaves_1_out_valid_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_1_out_context_o",
+      "width_bits": 3,
+      "sv_line": 851051,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅同叶out_valid_o为真时解释返回标签；没有载荷/内部读取。",
+      "symbol_key": "MatrixPipelineService__leaves_1_out_context_o",
+      "sv_var": "leaves_1_out_context_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__leaves_1_out_valid_o"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_1_out_last_o",
+      "width_bits": 1,
+      "sv_line": 851052,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅同叶out_valid_o为真时解释返回标签；没有载荷/内部读取。",
+      "symbol_key": "MatrixPipelineService__leaves_1_out_last_o",
+      "sv_var": "leaves_1_out_last_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__leaves_1_out_valid_o"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_1_completion_valid_o",
+      "width_bits": 1,
+      "sv_line": 851054,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_1_completion_valid_o",
+      "sv_var": "leaves_1_completion_valid_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_1_protocol_error_o",
+      "width_bits": 1,
+      "sv_line": 851057,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_1_protocol_error_o",
+      "sv_var": "leaves_1_protocol_error_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_1_seed_reset_required_o",
+      "width_bits": 1,
+      "sv_line": 851078,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_1_seed_reset_required_o",
+      "sv_var": "leaves_1_seed_reset_required_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_2_out_valid_o",
+      "width_bits": 1,
+      "sv_line": 851094,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_2_out_valid_o",
+      "sv_var": "leaves_2_out_valid_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_2_out_context_o",
+      "width_bits": 3,
+      "sv_line": 851096,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅同叶out_valid_o为真时解释返回标签；没有载荷/内部读取。",
+      "symbol_key": "MatrixPipelineService__leaves_2_out_context_o",
+      "sv_var": "leaves_2_out_context_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__leaves_2_out_valid_o"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_2_out_last_o",
+      "width_bits": 1,
+      "sv_line": 851097,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅同叶out_valid_o为真时解释返回标签；没有载荷/内部读取。",
+      "symbol_key": "MatrixPipelineService__leaves_2_out_last_o",
+      "sv_var": "leaves_2_out_last_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__leaves_2_out_valid_o"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_2_completion_valid_o",
+      "width_bits": 1,
+      "sv_line": 851099,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_2_completion_valid_o",
+      "sv_var": "leaves_2_completion_valid_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_2_protocol_error_o",
+      "width_bits": 1,
+      "sv_line": 851102,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_2_protocol_error_o",
+      "sv_var": "leaves_2_protocol_error_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_2_seed_reset_required_o",
+      "width_bits": 1,
+      "sv_line": 851123,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_2_seed_reset_required_o",
+      "sv_var": "leaves_2_seed_reset_required_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_3_out_valid_o",
+      "width_bits": 1,
+      "sv_line": 851139,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_3_out_valid_o",
+      "sv_var": "leaves_3_out_valid_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_3_out_context_o",
+      "width_bits": 3,
+      "sv_line": 851141,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅同叶out_valid_o为真时解释返回标签；没有载荷/内部读取。",
+      "symbol_key": "MatrixPipelineService__leaves_3_out_context_o",
+      "sv_var": "leaves_3_out_context_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__leaves_3_out_valid_o"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_3_out_last_o",
+      "width_bits": 1,
+      "sv_line": 851142,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅同叶out_valid_o为真时解释返回标签；没有载荷/内部读取。",
+      "symbol_key": "MatrixPipelineService__leaves_3_out_last_o",
+      "sv_var": "leaves_3_out_last_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__leaves_3_out_valid_o"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_3_completion_valid_o",
+      "width_bits": 1,
+      "sv_line": 851144,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_3_completion_valid_o",
+      "sv_var": "leaves_3_completion_valid_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_3_protocol_error_o",
+      "width_bits": 1,
+      "sv_line": 851147,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_3_protocol_error_o",
+      "sv_var": "leaves_3_protocol_error_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_3_seed_reset_required_o",
+      "width_bits": 1,
+      "sv_line": 851168,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_3_seed_reset_required_o",
+      "sv_var": "leaves_3_seed_reset_required_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_4_out_valid_o",
+      "width_bits": 1,
+      "sv_line": 851184,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_4_out_valid_o",
+      "sv_var": "leaves_4_out_valid_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_4_out_context_o",
+      "width_bits": 3,
+      "sv_line": 851186,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅同叶out_valid_o为真时解释返回标签；没有载荷/内部读取。",
+      "symbol_key": "MatrixPipelineService__leaves_4_out_context_o",
+      "sv_var": "leaves_4_out_context_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__leaves_4_out_valid_o"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_4_out_last_o",
+      "width_bits": 1,
+      "sv_line": 851187,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅同叶out_valid_o为真时解释返回标签；没有载荷/内部读取。",
+      "symbol_key": "MatrixPipelineService__leaves_4_out_last_o",
+      "sv_var": "leaves_4_out_last_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__leaves_4_out_valid_o"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_4_completion_valid_o",
+      "width_bits": 1,
+      "sv_line": 851189,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_4_completion_valid_o",
+      "sv_var": "leaves_4_completion_valid_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_4_protocol_error_o",
+      "width_bits": 1,
+      "sv_line": 851192,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_4_protocol_error_o",
+      "sv_var": "leaves_4_protocol_error_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_4_seed_reset_required_o",
+      "width_bits": 1,
+      "sv_line": 851213,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_4_seed_reset_required_o",
+      "sv_var": "leaves_4_seed_reset_required_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_5_out_valid_o",
+      "width_bits": 1,
+      "sv_line": 851229,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_5_out_valid_o",
+      "sv_var": "leaves_5_out_valid_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_5_out_context_o",
+      "width_bits": 3,
+      "sv_line": 851231,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅同叶out_valid_o为真时解释返回标签；没有载荷/内部读取。",
+      "symbol_key": "MatrixPipelineService__leaves_5_out_context_o",
+      "sv_var": "leaves_5_out_context_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__leaves_5_out_valid_o"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_5_out_last_o",
+      "width_bits": 1,
+      "sv_line": 851232,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅同叶out_valid_o为真时解释返回标签；没有载荷/内部读取。",
+      "symbol_key": "MatrixPipelineService__leaves_5_out_last_o",
+      "sv_var": "leaves_5_out_last_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__leaves_5_out_valid_o"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_5_completion_valid_o",
+      "width_bits": 1,
+      "sv_line": 851234,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_5_completion_valid_o",
+      "sv_var": "leaves_5_completion_valid_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_5_protocol_error_o",
+      "width_bits": 1,
+      "sv_line": 851237,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_5_protocol_error_o",
+      "sv_var": "leaves_5_protocol_error_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_5_seed_reset_required_o",
+      "width_bits": 1,
+      "sv_line": 851258,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_5_seed_reset_required_o",
+      "sv_var": "leaves_5_seed_reset_required_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_6_out_valid_o",
+      "width_bits": 1,
+      "sv_line": 851274,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_6_out_valid_o",
+      "sv_var": "leaves_6_out_valid_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_6_out_context_o",
+      "width_bits": 3,
+      "sv_line": 851276,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅同叶out_valid_o为真时解释返回标签；没有载荷/内部读取。",
+      "symbol_key": "MatrixPipelineService__leaves_6_out_context_o",
+      "sv_var": "leaves_6_out_context_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__leaves_6_out_valid_o"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_6_out_last_o",
+      "width_bits": 1,
+      "sv_line": 851277,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅同叶out_valid_o为真时解释返回标签；没有载荷/内部读取。",
+      "symbol_key": "MatrixPipelineService__leaves_6_out_last_o",
+      "sv_var": "leaves_6_out_last_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__leaves_6_out_valid_o"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_6_completion_valid_o",
+      "width_bits": 1,
+      "sv_line": 851279,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_6_completion_valid_o",
+      "sv_var": "leaves_6_completion_valid_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_6_protocol_error_o",
+      "width_bits": 1,
+      "sv_line": 851282,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_6_protocol_error_o",
+      "sv_var": "leaves_6_protocol_error_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_6_seed_reset_required_o",
+      "width_bits": 1,
+      "sv_line": 851303,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_6_seed_reset_required_o",
+      "sv_var": "leaves_6_seed_reset_required_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_7_out_valid_o",
+      "width_bits": 1,
+      "sv_line": 851319,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_7_out_valid_o",
+      "sv_var": "leaves_7_out_valid_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_7_out_context_o",
+      "width_bits": 3,
+      "sv_line": 851321,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅同叶out_valid_o为真时解释返回标签；没有载荷/内部读取。",
+      "symbol_key": "MatrixPipelineService__leaves_7_out_context_o",
+      "sv_var": "leaves_7_out_context_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__leaves_7_out_valid_o"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_7_out_last_o",
+      "width_bits": 1,
+      "sv_line": 851322,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅同叶out_valid_o为真时解释返回标签；没有载荷/内部读取。",
+      "symbol_key": "MatrixPipelineService__leaves_7_out_last_o",
+      "sv_var": "leaves_7_out_last_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "MatrixPipelineService__leaves_7_out_valid_o"
+        ]
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_7_completion_valid_o",
+      "width_bits": 1,
+      "sv_line": 851324,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_7_completion_valid_o",
+      "sv_var": "leaves_7_completion_valid_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_7_protocol_error_o",
+      "width_bits": 1,
+      "sv_line": 851327,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_7_protocol_error_o",
+      "sv_var": "leaves_7_protocol_error_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "leaves_7_seed_reset_required_o",
+      "width_bits": 1,
+      "sv_line": 851348,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 66:32]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。叶实例既有外部返回线，仅控制状态，不读取叶内部。",
+      "symbol_key": "MatrixPipelineService__leaves_7_seed_reset_required_o",
+      "sv_var": "leaves_7_seed_reset_required_o",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "seedController_reset",
+      "width_bits": 1,
+      "sv_line": 851352,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 70:58]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__seedController_reset",
+      "sv_var": "seedController_reset",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "seedController_io_resetRequired",
+      "width_bits": 1,
+      "sv_line": 851459,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 70:58]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__seedController_io_resetRequired",
+      "sv_var": "seedController_io_resetRequired",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "state",
+      "width_bits": 3,
+      "sv_line": 851492,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 43:20]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__state",
+      "sv_var": "state",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "group_tag",
+      "width_bits": 32,
+      "sv_line": 851497,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 44:16]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__group_tag",
+      "sv_var": "group_tag",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "event_",
+      "width_bits": 16,
+      "sv_line": 851498,
+      "source": "MatrixPipeline.scala45:20",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__event_",
+      "sv_var": "event_",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "poison",
+      "width_bits": 1,
+      "sv_line": 851499,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 46:21]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__poison",
+      "sv_var": "poison",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "endIssued",
+      "width_bits": 1,
+      "sv_line": 851500,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 47:24]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__endIssued",
+      "sv_var": "endIssued",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "seen",
+      "width_bits": 5,
+      "sv_line": 851501,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 48:19]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__seen",
+      "sv_var": "seen",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "closed",
+      "width_bits": 5,
+      "sv_line": 851502,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 48:48]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__closed",
+      "sv_var": "closed",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "wideSteps",
+      "width_bits": 64,
+      "sv_line": 851504,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 49:53]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__wideSteps",
+      "sv_var": "wideSteps",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "allOutValid",
+      "width_bits": 1,
+      "sv_line": 851523,
+      "source": "实际SV声明，见sv_line",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__allOutValid",
+      "sv_var": "allOutValid",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "allCompletion",
+      "width_bits": 1,
+      "sv_line": 851527,
+      "source": "实际SV声明，见sv_line",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__allCompletion",
+      "sv_var": "allCompletion",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "legalStep",
+      "width_bits": 1,
+      "sv_line": 851543,
+      "source": "实际SV声明，见sv_line",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__legalStep",
+      "sv_var": "legalStep",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "consumeOutput",
+      "width_bits": 1,
+      "sv_line": 851548,
+      "source": "实际SV声明，见sv_line",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__consumeOutput",
+      "sv_var": "consumeOutput",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "outputBad",
+      "width_bits": 1,
+      "sv_line": 851574,
+      "source": "实际SV声明，见sv_line",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__outputBad",
+      "sv_var": "outputBad",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "endpointError",
+      "width_bits": 1,
+      "sv_line": 851576,
+      "source": "实际SV声明，见sv_line",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__endpointError",
+      "sv_var": "endpointError",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "completionBad",
+      "width_bits": 1,
+      "sv_line": 851604,
+      "source": "实际SV声明，见sv_line",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__completionBad",
+      "sv_var": "completionBad",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "anyLeafFault",
+      "width_bits": 1,
+      "sv_line": 851744,
+      "source": "实际SV声明，见sv_line",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__anyLeafFault",
+      "sv_var": "anyLeafFault",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "idleUnexpected",
+      "width_bits": 1,
+      "sv_line": 851747,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 192:35]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__idleUnexpected",
+      "sv_var": "idleUnexpected",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "MatrixPipelineService",
+      "instance_path": "owner.matrix",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "lifetimeQuarantine",
+      "width_bits": 1,
+      "sv_line": 851748,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala 193:33]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "MatrixPipelineService__lifetimeQuarantine",
+      "sv_var": "lifetimeQuarantine",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "QwenOwnerKernel",
+      "instance_path": "owner",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "TransposedDenseDownOwner_io_window_result_bits_ng",
+      "width_bits": 16,
+      "sv_line": 1050914,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/p0_resident_observation_20261030/source/QwenOwnerProtocol.scala 258:13]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。窗口status/ng/slot为现有寄存器投影；本候选不含window valid，禁止称有效完成；producedBeats另受windowBegun&&exact门。",
+      "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_window_result_bits_ng",
+      "sv_var": "TransposedDenseDownOwner_io_window_result_bits_ng",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_ONLY_NO_COMPLETION_CLAIM",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "QwenOwnerKernel",
+      "instance_path": "owner",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "TransposedDenseDownOwner_io_window_result_bits_slot",
+      "width_bits": 2,
+      "sv_line": 1050916,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/p0_resident_observation_20261030/source/QwenOwnerProtocol.scala 258:13]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。窗口status/ng/slot为现有寄存器投影；本候选不含window valid，禁止称有效完成；producedBeats另受windowBegun&&exact门。",
+      "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_window_result_bits_slot",
+      "sv_var": "TransposedDenseDownOwner_io_window_result_bits_slot",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_ONLY_NO_COMPLETION_CLAIM",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "QwenOwnerKernel",
+      "instance_path": "owner",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "TransposedDenseDownOwner_io_window_result_bits_status",
+      "width_bits": 8,
+      "sv_line": 1050918,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/p0_resident_observation_20261030/source/QwenOwnerProtocol.scala 258:13]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。窗口status/ng/slot为现有寄存器投影；本候选不含window valid，禁止称有效完成；producedBeats另受windowBegun&&exact门。",
+      "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_window_result_bits_status",
+      "sv_var": "TransposedDenseDownOwner_io_window_result_bits_status",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_ONLY_NO_COMPLETION_CLAIM",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "QwenOwnerKernel",
+      "instance_path": "owner",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "TransposedDenseDownOwner_io_window_result_bits_producedBeats",
+      "width_bits": 11,
+      "sv_line": 1050920,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/p0_resident_observation_20261030/source/QwenOwnerProtocol.scala 258:13]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。窗口status/ng/slot为现有寄存器投影；本候选不含window valid，禁止称有效完成；producedBeats另受windowBegun&&exact门。",
+      "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_window_result_bits_producedBeats",
+      "sv_var": "TransposedDenseDownOwner_io_window_result_bits_producedBeats",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_ONLY_NO_COMPLETION_CLAIM",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "QwenOwnerKernel",
+      "instance_path": "owner",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "TransposedDenseDownOwner_io_done_bits_status",
+      "width_bits": 8,
+      "sv_line": 1051036,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/p0_resident_observation_20261030/source/QwenOwnerProtocol.scala 258:13]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。status直接状态寄存器投影；本候选不含done valid，不作为完成。",
+      "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_done_bits_status",
+      "sv_var": "TransposedDenseDownOwner_io_done_bits_status",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_ONLY_NO_COMPLETION_CLAIM",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "QwenOwnerKernel",
+      "instance_path": "owner",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "TransposedDenseDownOwner_io_matrix_result_ready",
+      "width_bits": 1,
+      "sv_line": 1051362,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/p0_resident_observation_20261030/source/QwenOwnerProtocol.scala 258:13]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_matrix_result_ready",
+      "sv_var": "TransposedDenseDownOwner_io_matrix_result_ready",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "QwenOwnerKernel",
+      "instance_path": "owner",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "TransposedDenseDownOwner_io_matrix_result_valid",
+      "width_bits": 1,
+      "sv_line": 1051363,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/p0_resident_observation_20261030/source/QwenOwnerProtocol.scala 258:13]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_matrix_result_valid",
+      "sv_var": "TransposedDenseDownOwner_io_matrix_result_valid",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    },
+    {
+      "module": "QwenOwnerKernel",
+      "instance_path": "owner",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "TransposedDenseDownOwner_io_matrix_result_bits_context",
+      "width_bits": 3,
+      "sv_line": 1055460,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/p0_resident_observation_20261030/source/QwenOwnerProtocol.scala 258:13]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅同前缀matrix_result_valid为真时解释；fire需result_ready。",
+      "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_matrix_result_bits_context",
+      "sv_var": "TransposedDenseDownOwner_io_matrix_result_bits_context",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "QwenOwnerKernel__TransposedDenseDownOwner_io_matrix_result_valid"
+        ]
+      }
+    },
+    {
+      "module": "QwenOwnerKernel",
+      "instance_path": "owner",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "TransposedDenseDownOwner_io_matrix_result_bits_last",
+      "width_bits": 1,
+      "sv_line": 1055461,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/p0_resident_observation_20261030/source/QwenOwnerProtocol.scala 258:13]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅同前缀matrix_result_valid为真时解释；fire需result_ready。",
+      "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_matrix_result_bits_last",
+      "sv_var": "TransposedDenseDownOwner_io_matrix_result_bits_last",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "QwenOwnerKernel__TransposedDenseDownOwner_io_matrix_result_valid"
+        ]
+      }
+    },
+    {
+      "module": "QwenOwnerKernel",
+      "instance_path": "owner",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "TransposedDenseDownOwner_io_matrix_result_bits_error",
+      "width_bits": 1,
+      "sv_line": 1055462,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/p0_resident_observation_20261030/source/QwenOwnerProtocol.scala 258:13]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。仅同前缀matrix_result_valid为真时解释；fire需result_ready。",
+      "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_matrix_result_bits_error",
+      "sv_var": "TransposedDenseDownOwner_io_matrix_result_bits_error",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "PAYLOAD_VALID",
+        "all_true_symbol_keys": [
+          "QwenOwnerKernel__TransposedDenseDownOwner_io_matrix_result_valid"
+        ]
+      }
+    },
+    {
+      "module": "QwenOwnerKernel",
+      "instance_path": "owner",
+      "instance_path_basis": "RELATIVE_TO_HOSTBLOCKTOPV4_NOT_GENERATED_CPP_ABI",
+      "signal": "TransposedDenseDownOwner_io_resetRequired",
+      "width_bits": 1,
+      "sv_line": 1055493,
+      "source": "@[home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha/candidates/p0_resident_observation_20261030/source/QwenOwnerProtocol.scala 258:13]",
+      "valid_qualifier_zh": "原clock=0 eval结束后、原resetRequired检查前只读当前组合/寄存位；不等价完成事件。",
+      "symbol_key": "QwenOwnerKernel__TransposedDenseDownOwner_io_resetRequired",
+      "sv_var": "TransposedDenseDownOwner_io_resetRequired",
+      "purpose_zh": "故障同拍只读控制定位，不作数值或完成资格",
+      "validity": {
+        "kind": "RAW_SNAPSHOT",
+        "all_true_symbol_keys": []
+      }
+    }
+  ],
+  "signal_count": 114,
+  "total_scalar_bits": 327,
+  "allowed_modules": [
+    "HostBlockTopV4",
+    "QwenOwnerKernel",
+    "MatrixPipelineService",
+    "HostRuntimeOwnerGuardV5"
+  ],
+  "unknown_modules_policy": "REJECT",
+  "deny_hier_modules": [
+    "TransposedDenseDownOwner",
+    "bf16_context_lane_cluster16_rev8b_b_candidate",
+    "qwen2_matrix_command_endpoint"
+  ],
+  "original_hierarchy_pin": {
+    "repo_path": "candidates/ci_frontend_materialization_r2_20261029/hierarchy_r7.vlt",
+    "sha256": "38d30ec52b3ccd708013d084745cab72423a702c12dc7f87ab865f622ac46541"
+  },
+  "finite_output": {
+    "max_bytes": 8192,
+    "recommended_encoding": "ordered scalar values array keyed by pinned schema; no raw paths/source/strings",
+    "worst_case_values_json_bytes": 283
+  }
+}

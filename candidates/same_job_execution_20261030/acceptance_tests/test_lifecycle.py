@@ -1,15 +1,156 @@
 import hashlib
 import argparse,ast,importlib.util,json,pathlib,tempfile,types,unittest
 from unittest.mock import patch
-D=pathlib.Path(__file__).resolve().parents[1]/'numeric'
+import os,copy
+D=pathlib.Path(os.environ.get('FIRST_FAULT_LEGACY_TEST_SOURCE',str(pathlib.Path(__file__).resolve().parents[1]))).resolve()/'numeric'
 import sys
 sys.path.insert(0,str(D))
 spec=importlib.util.spec_from_file_location('owned',D/'consumer_owned.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 BASE=D.parent/'acceptance_tests/fixtures/consumer_r2_baseline.py.txt'
+FIRST_FAULT_FUNCTION_INVERSE = {'artifact_identity': [('2d8f6018425ba181ef78c0d4d1e6028497c6fe7ff499a02ff45bc7281b69a909',
+                        "if frozen['schema'] == FIRST_FAULT_SCHEMA:\n"
+                        "    need(source_relocation is not None and source_relocation.get('candidate_scope') "
+                        "== FIRST_FAULT_SCOPE and (source_relocation.get('builder_identity') == "
+                        "frozen['artifact_identity']), 'independently admitted first fault artifact')\n"
+                        "elif frozen['schema'] == 'MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1':\n"
+                        "    need(source_relocation is not None and source_relocation.get('candidate_scope') "
+                        "== 'MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL' and "
+                        "(source_relocation.get('builder_identity') == frozen['artifact_identity']), "
+                        "'independently admitted model candidate, not a legacy schema alias')\n"
+                        'else:\n'
+                        "    need(frozen['schema'] == 'FROZEN_FIVE_PROFILE_DUT_ARTIFACT_V2', 'frozen "
+                        "artifact schema')",
+                        "if frozen['schema'] == 'MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1':\n"
+                        "    need(source_relocation is not None and source_relocation.get('candidate_scope') "
+                        "== 'MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL' and "
+                        "(source_relocation.get('builder_identity') == frozen['artifact_identity']), "
+                        "'independently admitted model candidate, not a legacy schema alias')\n"
+                        'else:\n'
+                        "    need(frozen['schema'] == 'FROZEN_FIVE_PROFILE_DUT_ARTIFACT_V2', 'frozen "
+                        "artifact schema')")],
+ 'coverage_policy': [('2151b5a7b72927bbff88f3c6fd8c40b761920f4000c9ed9be43f77128c306498',
+                      "if source_relocation is not None and source_relocation.get('candidate_scope') == "
+                      'FIRST_FAULT_SCOPE:\n'
+                      "    path = path.with_name('first_fault_observation_contract.py')\n"
+                      "    row = source_relocation['candidate_observation_checker']\n"
+                      "    need(pin(row) == path, 'admitted first fault observation checker')\n"
+                      "elif source_relocation is not None and source_relocation.get('candidate_scope') == "
+                      "'MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL':\n"
+                      "    path = path.with_name('candidate_observation_contract.py')\n"
+                      "    row = source_relocation['candidate_observation_checker']\n"
+                      "    need(pin(row) == path, 'admitted candidate observation checker')\n"
+                      'else:\n'
+                      '    need(sha(path) == '
+                      "'b8401fd6c8c238757103c3c093ea7dc6f3a0d37aab5f0d423e2a7edf2c293e71', 'reviewed "
+                      "observation contract module')",
+                      "if source_relocation is not None and source_relocation.get('candidate_scope') == "
+                      "'MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL':\n"
+                      "    path = path.with_name('candidate_observation_contract.py')\n"
+                      "    row = source_relocation['candidate_observation_checker']\n"
+                      "    need(pin(row) == path, 'admitted candidate observation checker')\n"
+                      'else:\n'
+                      '    need(sha(path) == '
+                      "'b8401fd6c8c238757103c3c093ea7dc6f3a0d37aab5f0d423e2a7edf2c293e71', 'reviewed "
+                      "observation contract module')")],
+ 'load_binding': [('e33c535544b5c6b002f5dd003ebedbd7deb4b4bcd2d332a33e20b6c60ee44127',
+                   "if frozen['schema'] == FIRST_FAULT_SCHEMA:\n"
+                   "    need(type(profile) is int and profile == 0, 'first fault execution is P0 only')\n"
+                   "    diagnostic_driver(frozen, source_relocation, common['driver'])\n"
+                   'else:\n'
+                   "    need(common['driver']['sha256'] == V3_DRIVER_SHA256, 'exact original V3 driver, no "
+                   "config-only replacement')",
+                   "need(common['driver']['sha256'] == V3_DRIVER_SHA256, 'exact original V3 driver, no "
+                   "config-only replacement')")],
+ 'verify_local_build': [('832633b7f44c56396020619899f974129d869a1112bee4084c6ea9670a0f8481',
+                         'if cloud is not None:\n'
+                         "    need(getattr(args, 'local_build_result', None) is None and getattr(args, "
+                         "'local_build_result_sha256', None) is None, 'imported build is not same-job "
+                         "retained result')\n"
+                         '    binding = cloud_invocation(args)\n'
+                         "    candidate = frozen['schema'] in "
+                         "('MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1', FIRST_FAULT_SCHEMA)\n"
+                         '    path = '
+                         "pathlib.Path(__file__).resolve().with_name('candidate_artifact_handoff.py' if "
+                         "candidate else 'artifact_handoff.py')\n"
+                         '    if candidate:\n'
+                         "        need(binding['pins'].get(str(path)) == sha(path), 'reviewed candidate "
+                         "build verifier source')\n"
+                         '    else:\n'
+                         '        need(sha(path) == '
+                         "'06ac175b7c1f8ca5b1dc19891a52c09f58f17fec521ee96e0f581ca4011ef0c5', 'reviewed "
+                         "imported build verifier')\n"
+                         "    spec = importlib.util.spec_from_file_location('verified_builder_handoff', "
+                         'path)\n'
+                         '    m = importlib.util.module_from_spec(spec)\n'
+                         '    spec.loader.exec_module(m)\n'
+                         "    need(frozen['artifact_identity']['run_id'] == args.expected_run_id and "
+                         "frozen['artifact_identity']['launch_commit'] == args.expected_launch_commit, "
+                         "'expected builder identity distinct from executor')\n"
+                         "    kwargs = dict(executor_adaptation=binding.get('executor_adaptation'))\n"
+                         '    if candidate:\n'
+                         "        kwargs.update(current_source_pins_pin=binding['source_pins'], "
+                         "repo=binding['repo'], "
+                         "model_candidate_review=binding.get('model_candidate_review'))\n"
+                         '    return m.verify(args.builder_handoff, args.builder_handoff_sha256, '
+                         'args.artifact_manifest, args.artifact_manifest_sha256, frozen, cloud, **kwargs)',
+                         'if cloud is not None:\n'
+                         "    need(getattr(args, 'local_build_result', None) is None and getattr(args, "
+                         "'local_build_result_sha256', None) is None, 'imported build is not same-job "
+                         "retained result')\n"
+                         '    binding = cloud_invocation(args)\n'
+                         "    candidate = frozen['schema'] == "
+                         "'MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'\n"
+                         '    path = '
+                         "pathlib.Path(__file__).resolve().with_name('candidate_artifact_handoff.py' if "
+                         "candidate else 'artifact_handoff.py')\n"
+                         '    if candidate:\n'
+                         "        need(binding['pins'].get(str(path)) == sha(path), 'reviewed candidate "
+                         "build verifier source')\n"
+                         '    else:\n'
+                         '        need(sha(path) == '
+                         "'06ac175b7c1f8ca5b1dc19891a52c09f58f17fec521ee96e0f581ca4011ef0c5', 'reviewed "
+                         "imported build verifier')\n"
+                         "    spec = importlib.util.spec_from_file_location('verified_builder_handoff', "
+                         'path)\n'
+                         '    m = importlib.util.module_from_spec(spec)\n'
+                         '    spec.loader.exec_module(m)\n'
+                         "    need(frozen['artifact_identity']['run_id'] == args.expected_run_id and "
+                         "frozen['artifact_identity']['launch_commit'] == args.expected_launch_commit, "
+                         "'expected builder identity distinct from executor')\n"
+                         "    kwargs = dict(executor_adaptation=binding.get('executor_adaptation'))\n"
+                         '    if candidate:\n'
+                         "        kwargs.update(current_source_pins_pin=binding['source_pins'], "
+                         "repo=binding['repo'], "
+                         "model_candidate_review=binding.get('model_candidate_review'))\n"
+                         '    return m.verify(args.builder_handoff, args.builder_handoff_sha256, '
+                         'args.artifact_manifest, args.artifact_manifest_sha256, frozen, cloud, **kwargs)')]}
+def undo_first_fault_function(test,tree,relative):
+ import copy
+ for digest,new_text,old_text in FIRST_FAULT_FUNCTION_INVERSE[relative]:
+  want=ast.parse(new_text).body;replacement=ast.parse(old_text).body
+  test.assertEqual(hashlib.sha256(ast.dump(ast.Module(body=want,type_ignores=[]),include_attributes=False).encode()).hexdigest(),digest)
+  count=0
+  want_dump=[ast.dump(n,include_attributes=False)for n in want]
+  def visit(node):
+   nonlocal count
+   for field,value in ast.iter_fields(node):
+    if isinstance(value,list):
+     i=0
+     while i<=len(value)-len(want):
+      if all(type(n)is type(w)for n,w in zip(value[i:i+len(want)],want)) and [ast.dump(n,include_attributes=False)for n in value[i:i+len(want)]]==want_dump:
+       value[i:i+len(want)]=copy.deepcopy(replacement);count+=1;i+=len(replacement)
+      else:i+=1
+     for item in value:
+      if isinstance(item,ast.AST):visit(item)
+    elif isinstance(value,ast.AST):visit(value)
+  visit(tree);test.assertEqual(count,1,'exact reviewed inverse snippet matched once: '+digest)
+ return tree
+
 class Tests(unittest.TestCase):
  def test_original_functions_ast(self):
   old={n.name:n for n in ast.parse(BASE.read_text()).body if isinstance(n,ast.FunctionDef)}
   new={n.name:n for n in ast.parse((D/'consumer_owned.py').read_text()).body if isinstance(n,ast.FunctionDef)}
+  for name in FIRST_FAULT_FUNCTION_INVERSE:undo_first_fault_function(self,new[name],name)
   dump=lambda n:ast.dump(n,include_attributes=False)
   # Only this reviewed split dispatch may precede the unchanged original path.
   expected=ast.parse("""
@@ -136,6 +277,24 @@ return result
  def test_inner_never_self_approves_outer_cleanup(self):
   tree=ast.parse((D/'consumer_owned.py').read_text());main=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='main')
   self.assertTrue(any(isinstance(n,ast.Raise) and ast.unparse(n.exc)=="SystemExit(1 if summary['status'] == 'FAIL_EXACT_REFERENCE' else 2)" for n in ast.walk(main)))
+
+class FirstFaultInverseNegativeTests(unittest.TestCase):
+ def test_every_fixed_fragment_duplicate_rejected(self):
+  for name,rows in FIRST_FAULT_FUNCTION_INVERSE.items():
+   for _,text,_ in rows:
+    fixture=ast.parse('\n'.join(row[1]for row in rows))
+    fixture.body.extend(ast.parse(text).body)
+    with self.subTest(name=name,fragment=text[:60]),self.assertRaises(AssertionError):undo_first_fault_function(self,fixture,name)
+ def test_every_fixed_fragment_mutation_rejected(self):
+  for name,rows in FIRST_FAULT_FUNCTION_INVERSE.items():
+   for index,(_,text,_)in enumerate(rows):
+    parts=[ast.parse(row[1]).body for row in rows]
+    # Mutate one literal in this exact fragment; no production code runs.
+    constants=[n for stmt in parts[index]for n in ast.walk(stmt)if isinstance(n,ast.Constant)and isinstance(n.value,str)]
+    self.assertTrue(constants);constants[0].value='UNREVIEWED_FIRST_FAULT_TEST_MUTATION'
+    fixture=ast.Module(body=[n for part in parts for n in part],type_ignores=[])
+    with self.subTest(name=name,fragment=text[:60]),self.assertRaises(AssertionError):undo_first_fault_function(self,fixture,name)
+
 if __name__=='__main__':
  parser=argparse.ArgumentParser();parser.add_argument('--baseline',type=pathlib.Path,required=True);args,rest=parser.parse_known_args();BASE=args.baseline
  unittest.main(argv=[__file__]+rest)

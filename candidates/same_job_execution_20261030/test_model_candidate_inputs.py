@@ -59,6 +59,6 @@ class Propagation(unittest.TestCase):
   flow=(D/'controller/cloud_flow.py').read_text()
   self.assertIn("roots.extend(imported['model_candidate_verified']['roots'])",flow)
   self.assertIn('DATA_REFERENCE_ONLY_NOT_NUMERICAL_ABI_OR_RUNTIME_PASS',flow)
-  self.assertIn("scope='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL'if 'model_candidate_review'in b",flow)
+  self.assertIn("scope='P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE'if admission['mode']=='P0_FIRST_FAULT_DIAGNOSTIC'else('MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL'if 'model_candidate_review'in b else 'CHISEL_TEST_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL')",flow)
   self.assertIn("'model-candidate-review'",(D/'prepare_cloud_execution.py').read_text())
 if __name__=='__main__':unittest.main()

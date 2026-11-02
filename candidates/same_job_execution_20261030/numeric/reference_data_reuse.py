@@ -37,9 +37,10 @@ def inventory(reference,result):
 def verify_metadata(reuse_pin,b):
  d=read(reuse_pin)
  need(set(d)=={'schema','scope','execution_mode','context','references','tensor_files','tensor_bytes','tree_cap','numerical_pass'},'exact reference reuse schema')
- need(d['schema']=='READONLY_REFERENCE_REUSE_V1'and d['scope']==SCOPE and d['execution_mode']==MODE and d['numerical_pass']is False,'explicit data-only stage reuse')
+ need(d['schema']=='READONLY_REFERENCE_REUSE_V1'and d['scope']==SCOPE and d['execution_mode']in(MODE,'P0_FIRST_FAULT_DIAGNOSTIC') and d['numerical_pass']is False,'explicit data-only stage reuse')
  need(set(d['context'])=={'repo','artifact_manifest','retained_materials'}and all(d['context'][k]==b[k]for k in d['context']),'current reference context')
- if 'execution_mode'in b:need(b['execution_mode']==MODE,'stage only')
+ if d['execution_mode']=='P0_FIRST_FAULT_DIAGNOSTIC':need(b.get('execution_mode')==d['execution_mode'],'first-fault reference exact binding mode')
+ if 'execution_mode'in b:need(b['execution_mode']==d['execution_mode'],'exact diagnostic reuse mode')
  canonical(b['repo'],True);read(b['artifact_manifest']);retained=read(b['retained_materials'])
  need(set(d['references'])==set(d['tensor_files'])=={str(i)for i in range(5)},'all five references')
  need(type(d['tensor_bytes'])is int and d['tensor_bytes']==sum(BYTES)and type(d['tree_cap'])is int and d['tree_cap']==TREE,'exact removed tensor bytes and tighter cap')

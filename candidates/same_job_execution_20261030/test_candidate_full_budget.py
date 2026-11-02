@@ -29,6 +29,13 @@ class CandidateBudgetTests(unittest.TestCase):
   with patch.object(importlib.machinery.SourceFileLoader,'exec_module',load):return mode.admit(self.b)
  def test_adapter_only_reviewed_exact_host_allowlist_additions(self):
   tree=ast.parse((E/'executor_adaptation.py').read_text())
+  # Exact first-fault host-only additions; retain the complete previous adapter AST.
+  first_fault_added={'evidence/first_fault_summary_join_20261102/README_CN.md','evidence/first_fault_summary_join_20261102/SYNTHETIC_FULL_SUMMARY_JOIN.json','evidence/first_fault_summary_join_20261102/test_full_summary_join.py','numeric/FIXED_NONHIER_SCHEMA.json','numeric/candidate_admission.py','numeric/candidate_artifact_handoff.py','numeric/first_fault_driver_contract.py','numeric/first_fault_records.py','numeric/p0_first_fault_contract.py','numeric/test_first_fault_contract.py','numeric/test_first_fault_gate_paths.py','numeric/test_first_fault_p0_reuse.py','numeric/test_first_fault_records.py','numeric/test_support_first_fault.py','test_first_fault_controller.py','test_first_fault_execution.py','test_first_fault_pipeline_join.py','test_first_fault_real_join.py','test_first_fault_summary_projection.py','test_model_candidate_inputs.py'}
+  first_fault_tuples=[n for n in ast.walk(tree)if isinstance(n,ast.Tuple)and first_fault_added <= {x.value for x in n.elts if isinstance(x,ast.Constant)}]
+  self.assertEqual(len(first_fault_tuples),1)
+  for value in first_fault_added:self.assertEqual(sum(isinstance(n,ast.Constant)and n.value==value for n in first_fault_tuples[0].elts),1)
+  first_fault_tuples[0].elts=[n for n in first_fault_tuples[0].elts if not(isinstance(n,ast.Constant)and n.value in first_fault_added)]
+  self.assertEqual(hashlib.sha256(ast.dump(tree,include_attributes=False).encode()).hexdigest(),'82eb724590f2fd529aa84fd3df3a762009c12a51769a24d89f6d2e89032f1efc')
   # Remove exactly the twelve independently reviewed reference-data host paths.
   reference_added={'test_profile_policy.py','runtime/test_cloud_runtime.py','evidence/reference_data_reuse_20261101/run_all_reference_links.py','evidence/reference_data_reuse_20261101/run_reference_pure_chain.py','evidence/reference_data_reuse_20261101/SAFE_EVIDENCE.json','evidence/reference_data_reuse_20261101/README_CN.md','test_reference_tree_budget.py','numeric/reference_data_reuse.py','numeric/test_reference_data_reuse.py','numeric/test_reference_numeric.py','numeric/locked_phase.py','numeric/live_budget.py'}
   reference_tuples=[n for n in ast.walk(tree)if isinstance(n,ast.Tuple)and reference_added <= {x.value for x in n.elts if isinstance(x,ast.Constant)}]

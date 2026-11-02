@@ -20,12 +20,14 @@ def base(old,profile):
 
 def candidate_contract(context):
  if context is None or 'model_candidate_review'not in context:return None
- consumer.need(context.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL','admitted model scope')
+ first_fault=context.get('candidate_scope')==consumer.FIRST_FAULT_SCOPE
+ consumer.need(first_fault or context.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL','admitted model scope')
  catalog_path=consumer.pin(context['current_source_pins_pin']);consumer.need(catalog_path.stat().st_size<=2<<20,'bounded actual source catalog')
  catalog=json.loads(catalog_path.read_text());consumer.need(catalog['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1','current source catalog')
- relative='candidates/same_job_execution_20261030/numeric/candidate_observation_contract.py'
+ observer='first_fault_observation_contract.py'if first_fault else'candidate_observation_contract.py'
+ relative='candidates/same_job_execution_20261030/numeric/'+observer
  rows=[r for r in catalog['files']if r['path']==relative];consumer.need(len(rows)==1,'one candidate observation implementation')
- path=P(context['repo'])/relative;consumer.need(path==HERE/'candidate_observation_contract.py'and path==path.resolve()and all(not q.is_symlink()for q in(path,*path.parents)),'fixed local candidate observer')
+ path=P(context['repo'])/relative;consumer.need(path==HERE/observer and path==path.resolve()and all(not q.is_symlink()for q in(path,*path.parents)),'fixed local candidate observer')
  raw=path.read_bytes();consumer.need(len(raw)==rows[0]['bytes']and hashlib.sha256(raw).hexdigest()==rows[0]['sha256'],'source-pinned candidate observation bytes')
  module=types.ModuleType('p0_admitted_candidate_observation');module.__file__=str(path);exec(compile(raw,str(path),'exec'),module.__dict__)
  module.admitted_context(context);return module
@@ -149,7 +151,9 @@ def preflight_artifact(args,frozen,source_relocation=None):
  for name,row in dict(frozen['common'],tool_manifest=frozen['tool_manifest']).items():
   rel=P(row['path']);consumer.need(not rel.is_absolute() and '..' not in rel.parts and str(rel) not in ('','.'),'relative artifact member')
   full=root/rel;consumer.need(full.resolve().is_relative_to(root),'artifact member escape');paths[name]=consumer.pin(dict(row,path=str(full)))
- consumer.need(frozen['common']['driver']['sha256']==consumer.V3_DRIVER_SHA256,'original V3 driver')
+ if frozen['schema']==consumer.FIRST_FAULT_SCHEMA:
+  consumer.need(type(args.profile)is int and args.profile==0,'first fault connection is P0 only');consumer.diagnostic_driver(frozen,source_relocation,frozen['common']['driver'])
+ else:consumer.need(frozen['common']['driver']['sha256']==consumer.V3_DRIVER_SHA256,'original V3 driver')
  receipt=json.loads(paths['build_receipt'].read_text())
  consumer.need(receipt['source_commit']==identity['source_commit'] and receipt['launch_commit']==identity['launch_commit'],'build source/launch')
  consumer.need(receipt['tool_manifest_sha256']==frozen['tool_manifest']['sha256'],'build tool pin')

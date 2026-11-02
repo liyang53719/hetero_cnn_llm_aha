@@ -1,3 +1,16 @@
+# 2026-11-02：P0 首故障只读诊断的宿主执行接线（非执行批准）
+
+## 当前事实与本批范围
+- 唯一完整硬件构建仍沿源码 `e1efd05fbd682405dffd090e278e69897f80e2f1`、激活 `f9d2c05cc66856278cebc02c43d122dfd1f01089`、run `41441028806` 执行。本批不改该 builder，不新建 launch/nonce，不重复构建，不改 159 硬件源、4096 MAC、122 IO 或 driver。
+- 本批仅宿主 E/N/runtime/controller/summary 与对应精确测试及有限纯链证据：新 `P0_FIRST_FAULT_DIAGNOSTIC` 明确只选 P0，P1–P4 为 NOT_SELECTED；注册的五块完整硬件定义及旧 CALIBRATION/STAGE/FULL 分支不变。新 scope/status 与旧数值评估域分开，诊断输出不证明首因或数值通过。
+- 预算提案为 P0 原完整 M128 刺激 10800 秒 / 1500000 active cycles，whole 22200 秒 = 材料预留 6090 + 保守 tail 15510 + 入口余量 600；这是工程上限，不是完成预测或新 ELF 实测校准。新只读探针开销未知；实际新七件、独立结构/driver 关系审查、ABI/资源/磁盘门及正式批准尚须逐项完成后才能启动。
+- 纯 provider 复用新增严格版本分支：旧 V1 同 artifact 门保留；新分支逐审旧 driver 343e、诊断 driver 逆剥、同固定 raw SV、原 program/输入/转换契约及旧闭合来源，所有实际 authority metadata 目录纳入监控。不把不同 ELF 当相同执行资格，不省略 fresh runtime/连接/ABI/输出隔离。
+- 受监督纯链 R2 已严格闭合：真实 C pack/七件完整 proof、N/E 准入、原 retained 完整哈希与原 evidence/acceptance/summary 均执行；ELF、身份/授权及运行收据明确为 synthetic，未执行 DUT。正例只得 VERIFIED_REAGGREGATED/PRESENT_VALID；额外 P1、缺 doc 拒绝，坏 snapshot 为 MALFORMED，全部 numerical_pass=false。该测试使用当时 874 源快照，不能冒本批新执行资格。
+- 独审另抓到真实 controller 最终 FLOW_RESULT 写旧 scope 的缺口；本批仅为新 mode 修精确 scope，并以唯一生产 save 表达式真实落盘、再走原 summary scope 门测试。旧 scope 分支保留；该补测与此前纯链分开记录，不声称旧纯链已覆盖该写出点。
+- 最终 builder→executor 全差异须精确 allowlist 与完整源 catalog 校验。本批只发布源代码及有限证据，不上传原始日志、SV/ELF 或数据，不扩大原七件传递范围。原五块仍 0/5 完整数值验收；局部 norm 相等、B 协议通过及工具小例均不得升级为原 P0 故障已修复。
+
+以下完整保留此前主计划正文：
+
 # 2026-11-02：原完整硬件 P0 首故障只读观测（源码／构建准备，尚无新数值结果）
 
 ## 当前事实与边界

@@ -1,6 +1,7 @@
 """Light file-only diagnostics; no census, job, supervisor or DUT execution."""
 import ast,hashlib,importlib.util,json,pathlib,tempfile,unittest
-D=pathlib.Path(__file__).resolve().parent
+import os
+D=pathlib.Path(os.environ.get('FIRST_FAULT_LEGACY_TEST_SOURCE',str(pathlib.Path(__file__).resolve().parent))).resolve()
 s=importlib.util.spec_from_file_location('disk_flow',D/'controller/cloud_flow.py');f=importlib.util.module_from_spec(s);s.loader.exec_module(f)
 EXPECTED_BASE_AST='6007e2b7aa04308f9b4c51287ce7ce027da9f53348c4ac0a83f97b10e71c96e2'
 REVIEWED_STAGE_INVERSE = {'controller/cloud_flow.py': [('ec28fb2ab41c8dc48e0a85a92172288f9b29736758e86ed7ae5e802effcec384',
@@ -652,7 +653,152 @@ REVIEWED_REFERENCE_INVERSE = {'controller/cloud_flow.py': [('4341d10fc595b5c3eb8
                                "stage_coverage_budget_sha256=b['stage_coverage_budget']['sha256'], "
                                "execution_scope='STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE') if "
                                "admission['mode'] == 'STAGE_COVERAGE_DIAGNOSTIC' else {}))")]}
+# Independently reviewed FIRST_FAULT insertion only; exact snippet SHA and unique count.
+# The final original whole-module BASE_AST/EXPECTED_BASE_AST below is unchanged.
+REVIEWED_FIRST_FAULT_INVERSE = {'controller/cloud_flow.py': [('d27e6a891963716c4d9089909d94d8091282fe74aa5bf64b9174523e2a7067b6',
+                               "if budget['execution_mode'] == 'P0_FIRST_FAULT_DIAGNOSTIC':\n"
+                               "    roots = reused.get('authority_roots')\n"
+                               '    need(type(roots) is list and roots == sorted(set(roots)) and '
+                               'all((type(x) is str and P(x).is_absolute() and (P(x) == P(x).resolve()) '
+                               "and P(x).is_dir() for x in roots)), 'exact canonical diagnostic "
+                               "authority directories')\n"
+                               "    need(reused['watch_scope'] == "
+                               "'PURE_PROVIDER_FINITE_EVIDENCE_AND_DIAGNOSTIC_AUTHORITY_V1' and "
+                               "reused['roots'] == [reused['provider_root'], reused['evidence_root'], "
+                               "*roots], 'all actual diagnostic data-authority reads watched')\n"
+                               'else:\n'
+                               "    need(reused['watch_scope'] == "
+                               "'PURE_PROVIDER_AND_FINITE_EVIDENCE_V1' and reused['roots'] == "
+                               "[reused['provider_root'], reused['evidence_root']], 'only verified pure "
+                               "provider and finite evidence directories watched')",
+                               "need(reused['watch_scope'] == 'PURE_PROVIDER_AND_FINITE_EVIDENCE_V1' "
+                               "and reused['roots'] == [reused['provider_root'], "
+                               "reused['evidence_root']], 'only verified pure provider and finite "
+                               "evidence directories watched')"),
+                              ['245cefff84c4ba2f20c13e8e0e199e85933483f1945777b9720448410befd236',
+                               "if mode in ('BOUNDED_CALIBRATION', 'STAGE_COVERAGE_DIAGNOSTIC', "
+                               "'P0_FIRST_FAULT_DIAGNOSTIC'):\n"
+                               '    return 2',
+                               "if mode in ('BOUNDED_CALIBRATION', 'STAGE_COVERAGE_DIAGNOSTIC'):\n"
+                               '    return 2'],
+                              ['c22948e731b9daab9e50ecf312e0ba85dfd98e20a42992ecdda5f304037a0e5d',
+                               "expected_profiles = {'0'} if b.get('execution_mode') == "
+                               "'P0_FIRST_FAULT_DIAGNOSTIC' else set(map(str, range(5)))\n"
+                               "if b.get('execution_mode') == 'P0_FIRST_FAULT_DIAGNOSTIC':\n"
+                               "    need(admission.get('diagnostic_profiles') == [0], 'fixed "
+                               "first-fault profile only')\n"
+                               'need(set(cal) == expected_profiles and all((type(x) is int and 0 < x <= '
+                               "20000 for x in cal.values())), 'all five explicit unchanged-stimulus "
+                               "calibration windows')",
+                               'need(set(cal) == set(map(str, range(5))) and all((type(x) is int and 0 '
+                               "< x <= 20000 for x in cal.values())), 'all five explicit "
+                               "unchanged-stimulus calibration windows')"],
+                              ['035fdd66ef45182e2d0fbb7cb3a8080e88f0c753ea8f521bd798cb082fd8021b',
+                               "need(candidate and budget['execution_mode'] in "
+                               "('STAGE_COVERAGE_DIAGNOSTIC', 'P0_FIRST_FAULT_DIAGNOSTIC'), 'P0 data "
+                               "reuse only approved candidate stage diagnostic')",
+                               "need(candidate and budget['execution_mode'] == "
+                               "'STAGE_COVERAGE_DIAGNOSTIC', 'P0 data reuse only approved candidate "
+                               "stage diagnostic')"],
+                              ['b50bf1424d19c860ff3d80f360e95c6ebbe6d31e76bc2981c8c143c6f92ca9c2',
+                               "need(candidate and budget['execution_mode'] in "
+                               "('STAGE_COVERAGE_DIAGNOSTIC', 'P0_FIRST_FAULT_DIAGNOSTIC'), 'reference "
+                               "reuse only approved candidate stage')",
+                               "need(candidate and budget['execution_mode'] == "
+                               "'STAGE_COVERAGE_DIAGNOSTIC', 'reference reuse only approved candidate "
+                               "stage')"],
+                              ['5b574f725e9c9aa54ec8ebec3649feabc36e7d3de6000affe44efd5d696a6ddf',
+                               "candidate = frozen.get('schema') in "
+                               "('MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1', "
+                               "'MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1')",
+                               "candidate = frozen.get('schema') == "
+                               "'MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'"],
+                              ['dbf5ec991b4ab24d310ccf6ddd9054d44ac075a98f35ed4498387600bec04f2c',
+                               'expected_scope = '
+                               "'P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE' "
+                               "if frozen.get('schema') == "
+                               "'MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1' else "
+                               "'MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL'\n"
+                               "need(reviewed['scope'] == expected_scope and "
+                               "reviewed['artifact_manifest_sha256'] == "
+                               "b['artifact_manifest']['sha256'], 'actual candidate review "
+                               "scope/artifact')",
+                               "need(reviewed['scope'] == "
+                               "'MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL' and "
+                               "reviewed['artifact_manifest_sha256'] == "
+                               "b['artifact_manifest']['sha256'], 'actual candidate review "
+                               "scope/artifact')"],
+                              ['1453e2f6ea5dc1ac95b7dd7d46766e56cccefddc9f5a13dc07a3767b64034f24',
+                               "if budget['execution_mode'] == 'P0_FIRST_FAULT_DIAGNOSTIC':\n"
+                               "    path = D.parent / 'numeric/p0_first_fault_contract.py'\n"
+                               "    need(b['pins'].get(str(path)) == sha(path), 'first-fault document "
+                               "verifier source pin')\n"
+                               "    doc_roots = mod('flow_first_fault_document', "
+                               'path).document_roots(b, reviewed)\n'
+                               '    imported = dict(imported, first_fault_document_roots=doc_roots)',
+                               ''],
+                              ['8be16d7dca4bc1f9f6b100a6e8239aa22ad5376df4d5597839350d5363258545',
+                               "fields = {k: b[k] for k in ('execution_mode', 'full_block_budget', "
+                               "'stage_coverage_budget', 'p0_provider_reuse', 'reference_data_reuse', "
+                               "'aggregate_tree_cap_bytes', 'executor_adaptation', 'workspace_loader', "
+                               "'retained_materials', 'model_candidate_review') if k in b}\n"
+                               "if b.get('execution_mode') == 'P0_FIRST_FAULT_DIAGNOSTIC':\n"
+                               "    fields['source_pins'] = b['source_pins']\n"
+                               'return fields',
+                               "return {k: b[k] for k in ('execution_mode', 'full_block_budget', "
+                               "'stage_coverage_budget', 'p0_provider_reuse', 'reference_data_reuse', "
+                               "'aggregate_tree_cap_bytes', 'executor_adaptation', 'workspace_loader', "
+                               "'retained_materials', 'model_candidate_review') if k in b}"],
+                              ['1d9ebde9238c4d20d170f709d4a448eb827e877ef42b09bd04253cb99a027cca',
+                               "if b.get('execution_mode') == 'P0_FIRST_FAULT_DIAGNOSTIC':\n"
+                               "    need('first_fault_document_roots' in imported, 'first-fault "
+                               "metadata verified before watch')\n"
+                               "    roots.extend(imported['first_fault_document_roots'])\n"
+                               '    roots = list(dict.fromkeys(roots))',
+                               '']]}
+
+FIRST_FAULT_FLOW_SCOPE_EXPRESSION="'P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE' if admission['mode'] == 'P0_FIRST_FAULT_DIAGNOSTIC' else 'MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL' if 'model_candidate_review' in b else 'CHISEL_TEST_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL'"
+FIRST_FAULT_FLOW_SCOPE_AST_SHA256='7c1de0423b45634c9b1ee7f4cbf706794aab8548086ebd0125f124a231ac3f93'
+def undo_first_fault_flow_scope(test,tree):
+ import copy
+ wanted=ast.parse(FIRST_FAULT_FLOW_SCOPE_EXPRESSION,mode='eval').body
+ expected=ast.dump(wanted,include_attributes=False)
+ test.assertEqual(hashlib.sha256(expected.encode()).hexdigest(),FIRST_FAULT_FLOW_SCOPE_AST_SHA256)
+ hits=[]
+ class ExactScope(ast.NodeTransformer):
+  def visit_IfExp(self,node):
+   if ast.dump(node,include_attributes=False)==expected:
+    hits.append(True);return copy.deepcopy(wanted.orelse)
+   return self.generic_visit(node)
+ tree=ExactScope().visit(tree)
+ test.assertEqual(len(hits),1,'one exact reviewed FLOW scope IfExp')
+ return tree
+
+def undo_reviewed_first_fault_delta(test,tree,relative):
+ if relative=='controller/cloud_flow.py':tree=undo_first_fault_flow_scope(test,tree)
+ import copy
+ for digest,new_text,old_text in REVIEWED_FIRST_FAULT_INVERSE[relative]:
+  want=ast.parse(new_text).body;replacement=ast.parse(old_text).body
+  test.assertEqual(hashlib.sha256(ast.dump(ast.Module(body=want,type_ignores=[]),include_attributes=False).encode()).hexdigest(),digest)
+  count=0
+  want_dump=[ast.dump(n,include_attributes=False)for n in want]
+  def visit(node):
+   nonlocal count
+   for field,value in ast.iter_fields(node):
+    if isinstance(value,list):
+     i=0
+     while i<=len(value)-len(want):
+      if all(type(n)is type(w)for n,w in zip(value[i:i+len(want)],want)) and [ast.dump(n,include_attributes=False)for n in value[i:i+len(want)]]==want_dump:
+       value[i:i+len(want)]=copy.deepcopy(replacement);count+=1;i+=len(replacement)
+      else:i+=1
+     for item in value:
+      if isinstance(item,ast.AST):visit(item)
+    elif isinstance(value,ast.AST):visit(value)
+  visit(tree);test.assertEqual(count,1,'exact reviewed inverse snippet matched once: '+digest)
+ return tree
+
 def undo_reviewed_reference_delta(test,tree,relative):
+ tree=undo_reviewed_first_fault_delta(test,tree,relative)
  import copy
  for digest,new_text,old_text in REVIEWED_REFERENCE_INVERSE[relative]:
   want=ast.parse(new_text).body;replacement=ast.parse(old_text).body
@@ -763,5 +909,29 @@ class ReferenceInverseNegativeTests(unittest.TestCase):
     if isinstance(n,ast.Constant)and n.value=='reference_data_reuse':n.value='UNREVIEWED_REFERENCE_REUSE';hit=True
    self.assertTrue(hit)
    with self.subTest(relative=relative,case='changed gate'),self.assertRaises(AssertionError):undo_reviewed_reference_delta(self,original,relative)
+
+
+class FirstFaultInverseNegativeTests(unittest.TestCase):
+ def test_exact_first_fault_snippets_changed_or_duplicate_fail(self):
+  import copy
+  for relative,rows in REVIEWED_FIRST_FAULT_INVERSE.items():
+   raw=(D/relative).read_text()
+   for digest,new_text,old_text in rows:
+    duplicate=ast.parse(raw);duplicate.body.extend(ast.parse(new_text).body)
+    with self.subTest(relative=relative,digest=digest,case='duplicate'),self.assertRaises(AssertionError):undo_reviewed_first_fault_delta(self,duplicate,relative)
+   changed=ast.parse(raw);hits=0
+   for n in ast.walk(changed):
+    if isinstance(n,ast.Constant)and n.value=='P0_FIRST_FAULT_DIAGNOSTIC':n.value='UNREVIEWED_FIRST_FAULT';hits+=1
+    elif isinstance(n,ast.Attribute)and n.attr=='FIRST_FAULT':n.attr='UNREVIEWED_FIRST_FAULT';hits+=1
+   self.assertGreater(hits,0)
+   with self.subTest(relative=relative,case='changed gate'),self.assertRaises(AssertionError):undo_reviewed_first_fault_delta(self,changed,relative)
+
+class FlowScopeInverseNegativeTests(unittest.TestCase):
+ def test_duplicate_scope_rejected(self):
+  tree=ast.parse('x='+FIRST_FAULT_FLOW_SCOPE_EXPRESSION+'\ny='+FIRST_FAULT_FLOW_SCOPE_EXPRESSION)
+  with self.assertRaises(AssertionError):undo_first_fault_flow_scope(self,tree)
+ def test_mutated_scope_rejected(self):
+  tree=ast.parse('x='+FIRST_FAULT_FLOW_SCOPE_EXPRESSION.replace('P0_FIRST_FAULT_DIAGNOSTIC','UNREVIEWED_MODE'))
+  with self.assertRaises(AssertionError):undo_first_fault_flow_scope(self,tree)
 
 if __name__=='__main__':unittest.main()

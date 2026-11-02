@@ -1,7 +1,8 @@
 """Isolated synthetic controller tests, never a native runtime/DUT/artifact PASS."""
 import ast,hashlib,importlib.util,json,pathlib,tempfile,time,types,unittest
 from unittest.mock import patch
-D=pathlib.Path(__file__).resolve().parent
+import os
+D=pathlib.Path(os.environ.get('FIRST_FAULT_LEGACY_TEST_SOURCE',str(pathlib.Path(__file__).resolve().parent))).resolve()
 spec=importlib.util.spec_from_file_location('cloud_flow',D/'controller/cloud_flow.py');flow=importlib.util.module_from_spec(spec);spec.loader.exec_module(flow)
 spec=importlib.util.spec_from_file_location('cloud_prepare',D/'prepare_cloud_execution.py');prepare=importlib.util.module_from_spec(spec);spec.loader.exec_module(prepare)
 class Tests(unittest.TestCase):
@@ -31,7 +32,7 @@ class Tests(unittest.TestCase):
    a=types.SimpleNamespace(p0_provider_reuse=p)
    with self.assertRaisesRegex(ValueError,'paired P0'):prepare.stage_coverage_input(a)
    a.p0_provider_reuse_sha256=prepare.sha(p)
-   with self.assertRaisesRegex(ValueError,'explicit stage budget'):prepare.stage_coverage_input(a)
+   with self.assertRaisesRegex(ValueError,'explicit diagnostic mode'):prepare.stage_coverage_input(a)
    a.stage_coverage_budget=p;a.stage_coverage_budget_sha256=prepare.sha(p)
    roles=prepare.stage_coverage_input(a);self.assertEqual(roles['p0_provider_reuse'],flow.pin(p))
    prepare.preserve_stage_coverage_input(roles,dict(roles))

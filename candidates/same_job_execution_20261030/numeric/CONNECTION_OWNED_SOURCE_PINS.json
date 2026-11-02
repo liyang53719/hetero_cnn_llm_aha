@@ -1,7 +1,7 @@
 {
-  "consumer_owned.py": "830fa13c11cf618ae5e183604b657b87633375e9291afaa2f6766a1fdc0d90de",
+  "consumer_owned.py": "b3bf7763ad558bbb0b3a6f15d1b4df384a05d9f369d75b8070fa31056eff06d0",
   "runtime_abi_owned.py": "961eba84a34b9c3ba0f529b904ccbd27ad2994a81b2753fd4b698c8776cc57ef",
-  "connect_owned.py": "6187997ba58852ace39dcc77c9d295656cc36bc6f6a2928dae849cf8e0a4cfe6",
+  "connect_owned.py": "f7136269531f5bc223991559f69ef449af437097548e15c86d506bee98bc0ac5",
   "local_build_proof.py": "b58ebbff5578e641b58e7f2c4c1366a7c73f3a4861cf21e37cab7a01c46d8b56",
   "correct_observation_policy.py": "dc2708cb5d258fff64f1e6aca4620ddd69d8410119f3aa00230a3e9fe907da58",
   "observation_contract.py": "b8401fd6c8c238757103c3c093ea7dc6f3a0d37aab5f0d423e2a7edf2c293e71",
@@ -18,11 +18,18 @@
   "../executor_identity.py": "e3011725f319f543c0d9ba08075efa9a9341eded6112187de4afe611d1987af4",
   "consumer_memory.py": "fcced97df2a0db4a7b3d72f7fcb6741dbc0d1aa43b2a52db591b5d04e822e767",
   "workspace_loader.py": "f310ea005bdaabc81d7d9b07d6be2eab8dc4ed435709a1cae1b5037ec9978070",
-  "../executor_adaptation.py": "1d9809c20e0de7494d06783873e94318979195f413b1141b1731791f38bd721a",
-  "../cloud_budget.py": "8643d24f15770474875d9d9671fcc05ec637ef30d2f0fe86afd31d061ed6f992",
-  "candidate_admission.py": "2641e1cb98b55ece8dbc4e39364428ebab333d92c4aec3ca412ea24f903cdbb8",
-  "candidate_artifact_handoff.py": "8343abf519585d18acf2852da28b2708ea84701c72723186cd9189969b490f05",
+  "../executor_adaptation.py": "c147a37a2b35b40b3073456bc2d48fe760c23d96b01004131e6457940ff4f417",
+  "../cloud_budget.py": "8b0baa30552095c3403581229270f8d0871365bd1acfb402fd85e3756856d80a",
+  "candidate_admission.py": "73b4255156c486b6ebb8dd1a7d7b5feebd9ddcec8f0afad70c813a1afd83341f",
+  "candidate_artifact_handoff.py": "402911feb33d5b65e68cf8fae33929cd7582274f43b63224129b1851e4c152ec",
   "candidate_observation_contract.py": "760e1090f0b68fa5691f32556b418069ff5f7f481616abeecc39f2d08635af35",
   "correct_model_observation_policy.py": "77e948cdf9fa9e923ae3861d3505a93f3ecb44b204b03d56bd19a19a8037bb86",
-  "MODEL_P0_SOURCE_CONTRACT.json": "7b46242a1206f651e8fac111436b6cb515b6a69f981b6f01c1e1f26bd7f51f13"
+  "MODEL_P0_SOURCE_CONTRACT.json": "7b46242a1206f651e8fac111436b6cb515b6a69f981b6f01c1e1f26bd7f51f13",
+  "first_fault_driver_contract.py": "18c7d13c843ba69413587d7b15f0cc49d00be9bb920aab40ebd901fec97eaf84",
+  "p0_first_fault_contract.py": "491ea2f7194808370cb00272e95c5ebd4a14f2c5949eb3b33ad92699c15fc0c0",
+  "first_fault_observation_contract.py": "f3a977a7290d70514a912784d7d765c3e21044338cb1f9488faed5bc3ff94366",
+  "correct_first_fault_observation_policy.py": "b3b79bdf8d7aa2c111b29adb7de185861c4109842d99a8491767a5fbef71c9cb",
+  "MODEL_P0_FIRST_FAULT_SOURCE_CONTRACT.json": "b31095b3e118fe5a2639886bb3dbe3f6de8067cd886884d898c1220b85f8500f",
+  "first_fault_records.py": "8134692a16727a6a85b56ea42630a80fa6f05da7ecab31d6dcc5f7925075dae6",
+  "FIXED_NONHIER_SCHEMA.json": "75088081cf6c3425eba9af3b44c78244f8c62697b4390f992ad63e21f16c7de4"
 }

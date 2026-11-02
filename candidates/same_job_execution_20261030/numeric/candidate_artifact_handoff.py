@@ -39,29 +39,37 @@ def adaptation_module(adaptation_pin):
  need(type(rows[0].get('bytes'))is int and len(raw)==rows[0]['bytes']and hashlib.sha256(raw).hexdigest()==rows[0]['sha256'],'reviewed adaptation checker bytes before import')
  module=types.ModuleType('reviewed_executor_adaptation');module.__file__=str(path);exec(compile(raw,str(path),'exec'),module.__dict__);return module
 
-def load_candidate_checker(current_source_pins_pin,repo):
+def load_candidate_checker(current_source_pins_pin,repo,first_fault=False):
  import sys
  catalog=read_pin(current_source_pins_pin['path'],current_source_pins_pin['sha256'],2<<20)
  need(catalog['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1','reviewed executor source closure')
  rows={r['path']:r for r in catalog['files']};need(len(rows)==len(catalog['files']),'unique source closure')
  base=P(repo)/'candidates/model_candidate_build_20261101'
- result={}
- for name in ('pack_model_candidate','candidate_dependency_proof'):
-  p=regular(base/(name+'.py'),1<<20);rel=str(p.relative_to(P(repo)));r=rows.get(rel);raw=p.read_bytes()
-  need(r is not None and len(raw)==r['bytes']and hashlib.sha256(raw).hexdigest()==r['sha256'],'source-pinned candidate verifier before import')
-  module=types.ModuleType(name);module.__file__=str(p);exec(compile(raw,str(p),'exec'),module.__dict__);result[name]=module
+ result={};names=('first_fault_probe','first_fault_policy','pack_model_candidate','first_fault_compilation','candidate_dependency_proof')if first_fault else('pack_model_candidate','candidate_dependency_proof')
+ prior={name:sys.modules.get(name)for name in names}
+ try:
+  for name in names:
+   p=regular(base/(name+'.py'),1<<20);rel=str(p.relative_to(P(repo)));r=rows.get(rel);raw=p.read_bytes()
+   need(r is not None and len(raw)==r['bytes']and hashlib.sha256(raw).hexdigest()==r['sha256'],'source-pinned candidate verifier before import')
+   need(prior[name]is None or getattr(prior[name],'__file__',None)==str(p),'no foreign cached candidate verifier')
+   module=types.ModuleType(name);module.__file__=str(p);exec(compile(raw,str(p),'exec'),module.__dict__);result[name]=module;sys.modules[name]=module
+ finally:
+  for name in names:
+   if prior[name]is None:sys.modules.pop(name,None)
+   else:sys.modules[name]=prior[name]
  return result
 
 def verify_compilation_policy(frozen,root,receipt,current_source_pins_pin,repo):
  import sys
- modules=load_candidate_checker(current_source_pins_pin,repo);name='pack_model_candidate';prior=sys.modules.get(name)
- need(prior is None or getattr(prior,'__file__',None)==modules[name].__file__,'no foreign cached candidate pack module')
+ modules=load_candidate_checker(current_source_pins_pin,repo,first_fault=frozen.get('schema')=='MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1');prior={name:sys.modules.get(name)for name in modules}
  try:
-  sys.modules[name]=modules[name]
+  for name,m in modules.items():
+   need(prior[name]is None or getattr(prior[name],'__file__',None)==m.__file__,'no foreign cached candidate verifier');sys.modules[name]=m
   return modules['candidate_dependency_proof'].verify_candidate_compilation(frozen,json.loads((root/'source_manifest.json').read_text()),receipt,root)
  finally:
-  if prior is None:sys.modules.pop(name,None)
-  else:sys.modules[name]=prior
+  for name in modules:
+   if prior[name]is None:sys.modules.pop(name,None)
+   else:sys.modules[name]=prior[name]
 
 def verify(handoff_path,handoff_sha,manifest,manifest_sha,frozen,executor_identity,executor_adaptation=None,current_source_pins_pin=None,repo=None,model_candidate_review=None):
  need(model_candidate_review is not None,'candidate review required')
@@ -83,7 +91,7 @@ def verify(handoff_path,handoff_sha,manifest,manifest_sha,frozen,executor_identi
  manifest=regular(manifest,65536);need(manifest.name=='frozen_artifact.json'and sha(manifest)==manifest_sha,'actual frozen manifest')
  need(json.loads(manifest.read_text())==frozen,'caller manifest bytes')
  root=manifest.parent;need({p.name for p in root.iterdir()}==set(NAMES.values())|{'frozen_artifact.json'},'only original seven-file artifact')
- need(frozen['schema']=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'and frozen['profiles']==list(range(5))and all(type(v)is int for v in frozen['profiles'])and frozen['matrix_macs']==4096 and frozen['vector_lanes']==32,'one fixed five-profile hardware')
+ need(frozen['schema']in('MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1','MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1')and frozen['profiles']==list(range(5))and all(type(v)is int for v in frozen['profiles'])and frozen['matrix_macs']==4096 and frozen['vector_lanes']==32,'one fixed five-profile hardware')
  need(set(frozen['common'])=={'binary','sv','driver','source_manifest','build_receipt'},'exact common files')
  rows={**frozen['common'],'tool_manifest':frozen['tool_manifest']};total=manifest.stat().st_size
  for k,name in NAMES.items():
@@ -102,5 +110,6 @@ def verify(handoff_path,handoff_sha,manifest,manifest_sha,frozen,executor_identi
  review_path=P(__file__).with_name('candidate_admission.py');catalog=read_pin(current_source_pins_pin['path'],current_source_pins_pin['sha256'],2<<20);rows=[r for r in catalog['files']if r['path']=='candidates/same_job_execution_20261030/numeric/candidate_admission.py'];raw=review_path.read_bytes()
  need(len(rows)==1 and len(raw)==rows[0]['bytes']and hashlib.sha256(raw).hexdigest()==rows[0]['sha256'],'source-pinned candidate admission')
  checker=types.ModuleType('candidate_admission');checker.__file__=str(review_path);exec(compile(raw,str(review_path),'exec'),checker.__dict__)
- reviewed=checker.verify_review(model_candidate_review,dict(path=str(manifest),bytes=manifest.stat().st_size,sha256=manifest_sha),i)
+ extra_review=dict(repo=repo,current_source_pins_pin=current_source_pins_pin)if frozen['schema']=='MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1'else{}
+ reviewed=checker.verify_review(model_candidate_review,dict(path=str(manifest),bytes=manifest.stat().st_size,sha256=manifest_sha),i,**extra_review)
  return dict(model_candidate_review_sha256=model_candidate_review['sha256'],scope=reviewed['scope'],compilation_policy=compilation,status='VERIFIED_IMPORTED_BUILD_BYTES_NOT_NUMERICAL',builder_identity=i,executor_identity=executor_identity,handoff_sha256=handoff_sha,artifact_manifest_sha256=manifest_sha,source_pins_sha256=h['source_pins_sha256'],executor_adaptation=adaptation,remote_receipt=r,numerical_pass=False,final_rtl_executed=False)

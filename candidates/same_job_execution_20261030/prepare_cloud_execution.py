@@ -31,27 +31,33 @@ def stage_coverage_input(a):
  path=getattr(a,'stage_coverage_budget',None);digest=getattr(a,'stage_coverage_budget_sha256',None)
  need((path is None)==(digest is None),'paired stage coverage budget path/digest')
  roles={} if path is None else {'stage_coverage_budget':input_pin(path,digest),'execution_mode':'STAGE_COVERAGE_DIAGNOSTIC'}
+ first_fault=getattr(a,'execution_mode',None)=='P0_FIRST_FAULT_DIAGNOSTIC'
+ if first_fault:
+  need(path is None and getattr(a,'model_candidate_review',None)is not None,'explicit first-fault review and no stage budget')
+  roles['execution_mode']='P0_FIRST_FAULT_DIAGNOSTIC'
  reuse=getattr(a,'p0_provider_reuse',None);reuse_sha=getattr(a,'p0_provider_reuse_sha256',None)
  need((reuse is None)==(reuse_sha is None),'paired P0 provider reuse path/digest')
  if reuse is not None:
-  need(path is not None,'P0 provider reuse requires explicit stage budget')
+  need(path is not None or first_fault,'P0 provider reuse requires explicit diagnostic mode')
   roles['p0_provider_reuse']=input_pin(reuse,reuse_sha,2<<20)
  reuse=getattr(a,'reference_data_reuse',None);reuse_sha=getattr(a,'reference_data_reuse_sha256',None)
  need((reuse is None)==(reuse_sha is None),'paired reference data reuse path/digest')
  if reuse is not None:
-  need(path is not None,'reference data reuse requires explicit stage budget')
+  need(path is not None or first_fault,'reference data reuse requires explicit diagnostic mode')
   roles['reference_data_reuse']=input_pin(reuse,reuse_sha,2<<20)
  return roles
 
 def preserve_stage_coverage_input(binding,approved):
+ if approved['execution_mode']=='P0_FIRST_FAULT_DIAGNOSTIC' or binding.get('execution_mode')=='P0_FIRST_FAULT_DIAGNOSTIC':
+  need(binding.get('execution_mode')==approved['execution_mode']=='P0_FIRST_FAULT_DIAGNOSTIC','explicit first-fault CLI equals reviewed mode')
  if 'reference_data_reuse'in binding or 'reference_data_reuse'in approved:
-  need(approved['execution_mode']=='STAGE_COVERAGE_DIAGNOSTIC' and binding.get('reference_data_reuse')is not None and binding['reference_data_reuse']==approved.get('reference_data_reuse'),'explicit reference reuse equals independently approved stage input')
+  need(approved['execution_mode']in('STAGE_COVERAGE_DIAGNOSTIC','P0_FIRST_FAULT_DIAGNOSTIC') and binding.get('reference_data_reuse')is not None and binding['reference_data_reuse']==approved.get('reference_data_reuse'),'explicit reference reuse equals independently approved stage input')
   binding['aggregate_tree_cap_bytes']=approved['aggregate_tree_cap_bytes']
  if approved['execution_mode']=='STAGE_COVERAGE_DIAGNOSTIC':
   need(binding.get('stage_coverage_budget')is not None and binding['stage_coverage_budget']==approved.get('stage_coverage_budget'),'explicit CLI stage budget equals independently approved input')
  else:need(binding.get('stage_coverage_budget')is None and approved.get('stage_coverage_budget')is None,'stage budget forbidden in other modes')
  if 'p0_provider_reuse'in binding or 'p0_provider_reuse'in approved:
-  need(approved['execution_mode']=='STAGE_COVERAGE_DIAGNOSTIC' and binding.get('p0_provider_reuse')is not None and binding['p0_provider_reuse']==approved.get('p0_provider_reuse'),'explicit P0 reuse equals independently approved stage input')
+  need(approved['execution_mode']in('STAGE_COVERAGE_DIAGNOSTIC','P0_FIRST_FAULT_DIAGNOSTIC') and binding.get('p0_provider_reuse')is not None and binding['p0_provider_reuse']==approved.get('p0_provider_reuse'),'explicit P0 reuse equals independently approved stage input')
 
 def adaptation_inputs(a,pins):
  roles={}
@@ -76,7 +82,7 @@ def adaptation_inputs(a,pins):
  return roles
 
 def imported_handoff(roles,frozen,identity,pins,manifest,repo):
- candidate=frozen.get('schema')=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'
+ candidate=frozen.get('schema')in('MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1','MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1')
  extra={'executor_adaptation':roles['executor_adaptation']}if 'executor_adaptation'in roles else {}
  name='artifact_handoff.py'
  if candidate:
@@ -127,6 +133,7 @@ def prepare_identity(a):
  # This externally supplied approval SHA, not a generated JSON flag, is authority.
  policy=load('cloud_identity_policy',D/'profile_policy.py');policy.require_source_pin(pins)
  stub=dict(execution_context='CLOUD_EXECUTOR_V1',identity=identity,execution_policy=policy.policy(policy.FULL),pins=pins,**roles)
+ if roles.get('execution_mode')=='P0_FIRST_FAULT_DIAGNOSTIC':stub.update(repo=str(repo),source_pins=dict(path=str(manifest),bytes=manifest.stat().st_size,sha256=sha(manifest)))
  budget_module=load('cloud_identity_budget',D/'cloud_budget.py');admitted=budget_module.admit(stub)
  preserve_stage_coverage_input(stub,admitted)
  budget_document=json.loads(P(roles['cloud_budget']['path']).read_text())
@@ -153,6 +160,7 @@ def prepare_identity(a):
 
 def main():
  p=argparse.ArgumentParser()
+ p.add_argument('--execution-mode',choices=('P0_FIRST_FAULT_DIAGNOSTIC',))
  p.add_argument('--repo',type=P,required=True);p.add_argument('--work',type=P,required=True)
  for role in ('builder-handoff','artifact-manifest','cloud-budget','execution-approval'):
   p.add_argument('--'+role,type=P,required=True);p.add_argument('--'+role+'-sha256',required=True)

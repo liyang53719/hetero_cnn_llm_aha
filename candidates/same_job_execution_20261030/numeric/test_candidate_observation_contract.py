@@ -92,6 +92,17 @@ LEGACY_OBSERVATION_MODULE_SHA256='b8401fd6c8c238757103c3c093ea7dc6f3a0d37aab5f0d
 LEGACY_CONNECT_FUNCTION_AST_SHA256={'pin': 'a7edc1661d34422c321479ab508c5c246886239daf2022f48de1533fe55948f1', 'source_guard': '3c00ef595cd40c1daf22c957e2250640cb647468be050b5b15088066ad8825ec', 'base': '867a01f182130cf7393d1a6120b437512690848e09eba20b9d5fae34c35759c6', 'add_arguments': '59139420636ec29b3ade1cd41a67329872db258a83211370b7789c38e4cb2577', 'preflight_artifact': '090c4d0736ca11e9c93affbc757faacaa6d166f1c84863ae62d591a5d7d5638b', 'main': '93e840e70aeb832a361390580ddb820180dd89e07a5f09d847ac71452c6081be'}
 LEGACY_VALIDATE_AST_SHA256='eec3d82358bd053376ba6281e06d00ad544c29b4a6621a5b22b56c92e95c00b6'
 
+
+def undo_reviewed_first_fault_preflight(test,fn):
+ expected="frozen['schema'] == consumer.FIRST_FAULT_SCHEMA"
+ branches=[x for x in fn.body if isinstance(x,ast.If)and ast.unparse(x.test)==expected]
+ test.assertEqual(len(branches),1,'unique reviewed first-fault preflight branch')
+ branch=branches[0]
+ test.assertEqual(hashlib.sha256(ast.dump(branch,include_attributes=False).encode()).hexdigest(),'8ee12fa1b85be8d5c193ae50dd79f511acf69f7af90c32b807713d93030d15f2','exact reviewed first-fault preflight branch')
+ test.assertEqual(len(branch.orelse),1)
+ fn.body[fn.body.index(branch):fn.body.index(branch)+1]=branch.orelse
+ return fn
+
 class OriginalValidationPreservation(unittest.TestCase):
  def test_original_full_p0_validation_ast(self):
   new=ast.parse(P(m.__file__).read_text())
@@ -106,6 +117,7 @@ class OriginalValidationPreservation(unittest.TestCase):
   for name in ('pin','source_guard','base','add_arguments','preflight_artifact','main'):
    b=next(n for n in new.body if isinstance(n,ast.FunctionDef)and n.name==name)
    if name=='preflight_artifact':
+    b=undo_reviewed_first_fault_preflight(self,b)
     self.assertEqual(b.args.args[-1].arg,'source_relocation');self.assertIsNone(b.args.defaults[-1].value);b.args.args.pop();b.args.defaults.pop()
     assignments=[n for n in ast.walk(b)if isinstance(n,ast.Assign)and any(isinstance(x,ast.Name)and x.id=='identity'for x in n.targets)]
     self.assertEqual(len(assignments),1);expr=assignments[0].value
@@ -129,5 +141,18 @@ class AdmissionOrdering(unittest.TestCase):
   self.assertIn('artifact_identity(frozen)',ast.unparse(branch.orelse[0]))
   self.assertIn('verify_local_build',ast.unparse(branch.orelse[1]))
   self.assertIn('approved_source_relocation',ast.unparse(branch.orelse[2]))
+
+
+class FirstFaultPreflightInverseNegative(unittest.TestCase):
+ def test_changed_or_duplicate_diagnostic_branch_cannot_be_stripped(self):
+  tree=ast.parse((P(m.__file__).parent/'connect_owned.py').read_text())
+  fn=next(n for n in tree.body if isinstance(n,ast.FunctionDef)and n.name=='preflight_artifact')
+  branch=next(n for n in fn.body if isinstance(n,ast.If)and ast.unparse(n.test)=="frozen['schema'] == consumer.FIRST_FAULT_SCHEMA")
+  duplicate=copy.deepcopy(fn);duplicate.body.append(copy.deepcopy(branch))
+  with self.assertRaises(AssertionError):undo_reviewed_first_fault_preflight(self,duplicate)
+  changed=copy.deepcopy(fn)
+  target=next(n for n in changed.body if isinstance(n,ast.If)and ast.unparse(n.test)=="frozen['schema'] == consumer.FIRST_FAULT_SCHEMA")
+  target.body.append(ast.parse('UNREVIEWED_EXTRA_CALL()').body[0])
+  with self.assertRaises(AssertionError):undo_reviewed_first_fault_preflight(self,changed)
 
 if __name__=='__main__':unittest.main()

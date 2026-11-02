@@ -19,13 +19,19 @@ def pin(v,limit):
 
 MODEL_SCHEMA='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'
 MODEL_SCOPE='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL'
+FIRST_FAULT='P0_FIRST_FAULT_DIAGNOSTIC'
+FIRST_FAULT_SCHEMA='MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1'
+FIRST_FAULT_SCOPE='P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE'
 def model_candidate_inputs(b):
  frozen=json.loads(pin(b['artifact_manifest'],65536).read_text())
- candidate=frozen.get('schema')==MODEL_SCHEMA
+ first_fault=b.get('execution_mode')==FIRST_FAULT
+ need(first_fault==(frozen.get('schema')==FIRST_FAULT_SCHEMA),'first fault artifact requires exact explicit diagnostic mode')
+ candidate=frozen.get('schema')in(MODEL_SCHEMA,FIRST_FAULT_SCHEMA)
  if candidate:
   need(frozen.get('status')=='UNREVIEWED_MODEL_BUILD','immutable unreviewed model artifact')
   need(b.get('model_candidate_review')is not None,'MODEL_CANDIDATE_REVIEW_REQUIRED')
-  pin(b['model_candidate_review'],2<<20)
+  review=json.loads(pin(b['model_candidate_review'],2<<20).read_text())
+  need(first_fault==(review.get('schema')=='MODEL_CANDIDATE_FIRST_FAULT_REVIEW_V1'),'first fault review requires exact explicit diagnostic mode')
  else:need('model_candidate_review'not in b,'model review cannot relabel legacy artifact')
  return candidate
 
@@ -34,11 +40,13 @@ def admit(b):
  need(b.get('execution_approval') is not None,'OPERATOR_APPROVED_EXECUTION_INPUT_REQUIRED')
  candidate=model_candidate_inputs(b)
  stage=b.get('execution_mode')=='STAGE_COVERAGE_DIAGNOSTIC'
+ first_fault=b.get('execution_mode')==FIRST_FAULT
+ need(not first_fault or (b.get('full_block_budget')is None and 'stage_coverage_budget'not in b),'first fault excludes full/stage budgets')
  need(not stage or candidate,'stage diagnostic requires model candidate')
  need(stage or 'stage_coverage_budget'not in b,'stage budget forbidden in legacy mode')
- need('p0_provider_reuse'not in b or (stage and candidate),'P0 provider reuse requires stage candidate')
+ need('p0_provider_reuse'not in b or ((stage or first_fault) and candidate),'P0 provider reuse requires stage candidate')
  reference_reuse='reference_data_reuse'in b
- need(not reference_reuse or (stage and candidate),'reference data reuse requires stage candidate')
+ need(not reference_reuse or ((stage or first_fault) and candidate),'reference data reuse requires stage candidate')
  need(reference_reuse or 'aggregate_tree_cap_bytes'not in b,'tree cap requires reference data reuse')
  adaptation_fields={'executor_adaptation','workspace_loader'}
  adapted=bool(adaptation_fields & set(b))
@@ -69,6 +77,8 @@ def admit(b):
  need(d['artifact_manifest_sha256']==b['artifact_manifest']['sha256'],'actual received binary manifest admission')
  need(set(d['basis'])=={'resource_audit','independent_review'},'actual resource audit and independent review')
  for v in d['basis'].values():pin(v,2<<20)
+ if first_fault:
+  need(d['runtime_mode']=='IMPORT_EXISTING_PINNED_RUNTIME' and d['archive_mode']=='READ_EXISTING_PINNED_ARCHIVES','first fault requires original pinned runtime/archive import')
  if reference_reuse:
   need(d['runtime_mode']=='IMPORT_EXISTING_PINNED_RUNTIME' and d['archive_mode']=='READ_EXISTING_PINNED_ARCHIVES','reference reuse requires original pinned runtime and archive import')
  if d['runtime_mode']=='IMPORT_EXISTING_PINNED_RUNTIME':
@@ -80,10 +90,11 @@ def admit(b):
  need(type(q)is dict and set(q)==set(caps)|{'calibration_seconds'},'cloud no build phase/reservation')
  need(all(type(q[k])is int and 0<q[k]<=v for k,v in caps.items()),'original phase ceilings retained')
  need(type(q['calibration_seconds'])is dict and set(q['calibration_seconds'])==IDS and all(type(v)is int and 0<v<=300 for v in q['calibration_seconds'].values()),'only explicit up-to300s calibration windows')
- need(d['execution_mode']in('BOUNDED_CALIBRATION','FULL_BLOCK_ACCEPTANCE','STAGE_COVERAGE_DIAGNOSTIC')and approval['purpose']==d['execution_mode'],'explicit approved cloud execution mode')
+ need(d['execution_mode']in('BOUNDED_CALIBRATION','FULL_BLOCK_ACCEPTANCE','STAGE_COVERAGE_DIAGNOSTIC',FIRST_FAULT)and approval['purpose']==d['execution_mode'],'explicit approved cloud execution mode')
  need(stage==(d['execution_mode']=='STAGE_COVERAGE_DIAGNOSTIC'),'binding stage mode equals approved budget')
- if d['execution_mode']in('BOUNDED_CALIBRATION','STAGE_COVERAGE_DIAGNOSTIC'):
-  need(d['full_block_budget']is None and d['resource_scope']==('CURRENT_HOST_STAGE_COVERAGE_DIAGNOSTIC'if stage else 'CURRENT_HOST_BOUNDED_RESOURCE_DIAGNOSTIC'),'explicit calibration diagnostic scope')
+ need(first_fault==(d['execution_mode']==FIRST_FAULT),'binding first fault mode equals approved budget')
+ if d['execution_mode']in('BOUNDED_CALIBRATION','STAGE_COVERAGE_DIAGNOSTIC',FIRST_FAULT):
+  need(d['full_block_budget']is None and d['resource_scope']==('CURRENT_HOST_P0_FIRST_FAULT_DIAGNOSTIC'if first_fault else 'CURRENT_HOST_STAGE_COVERAGE_DIAGNOSTIC'if stage else 'CURRENT_HOST_BOUNDED_RESOURCE_DIAGNOSTIC'),'explicit calibration diagnostic scope')
   need(type(d['dut_rss_bytes'])is int and type(d['dut_address_space_bytes'])is int and 0<d['dut_rss_bytes']<=2684354560 and 0<d['dut_address_space_bytes']<=2684354560,'current host diagnostic2.5GiB envelope, not original8/12GiB')
  else:
   need(d['resource_scope']=='FULL_BLOCK_MEASURED_RESOURCE_PLAN','full measured resource scope')
@@ -96,8 +107,8 @@ def admit(b):
  roles=d['stage_resources'];need(type(roles)is dict and set(roles)=={'install','reference'},'explicit installation/reference resource roles')
  for role in roles:
   values=roles[role];need(type(values)is dict and set(values)=={'rss_bytes','as_bytes'}and all(type(v)is int and v>0 for v in values.values()),'exact finite role resource limits')
-  rss_cap=2684354560 if d['execution_mode']in('BOUNDED_CALIBRATION','STAGE_COVERAGE_DIAGNOSTIC')else 3<<30
-  as_cap=2684354560 if d['execution_mode']in('BOUNDED_CALIBRATION','STAGE_COVERAGE_DIAGNOSTIC')else (4<<30 if role=='install'else 8<<30)
+  rss_cap=2684354560 if d['execution_mode']in('BOUNDED_CALIBRATION','STAGE_COVERAGE_DIAGNOSTIC',FIRST_FAULT)else 3<<30
+  as_cap=2684354560 if d['execution_mode']in('BOUNDED_CALIBRATION','STAGE_COVERAGE_DIAGNOSTIC',FIRST_FAULT)else (4<<30 if role=='install'else 8<<30)
   need(values['rss_bytes']<=rss_cap and values['as_bytes']<=as_cap,'no expanded role resource ceiling')
  need(type(d['reserved_other_owner_bytes'])is int and d['reserved_other_owner_bytes']==5<<30,'preserve unknown owner5GiB reservation')
  result={k:d[k]for k in('runtime_mode','archive_mode','runtime_reuse_manifest','stage_resources','consumer_address_space_bytes','reserved_other_owner_bytes','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','execution_mode','full_block_budget')}
@@ -107,11 +118,16 @@ def admit(b):
   path=D/'numeric/candidate_admission.py';need(b['pins'].get(str(path))==sha(path),'model candidate admission source pin')
   spec=importlib.util.spec_from_file_location('budget_model_candidate_admission',path);helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
   reviewed=helper.verify(b['model_candidate_review'],b)
-  need(reviewed['scope']==MODEL_SCOPE and reviewed['artifact_manifest_sha256']==b['artifact_manifest']['sha256'],'exact model candidate evaluation scope/artifact')
+  need(reviewed['scope']==(FIRST_FAULT_SCOPE if first_fault else MODEL_SCOPE) and reviewed['artifact_manifest_sha256']==b['artifact_manifest']['sha256'],'exact model candidate evaluation scope/artifact')
  if stage:
   path=D/'execution_mode.py';need(b['pins'].get(str(path))==sha(path),'stage mode verifier source pin')
   spec=importlib.util.spec_from_file_location('cloud_stage_mode',path);mode=importlib.util.module_from_spec(spec);spec.loader.exec_module(mode)
   mode.stage_admission(b) # pure: never recursively calls cloud admission
+ if first_fault:
+  path=D/'execution_mode.py';need(b['pins'].get(str(path))==sha(path),'first fault mode verifier source pin')
+  spec=importlib.util.spec_from_file_location('cloud_first_fault_mode',path);mode=importlib.util.module_from_spec(spec);spec.loader.exec_module(mode)
+  admitted=mode.first_fault_admission(b) # pure authority check, no recursive cloud admission
+  result['diagnostic_profiles']=admitted['diagnostic_profiles']
  return result
 
 

@@ -1,10 +1,332 @@
 import ast,copy,json,os,pathlib,signal,tempfile,types,unittest,hashlib
 from unittest.mock import patch
-P=pathlib.Path;D=P(__file__).resolve().parent
+P=pathlib.Path;D=P(os.environ.get('FIRST_FAULT_LEGACY_TEST_SOURCE',str(P(__file__).resolve().parent.parent))).resolve()/'numeric'
 source=ast.parse((D/'numeric_tail.py').read_text())
 selected=[n for n in source.body if isinstance(n,ast.FunctionDef)and n.name in ('sha','save','complete','prelaunch_rejection','require_cleanup')or isinstance(n,ast.Assign)and any(isinstance(t,ast.Name)and t.id.startswith('PRELAUNCH_')for t in n.targets)]
 ns=dict(P=P,json=json,hashlib=hashlib,signal=signal)
 exec(compile(ast.Module(body=selected,type_ignores=[]),'numeric_tail.py','exec'),ns)
+REVIEWED_FIRST_FAULT_INVERSE = {'numeric/numeric_tail.py': [['8b36c4832459be16aca77c6b2673700334ee3d491b543b60a5b52e283f99a9c8',
+                              "if b.get('reference_data_reuse') is not None:\n"
+                              "    need(b['execution_mode'] in (execution_mode.STAGE, "
+                              "execution_mode.FIRST_FAULT) and b.get('model_candidate_review') is "
+                              "not None, 'reference reuse only approved candidate stage "
+                              "coverage')\n"
+                              "if b.get('p0_provider_reuse') is not None:\n"
+                              "    need(b['execution_mode'] in (execution_mode.STAGE, "
+                              "execution_mode.FIRST_FAULT) and b.get('model_candidate_review') is "
+                              "not None, 'P0 reuse only approved candidate stage coverage')",
+                              "if b.get('reference_data_reuse') is not None:\n"
+                              "    need(b['execution_mode'] == execution_mode.STAGE and "
+                              "b.get('model_candidate_review') is not None, 'reference reuse only "
+                              "approved candidate stage coverage')\n"
+                              "if b.get('p0_provider_reuse') is not None:\n"
+                              "    need(b['execution_mode'] == execution_mode.STAGE and "
+                              "b.get('model_candidate_review') is not None, 'P0 reuse only "
+                              "approved candidate stage coverage')"],
+                             ['f9c4ab85ba0089d2b0f20c27f6d1100e098a01f281b797543b8b43c3899136a8',
+                              "need(cloud is not None and b['execution_mode'] in "
+                              '(execution_mode.STAGE, execution_mode.FIRST_FAULT) and '
+                              "(b['tree_cap'] == 12037043872), 'exact reference-data-only tree "
+                              "reduction')",
+                              "need(cloud is not None and b['execution_mode'] == "
+                              "execution_mode.STAGE and (b['tree_cap'] == 12037043872), 'exact "
+                              "reference-data-only tree reduction')"],
+                             ['e14a233fa3cbed06c5f25b4a1b5d3f0214ef465710c57813a1b7ab1104184093',
+                              'def execution_profiles(b, admission):\n'
+                              '    selected = profile_policy.eligible(b)\n'
+                              "    if admission['mode'] == execution_mode.FIRST_FAULT:\n"
+                              '        need(selected == list(range(5)) and '
+                              "admission.get('diagnostic_profiles') == [0] and "
+                              "(type(admission['diagnostic_profiles'][0]) is int), 'registered "
+                              "hardware unchanged; only integer P0 selected')\n"
+                              '        return [0]\n'
+                              '    return selected',
+                              ''],
+                             ['7fca2d91ad540d1a312208082b2e0ec8243754ee2ef394a7adfbf6f1ae694ce2',
+                              "if admission['mode'] == execution_mode.FIRST_FAULT:\n"
+                              "    need(profile == 0 and admission.get('diagnostic_profiles') == "
+                              "[0] and (b.get('execution_context') == 'CLOUD_EXECUTOR_V1') and "
+                              "(b.get('full_block_budget') is None) and "
+                              "(b.get('stage_coverage_budget') is None), 'only approved P0 "
+                              "first-fault diagnostic')\n"
+                              "elif admission['mode'] == execution_mode.STAGE:\n"
+                              "    need(b.get('execution_context') == 'CLOUD_EXECUTOR_V1' and "
+                              "b.get('full_block_budget') is None, 'stage coverage is cloud-only, "
+                              "not full acceptance')\n"
+                              "    budget = b['stage_coverage_budget']\n"
+                              "    argv += ['--stage-coverage-budget', budget['path'], "
+                              "'--stage-coverage-budget-sha256', budget['sha256']]\n"
+                              'else:\n'
+                              "    need(admission['mode'] == execution_mode.FULL, 'explicit "
+                              "execution mode')\n"
+                              "    budget = b['full_block_budget']\n"
+                              "    argv += ['--full-block-budget', budget['path'], "
+                              "'--full-block-budget-sha256', budget['sha256']]",
+                              "if admission['mode'] == execution_mode.STAGE:\n"
+                              "    need(b.get('execution_context') == 'CLOUD_EXECUTOR_V1' and "
+                              "b.get('full_block_budget') is None, 'stage coverage is cloud-only, "
+                              "not full acceptance')\n"
+                              "    budget = b['stage_coverage_budget']\n"
+                              "    argv += ['--stage-coverage-budget', budget['path'], "
+                              "'--stage-coverage-budget-sha256', budget['sha256']]\n"
+                              'else:\n'
+                              "    need(admission['mode'] == execution_mode.FULL, 'explicit "
+                              "execution mode')\n"
+                              "    budget = b['full_block_budget']\n"
+                              "    argv += ['--full-block-budget', budget['path'], "
+                              "'--full-block-budget-sha256', budget['sha256']]"],
+                             ['1f5500348daa0072d69ddb2469615393911d8e10e6608ab37e8cde7fbcb6f3e9',
+                              "if admission['mode'] == execution_mode.FIRST_FAULT:\n"
+                              '    return dict(full_budget_sha256=None, stage_budget_sha256=None, '
+                              "first_fault_document_sha256=admission['reviewed_budget_sha256'], "
+                              'diagnostic_profiles=[0], not_selected_profiles=[1, 2, 3, 4])',
+                              ''],
+                             ['3bde705240a9fd128040a7838b3bd250aea00cf2eaa73f1b8434af0a0c25cc7c',
+                              "candidate = frozen['schema'] in "
+                              "('MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1', "
+                              "'MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1')",
+                              "candidate = frozen['schema'] == "
+                              "'MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'"],
+                             ['bf9d2397d9ba4eecf848186a912f0e7cc205fbbb9dc105c35aa2cd66a167f86e',
+                              "if admission['mode'] == execution_mode.FIRST_FAULT:\n"
+                              "    reference_reuse_context['execution_mode'] = "
+                              'execution_mode.FIRST_FAULT',
+                              ''],
+                             ['199cde439e342d61061eecad7fe866207eeb36e90a61c0c769970b55dbc08328',
+                              'for i in execution_profiles(b, admission):\n'
+                              "    lease_root = out / f'profile{i}'\n"
+                              '    lease_root.mkdir()\n'
+                              "    profile = lease_root / 'material'\n"
+                              "    with owner.lease(b['owner_manifest']['path'], "
+                              "b['owner_manifest']['sha256'], b['owner_root'], i, lease_root) as "
+                              'selected:\n'
+                              '        weights(b, i)\n'
+                              "        runtime = selected[('qwen2', 'qwen35_08b', 'qwen35_08b', "
+                              "'qwen35_35b', 'qwen35_35b')[i]]\n"
+                              '        ref_path = reference_path(b, i, retained)\n'
+                              '        ref_doc = json.loads(ref_path.read_text())\n'
+                              "        need(ref_doc['runtime_receipt_sha256'] == "
+                              "runtime['receipt']['sha256'] and "
+                              "ref_doc['runtime_source_pins_sha256'] == "
+                              "runtime['sidecar']['sha256'], 'reference matches actual selected "
+                              "installed runtime/sidecar')\n"
+                              '\n'
+                              '        def provider_stage(label, argv):\n'
+                              "            return stage(f'p{i}_{label}', argv, "
+                              'lease_out=lease_root)\n'
+                              "        initialization = out / 'phases' / "
+                              "f'p{i}_initialize_input.json'\n"
+                              "        initialize_body = dict(repo=b['repo'], "
+                              "materializer=b['materializer'], output=str(profile), profile=i, "
+                              "reference=b['references'][str(i)])\n"
+                              '        if reference_reuse is not None:\n'
+                              '            '
+                              "initialize_body.update(reference_data_reuse=b['reference_data_reuse'], "
+                              'reference_reuse_context=reference_reuse_context, '
+                              'reference_reuse_source_pin=reference_reuse_source_pin)\n'
+                              '        save(initialization, initialize_body)\n'
+                              "        stage(f'p{i}_initialize', [b['python'], '-B', str(D / "
+                              "'provider_from_frozen.py'), '--initialize-binding', "
+                              "str(initialization), '--sha256', sha(initialization)], 120, "
+                              'lease_out=lease_root)\n'
+                              "        material.prepare(b['repo'], b['materializer'], profile, i, "
+                              "runtime['wrapper'], b['payload'], b['references'][str(i)], "
+                              "provider_stage, pins, p0_provider_reuse=b.get('p0_provider_reuse') "
+                              'if i == 0 else None)\n'
+                              "        stage(f'p{i}_connect', [b['python'], '-B', str(D / "
+                              "'connect_owned.py'), '--existing-output', str(profile), "
+                              "'--profile', str(i), *identity_args], 120, lease_out=lease_root)\n"
+                              '        generated = json.loads((profile / '
+                              "'CONSUMER_ARGV.json').read_text())['consumer_argv']\n"
+                              '        generated, outer_seconds = execution_command(generated, b, '
+                              'admission, i)\n'
+                              '        if reference_reuse is not None:\n'
+                              '            verify_reference_with_deadline(b, reference_reuse, '
+                              'profile, i, reference_reuse_context)\n'
+                              "        dut_outer = stage(f'p{i}_dut', generated, outer_seconds, "
+                              'accepted=(1, 2), lease_out=lease_root)\n'
+                              '        if reference_reuse is not None:\n'
+                              '            verify_reference_with_deadline(b, reference_reuse, '
+                              'profile, i, reference_reuse_context)\n'
+                              "        bundle = profile / 'runtime_bundle.v3.json'\n"
+                              '        bundle_doc = json.loads(bundle.read_text())\n'
+                              '        runtime_sha = '
+                              "bundle_doc['profiles'][0]['runtime']['sha256']\n"
+                              "        diagnostic = dut_evidence.verify(profile / 'dut_result', i, "
+                              "sha(manifest), sha(bundle), binary['sha256'], runtime_sha, "
+                              "material.pin(out / 'runs' / f'p{i}_dut' / 'RESULT.json'))\n"
+                              '        if cloud is not None:\n'
+                              '            report = json.loads((profile / '
+                              "'dut_result/RESULT.json').read_text())\n"
+                              "            need(report.get('executor_identity') == cloud and "
+                              "report.get('builder_handoff_sha256') == "
+                              "b['builder_handoff']['sha256'], 'actual executor report not builder "
+                              "identity')\n"
+                              "            if b.get('executor_adaptation') is not None:\n"
+                              "                need(report.get('executor_adaptation_sha256') == "
+                              "b['executor_adaptation']['sha256'] and "
+                              "report.get('workspace_loader_sha256') == "
+                              "b['workspace_loader']['sha256'], 'actual executor adapter/loader "
+                              "provenance')\n"
+                              "        if admission['mode'] in (execution_mode.FULL, "
+                              'execution_mode.STAGE, execution_mode.FIRST_FAULT):\n'
+                              '            report = json.loads((profile / '
+                              "'dut_result/RESULT.json').read_text())\n"
+                              "            actual = report['execution_admission']\n"
+                              "            need(actual['execution_mode'] == admission['mode'] and "
+                              "actual['reviewed_budget_sha256'] == "
+                              "admission['reviewed_budget_sha256'], 'actual consumer full-mode "
+                              "budget identity')\n"
+                              '            scope = '
+                              "'P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE' "
+                              "if admission['mode'] == execution_mode.FIRST_FAULT else "
+                              "'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE' if "
+                              "admission['mode'] == execution_mode.STAGE else "
+                              "'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE'\n"
+                              "            need(actual['scope'] == scope and "
+                              "actual['outer_cleanup_proof_required'] is True, 'actual explicit "
+                              "execution scope')\n"
+                              "            if admission['mode'] == execution_mode.STAGE:\n"
+                              "                need(actual.get('stage_budget_sha256') == "
+                              "admission['reviewed_budget_sha256'], 'actual stage coverage budget "
+                              "identity')\n"
+                              "            if admission['mode'] == execution_mode.FIRST_FAULT:\n"
+                              "                need(actual.get('first_fault_document_sha256') == "
+                              "admission['reviewed_budget_sha256'] and "
+                              "actual.get('stage_budget_sha256') is None, 'actual first-fault "
+                              "document identity')\n"
+                              '            expected_limits = '
+                              "report_effective_limits(actual['original_limits'], b, admission, "
+                              'i)\n'
+                              "            need(actual['effective_limits'] == expected_limits, "
+                              "'actual full watchdog limits')\n"
+                              '        dut_records.append(diagnostic)\n'
+                              "        save(out / f'PROFILE_{i}_DIAGNOSTIC.json', diagnostic)\n"
+                              '        weights(b, i)',
+                              'for i in profile_policy.eligible(b):\n'
+                              "    lease_root = out / f'profile{i}'\n"
+                              '    lease_root.mkdir()\n'
+                              "    profile = lease_root / 'material'\n"
+                              "    with owner.lease(b['owner_manifest']['path'], "
+                              "b['owner_manifest']['sha256'], b['owner_root'], i, lease_root) as "
+                              'selected:\n'
+                              '        weights(b, i)\n'
+                              "        runtime = selected[('qwen2', 'qwen35_08b', 'qwen35_08b', "
+                              "'qwen35_35b', 'qwen35_35b')[i]]\n"
+                              '        ref_path = reference_path(b, i, retained)\n'
+                              '        ref_doc = json.loads(ref_path.read_text())\n'
+                              "        need(ref_doc['runtime_receipt_sha256'] == "
+                              "runtime['receipt']['sha256'] and "
+                              "ref_doc['runtime_source_pins_sha256'] == "
+                              "runtime['sidecar']['sha256'], 'reference matches actual selected "
+                              "installed runtime/sidecar')\n"
+                              '\n'
+                              '        def provider_stage(label, argv):\n'
+                              "            return stage(f'p{i}_{label}', argv, "
+                              'lease_out=lease_root)\n'
+                              "        initialization = out / 'phases' / "
+                              "f'p{i}_initialize_input.json'\n"
+                              "        initialize_body = dict(repo=b['repo'], "
+                              "materializer=b['materializer'], output=str(profile), profile=i, "
+                              "reference=b['references'][str(i)])\n"
+                              '        if reference_reuse is not None:\n'
+                              '            '
+                              "initialize_body.update(reference_data_reuse=b['reference_data_reuse'], "
+                              'reference_reuse_context=reference_reuse_context, '
+                              'reference_reuse_source_pin=reference_reuse_source_pin)\n'
+                              '        save(initialization, initialize_body)\n'
+                              "        stage(f'p{i}_initialize', [b['python'], '-B', str(D / "
+                              "'provider_from_frozen.py'), '--initialize-binding', "
+                              "str(initialization), '--sha256', sha(initialization)], 120, "
+                              'lease_out=lease_root)\n'
+                              "        material.prepare(b['repo'], b['materializer'], profile, i, "
+                              "runtime['wrapper'], b['payload'], b['references'][str(i)], "
+                              "provider_stage, pins, p0_provider_reuse=b.get('p0_provider_reuse') "
+                              'if i == 0 else None)\n'
+                              "        stage(f'p{i}_connect', [b['python'], '-B', str(D / "
+                              "'connect_owned.py'), '--existing-output', str(profile), "
+                              "'--profile', str(i), *identity_args], 120, lease_out=lease_root)\n"
+                              '        generated = json.loads((profile / '
+                              "'CONSUMER_ARGV.json').read_text())['consumer_argv']\n"
+                              '        generated, outer_seconds = execution_command(generated, b, '
+                              'admission, i)\n'
+                              '        if reference_reuse is not None:\n'
+                              '            verify_reference_with_deadline(b, reference_reuse, '
+                              'profile, i, reference_reuse_context)\n'
+                              "        dut_outer = stage(f'p{i}_dut', generated, outer_seconds, "
+                              'accepted=(1, 2), lease_out=lease_root)\n'
+                              '        if reference_reuse is not None:\n'
+                              '            verify_reference_with_deadline(b, reference_reuse, '
+                              'profile, i, reference_reuse_context)\n'
+                              "        bundle = profile / 'runtime_bundle.v3.json'\n"
+                              '        bundle_doc = json.loads(bundle.read_text())\n'
+                              '        runtime_sha = '
+                              "bundle_doc['profiles'][0]['runtime']['sha256']\n"
+                              "        diagnostic = dut_evidence.verify(profile / 'dut_result', i, "
+                              "sha(manifest), sha(bundle), binary['sha256'], runtime_sha, "
+                              "material.pin(out / 'runs' / f'p{i}_dut' / 'RESULT.json'))\n"
+                              '        if cloud is not None:\n'
+                              '            report = json.loads((profile / '
+                              "'dut_result/RESULT.json').read_text())\n"
+                              "            need(report.get('executor_identity') == cloud and "
+                              "report.get('builder_handoff_sha256') == "
+                              "b['builder_handoff']['sha256'], 'actual executor report not builder "
+                              "identity')\n"
+                              "            if b.get('executor_adaptation') is not None:\n"
+                              "                need(report.get('executor_adaptation_sha256') == "
+                              "b['executor_adaptation']['sha256'] and "
+                              "report.get('workspace_loader_sha256') == "
+                              "b['workspace_loader']['sha256'], 'actual executor adapter/loader "
+                              "provenance')\n"
+                              "        if admission['mode'] in (execution_mode.FULL, "
+                              'execution_mode.STAGE):\n'
+                              '            report = json.loads((profile / '
+                              "'dut_result/RESULT.json').read_text())\n"
+                              "            actual = report['execution_admission']\n"
+                              "            need(actual['execution_mode'] == admission['mode'] and "
+                              "actual['reviewed_budget_sha256'] == "
+                              "admission['reviewed_budget_sha256'], 'actual consumer full-mode "
+                              "budget identity')\n"
+                              "            scope = 'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE' "
+                              "if admission['mode'] == execution_mode.STAGE else "
+                              "'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE'\n"
+                              "            need(actual['scope'] == scope and "
+                              "actual['outer_cleanup_proof_required'] is True, 'actual explicit "
+                              "execution scope')\n"
+                              "            if admission['mode'] == execution_mode.STAGE:\n"
+                              "                need(actual.get('stage_budget_sha256') == "
+                              "admission['reviewed_budget_sha256'], 'actual stage coverage budget "
+                              "identity')\n"
+                              '            expected_limits = '
+                              "report_effective_limits(actual['original_limits'], b, admission, "
+                              'i)\n'
+                              "            need(actual['effective_limits'] == expected_limits, "
+                              "'actual full watchdog limits')\n"
+                              '        dut_records.append(diagnostic)\n'
+                              "        save(out / f'PROFILE_{i}_DIAGNOSTIC.json', diagnostic)\n"
+                              '        weights(b, i)']]}
+def undo_reviewed_first_fault_delta(test,tree,relative):
+ import copy
+ for digest,new_text,old_text in REVIEWED_FIRST_FAULT_INVERSE[relative]:
+  want=ast.parse(new_text).body;replacement=ast.parse(old_text).body
+  test.assertEqual(hashlib.sha256(ast.dump(ast.Module(body=want,type_ignores=[]),include_attributes=False).encode()).hexdigest(),digest)
+  count=0
+  want_dump=[ast.dump(n,include_attributes=False)for n in want]
+  def visit(node):
+   nonlocal count
+   for field,value in ast.iter_fields(node):
+    if isinstance(value,list):
+     i=0
+     while i<=len(value)-len(want):
+      if all(type(n)is type(w)for n,w in zip(value[i:i+len(want)],want)) and [ast.dump(n,include_attributes=False)for n in value[i:i+len(want)]]==want_dump:
+       value[i:i+len(want)]=copy.deepcopy(replacement);count+=1;i+=len(replacement)
+      else:i+=1
+     for item in value:
+      if isinstance(item,ast.AST):visit(item)
+    elif isinstance(value,ast.AST):visit(value)
+  visit(tree);test.assertEqual(count,1,'exact reviewed inverse snippet matched once: '+digest)
+ return tree
+
 REVIEWED_STAGE_INVERSE = {'numeric/numeric_tail.py': [('bdcea0b9485bc538800ae32c592d6a6c4249b1a1913f741bbccbe3a540492a0c',
                               "for key in ('executor_adaptation', 'workspace_loader', "
                               "'model_candidate_review', 'stage_coverage_budget', 'p0_provider_reuse'):\n"
@@ -288,6 +610,7 @@ REVIEWED_REFERENCE_INVERSE = {'numeric/numeric_tail.py': [('ff7ac986fb69d6c04a1e
                               "bundle = profile / 'runtime_bundle.v3.json'",
                               "bundle = profile / 'runtime_bundle.v3.json'")]}
 def undo_reviewed_reference_delta(test,tree,relative):
+ tree=undo_reviewed_first_fault_delta(test,tree,relative)
  import copy
  for digest,new_text,old_text in REVIEWED_REFERENCE_INVERSE[relative]:
   want=ast.parse(new_text).body;replacement=ast.parse(old_text).body
@@ -452,5 +775,23 @@ class ReferenceInverseNegativeTests(unittest.TestCase):
     if isinstance(n,ast.Constant)and n.value=='reference_data_reuse':n.value='UNREVIEWED_REFERENCE_REUSE';hit=True
    self.assertTrue(hit)
    with self.subTest(relative=relative,case='changed gate'),self.assertRaises(AssertionError):undo_reviewed_reference_delta(self,original,relative)
+
+
+class FirstFaultInverseNegativeTests(unittest.TestCase):
+ def test_every_fixed_fragment_duplicate_rejected(self):
+  for name,rows in REVIEWED_FIRST_FAULT_INVERSE.items():
+   for _,text,_ in rows:
+    fixture=ast.parse('\n'.join(row[1]for row in rows))
+    fixture.body.extend(ast.parse(text).body)
+    with self.subTest(name=name,fragment=text[:60]),self.assertRaises(AssertionError):undo_reviewed_first_fault_delta(self,fixture,name)
+ def test_every_fixed_fragment_mutation_rejected(self):
+  for name,rows in REVIEWED_FIRST_FAULT_INVERSE.items():
+   for index,(_,text,_)in enumerate(rows):
+    parts=[ast.parse(row[1]).body for row in rows]
+    # Mutate one literal in this exact fragment; no production code runs.
+    constants=[n for stmt in parts[index]for n in ast.walk(stmt)if isinstance(n,ast.Constant)and isinstance(n.value,str)]
+    self.assertTrue(constants);constants[0].value='UNREVIEWED_FIRST_FAULT_TEST_MUTATION'
+    fixture=ast.Module(body=[n for part in parts for n in part],type_ignores=[])
+    with self.subTest(name=name,fragment=text[:60]),self.assertRaises(AssertionError):undo_reviewed_first_fault_delta(self,fixture,name)
 
 if __name__=='__main__':unittest.main()

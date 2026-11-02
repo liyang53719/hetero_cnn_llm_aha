@@ -1,0 +1,48 @@
+{
+  "scope": "SYNTHETIC_CONTROL_FLOW_WITH_REAL_RETAINED_BYTES_NOT_DUT_EXECUTION",
+  "supervisor_sha256": "8ca1dc5524116ba1e9006db704a3668d6319808752031768fe4934f027049dee",
+  "result_sha256": "7bcd6b50484443984778115ecc43ca128a8f025be4244c9d3178f690fd6c708c",
+  "native_exit": 0,
+  "errors": [],
+  "elapsed_seconds": 15.788824882009067,
+  "observed_peak_rss": 63766528,
+  "peak_tree_bytes": 8157489837,
+  "peak_file_bytes": 1073741824,
+  "strict_cleanup": true,
+  "results": {
+    "positive": {
+      "status": "VERIFIED_REAGGREGATED",
+      "fault_snapshot_status": "PRESENT_VALID",
+      "numerical_pass": false
+    },
+    "extra_p1": {
+      "status": "UNAVAILABLE",
+      "fault_snapshot_status": null,
+      "numerical_pass": false
+    },
+    "missing_doc": {
+      "status": "UNAVAILABLE",
+      "fault_snapshot_status": null,
+      "numerical_pass": false
+    },
+    "malformed_snapshot": {
+      "status": "VERIFIED_REAGGREGATED",
+      "fault_snapshot_status": "MALFORMED",
+      "numerical_pass": false
+    }
+  },
+  "actual_data_read_revalidated": true,
+  "models_executed": false,
+  "eda_executed": false,
+  "synthetic_authority_and_elf_and_receipts": true,
+  "tested_joint_source_catalog_sha256": "ef955913e051f26e7f66883f3c9a9aa7a3d706d07c3b79e8461da49cf86f73ae",
+  "tested_joint_source_files": 874,
+  "runner_sha256": "d94f029693b2afe28cfb9e315523ffc207146532f5eddf9db10285b5f8e1a674",
+  "observed_cpu_seconds": 14.0,
+  "execution_scope_pass": true,
+  "actual_model_numerical_pass": false,
+  "final_runtime_catalog_covered": false,
+  "old_failed_fixture_retained": true,
+  "prior_failure_reason": "Fixture self-catalog pin was stale; failure before artifact SV copy or retained hash",
+  "sampled_rss_is_not_continuous_peak_bound": true
+}

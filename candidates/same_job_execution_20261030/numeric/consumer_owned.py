@@ -205,13 +205,27 @@ OWNED_ENVIRONMENT=None
 
 V3_DRIVER_SHA256='343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61'
 
+FIRST_FAULT_SCHEMA='MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1'
+FIRST_FAULT_SCOPE='P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE'
+def diagnostic_driver(frozen,context,row):
+    need(type(context)is dict and context.get('candidate_scope')==FIRST_FAULT_SCOPE,'independently admitted diagnostic context')
+    import types
+    rel='candidates/same_job_execution_20261030/numeric/first_fault_driver_contract.py'
+    catalog=json.loads(pin(context['current_source_pins_pin']).read_text());need(catalog['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1','actual diagnostic checker catalog')
+    rows=[r for r in catalog['files']if r['path']==rel];need(len(rows)==1,'one diagnostic driver checker')
+    path=pathlib.Path(context['repo'])/rel;need(path==pathlib.Path(__file__).resolve().with_name('first_fault_driver_contract.py'),'fixed diagnostic checker location')
+    raw=pin(dict(rows[0],path=str(path))).read_bytes();module=types.ModuleType('admitted_first_fault_driver');module.__file__=str(path);exec(compile(raw,str(path),'exec'),module.__dict__)
+    return module.require_driver(frozen,context,row)
+
 def verify_frozen(path,expected_sha):
     need(len(expected_sha)==64 and all(c in '0123456789abcdef' for c in expected_sha),'expected artifact SHA256 required')
     need(path.is_file() and not path.is_symlink() and path.stat().st_size<=65536,'bounded regular artifact manifest')
     need(sha(path)==expected_sha,'shared artifact manifest changed')
 
 def artifact_identity(frozen,source_relocation=None):
-    if frozen['schema']=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1':
+    if frozen['schema']==FIRST_FAULT_SCHEMA:
+        need(source_relocation is not None and source_relocation.get('candidate_scope')==FIRST_FAULT_SCOPE and source_relocation.get('builder_identity')==frozen['artifact_identity'],'independently admitted first fault artifact')
+    elif frozen['schema']=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1':
         need(source_relocation is not None and source_relocation.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL' and source_relocation.get('builder_identity')==frozen['artifact_identity'],'independently admitted model candidate, not a legacy schema alias')
     else:need(frozen['schema']=='FROZEN_FIVE_PROFILE_DUT_ARTIFACT_V2','frozen artifact schema')
     need(frozen['profiles']==list(range(5)),'artifact qualifies same hardware definition for all five, not a profile-specific build')
@@ -230,7 +244,9 @@ def artifact_identity(frozen,source_relocation=None):
 def coverage_policy(profile,common,identity,bundle_root,source_relocation=None):
     import importlib.util
     path=pathlib.Path(__file__).resolve().with_name('observation_contract.py')
-    if source_relocation is not None and source_relocation.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL':
+    if source_relocation is not None and source_relocation.get('candidate_scope')==FIRST_FAULT_SCOPE:
+        path=path.with_name('first_fault_observation_contract.py');row=source_relocation['candidate_observation_checker'];need(pin(row)==path,'admitted first fault observation checker')
+    elif source_relocation is not None and source_relocation.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL':
         path=path.with_name('candidate_observation_contract.py');row=source_relocation['candidate_observation_checker'];need(pin(row)==path,'admitted candidate observation checker')
     else:need(sha(path)=='b8401fd6c8c238757103c3c093ea7dc6f3a0d37aab5f0d423e2a7edf2c293e71','reviewed observation contract module')
     spec=importlib.util.spec_from_file_location('required_observation_policy',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
@@ -251,7 +267,9 @@ def load_binding(manifest,expected_sha,bundle_path,profile,source_relocation=Non
         rel=pathlib.Path(p['path']);need(not rel.is_absolute() and '..' not in rel.parts and str(rel) not in ('','.'),'artifact relative path only')
         full=root/rel;need(full.resolve().is_relative_to(root),'artifact path escape')
         common[name]=dict(p,path=str(full.absolute()));pin(common[name])
-    need(common['driver']['sha256']==V3_DRIVER_SHA256,'exact original V3 driver, no config-only replacement')
+    if frozen['schema']==FIRST_FAULT_SCHEMA:
+        need(type(profile)is int and profile==0,'first fault execution is P0 only');diagnostic_driver(frozen,source_relocation,common['driver'])
+    else:need(common['driver']['sha256']==V3_DRIVER_SHA256,'exact original V3 driver, no config-only replacement')
     receipt=json.loads(pathlib.Path(common['build_receipt']['path']).read_text())
     need(receipt['tool_manifest_sha256']==tool['sha256'] and receipt['source_commit']==commit and receipt['launch_commit']==identity['launch_commit'],'source/launch/tool provenance')
     need(receipt['config_only'] is False and receipt['software_arithmetic_substitution'] is False,'real hardware build required')
@@ -336,7 +354,7 @@ def verify_local_build(args,frozen):
     if cloud is not None:
         need(getattr(args,'local_build_result',None) is None and getattr(args,'local_build_result_sha256',None) is None,'imported build is not same-job retained result')
         binding=cloud_invocation(args)
-        candidate=frozen['schema']=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'
+        candidate=frozen['schema']in('MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1',FIRST_FAULT_SCHEMA)
         path=pathlib.Path(__file__).resolve().with_name('candidate_artifact_handoff.py' if candidate else 'artifact_handoff.py')
         if candidate:need(binding['pins'].get(str(path))==sha(path),'reviewed candidate build verifier source')
         else:need(sha(path)=='06ac175b7c1f8ca5b1dc19891a52c09f58f17fec521ee96e0f581ca4011ef0c5','reviewed imported build verifier')
@@ -356,7 +374,7 @@ def approved_source_relocation(args,frozen):
     """Only the independently approved cloud invocation can authorize relocation.
     No bundle field or user-supplied path map is an authority input.
     """
-    candidate=frozen['schema']=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'
+    candidate=frozen['schema']in('MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1',FIRST_FAULT_SCHEMA)
     if (args.profile!=0 and not candidate) or getattr(args,'cloud_binding',None)is None:return None
     binding=cloud_invocation(args)
     if binding.get('executor_adaptation')is None:return None
@@ -376,9 +394,9 @@ def approved_source_relocation(args,frozen):
         path=pathlib.Path(__file__).resolve().with_name('candidate_admission.py');need(binding['pins'].get(str(path))==sha(path),'candidate admission source pin')
         spec=importlib.util.spec_from_file_location('consumer_model_candidate_admission',path);candidate_gate=importlib.util.module_from_spec(spec);spec.loader.exec_module(candidate_gate)
         reviewed=candidate_gate.verify(binding.get('model_candidate_review'),binding)
-        checker=path.with_name('candidate_observation_contract.py');need(binding['pins'].get(str(checker))==sha(checker),'candidate observation source pin')
+        checker=path.with_name('first_fault_observation_contract.py'if frozen['schema']==FIRST_FAULT_SCHEMA else'candidate_observation_contract.py');need(binding['pins'].get(str(checker))==sha(checker),'candidate observation source pin')
         context=dict(artifact_manifest=binding['artifact_manifest'],source_manifest_sha256=source_row['sha256'],candidate_scope=reviewed['scope'],model_candidate_review=binding['model_candidate_review'],model_source_contract=reviewed['source_contract'],builder_identity=frozen['artifact_identity'],repo=binding['repo'],current_source_pins_pin=binding['source_pins'],candidate_observation_checker=dict(path=str(checker),bytes=checker.stat().st_size,sha256=sha(checker)))
-    path=pathlib.Path(__file__).resolve().with_name('candidate_observation_contract.py'if candidate else'observation_contract.py');need(binding['pins'].get(str(path))==sha(path),'actual source mapping verifier pinned')
+    path=pathlib.Path(__file__).resolve().with_name('first_fault_observation_contract.py'if frozen['schema']==FIRST_FAULT_SCHEMA else'candidate_observation_contract.py'if candidate else'observation_contract.py');need(binding['pins'].get(str(path))==sha(path),'actual source mapping verifier pinned')
     spec=importlib.util.spec_from_file_location('source_relocation_contract',path);contract=importlib.util.module_from_spec(spec);spec.loader.exec_module(contract)
     anchors=contract.relocation_records(manifest,binding['repo'],binding['pins'],json.loads(catalog.read_text()),context) if candidate and args.profile==0 else {} if candidate else contract.relocation_records(manifest,binding['repo'],binding['pins'],json.loads(catalog.read_text()))
     result=dict(context or {})
@@ -441,6 +459,8 @@ def explicit_execution_admission(args):
             row=binding['workspace_loader'];WORKSPACE_LOADER=(row['path'],row['sha256'],args.expected_source_commit,args.artifact_manifest_sha256)
         admission=mode.admit(binding)
         if selected==mode.CALIBRATION:need(args.calibration_wall_seconds==admission['profile_seconds'][str(args.profile)],'actual cloud calibration window')
+        elif selected==mode.FIRST_FAULT:
+            need(args.profile==0 and admission.get('diagnostic_profiles')==[0]and args.calibration_wall_seconds is None and args.full_block_budget is None and args.full_block_budget_sha256 is None,'only approved first-fault P0 and no legacy budget override')
         elif selected==mode.STAGE:
             row=binding.get('stage_coverage_budget')
             need(args.calibration_wall_seconds is None and args.full_block_budget is None and args.full_block_budget_sha256 is None,'no calibration/full flags in stage coverage')
@@ -449,7 +469,7 @@ def explicit_execution_admission(args):
             need(selected==mode.FULL,'explicit cloud execution mode')
             need(args.calibration_wall_seconds is None and args.full_block_budget is not None and args.full_block_budget_sha256==binding['full_block_budget']['sha256']and str(args.full_block_budget)==binding['full_block_budget']['path'],'actual full cloud budget flags')
         return mode,admission
-    need(selected!=mode.STAGE,'stage coverage requires actual cloud invocation')
+    need(selected not in(mode.STAGE,mode.FIRST_FAULT),'diagnostic mode requires actual cloud invocation')
     need(getattr(args,'cloud_binding_sha256',None)is None and executor_context(args)is None,'cloud consumer requires actual invocation binding')
     budget=getattr(args,'full_block_budget',None);budget_sha=getattr(args,'full_block_budget_sha256',None)
     if selected==mode.FULL:
@@ -501,7 +521,7 @@ def main():
     a.add_argument('--validate-only',action='store_true')
     a.add_argument('--strict-outer-supervised',action='store_true')
     a.add_argument('--calibration-wall-seconds',type=int)
-    a.add_argument('--execution-mode',choices=('BOUNDED_CALIBRATION','FULL_BLOCK_ACCEPTANCE','STAGE_COVERAGE_DIAGNOSTIC'),default='BOUNDED_CALIBRATION')
+    a.add_argument('--execution-mode',choices=('BOUNDED_CALIBRATION','FULL_BLOCK_ACCEPTANCE','STAGE_COVERAGE_DIAGNOSTIC','P0_FIRST_FAULT_DIAGNOSTIC'),default='BOUNDED_CALIBRATION')
     a.add_argument('--full-block-budget',type=pathlib.Path)
     a.add_argument('--full-block-budget-sha256')
     a.add_argument('--stage-coverage-budget',type=pathlib.Path)
@@ -572,7 +592,8 @@ def main():
     if source_relocation is not None:
         summary['source_relocation']=source_relocation
         if source_relocation.get('candidate_scope') is not None:summary.update(model_candidate_review_sha256=source_relocation['model_candidate_review']['sha256'],candidate_scope=source_relocation['candidate_scope'])
-    summary['execution_admission']={'scope':'CALIBRATION_SAME_FULL_M128_STIMULUS' if admission['mode']==mode.CALIBRATION else 'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE' if admission['mode']==mode.STAGE else 'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE', 'execution_mode':admission['mode'], 'reviewed_budget_sha256':admission['reviewed_budget_sha256'],'original_limits':dict(limits),'effective_limits':execution_limits,'outer_cleanup_proof_required':True,'peak_resource_qualification':'INCOMPLETE_SAMPLED','numerical_pass':False}
+    summary['execution_admission']={'scope':'P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE' if admission['mode']==mode.FIRST_FAULT else 'CALIBRATION_SAME_FULL_M128_STIMULUS' if admission['mode']==mode.CALIBRATION else 'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE' if admission['mode']==mode.STAGE else 'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE', 'execution_mode':admission['mode'], 'reviewed_budget_sha256':admission['reviewed_budget_sha256'],'original_limits':dict(limits),'effective_limits':execution_limits,'outer_cleanup_proof_required':True,'peak_resource_qualification':'INCOMPLETE_SAMPLED','numerical_pass':False}
+    if admission['mode']==mode.FIRST_FAULT:summary['execution_admission'].update(first_fault_document_sha256=admission['reviewed_budget_sha256'],diagnostic_profiles=[0],numerical_pass=False)
     if admission['mode']==mode.STAGE:summary['execution_admission']['stage_budget_sha256']=admission['reviewed_budget_sha256']
     for p,runtime,obs,want,route_ref in prepared:
         r=dict(profile=p['id'],complete_block_tokens=128,status='INCOMPLETE',numerical_pass=False,coverage_policy=b['coverage_policy']);summary['profiles'].append(r)

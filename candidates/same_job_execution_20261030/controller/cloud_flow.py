@@ -36,7 +36,7 @@ def execution_admission(b):
  return mod('samejob_execution_mode',path).admit(b)
 
 def transport_code(mode,qualification):
- if mode in ('BOUNDED_CALIBRATION','STAGE_COVERAGE_DIAGNOSTIC'):return 2
+ if mode in ('BOUNDED_CALIBRATION','STAGE_COVERAGE_DIAGNOSTIC','P0_FIRST_FAULT_DIAGNOSTIC'):return 2
  need(mode=='FULL_BLOCK_ACCEPTANCE','explicit full execution mode')
  need(type(qualification)is dict and type(qualification.get('numerical_pass'))is bool,'recomputed aggregate qualification')
  status=qualification.get('status')
@@ -48,7 +48,9 @@ def reservations(b,admission=None):
  q=b['budgets']
  if admission is None:
   admission={'profile_seconds':q['calibration_seconds']} if b.get('execution_mode','BOUNDED_CALIBRATION')=='BOUNDED_CALIBRATION' else execution_admission(b)
- cal=admission['profile_seconds'];need(set(cal)==set(map(str,range(5)))and all(type(x)is int and 0<x<=20000 for x in cal.values()),'all five explicit unchanged-stimulus calibration windows')
+ cal=admission['profile_seconds'];expected_profiles={'0'}if b.get('execution_mode')=='P0_FIRST_FAULT_DIAGNOSTIC'else set(map(str,range(5)))
+ if b.get('execution_mode')=='P0_FIRST_FAULT_DIAGNOSTIC':need(admission.get('diagnostic_profiles')==[0],'fixed first-fault profile only')
+ need(set(cal)==expected_profiles and all(type(x)is int and 0<x<=20000 for x in cal.values()),'all five explicit unchanged-stimulus calibration windows')
  for k in ('archives','weights','install','owner_bind','reference','provider','parent'):
   need(type(q[k])is int and q[k]>0,'reviewed finite phase budget '+k)
  need(q['archives']<=1800 and q['weights']<=7200 and q['install']<=1800 and q['owner_bind']<=1800 and q['reference']<=1800,'no unreviewed original resource expansion')
@@ -69,16 +71,21 @@ def stage_policy(kind,seconds,roles=None):
 
 def verified_p0_provider_reuse(b,budget,candidate):
  if 'p0_provider_reuse'not in b:return None
- need(candidate and budget['execution_mode']=='STAGE_COVERAGE_DIAGNOSTIC','P0 data reuse only approved candidate stage diagnostic')
+ need(candidate and budget['execution_mode']in('STAGE_COVERAGE_DIAGNOSTIC','P0_FIRST_FAULT_DIAGNOSTIC'),'P0 data reuse only approved candidate stage diagnostic')
  need(b['p0_provider_reuse']==budget.get('p0_provider_reuse'),'P0 reuse equals independent approved pin')
  reuse_path=D.parent/'numeric/p0_provider_data_reuse.py';need(b['pins'].get(str(reuse_path))==sha(reuse_path),'P0 pure data reuse verifier source pin')
  reused=mod('actual_p0_provider_data_reuse',reuse_path).verify_metadata(b['p0_provider_reuse'],b)
- need(reused['watch_scope']=='PURE_PROVIDER_AND_FINITE_EVIDENCE_V1' and reused['roots']==[reused['provider_root'],reused['evidence_root']],'only verified pure provider and finite evidence directories watched')
+ if budget['execution_mode']=='P0_FIRST_FAULT_DIAGNOSTIC':
+  roots=reused.get('authority_roots')
+  need(type(roots)is list and roots==sorted(set(roots))and all(type(x)is str and P(x).is_absolute()and P(x)==P(x).resolve()and P(x).is_dir()for x in roots),'exact canonical diagnostic authority directories')
+  need(reused['watch_scope']=='PURE_PROVIDER_FINITE_EVIDENCE_AND_DIAGNOSTIC_AUTHORITY_V1'and reused['roots']==[reused['provider_root'],reused['evidence_root'],*roots],'all actual diagnostic data-authority reads watched')
+ else:
+  need(reused['watch_scope']=='PURE_PROVIDER_AND_FINITE_EVIDENCE_V1' and reused['roots']==[reused['provider_root'],reused['evidence_root']],'only verified pure provider and finite evidence directories watched')
  return reused
 
 def verified_reference_data_reuse(b,budget,candidate):
  if 'reference_data_reuse'not in b:return None
- need(candidate and budget['execution_mode']=='STAGE_COVERAGE_DIAGNOSTIC','reference reuse only approved candidate stage')
+ need(candidate and budget['execution_mode']in('STAGE_COVERAGE_DIAGNOSTIC','P0_FIRST_FAULT_DIAGNOSTIC'),'reference reuse only approved candidate stage')
  need(b['reference_data_reuse']==budget.get('reference_data_reuse'),'reference reuse independently approved pin')
  path=D.parent/'numeric/reference_data_reuse.py';need(b['pins'].get(str(path))==sha(path),'reference data reuse checker source pin')
  reused=mod('actual_reference_data_reuse',path).verify_metadata(b['reference_data_reuse'],b)
@@ -116,20 +123,25 @@ def admitted_inputs(b):
   need(pin(path)==row,'independent cloud input pin');return path
  identity_path=checked(b['executor_identity_pin'],65536);need(json.loads(identity_path.read_text())==identity,'executor receipt identity')
  manifest=checked(b['artifact_manifest'],65536);frozen=json.loads(manifest.read_text());handoff=checked(b['builder_handoff'],65536)
- candidate=frozen.get('schema')=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'
+ candidate=frozen.get('schema')in('MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1','MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1')
  extra={'executor_adaptation':b['executor_adaptation']}if 'executor_adaptation'in b else {}
  hpath=D.parent/'numeric/artifact_handoff.py';reviewed=None
  if candidate:
   need(b.get('model_candidate_review')is not None,'MODEL_CANDIDATE_REVIEW_REQUIRED')
   path=D.parent/'numeric/candidate_admission.py';need(b['pins'].get(str(path))==sha(path),'model candidate admission source pin')
   reviewed=mod('flow_model_candidate_admission',path).verify(b['model_candidate_review'],b)
-  need(reviewed['scope']=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL'and reviewed['artifact_manifest_sha256']==b['artifact_manifest']['sha256'],'actual candidate review scope/artifact')
+  expected_scope='P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE'if frozen.get('schema')=='MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1'else'MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL'
+  need(reviewed['scope']==expected_scope and reviewed['artifact_manifest_sha256']==b['artifact_manifest']['sha256'],'actual candidate review scope/artifact')
   hpath=D.parent/'numeric/candidate_artifact_handoff.py'
   extra.update(model_candidate_review=b['model_candidate_review'],current_source_pins_pin=b['source_pins'],repo=P(b['repo']))
  else:need('model_candidate_review'not in b,'model review cannot relabel legacy artifact')
  need(b['pins'].get(str(hpath))==sha(hpath),'handoff verifier source pin')
  imported=mod('actual_imported_artifact',hpath).verify(handoff,b['builder_handoff']['sha256'],manifest,b['artifact_manifest']['sha256'],frozen,identity,**extra)
  if reviewed is not None:imported=dict(imported,model_candidate_verified=reviewed)
+ if budget['execution_mode']=='P0_FIRST_FAULT_DIAGNOSTIC':
+  path=D.parent/'numeric/p0_first_fault_contract.py';need(b['pins'].get(str(path))==sha(path),'first-fault document verifier source pin')
+  doc_roots=mod('flow_first_fault_document',path).document_roots(b,reviewed)
+  imported=dict(imported,first_fault_document_roots=doc_roots)
  need(imported['builder_identity']==b['artifact_identity'],'separate actual builder identity')
  sourcepins=D.parent/'SOURCE_PINS.json';need(pin(sourcepins)==b['source_pins'],'actual executor source closure pin')
  if 'executor_adaptation'in b:
@@ -156,7 +168,9 @@ def admitted_inputs(b):
  return budget,imported
 
 def runtime_admission_fields(b):
- return {k:b[k]for k in ('execution_mode','full_block_budget','stage_coverage_budget','p0_provider_reuse','reference_data_reuse','aggregate_tree_cap_bytes','executor_adaptation','workspace_loader','retained_materials','model_candidate_review')if k in b}
+ fields={k:b[k]for k in ('execution_mode','full_block_budget','stage_coverage_budget','p0_provider_reuse','reference_data_reuse','aggregate_tree_cap_bytes','executor_adaptation','workspace_loader','retained_materials','model_candidate_review')if k in b}
+ if b.get('execution_mode')=='P0_FIRST_FAULT_DIAGNOSTIC':fields['source_pins']=b['source_pins']
+ return fields
 
 def upfront_disk_admission(snapshot,evidence_path=None,binding_sha=None,tree_cap=TREE):
  need(type(tree_cap)is int and tree_cap in (TREE,12037043872),'explicit reviewed unchanged or tighter aggregate cap')
@@ -196,6 +210,8 @@ def run(b,binding_path,binding_sha):
  roots=list(dict.fromkeys([str(job),str(repo),*[str(P(b[k]['path']).parent)for k in ('artifact_manifest','builder_handoff','executor_identity_pin','cloud_budget','execution_approval','executor_adaptation','workspace_loader','retained_materials','model_candidate_review','stage_coverage_budget')if k in b]]));pins=dict(b['pins']);pins[str(binding_path)]=binding_sha
  if 'model_candidate_review'in b:
   need('model_candidate_verified'in imported,'reviewed candidate before watch');roots.extend(imported['model_candidate_verified']['roots']);roots=list(dict.fromkeys(roots))
+ if b.get('execution_mode')=='P0_FIRST_FAULT_DIAGNOSTIC':
+  need('first_fault_document_roots'in imported,'first-fault metadata verified before watch');roots.extend(imported['first_fault_document_roots']);roots=list(dict.fromkeys(roots))
  if 'reference_data_reuse'in b:
   need('reference_data_reuse_verified'in imported,'reference roots verified before watch admission');roots.extend(imported['reference_data_reuse_verified']['roots']);roots=list(dict.fromkeys(roots))
  if 'p0_provider_reuse'in b:
@@ -289,7 +305,7 @@ def run(b,binding_path,binding_sha):
  qualification=acceptance.aggregate(numeric_result['actual_dut_reports'])
  need(numeric_result.get('qualification')==qualification and numeric_result.get('status')==qualification['status'] and numeric_result.get('numerical_pass')is qualification['numerical_pass'],'recomputed actual numeric finalization')
  code=transport_code(admission['mode'],qualification)
- save(job/'FLOW_RESULT.json',dict(execution_context='CLOUD_EXECUTOR_V1',identity=identity,executor_identity=identity,artifact_identity=builder,builder_identity=builder,source_pins=b['source_pins'],executor_identity_pin=b['executor_identity_pin'],builder_handoff=b['builder_handoff'],artifact_manifest=b['artifact_manifest'],cloud_budget=b['cloud_budget'],execution_approval=b['execution_approval'],job_budget_seconds=limit,execution_binding=pin(binding_path),execution_admission=admission,execution_mode=admission['mode'],transport_exit_code=code,qualification=qualification,execution_policy=execution_policy,status=qualification['status'],scope='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL'if 'model_candidate_review'in b else 'CHISEL_TEST_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL',stages=history,retained_materials_scope=imported.get('retained_materials_verified',{}).get('scope'),upfront_disk_admission=disk_admission,numeric_result=pin(numeric_path),hardware_definitions=1,profiles=list(range(5)),uploaded_payloads=False,**{k:b[k]for k in ('executor_adaptation','workspace_loader','retained_materials','model_candidate_review','p0_provider_reuse','reference_data_reuse','aggregate_tree_cap_bytes')if k in b},**(dict(stage_coverage_budget=b['stage_coverage_budget'],stage_coverage_budget_sha256=b['stage_coverage_budget']['sha256'],execution_scope='STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE')if admission['mode']=='STAGE_COVERAGE_DIAGNOSTIC'else {})))
+ save(job/'FLOW_RESULT.json',dict(execution_context='CLOUD_EXECUTOR_V1',identity=identity,executor_identity=identity,artifact_identity=builder,builder_identity=builder,source_pins=b['source_pins'],executor_identity_pin=b['executor_identity_pin'],builder_handoff=b['builder_handoff'],artifact_manifest=b['artifact_manifest'],cloud_budget=b['cloud_budget'],execution_approval=b['execution_approval'],job_budget_seconds=limit,execution_binding=pin(binding_path),execution_admission=admission,execution_mode=admission['mode'],transport_exit_code=code,qualification=qualification,execution_policy=execution_policy,status=qualification['status'],scope='P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE'if admission['mode']=='P0_FIRST_FAULT_DIAGNOSTIC'else('MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL'if 'model_candidate_review'in b else 'CHISEL_TEST_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL'),stages=history,retained_materials_scope=imported.get('retained_materials_verified',{}).get('scope'),upfront_disk_admission=disk_admission,numeric_result=pin(numeric_path),hardware_definitions=1,profiles=list(range(5)),uploaded_payloads=False,**{k:b[k]for k in ('executor_adaptation','workspace_loader','retained_materials','model_candidate_review','p0_provider_reuse','reference_data_reuse','aggregate_tree_cap_bytes')if k in b},**(dict(stage_coverage_budget=b['stage_coverage_budget'],stage_coverage_budget_sha256=b['stage_coverage_budget']['sha256'],execution_scope='STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE')if admission['mode']=='STAGE_COVERAGE_DIAGNOSTIC'else {})))
  return code
 if __name__=='__main__':
  a=argparse.ArgumentParser();a.add_argument('--binding',type=P,required=True);a.add_argument('--binding-sha256',required=True);v=a.parse_args();need(sha(v.binding)==v.binding_sha256,'independent top binding');code=run(json.loads(v.binding.read_text()),v.binding.resolve(),v.binding_sha256);raise SystemExit(code) # mode-specific transport follows recomputed qualification

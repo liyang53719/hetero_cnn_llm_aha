@@ -6,6 +6,8 @@ import hashlib,json,pathlib,re,importlib.util
 CALIBRATION='BOUNDED_CALIBRATION'
 FULL='FULL_BLOCK_ACCEPTANCE'
 STAGE='STAGE_COVERAGE_DIAGNOSTIC'
+FIRST_FAULT='P0_FIRST_FAULT_DIAGNOSTIC'
+FIRST_FAULT_SCOPE='P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE'
 STAGE_SCOPE='STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE'
 ACCEPTED_FULL_ADMISSION_SHA256=None
 FULL_POLICY='FULL_FIVE_ORIGINAL_HOST_POLICY'
@@ -67,10 +69,46 @@ def stage_document(binding,review):
   windows[i]=row['wall_seconds'];cycles[i]=row['max_active_cycles']
  return dict(mode=STAGE,profile_seconds=windows,profile_max_active_cycles=cycles,reviewed_budget_sha256=request['sha256'])
 
+def _first_fault_helper(binding):
+ need(binding.get('execution_context')=='CLOUD_EXECUTOR_V1' and binding.get('execution_mode')==FIRST_FAULT,'first fault requires explicit cloud diagnostic')
+ need(binding.get('full_block_budget')is None and 'stage_coverage_budget'not in binding,'first fault excludes full/stage budgets')
+ policy_path=D/'profile_policy.py'
+ need(binding['pins'].get(str(policy_path))==sha(policy_path),'first fault profile policy source pin')
+ ps=importlib.util.spec_from_file_location('first_fault_profile_policy',policy_path);policy=importlib.util.module_from_spec(ps);ps.loader.exec_module(policy)
+ policy.require_source_pin(binding['pins']);need(policy.checked(binding)['mode']==FULL_POLICY,'first fault retains five registered original-host profiles')
+ need('profiles'not in binding or (type(binding['profiles'])is list and len(binding['profiles'])==5 and all(type(i)is int for i in binding['profiles']) and binding['profiles']==list(range(5))),'first fault retains all five registered hardware profiles')
+ need('diagnostic_profiles'not in binding or (type(binding['diagnostic_profiles'])is list and len(binding['diagnostic_profiles'])==1 and type(binding['diagnostic_profiles'][0])is int and binding['diagnostic_profiles'][0]==0),'first fault selects only exact profile0')
+ path=D/'numeric/p0_first_fault_contract.py'
+ need(binding['pins'].get(str(path))==sha(path),'first fault contract verifier source pin')
+ spec=importlib.util.spec_from_file_location('first_fault_contract',path);helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
+ return helper
+
+def _first_fault_result(value):
+ need(type(value)is dict and set(value)=={'doc_sha','watchdog','diagnostic_profiles','scope'},'exact first fault contract result')
+ need(value['scope']==FIRST_FAULT_SCOPE and type(value['doc_sha'])is str and re.fullmatch('[0-9a-f]{64}',value['doc_sha'])is not None,'first fault reviewed scope/document')
+ profiles=value['diagnostic_profiles']
+ need(type(profiles)is list and len(profiles)==1 and type(profiles[0])is int and profiles[0]==0,'first fault exact selected profile0')
+ w=value['watchdog'];need(type(w)is dict and set(w)=={'wall_seconds','max_active_cycles'},'exact first fault watchdog')
+ need(type(w['wall_seconds'])is int and 0<w['wall_seconds']<=18000 and type(w['max_active_cycles'])is int and 0<w['max_active_cycles']<=1000000000,'first fault original finite watchdog ceilings')
+ return dict(mode=FIRST_FAULT,profile_seconds={'0':w['wall_seconds']},profile_max_active_cycles={'0':w['max_active_cycles']},reviewed_budget_sha256=value['doc_sha'],diagnostic_profiles=[0])
+
+def first_fault_document(binding,review):
+ """Proposal-only pure contract path. Never execution authority."""
+ return _first_fault_result(_first_fault_helper(binding).verify_document(binding,review))
+
+def first_fault_admission(binding):
+ """Production path: N helper verifies candidate invocation authority first."""
+ return _first_fault_result(_first_fault_helper(binding).admit(binding))
+
 def admit(binding):
  mode=binding.get('execution_mode',CALIBRATION)
- need(mode in (CALIBRATION,FULL,STAGE),'unknown execution mode')
+ need(mode in (CALIBRATION,FULL,STAGE,FIRST_FAULT),'unknown execution mode')
  request=binding.get('full_block_budget')
+ if mode==FIRST_FAULT:
+  path=D/'cloud_budget.py';need(binding['pins'].get(str(path))==sha(path),'first fault cloud verifier source pin')
+  spec=importlib.util.spec_from_file_location('first_fault_cloud_admission',path);cloud=importlib.util.module_from_spec(spec);spec.loader.exec_module(cloud)
+  approved=cloud.admit(binding);need(approved['execution_mode']==FIRST_FAULT and approved['diagnostic_profiles']==[0],'approved first fault diagnostic')
+  return first_fault_admission(binding)
  if mode==STAGE:
   path=D/'cloud_budget.py';need(binding['pins'].get(str(path))==sha(path),'stage cloud verifier source pin')
   spec=importlib.util.spec_from_file_location('stage_cloud_admission',path);cloud=importlib.util.module_from_spec(spec);spec.loader.exec_module(cloud)
@@ -138,18 +176,19 @@ def admit(binding):
 
 def consumer_limits(original,admission,profile):
  """Only watchdog limits change; never stimulus, data, hardware or success predicate."""
+ if admission['mode']==FIRST_FAULT:need(type(profile)is int and profile==0 and admission.get('diagnostic_profiles')==[0],'first fault consumer profile0 only')
  i=str(profile);result=dict(original);wall=admission['profile_seconds'][i]
  need(type(wall)is int and 0<wall<=original['wall_seconds'],'explicit wall within original runtime bound')
  result['wall_seconds']=wall
- if admission['mode']in(FULL,STAGE):
+ if admission['mode']in(FULL,STAGE,FIRST_FAULT):
   cycles=admission['profile_max_active_cycles'][i]
   need(type(cycles)is int and 0<cycles<=original['max_active_cycles'],'explicit full cycles within original runtime bound')
   result['max_active_cycles']=cycles
  return result
 
 def transport_exit(mode,qualification):
- need(mode in (CALIBRATION,FULL,STAGE),'unknown execution mode')
- if mode in(CALIBRATION,STAGE):return 2
+ need(mode in (CALIBRATION,FULL,STAGE,FIRST_FAULT),'unknown execution mode')
+ if mode in(CALIBRATION,STAGE,FIRST_FAULT):return 2
  need(type(qualification)is dict and type(qualification.get('numerical_pass'))is bool,'recomputed full qualification required')
  status=qualification.get('status')
  need(status in ('PASS_FIVE_FULL128_EXACT_REFERENCE','FAIL_EXACT_REFERENCE','INCOMPLETE'),'known aggregate qualification status')

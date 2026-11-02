@@ -67,6 +67,31 @@ def partial_stages(job):
  need(len(rows)<=40,'fixed stage count')
  return rows
 
+def first_fault_snapshot(path,b):
+ path=regular(path,64<<20);helper=D/'numeric/first_fault_records.py';schema=D/'numeric/FIXED_NONHIER_SCHEMA.json'
+ for f in (helper,schema):need(b['pins'].get(str(f))==sha(f),'fixed first-fault parser/schema source pins')
+ parser=load('actual_first_fault_records',helper);digest=hashlib.sha256();total=0;records=[];record_bytes=0;malformed=False;terminal_codes=[]
+ fixed_errors={b'ORIGINAL_HOST_REPLAY_FAIL: DUT resetRequired\n':'RESET_REQUIRED',b'ORIGINAL_HOST_REPLAY_FAIL: bounded original Host did not finish; partial progress is not numerical PASS\n':'BOUNDED_HOST_DID_NOT_FINISH'}
+ with path.open('rb')as f:
+  while True:
+   raw=f.readline(8193)
+   if not raw:break
+   total+=len(raw);need(total<=64<<20 and len(raw)<=8192,'bounded fixed Popen log');digest.update(raw)
+   if raw in fixed_errors:terminal_codes.append(fixed_errors[raw]);need(len(terminal_codes)<=1,'one fixed native terminal failure')
+   if raw.startswith(b'HOST_FIRST_FAULT'):
+    record_bytes+=len(raw)
+    if record_bytes>8192:malformed=True
+    elif not malformed:
+     try:records.append(raw.decode('ascii'))
+     except UnicodeError:malformed=True
+ need(path.stat().st_size==total,'complete fixed Popen log read')
+ try:
+  need(not malformed,'malformed or excess snapshot');result=parser.parse_records(iter(records))
+ except ValueError:result=dict(status='MALFORMED',fault_observed=None,fault_cause_established=False,numerical_pass=False)
+ if terminal_codes==['RESET_REQUIRED']:result['fault_observed']=True
+ elif result.get('status')=='ABSENT':result['fault_observed']=None
+ return dict(result,terminal_reason=terminal_codes[0]if terminal_codes else'NOT_ESTABLISHED_FROM_FIXED_NATIVE_FAILURE_RECORD',log_sha256=digest.hexdigest(),log_bytes=total,log_binding='FIXED_POPEN_OUTPUT_PATH_AFTER_VERIFIED_OWNER_CLEANUP_HASHED_AT_PROJECTION_NOT_PREEXISTING_LOG_PIN')
+
 def project(job,binding_path,binding_sha):
  unavailable=dict(schema='CLOUD_EXECUTION_SAFE_SUMMARY_V1',status='UNAVAILABLE',numerical_pass=False,final_rtl_executed=False)
  try:
@@ -74,7 +99,7 @@ def project(job,binding_path,binding_sha):
   need(b['job_root']==str(job)and job.is_absolute()and job==job.resolve(),'owning fixed job root')
   source_sha=source_guard(b)
   executor=load('summary_cloud_identity',D/'executor_identity.py').validate(b['identity'])
-  manifest=checked(b['artifact_manifest']);frozen=read(manifest);candidate=frozen['schema']=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'
+  manifest=checked(b['artifact_manifest']);frozen=read(manifest);candidate=frozen['schema']in('MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1','MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1')
   handoff=load('summary_cloud_handoff',D/'numeric'/('candidate_artifact_handoff.py'if candidate else'artifact_handoff.py'));builder=handoff.builder_identity(b['artifact_identity'])
   need(candidate==('model_candidate_review'in b),'candidate artifact requires explicit reviewed branch')
   review=load('summary_candidate_admission',D/'numeric/candidate_admission.py').verify(b['model_candidate_review'],b)if candidate else None
@@ -108,10 +133,17 @@ def project(job,binding_path,binding_sha):
   mode=load('summary_cloud_mode',D/'execution_mode.py');admission=mode.admit(b)
   need(cloud_admission['execution_mode']==admission['mode']and cloud_admission['full_block_budget']==b.get('full_block_budget'),'approved cloud mode and full budget')
   if admission['mode']==mode.STAGE:need(cloud_admission.get('stage_coverage_budget')==b.get('stage_coverage_budget')and b.get('stage_coverage_budget')is not None,'approved stage diagnostic budget')
+  first_fault=admission['mode']==mode.FIRST_FAULT
+  if first_fault:
+   need(admission.get('diagnostic_profiles')==[0],'only P0 first-fault selection')
+   unavailable['schema']='P0_FIRST_FAULT_DIAGNOSTIC_SUMMARY_V1'
+   diagnostic_root=job/'materials/numeric'
+   for i in range(1,5):need(not any(x.exists()or x.is_symlink()for x in(diagnostic_root/f'profile{i}',diagnostic_root/f'PROFILE_{i}_DIAGNOSTIC.json',diagnostic_root/f'runs/p{i}_dut')),'unselected first-fault profile present')
   flow_path=job/'FLOW_RESULT.json'
   if not flow_path.exists()and not flow_path.is_symlink():
    result=dict(schema=unavailable['schema'],status='INCOMPLETE_EXECUTION',numerical_pass=False,final_rtl_executed=False,profile_qualification='UNKNOWN_NOT_INFERRED_FROM_PARTIAL_STAGES',profiles_registered=list(range(5)),stages=partial_stages(job),binding_sha256=binding_sha,source_pins_sha256=source_sha,builder_handoff_sha256=b['builder_handoff']['sha256'],execution_approval_sha256=b['execution_approval']['sha256'],cloud_budget_sha256=b['cloud_budget']['sha256'])
    result.update(source_identity)
+   if first_fault:result.update(execution_mode=mode.FIRST_FAULT,diagnostic_profiles=[0],not_selected_profiles=[1,2,3,4],first_fault_document_sha256=admission['reviewed_budget_sha256'],full_block_acceptance=False,fault_observed=None,fault_cause_established=False)
    need(len(json.dumps(result).encode())<=65536,'bounded incomplete summary');return result
   flow=read(flow_path);root=job/'materials/numeric';numeric_path=root/'RESULT.json';numeric=read(numeric_path)
   for key,value in [('identity',executor),('execution_approval',b['execution_approval']),('artifact_identity',builder),('execution_binding',pin(bp)),('builder_handoff',b['builder_handoff']),('artifact_manifest',b['artifact_manifest']),('numeric_result',pin(numeric_path))]:need(flow.get(key)==value,'fixed flow binding '+key)
@@ -123,12 +155,16 @@ def project(job,binding_path,binding_sha):
   need(flow.get('execution_mode')==admission['mode']and numeric.get('execution_mode')==admission['mode'],'mode binding')
   if admission['mode']==mode.STAGE:
    need(flow.get('stage_coverage_budget')==b['stage_coverage_budget']and numeric.get('stage_budget_sha256')==admission['reviewed_budget_sha256']and numeric.get('full_budget_sha256')is None,'stage budget domain binding')
+  elif first_fault:
+   need(numeric.get('first_fault_document_sha256')==admission['reviewed_budget_sha256']and numeric.get('diagnostic_profiles')==[0]and numeric.get('not_selected_profiles')==[1,2,3,4]and numeric.get('full_budget_sha256')is None and numeric.get('stage_budget_sha256')is None,'first-fault exact document/selection domain')
+   for i in range(1,5):
+    need(not any(x.exists()or x.is_symlink()for x in(root/f'profile{i}',root/f'PROFILE_{i}_DIAGNOSTIC.json',root/f'runs/p{i}_dut')),'unselected profile must not run')
   else:need(numeric.get('full_budget_sha256')==admission['reviewed_budget_sha256']and numeric.get('stage_budget_sha256')is None,'legacy mode budget binding')
   sys.path.insert(0,str(D/'numeric'))
   acceptance=load('required_acceptance',D/'numeric/required_acceptance.py');sys.modules['required_acceptance']=acceptance
   evidence=load('cloud_dut_evidence',D/'numeric/dut_evidence.py')
   records=[];profiles=[]
-  for i in range(5):
+  for i in ([0]if first_fault else range(5)):
    rp=root/f'PROFILE_{i}_DIAGNOSTIC.json'
    if not rp.exists():continue
    record=read(rp);out=root/f'profile{i}/material/dut_result';report_path=out/'RESULT.json';start_path=out/f'profile{i}.started.json';outer_path=root/f'runs/p{i}_dut/RESULT.json'
@@ -141,23 +177,29 @@ def project(job,binding_path,binding_sha):
    ea=consumer.get('execution_admission',{})
    need(ea.get('execution_mode')==admission['mode']and ea.get('reviewed_budget_sha256')==admission['reviewed_budget_sha256']and ea.get('outer_cleanup_proof_required')is True,'actual consumer mode')
    if admission['mode']==mode.STAGE:need(ea.get('stage_budget_sha256')==admission['reviewed_budget_sha256'],'actual consumer stage budget domain')
-   else:need(ea.get('stage_budget_sha256')is None,'legacy consumer cannot carry stage budget')
+   else:need(ea.get('stage_budget_sha256')is None,'non-stage consumer cannot carry stage budget')
+   if first_fault:need(ea.get('first_fault_document_sha256')==admission['reviewed_budget_sha256']and ea.get('diagnostic_profiles')==[0],'actual first-fault consumer domain')
    need(ea.get('effective_limits')==cloud_budget.consumer_resource_limits(mode.consumer_limits(ea['original_limits'],admission,i),cloud_admission),'actual effective limits')
    parent_as=cloud_admission['consumer_address_space_bytes'];dut_as=cloud_admission['dut_address_space_bytes']
    expected_resource=dict(consumer_pre_fork_soft_bytes=parent_as,consumer_pre_fork_hard_bytes=dut_as,consumer_after_popen_hard_bytes=parent_as,dut_hard_address_space_bytes=dut_as,group_rss_is_sampled=True)
    need(consumer.get('resource_admission')==expected_resource and consumer['resource_admission'].get('group_rss_is_sampled') is True,'exact sampled group/resource admission')
-   scope={mode.FULL:'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE',mode.CALIBRATION:'CALIBRATION_SAME_FULL_M128_STIMULUS',mode.STAGE:'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE'}[admission['mode']]
+   scope={mode.FULL:'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE',mode.CALIBRATION:'CALIBRATION_SAME_FULL_M128_STIMULUS',mode.STAGE:'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE',mode.FIRST_FAULT:'P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE'}[admission['mode']]
    need(ea.get('scope')==scope,'actual consumer scope')
    actual=evidence.verify(out,i,consumer['artifact_manifest_sha256'],consumer['runtime_bundle_sha256'],started['binary_sha256'],started['runtime_sha256'],record['outer'])
    need(actual==record,'recomputed actual record');records.append(actual)
    q=actual['qualification'];need(all(type(q[k])is list and len(q[k])<=64 for k in ('missing','failed','checked')),'bounded qualification')
    profiles.append(dict(profile=i,state=actual['state'],qualification=q,receipt_sha256=sha(rp)))
+  if first_fault:need(len(records)==1 and records[0]['profile']==0,'one actual P0 closed diagnostic')
   q=acceptance.aggregate(records)
   need(numeric.get('actual_dut_reports')==records and numeric.get('qualification')==q and numeric.get('status')==q['status']and numeric.get('numerical_pass')is q['numerical_pass'],'actual numeric aggregate')
   need(flow.get('qualification')==q and flow.get('status')==q['status'],'actual flow aggregate')
   transport=mode.transport_exit(admission['mode'],q);need(type(flow.get('transport_exit_code'))is int and flow['transport_exit_code']==transport,'actual transport scope')
   result=dict(schema=unavailable['schema'],status='VERIFIED_REAGGREGATED',executor_identity=executor,builder_identity=builder,numerical_pass=q['numerical_pass'],final_rtl_executed=False,execution_mode=admission['mode'],transport_exit_code=transport,qualification=q,profiles=profiles,binding_sha256=binding_sha,execution_approval_sha256=b['execution_approval']['sha256'],cloud_budget_sha256=b['cloud_budget']['sha256'],source_pins_sha256=source_sha,builder_handoff_sha256=b['builder_handoff']['sha256'],artifact_manifest_sha256=b['artifact_manifest']['sha256'],flow_receipt_sha256=sha(flow_path),numeric_receipt_sha256=sha(numeric_path))
   result.update(source_identity)
+  if first_fault:
+   need(q['numerical_pass']is False,'single P0 cannot be five-block acceptance')
+   snapshot=first_fault_snapshot(root/'profile0/material/dut_result/profile0.log',b)
+   result.update(schema='P0_FIRST_FAULT_DIAGNOSTIC_SUMMARY_V1',first_fault_document_sha256=admission['reviewed_budget_sha256'],profiles_registered=list(range(5)),diagnostic_profiles=[0],not_selected_profiles=[1,2,3,4],full_block_acceptance=False,fault_snapshot=snapshot,fault_observed=snapshot.get('fault_observed',False),fault_cause_established=False)
   if admission['mode']==mode.STAGE:
    progress_path=D/'summary_progress.py';need(b['pins'].get(str(progress_path))==sha(progress_path),'stage progress helper source pin')
    progress=load('stage_post_cleanup_progress',progress_path).project(job,builder,D/'numeric')

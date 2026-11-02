@@ -1,3 +1,32 @@
+# 2026-11-02 07:51 UTC：同一709e候选五块长窗已闭，完整block仍0/5
+
+本节是1935实际云端阶段覆盖诊断的终态证据，不是新硬件或最终RTL验收。五块均启动并闭合；保留同builder128402、artifact05046aa9、SV3d148277、ELF709e88d0、固定4096 Matrix MAC/共享32-lane、原M128刺激与精度。整体原任务exit2，各DUT外监督native2/errors[]/cleanup及日志EOF完整。原数值门、MoE官方Torch topk与待用户明确的小ID同分契约均不改变。
+
+## done（仅精确范围）
+
+- 五块已闭输入norm局部输出均与官方reference逐bit相等：P0为官方BF16精确位扩展FP32存储，P1–4为原BF16直接字节比较。P0/P1/P2/P3/P4分别196608/131072/131072/262144/262144元素，均0差。不是每个内部算术节点通过，更不是whole block PASS。
+- stage目标每块至少2个clean completion，实际全部只有1个，目标0/5达成；完整block 0/5，全部INCOMPLETE。P0在pc1 resetRequired，其余四块在pc1达到1,500,000 active-cycle限额；后四块reset_required=0，不误报同故障。
+
+|profile|DUT阶段elapsed秒|采样最大group RSS字节|实际/目标completion|停止原因|完整状态|
+|---|---:|---:|---:|---|---|
+|P0|4535.7670|243900416|1 / 2|pc1 resetRequired|INCOMPLETE|
+|P1|9540.2024|182784000|1 / 2|pc1 active-cycle cap 1,500,000|INCOMPLETE|
+|P2|9546.2928|177741824|1 / 2|pc1 active-cycle cap 1,500,000|INCOMPLETE|
+|P3|9474.7788|1827393536|1 / 2|pc1 active-cycle cap 1,500,000|INCOMPLETE|
+|P4|9956.4737|1810763776|1 / 2|pc1 active-cycle cap 1,500,000|INCOMPLETE|
+
+五份DUT阶段elapsed合计43053.514778秒（约11.96小时），不是含全部准备/其他清理的完整生命周期时长；采样最大group RSS最大值1827393536B，不是连续峰值保证。不能拿未完成block周期作利用率分母；有效MAC80%/争取90%仍未资格，未宣布RTL实测利用率。
+
+## ongoing / todo
+
+1. 以实际同源命令/矩阵接入/租约证据定位pc1：P0 resetRequired与P1–4周期上限分开归因。先由唯一调度进行已批准的有界A诊断，不能把检查写成代码修复或假定原因已证。
+2. 保留五块输入norm精确匹配证据与各故障/限制收据；修复必须真实源码变更、独审、明确新身份并五块重测，不迁移旧局部/全链PASS。
+3. 完整M128 Chisel数值链通过后冻结源码、输入、参考、配置，再同一份统一RTL同刺激回放。1024/1224第二档未定不阻塞128；不缩4096、不用DPI/软件替代、不把叶子/控制/结构或此局部norm冒完整通过。
+
+有限证据：plans/evidence/five_stage_closed_20261102/SAFE_SUMMARY.json记录五closed RESULT、consumer/diagnostic/原progress log SHA、五局部norm摘要SHA、成本与确切范围；不含rawlog/binary/weights/reference tensor。本批仅更新已独审的有限证据与文档，不触发构建或数值执行。下面原中文计划完整逐字节保留。
+
+---
+
 # 2026-11-01 19:28 UTC：只读参考共享与更紧 TREE（host-only）
 
 当前实际候选仍为 builder 128402 / ELF 709e88…，不重建硬件。上轮五个 300 秒校准全部严格闭合为 INCOMPLETE，0/5 完整数值，完整周期分母未知。新阶段覆盖窗口 10800 秒×5、每块 1,500,000 active cycles、目标 clean completed commands=2，整体 65400 秒（18h10）仅工程上限，不是完成预测或 FULL 资格；尚未启动。

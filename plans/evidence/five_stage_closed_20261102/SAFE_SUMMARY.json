@@ -1,0 +1,502 @@
+{
+  "schema": "FIVE_CLOSED_M128_STAGE_COVERAGE_SAFE_SUMMARY_V1",
+  "scope": "MODEL_CANDIDATE_DIAGNOSTIC_NOT_FULL_BLOCK_OR_FINAL_RTL_PASS",
+  "execution_mode": "STAGE_COVERAGE_DIAGNOSTIC",
+  "profiles": [
+    {
+      "profile": 0,
+      "tokens": 128,
+      "full_block_status": "INCOMPLETE",
+      "full_block_numerical_pass": false,
+      "stage_coverage_target_completed_commands": 2,
+      "observed_completed_commands": 1,
+      "stage_target_met": false,
+      "exit": {
+        "supervisor_native_exit": 2,
+        "supervisor_errors": [],
+        "failure_reason": "DUT resetRequired"
+      },
+      "last_progress": {
+        "cycles": 852549,
+        "active_cycles": 852544,
+        "pc": 1,
+        "completions": 1,
+        "reset_required": 0,
+        "useful_macs": 0,
+        "executed_macs": 0,
+        "pipeline_issues": 12739,
+        "pipeline_stalls": 0,
+        "host_write_bytes": 786432
+      },
+      "last_progress_kind": "running",
+      "last_progress_line_sha256": "84993740444edeb1f5eec442a8c15a88e7d41511c9486747301b7a489721c9b5",
+      "local_norm": {
+        "status": "EXACT_LOCAL_NORM_OUTPUT_MATCH",
+        "elements": 196608,
+        "bytes": 786432,
+        "actual_sha256": "ddee5fd75094777c51ef1104c7a18dfe527fef9de2a24646aad1d83160a6e421",
+        "expected_layout_sha256": "ddee5fd75094777c51ef1104c7a18dfe527fef9de2a24646aad1d83160a6e421",
+        "byte_mismatches": 0,
+        "word_mismatches": 0,
+        "completion": {
+          "pc": 0,
+          "cycles": 607643,
+          "bytes": 786432
+        }
+      },
+      "cost": {
+        "dut_stage_elapsed_seconds": 4535.76700317199,
+        "observed_cpu_seconds": 4533.35,
+        "sampled_max_group_rss_bytes": 243900416,
+        "sample_count": 6329,
+        "sample_max_gap_seconds": 0.9900144200073555,
+        "disk_census_seconds": 4212.039583301841,
+        "supervisor_cpu_seconds": 4270.934320505
+      },
+      "cleanup": {
+        "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+        "reader_join_complete": true,
+        "log_eof": true,
+        "gzip_finalized": true
+      },
+      "evidence": {
+        "outer_result": {
+          "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/materials/numeric/runs/p0_dut/RESULT.json",
+          "bytes": 7689,
+          "sha256": "52f6b2cab1ac2fdef7124a705de29fcd80b092bf26587e719431e596674958d3"
+        },
+        "profile_diagnostic": {
+          "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/materials/numeric/PROFILE_0_DIAGNOSTIC.json",
+          "bytes": 2535,
+          "sha256": "2cb900371d90489f144c50083017ec2098fcbd9a7df62541c59d7f3876f0b687"
+        },
+        "consumer_result": {
+          "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/materials/numeric/profile0/material/dut_result/RESULT.json",
+          "bytes": 25445,
+          "sha256": "3058922809c2fb4caa6788bb94464b40ae33f3eb112dd4c2b88c033327227bb3"
+        },
+        "driver_progress_log": {
+          "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/materials/numeric/profile0/material/dut_result/profile0.log",
+          "bytes": 1935531,
+          "sha256": "457bbc64fbb8975f9d63a5d39dd16e032b0c1208341fd497a05c5c00e9a06331"
+        },
+        "local_norm_summary": {
+          "relative_local_evidence_path": "p0_n0_closed_comparison_20261101T2105/SUMMARY.json",
+          "bytes": 3445,
+          "sha256": "eed28c3057229cce9109a3fcd7711ada43899ae7ecbc6eaaa40924d1ff6e4c25"
+        }
+      },
+      "artifact": {
+        "layer": "CHISEL_EMITTED_SV_NUMERICAL_BACKEND",
+        "matrix_macs": 4096,
+        "vector_lanes": 32,
+        "artifact_manifest_sha256": "05046aa9b694d2c785f08ee7f81ae3dc945acc7b7ecfee95be355f10dd382ca5",
+        "binary_sha256": "709e88d035bf167d7b2012252eae4ca267c1623c7ef5bbded3fc8b8fc06ae793",
+        "sv_sha256": "3d148277114ff5d968d0e200f4ab117839a3b6c0c0d33e5388e6e5268d42d029",
+        "source_manifest_sha256": "4861deeb8c3afa7a06613249216ba3781edaec4097c97eb664d6a13678fc76ed",
+        "driver_sha256": "343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61"
+      }
+    },
+    {
+      "profile": 1,
+      "tokens": 128,
+      "full_block_status": "INCOMPLETE",
+      "full_block_numerical_pass": false,
+      "stage_coverage_target_completed_commands": 2,
+      "observed_completed_commands": 1,
+      "stage_target_met": false,
+      "exit": {
+        "supervisor_native_exit": 2,
+        "supervisor_errors": [],
+        "failure_reason": "bounded original Host did not finish; partial progress is not numerical PASS"
+      },
+      "last_progress": {
+        "cycles": 1500005,
+        "active_cycles": 1500000,
+        "pc": 1,
+        "completions": 1,
+        "reset_required": 0,
+        "useful_macs": 0,
+        "executed_macs": 0,
+        "pipeline_issues": 129920,
+        "pipeline_stalls": 0,
+        "host_write_bytes": 262144
+      },
+      "last_progress_kind": "terminal",
+      "last_progress_line_sha256": "c1f765cf2443d804bc14612b2dac8becf8d6e481b48ff5f7d292e5ca60226130",
+      "local_norm": {
+        "status": "EXACT_LOCAL_NORM_OUTPUT_MATCH",
+        "elements": 131072,
+        "bytes": 262144,
+        "actual_sha256": "a644f8518a72dac354953b2d58b8cc128a392b4c105a23f9671e209ea6c8cd7f",
+        "expected_layout_sha256": "a644f8518a72dac354953b2d58b8cc128a392b4c105a23f9671e209ea6c8cd7f",
+        "byte_mismatches": 0,
+        "word_mismatches": 0,
+        "completion": {
+          "pc": 0,
+          "cycles": 252070,
+          "bytes": 262144
+        }
+      },
+      "cost": {
+        "dut_stage_elapsed_seconds": 9540.202396198001,
+        "observed_cpu_seconds": 9536.62,
+        "sampled_max_group_rss_bytes": 182784000,
+        "sample_count": 13144,
+        "sample_max_gap_seconds": 1.2778556330013089,
+        "disk_census_seconds": 8867.748006877722,
+        "supervisor_cpu_seconds": 8991.275628119998
+      },
+      "cleanup": {
+        "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+        "reader_join_complete": true,
+        "log_eof": true,
+        "gzip_finalized": true
+      },
+      "evidence": {
+        "outer_result": {
+          "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/materials/numeric/runs/p1_dut/RESULT.json",
+          "bytes": 7696,
+          "sha256": "37a23428d5e063e1f75ab70385e3ec0af330e6db0bcafd758b1d970241a57d13"
+        },
+        "profile_diagnostic": {
+          "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/materials/numeric/PROFILE_1_DIAGNOSTIC.json",
+          "bytes": 2502,
+          "sha256": "aee22f6369106776510f34bd3da9724694db718b844824823cbd201f68eaa6bf"
+        },
+        "consumer_result": {
+          "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/materials/numeric/profile1/material/dut_result/RESULT.json",
+          "bytes": 18002,
+          "sha256": "e09df96e702969aaf19a23e11aaa90fb4dee855be1779276cdb40c5a1c752ba7"
+        },
+        "driver_progress_log": {
+          "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/materials/numeric/profile1/material/dut_result/profile1.log",
+          "bytes": 4133526,
+          "sha256": "352f64e46735b21db19d9dc5bd2356c8c649ea13f2f1a4f397ded6a0206a5a7e"
+        },
+        "local_norm_summary": {
+          "relative_local_evidence_path": "p1_input_norm_closed_comparison_20261101T2342/SUMMARY.json",
+          "bytes": 4240,
+          "sha256": "3799f02a92791bcc3506386350d49d61a811e8557ddaa911eed9d0af6c43d8cd"
+        }
+      },
+      "artifact": {
+        "layer": "CHISEL_EMITTED_SV_NUMERICAL_BACKEND",
+        "matrix_macs": 4096,
+        "vector_lanes": 32,
+        "artifact_manifest_sha256": "05046aa9b694d2c785f08ee7f81ae3dc945acc7b7ecfee95be355f10dd382ca5",
+        "binary_sha256": "709e88d035bf167d7b2012252eae4ca267c1623c7ef5bbded3fc8b8fc06ae793",
+        "sv_sha256": "3d148277114ff5d968d0e200f4ab117839a3b6c0c0d33e5388e6e5268d42d029",
+        "source_manifest_sha256": "4861deeb8c3afa7a06613249216ba3781edaec4097c97eb664d6a13678fc76ed",
+        "driver_sha256": "343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61"
+      }
+    },
+    {
+      "profile": 2,
+      "tokens": 128,
+      "full_block_status": "INCOMPLETE",
+      "full_block_numerical_pass": false,
+      "stage_coverage_target_completed_commands": 2,
+      "observed_completed_commands": 1,
+      "stage_target_met": false,
+      "exit": {
+        "supervisor_native_exit": 2,
+        "supervisor_errors": [],
+        "failure_reason": "bounded original Host did not finish; partial progress is not numerical PASS"
+      },
+      "last_progress": {
+        "cycles": 1500005,
+        "active_cycles": 1500000,
+        "pc": 1,
+        "completions": 1,
+        "reset_required": 0,
+        "useful_macs": 0,
+        "executed_macs": 0,
+        "pipeline_issues": 129920,
+        "pipeline_stalls": 1270,
+        "host_write_bytes": 262144
+      },
+      "last_progress_kind": "terminal",
+      "last_progress_line_sha256": "5835cc2314fc70b29f795042e9e1d8a90651f864fc4f63c48edcec0f1fbe1be3",
+      "local_norm": {
+        "status": "EXACT_LOCAL_NORM_OUTPUT_MATCH",
+        "elements": 131072,
+        "bytes": 262144,
+        "actual_sha256": "758cc0b96148c08ec2658e22fff596e38a35c1fac3870d193554630e1c344b59",
+        "expected_layout_sha256": "758cc0b96148c08ec2658e22fff596e38a35c1fac3870d193554630e1c344b59",
+        "byte_mismatches": 0,
+        "word_mismatches": 0,
+        "completion": {
+          "pc": 0,
+          "cycles": 252070,
+          "bytes": 262144
+        }
+      },
+      "cost": {
+        "dut_stage_elapsed_seconds": 9546.292824475007,
+        "observed_cpu_seconds": 9543.18,
+        "sampled_max_group_rss_bytes": 177741824,
+        "sample_count": 13124,
+        "sample_max_gap_seconds": 1.0689678880153224,
+        "disk_census_seconds": 8875.032681747078,
+        "supervisor_cpu_seconds": 8998.992657603001
+      },
+      "cleanup": {
+        "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+        "reader_join_complete": true,
+        "log_eof": true,
+        "gzip_finalized": true
+      },
+      "evidence": {
+        "outer_result": {
+          "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/materials/numeric/runs/p2_dut/RESULT.json",
+          "bytes": 7691,
+          "sha256": "92fbf283f0ef3d6a54b2fc7d8c75633d0993f470fb5f7253af2108f08adcf44c"
+        },
+        "profile_diagnostic": {
+          "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/materials/numeric/PROFILE_2_DIAGNOSTIC.json",
+          "bytes": 2477,
+          "sha256": "cf62dc31275018df22eef331fe86badfa1abced0309b6bdef6e18d20f63da16d"
+        },
+        "consumer_result": {
+          "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/materials/numeric/profile2/material/dut_result/RESULT.json",
+          "bytes": 17973,
+          "sha256": "ac40d54f1af211a08479074708b535df47ab41c2b34996148223ff250bd0cf4d"
+        },
+        "driver_progress_log": {
+          "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/materials/numeric/profile2/material/dut_result/profile2.log",
+          "bytes": 4140830,
+          "sha256": "fcd433d2b30f7ae1411d85fd7f7cadca836f166ea4d265dc7ee2839acdaf59a3"
+        },
+        "local_norm_summary": {
+          "relative_local_evidence_path": "p2_input_norm_closed_comparison_20261102T0225/SUMMARY.json",
+          "bytes": 4240,
+          "sha256": "9925c258635df94200ed4d21cfdb0a735cc1de131c954d9ca040c342e83f8bab"
+        }
+      },
+      "artifact": {
+        "layer": "CHISEL_EMITTED_SV_NUMERICAL_BACKEND",
+        "matrix_macs": 4096,
+        "vector_lanes": 32,
+        "artifact_manifest_sha256": "05046aa9b694d2c785f08ee7f81ae3dc945acc7b7ecfee95be355f10dd382ca5",
+        "binary_sha256": "709e88d035bf167d7b2012252eae4ca267c1623c7ef5bbded3fc8b8fc06ae793",
+        "sv_sha256": "3d148277114ff5d968d0e200f4ab117839a3b6c0c0d33e5388e6e5268d42d029",
+        "source_manifest_sha256": "4861deeb8c3afa7a06613249216ba3781edaec4097c97eb664d6a13678fc76ed",
+        "driver_sha256": "343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61"
+      }
+    },
+    {
+      "profile": 3,
+      "tokens": 128,
+      "full_block_status": "INCOMPLETE",
+      "full_block_numerical_pass": false,
+      "stage_coverage_target_completed_commands": 2,
+      "observed_completed_commands": 1,
+      "stage_target_met": false,
+      "exit": {
+        "supervisor_native_exit": 2,
+        "supervisor_errors": [],
+        "failure_reason": "bounded original Host did not finish; partial progress is not numerical PASS"
+      },
+      "last_progress": {
+        "cycles": 1500005,
+        "active_cycles": 1500000,
+        "pc": 1,
+        "completions": 1,
+        "reset_required": 0,
+        "useful_macs": 0,
+        "executed_macs": 0,
+        "pipeline_issues": 106240,
+        "pipeline_stalls": 0,
+        "host_write_bytes": 524288
+      },
+      "last_progress_kind": "terminal",
+      "last_progress_line_sha256": "28edf284c3c8bed89347b77906f2294852cd6e9e373c2d89a5aa20536da31128",
+      "local_norm": {
+        "status": "EXACT_LOCAL_NORM_OUTPUT_MATCH",
+        "elements": 262144,
+        "bytes": 524288,
+        "actual_sha256": "9c001347e10b02536efdf1f07080d93213b30af348505e4ca766917a95d1c619",
+        "expected_layout_sha256": "9c001347e10b02536efdf1f07080d93213b30af348505e4ca766917a95d1c619",
+        "byte_mismatches": 0,
+        "word_mismatches": 0,
+        "completion": {
+          "pc": 0,
+          "cycles": 490406,
+          "bytes": 524288
+        }
+      },
+      "cost": {
+        "dut_stage_elapsed_seconds": 9474.778838386992,
+        "observed_cpu_seconds": 9471.93,
+        "sampled_max_group_rss_bytes": 1827393536,
+        "sample_count": 12836,
+        "sample_max_gap_seconds": 1.082994708995102,
+        "disk_census_seconds": 8818.076227352984,
+        "supervisor_cpu_seconds": 8942.845116993001
+      },
+      "cleanup": {
+        "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+        "reader_join_complete": true,
+        "log_eof": true,
+        "gzip_finalized": true
+      },
+      "evidence": {
+        "outer_result": {
+          "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/materials/numeric/runs/p3_dut/RESULT.json",
+          "bytes": 7703,
+          "sha256": "a58cc6aa2d26e47364d2bf8967722440e0679d991c544cdfc11c47d061f6581d"
+        },
+        "profile_diagnostic": {
+          "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/materials/numeric/PROFILE_3_DIAGNOSTIC.json",
+          "bytes": 2791,
+          "sha256": "5233b11034877cbbf20c3c101fe6209a2a1a0f22363c27870baac0decdd2957a"
+        },
+        "consumer_result": {
+          "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/materials/numeric/profile3/material/dut_result/RESULT.json",
+          "bytes": 18319,
+          "sha256": "40c2b0ae969427713cad8ac2cac142801e3fe08d6a3961963b457f1ae4cb8ab3"
+        },
+        "driver_progress_log": {
+          "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/materials/numeric/profile3/material/dut_result/profile3.log",
+          "bytes": 4084290,
+          "sha256": "8c8b2831d941c0563f8875e40be1884610376642dc63953a8f57700c866fb728"
+        },
+        "local_norm_summary": {
+          "relative_local_evidence_path": "p3_input_norm_closed_comparison_20261102T0500/SUMMARY.json",
+          "bytes": 4240,
+          "sha256": "61874316c82627e360bb63815b132a63c942f023da0df44b0ea57e8e2856dfe0"
+        }
+      },
+      "artifact": {
+        "layer": "CHISEL_EMITTED_SV_NUMERICAL_BACKEND",
+        "matrix_macs": 4096,
+        "vector_lanes": 32,
+        "artifact_manifest_sha256": "05046aa9b694d2c785f08ee7f81ae3dc945acc7b7ecfee95be355f10dd382ca5",
+        "binary_sha256": "709e88d035bf167d7b2012252eae4ca267c1623c7ef5bbded3fc8b8fc06ae793",
+        "sv_sha256": "3d148277114ff5d968d0e200f4ab117839a3b6c0c0d33e5388e6e5268d42d029",
+        "source_manifest_sha256": "4861deeb8c3afa7a06613249216ba3781edaec4097c97eb664d6a13678fc76ed",
+        "driver_sha256": "343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61"
+      }
+    },
+    {
+      "profile": 4,
+      "tokens": 128,
+      "full_block_status": "INCOMPLETE",
+      "full_block_numerical_pass": false,
+      "stage_coverage_target_completed_commands": 2,
+      "observed_completed_commands": 1,
+      "stage_target_met": false,
+      "exit": {
+        "supervisor_native_exit": 2,
+        "supervisor_errors": [],
+        "failure_reason": "bounded original Host did not finish; partial progress is not numerical PASS"
+      },
+      "last_progress": {
+        "cycles": 1500005,
+        "active_cycles": 1500000,
+        "pc": 1,
+        "completions": 1,
+        "reset_required": 0,
+        "useful_macs": 0,
+        "executed_macs": 0,
+        "pipeline_issues": 106240,
+        "pipeline_stalls": 0,
+        "host_write_bytes": 524288
+      },
+      "last_progress_kind": "terminal",
+      "last_progress_line_sha256": "28edf284c3c8bed89347b77906f2294852cd6e9e373c2d89a5aa20536da31128",
+      "local_norm": {
+        "status": "EXACT_LOCAL_NORM_OUTPUT_MATCH",
+        "elements": 262144,
+        "bytes": 524288,
+        "actual_sha256": "434681d8fcbf60766abfc2bab5dfda14a0836f231946dee89ffd82cfab3c57dd",
+        "expected_layout_sha256": "434681d8fcbf60766abfc2bab5dfda14a0836f231946dee89ffd82cfab3c57dd",
+        "byte_mismatches": 0,
+        "word_mismatches": 0,
+        "completion": {
+          "pc": 0,
+          "cycles": 490406,
+          "bytes": 524288
+        }
+      },
+      "cost": {
+        "dut_stage_elapsed_seconds": 9956.473715820961,
+        "observed_cpu_seconds": 9953.54,
+        "sampled_max_group_rss_bytes": 1810763776,
+        "sample_count": 12927,
+        "sample_max_gap_seconds": 1.2856037220335566,
+        "disk_census_seconds": 9294.533734397526,
+        "supervisor_cpu_seconds": 9428.000641696999
+      },
+      "cleanup": {
+        "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+        "reader_join_complete": true,
+        "log_eof": true,
+        "gzip_finalized": true
+      },
+      "evidence": {
+        "outer_result": {
+          "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/materials/numeric/runs/p4_dut/RESULT.json",
+          "bytes": 7706,
+          "sha256": "aad9ff8794322c30dda379a131f52d627e8bfbbb5f8b50f3ee02a2ff68f9d661"
+        },
+        "profile_diagnostic": {
+          "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/materials/numeric/PROFILE_4_DIAGNOSTIC.json",
+          "bytes": 2766,
+          "sha256": "b0f24c606dcbbf998b8cb883003cbf13d3d4e00c1523a191185d3464f4d8778e"
+        },
+        "consumer_result": {
+          "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/materials/numeric/profile4/material/dut_result/RESULT.json",
+          "bytes": 18290,
+          "sha256": "779f8cfbcc3fb65b165df94dc2a61aee94058fffcb0745332f2ed444d324576f"
+        },
+        "driver_progress_log": {
+          "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/materials/numeric/profile4/material/dut_result/profile4.log",
+          "bytes": 4225401,
+          "sha256": "5293843915af8e30b44aa57290ed20595661603b27f9509d13ae242ab6cbcc50"
+        },
+        "local_norm_summary": {
+          "relative_local_evidence_path": "p4_input_norm_closed_comparison_20261102T0748/SUMMARY.json",
+          "bytes": 4241,
+          "sha256": "812f35cc7511a0956ff5d18511ffe02f53892e4912c04e89096b8e8dcb8e6473"
+        }
+      },
+      "artifact": {
+        "layer": "CHISEL_EMITTED_SV_NUMERICAL_BACKEND",
+        "matrix_macs": 4096,
+        "vector_lanes": 32,
+        "artifact_manifest_sha256": "05046aa9b694d2c785f08ee7f81ae3dc945acc7b7ecfee95be355f10dd382ca5",
+        "binary_sha256": "709e88d035bf167d7b2012252eae4ca267c1623c7ef5bbded3fc8b8fc06ae793",
+        "sv_sha256": "3d148277114ff5d968d0e200f4ab117839a3b6c0c0d33e5388e6e5268d42d029",
+        "source_manifest_sha256": "4861deeb8c3afa7a06613249216ba3781edaec4097c97eb664d6a13678fc76ed",
+        "driver_sha256": "343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61"
+      }
+    }
+  ],
+  "full_block_passes": 0,
+  "full_block_total": 5,
+  "stage_target_met_profiles": 0,
+  "stage_target_completed_commands": 2,
+  "local_norm_exact_matches": 5,
+  "total_dut_stage_elapsed_seconds": 43053.51477805295,
+  "total_observed_dut_stage_cpu_seconds": 43038.62,
+  "sampled_largest_group_rss_bytes": 1827393536,
+  "resource_scope": "RSS is observed sampled group maximum, not a continuous or guaranteed peak; summed DUT stage elapsed excludes preparation/cleanup outside these receipts and is not complete lifecycle duration.",
+  "utilization": "UNQUALIFIED_NO_COMPLETE_BLOCK_CYCLE_DENOMINATOR",
+  "arithmetic_policy": "ORIGINAL_EXACT_REFERENCE_NO_NEW_TOLERANCE",
+  "moe_tie_policy": "ORIGINAL_TORCH_TOPK_UNCHANGED_NO_SMALL_ID_APPROVAL",
+  "outer_result": {
+    "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/FLOW_RESULT.json",
+    "bytes": 8226,
+    "sha256": "71ab769e3c2d57625de272b6f754ec13e890dc457f22a408f187bd99aba0b4e8"
+  },
+  "numeric_summary": {
+    "relative_local_evidence_path": "cloud_execution_model_reference_stage_20261101T1935/run/materials/numeric/RESULT.json",
+    "bytes": 19154,
+    "sha256": "147f36bcbe00fe262605dbcb29dc258e2d8a4431ea76e31f720a2c21ef4f9f62"
+  },
+  "source_artifact_unchanged": true,
+  "final_rtl_executed": false,
+  "raw_payloads_included": false
+}

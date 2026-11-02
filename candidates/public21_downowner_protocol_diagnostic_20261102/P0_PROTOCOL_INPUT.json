@@ -1,0 +1,57 @@
+{
+  "tokens": 128,
+  "shape": {
+    "H": 1536
+  },
+  "commands": 21,
+  "tensors": {
+    "n0": {
+      "dims": [
+        128,
+        1536
+      ],
+      "address": 4483535872
+    },
+    "wq": {
+      "dims": [
+        1536,
+        1536
+      ],
+      "address": 4295032896
+    },
+    "q": {
+      "dims": [
+        128,
+        1536
+      ],
+      "address": 4485895360
+    }
+  },
+  "protocol_metadata_provenance": {
+    "schema": "P0_EXACT_PROTOCOL_FIELD_PROJECTION_V1",
+    "scope": "EXACT_SELECTED_PROTOCOL_METADATA_NOT_TENSOR_OR_NUMERICAL_EVIDENCE",
+    "source_manifest_sha256": "4f201e1744b8aa2c604a478ca837076abaf41a7235b62d8aa7ef14fcdc830163",
+    "source_manifest_bytes": 15000,
+    "selected_fields": {
+      "/tokens": 128,
+      "/shape/H": 1536,
+      "/commands": 21,
+      "/tensors/n0/dims": [
+        128,
+        1536
+      ],
+      "/tensors/n0/address": 4483535872,
+      "/tensors/wq/dims": [
+        1536,
+        1536
+      ],
+      "/tensors/wq/address": 4295032896,
+      "/tensors/q/dims": [
+        128,
+        1536
+      ],
+      "/tensors/q/address": 4485895360
+    },
+    "selected_fields_sha256": "9342bdccce6b5dec3caf6e31f84377a7bb57b4b9719242017547f755f9efa19a"
+  }
+}

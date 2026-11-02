@@ -1,3 +1,30 @@
+# 2026-11-02：P0 首 Dense 故障的同源 B 云端协议诊断（源码准备，尚未启动）
+
+本次仍以完整五块数值验收为主目标。既有五块长窗及局部 norm 结果见下方完整保留正文：五个 input norm 局部逐 bit 相等不升级为全块通过，完整数值仍为 0/5。P0 已退休 norm 后在首 Dense 阶段报告 resetRequired；具体首次故障分量尚未定位。不得把 P1–4 的周期上限退出或小模型资格混作该故障的复现。
+
+## 已闭的局部证据及明确未通过项
+
+- A：真实 Public21 Router／Dense Coordinator／SumBridge，外部端口使用协议 responder；首个完整 N 窗加第二 N 窗第一 partial 终态的正常路径与错误 ng 反例通过。A 没有真实 DownOwner／banks／Matrix 后端，不能据此排除实际首因。
+- B：保持真实 Router／Coordinator／Bridge／TransposedDenseDownOwner 和原容量、端口、时序的 banks，Matrix／向量运算结果／DDR 数据明确为 mock 零值协议流量；不是缩小后冒充 4096 MAC 硬件，也不授任何数值资格。目标是 ng0 的两段 K 归约、真实 tile／drain，再进入 ng160 首段 K 的终态。done 的发送依据模拟 Matrix 自身实际握手债清，不额外等待 DownOwner 写完，避免掩盖最后 tile 写入重叠。
+- 本地 B 的三个资源失败均保留：512 MiB JVM heap 在 FIRRTL ResolveKinds 路径耗尽；1408 MiB heap 加 backend 子进程聚合 RSS 达 2,155,655,168 B 超过 2 GiB；释放 JVM 后单独 Verilator 仍达聚合 2,153,136,128 B 超过 2 GiB。三者均未到 B_SIM_READY，不是协议 PASS／硬件故障复现。实际已生成约 101.9 MB LOW、86.9 MB SV 和 633 KB JNA harness，但不据文件存在迁移成功资格。
+- 两次直接 JNA 适配的 Scala API／作用域编译失败已留存；修后同包工厂与三小源实际严格编译成功（13.7956 s），新 emit-only 入口单源实际严格编译成功（6.9273 s）。这些只证明类型编译，不证明原生库加载、协议运行或全块数值。
+
+## 唯一云端诊断设计与预算边界
+
+本轮新建独立 source-only 协议诊断 workflow／唯一 nonce，先发布审定源码并检查 source CI，再另建仅含该 nonce 的激活提交。不得复用任何已消费的硬件构建 nonce，不重复原五个长窗。基于同一 159 源选择与官方 107 JAR 记录（106 classpath 条目及 1 plugin 角色），在新 runner 从源码重建；不上传本地 classes、LOW、SV 或共享库来替代源码闭包。仍沿原官方 Chiseltest LOW→SV 路径，不在此次引入尚未验证的新 CIRCT/CSE 变换。
+
+整 job 单调时钟上限 **7,200 秒（2 小时）**，从首次 checkout 前开始，不是完成时间预测。runner step 上限 6,600 秒，预备阶段共享 1,800 秒且含其 cleanup；六个主体阶段依次为 Scala compile 300、emit 600、端口映射 120、Verilator 900、make 1,800、协议驱动 600 秒，主体合计 4,320 秒，另为六次 cleanup 各留 30 秒和有限摘要留 60 秒。每阶段实际开始前再次检查整 job 剩余时间与后续收尾预约，不重置计时。
+
+最高阶段 RSS 6 GiB、另留 non-DUT 1 GiB 并真实核 runner MemAvailable；AS 15 GiB、单文件 512 MiB；2,000,000,000 B 的 tree 门仅约束各阶段 run 目录。共享 W/emitted 等输出目录不在该阶段独立 2 GB 门内，而由包含工作区和源码树的 12,081,306,272 B aggregate watch、512 MiB 单文件门及 1,500,000,000 B 磁盘空闲下限实际监督；不能把该共享域描述为已有独立 2 GB 硬门。单线程编译。此为新独立云端 job 的受审工程上限，不能拿本地 namespace 检查消除同主机未知旧 owner 的 5 GiB 预约，也不保证 B 必然能在这些上限内完成。
+
+原 Scala 协议 driver 的完整 body 仅两处类型机械适配且反向逐字节相等；直接 JNA 端口名、方向、宽度、4710 个非时钟 ID 和独立 clock 与实际 LOW／SV／harness 四组 switch 对照，保留原 reset 一拍序列和所有断言。云端重新生成映射后必须匹配独立固定 typed 摘要，不由 actual 自赋 expected。协议输入仅为从已闭 manifest 精确投影的九个 shape／地址字段；不携 tensor／权重／参考输出，不冒原完整 manifest 或实际计算重放。
+
+## 传递范围与失败处理
+
+**没有新增 artifact 上传。** 不改变原七件传递范围；本诊断不下载或上传权重、参考 tensor、NPZ、原始日志、IR、SV、classes、共享库。子阶段 raw log 只在 runner 本地严格 gzip 保存，对外仅固定白名单的有限阶段退出／资源／cleanup／checkpoint／首故障分量及 SHA 摘要。失败沿本次身份诊断，不凭未知原因复制昂贵 CI；任何新的源变更、预算调整或复现结论均须另以实际证据核定。真实 Matrix endpoint、完整原始算术与全块验收并不因 B 协议诊断而完成。
+
+---
+
 # 2026-11-02 07:51 UTC：同一709e候选五块长窗已闭，完整block仍0/5
 
 本节是1935实际云端阶段覆盖诊断的终态证据，不是新硬件或最终RTL验收。五块均启动并闭合；保留同builder128402、artifact05046aa9、SV3d148277、ELF709e88d0、固定4096 Matrix MAC/共享32-lane、原M128刺激与精度。整体原任务exit2，各DUT外监督native2/errors[]/cleanup及日志EOF完整。原数值门、MoE官方Torch topk与待用户明确的小ID同分契约均不改变。

@@ -1,0 +1,39 @@
+{
+  "schema": "PUBLIC21_B_SOURCE_ONLY_CLOUD_BUDGET_V1",
+  "scope": "REAL_ROUTER_DOWNOWNER_BANKS_MOCK_MATRIX_VECTOR_DDR_PROTOCOL_ONLY",
+  "whole_job_seconds": 7200,
+  "runner_step_seconds": 6600,
+  "preparation_shared_seconds_including_cleanup": 1800,
+  "main_phase_wall_seconds": {
+    "compile": 300,
+    "emit": 600,
+    "ports": 120,
+    "verilate": 900,
+    "make": 1800,
+    "protocol": 600
+  },
+  "main_phase_rss_gib": {
+    "compile": 3,
+    "emit": 6,
+    "ports": 2,
+    "verilate": 6,
+    "make": 6,
+    "protocol": 6
+  },
+  "cleanup_seconds_per_phase": 30,
+  "summary_reserve_seconds": 60,
+  "max_main_and_prep_seconds_including_cleanup_summary": 6360,
+  "max_process_address_space_bytes": 16106127360,
+  "per_file_bytes": 536870912,
+  "aggregate_watched_tree_bytes": 12081306272,
+  "minimum_free_disk_bytes": 1500000000,
+  "memory_gate": "phase_RSS_plus_1GiB_nonDUT",
+  "thread_policy": "ActiveProcessorCount1_MAKE_j1_OMP1",
+  "artifact_upload_permitted": false,
+  "local_binary_transfer_permitted": false,
+  "numerical_pass": false,
+  "final_rtl_replay": false,
+  "hardware_source_changes": false,
+  "stage_run_directory_tree_bytes": 2000000000,
+  "shared_emitted_outputs_scope": "W/emitted is covered by aggregate_watched_tree_bytes and per_file_bytes, NOT stage_run_directory_tree_bytes"
+}

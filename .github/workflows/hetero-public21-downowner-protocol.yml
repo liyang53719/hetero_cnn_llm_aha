@@ -1,0 +1,54 @@
+name: hetero-public21-downowner-protocol-only
+on:
+  push:
+    branches: [main]
+    paths: [ci_launch/public21_downowner_protocol_20261102_once.json]
+permissions:
+  contents: read
+concurrency:
+  group: hetero-exclusive-numeric-bootstrap
+  cancel-in-progress: false
+jobs:
+  protocol_only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      MAKEFLAGS: -j1
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record original protocol-only whole-job clock
+        timeout-minutes: 1
+        run: |
+          set -euo pipefail
+          python3 -B - <<'PY'
+          import json, os, pathlib, time
+          with (pathlib.Path(os.environ['RUNNER_TEMP'])/'public21-b-start.json').open('x') as f:
+              json.dump(dict(schema='PUBLIC21_DOWNOWNER_PROTOCOL_JOB_START_V1', started_monotonic=time.monotonic(), run_id=int(os.environ['GITHUB_RUN_ID']), launch_commit=os.environ['GITHUB_SHA'], job_budget_seconds=7200), f)
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        timeout-minutes: 4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 2
+      - name: Require unique reviewed source-only protocol launch
+        id: launch
+        timeout-minutes: 1
+        run: python3 -B candidates/public21_downowner_protocol_diagnostic_20261102/validate_launch.py
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        timeout-minutes: 4
+        with:
+          ref: ${{ steps.launch.outputs.source_sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Real Router and DownOwner banks; mock Matrix vector DDR; finite summary only
+        timeout-minutes: 110
+        run: |
+          set -euo pipefail
+          python3 -B candidates/public21_downowner_protocol_diagnostic_20261102/run_cloud_b.py \
+            --repo "$GITHUB_WORKSPACE" --work "$RUNNER_TEMP/public21-b" \
+            --identity "$RUNNER_TEMP/public21-b-identity.json" \
+            --job-start "$RUNNER_TEMP/public21-b-start.json"

@@ -1,0 +1,65 @@
+{
+  "scope": "REAL_BRIDGE_ONLY_STALE_MOCK_DRIVE_ORDER_CAUSAL_CONTROL_NOT_B_HARDWARE",
+  "stages": [
+    {
+      "stage": "compile",
+      "receipt_sha256": "50cac78db01c645d5ec33eaf0144232f5d2756667a70a08f0c72a3fe1e1ea56c",
+      "native_exit": 0,
+      "errors": [],
+      "elapsed_seconds": 13.127441916032694,
+      "sampled_rss": 295612416,
+      "cleanup": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+      "pipe_eof": true,
+      "gzip_finalized": true
+    },
+    {
+      "stage": "model",
+      "receipt_sha256": "0e27dd2e0f5842937dc92f1c3a73c248a00c21daedafe4b337ad09973c95cee6",
+      "native_exit": 0,
+      "errors": [],
+      "elapsed_seconds": 12.83521670702612,
+      "sampled_rss": 452612096,
+      "cleanup": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+      "pipe_eof": true,
+      "gzip_finalized": true
+    }
+  ],
+  "old_postedge_stale_valid_transient_abort": true,
+  "drive_first_no_registered_fault": true,
+  "illegal_valid_held_across_edge_registered_poison": true,
+  "original_cloud_vector_edge_observed": false,
+  "actual_p0_fault_reproduced": false,
+  "numerical_pass": false,
+  "schema": "PUBLIC21_B_DRIVE_ORDER_FIX_EVIDENCE_V1",
+  "original_cloud_run": 41423897669,
+  "original_cloud_protocol_receipt_sha256": "a4253033504a837362061f1b304f76872c01d2e6c331bf3c44fb8814782401e4",
+  "original_cloud_10_preceding_stages_strict_success": true,
+  "original_cloud_failure_tick": 62002,
+  "original_cloud_failure_ng": 0,
+  "new_two_fixture_compile": {
+    "receipt_sha256": "412110693a021c083628210d4f380064fa8bf3ab333dfac041ce2a0a2c92faf9",
+    "native_exit": 0,
+    "errors": [],
+    "elapsed_seconds": 13.623519751999993,
+    "sampled_rss": 292225024,
+    "cleanup": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+    "pipe_eof": true,
+    "gzip_finalized": true
+  },
+  "actual_original_generator_review": {
+    "original_spec_sha256": "6ac485d1af197aefc73b730a30f826efbf4e966052d3173d04033f9af1fa3ded",
+    "original_body_sha256": "b0cf31792dd39d4318281dd4917e833e0c8729ccdebe3491d6cd85f35574a938",
+    "adapted_body_sha256": "bfd4948aef90d9260aca8bf8faf677f64d3fc8ada39ea20418add190749a66db",
+    "reversible_type_substitutions": 2,
+    "generator_sha256": "900bff41b607a2a12d5e637bb7a5db33e53552ac4e12fa1be2971b75b59fb15d",
+    "driver_bytes_exact": true,
+    "large_model_reparsed": false
+  },
+  "new_full_b_protocol_executed": false,
+  "source_pins": {
+    "Public21DownOwnerCrossWindowProtocolOnlySpec.scala": "6ac485d1af197aefc73b730a30f826efbf4e966052d3173d04033f9af1fa3ded",
+    "Public21DownOwnerDirectDriver.scala": "5dded4a5951819136586d30c69c03174b6329bbab1624314cf5f9f196aa64be4",
+    "DenseTileSumBridgeDriveOrderHarness.scala": "76f0f919a91afd1c4db95a96caa0250fb100251201904ad048170450b0f1953c",
+    "DenseTileSumBridgeDriveOrderSpec.scala": "6ad3da65447829fbf07a7f0f417e7560e46fa9ea491198a59380dbb03eff01da"
+  }
+}

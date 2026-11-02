@@ -1,6 +1,8 @@
 """Closed-log finite projection: never emits raw error, path, payload or source text."""
 import gzip,json,re,hashlib
 FIELDS={
+'B_FIRST_VECTOR_REQUEST':{'tick','protocol_only'},
+'B_FIRST_VECTOR_RETURN':{'tick','protocol_only'},
 'B_EMIT_ONLY_AFTER_ELAB':{'backend_started','native_loaded'},
 'B_EMIT_ONLY_AFTER_LOW':{'backend_started','native_loaded'},
 'B_EMIT_ONLY_AFTER_INFO':{'name_matches','low_exists','backend_started','native_loaded'},

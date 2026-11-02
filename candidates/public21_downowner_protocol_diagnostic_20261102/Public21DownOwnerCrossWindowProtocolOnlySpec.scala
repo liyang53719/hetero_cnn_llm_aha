@@ -57,12 +57,6 @@ class Public21DownOwnerCrossWindowProtocolOnlySpec extends AnyFlatSpec with Chis
       println(s"$label tick=$ticks windows=$returnedWindows group=$groupSequence steps=$steps reset=${p.resetRequired.peek().litToBoolean} status=${q.status.peek().litValue} firstStatus=${q.firstStatus.peek().litValue} state=${q.state.peek().litValue} bankReset=${q.bankReset.peek().litToBoolean} firstBankReset=${q.firstBankReset.peek().litToBoolean} terminalIssued=${q.terminalIssued.peek().litValue} captured=${q.captured.peek().litValue} written=${q.written.peek().litValue} ng=${q.nBase.peek().litValue} ownerGroupSequence=${q.groupSequence.peek().litValue}")
     }
     while(returnedWindows<3 && ticks<500000){
-      // Current fields matter: first-fault registers may update next edge.
-      if(p.resetRequired.peek().litToBoolean)checkpoint("B_FAULT_BEFORE_ASSERT")
-      else if(ticks%20000==0)checkpoint("B_BOUNDED_PROGRESS")
-      p.resetRequired.expect(false.B);p.done.valid.expect(false.B);p.reductionOwns.expect(true.B)
-      p.memory.valid.expect(false.B) // no prefix or scalar memory in this selected recipe
-      p.matrix.seed.get.begin.valid.expect(false.B);p.matrix.seed.get.beat.valid.expect(false.B)
       p.burst.ready.poke(readPending.isEmpty.B)
       p.burstResponse.valid.poke(readPending.nonEmpty.B);p.burstResponse.bits.tag.poke(readPending.getOrElse(BigInt(0)).U);p.burstResponse.bits.last.poke(true.B)
       p.writeRequest.ready.poke(writePending.isEmpty.B)
@@ -79,6 +73,12 @@ class Public21DownOwnerCrossWindowProtocolOnlySpec extends AnyFlatSpec with Chis
       p.matrix.done.valid.poke(canDone.B);p.matrix.done.bits.tag.poke(groupTag.U)
       p.vector.request.ready.poke((!vectorPending).B);p.vector.result.valid.poke(vectorPending.B)
       p.vector.busy.poke(vectorPending.B);p.vector.drained.poke((!vectorPending).B)
+      // Current fields matter: first-fault registers may update next edge.
+      if(p.resetRequired.peek().litToBoolean)checkpoint("B_FAULT_BEFORE_ASSERT")
+      else if(ticks%20000==0)checkpoint("B_BOUNDED_PROGRESS")
+      p.resetRequired.expect(false.B);p.done.valid.expect(false.B);p.reductionOwns.expect(true.B)
+      p.memory.valid.expect(false.B) // no prefix or scalar memory in this selected recipe
+      p.matrix.seed.get.begin.valid.expect(false.B);p.matrix.seed.get.beat.valid.expect(false.B)
       def fire(x:chisel3.util.DecoupledIO[_]):Boolean=x.valid.peek().litToBoolean && x.ready.peek().litToBoolean
       val readFire=fire(p.burst);val readReturn=fire(p.burstResponse)
       val wrFire=fire(p.writeRequest);val wdFire=fire(p.writeData);val waFire=fire(p.writeResponse)
@@ -113,7 +113,8 @@ class Public21DownOwnerCrossWindowProtocolOnlySpec extends AnyFlatSpec with Chis
       }
       if(resultFire){require(results.head==terminalReturns,"ordered mock terminal contexts");d.diagnostic.terminalIssued.peek().litValue.testBit(results.head) shouldBe true}
       if(doneFire){steps shouldBe length*5;terminalReturns shouldBe 5;d.diagnostic.captured.expect(5.U)}
-      if(vectorFire){p.vector.request.bits.binaryAdd.get.expect(true.B);vectors+=1}
+      if(vectorFire){if(vectors==0)println(s"B_FIRST_VECTOR_REQUEST tick=$ticks protocol_only=true");p.vector.request.bits.binaryAdd.get.expect(true.B);vectors+=1}
+      if(vectorReturn && vectors==1)println(s"B_FIRST_VECTOR_RETURN tick=$ticks protocol_only=true")
       if(p.windowReturned.valid.peek().litToBoolean){
         val r=p.windowReturned.bits;r.status.expect(0.U);r.committed.expect(true.B);r.producedBeats.expect(1280.U);r.ddrWriteBytes.expect(0.U)
         r.ng.expect((if(returnedWindows<2)0 else 160).U);r.slot.expect((if(returnedWindows==1)1 else 0).U)

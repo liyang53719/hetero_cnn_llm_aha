@@ -1,3 +1,17 @@
+## 2026-11-02 10:23 UTC：B 已运行到协议；纠正 mock 驱动与采样顺序
+
+- 原唯一 run `41423897669` 已关闭。全部准备、compile、emit、ports、Verilator、make 均 strict0；emit 114.7673 s / sampled RSS 2,191,253,504 B，Verilator 101.2595 s / 2,296,471,552 B，make 705.9808 s / 2,814,488,576 B。协议模型真实启动，native1 / errors=[] / cleanup+EOF+gzip 完整，172.4364 s / sampled RSS 186,236,928 B。不是资源 cap、入口身份或 TargetDir 失败。
+- 有限闭日志记录 ng0 两个 K partial 在 tick 52374 / 61992 正常 terminal，captured=5、written=5、status=0。随后 tick62002 reset=true，但 owner state/status/firstStatus=0、bankReset/firstBankReset=false；未到 ng160。此反例不能直接等同原 P0 resetRequired 首因。
+- 三方源码核查发现确定的 fixture delta-cycle 风险：旧循环先读取 reset，才根据上个 edge 后更新的 mock 状态刷新 vector.result.valid。真实 Bridge 结果已 fire 使 inflight=false 时，旧 mock valid 在下一次 poke 前仍 true，触发组合 unexpected→tiles.abort；真实 DownOwner 将该 abort 组合反映为 resetRequired。该边沿间观察不等于被时钟采样的硬件错误。
+- 已用原真实 DenseTileSumBridge 小模型实证三场景，未改生产：旧顺序的 stale unexpected/tile_abort 真而注册 reset 假；先驱动再采样并跨 edge 保持健康；非法 valid 真正保持跨 edge 必须触发 sticky reset。compile 13.1274 s / 295,612,416 B，model 12.8352 s / 452,612,096 B，全部 strict0。小模型无真实 banks，不冒完整 B 或原 P0 因果证明。
+- 最窄修复仅把 B 的原全部故障/完成/owner/内存/seed 断言块原样移到本周期所有 mock poke 后、fire 快照/clock 前；所有断言、窗口形状、early-done、队列和硬件保持。Spec 与 direct driver 机械逆变换恢复旧全字节；补首 vector request/result 实际 fire 的 tick/protocol_only 有限事件，不输出 payload。
+- 下一次沿独立 `public21_downowner_protocol_driveorderfix_20261102_once` 唯一接续。workflow/guard/runner 精确三处 nonce 同步，并保真实临时 Git→guard.main→actual runner 全 11 阶段回归。云端原 whole7200/runner6600/各阶段内存CPU盘预算与 no-artifact 范围不变；原三次云失败与本地证据均保留。没有借机修改 RTL、缩小 banks、放宽数值或 success 门。
+- 主任务仍原五块完整数值，whole0/5 INCOMPLETE。后续 B 的协议通过也只说明此 mock 合同下跨边界；原 P0 故障是否同因仍须实际工程证据，不以 fixture 修复冒充硬件修复。
+
+以下此前完整计划原样保留。
+
+---
+
 ## 2026-11-02 09:46 UTC：修正恢复入口的精确 nonce 三处闭包
 
 - 原 targetdirfix run `41422562975` 在 09:41:04 UTC 的 IDENTITY 前置门失败；有限回执明确 runner 行 36 / last_completed_stage=null。workflow 与 guard 已换新 nonce，但 runner 仍硬锁最初 once 路径，交接遗漏导致确定拒绝。此轮没有任何 prep、compile、emit、backend 或协议阶段执行，不是相对 TargetDir 修复失败。

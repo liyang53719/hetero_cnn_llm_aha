@@ -29,6 +29,10 @@ class Tests(unittest.TestCase):
   q=dict(d);q['frames']=[d['frames'][0]]*9;self.assertIsNone(diag.failure('B_EMIT_ONLY_FAILURE '+json.dumps(q)))
   with tempfile.TemporaryDirectory() as td:
    p=pathlib.Path(td)/'log.gz';raw=('B_EMIT_ONLY_FAILURE '+json.dumps(d)+'\n').encode();self.assertEqual(diag.project(p,self.receipt(p,raw))['emit_failure'],d)
+ def test_first_vector_finite_fields(self):
+  for kind in ('B_FIRST_VECTOR_REQUEST','B_FIRST_VECTOR_RETURN'):
+   self.assertEqual(diag.parse(kind+' tick=62001 protocol_only=true')['values'],dict(tick=62001,protocol_only=True))
+   self.assertIsNone(diag.parse(kind+' tick=62001 protocol_only=true payload=secret'))
  def test_malformed_records(self):
   for line in ['B_WINDOW_ACCEPTED ordinal=1 tick=3 ng=0 slot=/secret','B_WINDOW_ACCEPTED ordinal=1 tick=3 ng=0 slot=0 extra=1','B_WINDOW_ACCEPTED ordinal=1 tick=3 ng=0 slot=0 slot=0','B_WINDOW_ACCEPTED ordinal=1 tick=3 ng=0 slot=999999999999999999999']:
    self.assertIsNone(diag.parse(line))

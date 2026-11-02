@@ -27,7 +27,7 @@ class Flow(unittest.TestCase):
   self.write(self.original/'SOURCE_AND_TOOLCHAIN_PINS.json',{'jars':self.jars})
   self.java=self.root/'jdk';(self.java/'bin').mkdir(parents=True);(self.java/'bin/java').write_text('synthetic JDK executable, never executed')
   self.sha='a'*40;self.launch='b'*40;self.identity=self.root/'identity.json';self.start=self.root/'start.json';self.event=self.root/'event.json'
-  self.write(self.identity,dict(schema='PUBLIC21_DOWNOWNER_PROTOCOL_JOB_IDENTITY_V1',run_id=123,source_commit=self.sha,launch_commit=self.launch,launch_manifest_path='ci_launch/public21_downowner_protocol_identityfix_20261102_once.json',launch_manifest_blob_sha='c'*40,scope='PROTOCOL_ONLY_MOCK_MATRIX_VECTOR_DDR_NO_NUMERICAL_PASS_NO_ARTIFACT_TRANSFER'))
+  self.write(self.identity,dict(schema='PUBLIC21_DOWNOWNER_PROTOCOL_JOB_IDENTITY_V1',run_id=123,source_commit=self.sha,launch_commit=self.launch,launch_manifest_path='ci_launch/public21_downowner_protocol_driveorderfix_20261102_once.json',launch_manifest_blob_sha='c'*40,scope='PROTOCOL_ONLY_MOCK_MATRIX_VECTOR_DDR_NO_NUMERICAL_PASS_NO_ARTIFACT_TRANSFER'))
   self.write(self.start,dict(schema='PUBLIC21_DOWNOWNER_PROTOCOL_JOB_START_V1',run_id=123,launch_commit=self.launch,job_budget_seconds=7200,started_monotonic=time.monotonic()))
   self.write(self.event,dict(before=self.sha,after=self.launch,ref='refs/heads/main'))
   files={str(p.relative_to(self.repo)):digest(p)for p in self.c.iterdir()if p.is_file()and not p.name.startswith('test_')}

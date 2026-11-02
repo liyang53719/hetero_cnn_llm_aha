@@ -1,7 +1,8 @@
 """Actual runner main/CLI orchestration with mocked authorities and subprocesses.
-No Java, Verilator, make, Git, network or diagnostic hardware execution.
+No Java, Verilator, make, network or diagnostic hardware execution.
+The end-to-end identity regression uses real isolated local Git commits and guard.
 """
-import contextlib,hashlib,importlib.util,io,json,os,resource,sys,tempfile,time,types,unittest
+import subprocess,contextlib,hashlib,importlib.util,io,json,os,resource,sys,tempfile,time,types,unittest
 from pathlib import Path
 from unittest.mock import patch
 HERE=Path(__file__).resolve().parent
@@ -26,7 +27,7 @@ class Flow(unittest.TestCase):
   self.write(self.original/'SOURCE_AND_TOOLCHAIN_PINS.json',{'jars':self.jars})
   self.java=self.root/'jdk';(self.java/'bin').mkdir(parents=True);(self.java/'bin/java').write_text('synthetic JDK executable, never executed')
   self.sha='a'*40;self.launch='b'*40;self.identity=self.root/'identity.json';self.start=self.root/'start.json';self.event=self.root/'event.json'
-  self.write(self.identity,dict(schema='PUBLIC21_DOWNOWNER_PROTOCOL_JOB_IDENTITY_V1',run_id=123,source_commit=self.sha,launch_commit=self.launch,launch_manifest_path='ci_launch/public21_downowner_protocol_20261102_once.json',launch_manifest_blob_sha='c'*40,scope='PROTOCOL_ONLY_MOCK_MATRIX_VECTOR_DDR_NO_NUMERICAL_PASS_NO_ARTIFACT_TRANSFER'))
+  self.write(self.identity,dict(schema='PUBLIC21_DOWNOWNER_PROTOCOL_JOB_IDENTITY_V1',run_id=123,source_commit=self.sha,launch_commit=self.launch,launch_manifest_path='ci_launch/public21_downowner_protocol_identityfix_20261102_once.json',launch_manifest_blob_sha='c'*40,scope='PROTOCOL_ONLY_MOCK_MATRIX_VECTOR_DDR_NO_NUMERICAL_PASS_NO_ARTIFACT_TRANSFER'))
   self.write(self.start,dict(schema='PUBLIC21_DOWNOWNER_PROTOCOL_JOB_START_V1',run_id=123,launch_commit=self.launch,job_budget_seconds=7200,started_monotonic=time.monotonic()))
   self.write(self.event,dict(before=self.sha,after=self.launch,ref='refs/heads/main'))
   files={str(p.relative_to(self.repo)):digest(p)for p in self.c.iterdir()if p.is_file()and not p.name.startswith('test_')}
@@ -67,7 +68,7 @@ class Flow(unittest.TestCase):
   elif name=='make':(w/'emitted/verilated'/('V'+top)).write_text('synthetic library')
   q=dict(native_exit=1 if self.mode=='strictfail'and name=='emit'else 0,errors=[],cleanup_proof={'status':'COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP'},log_capture={'pipe_eof_observed':True,'gzip_finalized':True},elapsed_seconds=0.01,observed_peak_rss=1024,observed_cpu_seconds=0.01)
   self.write(out/'RESULT.json',q);return q
- def invoke(self,extra_cli=()):
+ def invoke(self,extra_cli=(),real_git=False):
   fresh=types.ModuleType('fresh_host');fresh.reject_injection=lambda e:self.authority.append('injection');fresh.validate_compile_inventory=lambda v:self.authority.append('compile_inventory')
   gen=types.ModuleType('candidate_generation_gate');gen.GENERATION_CONTRACT_SHA256='d'*64;gen.load_contract=lambda *a:self.authority.append('generation')or{};gen.checked_paths=lambda *a:list(self.sources)
   sup=types.ModuleType('supervise_multiroot');sup.execute=self.execute
@@ -78,10 +79,39 @@ class Flow(unittest.TestCase):
   args=['run_cloud_b.py','--repo',str(self.repo),'--work',str(self.work),'--identity',str(self.identity),'--job-start',str(self.start),*extra_cli]
   oldpath=sys.path[:];self.stdout=io.StringIO()
   try:
-   with patch.dict(sys.modules,modules),patch.dict(os.environ,env,clear=True),patch.object(sys,'argv',args),patch.object(self.runner.subprocess,'check_output',return_value=self.sha+'\n')as githead,patch.object(self.runner.subprocess,'run')as gitdiff,contextlib.redirect_stdout(self.stdout):
+   with contextlib.ExitStack() as stack:
+    for c in (patch.dict(sys.modules,modules),patch.dict(os.environ,env,clear=True),patch.object(sys,'argv',args),contextlib.redirect_stdout(self.stdout)):stack.enter_context(c)
+    if not real_git:
+     githead=stack.enter_context(patch.object(self.runner.subprocess,'check_output',return_value=self.sha+'\n'));gitdiff=stack.enter_context(patch.object(self.runner.subprocess,'run'))
     self.runner.main()
-    githead.assert_called_once();gitdiff.assert_called_once()
+    if not real_git:githead.assert_called_once();gitdiff.assert_called_once()
   finally:sys.path[:]=oldpath
+ def actual_guard_identity(self):
+  # Workflow path -> actual guard.main -> real source checkout -> actual runner.main.
+  # Only downstream tool authorities/stages remain the original explicit mocks.
+  workflow=(PACKAGE.parents[1]/'.github/workflows/hetero-public21-downowner-protocol.yml').read_text()
+  spec=importlib.util.spec_from_file_location('real_launch_guard_under_test',self.c/'validate_launch.py');guard=importlib.util.module_from_spec(spec);spec.loader.exec_module(guard)
+  self.assertIn('paths: ['+guard.LAUNCH+']',workflow)
+  self.assertIn('python3 -B '+REL+'/validate_launch.py',workflow)
+  self.assertIn('python3 -B '+REL+'/run_cloud_b.py',workflow)
+  def git(*args):return subprocess.check_output(['git','-C',str(self.repo),'-c','user.name=IdentityFixture','-c','user.email=fixture@example.invalid',*args],text=True,stderr=subprocess.PIPE).strip()
+  git('init','--initial-branch=main');git('add','.');git('commit','-m','reviewed synthetic source');self.sha=git('rev-parse','HEAD')
+  self.write(self.repo/guard.LAUNCH,dict(schema=guard.SCHEMA,source_sha=self.sha,nonce=guard.NONCE))
+  git('add',guard.LAUNCH);git('commit','-m','single source-only activation');self.launch=git('rev-parse','HEAD')
+  self.write(self.event,dict(before=self.sha,after=self.launch,ref='refs/heads/main'))
+  self.write(self.start,dict(schema='PUBLIC21_DOWNOWNER_PROTOCOL_JOB_START_V1',run_id=123,launch_commit=self.launch,job_budget_seconds=7200,started_monotonic=time.monotonic()))
+  output=self.root/'github_output';env=dict(GITHUB_RUN_ID='123',GITHUB_RUN_ATTEMPT='1',GITHUB_SHA=self.launch,GITHUB_EVENT_PATH=str(self.event),RUNNER_TEMP=str(self.root),GITHUB_OUTPUT=str(output),PATH='/usr/bin:/bin')
+  with patch.dict(os.environ,env,clear=True),contextlib.chdir(self.repo):guard.main()
+  self.identity=self.root/'public21-b-identity.json';actual=json.loads(self.identity.read_text())
+  self.assertEqual(actual['source_commit'],self.sha);self.assertEqual(actual['launch_commit'],self.launch);self.assertEqual(actual['launch_manifest_blob_sha'],git('rev-parse','HEAD:'+guard.LAUNCH));self.assertEqual(output.read_text(),'source_sha='+self.sha+'\n')
+  git('checkout','--detach',self.sha)
+ def test_workflow_guard_real_git_identity_to_actual_runner(self):
+  self.actual_guard_identity();self.invoke(real_git=True)
+  self.assertEqual([x['name']for x in self.calls],ORDER)
+ def test_actual_guard_identity_rejects_stale_runner_path_before_stages(self):
+  self.actual_guard_identity();d=json.loads(self.identity.read_text());d['launch_manifest_path']='ci_launch/public21_downowner_protocol_20261102_once.json';self.write(self.identity,d)
+  with self.assertRaisesRegex(ValueError,'launch boundary'):self.invoke(real_git=True)
+  self.assertEqual(self.calls,[]);self.assertFalse(self.work.exists())
  def test_actual_main_positive_layout_and_pins(self):
   self.invoke();self.assertEqual([x['name']for x in self.calls],ORDER)
   final=json.loads((self.work/'FINAL_SAFE.json').read_text());self.assertFalse(final['numerical_pass']);self.assertTrue(final['protocol_driver_returned']);self.assertEqual(len(final['stages']),11)

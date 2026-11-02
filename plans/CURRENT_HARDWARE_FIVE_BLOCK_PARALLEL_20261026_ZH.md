@@ -1,3 +1,14 @@
+## 2026-11-02 09:46 UTC：修正恢复入口的精确 nonce 三处闭包
+
+- 原 targetdirfix run `41422562975` 在 09:41:04 UTC 的 IDENTITY 前置门失败；有限回执明确 runner 行 36 / last_completed_stage=null。workflow 与 guard 已换新 nonce，但 runner 仍硬锁最初 once 路径，交接遗漏导致确定拒绝。此轮没有任何 prep、compile、emit、backend 或协议阶段执行，不是相对 TargetDir 修复失败。
+- 本次仅同步 workflow path、guard 的 LAUNCH/NONCE、runner 的 exact launch_manifest_path 为独立 `public21_downowner_protocol_identityfix_20261102_once`。不改 exact path / source parent / attempt=1 / source Git identity 门；不泛化可接受路径，不重新激活旧 nonce。
+- 增加实际入口回归：临时真实 Git source commit → 单新 launch commit → 读取真实 workflow 的路径/入口 → 执行原 guard.main 并保存真实 identity/blob → checkout source → 原 runner.main 全 11 阶段编排。Git 与 guard/runner 身份门不 mock；下载/EDA/权威工具仍明确 synthetic mock，不冒云端资格。旧路径反例须在首阶段前拒绝且不创建 work。修复了此前手工构造旧 identity 使测试没覆盖实际交接的缺口。
+- 原 run 41422562975 闭日志与 41419416366 / tiny 负正证据全部保留。相对 TargetDir 修复、真实 B、硬件、源角色、预算和 no-artifact 边界一字节不变。下一次唯一新 nonce 接续仍仅协议诊断，不声称原 P0 resetRequired 或五块完整数值已解决；whole 数值仍 0/5。
+
+以下此前完整计划原样保留。
+
+---
+
 ## 2026-11-02 09:35 UTC：B 源码诊断的相对 TargetDir 修复（非硬件通过）
 
 - 原唯一云端 run `41419416366` 已 failure：JDK、编译工具、JAR、Verilator 工具、fresh-host 五准备阶段及 165 源 compile 均 strict0；compile 120.6446 s / sampled RSS 1,653,260,288 B。emit 在 6.2896 s / sampled RSS 246,501,376 B 以 native1 关闭，errors=[]、cleanup/EOF/gzip 完整；仅观察到 BEFORE_ELAB 与 ILLEGAL_ARGUMENT / REQUIREMENT_FAILURE 有限类别。未到 backend、native load 或 B 协议执行，未上传 artifact；原远端具体子异常 stack 未传出，不追认已看到。

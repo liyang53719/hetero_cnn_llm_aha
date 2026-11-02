@@ -33,7 +33,7 @@ def main():
  need(I['scope']=='PROTOCOL_ONLY_MOCK_MATRIX_VECTOR_DDR_NO_NUMERICAL_PASS_NO_ARTIFACT_TRANSFER','identity scope')
  need(type(I['run_id'])is int and str(I['run_id'])==os.environ['GITHUB_RUN_ID'] and os.environ['GITHUB_RUN_ATTEMPT']=='1' and I['launch_commit']==os.environ['GITHUB_SHA'],'actual first run')
  need(all(type(I[k])is str and re.fullmatch('[0-9a-f]{40}',I[k]) for k in ('source_commit','launch_commit','launch_manifest_blob_sha')),'commit pins')
- need(I['launch_manifest_path']=='ci_launch/public21_downowner_protocol_20261102_once.json' and I['source_commit']!=I['launch_commit'],'launch boundary')
+ need(I['launch_manifest_path']=='ci_launch/public21_downowner_protocol_identityfix_20261102_once.json' and I['source_commit']!=I['launch_commit'],'launch boundary')
  need(start.get('schema')=='PUBLIC21_DOWNOWNER_PROTOCOL_JOB_START_V1' and start.get('run_id')==I['run_id'] and start.get('launch_commit')==I['launch_commit'] and start.get('job_budget_seconds')==WHOLE,'original clock binding')
  t=start.get('started_monotonic');need(type(t)in(int,float) and math.isfinite(t) and 0<=time.monotonic()-t<WHOLE,'original monotonic clock')
  event=load(os.environ['GITHUB_EVENT_PATH'],2<<20);need(event.get('before')==I['source_commit'] and event.get('after')==I['launch_commit'] and event.get('ref')=='refs/heads/main','actual source parent')

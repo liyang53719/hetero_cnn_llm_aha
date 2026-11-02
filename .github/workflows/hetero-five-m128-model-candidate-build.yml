@@ -2,7 +2,7 @@ name: hetero-five-m128-model-candidate-rms32-build-only
 on:
   push:
     branches: [main]
-    paths: [ci_launch/five_m128_model_candidate_rms32_exportfix_20261101_once.json]
+    paths: [ci_launch/five_m128_model_candidate_firstfault_20261102_once.json]
 permissions:
   contents: read
   actions: read
@@ -54,7 +54,7 @@ jobs:
           python3 -B candidates/model_candidate_build_20261101/prepare_model_build.py \
             --repo "$GITHUB_WORKSPACE" --work "$RUNNER_TEMP/hetero-split-build" \
             --identity "$RUNNER_TEMP/hetero-split-build-identity.json" \
-            --job-start "$RUNNER_TEMP/hetero-split-build-start.json"
+            --job-start "$RUNNER_TEMP/hetero-split-build-start.json" --first-fault-readonly
       - name: Verify all strict candidate stages and exact seven bytes
         id: export
         timeout-minutes: 5

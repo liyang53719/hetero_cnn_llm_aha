@@ -1,12 +1,21 @@
 import ast,contextlib,copy,hashlib,importlib.util,io,json,pathlib,tempfile,unittest
 D=pathlib.Path(__file__).resolve().parent
 s=importlib.util.spec_from_file_location('bootstrap_diag',D/'bootstrap_model_candidate.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
+
+# Exact inverse of the independently reviewed read-only build branch only.
+FIRST_FAULT_INVERSE = [(" a.add_argument('--first-fault-readonly',action='store_true')\n", '', '793e0c515eb48d727f4d62ab5139a4cb7e257b12945a8e645338732df0ba26c5'), (" stage('binding',[py,'-B',str(C/'materialize_model_binding.py'),'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')]+(['--first-fault-readonly'] if v.first_fault_readonly else []))\n", " stage('binding',[py,'-B',str(C/'materialize_model_binding.py'),'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')])\n", '81aac29514dd880e221e6451ec0b30b0759ed77bd195e057492d4e0091593960')]
+def first_fault_inverse(text):
+ for added,original,expected in FIRST_FAULT_INVERSE:
+  if hashlib.sha256(added.encode()).hexdigest()!=expected or text.count(added)!=1:raise ValueError("unique exact first-fault addition")
+  text=text.replace(added,original,1)
+ return text
+
 class Tests(unittest.TestCase):
  def setUp(self):
   self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.w=pathlib.Path(self.tmp.name)
  def project(self,r,name='jars'):return json.loads(m.bootstrap_stage_diagnostic(name,r,self.w/'absent'/'RESULT.json'))
  def test_source_ast_preserved(self):
-  source=(D/'bootstrap_model_candidate.py').read_text()
+  source=first_fault_inverse((D/'bootstrap_model_candidate.py').read_text())
   self.assertEqual(source.count("C/'restore_model_inputs.py'"),2)
   source=source.replace("'--download-jars','--status-json',str(W/'MODEL_JAR_STATUS.json')","'--download-jars'")
   tree=ast.parse(source.replace("C/'restore_model_inputs.py'","R/'candidates/fresh_original_top_recovery_20261028/restore_inputs.py'"))
@@ -69,4 +78,8 @@ class Tests(unittest.TestCase):
   p=self.w/'MODEL_JAR_STATUS.json';p.write_text(json.dumps(self.jar()));o=io.StringIO()
   with contextlib.redirect_stdout(o):m.record_bootstrap_diagnostic('jdk',{},self.w)
   self.assertNotIn('MODEL_JAR_STATUS ',o.getvalue())
+ def test_first_fault_inverse_rejects_duplicate_or_mutated_addition(self):
+  text=(D/'bootstrap_model_candidate.py').read_text();added=FIRST_FAULT_INVERSE[0][0]
+  with self.assertRaises(ValueError):first_fault_inverse(text+added)
+  with self.assertRaises(ValueError):first_fault_inverse(text.replace(added,added.replace('first-fault','wrong-fault',1),1))
 if __name__=='__main__':unittest.main()

@@ -17,6 +17,7 @@ def main():
  a=argparse.ArgumentParser()
  for k in ['repo','pipeline','jdk_inventory','java','tools','idma','matrix','binding','output']:a.add_argument('--'+k.replace('_','-'),type=pathlib.Path,required=True)
  a.add_argument('--expected-repo-sha',required=True)
+ a.add_argument('--first-fault-readonly',action='store_true')
  v=a.parse_args();R=v.repo.resolve();C=v.pipeline.resolve();I=v.idma.resolve();T=v.tools.resolve();M=v.matrix.resolve()
  import sys
  sys.path.insert(0,str(C))
@@ -69,6 +70,10 @@ def main():
  helpers=[C/n for n in ['CanonicalHighGate.scala','CanonicalInfoMicroTest.scala','PortableHostDenseAccMemoryLowering.scala','PortableHostMatrixResultFifoMemoryLowering.scala']]+[K/n for n in ['CandidateDenseAccMemoryLoweringV2.scala','ModelCandidateHighDescriptorV1.scala','ModelCandidateHostSimulationEmitterV1.scala','ModelCandidateTransformGateV1.scala']]+[backend/n for n in ['PhysicalFmaStageLibrary.scala','RetainedBackendCircuitGate.scala','RetainedEndpointPortContract.scala','RetainedServicePhaseObserver.scala']]
  driver=R/'candidates/moe_router_score_observation_20261030/driver/host_axi_driver_non_dpi.cpp'
  need(sha(driver)=='343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61','V3 driver')
+ diagnostic=None
+ if v.first_fault_readonly:
+  from first_fault_policy import load_source_contract,CONTRACT_REPO_PATH,CONTRACT_SHA,SOURCE_CONTRACT_REPO_PATH,SOURCE_CONTRACT_SHA,ROLES
+  diagnostic=load_source_contract(R);driver=R/diagnostic['diagnostic_driver']['repo_path']
  paths=[str(p) for folder in (C,D,K) for p in folder.iterdir() if p.is_file() and p.suffix in ('.py','.json','.scala','.vlt','.tsv')]+providers+list(map(str,helpers))+[str(java),str(T/'verilator'),str(pathlib.Path('/usr/bin/make').resolve()),str(pathlib.Path('/usr/bin/python3').resolve()),str(D/'hierarchy_r7.vlt'),str(driver),str(K/'MODEL_SOURCE_OVERLAY.json'),str(K/'candidate_generation_gate.py'),str(K/'GENERATION_CONTRACT.json'),str(K/'MODEL_CANDIDATE_PRECONDITIONS.json'),str(C/'prepare_fma_subset.py'),str(R/'candidates/fresh_original_top_recovery_20261028/SOURCE_AND_TOOLCHAIN_PINS.json')]
  paths += [str(R/'candidates/same_job_execution_20261030/numeric/MODEL_P0_SOURCE_CONTRACT.json'),str(R/'candidates/p0_newboundary_input_provider_20261028/PROGRAM_MANIFEST.json')]
  paths += [str(driver.parent/n) for n in ('resident_observation.hpp','moe_raw_score_observation.hpp')]
@@ -83,8 +88,17 @@ def main():
  for x in om['jars']:
   p=original/'cache'/x['maven_path'];need(sha(p)==x['sha256'],'exact JAR/toolchain pin');paths.append(str(p))
  paths += [str((jh/x['path']).resolve(strict=True)) for x in j['files'] if 'sha256' in x]
+ if diagnostic is not None:
+  paths += [str(R/diagnostic[n]['repo_path']) for n in ROLES]+[str(R/CONTRACT_REPO_PATH),str(R/SOURCE_CONTRACT_REPO_PATH)]
+  need(sha(R/SOURCE_CONTRACT_REPO_PATH)==SOURCE_CONTRACT_SHA,'first-fault P0 source contract')
+  need(all(str(Path.relative_to(R))in tracked for Path in [R/diagnostic[n]['repo_path'] for n in ROLES]+[R/CONTRACT_REPO_PATH,R/SOURCE_CONTRACT_REPO_PATH]),'tracked first-fault inputs')
  pins={p:sha(p) for p in dict.fromkeys(paths)};pins.update(external_pins)
  b=dict(provider_root_receipt=provider_root_receipt,schema='MODEL_CANDIDATE_BUILD_BINDING_V1',mode='BUILD_ONLY',candidate_status='UNREVIEWED_MODEL_BUILD',numeric_execution_authorized=False,generation_contract=str(K/'GENERATION_CONTRACT.json'),generation_contract_sha256=GENERATION_CONTRACT_SHA256,unchanged_module_contract=str(K/'MODEL_CANDIDATE_PRECONDITIONS.json'),host_port_contract=str(C/'OBSERVER_HOST_PORTS_122.json'),model_source_contract=str(R/'candidates/same_job_execution_20261030/numeric/MODEL_P0_SOURCE_CONTRACT.json'),jdk_aliases=jdk_aliases,repo=str(R),repo_sha=v.expected_repo_sha,java=str(java),verilator=str(T/'verilator'),make=str(pathlib.Path('/usr/bin/make').resolve()),python=str(pathlib.Path('/usr/bin/python3').resolve()),pins=pins,provider_sources=providers,idma_include_dirs=inc,idma_defines=defs,hierarchy=str(D/'hierarchy_r7.vlt'),driver=str(driver),driver_include=str(driver_headers),helper_sources=list(map(str,helpers)),output=str(v.output.resolve()),fixed_source_overlay=str(K/'MODEL_SOURCE_OVERLAY.json'),fixed_source_validator=str(K/'candidate_generation_gate.py'),sv_identity_script=str(K/'observe_model_sv.py'),materialized_roots=[str(T),str(I.parent.parent),str(M),str(C),str(D),str(K)])
+ if diagnostic is not None:
+  b['first_fault_driver_contract']={'path':str(R/CONTRACT_REPO_PATH),'sha256':CONTRACT_SHA}
+  b['model_source_contract']=str(R/SOURCE_CONTRACT_REPO_PATH)
+  from first_fault_policy import binding_policy
+  binding_policy(b)
  v.binding.write_text(json.dumps(b,indent=2)+'\n');v.binding.with_suffix('.sha256').write_text(sha(v.binding)+'\n')
  print('MODEL_CANDIDATE_BINDING_NOT_ACCEPTED_NOT_EXECUTED '+sha(v.binding))
 if __name__=='__main__':main()

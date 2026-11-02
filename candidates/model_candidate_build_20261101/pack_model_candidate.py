@@ -171,7 +171,9 @@ def _pack_impl(original,b,built,host,overlay,out,budget_check,observation_pin,_m
  need(built['binary']==phases[-1]['output'],'final linked binary');binary=regular(built['binary']['path'])
  with binary.open('rb')as f:need(f.read(6)==b'\x7fELF\x02\x01','actual ELF64LE')
  _mark('ENRICH')
- driver=regular(original['driver']);need(sha(driver)==DRIVER_SHA,'frozen driver')
+ from first_fault_policy import binding_policy,expected_driver_sha,FIRST_FAULT_MANIFEST_SCHEMA,FIRST_FAULT_SCOPE
+ readonly=binding_policy(original);need(binding_policy(b)==readonly,'same original/admitted readonly policy')
+ driver=regular(original['driver']);need(sha(driver)==expected_driver_sha(original),'frozen policy driver')
  source_path=regular(b['source_manifest'],16<<20);source=json_file(source_path,16<<20)
  need(source.get('source_commit')==original['repo_sha'],'source ledger commit')
  need(source.get('sv_sha256')==sha(host)and source.get('driver_sha256')==sha(driver),'source ledger actual SV/driver')
@@ -181,6 +183,12 @@ def _pack_impl(original,b,built,host,overlay,out,budget_check,observation_pin,_m
  need(type(source['model_source_evidence'])is dict and bool(source['model_source_evidence']),'new complete source evidence required')
  need('model_candidate_observation'not in source,'no prefilled observation override')
  need('model_candidate_build_evidence'not in source,'no prefilled actual build evidence')
+ need('readonly_probe'not in source,'no prefilled readonly evidence override')
+ if readonly is not None:
+  cp=regular(original['first_fault_driver_contract']['path'],256<<10)
+  ep=b['readonly_probe_evidence'];need(type(ep)is dict and set(ep)=={'path','bytes','sha256'},'readonly actual evidence pin')
+  actual=regular(ep['path'],128<<10);need(pin(actual)==ep and b['pins'].get(str(actual))==ep['sha256'],'readonly generated evidence prebuild pin/drift')
+  source['readonly_probe']={'schema':'FIRST_FAULT_READONLY_BUILD_EVIDENCE_V1','status':'OBSERVED_UNREVIEWED','contract':dict(pin(cp),text=cp.read_text()),'accessor_generation':json_file(actual,128<<10)}
  dep=built['phases'][-1].get('driver_dependency');need(type(dep)is dict,'actual GCC dependency evidence required')
  headers=[p for p in dep.get('dependencies',{})if P(p).name=='VHostBlockTopV4.h'];need(len(headers)==1,'one actual generated Host header')
  header_path=regular(headers[0],2<<20);need(pin(header_path)==dep['dependencies'][headers[0]],'captured actual Host header bytes')
@@ -198,9 +206,14 @@ def _pack_impl(original,b,built,host,overlay,out,budget_check,observation_pin,_m
  files['source_manifest']=root/NAMES['source_manifest'];files['source_manifest'].write_bytes(enriched)
  need(pin(source_path)==source_before,'collector source drift')
  receipt=dict(schema='MODEL_CANDIDATE_BUILD_RECEIPT_V1',status=STATUS,cpp_build_policy=CPP_POLICY,cpp_build_overrides=list(CPP_OVERRIDES),source_commit=original['repo_sha'],launch_commit=original['artifact_identity']['launch_commit'],**{k+'_sha256':sha(files[k])for k in files},model_candidate_observation_sha256=obs_hash,phases=summaries,stages=stage_summary,scope='CHISEL_TEST_BACKEND_NOT_FINAL_RTL_REPLAY',config_only=False,software_arithmetic_substitution=False,numerical_pass=False,final_rtl_executed=False)
+ if readonly is not None:
+  receipt['readonly_probe_contract_sha256']=source['readonly_probe']['contract']['sha256'];receipt['scope']=FIRST_FAULT_SCOPE
  raw=(json.dumps(receipt,indent=2,allow_nan=False)+'\n').encode();need(len(raw)<=65536,'receipt64KiB');files['build_receipt']=root/NAMES['build_receipt'];files['build_receipt'].write_bytes(raw)
  entries={k:dict(path=NAMES[k],bytes=p.stat().st_size,sha256=sha(p))for k,p in files.items()}
  manifest=dict(schema=MANIFEST_SCHEMA,status=STATUS,cpp_build_policy=CPP_POLICY,cpp_build_overrides=list(CPP_OVERRIDES),profiles=list(range(5)),layer='CHISEL_EMITTED_SV_NUMERICAL_BACKEND',matrix_macs=4096,vector_lanes=32,moe_reference_contract=ROUTE,artifact_identity=original['artifact_identity'],common={k:entries[k]for k in ('binary','sv','source_manifest','driver','build_receipt')},tool_manifest=entries['tool_manifest'],model_candidate_observation_sha256=obs_hash,numerical_pass=False,final_rtl_executed=False,model_numerical_evaluation_authorized=False,external_review_required=True)
+ if readonly is not None:
+  manifest['schema']=FIRST_FAULT_MANIFEST_SCHEMA;manifest['scope']=FIRST_FAULT_SCOPE
+  manifest['readonly_probe_contract']={k:source['readonly_probe']['contract'][k]for k in ('bytes','sha256')}
  mf=root/'frozen_artifact.json';mf.write_text(json.dumps(manifest,sort_keys=True,indent=2)+'\n');need(mf.stat().st_size<=65536,'manifest64KiB')
  _mark('FINAL')
  result=validate_export(root)
@@ -224,7 +237,12 @@ def validate_export(root):
  need({p.name for p in root.iterdir()}==set(NAMES.values())|{'frozen_artifact.json'},'exact seven names')
  mf=regular(root/'frozen_artifact.json',65536);m=json_file(mf,65536)
  fields={'schema','status','cpp_build_policy','cpp_build_overrides','profiles','layer','matrix_macs','vector_lanes','moe_reference_contract','artifact_identity','common','tool_manifest','model_candidate_observation_sha256','numerical_pass','final_rtl_executed','model_numerical_evaluation_authorized','external_review_required'}
- need(set(m)==fields and m['schema']==MANIFEST_SCHEMA and m['status']==STATUS,'unreviewed candidate schema')
+ FIRST_FAULT_MANIFEST_SCHEMA='MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1'
+ readonly_schema=m.get('schema')==FIRST_FAULT_MANIFEST_SCHEMA
+ if readonly_schema:
+  from first_fault_policy import FIRST_FAULT_SCOPE,artifact_policy
+ need(set(m)==(fields|{'scope','readonly_probe_contract'}if readonly_schema else fields)and m['schema'] in (MANIFEST_SCHEMA,FIRST_FAULT_MANIFEST_SCHEMA)and m['status']==STATUS,'unreviewed candidate schema')
+ if readonly_schema:need(m['scope']==FIRST_FAULT_SCOPE,'readonly diagnostic artifact scope')
  need(all(m[k]is False for k in ('numerical_pass','final_rtl_executed','model_numerical_evaluation_authorized'))and m['external_review_required']is True,'never grants evaluation')
  need(m['profiles']==list(range(5))and all(type(v)is int for v in m['profiles'])and type(m['matrix_macs'])is int and m['matrix_macs']==4096 and type(m['vector_lanes'])is int and m['vector_lanes']==32,'one fixed fiveprofile hardware')
  need(m['cpp_build_policy']==CPP_POLICY and m['cpp_build_overrides']==CPP_OVERRIDES and m['moe_reference_contract']==ROUTE and m['layer']=='CHISEL_EMITTED_SV_NUMERICAL_BACKEND','fixed contracts');identity(m['artifact_identity'])
@@ -233,12 +251,18 @@ def validate_export(root):
   need(type(row)is dict and set(row)=={'path','bytes','sha256'}and row['path']==NAMES[k],'flat canonical payload pin')
   cap=65536 if k=='build_receipt' else 16<<20 if k=='source_manifest' else 32<<20 if k=='tool_manifest' else 4<<30
   p=regular(root/NAMES[k],cap);need(type(row['bytes'])is int and row['bytes']==p.stat().st_size and row['sha256']==sha(p),'payload drift');actual[k]={'bytes':row['bytes'],'sha256':row['sha256']}
- need(actual['driver']['sha256']==DRIVER_SHA,'original driver');source=json_file(root/NAMES['source_manifest'],16<<20);need(source.get('sv_sha256')==actual['sv']['sha256']and source.get('driver_sha256')==actual['driver']['sha256'],'source ledger exact actual SV/driver');obs=source.get('model_candidate_observation')
+ source=json_file(root/NAMES['source_manifest'],16<<20)
+ if readonly_schema:readonly=artifact_policy(m,source)
+ else:
+  need('readonly_probe'not in source and 'readonly_probe_contract'not in m,'original artifact cannot carry readonly evidence');readonly=None
+ need(actual['driver']['sha256']==(DRIVER_SHA if readonly is None else readonly['diagnostic_driver']['sha256']),'fixed policy driver');need(source.get('sv_sha256')==actual['sv']['sha256']and source.get('driver_sha256')==actual['driver']['sha256'],'source ledger exact actual SV/driver');obs=source.get('model_candidate_observation')
  validate_observation(obs);need(hashlib.sha256(canonical(obs)).hexdigest()==m['model_candidate_observation_sha256'],'observation canonical integrity')
  r=json_file(root/NAMES['build_receipt'],65536);need(r.get('status')==STATUS and r.get('schema')=='MODEL_CANDIDATE_BUILD_RECEIPT_V1','candidate receipt')
  need(r.get('source_commit')==source.get('source_commit')==m['artifact_identity']['source_commit']and r.get('launch_commit')==m['artifact_identity']['launch_commit'],'receipt git chain')
  need(r.get('model_candidate_observation_sha256')==m['model_candidate_observation_sha256']and r.get('cpp_build_policy')==CPP_POLICY and r.get('cpp_build_overrides')==CPP_OVERRIDES,'receipt observation/policy')
  for k in ('binary','sv','driver','source_manifest','tool_manifest'):need(r.get(k+'_sha256')==actual[k]['sha256'],'receipt payload chain')
+ if readonly is None:need('readonly_probe_contract_sha256'not in r and 'readonly_probe'not in source,'no readonly evidence in original branch')
+ else:need(r.get('readonly_probe_contract_sha256')==m['readonly_probe_contract']['sha256']and r.get('scope')==FIRST_FAULT_SCOPE,'readonly receipt contract/scope')
  need(r.get('numerical_pass')is False and r.get('final_rtl_executed')is False and r.get('config_only')is False and r.get('software_arithmetic_substitution')is False,'receipt scope')
  need([s.get('name')for s in r.get('stages',[])]==list(STAGES),'all20 stages ordered')
  for s in r['stages']:need(type(s.get('native_exit'))is int and s.get('native_exit')==0 and s.get('errors')==[]and all(s.get(k)is True for k in ('cleanup_complete','pipe_eof_observed','gzip_finalized')),'strict stage projection')

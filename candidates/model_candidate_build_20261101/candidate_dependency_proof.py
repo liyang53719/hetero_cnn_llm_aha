@@ -109,15 +109,33 @@ CANDIDATE_REQUIRED_IMPLEMENTATIONS = {
  'candidates/model_candidate_build_20261101/model_source_evidence.py',
  'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py',
 }
+OLD_CANDIDATE_IMPLEMENTATION_PINS=dict(CANDIDATE_IMPLEMENTATION_PINS)
+FIRST_FAULT_REQUIRED_IMPLEMENTATIONS=CANDIDATE_REQUIRED_IMPLEMENTATIONS|{
+ 'candidates/model_candidate_build_20261101/first_fault_policy.py',
+ 'candidates/model_candidate_build_20261101/first_fault_probe.py',
+ 'candidates/model_candidate_build_20261101/first_fault_compilation.py',
+}
+FIRST_FAULT_IMPLEMENTATION_PINS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f', 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53', 'candidates/model_candidate_build_20261101/candidate_build_producer.py': '6650680872d1cfe06b485d6d0a59d5ba79092bbafbc100b66201fe336bcd3264', 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': '4eeb7d204f8401f2d886f4240b3b1d19fc427e1776b44860a4531cd3b58e325c', 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': '92a0155d5317a6a74a66feee1caf18fc85d7331b1633327caffcda802254114d', 'candidates/model_candidate_build_20261101/first_fault_compilation.py': '4f56f27bb77c4bb40c16656403cb92b3f6fe189956c2849aa252dfb74b4535de', 'candidates/model_candidate_build_20261101/first_fault_policy.py': 'cbf72b35085959b2b4b774390ed37b76c033c20eee6e90d7096004b4eba9c1e4', 'candidates/model_candidate_build_20261101/first_fault_probe.py': '6ce53ee4a74fd5ba9b533a7051fd1737aed215caa1ed1c3a314a4d0f79ce0766', 'candidates/model_candidate_build_20261101/model_source_evidence.py': 'ab07b41bbfb201e9b58146bac6d202405ac2e606f1d22bff0ef78fc9be98a523', 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': '4c3f08a599394d34f3706dae381880f104887155d5223fbc9f00c82eff6c40e2', 'candidates/model_candidate_build_20261101/pack_model_candidate.py': '91db9d870922de6126a6f28b2d394656e951c0f75ff0033cfc8e5f9f51500e5c'}
+LOCAL_PACK_READER_SHA='91db9d870922de6126a6f28b2d394656e951c0f75ff0033cfc8e5f9f51500e5c'
+
 COLLECTOR_PATH='candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py'
-def compilation_policy(r,m,build_receipt):
+def compilation_policy(r,m,build_receipt,manifest=None):
  need(set(CANDIDATE_IMPLEMENTATION_PINS)==CANDIDATE_REQUIRED_IMPLEMENTATIONS,'candidate implementation contract not frozen')
  need(all(type(h)is str and re.fullmatch('[0-9a-f]{64}',h)for h in CANDIDATE_IMPLEMENTATION_PINS.values()),'candidate implementation SHA')
  need(CANDIDATE_IMPLEMENTATION_PINS[COLLECTOR_PATH]==O1_PRODUCER_DEPENDENCY_CAPTURE_SHA,'original capture bytes unchanged')
  need(r['schema']=='ACTUAL_FRESH_DRIVER_DEPENDENCY_V2','candidate actual V2 GCC capture')
  need(all(h.get('cpp_build_policy')==CPP_O1_POLICY and h.get('cpp_build_overrides')==CPP_O1_OVERRIDES for h in (r,m,build_receipt)),'candidate strict O1 only')
  need(build_receipt.get('schema')=='MODEL_CANDIDATE_BUILD_RECEIPT_V1'and build_receipt.get('status')=='UNREVIEWED_MODEL_BUILD','explicit unreviewed candidate build')
- return CPP_O1_POLICY,list(CPP_O1_OVERRIDES),dict(CANDIDATE_IMPLEMENTATION_PINS)
+ if manifest is not None and manifest.get('schema')=='MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1':
+  from first_fault_policy import artifact_policy
+  readonly=artifact_policy(manifest,m)
+ else:
+  need('readonly_probe'not in m and 'readonly_probe_contract_sha256'not in build_receipt and (manifest is None or 'readonly_probe_contract'not in manifest),'readonly proof requires explicit new actual manifest')
+  readonly=None
+ if readonly is None:return CPP_O1_POLICY,list(CPP_O1_OVERRIDES),dict(OLD_CANDIDATE_IMPLEMENTATION_PINS)
+ need(set(FIRST_FAULT_IMPLEMENTATION_PINS)==FIRST_FAULT_REQUIRED_IMPLEMENTATIONS and all(type(h)is str and re.fullmatch('[0-9a-f]{64}',h)for h in FIRST_FAULT_IMPLEMENTATION_PINS.values()),'readonly producer implementation contract not frozen')
+ need(FIRST_FAULT_IMPLEMENTATION_PINS[COLLECTOR_PATH]==O1_PRODUCER_DEPENDENCY_CAPTURE_SHA,'original capture bytes unchanged for readonly')
+ return CPP_O1_POLICY,list(CPP_O1_OVERRIDES),dict(FIRST_FAULT_IMPLEMENTATION_PINS)
 
 def expected_phase_argv(cwd,tools,overrides,libs):
  flags=['-j1','VM_HIER_VERILATION_INCLUDED=1',*overrides,'CXX='+tools['cxx'],'LINK='+tools['cxx'],'AR='+tools['ar'],'RANLIB='+tools['ranlib'],'PERL='+tools['perl'],'PYTHON3='+tools['python'],'OBJCACHE=','OPT=','USER_CPPFLAGS=','USER_LDLIBS=','USER_LDFLAGS=']
@@ -128,12 +146,12 @@ def expected_phase_argv(cwd,tools,overrides,libs):
   result[phase]=[tools['make'],'-C',cwd,'-f','VHostBlockTopV4.mk',*flags,'VM_HIER_LIBS='+' '.join(libs),target]
  return result
 
-def verify_compilation_policy(r,m,build_receipt,tool,producer_repo=None):
+def verify_compilation_policy(r,m,build_receipt,tool,producer_repo=None,manifest=None):
  """All-profile build policy proof. No compiler/ELF execution or P0 waiver.
  Missing fields mean historical O0 only with its original fixed producer pins;
  V2 binds all five actual supervised compiler phases to the exact reviewed O1.
  """
- policy,overrides,implementations=compilation_policy(r,m,build_receipt)
+ policy,overrides,implementations=compilation_policy(r,m,build_receipt,manifest)
  suffix='/candidates/model_candidate_build_20261101/candidate_build_producer.py'
  roots=[p[:-len(suffix)]for p in m['generation_input_pins']if p.endswith(suffix)]
  need(len(roots)==1,'unique original reviewed build producer root')
@@ -175,8 +193,8 @@ def verify_compilation_policy(r,m,build_receipt,tool,producer_repo=None):
   need(actual[-1]['supervisor']==host and actual[-1]['output']==r['binary'],'same real host link product')
  return dict(policy=policy,make_overrides=overrides,producer_source_commit=m['source_commit'],collector_sha256=implementations[COLLECTOR_PATH],actual_compilation_phases=5 if policy==CPP_O1_POLICY else None,scope='COMPILATION_POLICY_ONLY_NOT_NUMERICAL')
 
-def verify(r,m,policy,common,build_receipt,producer_repo):
- selected_policy,selected_overrides,implementations=compilation_policy(r,m,build_receipt)
+def verify(r,m,policy,common,build_receipt,producer_repo,manifest=None):
+ selected_policy,selected_overrides,implementations=compilation_policy(r,m,build_receipt,manifest)
  for name,want in implementations.items():
   expected=str(P(producer_repo)/name)
   matches=[path for path in m['generation_input_pins']if path.endswith('/'+name)]
@@ -217,7 +235,7 @@ def verify(r,m,policy,common,build_receipt,producer_repo):
  for name in ('make','cxx','ar','ranlib','perl','python'):need(builder_tool_pin(tool,name)==tools[name],'tool identity missing '+name)
  rows=[x for x in build_receipt['phases']if x['phase']=='host_link'];need(len(rows)==1 and rows[0]['native_exit']==0 and rows[0]['output_sha256']==common['binary']['sha256'],'frozen binary link phase')
  need(rows[0]['supervisor_receipt_sha256']==digest(json.dumps(receipt,sort_keys=True,separators=(',',':')).encode()),'actual build receipt binds retained host link receipt')
- verify_compilation_policy(r,m,build_receipt,tool,producer_repo)
+ verify_compilation_policy(r,m,build_receipt,tool,producer_repo,manifest)
  return selected
 
 HOST_PORTS_SHA='289f230ec8fc85e7aee0396ab34424f505855074a762707e874fbf8a2f45ca08'
@@ -238,7 +256,7 @@ def verify_candidate_compilation(manifest,source,receipt,payloadroot):
  are fixed in this verifier, never taken as accepted values from the artifact.
  """
  pack_path=P(__file__).resolve().with_name('pack_model_candidate.py')
- need(set(CANDIDATE_IMPLEMENTATION_PINS)==CANDIDATE_REQUIRED_IMPLEMENTATIONS and sha(pack_path)==CANDIDATE_IMPLEMENTATION_PINS.get('candidates/model_candidate_build_20261101/pack_model_candidate.py'),'candidate actual pack implementation before import')
+ need(type(LOCAL_PACK_READER_SHA)is str and re.fullmatch('[0-9a-f]{64}',LOCAL_PACK_READER_SHA)and sha(pack_path)==LOCAL_PACK_READER_SHA,'independently reviewed local pack reader before import')
  spec=importlib.util.spec_from_file_location('_candidate_compilation_pack_api',pack_path);pack=importlib.util.module_from_spec(spec);spec.loader.exec_module(pack)
  need(P(pack.__file__).resolve()==pack_path,'exact explicit pack import')
  validate_export=pack.validate_export;STAGES=pack.STAGES;json_file=pack.json_file
@@ -256,10 +274,15 @@ def verify_candidate_compilation(manifest,source,receipt,payloadroot):
  suffix='/candidates/model_candidate_build_20261101/candidate_build_producer.py'
  roots=[p[:-len(suffix)]for p in source['generation_input_pins']if p.endswith(suffix)];need(len(roots)==1,'actual candidate builder source root')
  producer_repo=roots[0]
- selected=verify(dep,source,{'source_pins':{'sparse_memory':SPARSE_HEADER}},common,receipt,producer_repo)
- tool=json_file(root/'tool_manifest.json',32<<20);result=verify_compilation_policy(dep,source,receipt,tool,producer_repo)
+ selected=verify(dep,source,{'source_pins':{'sparse_memory':SPARSE_HEADER}},common,receipt,producer_repo,manifest)
+ tool=json_file(root/'tool_manifest.json',32<<20);result=verify_compilation_policy(dep,source,receipt,tool,producer_repo,manifest)
  h=e['actual_host_header'];header=check_text(h);need(P(h['path']).name=='VHostBlockTopV4.h'and dep['dependencies'].get(h['path'])=={k:h[k]for k in ('path','bytes','sha256')},'actual GCC compiled header text pin')
  contract_path=P(__file__).resolve().parent.parent/'ci_frontend_pipeline_r2_20261029/OBSERVER_HOST_PORTS_122.json'
  need(sha(contract_path)==HOST_PORTS_SHA,'unchanged explicit public ABI contract')
  expected=json.loads(contract_path.read_text());need(len(expected)==122 and header_ports(header)==expected,'actual complete122 header ABI')
+ if manifest.get('schema')=='MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1':
+  from first_fault_compilation import verify_readonly_probe
+  readonly_proof=verify_readonly_probe(manifest,source,receipt,dep)
+  need(readonly_proof is not None,'explicit readonly compilation proof');result=dict(result,readonly_probe=readonly_proof)
+ else:need('readonly_probe'not in source and 'readonly_probe_contract_sha256'not in receipt,'original compilation cannot carry readonly evidence')
  return dict(result,status='VERIFIED_MODEL_CANDIDATE_COMPILATION_NOT_NUMERICAL_ADMISSION',resolved_sparse_header=selected,actual_stage_count=20,actual_header_ports=122,numerical_pass=False,final_rtl_executed=False,external_review_required=True)

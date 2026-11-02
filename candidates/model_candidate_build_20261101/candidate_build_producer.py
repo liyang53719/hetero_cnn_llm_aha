@@ -46,7 +46,8 @@ def prepare(b):
  need(a['no_implicit_frontend'] is True and 'uniform_O0_no_fast_math'not in a,'explicit current C++ policy admission, no legacy approval alias')
  need(b['cpp_build_policy']==a['cpp_build_policy']==CPP_POLICY and b['cpp_build_overrides']==a['cpp_build_overrides']==CPP_OVERRIDES,'exact independently reviewed strict O1 policy')
  need(a['header_122_observation_ports_and_driver_ABI_reviewed'] is True,'actual header/driver ABI review missing')
- need(sha(b['driver'])==DRIVER_SHA,'real V3 driver required')
+ from first_fault_policy import expected_driver_sha
+ need(sha(b['driver'])==expected_driver_sha(b),'fixed policy driver required')
  obj=Path(b['obj']).resolve();need(obj.is_dir(),'actual generated object tree absent')
  # Reject stale compiled products: candidate requires a NEW uncompiled copy tree.
  need(not any(p.suffix in ('.o','.a','.gch') for p in obj.rglob('*')),'fresh uncompiled tree required')

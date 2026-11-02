@@ -119,7 +119,9 @@ def main():
  need(b['fixed_source_validator'] in b['pins'] and b['fixed_source_overlay'] in b['pins'],'fixed overlay/validator pin')
  source_paths=checked_paths(repo,b['fixed_source_overlay'],m,generation)
  manifest=pathlib.Path(b['fixed_source_overlay'])
- need(b['pins'][b['driver']]=='343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61','V3 final-state driver')
+ from first_fault_policy import binding_policy,expected_driver_sha
+ diagnostic=binding_policy(b)
+ need(b['pins'][b['driver']]==expected_driver_sha(b),'fixed final-state driver')
  jars=[];plugin=None
  for x in m['jars']:
   p=original/'cache'/x['maven_path'];pinned(p,x['sha256'])
@@ -192,8 +194,21 @@ def main():
   subset=out/'fma_subset.sv'
   stage('subset',[b['python'],'-B',str(extractor),'--host',str(host),'--host-sha256',sha(host),'--fma',str(fma),'--fma-sha256',sha(fma),'--out',str(subset)],120,2)
   obj=out/'frontend/obj'
-  argv=[b['verilator'],*['+incdir+'+x for x in b['idma_include_dirs']],*['+define+'+x for x in b['idma_defines']],'--cc','--exe','--no-std','--relative-includes','--hierarchical','--build-jobs','1','--verilate-jobs','1','--threads','1','--top-module','HostBlockTopV4','--prefix','VHostBlockTopV4','--Mdir',str(obj),'-Wno-fatal',b['hierarchy'],*b['provider_sources'],str(host),str(subset),b['driver'],'-CFLAGS','-std=c++17 -I'+b['driver_include'],'-LDFLAGS','-lcrypto']
+  argv=[b['verilator'],*['+incdir+'+x for x in b['idma_include_dirs']],*['+define+'+x for x in b['idma_defines']],'--cc','--exe','--no-std','--relative-includes','--hierarchical','--build-jobs','1','--verilate-jobs','1','--threads','1','--top-module','HostBlockTopV4','--prefix','VHostBlockTopV4','--Mdir',str(obj),'-Wno-fatal',b['hierarchy'],*([str(repo/diagnostic['probe_config']['repo_path'])] if diagnostic is not None else []),*b['provider_sources'],str(host),str(subset),b['driver'],'-CFLAGS','-std=c++17 -I'+b['driver_include'],'-LDFLAGS','-lcrypto']
   run_frontend_serial(stage,argv,b['python'],b['verilator'],out)
+  if diagnostic is not None:
+   # Pure bounded declaration/provenance work inside original whole-job envelope.
+   # Never modifies SV or generated C++; all actual products enter prebuild pins.
+   from first_fault_probe import generate
+   disk_gate(256<<10)
+   need(time.monotonic()-start<job_budget,'remaining original build budget before probe generation')
+   evidence=out/'readonly-probe-evidence.json'
+   generated=generate(repo/diagnostic['probe_schema']['repo_path'],repo/diagnostic['probe_config']['repo_path'],obj/'VHostBlockTopV4___024root.h',obj/'readonly_first_fault_access.hpp',evidence)
+   b['readonly_probe_evidence']={'path':str(evidence),'bytes':evidence.stat().st_size,'sha256':sha(evidence)}
+   b['pins'][str(evidence)]=sha(evidence)
+   b['pins'][str(obj/'readonly_first_fault_access.hpp')]=generated['accessor']['sha256']
+   b['pins'][str(obj/'VHostBlockTopV4___024root.h')]=generated['root_header']['sha256']
+   disk_gate()
   frontend_receipt=out/'frontend_native_VHostBlockTopV4/RESULT.json'
   # Fresh actual Host.mk/header is admitted against reviewed tool/source/ABI;
   # no inherited C++/binary/numerical PASS from the frontend-only R8 run.

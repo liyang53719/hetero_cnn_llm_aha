@@ -10,6 +10,9 @@ class PackTests(unittest.TestCase):
    p=self.w/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(data if isinstance(data,bytes)else json.dumps(data).encode());return p
   self.record=mock.Mock(return_value={'synthetic':True});self.modpatch=mock.patch.dict(sys.modules,{'model_source_evidence':types.SimpleNamespace(record=self.record)});self.modpatch.start();self.addCleanup(self.modpatch.stop)
   self.write=write;driver=write('driver.cpp',b'synthetic test driver\n');self.patch=mock.patch.object(m,'DRIVER_SHA',m.sha(driver));self.patch.start();self.addCleanup(self.patch.stop)
+  # This legacy packaging fixture uses a deliberately fake driver, never source qualification.
+  import first_fault_policy
+  self.policy_patch=mock.patch.object(first_fault_policy,'expected_driver_sha',return_value=m.sha(driver));self.policy_patch.start();self.addCleanup(self.policy_patch.stop)
   self.host=write('host.sv',b'module synthetic; endmodule\n');self.overlay=write('overlay.json',{'files':[]});tool=write('tool.json',{'synthetic':True});inputfile=write('input.txt',b'pinned source\n');header=write('obj/VHostBlockTopV4.h',b'// synthetic pinned header\n')
   source=write('source.json',{'source_commit':'1'*40,'sv_sha256':m.sha(self.host),'driver_sha256':m.sha(driver),'cpp_build_policy':m.CPP_POLICY,'cpp_build_overrides':m.CPP_OVERRIDES})
   self.original={'artifact_identity':dict(run_id=1,artifact_name='synthetic',source_commit='1'*40,launch_commit='2'*40,launch_manifest_path='ci_launch/synthetic.json',launch_manifest_blob_sha='3'*40),'repo_sha':'1'*40,'driver':str(driver)}

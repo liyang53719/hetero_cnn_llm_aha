@@ -1,3 +1,36 @@
+# 2026-11-02：原完整硬件 P0 首故障只读观测（源码／构建准备，尚无新数值结果）
+
+## 当前事实与边界
+
+- 原完整 4096 MAC、共享 32-lane 向量 bank、五块 M=128 实际长窗已全部严格收尾；完整数值仍为 **0/5，INCOMPLETE**。五块首个 input norm 局部产物均逐 bit 等于官方参考，不等于整块通过。P0 在首 matrix 期间 `resetRequired`，另外四块在 1,500,000 active cycles 上限结束。
+- 单独云端 B 协议诊断原 run **41429101257** 的 11 个阶段均以原严格门闭合。真实 Router／Coordinator／Bridge／DownOwner／banks 走过首个完整 N 窗及第二 N 窗第一 partial 终态；Matrix、vector、DDR 响应仍为明确的协议替身。它未复现原 P0 故障、未证明真实矩阵算术。
+- B 首轮 tick 62002 的异常与测试驱动在更新 mock valid 前采样组合错误的路径一致；真实 Bridge 三场景小对照验证该风险，修正驱动顺序后 B 实际跨过此点并完成上述协议边界；原实际生产 driver 本就先驱动再采样，因此不能将该修复迁作原 P0 根因。B 的 dst 取 manifest 的 `q`（4485895360），原 pc1 是 `qraw`（4484322368）；B 不是原完整命令重放。原 P0 没有可供比较的 qraw partial 文件，写 ACK 字节计数不能冒充数值产物。
+
+## 最窄新增观测，保持行为与硬件定义
+
+- 原 Scala、159 源选择、GENERATION_CONTRACT、HIGH／LOW／SV 生成算法及 122 个顶层端口不变；原 driver `343e9978…` 文件完整保留。旁置新 `host_axi_driver_first_fault.cpp` 仅有三处显式插入，固定逆剥验证必须逐字恢复原 driver 全文。
+- 使用独立、精确模块／变量名的 Verilator `public_flat_rd` 配置，仅读取非 hierarchical 的 Top／Owner Kernel／Matrix service／runtime guard 的 114 个控制标量（327 bit）。不开放全局 public，不增加顶层 IO，不使用 VPI/DPI，不穿透三处原 hierarchical 边界，不导出数据、权重、参考张量或地址。
+- 原 `clock=0 → 驱动 AXI 输入 → eval → need(!resetRequired)` 顺序和原拒绝语句不动。在同一检查点只读采样宿主两槽（上一健康样本、当前故障样本），仅失败时一次输出固定 schema 与 indexed 控制数字。没有额外 eval、时钟边沿、输入写入、数值替换或正常路径日志。裸组合位必须结合固定有效条件解读；快照本身不自动证明唯一首因。
+- 原实际 SV 的完整 SHA256 `3d148277114ff5d968d0e200f4ab117839a3b6c0c0d33e5388e6e5268d42d029` 是新产物严格条件；不以删除注释／路径归一化掩盖差异。实际 frontend 后、Make 前须按生成 root header 的唯一名称／声明／位宽生成只读 accessor，缺项或歧义直接拒绝，不填零。实际 GCC 依赖及原 20 阶段／5 编译阶段证明继续核验。
+
+## 已有局部证据，不替代真实新构建
+
+- 实际 hierarchical tiny 工具验证确认：子模块 public 变量虽保留，但 Top 仅有 opaque protectlib handle，不能经公开生成对象接口读取；该路线已停止，未通过 cast、getter 或去除层级绕过。
+- 同一 tiny SV 的 baseline 与 exact Top public 配置分别完成原工具生成、make、link、native 六阶段。11 行功能输出逐字相同；故障检查点 eval=10／rising=4，正常 eval=12／rising=5，无新增边沿或 eval。这里只证明非 hierarchical 只读访问及检查时序，不是原 P0 的硬件复现。
+- 原宿主 collector 的独立 C++ 测试在合成 accessor 下验证无历史、两槽、只打印一次和所有位宽最大值；最大输出 1010 B，小于 8 KiB。实际硬件 accessor 尚待本次新构建，不能以 stub 资格代替。
+- 新分支已有真实 pack → checkout-local 七件入口 → 完整 compilation／readonly proof 的 normal／`-O` 端到端测试，5 类错配反例均拒绝。源角色、driver 逆剥和原 SV 字节真实；ELF、编译收据、生成 header 和依赖元数据明确为合成夹具，不授予实际编译或执行资格。旧真实七件也在新 checker 下完整复核通过。
+- workflow／guard／prepare 的真实临时 Git 身份链及显式只读 selector 已联测；bootstrap／materializer 的精确原 parser／argv／selector 语句与固定 policy 连接已测，完整工具 inventory 未在轻测中执行。缺旧上下文和初次测试维护失败记录全部保留，不冒初次全绿。
+
+## 新身份、构建与后续单 P0 执行
+
+- 新配置、accessor、driver 和 ELF 均为新身份，必须使用独立 FIRST_FAULT 产物／review／source evidence 合同；硬件旧 generation 与新 driver 是两个明确域。旧 CAL／STAGE／FULL 数值准入不因同源关系自动授权新 ELF，旧结果不迁为新数值通过。
+- 本次仅按原 full build 的预算与原七文件类别构建一次；七件仍为模拟可执行文件、同源 SV、driver 源及四份原类别清单／收据，不新增第八件，不上传本地原始日志、权重或参考数据。源码 CI 成功后才以独立精确 nonce 唯一启动；不并行重复 full build。
+- 新七件下载后须严格校验、实际 source／结构／只读证据独审、fresh runtime／ABI 与新执行输入资源审查。运行接线若随后以 host-only 源提交完善，须明确 builder／executor 差异和全量 exact allowlist，不重编同一硬件、也不省略适配门。
+- 拟单 P0 `P0_FIRST_FAULT_DIAGNOSTIC` 仍使用原完整 M=128 程序、输入和原数值门；P1–4 明确 NOT_SELECTED，不伪造五块启动。工程 watchdog 为 10800 s／1,500,000 active cycles，whole 上界 22200 s（6 小时 10 分）= 6090 材料预留 + 15510 保守尾段 + 600 入口余量，**不是完成时间预测或 FULL 预算**。新 public 配置及 114 项宿主读取的实际成本未知；旧 1935 长窗只作历史故障时点／工程上界依据，不冒新 ELF 实测校准。
+- 最终实际资源、watched roots、磁盘／内存门和新批准输入在新七件就绪后重新核验；保留未知旧 owner 5 GiB 与非 DUT 1 GiB 预约、原 8 GiB 磁盘门及严格 cleanup。未实际通过这些门前不启动 DUT。主目标仍是解释原故障并推进五块完整官方参考比较，不无限重复诊断。
+
+---
+
 ## 2026-11-02 10:23 UTC：B 已运行到协议；纠正 mock 驱动与采样顺序
 
 - 原唯一 run `41423897669` 已关闭。全部准备、compile、emit、ports、Verilator、make 均 strict0；emit 114.7673 s / sampled RSS 2,191,253,504 B，Verilator 101.2595 s / 2,296,471,552 B，make 705.9808 s / 2,814,488,576 B。协议模型真实启动，native1 / errors=[] / cleanup+EOF+gzip 完整，172.4364 s / sampled RSS 186,236,928 B。不是资源 cap、入口身份或 TargetDir 失败。

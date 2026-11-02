@@ -103,6 +103,7 @@ def main():
  for n in ['repo','pipeline','work']:a.add_argument('--'+n,type=pathlib.Path,required=True)
  a.add_argument('--shared-owned-root',type=pathlib.Path,required=True)
  a.add_argument('--materialization-dir',type=pathlib.Path,required=True);a.add_argument('--job-started-monotonic',type=float,required=True);a.add_argument('--remaining-tail-reserve-seconds',type=int,required=True);a.add_argument('--maximum-build-seconds',type=int,required=True)
+ a.add_argument('--first-fault-readonly',action='store_true')
  a.add_argument('--reviewed-repo-sha',required=True);a.add_argument('--artifact-identity',type=pathlib.Path,required=True);a.add_argument('--execute-reviewed-once',action='store_true');a.add_argument('--fresh-host-contract',type=pathlib.Path);a.add_argument('--fresh-host-contract-sha256');v=a.parse_args()
  D=v.materialization_dir.resolve()
  need(v.remaining_tail_reserve_seconds==900 and v.maximum_build_seconds==7200 and 0<=time.monotonic()-v.job_started_monotonic<9000,'whole job clock and remaining tail reserve')
@@ -186,7 +187,7 @@ def main():
    fresh_aliases=dict(host['aliases']);pins.update(host['pins']);pins[str(W/'fresh-host.json')]=sha(W/'fresh-host.json')
   except Exception:
    parent_failure('HOST_RECEIPT_ADMISSION','FRESH_HOST_RECEIPT_REJECTED');raise
- stage('binding',[py,'-B',str(C/'materialize_model_binding.py'),'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')])
+ stage('binding',[py,'-B',str(C/'materialize_model_binding.py'),'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')]+(['--first-fault-readonly'] if v.first_fault_readonly else []))
  # This entry owns its own stage-level process groups and aggregate memory budget.
  # Token is intentionally absent. Outer GitHub job timeout bounds all stages.
  binding=W/'FRONTEND_BINDING.json';bound=json.loads(binding.read_text());bound['mode']='BUILD_ONLY';bound['artifact_identity']=identity

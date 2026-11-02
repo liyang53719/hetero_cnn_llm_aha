@@ -14,8 +14,12 @@ def text_pin(p,cap=2<<20):
 
 def record(original,b,built):
  repo=P(original['repo']).resolve();contract_path=P(original['model_source_contract']);contract_doc=text_pin(contract_path)
- need(original['pins'].get(str(contract_path))==contract_doc['sha256']==CONTRACT_SHA,'independently reviewed candidate P0 contract')
- doc=json.loads(contract_doc['text']);need(doc['schema']=='MODEL_CANDIDATE_P0_OBSERVATION_CONTRACT_V1','candidate source contract only');contract=doc['sources']
+ from first_fault_policy import binding_policy,SOURCE_CONTRACT_SHA,SOURCE_CONTRACT_REPO_PATH
+ readonly=binding_policy(original)
+ want_contract=CONTRACT_SHA if readonly is None else SOURCE_CONTRACT_SHA
+ if readonly is not None:need(contract_path==repo/SOURCE_CONTRACT_REPO_PATH,'exact readonly P0 source contract path')
+ need(original['pins'].get(str(contract_path))==contract_doc['sha256']==want_contract,'independently reviewed candidate P0 contract')
+ doc=json.loads(contract_doc['text']);need(doc['schema']==('MODEL_CANDIDATE_P0_OBSERVATION_CONTRACT_V1' if readonly is None else 'MODEL_CANDIDATE_P0_FIRST_FAULT_OBSERVATION_CONTRACT_V1'),'candidate source contract only');contract=doc['sources']
  overlay_path=P(original['fixed_source_overlay']);need(sha(overlay_path)==original['pins'][str(overlay_path)],'actual selected source list');fixed={r['name']:r for r in json.loads(overlay_path.read_text())['files']}
  rows=[];anchors={}
  def row(name,path,role,kind='ACTUAL_BUILD_INPUT'):
@@ -31,4 +35,4 @@ def record(original,b,built):
   want=contract[name];need(meta['table_sha256'][filename]==want['sha256']and meta[hi]-meta[lo]==want['bytes'],'original runtime manifest table bytes')
   rel='runtime_contract/P0/'+filename;rows.append(dict(path=rel,bytes=want['bytes'],sha256=want['sha256'],role='RUNTIME_'+name.upper()+'_BYTES',kind='RUNTIME_EXPECTATION_NOT_BUILD_INPUT',derived_from=str(program.relative_to(repo))));anchors[name]=rel
  need(set(anchors)==set(contract),'complete source roles, none omitted')
- return {'schema':'MODEL_CANDIDATE_P0_SOURCE_EVIDENCE_V1','contract':contract_doc,'files':rows,'anchors':anchors,'program_contract':text_pin(program)}
+ return {'schema':'MODEL_CANDIDATE_P0_SOURCE_EVIDENCE_V1' if readonly is None else 'MODEL_CANDIDATE_P0_FIRST_FAULT_SOURCE_EVIDENCE_V1','contract':contract_doc,'files':rows,'anchors':anchors,'program_contract':text_pin(program)}

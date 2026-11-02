@@ -1,3 +1,17 @@
+## 2026-11-02 09:35 UTC：B 源码诊断的相对 TargetDir 修复（非硬件通过）
+
+- 原唯一云端 run `41419416366` 已 failure：JDK、编译工具、JAR、Verilator 工具、fresh-host 五准备阶段及 165 源 compile 均 strict0；compile 120.6446 s / sampled RSS 1,653,260,288 B。emit 在 6.2896 s / sampled RSS 246,501,376 B 以 native1 关闭，errors=[]、cleanup/EOF/gzip 完整；仅观察到 BEFORE_ELAB 与 ILLEGAL_ARGUMENT / REQUIREMENT_FAILURE 有限类别。未到 backend、native load 或 B 协议执行，未上传 artifact；原远端具体子异常 stack 未传出，不追认已看到。
+- 独立 32-bit 寄存器 + Boring 小例沿相同官方 Compiler API 真实复现：绝对 `TargetDirAnnotation` 被 `Compiler.requireTargetDir` → `os.RelPath` 拒绝。旧 Scalatest 入口使用相对目录；这是一处已证明的 host API 前置缺陷，不归因硬件 fault。
+- 最窄修复仅令 annotation 使用 `out.relativeTo(os.pwd)`，新增精确还原为原绝对 out 的等式；不 chdir、不更换输出实体、不放松空目录、LOW/SV 存在或其他成功门。同限小正例完整走过 elaborate → LOW → TopmoduleInfo → harness → SV，3.4007 s / sampled RSS 154,628,096 B，strict0；新 EmitOnly 也真实类型编译成功。小例无 DownOwner/banks/backend/native，不冒 B 资格。
+- 补固定阶段 checkpoint 与有限异常类别 / 已 pin Scala basename + 正行号（最多 8 帧）；原异常继续抛出，闭日志完整 hash 验证与 8 KiB 投影门保持。无 raw error、路径、payload 或额外 artifact。
+- 接续仍同真实 B / 原 159 硬件及 6 fixture 源、原 mock Matrix/vector/DDR 范围；单独新 nonce `public21_downowner_protocol_targetdirfix_20261102_once` 在源码 CI 成功后唯一启用。不是重试旧 run；原失败与小例负/正对照保留。
+- 云端 whole 7200 s、runner 6600 s 与所有阶段预算、6 GiB 最大阶段 RSS、AS 15 GiB、512 MiB 单文件、阶段 run 目录 2,000,000,000 B、共享 W/emitted 的 aggregate watch 12,081,306,272 B、1.5 GB 盘 reserve 均不变。2 GB 不冒称共享 emitted 的独立硬门。仅源码与有限日志，无本地 SV/classes/.so/数据上传。
+- 任务主目标仍五块完整数值。现 whole 0/5 INCOMPLETE；五局部 input norm 精确相等不升级整体。B 的本轮修复、小 API 对照或后续协议正例均不证明原 P0 resetRequired 已消除。
+
+以下原计划全文保留，不覆盖历史失败或资格边界。
+
+---
+
 # 2026-11-02：P0 首 Dense 故障的同源 B 云端协议诊断（源码准备，尚未启动）
 
 本次仍以完整五块数值验收为主目标。既有五块长窗及局部 norm 结果见下方完整保留正文：五个 input norm 局部逐 bit 相等不升级为全块通过，完整数值仍为 0/5。P0 已退休 norm 后在首 Dense 阶段报告 resetRequired；具体首次故障分量尚未定位。不得把 P1–4 的周期上限退出或小模型资格混作该故障的复现。

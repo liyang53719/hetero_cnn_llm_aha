@@ -13,6 +13,22 @@ class Tests(unittest.TestCase):
   with tempfile.TemporaryDirectory() as td:
    p=pathlib.Path(td)/'log.gz';r=self.receipt(p,b'/secret/root/Allowed.scala:72: error: not found: type SECRET_TYPE\n/secret/root/Other.scala:3: error: message\njava.lang.UnsatisfiedLinkError: /secret/library\n')
    o=diag.project(p,r,['Allowed.scala']);self.assertEqual(o['source_errors'],[dict(source='Allowed.scala',line=72,code='NOT_FOUND_TYPE')]);self.assertNotIn('secret',json.dumps(o));self.assertNotIn('SECRET_TYPE',json.dumps(o));self.assertIn('UNSATISFIED_LINK',o['reasons'])
+ def test_stack_frame_projection(self):
+  with tempfile.TemporaryDirectory() as td:
+   p=pathlib.Path(td)/'log.gz';raw=b'java.lang.IllegalArgumentException: SECRET_MESSAGE\n\tat secret.pkg.Owner.foo(Allowed.scala:72)\n\tat secret.pkg.Other.foo(Other.scala:2)\n\tat secret.pkg.Owner.foo(/secret/Allowed.scala:73)\n\tat secret.pkg.Owner.foo(Allowed.scala:0)\n'
+   r=self.receipt(p,raw);o=diag.project(p,r,['Allowed.scala']);self.assertEqual(o['source_frames'],[dict(source='Allowed.scala',line=72)]);self.assertNotIn('secret',json.dumps(o));self.assertNotIn('SECRET',json.dumps(o))
+ def test_stack_frame_bound(self):
+  with tempfile.TemporaryDirectory() as td:
+   p=pathlib.Path(td)/'log.gz';raw=''.join('at secret.Owner.f(Allowed.scala:%d)\n'%i for i in range(1,30)).encode();o=diag.project(p,self.receipt(p,raw),['Allowed.scala']);self.assertEqual(len(o['source_frames']),8)
+ def test_finite_failure(self):
+  d=dict(schema='B_EMIT_PHASE_FAILURE_V1',phase='LOWER',exception_kind='ILLEGAL_ARGUMENT',frames=[dict(source='Public21DownOwnerEmitOnly.scala',line=26)],backend_started=False,native_loaded=False)
+  self.assertEqual(diag.failure('B_EMIT_ONLY_FAILURE '+json.dumps(d)),d)
+  for key,value in [('phase','SECRET'),('exception_kind','secret.Exception'),('frames',[dict(source='/secret/A.scala',line=2)]),('backend_started',0),('extra','secret')]:
+   q=dict(d);q[key]=value;self.assertIsNone(diag.failure('B_EMIT_ONLY_FAILURE '+json.dumps(q)))
+  self.assertIsNone(diag.failure('B_EMIT_ONLY_FAILURE '+json.dumps(d)[:-1]+',"phase":"LOWER"}'))
+  q=dict(d);q['frames']=[d['frames'][0]]*9;self.assertIsNone(diag.failure('B_EMIT_ONLY_FAILURE '+json.dumps(q)))
+  with tempfile.TemporaryDirectory() as td:
+   p=pathlib.Path(td)/'log.gz';raw=('B_EMIT_ONLY_FAILURE '+json.dumps(d)+'\n').encode();self.assertEqual(diag.project(p,self.receipt(p,raw))['emit_failure'],d)
  def test_malformed_records(self):
   for line in ['B_WINDOW_ACCEPTED ordinal=1 tick=3 ng=0 slot=/secret','B_WINDOW_ACCEPTED ordinal=1 tick=3 ng=0 slot=0 extra=1','B_WINDOW_ACCEPTED ordinal=1 tick=3 ng=0 slot=0 slot=0','B_WINDOW_ACCEPTED ordinal=1 tick=3 ng=0 slot=999999999999999999999']:
    self.assertIsNone(diag.parse(line))
@@ -35,7 +51,7 @@ class Tests(unittest.TestCase):
   b=json.loads((D/'BUDGET_CONTRACT.json').read_text());self.assertEqual(b['whole_job_seconds'],runner.WHOLE);self.assertEqual(b['main_phase_wall_seconds'],{n:w for n,w,r in runner.MAIN});self.assertEqual(b['main_phase_rss_gib'],{n:r for n,w,r in runner.MAIN});self.assertFalse(b['artifact_upload_permitted']);self.assertEqual(b['stage_run_directory_tree_bytes'],2000000000);self.assertNotIn('per_stage_tree_bytes',b);self.assertIn('NOT stage_run_directory_tree_bytes',b['shared_emitted_outputs_scope'])
   tree=ast.parse((D/'run_cloud_b.py').read_text());caps=[n.value for n in ast.walk(tree) if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='caps' for t in n.targets)];self.assertEqual(len(caps),1);kw={x.arg:x.value for x in caps[0].keywords};self.assertEqual(ast.literal_eval(kw['tree_bytes']),b['stage_run_directory_tree_bytes']);self.assertEqual(ast.unparse(kw['watch_tree_bytes']),'TREE');self.assertEqual(ast.unparse(kw['extra_watch_roots']),'[str(W), str(R)]');self.assertEqual(runner.TREE,b['aggregate_watched_tree_bytes']);self.assertIn("emitted = W / 'emitted'",ast.unparse(tree))
  def test_emit_checkpoints(self):
-  for s in ['B_EMIT_ONLY_BEFORE_ELAB backend_started=false native_loaded=false','B_EMIT_ONLY_LOW_AND_HARNESS_DONE backend_started=false','B_EMIT_ONLY_COMPLETE backend_started=false native_loaded=false protocol_executed=false']:self.assertIsNotNone(diag.parse(s))
+  for s in ['B_EMIT_ONLY_AFTER_ELAB backend_started=false native_loaded=false','B_EMIT_ONLY_AFTER_LOW backend_started=false native_loaded=false','B_EMIT_ONLY_AFTER_INFO name_matches=true low_exists=true backend_started=false native_loaded=false','B_EMIT_ONLY_BEFORE_ELAB backend_started=false native_loaded=false','B_EMIT_ONLY_LOW_AND_HARNESS_DONE backend_started=false','B_EMIT_ONLY_COMPLETE backend_started=false native_loaded=false protocol_executed=false']:self.assertIsNotNone(diag.parse(s))
  def test_scope_and_no_upload(self):
   t=ast.parse((D/'run_cloud_b.py').read_text());calls=[n for n in ast.walk(t) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='stage']
   names=[n.args[0].value for n in calls if n.args and isinstance(n.args[0],ast.Constant)]

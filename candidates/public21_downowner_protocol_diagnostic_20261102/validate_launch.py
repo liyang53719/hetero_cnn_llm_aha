@@ -1,7 +1,7 @@
 """One reviewed source parent, one protocol-only job, no artifact transfer."""
 import json,os,pathlib,re,subprocess
-LAUNCH='ci_launch/public21_downowner_protocol_20261102_once.json'
-NONCE='public21_downowner_protocol_20261102_once'
+LAUNCH='ci_launch/public21_downowner_protocol_targetdirfix_20261102_once.json'
+NONCE='public21_downowner_protocol_targetdirfix_20261102_once'
 SCHEMA='PUBLIC21_DOWNOWNER_PROTOCOL_SOURCE_ONLY_ONE_SHOT_V1'
 def need(value,message):
  if not value:raise ValueError(message)

@@ -1,0 +1,74 @@
+{
+  "schema": "PUBLIC21_B_RELATIVE_TARGET_API_EVIDENCE_V1",
+  "scope": "LOCAL_TINY_32BIT_BORING_HOST_API_AND_EMIT_TYPE_COMPILE_ONLY",
+  "original_cloud_run": 41419416366,
+  "original_cloud_exact_stack_observed": false,
+  "cloud_emit_native_exit": 1,
+  "local_original_reason": "ABSOLUTE_TARGET_DIR_REJECTED_BY_COMPILER_REQUIRE_TARGET_DIR_OS_RELPATH",
+  "local_corrected_all_five_official_apis_completed": true,
+  "stages": [
+    {
+      "attempt": "0931",
+      "stage": "compile",
+      "receipt_sha256": "814345745b87b40dc98ff1ecf1529a53d379cef4dc5712483e4601ce4c58ceda",
+      "native_exit": 0,
+      "errors": [],
+      "elapsed_seconds": 7.417647210997529,
+      "sampled_rss": 249114624,
+      "cleanup": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+      "pipe_eof": true,
+      "gzip_finalized": true,
+      "log_sha256": "0ee226ee44efa2903309f8758c9b1edeec9b8c26e1e806924a28a0bc6ade3e28"
+    },
+    {
+      "attempt": "0931",
+      "stage": "probe",
+      "receipt_sha256": "75f267a1d677e49f3e9705e75cd8e1e2c0ece44db2167b660b636676b4e436c7",
+      "native_exit": 1,
+      "errors": [],
+      "elapsed_seconds": 1.575978718989063,
+      "sampled_rss": 114581504,
+      "cleanup": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+      "pipe_eof": true,
+      "gzip_finalized": true,
+      "log_sha256": "cb785b015cdf68b59c95467c5196d7700c4d6aa5bdd93f8520536cc7daff5a3d"
+    },
+    {
+      "attempt": "0934",
+      "stage": "compile",
+      "receipt_sha256": "85ef1d0a2a2158b5377626e39b9d8de3458fde8385271c10e0e3f1048f1a218c",
+      "native_exit": 0,
+      "errors": [],
+      "elapsed_seconds": 9.711585325014312,
+      "sampled_rss": 260608000,
+      "cleanup": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+      "pipe_eof": true,
+      "gzip_finalized": true,
+      "log_sha256": "0ee226ee44efa2903309f8758c9b1edeec9b8c26e1e806924a28a0bc6ade3e28"
+    },
+    {
+      "attempt": "0934",
+      "stage": "probe",
+      "receipt_sha256": "07706b03147e8d9f1fde53ea40b621dd1d54563eea755539dedf6aa108806685",
+      "native_exit": 0,
+      "errors": [],
+      "elapsed_seconds": 3.400673545023892,
+      "sampled_rss": 154628096,
+      "cleanup": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+      "pipe_eof": true,
+      "gzip_finalized": true,
+      "log_sha256": "46191ebb57c88df18d8279f296f183054247af879e10c07525b7b359a0fce3af"
+    }
+  ],
+  "actual_output_bytes": {
+    "Public21EmitApiProbe-harness.cpp": 7875,
+    "Public21EmitApiProbe.lo.fir": 3328,
+    "Public21EmitApiProbe.sv": 5340
+  },
+  "fixed_emit_sha256": "efaa8e39cfcfb6abf9ca27568d2f2fe365d9de17dd62491c9ecc802ef63691f1",
+  "probe_source_sha256": "ede787a13fc81b840f0b18a925cb0455a48ef5ffb3f6c0a909e06007a05dcaf6",
+  "b_protocol_executed": false,
+  "actual_p0_fault_reproduced": false,
+  "numerical_pass": false,
+  "full_block_pass": false
+}

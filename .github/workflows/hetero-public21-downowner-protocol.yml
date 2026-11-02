@@ -2,7 +2,7 @@ name: hetero-public21-downowner-protocol-only
 on:
   push:
     branches: [main]
-    paths: [ci_launch/public21_downowner_protocol_20261102_once.json]
+    paths: [ci_launch/public21_downowner_protocol_targetdirfix_20261102_once.json]
 permissions:
   contents: read
 concurrency:

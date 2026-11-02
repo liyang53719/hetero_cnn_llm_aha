@@ -16,12 +16,18 @@ def execute_nodes(nodes,env):
 def function(path,name):
  return next(x for x in ast.parse(path.read_text()).body if isinstance(x,ast.FunctionDef)and x.name==name)
 class EntryFlow(unittest.TestCase):
+ contract_version=1
  def setUp(self):
   self.t=tempfile.TemporaryDirectory();self.addCleanup(self.t.cleanup);self.root=pathlib.Path(self.t.name).resolve();self.repo=self.root/'repo';self.repo.mkdir();self.c=self.repo/'candidates/model_candidate_build_20261101';self.c.mkdir(parents=True)
-  doc=policy.decode_contract((D/'FIRST_FAULT_DRIVER_CONTRACT.json').read_bytes())
+  doc=policy.decode_contract((D/('FIRST_FAULT_TERMINAL_DRIVER_CONTRACT.json'if self.contract_version==2 else 'FIRST_FAULT_DRIVER_CONTRACT.json')).read_bytes())
   for row in doc.values():
    if type(row)is dict and 'repo_path'in row:self.copy(row['repo_path'])
-  for rel in [policy.CONTRACT_REPO_PATH,policy.SOURCE_CONTRACT_REPO_PATH,'candidates/split_build_only_20261031/TRANSFER_APPROVAL.json'] :self.copy(rel)
+  for rel in [policy.contract_path(doc),policy.SOURCE_CONTRACT_REPO_PATH,'candidates/split_build_only_20261031/TRANSFER_APPROVAL.json'] :self.copy(rel)
+  if self.contract_version==1:
+   fixture=ast.parse((ROOT/'candidates/moe_router_score_observation_20261030/driver/test_terminal_finite_host.py').read_text())
+   legacy=ast.literal_eval(next(n.value for n in fixture.body if isinstance(n,ast.Assign)and any(isinstance(t,ast.Name)and t.id=='LEGACY_HEADER'for t in n.targets)))
+   self.assertEqual(hashlib.sha256(legacy.encode()).hexdigest(),doc['host_observer']['sha256'])
+   (self.repo/doc['host_observer']['repo_path']).write_text(legacy)
   for n in ['prepare_model_build.py','bootstrap_model_candidate.py','materialize_model_binding.py','validate_model_launch.py','first_fault_policy.py']:shutil.copyfile(D/n,self.c/n)
   self.git('init','-q');self.git('config','user.email','fixture@example.invalid');self.git('config','user.name','Local fixture');self.git('add','.');self.git('commit','-qm','source fixture');self.source=self.git('rev-parse','HEAD').strip()
   launch=self.repo/guard.LAUNCH;launch.parent.mkdir();launch.write_text(json.dumps(dict(schema=guard.SCHEMA,source_sha=self.source,nonce=guard.NONCE,transfer_approval_sha256=guard.ACCEPTED_TRANSFER_APPROVAL_SHA256)))
@@ -36,9 +42,9 @@ class EntryFlow(unittest.TestCase):
   self.assertEqual(i['source_commit'],self.source);self.assertEqual(i['launch_commit'],self.head);self.assertEqual(i['launch_manifest_blob_sha'],self.git('rev-parse','HEAD:'+guard.LAUNCH).strip())
   self.git('checkout','-q','--detach',self.source)
   return p,i
- def prepare(self,flag):
+ def prepare(self,flag,terminal=False):
   ip,identity=self.identity();m=load('_entry_prepare_'+str(flag),self.c/'prepare_model_build.py');clock=self.root/'clock.json';clock.write_text(json.dumps(dict(schema='SPLIT_BUILD_JOB_START_V1',job_budget_seconds=9000,run_id=identity['run_id'],launch_commit=identity['launch_commit'],started_monotonic=time.monotonic())))
-  a=argparse.Namespace(repo=self.repo,work=self.root/'work',identity=ip,job_start=clock,first_fault_readonly=flag)
+  a=argparse.Namespace(repo=self.repo,work=self.root/'work',identity=ip,job_start=clock,first_fault_readonly=flag,terminal_finite_readonly=terminal)
   orig=pathlib.Path.read_text
   def read(p,*args,**kw):return 'MemAvailable: 999999999 kB\n' if str(p)=='/proc/meminfo' else orig(p,*args,**kw)
   fresh=types.SimpleNamespace(validate_contract=lambda *a:None,reject_injection=lambda *a:None)
@@ -56,13 +62,13 @@ class EntryFlow(unittest.TestCase):
   v=env['v'];calls=[];binding=[n for n in f.body if isinstance(n,ast.Expr)and isinstance(n.value,ast.Call)and isinstance(n.value.func,ast.Name)and n.value.func.id=='stage'and isinstance(n.value.args[0],ast.Constant)and n.value.args[0].value=='binding'];self.assertEqual(len(binding),1)
   env.update(v=v,stage=lambda *a:calls.append(a),py=sys.executable,C=self.c,R=self.repo,P=self.repo/'pipeline',W=self.root/'bootstrap',java=self.root/'java')
   execute_nodes(binding,env);return calls[0][1],v
- def materialize_selector(self,flag):
+ def materialize_selector(self,flag,terminal=False):
   # Execute exact production selector statements, not a rewritten imitation.
   f=function(self.c/'materialize_model_binding.py','main')
-  select=[n for n in f.body if isinstance(n,ast.If)and ast.unparse(n.test)=='v.first_fault_readonly'];self.assertEqual(len(select),1)
+  select=[n for n in f.body if isinstance(n,ast.If)and ast.unparse(n.test)=='v.first_fault_readonly or v.terminal_finite_readonly'];self.assertEqual(len(select),1)
   final=[n for n in f.body if isinstance(n,ast.If)and ast.unparse(n.test)=='diagnostic is not None'and any(isinstance(x,ast.Assign)and any(isinstance(t,ast.Subscript)and ast.unparse(t)=='b[\'first_fault_driver_contract\']'for t in x.targets)for x in n.body)];self.assertEqual(len(final),1)
-  doc=policy.load_source_contract(self.repo);b=dict(repo=str(self.repo),driver=str(self.repo/doc['legacy_driver']['repo_path']),generation_contract=str(self.repo/doc['hardware_generation_contract']['repo_path']),generation_contract_sha256=doc['hardware_generation_contract']['sha256'],model_source_contract='legacy-default',pins={str(p):policy.sha(p)for p in self.repo.rglob('*')if p.is_file()and '.git'not in p.parts})
-  env=dict(v=argparse.Namespace(first_fault_readonly=flag),R=self.repo,diagnostic=None,driver=pathlib.Path(b['driver']),b=b)
+  doc=policy.load_source_contract(self.repo,terminal);b=dict(repo=str(self.repo),driver=str(self.repo/doc['legacy_driver']['repo_path']),generation_contract=str(self.repo/doc['hardware_generation_contract']['repo_path']),generation_contract_sha256=doc['hardware_generation_contract']['sha256'],model_source_contract='legacy-default',pins={str(p):policy.sha(p)for p in self.repo.rglob('*')if p.is_file()and '.git'not in p.parts})
+  env=dict(v=argparse.Namespace(first_fault_readonly=flag,terminal_finite_readonly=terminal),R=self.repo,diagnostic=None,driver=pathlib.Path(b['driver']),b=b)
   with mock.patch.dict(sys.modules,{'first_fault_policy':policy}):
    execute_nodes(select,env);b['driver']=str(env['driver']);execute_nodes(final,env)
   return b
@@ -82,9 +88,9 @@ class EntryFlow(unittest.TestCase):
   with self.assertRaises(ValueError):policy.binding_policy(b)
  def test_workflow_exact_guard_checkout_flag_and_nonce(self):
   text=(ROOT/'.github/workflows/hetero-five-m128-model-candidate-build.yml').read_text();self.assertIn('paths: ['+guard.LAUNCH+']',text);self.assertIn('ref: ${{ steps.launch.outputs.source_sha }}',text);self.assertIn('validate_model_launch.py',text)
-  command=text.split('python3 -B candidates/model_candidate_build_20261101/prepare_model_build.py',1)[1].split('- name:',1)[0];self.assertEqual(command.count(FLAG),1)
+  command=text.split('python3 -B candidates/model_candidate_build_20261101/prepare_model_build.py',1)[1].split('- name:',1)[0];self.assertEqual(command.count('--terminal-finite-readonly'),1);self.assertNotIn(FLAG,command)
   # A removed selector is detected by this workflow contract, not accepted as a diagnostic build.
-  with self.assertRaises(AssertionError):self.assertEqual(command.replace(FLAG,'').count(FLAG),1)
+  with self.assertRaises(AssertionError):self.assertEqual(command.replace('--terminal-finite-readonly','').count('--terminal-finite-readonly'),1)
  def test_materializer_cli_exposes_false_default_true_selector(self):
   f=function(D/'materialize_model_binding.py','main');nodes=[]
   for n in f.body:

@@ -189,6 +189,11 @@ def _pack_impl(original,b,built,host,overlay,out,budget_check,observation_pin,_m
   ep=b['readonly_probe_evidence'];need(type(ep)is dict and set(ep)=={'path','bytes','sha256'},'readonly actual evidence pin')
   actual=regular(ep['path'],128<<10);need(pin(actual)==ep and b['pins'].get(str(actual))==ep['sha256'],'readonly generated evidence prebuild pin/drift')
   source['readonly_probe']={'schema':'FIRST_FAULT_READONLY_BUILD_EVIDENCE_V1','status':'OBSERVED_UNREVIEWED','contract':dict(pin(cp),text=cp.read_text()),'accessor_generation':json_file(actual,128<<10)}
+  if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2':
+   tp=b['terminal_probe_evidence'];need(type(tp)is dict and set(tp)=={'path','bytes','sha256'},'terminal actual evidence pin')
+   terminal_actual=regular(tp['path'],4<<20);need(pin(terminal_actual)==tp and b['pins'].get(str(terminal_actual))==tp['sha256'],'terminal actual evidence prebuild pin/drift')
+   source['readonly_probe'].update(schema='FIRST_FAULT_READONLY_BUILD_EVIDENCE_V2',terminal_accessor_generation=json_file(terminal_actual,4<<20))
+  else:need('terminal_probe_evidence'not in b,'old readonly contract cannot carry terminal evidence')
  dep=built['phases'][-1].get('driver_dependency');need(type(dep)is dict,'actual GCC dependency evidence required')
  headers=[p for p in dep.get('dependencies',{})if P(p).name=='VHostBlockTopV4.h'];need(len(headers)==1,'one actual generated Host header')
  header_path=regular(headers[0],2<<20);need(pin(header_path)==dep['dependencies'][headers[0]],'captured actual Host header bytes')

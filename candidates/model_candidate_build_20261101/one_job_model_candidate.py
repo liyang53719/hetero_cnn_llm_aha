@@ -194,7 +194,7 @@ def main():
   subset=out/'fma_subset.sv'
   stage('subset',[b['python'],'-B',str(extractor),'--host',str(host),'--host-sha256',sha(host),'--fma',str(fma),'--fma-sha256',sha(fma),'--out',str(subset)],120,2)
   obj=out/'frontend/obj'
-  argv=[b['verilator'],*['+incdir+'+x for x in b['idma_include_dirs']],*['+define+'+x for x in b['idma_defines']],'--cc','--exe','--no-std','--relative-includes','--hierarchical','--build-jobs','1','--verilate-jobs','1','--threads','1','--top-module','HostBlockTopV4','--prefix','VHostBlockTopV4','--Mdir',str(obj),'-Wno-fatal',b['hierarchy'],*([str(repo/diagnostic['probe_config']['repo_path'])] if diagnostic is not None else []),*b['provider_sources'],str(host),str(subset),b['driver'],'-CFLAGS','-std=c++17 -I'+b['driver_include'],'-LDFLAGS','-lcrypto']
+  argv=[b['verilator'],*['+incdir+'+x for x in b['idma_include_dirs']],*['+define+'+x for x in b['idma_defines']],'--cc','--exe','--no-std','--relative-includes','--hierarchical','--build-jobs','1','--verilate-jobs','1','--threads','1','--top-module','HostBlockTopV4','--prefix','VHostBlockTopV4','--Mdir',str(obj),'-Wno-fatal',b['hierarchy'],*([str(repo/diagnostic['probe_config']['repo_path'])]+([str(repo/diagnostic['terminal_probe_config']['repo_path'])] if diagnostic.get('schema')=='FIRST_FAULT_DRIVER_CONTRACT_V2' else []) if diagnostic is not None else []),*b['provider_sources'],str(host),str(subset),b['driver'],'-CFLAGS','-std=c++17 -I'+b['driver_include'],'-LDFLAGS','-lcrypto']
   run_frontend_serial(stage,argv,b['python'],b['verilator'],out)
   if diagnostic is not None:
    # Pure bounded declaration/provenance work inside original whole-job envelope.
@@ -208,6 +208,17 @@ def main():
    b['pins'][str(evidence)]=sha(evidence)
    b['pins'][str(obj/'readonly_first_fault_access.hpp')]=generated['accessor']['sha256']
    b['pins'][str(obj/'VHostBlockTopV4___024root.h')]=generated['root_header']['sha256']
+   if diagnostic['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2':
+    from terminal_finite_probe import generate as generate_terminal
+    disk_gate(8<<20)
+    need(time.monotonic()-start<job_budget,'remaining original build budget before terminal generation')
+    terminal_evidence=out/'terminal-probe-evidence.json'
+    terminal_generated=generate_terminal(repo/diagnostic['terminal_probe_schema']['repo_path'],repo/diagnostic['terminal_probe_config']['repo_path'],obj/'VHostBlockTopV4___024root.h',obj/'readonly_terminal_finite_access.hpp',terminal_evidence)
+    need(terminal_generated['root_header']==generated['root_header'],'same actual scalar/terminal header')
+    b['terminal_probe_evidence']={'path':str(terminal_evidence),'bytes':terminal_evidence.stat().st_size,'sha256':sha(terminal_evidence)}
+    b['pins'][str(terminal_evidence)]=sha(terminal_evidence)
+    b['pins'][str(obj/'readonly_terminal_finite_access.hpp')]=terminal_generated['accessor']['sha256']
+    need(time.monotonic()-start<job_budget,'remaining original build budget after terminal generation')
    disk_gate()
   frontend_receipt=out/'frontend_native_VHostBlockTopV4/RESULT.json'
   # Fresh actual Host.mk/header is admitted against reviewed tool/source/ABI;

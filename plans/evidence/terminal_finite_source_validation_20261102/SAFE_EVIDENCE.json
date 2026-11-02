@@ -1,0 +1,70 @@
+{
+  "schema": "TERMINAL_FINITE_SOURCE_VALIDATION_SAFE_V1",
+  "scope": "SYNTHETIC_HEADERS_ELF_STAGE_AUTHORITY_REAL_PACK_AND_VALIDATORS_NOT_ACTUAL_BUILD_OR_NUMERICAL_ACCEPTANCE",
+  "joint_catalog_sha256": "5dc1017b23d68afbd7c1f8124c669d8697b14c59f41aeb52294dae90aa041e4f",
+  "contract_sha256": "199a9b9470c80aa321d9d1ae4846f71fd17945a2dfbfcf64c45669f9db567b79",
+  "full_join": {
+    "plan_sha256": "b02f55f11cf2721c60ce552a4cd8ef712403acab2f27805cfa6b278e70b3dfce",
+    "receipt_sha256": "3087fa1975f4c8fb16c0e8615ae97082fb4adf687e42b6181a201e34b5dc1963",
+    "native_exit": 0,
+    "errors": [],
+    "elapsed_seconds": 8.293632401968352,
+    "sampled_peak_rss_bytes": 316006400,
+    "owned_tmpfs_peak_bytes": 240416126,
+    "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+    "direct_exit_code": 0,
+    "pipe_eof_observed": true,
+    "gzip_finalized": true,
+    "raw_log_sha256": "77b0a9365af42815e1cd3542b287dc2fa18fef842c03951e8c0999d4b4781c1d",
+    "gzip_sha256": "a01d0cb1d170e88fc9336eb26d278bdb8c45e7a2a3d3b495155c352e732b1b5c",
+    "seven_files": 7,
+    "c_pack_and_full_proof": true,
+    "n_fresh_process_full_proof": true,
+    "negative": {
+      "missing_terminal_gcc_dependency": "REJECTED_BY_REAL_COMPLETE_PROOF",
+      "terminal_source_pin_drift": "REJECTED_BY_REAL_N_SOURCE_PIN_GATE"
+    },
+    "metadata_restored": true
+  },
+  "filesystem_scope": {
+    "production_supervisor_changed": false,
+    "workspace_free_floor_bytes": 8589934592,
+    "owned_tmpfs_hardcap_bytes": 536870912,
+    "aggregate_watch_cap_bytes": 1073741824,
+    "non_dut_tmpfs_total_budget_bytes": 1073741824,
+    "future_zip_reserved_bytes": 402653184,
+    "margin_bytes": 67108864,
+    "all_existing_tmpfs_usage_accounted": true,
+    "fixture_retained": true,
+    "workspace_sv_copy": false,
+    "final_space": {
+      "workspace_free": 12598788096,
+      "tmpfs_free": 4946472960,
+      "tmpfs_total": 5225717760,
+      "mem_available": 8797814784,
+      "tmpfs_used": 279244800,
+      "fixture_max": 536870912,
+      "future_zip_reserved": 402653184,
+      "tmpfs_margin": 67108864,
+      "non_dut_budget": 1073741824,
+      "workspace_floor": 8589934592,
+      "initial": false,
+      "owned_tree_bytes": 240416126
+    }
+  },
+  "regression": {
+    "C_full_each_mode": 312,
+    "C_optional_skips_each_mode": 2,
+    "E_full_each_mode": 438,
+    "E_skips": 0,
+    "N_full_each_mode": 347,
+    "N_optional_skips_each_mode": 1,
+    "later_fixture_space_gate_targeted_each_mode": 4,
+    "filesystem_policy_tests_each_mode": 14,
+    "all_normal_optimized_closed_zero": true
+  },
+  "actual_new_hardware_header_verified": false,
+  "eda_executed": false,
+  "dut_executed": false,
+  "numerical_pass": false
+}

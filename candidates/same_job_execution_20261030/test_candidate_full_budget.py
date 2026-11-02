@@ -9,6 +9,16 @@ E=pathlib.Path(mode.D)
 sys.path.insert(0,str(E/'numeric'))
 from test_candidate_admission import Test as ReviewFixture
 import profile_policy
+TERMINAL_HOST_PATHS=frozenset({'numeric/terminal_finite_records.py','numeric/test_terminal_finite_records.py','numeric/test_terminal_contract_summary.py','numeric/fixtures/readonly_first_fault_v1.hpp'})
+def undo_terminal_host_paths(test,tree):
+ assignments=[n for n in tree.body if isinstance(n,ast.Assign)and any(isinstance(t,ast.Name)and t.id=='ALLOWED_PATHS'for t in n.targets)]
+ test.assertEqual(len(assignments),1)
+ tuples=[n for n in ast.walk(assignments[0])if isinstance(n,ast.Tuple)and TERMINAL_HOST_PATHS<={v.value for v in n.elts if isinstance(v,ast.Constant)}]
+ test.assertEqual(len(tuples),1)
+ for value in TERMINAL_HOST_PATHS:test.assertEqual(sum(isinstance(n,ast.Constant)and n.value==value for n in tuples[0].elts),1)
+ tuples[0].elts=[n for n in tuples[0].elts if not(isinstance(n,ast.Constant)and n.value in TERMINAL_HOST_PATHS)]
+ return tree
+
 class CandidateBudgetTests(unittest.TestCase):
  def setUp(self):
   self.fixture=ReviewFixture();self.fixture.setUp();self.addCleanup(self.fixture.doCleanups)
@@ -28,7 +38,7 @@ class CandidateBudgetTests(unittest.TestCase):
     module.admit=lambda binding:dict(execution_mode=mode.FULL,full_block_budget=binding['full_block_budget'])
   with patch.object(importlib.machinery.SourceFileLoader,'exec_module',load):return mode.admit(self.b)
  def test_adapter_only_reviewed_exact_host_allowlist_additions(self):
-  tree=ast.parse((E/'executor_adaptation.py').read_text())
+  tree=undo_terminal_host_paths(self,ast.parse((E/'executor_adaptation.py').read_text()))
   # Only the reviewed exact two/three-key catalog predicate is reversed.
   catalog_fn=[n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='catalog']
   self.assertEqual(len(catalog_fn),1)
@@ -98,4 +108,15 @@ class CandidateBudgetTests(unittest.TestCase):
  def test_candidate_looks_legacy_but_review_exists_rejected(self):
   self.b['artifact_manifest']=self.fixture.write('legacy.json',{'schema':'FROZEN_FIVE_PROFILE_DUT_ARTIFACT_V2'})
   with self.assertRaisesRegex(ValueError,'cannot use legacy'):self.admit()
+class TerminalHostPathsNegativeTests(unittest.TestCase):
+ def test_duplicate_one_reviewed_path_rejected(self):
+  tree=ast.parse((E/'executor_adaptation.py').read_text())
+  target=next(n for n in ast.walk(tree)if isinstance(n,ast.Tuple)and TERMINAL_HOST_PATHS<={v.value for v in n.elts if isinstance(v,ast.Constant)})
+  target.elts.append(ast.Constant(value='numeric/terminal_finite_records.py'))
+  with self.assertRaises(AssertionError):undo_terminal_host_paths(self,tree)
+ def test_missing_or_changed_reviewed_path_rejected(self):
+  tree=ast.parse((E/'executor_adaptation.py').read_text())
+  targets=[n for n in ast.walk(tree)if isinstance(n,ast.Constant)and n.value=='numeric/terminal_finite_records.py'];self.assertEqual(len(targets),1);targets[0].value='numeric/unreviewed_terminal.py'
+  with self.assertRaises(AssertionError):undo_terminal_host_paths(self,tree)
+
 if __name__=='__main__':unittest.main()

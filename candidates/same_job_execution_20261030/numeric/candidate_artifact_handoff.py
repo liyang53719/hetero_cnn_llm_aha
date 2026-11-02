@@ -39,13 +39,15 @@ def adaptation_module(adaptation_pin):
  need(type(rows[0].get('bytes'))is int and len(raw)==rows[0]['bytes']and hashlib.sha256(raw).hexdigest()==rows[0]['sha256'],'reviewed adaptation checker bytes before import')
  module=types.ModuleType('reviewed_executor_adaptation');module.__file__=str(path);exec(compile(raw,str(path),'exec'),module.__dict__);return module
 
-def load_candidate_checker(current_source_pins_pin,repo,first_fault=False):
+def load_candidate_checker(current_source_pins_pin,repo,first_fault=False,terminal=False):
  import sys
  catalog=read_pin(current_source_pins_pin['path'],current_source_pins_pin['sha256'],2<<20)
  need(catalog['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1','reviewed executor source closure')
  rows={r['path']:r for r in catalog['files']};need(len(rows)==len(catalog['files']),'unique source closure')
  base=P(repo)/'candidates/model_candidate_build_20261101'
+ need(type(terminal)is bool and (not terminal or first_fault),'explicit terminal checker domain')
  result={};names=('first_fault_probe','first_fault_policy','pack_model_candidate','first_fault_compilation','candidate_dependency_proof')if first_fault else('pack_model_candidate','candidate_dependency_proof')
+ if terminal:names=('first_fault_probe','terminal_finite_probe',*names[1:])
  prior={name:sys.modules.get(name)for name in names}
  try:
   for name in names:
@@ -61,7 +63,9 @@ def load_candidate_checker(current_source_pins_pin,repo,first_fault=False):
 
 def verify_compilation_policy(frozen,root,receipt,current_source_pins_pin,repo):
  import sys
- modules=load_candidate_checker(current_source_pins_pin,repo,first_fault=frozen.get('schema')=='MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1');prior={name:sys.modules.get(name)for name in modules}
+ first_fault=frozen.get('schema')=='MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1'
+ terminal=first_fault and frozen.get('readonly_probe_contract',{}).get('sha256')=='199a9b9470c80aa321d9d1ae4846f71fd17945a2dfbfcf64c45669f9db567b79'
+ modules=load_candidate_checker(current_source_pins_pin,repo,first_fault=first_fault,terminal=terminal);prior={name:sys.modules.get(name)for name in modules}
  try:
   for name,m in modules.items():
    need(prior[name]is None or getattr(prior[name],'__file__',None)==m.__file__,'no foreign cached candidate verifier');sys.modules[name]=m

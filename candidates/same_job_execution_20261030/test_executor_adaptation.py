@@ -98,4 +98,16 @@ class CatalogShapeTests(unittest.TestCase):
   self.assertIn(set(d),({'schema','files'},{'schema','original_source_commit','files'}))
   self.assertEqual(len(a.catalog(a.pin(p))),len(d['files']))
 
+ def test_terminal_exact_host_paths_full_verifier(self):
+  paths=('numeric/terminal_finite_records.py','numeric/test_terminal_finite_records.py','numeric/test_terminal_contract_summary.py','numeric/fixtures/readonly_first_fault_v1.hpp')
+  for name in paths:self.f.new[a.PREFIX+name]=b'explicit synthetic host source\n'
+  self.f.refresh();result=self.f.verify()
+  self.assertTrue(all(a.PREFIX+n in result['changed_paths'] for n in paths));self.assertFalse(result['numerical_pass'])
+ def test_terminal_unknown_sibling_still_rejected(self):
+  self.f.new[a.PREFIX+'numeric/terminal_finite_unreviewed.py']=b'unknown\n';self.f.refresh()
+  with self.assertRaises(ValueError):self.f.verify()
+ def test_terminal_builder_helper_still_rejected(self):
+  self.f.new['candidates/moe_router_score_observation_20261030/driver/readonly_first_fault.hpp']=b'changed builder C++\n';self.f.refresh()
+  with self.assertRaises(ValueError):self.f.verify()
+
 if __name__=='__main__':unittest.main()

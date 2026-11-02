@@ -21,13 +21,15 @@ def checked_pin(row, text=False, cap=128<<10):
     return {k:row[k] for k in ('path','bytes','sha256')}
 
 def verify_readonly_probe(manifest,source,receipt,dep):
-    from first_fault_policy import artifact_policy,FIRST_FAULT_SCOPE,CONTRACT_SHA
+    from first_fault_policy import artifact_policy,FIRST_FAULT_SCOPE,contract_sha,contract_path
     contract=artifact_policy(manifest,source)
     if contract is None:
         need('readonly_probe'not in source and 'readonly_probe_contract_sha256'not in receipt,'original branch cannot carry readonly evidence')
         return None
+    CONTRACT_SHA=contract_sha(contract)
+    terminal=contract['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'
     need(receipt.get('readonly_probe_contract_sha256')==CONTRACT_SHA and receipt.get('scope')==FIRST_FAULT_SCOPE,'readonly receipt scope/contract')
-    row=source['readonly_probe'];need(type(row)is dict and set(row)=={'schema','status','contract','accessor_generation'} and row['schema']=='FIRST_FAULT_READONLY_BUILD_EVIDENCE_V1' and row['status']=='OBSERVED_UNREVIEWED','readonly source evidence shape')
+    row=source['readonly_probe'];need(type(row)is dict and set(row)==({'schema','status','contract','accessor_generation'}|({'terminal_accessor_generation'}if terminal else set())) and row['schema']==('FIRST_FAULT_READONLY_BUILD_EVIDENCE_V2'if terminal else'FIRST_FAULT_READONLY_BUILD_EVIDENCE_V1') and row['status']=='OBSERVED_UNREVIEWED','readonly source evidence shape')
     cp=checked_pin(row['contract'],True,256<<10)
     need(cp['sha256']==CONTRACT_SHA and manifest['readonly_probe_contract']=={k:cp[k]for k in ('bytes','sha256')},'readonly manifest/source contract join')
     gen=row['accessor_generation']
@@ -63,14 +65,50 @@ def verify_readonly_probe(manifest,source,receipt,dep):
     repo=dep['driver'][:-len('/'+contract['diagnostic_driver']['repo_path'])]
     for v,role_name in ((sp,'probe_schema'),(cfg,'probe_config')):
         role=contract[role_name];need(v['path']==repo+'/'+role['repo_path'] and v['bytes']==role['bytes'] and v['sha256']==role['sha256'],'fixed actual source role '+role_name)
-    need(cp['path']==repo+'/candidates/model_candidate_build_20261101/FIRST_FAULT_DRIVER_CONTRACT.json','exact producer contract location')
+    need(cp['path']==repo+'/'+contract_path(contract),'exact producer contract location')
     hp=doc['original_hierarchy_pin'];hier=[p for p,h in generation.items()if p.endswith('/'+hp['repo_path'])and h==hp['sha256']]
     need(len(hier)==1,'original exact hierarchy source retained')
     argv=source['physical_closure']['initial_frontend_argv']
     need(type(argv)is list and all(type(a)is str for a in argv),'actual frontend argv')
-    need([a for a in argv if a.endswith('.vlt')]==[hier[0],cfg['path']] and argv.count(cfg['path'])==1,'original hierarchy plus one exact readonly frontend config')
+    terminal_proof=verify_terminal_probe(row['terminal_accessor_generation'],gen,contract,source,dep,repo)if terminal else None
+    configs=[hier[0],cfg['path']]+([terminal_proof['config_path']]if terminal else[])
+    need([a for a in argv if a.endswith('.vlt')]==configs and argv.count(cfg['path'])==1,'original hierarchy plus one exact readonly frontend config')
     need('--public-flat-rw'not in argv and '--public'not in argv and '--vpi'not in argv,'no global signal exposure')
-    return dict(schema='VERIFIED_FIRST_FAULT_READONLY_COMPILATION_V1',scope=FIRST_FAULT_SCOPE,field_count=114,contract_sha256=CONTRACT_SHA,accessor_sha256=acc['sha256'],config_sha256=cfg['sha256'],root_header_sha256=root['sha256'],numerical_pass=False,final_rtl_executed=False)
+    result=dict(schema='VERIFIED_FIRST_FAULT_READONLY_COMPILATION_V2'if terminal else'VERIFIED_FIRST_FAULT_READONLY_COMPILATION_V1',scope=FIRST_FAULT_SCOPE,field_count=114,contract_sha256=CONTRACT_SHA,accessor_sha256=acc['sha256'],config_sha256=cfg['sha256'],root_header_sha256=root['sha256'],numerical_pass=False,final_rtl_executed=False)
+    if terminal:result['terminal_accessor']=terminal_proof
+    return result
+
+
+def verify_terminal_probe(gen,scalar_gen,contract,source,dep,repo):
+    import terminal_finite_probe as terminal
+    expected={'schema','scope','schema_input','config','root_header','accessor','mappings','word_count','reads_hier_child_internals','extra_eval_or_clock','output_raw_words'}
+    need(type(gen)is dict and set(gen)==expected and gen['schema']=='ACTUAL_TERMINAL_FINITE_ACCESSOR_EVIDENCE_V1' and gen['scope']=='READ_ONLY_TERMINAL_CLASSIFICATION_NOT_NUMERICAL_ACCEPTANCE','exact terminal evidence schema')
+    need(type(gen['word_count'])is int and gen['word_count']==4096 and gen['reads_hier_child_internals']is False and gen['extra_eval_or_clock']is False and gen['output_raw_words']is False,'terminal classification only scope')
+    sp=checked_pin(gen['schema_input'],False,16384);cfg=checked_pin(gen['config'],True,1<<20)
+    root=checked_pin(gen['root_header'],False,probe.HEADER_CAP);acc=checked_pin(gen['accessor'],True,2<<20)
+    _,raw=terminal.load_schema(P(__file__).resolve().with_name('TERMINAL_FINITE_SCHEMA.json'))
+    need(sp['bytes']==len(raw)and sp['sha256']==terminal.SCHEMA_SHA,'fixed terminal schema bytes')
+    need(gen['config']['text'].encode()==terminal.config_bytes(),'exact terminal-only readonly config')
+    need(root==checked_pin(scalar_gen['root_header'],False,probe.HEADER_CAP),'scalar and terminal actual root identical')
+    maps=gen['mappings'];need(type(maps)is list and len(maps)==4096,'all terminal mappings')
+    keys={'index','row','column','sv_var','member','width_bits','declaration'}
+    need(all(type(m)is dict and set(m)==keys and type(m['index'])is int and type(m['row'])is int and type(m['column'])is int and type(m['width_bits'])is int and type(m['declaration'])is str and '\n'not in m['declaration']and len(m['declaration'])<=512 for m in maps),'exact bounded terminal map fields')
+    # Reconstruction validates retained declarations; actual GCC root SHA below
+    # independently binds the real header, never this synthetic reconstruction.
+    declarations=[m['declaration']for m in scalar_gen['mappings']]+[m['declaration']for m in maps]
+    header='\n'.join(['#ifndef VERILATED_VHOSTBLOCKTOPV4___024ROOT_H_','#define VERILATED_VHOSTBLOCKTOPV4___024ROOT_H_','class alignas(VL_CACHE_LINE_BYTES) VHostBlockTopV4___024root final : public VerilatedModule {','  public:',*('    '+d for d in declarations),'};','#endif',''])
+    need(terminal.match_header(header.encode())==maps,'exact terminal mapping order widths and declarations')
+    need(gen['accessor']['text'].encode()==terminal.accessor_bytes(maps),'deterministic full terminal accessor')
+    generation=source['generation_input_pins'];derived=source['derived_generated_pins'];known={**generation,**derived}
+    for v in (sp,cfg,root,acc):need(known.get(v['path'])==v['sha256'],'actual terminal generation/derived pin')
+    for v,role_name in ((sp,'terminal_probe_schema'),(cfg,'terminal_probe_config')):
+        role=contract[role_name];need(v['path']==repo+'/'+role['repo_path']and v['bytes']==role['bytes']and v['sha256']==role['sha256']and generation.get(v['path'])==v['sha256'],'exact terminal source role '+role_name)
+    cwd=P(dep['cwd']);need(acc['path']==str(cwd/'readonly_terminal_finite_access.hpp'),'fixed terminal accessor output')
+    for v in (root,acc):
+        need([p for p in dep['dependencies']if P(p).name==P(v['path']).name]==[v['path']]and dep['dependencies'].get(v['path'])==v,'actual unique GCC terminal dependency')
+    for role_name in ('terminal_probe_generator','terminal_record_schema'):
+        role=contract[role_name];need(generation.get(repo+'/'+role['repo_path'])==role['sha256'],'actual terminal generator/record role pin')
+    return dict(schema='VERIFIED_TERMINAL_FINITE_COMPILATION_V1',word_count=4096,accessor_sha256=acc['sha256'],root_header_sha256=root['sha256'],config_sha256=cfg['sha256'],config_path=cfg['path'],output_raw_words=False,numerical_pass=False)
 
 
 DEPENDENCY_RULE_POLICY='GCC_MMD_EXACT_REPEATED_PREREQUISITES_V1'

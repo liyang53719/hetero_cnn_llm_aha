@@ -67,9 +67,16 @@ def partial_stages(job):
  need(len(rows)<=40,'fixed stage count')
  return rows
 
-def first_fault_snapshot(path,b):
+def first_fault_snapshot(path,b,terminal_contract_sha=None):
  path=regular(path,64<<20);helper=D/'numeric/first_fault_records.py';schema=D/'numeric/FIXED_NONHIER_SCHEMA.json'
  for f in (helper,schema):need(b['pins'].get(str(f))==sha(f),'fixed first-fault parser/schema source pins')
+ terminal_parser=None;terminal_records=[];terminal_bytes=0;terminal_malformed=False
+ if terminal_contract_sha is not None:
+  checker=D/'numeric/first_fault_driver_contract.py';need(b['pins'].get(str(checker))==sha(checker),'fixed terminal contract checker')
+  terminal_checker=load('summary_terminal_contract',checker);need(terminal_contract_sha==terminal_checker.TERMINAL_CONTRACT_SHA,'independently fixed terminal contract')
+  terminal_helper=D/'numeric/terminal_finite_records.py';terminal_schema=P(b['repo'])/'candidates/model_candidate_build_20261101/TERMINAL_FINITE_RECORD_SCHEMA.json'
+  for f in(terminal_helper,terminal_schema):need(b['pins'].get(str(f))==sha(f),'fixed terminal parser/schema source pins')
+  terminal_parser=load('actual_terminal_finite_records',terminal_helper)
  parser=load('actual_first_fault_records',helper);digest=hashlib.sha256();total=0;records=[];record_bytes=0;malformed=False;terminal_codes=[]
  fixed_errors={b'ORIGINAL_HOST_REPLAY_FAIL: DUT resetRequired\n':'RESET_REQUIRED',b'ORIGINAL_HOST_REPLAY_FAIL: bounded original Host did not finish; partial progress is not numerical PASS\n':'BOUNDED_HOST_DID_NOT_FINISH'}
  with path.open('rb')as f:
@@ -78,6 +85,12 @@ def first_fault_snapshot(path,b):
    if not raw:break
    total+=len(raw);need(total<=64<<20 and len(raw)<=8192,'bounded fixed Popen log');digest.update(raw)
    if raw in fixed_errors:terminal_codes.append(fixed_errors[raw]);need(len(terminal_codes)<=1,'one fixed native terminal failure')
+   if terminal_parser is not None and raw.startswith(b'HOST_TERMINAL_FINITE'):
+    terminal_bytes+=len(raw)
+    if terminal_bytes>1024 or malformed or len(records)!=3:terminal_malformed=True
+    elif not terminal_malformed:
+     try:terminal_records.append(raw.decode('ascii'))
+     except UnicodeError:terminal_malformed=True
    if raw.startswith(b'HOST_FIRST_FAULT'):
     record_bytes+=len(raw)
     if record_bytes>8192:malformed=True
@@ -90,6 +103,19 @@ def first_fault_snapshot(path,b):
  except ValueError:result=dict(status='MALFORMED',fault_observed=None,fault_cause_established=False,numerical_pass=False)
  if terminal_codes==['RESET_REQUIRED']:result['fault_observed']=True
  elif result.get('status')=='ABSENT':result['fault_observed']=None
+ if terminal_parser is not None:
+  try:
+   need(not terminal_malformed,'malformed or excess terminal summary')
+   terminal=terminal_parser.parse_records(iter(terminal_records),terminal_schema)
+   need(result.get('status')!='PRESENT_VALID' or terminal['status']=='PRESENT_VALID','V2 fault emission requires terminal summary')
+   if terminal['status']=='PRESENT_VALID':
+    need(result.get('status')=='PRESENT_VALID','terminal classification needs original three control records')
+    sample=terminal['sample'];fault=result['current_fault'];previous=result['previous_healthy']
+    if sample['sample_valid']:
+     need(previous is not None and all(sample[k]<=previous[k]for k in('cycle','active_cycle','completions')),'stored accepted sample no later than previous healthy snapshot')
+    need(sample['fault_pc']<(1<<64)and fault is not None,'terminal fault association remains observation only')
+  except ValueError:terminal=dict(status='MALFORMED',fault_cause_established=False,numerical_pass=False)
+  result['terminal_finite_summary']=terminal
  return dict(result,terminal_reason=terminal_codes[0]if terminal_codes else'NOT_ESTABLISHED_FROM_FIXED_NATIVE_FAILURE_RECORD',log_sha256=digest.hexdigest(),log_bytes=total,log_binding='FIXED_POPEN_OUTPUT_PATH_AFTER_VERIFIED_OWNER_CLEANUP_HASHED_AT_PROJECTION_NOT_PREEXISTING_LOG_PIN')
 
 def project(job,binding_path,binding_sha):
@@ -198,7 +224,11 @@ def project(job,binding_path,binding_sha):
   result.update(source_identity)
   if first_fault:
    need(q['numerical_pass']is False,'single P0 cannot be five-block acceptance')
-   snapshot=first_fault_snapshot(root/'profile0/material/dut_result/profile0.log',b)
+   terminal_contract=None
+   checker=D/'numeric/first_fault_driver_contract.py';need(b['pins'].get(str(checker))==sha(checker),'fixed readonly summary checker')
+   terminal_checker=load('summary_readonly_contract_selection',checker)
+   if frozen['readonly_probe_contract']['sha256']==terminal_checker.TERMINAL_CONTRACT_SHA:terminal_contract=terminal_checker.TERMINAL_CONTRACT_SHA
+   snapshot=first_fault_snapshot(root/'profile0/material/dut_result/profile0.log',b,terminal_contract)
    result.update(schema='P0_FIRST_FAULT_DIAGNOSTIC_SUMMARY_V1',first_fault_document_sha256=admission['reviewed_budget_sha256'],profiles_registered=list(range(5)),diagnostic_profiles=[0],not_selected_profiles=[1,2,3,4],full_block_acceptance=False,fault_snapshot=snapshot,fault_observed=snapshot.get('fault_observed',False),fault_cause_established=False)
   if admission['mode']==mode.STAGE:
    progress_path=D/'summary_progress.py';need(b['pins'].get(str(progress_path))==sha(progress_path),'stage progress helper source pin')

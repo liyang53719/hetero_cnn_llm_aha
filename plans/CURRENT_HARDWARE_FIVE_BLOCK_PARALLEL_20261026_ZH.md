@@ -1,3 +1,17 @@
+# 2026-11-02：真实 P0 Numerical 首 fault 后的最窄 terminal 有限分类观测
+
+- 上一真实 7a99 / b89a 单 P0 已严格闭合，114 控制槽捕获 active 852606→852607、completions=1、ng160、wideSteps12800；DownOwner Numerical=8。独立源码不变量推导定位到 context0 terminal 返回的 finite 检查失败，但尚未直接采到哪一字、NaN/Inf 类别或产生环节。不是把 B 的 mock 驱动排序问题迁移为实际 P0 根因。
+- 同一已闭窗口的有限输入切片独核 851968 B：A max=14.4375、W max=0.3984375，全 finite；正确读取、零初始 seed、至多1024项、正确FP32 RNE 条件下保守界5891.219143，远低于FP32最大有限值。该界不证明实际bank、地址、seed或算术实现正确，不替代硬件执行。实际M128/context0的4096物理返回词一一对应128×32逻辑有效输出；故障拒绝未捕获/未写回与padding无效是不同概念。
+- 本次候选保原159硬件源、原同字节SV 3d148、4096 MAC、32-lane bank、122 ABI、原driver abed、P0原program及b310源合同不变。原114标量schema/config/accessor与三行记录原样；新增仅非hier QwenOwnerKernel 的4096个既有32位边界wire的exact public_flat_rd配置。生成器须对新的实际root header逐名称/唯一性/宽度核验后生成逐case只读accessor，不能假设独立C++成员内存连续，不能缺字段补0；新增配置、helper、实际accessor与GCC依赖均入同原七件proof。
+- 原clock0驱动/eval后的相同观察点，仅healthy、pc1、completions1、ownerstatus0且result.valid&&ready时以整数位模式扫描4096词，保存总数、NaN/±Inf数量、首物理index/类别及逻辑区域，不保存或输出payload值、权重、tensor或地址。fault时只输出最后accepted摘要，不重新读fault传播后的下一context数据；额外fault_pc明确区分历史pc1样本与后来其他命令故障。不加eval/clock、不改输入或finite/reset门。运输握手不等于finite门接受或成功物化。
+- 新driver合同V2与旧79cd明确分域：原helper实际bytes更新、terminal读取payload但不保留/输出raw值，禁止沿用旧“完全不读data”的表述。新C checker仍可完整验证旧7a99七件；旧N执行准入仍须其immutable原source/catalog，新executor若helper不同则旧79cd source门正确拒绝，不能为兼容跳hash。新构建/ELF没有旧数值资格，仍需新结构/driver/loader/实际adapter/资源review及fresh原门。
+- 本地真实双generator生成的114+4096 accessor与新helper已在合成root上严格C++编译/运行：3个NaN/+Inf/-Inf样例、4093 finite，fault前清payload仍保留原accepted样本；原3控制行与1新有限行精确，非未来actual硬件header或DUT数值资格。新V2 synthetic完整pack/export与真实validators反例、旧7a99新checker完整proof亦闭；synthetic ELF/阶段authority不冒实际build结果。下一唯一受审完整build必须用新真实头再次完成同门，不拿合成声明替代。
+- 唯一完整 C pack→新进程 N source-pinned loader→完整七件 proof 纯联测已严格0，8.294秒，sampled RSS316006400B；缺terminal GCC依赖与sourcepin漂移两反例均拒，改动的合成metadata全bytes恢复。ELF、编译阶段authority及header明确synthetic，不执行模型。为不占workspace新增224MB副本，使用独立纯测试按文件系统监督：workspace8GiB门不变，owned tmpfs512MiB硬cap、总tmpfs计入nonDUT1GiB（含既存依赖、未来ZIP384MiB及64MiB余量），真实内存与空间不足即拒；原生产DUT监督器与准入门未改。14空间正反测试双模式通过，实际owned产物240416126B保留，未追加本日清理。有限证据见 plans/evidence/terminal_finite_source_validation_20261102/SAFE_EVIDENCE.json。
+- 原build工程上限9000秒及七件transfer范围不变，不重复无因build，不上传第八件或数据。新ZIP/七件接收必须先审实际空间：可从初始落盘就使用受计费tmpfs保存完整ZIP，同字节SV逐stream校验后直接建立只读hardlink，其余六件实际写入；这不是删旧证据或追加本日清理。未通过实际内存/盘门不启动依赖执行，不承诺目前余量足够。
+- 后续单P0原10800秒/1500000 active cycles、whole22200秒仍只是有限工程watchdog，不是新观测开销或完成时间预测；新ELF需重新独立资源准入。当前整块数值仍未通过；所有旧失败/闭回执保留，本段不宣布底层根因已修复或任何完整五块验收。
+
+---
+
 # 2026-11-02：真实 4096 MAC / 原 P0 首 fault 两槽观测已闭合，尚未修复
 
 - 原唯一 `cloud_execution_p0_first_fault_connectfix_20261102T1635` / session 44518 已退出 2；新 executor 1a50、实际 artifact 7a99 / ELF b89a / 原同字节 SV 3d148 / 只读 driver abed。九个前置阶段严格 0，包括 fresh ABI 与真实完整 connect；随后单 P0 DUT 因 `resetRequired` 退出 1，outer native 2 / errors[] / strict cleanup / EOF。P0 阶段耗时 6036.663 秒，sampled RSS 248,307,712 B；不是 10800 秒墙时或 1,500,000 active cycles 上限耗尽，采样 RSS 不冒连续峰值保证。

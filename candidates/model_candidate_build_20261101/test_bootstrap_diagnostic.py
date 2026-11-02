@@ -5,12 +5,28 @@ s=importlib.util.spec_from_file_location('bootstrap_diag',D/'bootstrap_model_can
 # Exact inverse of the independently reviewed read-only build branch only.
 FIRST_FAULT_INVERSE = [(" a.add_argument('--first-fault-readonly',action='store_true')\n", '', '793e0c515eb48d727f4d62ab5139a4cb7e257b12945a8e645338732df0ba26c5'), (" stage('binding',[py,'-B',str(C/'materialize_model_binding.py'),'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')]+(['--first-fault-readonly'] if v.first_fault_readonly else []))\n", " stage('binding',[py,'-B',str(C/'materialize_model_binding.py'),'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')])\n", '81aac29514dd880e221e6451ec0b30b0759ed77bd195e057492d4e0091593960')]
 def first_fault_inverse(text):
+ text=terminal_inverse(text)
  for added,original,expected in FIRST_FAULT_INVERSE:
   if hashlib.sha256(added.encode()).hexdigest()!=expected or text.count(added)!=1:raise ValueError("unique exact first-fault addition")
   text=text.replace(added,original,1)
  return text
 
+TERMINAL_INVERSE = [(" a.add_argument('--terminal-finite-readonly',action='store_true')\n", '', '22099f59b102782ebe15919440dd236925559d975836763ce6f323b073610382'), (" need(not(v.first_fault_readonly and v.terminal_finite_readonly),'one explicit readonly mode')\n", '', '80a77b5eedcf7e06500ae1acfb039e4da046e602dcfa32fb248576706d0ce231'), (" stage('binding',[py,'-B',str(C/'materialize_model_binding.py'),'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')]+(['--first-fault-readonly'] if v.first_fault_readonly else [])+(['--terminal-finite-readonly'] if v.terminal_finite_readonly else []))\n", " stage('binding',[py,'-B',str(C/'materialize_model_binding.py'),'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')]+(['--first-fault-readonly'] if v.first_fault_readonly else []))\n", 'bd38c8d1fa2269a18e7504aff93fd512dc12b3b30d5a7b3c64c01737e3b394ec')]
+TERMINAL_BASE_AST_SHA = '5588a1d0ffd238b160307f8c368e0a13f0fa6a02aba8a301f9ee6737922aff33'
+def terminal_inverse(text):
+ for added,original,expected in TERMINAL_INVERSE:
+  if hashlib.sha256(added.encode()).hexdigest()!=expected or text.count(added)!=1:raise ValueError('unique exact terminal addition')
+  text=text.replace(added,original,1)
+ try:tree=ast.parse(text)
+ except SyntaxError as e:raise ValueError('original first-fault bootstrap syntax')from e
+ if hashlib.sha256(ast.dump(tree,include_attributes=False).encode()).hexdigest()!=TERMINAL_BASE_AST_SHA:raise ValueError('original first-fault bootstrap AST')
+ return text
+
 class Tests(unittest.TestCase):
+ def test_terminal_inverse_rejects_duplicate_mutation(self):
+  text=(D/'bootstrap_model_candidate.py').read_text();added=TERMINAL_INVERSE[0][0]
+  with self.assertRaises(ValueError):terminal_inverse(text+added)
+  with self.assertRaises(ValueError):terminal_inverse(text.replace(added,added.replace('terminal-finite','wrong-terminal',1),1))
  def setUp(self):
   self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.w=pathlib.Path(self.tmp.name)
  def project(self,r,name='jars'):return json.loads(m.bootstrap_stage_diagnostic(name,r,self.w/'absent'/'RESULT.json'))

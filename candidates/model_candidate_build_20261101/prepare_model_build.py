@@ -20,6 +20,7 @@ def source_pins(repo):
  need(all(str(p.relative_to(repo))in seen for p in D.glob('*.py')),'builder wrapper in active source closure')
  return sha(path)
 def run(a):
+ need(not(a.first_fault_readonly and getattr(a,'terminal_finite_readonly',False)),'one explicit readonly mode')
  repo=a.repo.resolve();work=a.work;identity=read(a.identity);clock=read(a.job_start)
  need(D.is_relative_to(repo)and subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()==identity['source_commit'],'reviewed checkout')
  subprocess.run(['git','-C',str(repo),'diff','--quiet','HEAD','--'],check=True)
@@ -40,9 +41,11 @@ def run(a):
  py=str(P('/usr/bin/python3').resolve());bootstrap=D/'bootstrap_model_candidate.py'
  args=[py,'-B',str(bootstrap),'--repo',str(repo),'--pipeline',str(repo/'candidates/ci_frontend_pipeline_r2_20261029'),'--work',str(work/'shared/build'),'--shared-owned-root',str(work/'shared'),'--materialization-dir',str(material),'--job-started-monotonic',str(started),'--remaining-tail-reserve-seconds',str(EXPORT_RESERVE_SECONDS),'--maximum-build-seconds',str(BUILD_SECONDS),'--reviewed-repo-sha',identity['source_commit'],'--artifact-identity',str(a.identity),'--fresh-host-contract',str(contract),'--fresh-host-contract-sha256',sha(contract),'--execute-reviewed-once']
  if a.first_fault_readonly:args.append('--first-fault-readonly')
+ if getattr(a,'terminal_finite_readonly',False):args.append('--terminal-finite-readonly')
  os.execve(py,args,dict(os.environ)) # bootstrap forwards GH_TOKEN only to its original idma acquisition.
 if __name__=='__main__':
  p=argparse.ArgumentParser()
  for n in('repo','work','identity','job-start'):p.add_argument('--'+n,type=P,required=True)
  p.add_argument('--first-fault-readonly',action='store_true')
+ p.add_argument('--terminal-finite-readonly',action='store_true')
  run(p.parse_args())

@@ -116,7 +116,20 @@ FIRST_FAULT_REQUIRED_IMPLEMENTATIONS=CANDIDATE_REQUIRED_IMPLEMENTATIONS|{
  'candidates/model_candidate_build_20261101/first_fault_compilation.py',
 }
 FIRST_FAULT_IMPLEMENTATION_PINS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f', 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53', 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'ad794f49f2b6d9274ebcda8110a82467847b358b80c569a716614695c276c36f', 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': '4eeb7d204f8401f2d886f4240b3b1d19fc427e1776b44860a4531cd3b58e325c', 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': '92a0155d5317a6a74a66feee1caf18fc85d7331b1633327caffcda802254114d', 'candidates/model_candidate_build_20261101/first_fault_compilation.py': '65616afa30e55ff9b4aae92d5ed45efed056f99d9e0991861bdbe2cf394e15fb', 'candidates/model_candidate_build_20261101/first_fault_policy.py': 'cbf72b35085959b2b4b774390ed37b76c033c20eee6e90d7096004b4eba9c1e4', 'candidates/model_candidate_build_20261101/first_fault_probe.py': '6ce53ee4a74fd5ba9b533a7051fd1737aed215caa1ed1c3a314a4d0f79ce0766', 'candidates/model_candidate_build_20261101/model_source_evidence.py': 'ab07b41bbfb201e9b58146bac6d202405ac2e606f1d22bff0ef78fc9be98a523', 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': '4c3f08a599394d34f3706dae381880f104887155d5223fbc9f00c82eff6c40e2', 'candidates/model_candidate_build_20261101/pack_model_candidate.py': '91db9d870922de6126a6f28b2d394656e951c0f75ff0033cfc8e5f9f51500e5c'}
-LOCAL_PACK_READER_SHA='91db9d870922de6126a6f28b2d394656e951c0f75ff0033cfc8e5f9f51500e5c'
+TERMINAL_REQUIRED_IMPLEMENTATIONS=FIRST_FAULT_REQUIRED_IMPLEMENTATIONS|{'candidates/model_candidate_build_20261101/terminal_finite_probe.py'}
+TERMINAL_IMPLEMENTATION_PINS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f',
+ 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53',
+ 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'ad794f49f2b6d9274ebcda8110a82467847b358b80c569a716614695c276c36f',
+ 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': '4eeb7d204f8401f2d886f4240b3b1d19fc427e1776b44860a4531cd3b58e325c',
+ 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': '92a0155d5317a6a74a66feee1caf18fc85d7331b1633327caffcda802254114d',
+ 'candidates/model_candidate_build_20261101/first_fault_compilation.py': 'c548cbe0d5891c0a2d0bcb1e51cb3eb2ce48135b666b4857e0d84c2c9b1ab347',
+ 'candidates/model_candidate_build_20261101/first_fault_policy.py': 'c095e177128e89c146275b421d76e84320ab0f9bced6de41bf0facd46580e6de',
+ 'candidates/model_candidate_build_20261101/first_fault_probe.py': '6ce53ee4a74fd5ba9b533a7051fd1737aed215caa1ed1c3a314a4d0f79ce0766',
+ 'candidates/model_candidate_build_20261101/model_source_evidence.py': 'ab07b41bbfb201e9b58146bac6d202405ac2e606f1d22bff0ef78fc9be98a523',
+ 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': '7e04700f063728cf1df376a563565830f7e1544f8b2e439b507cc649975749ff',
+ 'candidates/model_candidate_build_20261101/pack_model_candidate.py': '02714c6677e749e71b285d2512c779e5687d009eb49dd7da883aab68cc376d20',
+ 'candidates/model_candidate_build_20261101/terminal_finite_probe.py': '17e9d268e0e5d3d74d0c5c79f53405553771652643bac5822b308dde15d3de18'}
+LOCAL_PACK_READER_SHA='02714c6677e749e71b285d2512c779e5687d009eb49dd7da883aab68cc376d20'
 
 COLLECTOR_PATH='candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py'
 def compilation_policy(r,m,build_receipt,manifest=None):
@@ -137,6 +150,10 @@ def compilation_policy(r,m,build_receipt,manifest=None):
   return CPP_O1_POLICY,list(CPP_O1_OVERRIDES),dict(OLD_CANDIDATE_IMPLEMENTATION_PINS)
  from first_fault_compilation import DEPENDENCY_RULE_POLICY
  need(r.get('dependency_rule_policy')==DEPENDENCY_RULE_POLICY,'explicit readonly GCC prerequisite policy')
+ if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2':
+  need(set(TERMINAL_IMPLEMENTATION_PINS)==TERMINAL_REQUIRED_IMPLEMENTATIONS and all(type(h)is str and re.fullmatch('[0-9a-f]{64}',h)for h in TERMINAL_IMPLEMENTATION_PINS.values()),'terminal producer implementation contract not frozen')
+  need(TERMINAL_IMPLEMENTATION_PINS[COLLECTOR_PATH]==O1_PRODUCER_DEPENDENCY_CAPTURE_SHA,'original capture bytes unchanged for terminal')
+  return CPP_O1_POLICY,list(CPP_O1_OVERRIDES),dict(TERMINAL_IMPLEMENTATION_PINS)
  need(set(FIRST_FAULT_IMPLEMENTATION_PINS)==FIRST_FAULT_REQUIRED_IMPLEMENTATIONS and all(type(h)is str and re.fullmatch('[0-9a-f]{64}',h)for h in FIRST_FAULT_IMPLEMENTATION_PINS.values()),'readonly producer implementation contract not frozen')
  need(FIRST_FAULT_IMPLEMENTATION_PINS[COLLECTOR_PATH]==O1_PRODUCER_DEPENDENCY_CAPTURE_SHA,'original capture bytes unchanged for readonly')
  return CPP_O1_POLICY,list(CPP_O1_OVERRIDES),dict(FIRST_FAULT_IMPLEMENTATION_PINS)

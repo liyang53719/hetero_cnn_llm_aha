@@ -14,7 +14,11 @@ def build(root):
  sources=['candidate_admission.py','first_fault_driver_contract.py','p0_first_fault_contract.py','MODEL_P0_FIRST_FAULT_SOURCE_CONTRACT.json','first_fault_observation_contract.py','correct_first_fault_observation_policy.py']
  for name in sources:put(repo/N/name,(D/name).read_bytes())
  helper=module(repo/N/'first_fault_driver_contract.py')
- for rel in helper.ROLES.values():put(repo/rel,(origin/rel).read_bytes())
+ for role,rel in helper.ROLES.items():
+  # Historical V1 fixture keeps its exact approved helper, not the new V2 role.
+  raw=(D/'fixtures/readonly_first_fault_v1.hpp').read_bytes()if role=='host_observer'else(origin/rel).read_bytes()
+  if role=='host_observer'and hashlib.sha256(raw).hexdigest()!='16c9a400a1e74dae2135c8ac6b6e40fa98e7b349d2777956279734c0f87cb818':raise ValueError('exact historical V1 observer fixture')
+  put(repo/rel,raw)
  cp=put(control/'driver_contract.json',(origin/helper.C/'FIRST_FAULT_DRIVER_CONTRACT.json').read_bytes())
  gen=module(repo/helper.ROLES['probe_generator']);schema,_=gen.load_schema(repo/helper.ROLES['probe_schema'])
  guard='VERILATED_VHOSTBLOCKTOPV4___024ROOT_H_';lines=['#ifndef '+guard,'#define '+guard,'class alignas(VL_CACHE_LINE_BYTES) VHostBlockTopV4___024root final : public VerilatedModule {','public:']

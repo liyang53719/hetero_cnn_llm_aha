@@ -1,0 +1,71 @@
+{
+  "schema": "FIRST_FAULT_DRIVER_CONTRACT_V2",
+  "scope": "P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE",
+  "legacy_driver": {
+    "repo_path": "candidates/moe_router_score_observation_20261030/driver/host_axi_driver_non_dpi.cpp",
+    "bytes": 27317,
+    "sha256": "343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61"
+  },
+  "diagnostic_driver": {
+    "repo_path": "candidates/moe_router_score_observation_20261030/driver/host_axi_driver_first_fault.cpp",
+    "bytes": 27486,
+    "sha256": "abedbe2a3a25d6b02c4b4dc03f6f4a852c63415ca981f26d29930273a0f9f420"
+  },
+  "host_observer": {
+    "repo_path": "candidates/moe_router_score_observation_20261030/driver/readonly_first_fault.hpp",
+    "bytes": 6829,
+    "sha256": "92ec39cfe84c4098b97bfa58fafb91e4e9f605f7f322bfa3263de3ebfa2d19ba"
+  },
+  "probe_schema": {
+    "repo_path": "candidates/model_candidate_build_20261101/FIXED_NONHIER_SCHEMA.json",
+    "bytes": 104430,
+    "sha256": "75088081cf6c3425eba9af3b44c78244f8c62697b4390f992ad63e21f16c7de4"
+  },
+  "probe_config": {
+    "repo_path": "candidates/model_candidate_build_20261101/FIRST_FAULT_READONLY.vlt",
+    "bytes": 8722,
+    "sha256": "a48da9d9925ace6f32ab3b8db7a63780d02170adcd315ee4c29ee95482e79cf6"
+  },
+  "probe_generator": {
+    "repo_path": "candidates/model_candidate_build_20261101/first_fault_probe.py",
+    "bytes": 10786,
+    "sha256": "6ce53ee4a74fd5ba9b533a7051fd1737aed215caa1ed1c3a314a4d0f79ce0766"
+  },
+  "inverse_verifier": {
+    "repo_path": "candidates/moe_router_score_observation_20261030/driver/verify_first_fault_driver.py",
+    "bytes": 1504,
+    "sha256": "a753e188ae815835501f58a4601c22e52c1b02131805000c721c778c9610cb02"
+  },
+  "hardware_generation_contract": {
+    "repo_path": "candidates/model_candidate_build_20261101/GENERATION_CONTRACT.json",
+    "bytes": 766,
+    "sha256": "3354827c1c9d2ac167b3b325dc07acbd50ea663ddd384dddfea1b1d037ae3851"
+  },
+  "host_ports_sha256": "289f230ec8fc85e7aee0396ab34424f505855074a762707e874fbf8a2f45ca08",
+  "control_semantics_changed": false,
+  "extra_eval_or_clock": false,
+  "scalar_payload_data_or_addresses": false,
+  "terminal_payload_words_read": true,
+  "raw_payload_values_emitted": false,
+  "retained_payload": false,
+  "terminal_probe_schema": {
+    "repo_path": "candidates/model_candidate_build_20261101/TERMINAL_FINITE_SCHEMA.json",
+    "bytes": 612,
+    "sha256": "6df79f9f5c1088c1f79caf90c713aa1cf223cba264c7bbeb8f1845cff29010ba"
+  },
+  "terminal_probe_config": {
+    "repo_path": "candidates/model_candidate_build_20261101/TERMINAL_FINITE_READONLY.vlt",
+    "bytes": 438066,
+    "sha256": "57bb09e07f82143510d810fcf4de4e48ec66a216603e86e8b3a88f5b5afbc191"
+  },
+  "terminal_probe_generator": {
+    "repo_path": "candidates/model_candidate_build_20261101/terminal_finite_probe.py",
+    "bytes": 5423,
+    "sha256": "17e9d268e0e5d3d74d0c5c79f53405553771652643bac5822b308dde15d3de18"
+  },
+  "terminal_record_schema": {
+    "repo_path": "candidates/model_candidate_build_20261101/TERMINAL_FINITE_RECORD_SCHEMA.json",
+    "bytes": 3659,
+    "sha256": "10ef123a49d3490454b9f62ceb2ec63a1ac7325eb688cb001729b68af3c1fde4"
+  }
+}

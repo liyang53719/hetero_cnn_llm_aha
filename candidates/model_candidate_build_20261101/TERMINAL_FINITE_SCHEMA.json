@@ -1,0 +1,17 @@
+{
+  "schema": "FIXED_TERMINAL_FINITE_READ_SCHEMA_V1",
+  "scope": "HOST_ONLY_CLASSIFICATION_NO_PAYLOAD_EXPORT_NOT_NUMERICAL_ACCEPTANCE",
+  "module": "QwenOwnerKernel",
+  "instance_path": "owner",
+  "root_module": "HostBlockTopV4",
+  "signal_prefix": "TransposedDenseDownOwner_io_matrix_result_bits_value_",
+  "rows": 16,
+  "columns": 256,
+  "word_count": 4096,
+  "width_bits": 32,
+  "physical_index": "row*256+column",
+  "read_hier_child_internals": false,
+  "extra_eval_or_clock": false,
+  "output_raw_words": false,
+  "scalar_schema_sha256": "75088081cf6c3425eba9af3b44c78244f8c62697b4390f992ad63e21f16c7de4"
+}

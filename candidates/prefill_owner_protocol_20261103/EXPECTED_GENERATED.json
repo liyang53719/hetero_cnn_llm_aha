@@ -1,0 +1,680 @@
+{
+  "CHIRRTL": {
+    "bytes": 17903025,
+    "sha256": "b10ad391b2fcedd335f305adfcc93422725ad37ecb83348f116bc0070a7790ae"
+  },
+  "SV": {
+    "bytes": 34294411,
+    "sha256": "8f2c4a5093b848f8b5c33a0b5aae6062315e625505bde21c6a11e9230a8b69ed"
+  },
+  "generated_files": [
+    {
+      "name": "VTransposedDenseDownOwner.cpp",
+      "bytes": 411087,
+      "sha256": "f521c2dec847e68743a5a3279a09cd1371f8a57938ca646fdbc4fd3b104660ba"
+    },
+    {
+      "name": "VTransposedDenseDownOwner.h",
+      "bytes": 246438,
+      "sha256": "5ee4f1c8d6aee752a079b9363ebf604ed524fc91e3ced64e00aebf65fb060548"
+    },
+    {
+      "name": "VTransposedDenseDownOwner.mk",
+      "bytes": 2322,
+      "sha256": "02dea9f16746ee158898db914f81a40c12e9a253bcc33e8a32ded9669edbfb61"
+    },
+    {
+      "name": "VTransposedDenseDownOwner__ConstPool_0.cpp",
+      "bytes": 607,
+      "sha256": "95d58f2a5eff1044bcbedca0ed957f5be9b23f7362c5cbfb0b5165b0e13f439c"
+    },
+    {
+      "name": "VTransposedDenseDownOwner__Syms.cpp",
+      "bytes": 1657,
+      "sha256": "2805aa87a084ad4508bacdaa481776091c2949196f48073c3457802f9ec60294"
+    },
+    {
+      "name": "VTransposedDenseDownOwner__Syms.h",
+      "bytes": 1374,
+      "sha256": "712ee6412b2358f5dade739aa80d7c576c75119ae69375cd19f23072a27cd18b"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root.h",
+      "bytes": 750446,
+      "sha256": "07faa4640d0282466427257ecd51567aeab4d6bf4c2df4a3744fe942c1ef8054"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_h7a929864__0.cpp",
+      "bytes": 257477,
+      "sha256": "6982a389ad182e9b7e308ba4bf448c71d2f34581d73147aa2e90f3ce3ea38d11"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_h7a929864__0__Slow.cpp",
+      "bytes": 1127,
+      "sha256": "8999296aa2e49d2e87d053b2deb5094fbf1eeedd02602b5e6184311951e7ba0e"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__0.cpp",
+      "bytes": 4691571,
+      "sha256": "53fc8772db57284d837ab35863bb6b4c47ccc01448bdc97a44a1ab01bcd60f5d"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__0__Slow.cpp",
+      "bytes": 309460,
+      "sha256": "2e38d3111e524a66a2f3eb834707d260d4af693e3eaed11eeb727fd6c1223bd3"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__1.cpp",
+      "bytes": 307948,
+      "sha256": "85bf56cd18a2dbb11e070b914ec3b537a9cdea4fb59c522a3e2b4221d2b3fd5e"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__10.cpp",
+      "bytes": 216569,
+      "sha256": "6056a2efddbbd4e6ff6020119a94adf059bf568e04fb6befa9f85e98a6e4e211"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__10__Slow.cpp",
+      "bytes": 368178,
+      "sha256": "fa63044258c569487d79013e768827a21d8f70dbff7594aedcfc6fba8e5489d2"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__11.cpp",
+      "bytes": 213831,
+      "sha256": "9c06b45c58e86c4faa38878dfcbe2ff5e6a8c8f5daaa2052721d87a0bca97813"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__11__Slow.cpp",
+      "bytes": 638925,
+      "sha256": "7fbf8b27ca6e2b410438d5106faf42374ae27ac167af8c080c5af87160cd17c5"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__12.cpp",
+      "bytes": 214599,
+      "sha256": "fdbc2b736e774cddc7fc5ada706b823f7b3fc7f52d0e3a13926abf98254cbe81"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__12__Slow.cpp",
+      "bytes": 715600,
+      "sha256": "e6923c593a1ebcbd6a657fb5f56fb34963fb3f24d45400c22a52f70b10661181"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__13.cpp",
+      "bytes": 210857,
+      "sha256": "4b6a4f8c0cae01b744afa8321e8be24fb2c2278d6fa4d156cf92df4dce9fb9e0"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__13__Slow.cpp",
+      "bytes": 4667440,
+      "sha256": "e9f861a967343190412610511b95a13aa4f72fea5896b82537ba64ac3a023222"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__14.cpp",
+      "bytes": 307355,
+      "sha256": "34e9178973d35b1a57e435dc49e0e7b697f7c2dc61dc6046d97b2cfadbb44307"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__14__Slow.cpp",
+      "bytes": 274806,
+      "sha256": "266fc4593ce106c34ec18839df9d546c619fdcfff32911a279feedee2a39e717"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__15.cpp",
+      "bytes": 309395,
+      "sha256": "9c9e4b55a2d8da8f9b4251caade08639f7a4c8d56aab19b8b62af38c83281620"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__15__Slow.cpp",
+      "bytes": 309159,
+      "sha256": "e3fb90a1749baf1885b307e111ed09c0f5346f2420cd7a6153c46a74ff80d599"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__16.cpp",
+      "bytes": 233429,
+      "sha256": "5eff90be7ce287569f7cb00139fe92e7a1320fa969ec8b83941b943785071d29"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__16__Slow.cpp",
+      "bytes": 329718,
+      "sha256": "620f9421787a529ad04324dbcd309ea9097df4631350be3bdde2d76ae35a150a"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__17.cpp",
+      "bytes": 401705,
+      "sha256": "0ea6da254f8ebb904c0503be3480c70bd3d46eed044dc470b6e08ef47dcc044d"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__17__Slow.cpp",
+      "bytes": 2736,
+      "sha256": "77eeb8b594544e7108a9620ed7c08327a7f465e7ee66b05b50f9910f695981ec"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__18.cpp",
+      "bytes": 454799,
+      "sha256": "5db1e5041e81ed6d6c3fa4f155d38034cc74f0c2d25e26f3720a778234b1a34a"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__19.cpp",
+      "bytes": 368015,
+      "sha256": "dd2bc5f284bd17499b8f9a228699e83762473e9f308bd6411404e54312422387"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__1__Slow.cpp",
+      "bytes": 238338,
+      "sha256": "0c2345b7da62424640f9b9b743ea2a658eaf975757ff8c08fbd81b66abe8c7e0"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__2.cpp",
+      "bytes": 349308,
+      "sha256": "2e6e21bbcb4990bfcb4fd93c63adddba39a693be6a72bf8ea5d65b8f0632bd7b"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__20.cpp",
+      "bytes": 901965,
+      "sha256": "c02486da0529f8e9b5bc320e2b2e8413c7580d8deacf7873ad7ca5a78c8b78e7"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__21.cpp",
+      "bytes": 714360,
+      "sha256": "5b5ad692bad2fc9dae136e2e7b9726e39760072f13ac9d9e0000f5574e819ec3"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__22.cpp",
+      "bytes": 4694881,
+      "sha256": "e40805a244c31110ba196936bac885774f7a6298caadbba73806c3a92ed7a5ae"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__23.cpp",
+      "bytes": 351632,
+      "sha256": "8e370933f1aaab3606852e0371ef2323dac8dcb9c6304d15bb636f8e99049220"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__24.cpp",
+      "bytes": 157150,
+      "sha256": "f389d6c9adcb926fb773cda3b458bd16d8536b1b00e8b5872db4b68421c452d6"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__2__Slow.cpp",
+      "bytes": 214593,
+      "sha256": "3722cde4f3930c8c9195a74432a04579dc394e791010a899995679084cd91261"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__3.cpp",
+      "bytes": 1200989,
+      "sha256": "4018f808b0adc19b82c17fc59321d7fe083b2bc37d0e6a3bc2205984dda5cd27"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__3__Slow.cpp",
+      "bytes": 213825,
+      "sha256": "0e0b3f20b1b98f80e105ee639042855dd059b827dafeb82a682595fa55a87d8c"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__4.cpp",
+      "bytes": 362936,
+      "sha256": "780adb06b4fc5cf817e2723d8562848b607f8eca58b91625f5f5479e2138f4bb"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__4__Slow.cpp",
+      "bytes": 213829,
+      "sha256": "6df60ef47bc4624958c11e3ac182ad89e64ab04d160a06f3d7daec84c08ed3a2"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__5.cpp",
+      "bytes": 363853,
+      "sha256": "ac5fe4274a98ccc8fc3e5e1d235238bbf1278f304f40ac75566cdaae240fd687"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__5__Slow.cpp",
+      "bytes": 246955,
+      "sha256": "22702b67ca1145df343c6f34004a48d1ba1339abf974caf28ffd046863b68336"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__6.cpp",
+      "bytes": 363853,
+      "sha256": "354e760b98418a4f750f3b57c8cf0d8ec0170c905c110b45986ce62d95259fb7"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__6__Slow.cpp",
+      "bytes": 308528,
+      "sha256": "142956ab8ec7baa05c7d97fbd785856f1142c7cfeba6e391ca67197d1d0d15b5"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__7.cpp",
+      "bytes": 365252,
+      "sha256": "b005a74ce2d2549ff65c395dae1bdfa12c13df351b81bc7b6fc1cce2ffb27ad8"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__7__Slow.cpp",
+      "bytes": 309392,
+      "sha256": "0b9b266148992f6ec675bc9bdd2110e7fe60170fd69e78c99efaa77fa1e91ae4"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__8.cpp",
+      "bytes": 366885,
+      "sha256": "8a2e8b0036296dd8e973a57c3f6140ec04c3c4fe62242deb3ad263cf3b778fd2"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__8__Slow.cpp",
+      "bytes": 462552,
+      "sha256": "57c286bcd6c1be8d3862a89fbd8c80e73c372038e34e2a5a28071f69b78d1710"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__9.cpp",
+      "bytes": 349307,
+      "sha256": "d697f0e8326db2e433fc24b64d9c94276595b218d60e0744cd04585003cbd87a"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__9__Slow.cpp",
+      "bytes": 305171,
+      "sha256": "7b6b04004d6c2b206f233c899d14174ea43797be8f2d483bd84a89d28beecb6e"
+    },
+    {
+      "name": "VTransposedDenseDownOwner___024root__Slow.cpp",
+      "bytes": 893,
+      "sha256": "fd2a0494e48e46833e2eb01de8f6edff22f97b76e5a8d757d80a669a288cd1b2"
+    },
+    {
+      "name": "VTransposedDenseDownOwner__pch.h",
+      "bytes": 851,
+      "sha256": "fc827fe5e5fa0660f09d11cfa737fc45949e39ca2fb1622fa78b858bf9f6b776"
+    },
+    {
+      "name": "VTransposedDenseDownOwner__ver.d",
+      "bytes": 4200,
+      "sha256": "0f0192a040250440ca009e94435be7f6f875db2b03b38f0908469a99a03c0a91"
+    },
+    {
+      "name": "VTransposedDenseDownOwner__verFiles.dat",
+      "bytes": 8987,
+      "sha256": "7e62f9c55b7018d6a52db63335b296820c2b03aa9aaeb90b94c7e52e74f28398"
+    },
+    {
+      "name": "VTransposedDenseDownOwner_classes.mk",
+      "bytes": 4416,
+      "sha256": "6719cfad1594008a5498df27cbc6d15907d8ef65cceae9af3869e3a3c74dcf01"
+    }
+  ],
+  "byte_identical_required": [
+    "VTransposedDenseDownOwner.cpp",
+    "VTransposedDenseDownOwner.h",
+    "VTransposedDenseDownOwner.mk",
+    "VTransposedDenseDownOwner__ConstPool_0.cpp",
+    "VTransposedDenseDownOwner__Syms.cpp",
+    "VTransposedDenseDownOwner__Syms.h",
+    "VTransposedDenseDownOwner___024root.h",
+    "VTransposedDenseDownOwner___024root__DepSet_h7a929864__0.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_h7a929864__0__Slow.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__0.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__0__Slow.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__1.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__10.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__10__Slow.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__11.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__11__Slow.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__12.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__12__Slow.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__13.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__13__Slow.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__14.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__14__Slow.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__15.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__15__Slow.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__16.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__16__Slow.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__17.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__17__Slow.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__18.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__19.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__1__Slow.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__2.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__20.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__21.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__22.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__23.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__24.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__2__Slow.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__3.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__3__Slow.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__4.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__4__Slow.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__5.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__5__Slow.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__6.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__6__Slow.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__7.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__7__Slow.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__8.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__8__Slow.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__9.cpp",
+    "VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__9__Slow.cpp",
+    "VTransposedDenseDownOwner___024root__Slow.cpp",
+    "VTransposedDenseDownOwner__pch.h",
+    "VTransposedDenseDownOwner__ver.d",
+    "VTransposedDenseDownOwner_classes.mk"
+  ],
+  "metadata_exception": {
+    "name": "VTransposedDenseDownOwner__verFiles.dat",
+    "reason": "Records inode/ctime/mtime. Must retain new raw hash and compare exact argument plus file-path set; cannot require historical raw hash or use --skip-identical."
+  },
+  "port_canonical_sha256": "4aba39c5df91a78c431ea7a080f9fe2422a828278610e4af254d18a387cd5ce4",
+  "driver_sha256": "2c66667ae5ed85b5712f5e946d82dc881a41a45bd3835af64ced1e66ccec0688",
+  "generated_header_sha256": "df71228bcdf35b2871fa4e311c8fae2d6161916063481bdb424598d9b0df6b8c",
+  "timestamp_metadata_identity": {
+    "C_record": "C \"--cc --exe --top-module TransposedDenseDownOwner --Mdir obj --threads 1 --output-split 10000 --output-split-cfuncs 1000 --assert -Wno-fatal /workspace/scratch/f28987e955ed/prefill_supply_overlap_candidate_20261103T1130/next_protocol_resource_analysis/owner_lowering_r1/run/TransposedDenseDownOwner.sv /workspace/scratch/f28987e955ed/prefill_supply_overlap_candidate_20261103T1130/next_protocol_resource_analysis/native_protocol/owner_protocol.cpp\"",
+    "records": [
+      {
+        "role": "S",
+        "bytes": 34294411,
+        "path": "/workspace/scratch/f28987e955ed/prefill_supply_overlap_candidate_20261103T1130/next_protocol_resource_analysis/owner_lowering_r1/run/TransposedDenseDownOwner.sv"
+      },
+      {
+        "role": "S",
+        "bytes": 13920736,
+        "path": "/workspace/scratch/f28987e955ed/verilator_dependency_recovery_20261030T0534/tools/verilator-package/usr/bin/verilator_bin"
+      },
+      {
+        "role": "S",
+        "bytes": 5345,
+        "path": "/workspace/scratch/f28987e955ed/verilator_dependency_recovery_20261030T0534/tools/verilator-package/usr/share/verilator/include/verilated_std.sv"
+      },
+      {
+        "role": "S",
+        "bytes": 2787,
+        "path": "/workspace/scratch/f28987e955ed/verilator_dependency_recovery_20261030T0534/tools/verilator-package/usr/share/verilator/include/verilated_std_waiver.vlt"
+      },
+      {
+        "role": "T",
+        "bytes": 411087,
+        "path": "obj/VTransposedDenseDownOwner.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 246438,
+        "path": "obj/VTransposedDenseDownOwner.h"
+      },
+      {
+        "role": "T",
+        "bytes": 2322,
+        "path": "obj/VTransposedDenseDownOwner.mk"
+      },
+      {
+        "role": "T",
+        "bytes": 607,
+        "path": "obj/VTransposedDenseDownOwner__ConstPool_0.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 1657,
+        "path": "obj/VTransposedDenseDownOwner__Syms.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 1374,
+        "path": "obj/VTransposedDenseDownOwner__Syms.h"
+      },
+      {
+        "role": "T",
+        "bytes": 750446,
+        "path": "obj/VTransposedDenseDownOwner___024root.h"
+      },
+      {
+        "role": "T",
+        "bytes": 257477,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_h7a929864__0.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 1127,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_h7a929864__0__Slow.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 4691571,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__0.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 309460,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__0__Slow.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 307948,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__1.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 216569,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__10.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 368178,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__10__Slow.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 213831,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__11.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 638925,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__11__Slow.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 214599,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__12.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 715600,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__12__Slow.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 210857,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__13.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 4667440,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__13__Slow.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 307355,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__14.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 274806,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__14__Slow.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 309395,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__15.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 309159,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__15__Slow.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 233429,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__16.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 329718,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__16__Slow.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 401705,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__17.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 2736,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__17__Slow.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 454799,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__18.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 368015,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__19.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 238338,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__1__Slow.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 349308,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__2.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 901965,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__20.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 714360,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__21.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 4694881,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__22.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 351632,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__23.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 157150,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__24.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 214593,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__2__Slow.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 1200989,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__3.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 213825,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__3__Slow.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 362936,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__4.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 213829,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__4__Slow.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 363853,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__5.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 246955,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__5__Slow.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 363853,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__6.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 308528,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__6__Slow.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 365252,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__7.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 309392,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__7__Slow.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 366885,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__8.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 462552,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__8__Slow.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 349307,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__9.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 305171,
+        "path": "obj/VTransposedDenseDownOwner___024root__DepSet_hf8adc7aa__9__Slow.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 893,
+        "path": "obj/VTransposedDenseDownOwner___024root__Slow.cpp"
+      },
+      {
+        "role": "T",
+        "bytes": 851,
+        "path": "obj/VTransposedDenseDownOwner__pch.h"
+      },
+      {
+        "role": "T",
+        "bytes": 4200,
+        "path": "obj/VTransposedDenseDownOwner__ver.d"
+      },
+      {
+        "role": "T",
+        "bytes": 0,
+        "path": "obj/VTransposedDenseDownOwner__verFiles.dat"
+      },
+      {
+        "role": "T",
+        "bytes": 4416,
+        "path": "obj/VTransposedDenseDownOwner_classes.mk"
+      }
+    ],
+    "only_ignored_fields": [
+      "inode",
+      "ctime_seconds",
+      "ctime_nanoseconds",
+      "mtime_seconds",
+      "mtime_nanoseconds"
+    ],
+    "self_T_bytes_zero_retained": true
+  }
+}

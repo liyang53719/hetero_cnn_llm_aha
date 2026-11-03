@@ -1,0 +1,22 @@
+{
+  "schema": "MODEL_CANDIDATE_GENERATION_CONTRACT_V1",
+  "scope": "SOURCE_STRUCTURAL_PRECONDITIONS_ONLY_NOT_NUMERICAL_ACCEPTANCE",
+  "source_overlay_sha256": "a43e536bc0d0af808429f0730e4ad5fd6f949f4b4e1deb8194c1518eeacb521b",
+  "source_count": 159,
+  "unchanged_module_contract_sha256": "80c1426efa4a8f2740dadc1757a35d01913233e86c5fc5c2a35f9d3a8d044f0e",
+  "host_ports_sha256": "289f230ec8fc85e7aee0396ab34424f505855074a762707e874fbf8a2f45ca08",
+  "driver_sha256": "343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61",
+  "cpp_build_policy": "CPP_O1_STRICT_V1",
+  "matrix_macs": 4096,
+  "vector_lanes": 32,
+  "tokens": 128,
+  "profiles": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "numeric_execution_authorized": false,
+  "final_rtl_accepted": false
+}

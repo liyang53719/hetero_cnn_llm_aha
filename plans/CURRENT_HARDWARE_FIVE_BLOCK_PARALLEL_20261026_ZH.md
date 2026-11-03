@@ -995,3 +995,13 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 原始cold M128/BF16/未改PyTorch路由下，P3/P4非空专家E=226/218，分别至少读取1421869056/1371537408B routed weights。固定每周期最多64B读口时，这些读取单独要求22216704/21430272周期。以完整block严格非padding Matrix有效MAC分子8002994176/7248543744计算，整块利用率乐观上界为8.794535859%/8.257776663%，不是RTL实测、周期预测或routed阶段冒整块。其他读写、Vector/Scalar、启动及最终drain只会增加完整分母。现有GQA counter含causal-zero项，不能原样冒严格有效MAC。
 - 若额外宽计P3 GDN dot/solve及conv归约，扩展分子上界8342159360仍只给9.167246411%。该口径与Matrix口径分列，不把所有非Matrix算子任意折成MAC。只改burst、A驻留或独立R/W不能消除这个只读瓶颈，当前候选不是80%/90%完整block最终方案。达到80%/90%的必要读带宽（仅这些routed weights）P3至少9.0966/10.2336、P4至少9.6878/10.8988个64B拍/周期；不能把理想供数压力bench冒目标内存实测。
 - 后续继续原完整数值链，同时受限推进候选真实owner动态协议；保留Python参考/Chisel模型/最终RTL分层。任何共享硬件变动均须五块同一新定义/同一RTL hash全部重测，不能迁移旧通过结果。没有清理/迁移，未上传权重、原输入、原route IDs或npz。
+
+
+### TEMP 2026-11-03：真实 prefill owner 协议候选与独立有界 CI（尚未触发）
+
+- 保留既有 `legacy`、`transposed-tile-address-v1` 路径和已修复的 A-bank 11bit tile 地址。新增 `prefill-supply-overlap-v1` 仅替换原 selected159 中六个真实控制/接口源，不变算术源、FP32/BF16顺序或固定4096MAC/Vector32资源。真实 burst/count/LAST、输入驻留失效、跨 N B-half 预取及 DMA 1KiB posted-W 均为候选；新增缓存资源须计入，不能称零资源增量。
+- 已有资格分层：159 源新编译、80case 实际 credit 叶测试、真实 owner/full banks 的 CHIRRTL/SV 与 Verilator翻译及57个相关生成文件库存已完成；本地 C++ 编译在原非DUT预算内触 RSS 门，两次失败保留且尚无 ELF/8case PASS。旧 tmpfs fixture 因跨namespace引用证明不足保持原样。原 FULL 源码/SV/运行身份均不修改、不重启。
+- 本次仅发布独立候选source/selected159选择器、工具pin/owner入口/driver及 dormant workflow；旧六共享helper、gate/pack/restore/producer字节完全不变。新完整Top producer/source-observation合同尚未贯通，完整集成patch延后至专门提交，不冒完整block已可运行。不把 IR/SV/C++/class/ELF 或压缩后的中间产物写入git。专用 workflow 只响应独立新增的一次性 `ci_launch/prefill_owner_protocol_20261103_once.json`；此次源码发布不包含该文件。普通源码 CI 通过不等于专用 owner 协议 CI 通过，后者尚未启动。
+- 后续单一独立 GitHub job 拟按明确预授权流程串行完成 159源编译→owner CHIRRTL→固定firtool→固定Verilator→52TU C++编译/链接→8case协议。各阶段原始hash/actual-MD依赖/tool/ELF及native0/EOF/cleanup、fresh资源门需闭合才进入下一阶段；任一失败即停，无自动加额/重试。运行不读取权重、用户输入、reference或原FULL材料。
+- 8case 的外部 Matrix responder 只产生协议payload并检查真实owner的握手/标签/搬运次序；该模型无 Matrix4096算术、DMA或TileSumBridge。N192/N320、M128/K128为控制激励，next-N在旧ACK前真正发起只证明owner依赖窗口，不代表目标单outstanding内存吞吐。slot2/window整链及五块数值/有效MAC80%或90%仍未验收；任何专用协议PASS不得替代这些门。
+- 本次分拆后的独立出版源树已运行27个纯协议/源码检查和6个真实selected159选择检查，均PASS（AS64MiB/CPU10s/wall15s单进程上限）；不含JVM、EDA、ELF执行。撤回的共享helper方案首轮测试失败保留，不冒全Top集成修复。

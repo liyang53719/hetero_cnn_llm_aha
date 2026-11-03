@@ -1,0 +1,58 @@
+name: hetero-prefill-owner-protocol-source-only-protocol8
+on:
+  push:
+    branches: [main]
+    paths: [ci_launch/prefill_owner_protocol_20261103_once.json]
+permissions:
+  contents: read
+concurrency:
+  group: hetero-exclusive-numeric-bootstrap
+  cancel-in-progress: false
+jobs:
+  owner_protocol8:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      OMP_NUM_THREADS: '1'
+      MAKEFLAGS: -j1
+    steps:
+      - name: Start fixed whole-job clock
+        run: python3 -B -c 'import json,os,pathlib,time; p=pathlib.Path(os.environ["RUNNER_TEMP"])/"owner-protocol-clock.json"; p.open("x").write(json.dumps({"started_monotonic":time.monotonic(),"run_id":os.environ["GITHUB_RUN_ID"],"budget_seconds":4500}))'
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        timeout-minutes: 4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 2
+      - name: Verify one unique compile plus protocol launch
+        id: launch
+        run: python3 -B candidates/prefill_owner_protocol_20261103/validate_launch.py
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        timeout-minutes: 4
+        with:
+          ref: ${{ steps.launch.outputs.source_sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Prepare fresh VM path layout for byte-identical source locations
+        timeout-minutes: 1
+        run: |
+          set -euo pipefail
+          test ! -e /workspace/scratch/f28987e955ed
+          sudo install -d -o "$USER" -g "$(id -gn)" /workspace/scratch/f28987e955ed
+      - name: Generate actual owner, serial compile, then exact 8 protocol cases
+        timeout-minutes: 58
+        run: python3 -B candidates/prefill_owner_protocol_20261103/run_remote.py --execute-compile-and-protocol8 --repo "$GITHUB_WORKSPACE"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ always() }}
+        timeout-minutes: 5
+        with:
+          name: owner-protocol-receipts-${{ github.run_id }}
+          path: /workspace/scratch/f28987e955ed/prefill_supply_overlap_candidate_20261103T1130/remote_ci/export/*
+          if-no-files-found: error
+          retention-days: 7
+          overwrite: false
+          compression-level: 0
+# Dormant source-only proposal: no launch file.
+# Preauthorized exact compile_and_protocol8 mode only; all intermediate failures stop.
+# No IR/SV/C++/ELF upload and no model weights/reference acquisition.

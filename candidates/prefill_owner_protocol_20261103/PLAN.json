@@ -1,0 +1,186 @@
+{
+  "status": "DESIGN_ONLY_NOT_PUBLISHED_OR_DISPATCHED",
+  "repository": "liyang53719/hetero_cnn_llm_aha",
+  "verified_visibility": "public",
+  "read_only_base_ref": "cac5674d7084017819bd1194ad968d848e328df4",
+  "runner": "ubuntu-24.04 x86_64 standard GitHub-hosted fresh VM",
+  "scope": "SOURCE_ONLY_REAL_OWNER_PROTOCOL_NOT_FULL4096_OR_NUMERICAL",
+  "publish": {
+    "estimated_new_total_max_bytes": 1048576,
+    "forbidden": [
+      "generated IR/SV/C++/class/ELF in git",
+      "compressed/base64 intermediate payloads in git",
+      "weights",
+      "reference/input arrays",
+      "original FULL materials",
+      "old .o"
+    ],
+    "existing_patch_sha256_deferred": "4be02731e806fac689c9a12ae9bdfb4236b7dc57e92acc3d2341b459c6d29286",
+    "existing_patch_bytes_deferred": 391387,
+    "shared_helpers_modified": [],
+    "scope": "Independent six Scala candidate sources and exact isolated selector; shared production entries and producer/numeric authority remain unchanged."
+  },
+  "selected_sources": {
+    "manifest": "SELECTED159.json",
+    "sha256": "9a53dca4af6767085ae85ab4767a165a08e276d4198d206e2d5b39cf9228c2d0",
+    "count": 159,
+    "total_bytes": 2046573,
+    "selector": "prefill-supply-overlap-v1",
+    "independent_selector": {
+      "repo_path": "candidates/prefill_supply_overlap_20261103/selected159.py",
+      "sha256": "25411d052ef3de56ec46af2c70eb3858127ecb038e71ce8691f1f0d7cb36b5b4",
+      "not_shared_entrypoint": true
+    }
+  },
+  "expected_generation": {
+    "manifest": "EXPECTED_GENERATED.json",
+    "sha256": "41af03ff8b88e18ec9903446473e757beaef590ef4637df29b19c308f0321460",
+    "raw_IR_SV_hash_required": true,
+    "generated_raw_hash_count": 56,
+    "timestamp_only_metadata_exception_count": 1
+  },
+  "phases": [
+    {
+      "name": "acquire",
+      "child_RSS_limit_bytes": 134217728,
+      "JVM_heap_limit_bytes": 0,
+      "combined_CPU_limit_seconds": 120,
+      "wall_limit_seconds": 300,
+      "new_output_limit_bytes": 268435456,
+      "all_prior_stage_identities_and_cleanup_required": true
+    },
+    {
+      "name": "host_tool_header_inventory",
+      "child_RSS_limit_bytes": 134217728,
+      "combined_CPU_limit_seconds": 30,
+      "wall_limit_seconds": 60,
+      "new_output_limit_bytes": 8388608,
+      "all_prior_stage_identities_and_cleanup_required": true
+    },
+    {
+      "name": "compile159_and_entry",
+      "child_RSS_limit_bytes": 3221225472,
+      "JVM_heap_limit_bytes": 1610612736,
+      "combined_CPU_limit_seconds": 420,
+      "wall_limit_seconds": 600,
+      "new_output_limit_bytes": 134217728,
+      "all_prior_stage_identities_and_cleanup_required": true
+    },
+    {
+      "name": "emit_owner_CHIRRTL",
+      "child_RSS_limit_bytes": 1073741824,
+      "JVM_heap_limit_bytes": 536870912,
+      "combined_CPU_limit_seconds": 60,
+      "wall_limit_seconds": 120,
+      "new_output_limit_bytes": 134217728,
+      "all_prior_stage_identities_and_cleanup_required": true
+    },
+    {
+      "name": "firtool_only",
+      "child_RSS_limit_bytes": 805306368,
+      "JVM_heap_limit_bytes": 0,
+      "combined_CPU_limit_seconds": 180,
+      "wall_limit_seconds": 300,
+      "new_output_limit_bytes": 134217728,
+      "all_prior_stage_identities_and_cleanup_required": true
+    },
+    {
+      "name": "actual_port_header_generator",
+      "child_RSS_limit_bytes": 67108864,
+      "combined_CPU_limit_seconds": 10,
+      "wall_limit_seconds": 30,
+      "new_output_limit_bytes": 2097152,
+      "all_prior_stage_identities_and_cleanup_required": true
+    },
+    {
+      "name": "verilator_translation_only",
+      "child_RSS_limit_bytes": 805306368,
+      "JVM_heap_limit_bytes": 0,
+      "combined_CPU_limit_seconds": 180,
+      "wall_limit_seconds": 360,
+      "new_output_limit_bytes": 134217728,
+      "all_prior_stage_identities_and_cleanup_required": true
+    },
+    {
+      "name": "compile52_link_only",
+      "child_RSS_limit_bytes": 4294967296,
+      "JVM_heap_limit_bytes": 0,
+      "combined_CPU_limit_seconds": 1200,
+      "wall_limit_seconds": 1800,
+      "new_output_limit_bytes": 536870912,
+      "all_prior_stage_identities_and_cleanup_required": true
+    },
+    {
+      "name": "protocol8_after_all_build_checks",
+      "child_RSS_limit_bytes": 1073741824,
+      "JVM_heap_limit_bytes": 0,
+      "combined_CPU_limit_seconds": 120,
+      "wall_limit_seconds": 180,
+      "new_output_limit_bytes": 16777216,
+      "all_prior_stage_identities_and_cleanup_required": true
+    }
+  ],
+  "global": {
+    "job_wall_seconds": 4500,
+    "aggregate_charged_CPU_seconds": 2400,
+    "all_output_and_tools_bytes": 2147483648,
+    "free_disk_floor_bytes": 8589934592,
+    "supervisor_RSS_bytes": 67108864,
+    "fresh_MemAvailable_start_bytes": 8589934592,
+    "sampled_MemAvailable_floor_bytes": 2147483648,
+    "per_process_AS_bytes": 8589934592,
+    "compile_per_process_CPU_seconds": 240,
+    "log_per_stage_bytes": 4194304,
+    "single_file_bytes": 134217728,
+    "RSS_CPU_sample_seconds": 0.05,
+    "disk_sample_seconds": 0.25,
+    "limitations": "Sampled aggregate RSS/CPU/disk are not cgroup hard containment; terminal max(observed,waited) CPU plus supervisor, no double counting."
+  },
+  "runtime_gate": "Single reviewed compile_and_protocol8 launch; no manual mid-job pause. Prior native0/EOF/cleanup,52TU/full-MD/tool pins/new ELF and fresh runtime resource gate required; failures stop. No retry or second cloud job.",
+  "launch_policy": {
+    "trigger": "unique added ci_launch/prefill_owner_protocol_20261103_once.json on main only",
+    "no_launch_file_in_dormant_source_publication": true,
+    "attempt_must_equal": 1,
+    "source_sha_must_equal_launch_parent": true,
+    "only_launch_file_added": true,
+    "concurrency_group": "hetero-exclusive-numeric-bootstrap",
+    "cancel_in_progress": false,
+    "no_workflow_dispatch": true,
+    "mode": "compile_and_protocol8",
+    "driver_sha256": "2c66667ae5ed85b5712f5e946d82dc881a41a45bd3835af64ced1e66ccec0688"
+  },
+  "actions": {
+    "checkout": "11bd71901bbe5b1630ceea73d27597364c9af683",
+    "upload_artifact": "ea165f8d65b6e75b540449e92b4886f43607fa02"
+  },
+  "artifact_policy": {
+    "default": "small whitelisted JSON receipts/manifests, compressed bounded logs and synthetic protocol counters only",
+    "retention_days": 7,
+    "overwrite": false,
+    "never_upload": [
+      "weights",
+      "reference",
+      "raw user inputs",
+      "KV/cache",
+      "original FULL files"
+    ],
+    "ELF_transfer": "No ELF transfer; run only in the same ephemeral VM after all prior checks."
+  },
+  "not_execution_authorization": true,
+  "implementation_pending": [
+    "independent static review",
+    "publication and unique launch approval",
+    "real hosted execution"
+  ],
+  "workflow_wall_explanation": "The 58min main step and whole4500s gate can refuse a phase if worst-case remaining windows do not fit. Stage maxima are not guaranteed to all fit; failure is INCOMPLETE, never automatic extension.",
+  "supervision_revision": "r2: original helper unchanged; phase aggregate-delta output gate, failure evidence exported before success checks, full JDK lib/release + native DT_NEEDED/PT_INTERP, light wrapper guards.",
+  "runtime_preconditions": [
+    "all prior native0/EOF/cleanup",
+    "56 raw generated matches plus dat exact argv/role/size/path except timestamps/inodes",
+    "52 exact fresh ELF64 object TUs",
+    "full -MD system dependencies belong to before/after host+official+generated pins",
+    "new linked x86_64 ELF with actual owner symbols and pinned PT_INTERP/NEEDED, no RPATH/RUNPATH",
+    "fresh runtime memory/disk and whole CPU/wall remainder"
+  ],
+  "fullTop_followup": "Deferred exact shared-helper integration, producer revision, new source-observation contract and five-block same-stimulus acceptance; owner protocol PASS is not that acceptance."
+}

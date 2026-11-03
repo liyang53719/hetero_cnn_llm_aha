@@ -1,0 +1,51 @@
+{
+  "schema": "PREFILL_PROFILED_MAPPER_SOURCE_RELATION_V1",
+  "scope": "SAME_JOB_P0_M128_HOST_DIAGNOSTIC_NOT_FULL_ACCEPTANCE",
+  "hardware_source": "prefill-supply-overlap-v1",
+  "generation_contract_sha256": "d6b8f476cb4f586ff47a44d4f2155891f15e3bac99f56e45039c459093feaabb",
+  "source_overlay_sha256": "a43e536bc0d0af808429f0730e4ad5fd6f949f4b4e1deb8194c1518eeacb521b",
+  "reviewed_mapper_driver_sha256": "80de0308d10d12b665ed7edef58a51e3e56a3a4f2e23cba211c0d45b6f0abe65",
+  "driver_sha256": "e4b23d01ee81a738220512eb24d63b4e323723f686c8af340ad64849a00b5887",
+  "source_contract": {
+    "repo_path": "candidates/same_job_execution_20261030/numeric/MODEL_P0_PREFILL_HOST_PROFILE_SOURCE_CONTRACT.json",
+    "bytes": 1900,
+    "sha256": "634ecd3e0187844b7f97ef7ca9b0d38fdd274960bccc210a2419923164e05c24"
+  },
+  "sources": {
+    "affine_tsv_loader.hpp": {
+      "repo_path": "candidates/prefill_host_diagnostic_20261103/source/affine_tsv_loader.hpp",
+      "bytes": 3518,
+      "sha256": "c2dbbb13edb8d7c85eceed26a69a7fa34df9caad0a7bf4d405ee7ca044500353"
+    },
+    "beat_readonly.hpp": {
+      "repo_path": "candidates/prefill_host_diagnostic_20261103/source/beat_readonly.hpp",
+      "bytes": 3187,
+      "sha256": "6ae8ec26ab6fcbd88cf45918473b15cab6335db53e0026c17c571ab6960e544e"
+    },
+    "host_axi_driver_non_dpi.cpp": {
+      "repo_path": "candidates/prefill_host_diagnostic_20261103/source/host_axi_driver_non_dpi.cpp",
+      "bytes": 29066,
+      "sha256": "e4b23d01ee81a738220512eb24d63b4e323723f686c8af340ad64849a00b5887"
+    },
+    "host_phase_profiler.hpp": {
+      "repo_path": "candidates/prefill_host_diagnostic_20261103/source/host_phase_profiler.hpp",
+      "bytes": 4449,
+      "sha256": "7f048514405c38e84e26d26d1df06a5d59e0ca0189cbc4c983d6da1017af5758"
+    },
+    "moe_raw_score_observation.hpp": {
+      "repo_path": "candidates/prefill_host_diagnostic_20261103/source/moe_raw_score_observation.hpp",
+      "bytes": 4391,
+      "sha256": "fc029f28224bf07452b36702b6c81f5cd196fd7870e81fe980efce13bffaf9df"
+    },
+    "resident_observation.hpp": {
+      "repo_path": "candidates/prefill_host_diagnostic_20261103/source/resident_observation.hpp",
+      "bytes": 3504,
+      "sha256": "88185df7e27f3c0ffa7f3fd857e40f4a31fd72a69c876602519be2e3b0a69721"
+    }
+  },
+  "arithmetic_changed": false,
+  "eval_or_clock_sequence_changed": false,
+  "numeric_execution_authorized": false,
+  "new_profiled_host_counter_bytes": 14368,
+  "hardware_resource_increment_from_profiling": 0
+}

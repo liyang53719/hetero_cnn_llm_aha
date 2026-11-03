@@ -1024,3 +1024,17 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - compile159 实际 elapsed 131.169 s、采样树 RSS 峰值 1,467,117,568 B；build52 为 231.924 s、1,548,906,496 B。protocol8 受监督阶段 elapsed 4.000 s，模型回收 CPU 2.134911 s。采样不是零超冲保证，日志保存了采样间隔；该小协议模型速度不得外推完整 block。仅下载 36 个摘要/日志/pin 收据，ZIP 859,272 B / SHA256 `d8fad4f587a941c137849640c215740a8e38fa8ebe8a14a2e19f8a514ffc1766`；无 IR/SV/C++/class/ELF payload。独立收据与计数审查 SHA256 `62e162d30a229f35346ae0c12aea60344dae15694f5f15f8b36169c1e694edad`。完整安全摘要见 `reports/PREFILL_OWNER_PROTOCOL_R2_41680215437_SUMMARY.json`。
 - window snapshot、slot2 sum/drain、全 Top、五个原完整 M128 block 数值及完整周期有效 MAC 80%/90% 仍未验收；驻留仅覆盖当前输入不变/独占生命周期及 idle snoop，不是任意并发同址写一致性。新硬件不能继承旧数值 PASS。原 FULL 冻结身份继续，未修改、重编或重启。
 - 下一完整 Top 的 18 文件源码联接准备已独立静态审核，但其中 workflow 包含未获对应授权的未来 7 文件生成物/二进制 artifact 传输，因此整批未发布、未激活，0 blob/commit/ref。该方案保持原样，不改工具或编码绕过。另行评估只在同一云 job 内生成并执行、仅输出获准摘要/日志/pin 的可行路径；每块单独 6h 与五块总成本分列，同硬件/hash要求不变。当前未证明时长可完成，也未启动新的重构建或数值 job。
+
+
+## TEMP 2026-11-03：同 job 真实 supply159 / P0 M128 主机诊断源码，未执行
+
+- 本次为独立 summary-only 路线，基线 main15054841；不发布此前被拒的七件产物传输 workflow，也不加入 launch nonce。旧 owner r2 修复、两次 nonce 历史、旧 driver/readonly/finite-long 域及计划前文保留。正在运行或终态尚未证实的旧 FULL 不修改、不重启、不清理。
+- 真实主线已接为独立入口→原 controller/installer→profiled materializer→同159源 generation/producer/compiler/pack→实际12角色源合同、20编译阶段及122端口证明→原 startup ABI→原 P0 provider/connect/corrector→原 consumer/DUT。新 source relation 只限定源身份，不自授数值资格；所有实际编译、依赖、ABI和源证明必须在未来同一个 job 重新通过。当前未生成新 fullTop SV/ELF，未执行生产ABI或DUT。
+- 使用与 owner 协议候选同一 supply159 源，固定4096 MAC、Vector32、完整A/B bank；五profile共用同一定义。仅P0执行原M128、21commands、215descriptors，其他四块不借用P0结果。独立驱动 e4b23d01ee81a738220512eb24d63b4e323723f686c8af340ad64849a00b5887 从mapper80de增加采样，十处精确逆向恢复原源；三次eval、时钟、ACK、mutable写与算术次序不改。
+- 单job总钟21000秒：控制≤300、实际build≤7200、排除控制/build区间后的连续准备≤3600，包含检查和间隙。准备完成一次冻结 W=min(14400,floor(21000−elapsed−900))；W<9000或Popen前不足9000秒则不启动，不退为300秒资格运行。额外active-cycle帽3000000不替代原1b硬件watchdog。原绝对DUT deadline不会在Popen时重置；900秒尾段内保留300秒给封装120、上传120及final余量60，不保证网络成功。
+- 历史4565秒build与145.9c/s只用于敏感度。旧硬件qraw约1607023、qr约2024965 active cycles；新mapper/硬件真实速度未知，9k至14.4ks可达哪一实际边界须实测，不保证qr或完整块。host计时分离3eval和4个读路径桶，inclusive Step不相加；write/stability/observer/log仍是未独立归因residual，hash抽样约1/1024不是无偏统计或已测低扰动。
+- qraw仅完整安全闭合后finite/shape/hash；qr复用原consumer比较函数及冻结q_proj dtype/layout，比较视图的BF16位展开不改变Qwen2实际FP32存储/rounding。未到达、未安全闭合、缺文件、真实fault、资源超限与精确wall/cycle cap分别记录；任何partial结果不宣布完整block数值PASS。
+- 允许导出仅 RESULT.json、PHASE_SUMMARY.json、HOST_TIMING.json，严格字段/类型/总量≤1MiB，失败允许安全子集。ENTRY状态、原raw日志、AXI、完整tensor、权重、reference、SV/IR/C++/ELF均留job内；不以hex/jsonl/text编码替代禁止上传的数据。既有已授权iDMA source ZIP仅作只读依赖。封装失败可以无artifact，不伪装安全收口成功。
+- 有限本地证据：host-only GCC fake-clock37断言；R4真实连接18组、partial R3共22组；入口normal/-O各30组；最终合并预算/CLI17组、catalog/API10组、entry7组均normal/-O通过；四种实际源binding（legacy/address/supply/profiled-supply）检查通过。只验证源码/纯API/合成输入，不是实际fullTop编译、ABI、性能或数值验收。测试fixture曾把baseline元数据计为第8生产文件及保留旧catalog pin，两次原失败均保留，修正fixture后通过，未据此改硬件。
+- 最终独审发现并修复实际bootstrap→restore的旧generation gate硬pin；三种restore verify-only原调用均通过，无下载或编译。test-only精确inverse重建为14个最终源→原finite基线文件，保持原历史断言而非放宽门；原restore13组、address13组、finite修订回归及最终合并纯测均normal/-O通过。旧未发布包及失败记录保留。
+- 后续须同一冻结包独审、source-only dormant发布和单独唯一nonce准入；本条不表示已启动。原FULL租约释放后本机分阶段构建/长跑另需最新总RAM、各角色预留及future disk门，不能把unknownowner/consumer预算自动转给compiler。当前不宣称80%/90%整块利用率。

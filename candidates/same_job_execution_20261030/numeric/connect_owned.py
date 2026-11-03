@@ -19,9 +19,9 @@ def base(old,profile):
  result=copy.deepcopy(old);result['schema']='SINGLE_PROFILE_RUNTIME_BUNDLE_V3';return result
 
 def candidate_contract(context):
- if context is None or 'model_candidate_review'not in context:return None
+ if context is None or ('model_candidate_review'not in context and not consumer.host_context(context)):return None
  first_fault=context.get('candidate_scope')==consumer.FIRST_FAULT_SCOPE
- consumer.need(first_fault or context.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL','admitted model scope')
+ consumer.need(consumer.host_context(context) or first_fault or context.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL','admitted model scope')
  catalog_path=consumer.pin(context['current_source_pins_pin']);consumer.need(catalog_path.stat().st_size<=2<<20,'bounded actual source catalog')
  catalog=json.loads(catalog_path.read_text());consumer.need(catalog['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1','current source catalog')
  observer='first_fault_observation_contract.py'if first_fault else'candidate_observation_contract.py'
@@ -130,6 +130,7 @@ def connect(args,out):
  else:
   argv+=['--builder-handoff',str(args.builder_handoff),'--builder-handoff-sha256',args.builder_handoff_sha256,'--executor-identity',str(args.executor_identity),'--executor-identity-sha256',args.executor_identity_sha256]
   if getattr(args,'cloud_binding',None)is not None:argv+=['--cloud-binding',str(args.cloud_binding),'--cloud-binding-sha256',args.cloud_binding_sha256]
+ if consumer.host_context(source_relocation):argv+=['--execution-mode',consumer.HOST_DIAGNOSTIC_MODE,'--samejob-diagnostic-binding',str(args.samejob_diagnostic_binding),'--samejob-diagnostic-binding-sha256',args.samejob_diagnostic_binding_sha256]
  argv+=['--strict-outer-supervised']
  receipt=dict(status='MATERIALIZED_AND_BOUND_NOT_DUT_EXECUTED',profile=args.profile,original_bundle=old_pin,runtime_bundle=pin(final),artifact_manifest_sha256=args.artifact_manifest_sha256,provenance=provenance,consumer_argv=argv,validate_only_argv=argv+['--validate-only'],hardware_executed=False,numerical_pass=False,raw_payloads_upload_allowed=False)
  if source_relocation is not None:receipt['source_relocation']=source_relocation
@@ -142,6 +143,7 @@ def add_arguments(ap):
  ap.add_argument('--local-build-result',type=P);ap.add_argument('--local-build-result-sha256')
  ap.add_argument('--builder-handoff',type=P);ap.add_argument('--builder-handoff-sha256')
  ap.add_argument('--executor-identity',type=P);ap.add_argument('--executor-identity-sha256')
+ ap.add_argument('--samejob-diagnostic-binding',type=P);ap.add_argument('--samejob-diagnostic-binding-sha256')
  ap.add_argument('--cloud-binding',type=P);ap.add_argument('--cloud-binding-sha256')
  ap.add_argument('--expected-run-id',type=int);ap.add_argument('--expected-launch-commit');ap.add_argument('--expected-source-commit')
  ap.add_argument('--local-runtime-abi',type=P);ap.add_argument('--local-runtime-abi-sha256')
@@ -157,6 +159,8 @@ def preflight_artifact(args,frozen,source_relocation=None):
   full=root/rel;consumer.need(full.resolve().is_relative_to(root),'artifact member escape');paths[name]=consumer.pin(dict(row,path=str(full)))
  if frozen['schema']==consumer.FIRST_FAULT_SCHEMA:
   consumer.need(type(args.profile)is int and args.profile==0,'first fault connection is P0 only');consumer.diagnostic_driver(frozen,source_relocation,frozen['common']['driver'])
+ elif consumer.host_context(source_relocation):
+  consumer.host_diagnostic_module().admitted_context(source_relocation);consumer.need(args.profile==0 and frozen['common']['driver']['sha256']==consumer.host_diagnostic_module().DRIVER_SHA,'new same-job P0 driver domain')
  else:
   long_admission=consumer.finite_long_connection_admission(args)
   if long_admission is not None:consumer.finite_long_mode().verify_finite_driver(long_admission,frozen['common']['driver']['sha256'],args.artifact_manifest_sha256)

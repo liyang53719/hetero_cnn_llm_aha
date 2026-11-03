@@ -151,7 +151,7 @@ def main():
  source_paths=checked_paths(repo,b['fixed_source_overlay'],m,generation)
  manifest=pathlib.Path(b['fixed_source_overlay'])
  from first_fault_policy import binding_policy
- from finite_watchdog_policy import expected_driver_sha
+ from host_profile_policy import expected_driver_sha
  diagnostic=binding_policy(b)
  need(b['pins'][b['driver']]==expected_driver_sha(b),'fixed final-state driver')
  jars=[];plugin=None

@@ -3,6 +3,14 @@ import hashlib,importlib.util,json,pathlib,types
 HERE=pathlib.Path(__file__).resolve().parent
 CORRECTOR_SHA='4de01038fc1c916f37bb2ec25880f1247243d6d031695ed56a21712966f93819'
 CONTRACT_SHA='7b46242a1206f651e8fac111436b6cb515b6a69f981b6f01c1e1f26bd7f51f13'
+# A separate source-only candidate domain, not evidence of actual fullTop acceptance.
+PREFILL_CONTRACT_SHA='2cdb20b502877708ab91d054f18b7032573569fafd9121144ca7466c68a0f1bd'
+PREFILL_CONTRACT_FILE='MODEL_P0_PREFILL_SUPPLY_SOURCE_CONTRACT.json'
+PREFILL_DIR='candidates/prefill_supply_overlap_20261103'
+PREFILL_GENERATION_SHA='d6b8f476cb4f586ff47a44d4f2155891f15e3bac99f56e45039c459093feaabb'
+PREFILL_OVERLAY_SHA='a43e536bc0d0af808429f0730e4ad5fd6f949f4b4e1deb8194c1518eeacb521b'
+PREFILL_DRIVER_REL='candidates/moe_router_score_observation_20261030/driver/host_axi_driver_non_dpi.cpp'
+PREFILL_DRIVER_SHA='343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61'
 def need(v,s):
  if not v:raise ValueError(s)
 def sha(p):
@@ -23,8 +31,21 @@ def reviewed_module(name,context):
  module=types.ModuleType('reviewed_'+name);module.__file__=str(path);exec(compile(raw,str(path),'exec'),module.__dict__);return module
 
 
+def host_context(context):
+ return type(context)is dict and context.get('schema')=='ADMITTED_SAME_JOB_P0_HOST_DIAGNOSTIC_V1' and context.get('candidate_scope')=='SAME_JOB_P0_M128_HOST_DIAGNOSTIC_NOT_FULL_ACCEPTANCE'
+def host_module():
+ path=HERE/'samejob_host_diagnostic.py';spec=importlib.util.spec_from_file_location('actual_samejob_host_context',path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
+
 def selected_contract(context):
+ if host_context(context):
+  b=host_module().admitted_context(context);row=b['host_diagnostic']['source_contract'];return row['sha256'],pathlib.Path(row['path']).name
  row=context['model_source_contract']
+ if row['sha256']==PREFILL_CONTRACT_SHA:
+  review=json.loads(pin(context['model_candidate_review']).read_text())
+  need(review.get('schema')=='INDEPENDENT_MODEL_CANDIDATE_EXECUTION_REVIEW_V1'and review.get('scope')==SCOPE and review.get('status')=='REVIEWED_FOR_MODEL_NUMERICAL_EVALUATION','independently admitted ordinary prefill review')
+  need('first_fault_diagnostic'not in review and (type(review.get('data_reference_contract'))is not dict or 'finite_watchdog_driver'not in review['data_reference_contract']),'prefill review cannot borrow readonly/finite authority')
+  overlay=pin(review['source_overlay']);need(overlay.stat().st_size<=2<<20 and review['source_overlay']['sha256']==PREFILL_OVERLAY_SHA,'independently reviewed exact prefill overlay')
+  return PREFILL_CONTRACT_SHA,PREFILL_CONTRACT_FILE
  if row['sha256']==CONTRACT_SHA:return CONTRACT_SHA,'MODEL_P0_SOURCE_CONTRACT.json'
  need(row['sha256']=='5b7f12fa31a6ddef6256322fd8f19f46cb764c4b56f42bc599c87e752760d911','only exact watchdog source contract alternative')
  review=json.loads(pin(context['model_candidate_review']).read_text())
@@ -32,6 +53,7 @@ def selected_contract(context):
  return '5b7f12fa31a6ddef6256322fd8f19f46cb764c4b56f42bc599c87e752760d911','MODEL_P0_FINITE_LONG_SOURCE_CONTRACT.json'
 
 def admitted_context(context):
+ if host_context(context):return host_module().admitted_context(context)
  # Only the caller's independently admitted invocation creates this mapping.
  # There is deliberately no bundle/CLI deserializer for this authority.
  need(type(context)is dict and context.get('candidate_scope')==SCOPE,'independently admitted model context required')
@@ -52,12 +74,31 @@ def admitted_context(context):
  need(review['scope']==SCOPE and review['source_contract']==context['model_source_contract']and review['builder_identity']['source_commit']==context['builder_identity']['source_commit']and review['source_manifest_sha256']==context['source_manifest_sha256'],'same independently reviewed source domain')
  return review
 
+def prefill_source_domain(manifest,selected_sha):
+ """Join new contract to original generation paths, without rewriting provenance."""
+ closure=manifest.get('model_candidate_observation',{}).get('source_closure',{})
+ fixed=manifest.get('fixed_source_overlay','')
+ active=(selected_sha==PREFILL_CONTRACT_SHA or closure.get('generation_contract_sha256')==PREFILL_GENERATION_SHA or closure.get('source_overlay',{}).get('sha256')==PREFILL_OVERLAY_SHA or (type(fixed)is str and fixed.endswith('/'+PREFILL_DIR+'/MODEL_SOURCE_OVERLAY.json')))
+ if not active:return
+ need(selected_sha==PREFILL_CONTRACT_SHA,'prefill hardware requires its own reviewed source contract')
+ need('readonly_probe'not in manifest and 'finite_watchdog_driver'not in manifest and manifest.get('driver_sha256')==PREFILL_DRIVER_SHA,'prefill uses only ordinary original driver, never readonly/finite evidence')
+ need(closure.get('generation_contract_sha256')==PREFILL_GENERATION_SHA and closure.get('source_overlay',{}).get('sha256')==PREFILL_OVERLAY_SHA and type(closure.get('source_count'))is int and closure['source_count']==159,'exact prefill generation159 pair')
+ suffix='/'+PREFILL_DIR+'/MODEL_SOURCE_OVERLAY.json'
+ need(type(fixed)is str and fixed.endswith(suffix),'exact prefill original overlay role');repo=fixed[:-len(suffix)]
+ need(repo.startswith('/')and str(pathlib.PurePosixPath(repo))==repo and '..'not in pathlib.PurePosixPath(repo).parts,'canonical prefill original builder root')
+ pins=manifest['generation_input_pins']
+ for rel,want in [(PREFILL_DIR+'/GENERATION_CONTRACT.json',PREFILL_GENERATION_SHA),(PREFILL_DIR+'/MODEL_SOURCE_OVERLAY.json',PREFILL_OVERLAY_SHA),('candidates/same_job_execution_20261030/numeric/'+PREFILL_CONTRACT_FILE,PREFILL_CONTRACT_SHA),(PREFILL_DRIVER_REL,PREFILL_DRIVER_SHA)]:
+  matches=[p for p in pins if p.endswith('/'+rel)]
+  need(matches==[repo+'/'+rel]and pins[matches[0]]==want,'exact original prefill source input '+rel)
+ need(manifest['model_source_evidence']['contract']['path']==repo+'/candidates/same_job_execution_20261030/numeric/'+PREFILL_CONTRACT_FILE,'exact original prefill contract role')
+
 def source_view(manifest,context):
  admitted_context(context)
  selected_sha,_=selected_contract(context)
  e=manifest['model_source_evidence']
  need(set(e)=={'schema','contract','files','anchors','program_contract'}and e['schema']=='MODEL_CANDIDATE_P0_SOURCE_EVIDENCE_V1','exact candidate source evidence domain')
  raw=e['contract']['text'].encode();need(len(raw)==e['contract']['bytes']and hashlib.sha256(raw).hexdigest()==e['contract']['sha256']==selected_sha,'actual embedded candidate contract')
+ if not host_context(context):prefill_source_domain(manifest,selected_sha)
  # Private projection for shared12-role checks; never rewrites the artifact.
  return dict(manifest,files=e['files'],observation_policy_bindings={'P0':dict(schema='MODEL_CANDIDATE_P0_SOURCE_LINK_V1',contract_sha256=selected_sha,corrector_sha256=CORRECTOR_SHA,anchors=e['anchors'])},p0_retained_evidence={'program_contract':e['program_contract']})
 
@@ -69,9 +110,12 @@ def verify_build(manifest,common,identity,evidence,context):
  for key in common:
   row=artifact['common'][key];need(common[key]==dict(row,path=str(root/row['path'])),'same common payload '+key)
  need(json.loads(pin(common['source_manifest']).read_text())==manifest,'actual source manifest bytes')
- module=reviewed_module('candidate_artifact_handoff',context)
  receipt=json.loads(pin(common['build_receipt']).read_text())
- module.verify_compilation_policy(artifact,root,receipt,context['current_source_pins_pin'],context['repo'])
+ if host_context(context):
+  helper=host_module();helper.verify_candidate_payload(root,identity,context['artifact_manifest']['sha256'],context['repo'],review['pins'])
+ else:
+  module=reviewed_module('candidate_artifact_handoff',context)
+  module.verify_compilation_policy(artifact,root,receipt,context['current_source_pins_pin'],context['repo'])
  need(set(evidence)=={'schema','files','driver_dependency'}and evidence['schema']=='MODEL_CANDIDATE_RETAINED_PRODUCER_EVIDENCE_V1','new candidate retained evidence domain')
  stage_rows=manifest['model_candidate_build_evidence']['actual_stage_receipts']
  expected={r['path']:r for r in stage_rows.values()}
@@ -139,7 +183,7 @@ def source_links(manifest,policy,identity,common,evidence,source_relocation=None
  need(link['schema']=='MODEL_CANDIDATE_P0_SOURCE_LINK_V1' and link['contract_sha256']==selected_sha and link['corrector_sha256']==CORRECTOR_SHA,'actual source manifest policy binding')
  anchors=link['anchors'];need(set(anchors)==set(policy['source_pins']),'all 12 actual artifact anchors')
  if source_relocation is not None:
-  need(source_relocation['schema']=='ADMITTED_CLOUD_P0_SOURCE_RELOCATION_V1'and source_relocation['builder_source_commit']==identity['source_commit']and source_relocation['source_manifest_sha256']==common['source_manifest']['sha256'],'same independently admitted frozen source relocation')
+  need((host_context(source_relocation) or source_relocation['schema']=='ADMITTED_CLOUD_P0_SOURCE_RELOCATION_V1')and source_relocation['builder_source_commit']==identity['source_commit']and source_relocation['source_manifest_sha256']==common['source_manifest']['sha256'],'same independently admitted frozen source relocation')
   need(set(source_relocation['anchors'])==set(anchors)-{'commands','descriptors','program_manifest'},'exact nine admitted source roles')
  for name,p in policy['source_pins'].items():
   key=anchors[name];need(key in files,'anchor missing actual source manifest file: '+name)
@@ -151,6 +195,7 @@ def source_links(manifest,policy,identity,common,evidence,source_relocation=None
    else:
     local=source_relocation['anchors'][name]
     need(local==dict(relative_path=key,origin_path=r['origin_path'],local=p),'exact admitted original/local source domains '+name)
+    if host_context(source_relocation):need(r['origin_path']==p['path'],'same-job source path cannot be relocated')
     need(manifest['generation_input_pins'].get(r['origin_path'])==r['sha256'],'original source generation pin '+name)
     path=pin(p);need(path==path.resolve()and all(not q.is_symlink()for q in(path,*path.parents)),'actual local source remains canonical')
  program_record=files[anchors['program_manifest']]

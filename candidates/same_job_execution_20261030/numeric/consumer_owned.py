@@ -176,6 +176,7 @@ def full_log_module():
     return module
 
 def execute_streaming(binary, runtime, output, log, limits):
+    need('diagnostic_deadline_monotonic'not in limits,'same-job diagnostic uses existing closed raw-log execution, no unbound streaming deadline')
     helper=full_log_module();archive,capture_path=helper.paths(log)
     need(not log.exists() and not archive.exists() and not capture_path.exists(),'fresh full streaming log')
     writer=helper.Writer(archive,FULL_LOG_POLICY)
@@ -213,31 +214,56 @@ def execute(binary, runtime, output, log, limits):
         resource.setrlimit(resource.RLIMIT_CORE,(0,0))
     binary_sha=sha(binary);runtime_sha=sha(runtime)
     with open(log,'xb') as f:
+        diagnostic_launch=host_diagnostic_module().cap_before_popen(limits,time.monotonic()) if 'diagnostic_deadline_monotonic'in limits else None
         try:
             p=subprocess.Popen(runtime_abi_module().execution_argv(binary,runtime,output,limits['max_active_cycles']) if WORKSPACE_LOADER is not None else [str(binary),str(runtime),str(output),str(limits['max_active_cycles'])],stdout=f,stderr=subprocess.STDOUT,preexec_fn=bounded,env=runtime_abi_module().clean_env())
         except BaseException:
             if CLOUD_MEMORY is not None:CLOUD_MEMORY.after_popen()
             raise
+        observed_exit_monotonic=None;diagnostic_wall_timeout=False
         try:
             if CLOUD_MEMORY is not None:CLOUD_MEMORY.after_popen()
             started=pathlib.Path(log).with_suffix('.started.json')
             with started.open('x') as evidence:
-                json.dump(dict(schema='ACTUAL_DUT_POPEN_V1',pid=p.pid,consumer_pid=os.getpid(),consumer_start_tick=int(pathlib.Path('/proc/self/stat').read_text().rsplit(')',1)[1].split()[19]),inherited_group=os.getpgrp(),inherited_session=os.getsid(0),binary_sha256=binary_sha,runtime_sha256=runtime_sha),evidence)
+                proof=dict(schema='ACTUAL_DUT_POPEN_V1',pid=p.pid,consumer_pid=os.getpid(),consumer_start_tick=int(pathlib.Path('/proc/self/stat').read_text().rsplit(')',1)[1].split()[19]),inherited_group=os.getpgrp(),inherited_session=os.getsid(0),binary_sha256=binary_sha,runtime_sha256=runtime_sha)
+                if diagnostic_launch is not None:
+                    proof['host_diagnostic_execution']=dict(diagnostic_launch,popen_after_monotonic=time.monotonic())
+                    proof.update(started_monotonic=diagnostic_launch['popen_before_monotonic'],effective_runtime_limits=dict(limits))
+                json.dump(proof,evidence)
             deadline=time.monotonic()+limits['wall_seconds']
+            if diagnostic_launch is not None:deadline=min(deadline,diagnostic_launch['absolute_deadline_monotonic'])
             while True:
                 # WNOWAIT retains the leader (including a zombie) as PGID anchor.
                 state=os.waitid(os.P_PID,p.pid,os.WEXITED|os.WNOHANG|os.WNOWAIT)
                 if state is not None:
+                    if diagnostic_launch is not None:observed_exit_monotonic=time.monotonic()
                     return state.si_status if state.si_code==os.CLD_EXITED else -state.si_status
-                if time.monotonic()>=deadline: raise TimeoutError('DUT wall deadline')
+                if time.monotonic()>=deadline:
+                    diagnostic_wall_timeout=diagnostic_launch is not None
+                    raise TimeoutError('DUT wall deadline')
                 time.sleep(0.2)
         finally:
             # The DUT inherits the strict outer group/session: never create or
             # kill a nested group here. Reap this leader only; caller must retain
             # the consumer leader and prove full outer group absence afterward.
-            if p.poll() is None:
-                p.kill()
-            p.wait()
+            if diagnostic_launch is None:
+                if p.poll() is None:p.kill()
+                p.wait()
+            else:
+                # Never poll/reap first: wait4 supplies this actual child's CPU,
+                # separate from outer controller/supervisor wall and CPU.
+                state=os.waitid(os.P_PID,p.pid,os.WEXITED|os.WNOHANG|os.WNOWAIT)
+                cleanup_started=time.monotonic()
+                if state is None:
+                    try:p.kill()
+                    except ProcessLookupError:pass
+                while True:
+                    try:waited,status,usage=os.wait4(p.pid,0);break
+                    except InterruptedError:continue
+                need(waited==p.pid,'actual diagnostic child wait identity')
+                p.returncode=os.waitstatus_to_exitcode(status);reaped=time.monotonic()
+                termination=dict(schema='ACTUAL_DUT_TERMINATION_V1',scope=HOST_DIAGNOSTIC_SCOPE,pid=p.pid,consumer_pid=os.getpid(),binary_sha256=binary_sha,runtime_sha256=runtime_sha,started_monotonic=diagnostic_launch['popen_before_monotonic'],observed_exit_monotonic=observed_exit_monotonic,cleanup_started_monotonic=cleanup_started,reaped_monotonic=reaped,elapsed_through_reap_seconds=reaped-diagnostic_launch['popen_before_monotonic'],wait4_child_user_seconds=usage.ru_utime,wait4_child_system_seconds=usage.ru_stime,wait4_child_cpu_seconds=usage.ru_utime+usage.ru_stime,native_exit=p.returncode,wall_deadline_triggered=diagnostic_wall_timeout,effective_runtime_limits=dict(limits),measurement_scope='DIRECT_DUT_CHILD_HOST_TIME_NOT_RTL_CYCLES_NOT_OUTER_STAGE',outer_cleanup_still_required=True)
+                with pathlib.Path(log).with_suffix('.termination.json').open('x')as evidence:json.dump(termination,evidence)
 
 
 OWNED_ENVIRONMENT=None
@@ -246,6 +272,18 @@ V3_DRIVER_SHA256='343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb
 
 FIRST_FAULT_SCHEMA='MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1'
 FIRST_FAULT_SCOPE='P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE'
+HOST_DIAGNOSTIC_MODE='SAME_JOB_P0_M128_HOST_DIAGNOSTIC'
+HOST_DIAGNOSTIC_SCOPE=HOST_DIAGNOSTIC_MODE+'_NOT_FULL_ACCEPTANCE'
+class HostDiagnosticBoundary(Exception):pass
+
+def host_diagnostic_module():
+    import importlib.util
+    path=pathlib.Path(__file__).resolve().with_name('samejob_host_diagnostic.py')
+    spec=importlib.util.spec_from_file_location('actual_samejob_host_diagnostic',path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
+
+def host_context(context):
+    return type(context)is dict and context.get('schema')=='ADMITTED_SAME_JOB_P0_HOST_DIAGNOSTIC_V1' and context.get('candidate_scope')==HOST_DIAGNOSTIC_SCOPE
+
 def diagnostic_driver(frozen,context,row):
     need(type(context)is dict and context.get('candidate_scope')==FIRST_FAULT_SCOPE,'independently admitted diagnostic context')
     import types
@@ -264,6 +302,9 @@ def verify_frozen(path,expected_sha):
 def artifact_identity(frozen,source_relocation=None):
     if frozen['schema']==FIRST_FAULT_SCHEMA:
         need(source_relocation is not None and source_relocation.get('candidate_scope')==FIRST_FAULT_SCOPE and source_relocation.get('builder_identity')==frozen['artifact_identity'],'independently admitted first fault artifact')
+    elif frozen['schema']=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1' and host_context(source_relocation):
+        host_diagnostic_module().admitted_context(source_relocation)
+        need(source_relocation['builder_identity']==frozen['artifact_identity'],'same-job diagnostic artifact identity')
     elif frozen['schema']=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1':
         need(source_relocation is not None and source_relocation.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL' and source_relocation.get('builder_identity')==frozen['artifact_identity'],'independently admitted model candidate, not a legacy schema alias')
     else:need(frozen['schema']=='FROZEN_FIVE_PROFILE_DUT_ARTIFACT_V2','frozen artifact schema')
@@ -285,7 +326,7 @@ def coverage_policy(profile,common,identity,bundle_root,source_relocation=None):
     path=pathlib.Path(__file__).resolve().with_name('observation_contract.py')
     if source_relocation is not None and source_relocation.get('candidate_scope')==FIRST_FAULT_SCOPE:
         path=path.with_name('first_fault_observation_contract.py');row=source_relocation['candidate_observation_checker'];need(pin(row)==path,'admitted first fault observation checker')
-    elif source_relocation is not None and source_relocation.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL':
+    elif host_context(source_relocation) or (source_relocation is not None and source_relocation.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL'):
         path=path.with_name('candidate_observation_contract.py');row=source_relocation['candidate_observation_checker'];need(pin(row)==path,'admitted candidate observation checker')
     else:need(sha(path)=='b8401fd6c8c238757103c3c093ea7dc6f3a0d37aab5f0d423e2a7edf2c293e71','reviewed observation contract module')
     spec=importlib.util.spec_from_file_location('required_observation_policy',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
@@ -330,6 +371,9 @@ def load_binding(manifest,expected_sha,bundle_path,profile,source_relocation=Non
         common[name]=dict(p,path=str(full.absolute()));pin(common[name])
     if frozen['schema']==FIRST_FAULT_SCHEMA:
         need(type(profile)is int and profile==0,'first fault execution is P0 only');diagnostic_driver(frozen,source_relocation,common['driver'])
+    elif host_context(source_relocation):
+        host_diagnostic_module().admitted_context(source_relocation)
+        need(profile==0 and common['driver']['sha256']==host_diagnostic_module().DRIVER_SHA,'exact independent same-job host driver only')
     elif admission is not None and 'finite_long_policy'in admission:finite_long_mode().verify_finite_driver(admission,common['driver']['sha256'],expected_sha)
     else:need(common['driver']['sha256']==V3_DRIVER_SHA256,'exact original V3 driver, no config-only replacement')
     receipt=json.loads(pathlib.Path(common['build_receipt']['path']).read_text())
@@ -411,6 +455,8 @@ def owning_environment_identity(args):
 
 
 def verify_local_build(args,frozen):
+    if getattr(args,'samejob_diagnostic_binding',None)is not None:return host_diagnostic_module().verify_build(args,frozen)
+    need(getattr(args,'samejob_diagnostic_binding_sha256',None)is None,'no unpaired diagnostic binding')
     import importlib.util
     cloud=executor_context(args)
     if cloud is not None:
@@ -436,6 +482,7 @@ def approved_source_relocation(args,frozen):
     """Only the independently approved cloud invocation can authorize relocation.
     No bundle field or user-supplied path map is an authority input.
     """
+    if getattr(args,'samejob_diagnostic_binding',None)is not None:return host_diagnostic_module().source_context(args,frozen)
     candidate=frozen['schema']in('MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1',FIRST_FAULT_SCHEMA)
     if (args.profile!=0 and not candidate) or getattr(args,'cloud_binding',None)is None:return None
     binding=cloud_invocation(args)
@@ -503,6 +550,12 @@ def prepare_cloud_memory(args):
 
 def explicit_execution_admission(args):
     global WORKSPACE_LOADER
+    if getattr(args,'execution_mode',None)==HOST_DIAGNOSTIC_MODE:
+        helper=host_diagnostic_module();binding,row,admission=helper.load_binding(args)
+        need(args.calibration_wall_seconds is None,'no calibration fallback for host diagnostic')
+        if not args.validate_only:need('frozen_window'in admission,'actual execution requires frozen one-shot long window')
+        return helper,admission
+    need(getattr(args,'samejob_diagnostic_binding',None)is None and getattr(args,'samejob_diagnostic_binding_sha256',None)is None,'diagnostic binding forbidden in old modes')
     import importlib.util
     path=pathlib.Path(__file__).resolve().parent.parent/'execution_mode.py'
     spec=importlib.util.spec_from_file_location('owned_execution_mode',path);mode=importlib.util.module_from_spec(spec);spec.loader.exec_module(mode)
@@ -569,6 +622,8 @@ def main():
     a.add_argument('--artifact-manifest-sha256',required=True)
     a.add_argument('--local-build-result',type=pathlib.Path)
     a.add_argument('--local-build-result-sha256')
+    a.add_argument('--samejob-diagnostic-binding',type=pathlib.Path)
+    a.add_argument('--samejob-diagnostic-binding-sha256')
     a.add_argument('--cloud-binding',type=pathlib.Path)
     a.add_argument('--cloud-binding-sha256')
     a.add_argument('--builder-handoff',type=pathlib.Path)
@@ -586,7 +641,7 @@ def main():
     a.add_argument('--validate-only',action='store_true')
     a.add_argument('--strict-outer-supervised',action='store_true')
     a.add_argument('--calibration-wall-seconds',type=int)
-    a.add_argument('--execution-mode',choices=('BOUNDED_CALIBRATION','FULL_BLOCK_ACCEPTANCE','STAGE_COVERAGE_DIAGNOSTIC','P0_FIRST_FAULT_DIAGNOSTIC'),default='BOUNDED_CALIBRATION')
+    a.add_argument('--execution-mode',choices=('BOUNDED_CALIBRATION','FULL_BLOCK_ACCEPTANCE','STAGE_COVERAGE_DIAGNOSTIC','P0_FIRST_FAULT_DIAGNOSTIC',HOST_DIAGNOSTIC_MODE),default='BOUNDED_CALIBRATION')
     a.add_argument('--full-block-budget',type=pathlib.Path)
     a.add_argument('--full-block-budget-sha256')
     a.add_argument('--stage-coverage-budget',type=pathlib.Path)
@@ -658,8 +713,10 @@ def main():
             summary['workspace_loader_sha256']=invocation['workspace_loader']['sha256']
     if source_relocation is not None:
         summary['source_relocation']=source_relocation
-        if source_relocation.get('candidate_scope') is not None:summary.update(model_candidate_review_sha256=source_relocation['model_candidate_review']['sha256'],candidate_scope=source_relocation['candidate_scope'])
-    summary['execution_admission']={'scope':'P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE' if admission['mode']==mode.FIRST_FAULT else 'CALIBRATION_SAME_FULL_M128_STIMULUS' if admission['mode']==mode.CALIBRATION else 'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE' if admission['mode']==mode.STAGE else 'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE', 'execution_mode':admission['mode'], 'reviewed_budget_sha256':admission['reviewed_budget_sha256'],'original_limits':dict(limits),'effective_limits':execution_limits,'outer_cleanup_proof_required':True,'peak_resource_qualification':'INCOMPLETE_SAMPLED','numerical_pass':False}
+        if host_context(source_relocation):summary.update(diagnostic_binding_sha256=source_relocation['diagnostic_binding']['sha256'],candidate_scope=HOST_DIAGNOSTIC_SCOPE)
+        elif source_relocation.get('candidate_scope') is not None:summary.update(model_candidate_review_sha256=source_relocation['model_candidate_review']['sha256'],candidate_scope=source_relocation['candidate_scope'])
+    summary['execution_admission']={'scope':HOST_DIAGNOSTIC_SCOPE if admission['mode']==HOST_DIAGNOSTIC_MODE else 'P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE' if admission['mode']==mode.FIRST_FAULT else 'CALIBRATION_SAME_FULL_M128_STIMULUS' if admission['mode']==mode.CALIBRATION else 'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE' if admission['mode']==mode.STAGE else 'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE', 'execution_mode':admission['mode'], 'reviewed_budget_sha256':admission['reviewed_budget_sha256'],'original_limits':dict(limits),'effective_limits':execution_limits,'outer_cleanup_proof_required':True,'peak_resource_qualification':'INCOMPLETE_SAMPLED','numerical_pass':False}
+    if admission['mode']==HOST_DIAGNOSTIC_MODE:summary['execution_admission'].update(frozen_window=admission['frozen_window'],diagnostic_profiles=[0])
     if admission['mode']==mode.FIRST_FAULT:summary['execution_admission'].update(first_fault_document_sha256=admission['reviewed_budget_sha256'],diagnostic_profiles=[0],numerical_pass=False)
     if admission['mode']==mode.STAGE:summary['execution_admission']['stage_budget_sha256']=admission['reviewed_budget_sha256']
     if mode.finite_long(admission):summary['execution_admission']['finite_long_policy']=dict(admission['finite_long_policy'])
@@ -681,6 +738,8 @@ def main():
             target=args.output/('profile'+str(p['id']));log=args.output/('profile'+str(p['id'])+'.log')
             need(not target.exists() and not log.exists() and not log.with_suffix('.started.json').exists(),'fresh per-round observations')
             if FULL_LOG_POLICY is not None:need(time.monotonic()-consumer_started<=30 and time.process_time()-consumer_cpu_started<=30,'full V2 preflight within reserved 30 seconds')
+            if admission['mode']==HOST_DIAGNOSTIC_MODE:
+                execution_limits=mode.remaining_limits(execution_limits,admission,time.monotonic());summary['execution_admission']['effective_limits']=dict(execution_limits)
             rc=(execute_streaming if FULL_LOG_POLICY is not None else execute)(files['binary'],runtime,target,log,execution_limits);r['exit_code']=rc
             if FULL_LOG_POLICY is not None:postprocess=full_log_module().PostprocessBudget(postprocess_limits).start()
             load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile,source_relocation,admission)
@@ -690,6 +749,7 @@ def main():
             for v in list(common.values())+[p[k] for k in ('runtime','views','reference_result','provider_receipt')]: pin(v)
             need(rc==0,'DUT process failure')
             r['observation_round']=verify_current_observation_round(log,files['binary'],runtime)
+            if admission['mode']==HOST_DIAGNOSTIC_MODE:raise HostDiagnosticBoundary() # no full final-value comparison/qualification in this scope
             terminal='COMPLETE_ORIGINAL_HOST_DDR_REPLAY profile='+str(p['id'])+' '
             if FULL_LOG_POLICY is not None:
                 markers=[terminal]+[f'HOST_FINAL_OUTPUT name={name} address={obs[name][1]} bytes={obs[name][2]} dtype={obs[name][3]} coverage=ACKNOWLEDGED_EVERY_BYTE' for name in want]
@@ -739,8 +799,10 @@ def main():
                     r['router']['raw_probability_diagnostics']={'status':'INCOMPLETE','error':str(error),'error_class':type(error).__name__}
             r['execution_evidence']={key:True for key in required_acceptance.EXECUTION}
             classify_observed_profile(r, route_ref is not None)
+        except HostDiagnosticBoundary:r['diagnostic_process_complete']=True
         except Exception as e: r['error']=str(e);r['error_class']=type(e).__name__
         finally:
+            if admission['mode']==HOST_DIAGNOSTIC_MODE:summary['execution_admission']['effective_limits']=dict(execution_limits)
             if postprocess is not None:
                 r['postprocess_observed']=postprocess.stop()
                 if r['postprocess_observed']['budget_exceeded']:
@@ -749,13 +811,14 @@ def main():
             try:r['log_capture']=full_log_module().read_capture(log,FULL_LOG_POLICY)
             except Exception as e:
                 r.setdefault('error','full log capture unavailable');r.setdefault('error_class',type(e).__name__)
-        r['qualification']=required_acceptance.evaluate(r)
+        r['qualification']=dict(status='INCOMPLETE',scope=HOST_DIAGNOSTIC_SCOPE,numerical_pass=False) if admission['mode']==HOST_DIAGNOSTIC_MODE else required_acceptance.evaluate(r)
         r['status']=r['qualification']['status']
         summary['status']='FAIL_EXACT_REFERENCE' if any(x['status']=='FAIL_EXACT_REFERENCE' for x in summary['profiles']) else 'INCOMPLETE'
-        summary['numeric_acceptance']='FULL_M128_EXACT_REFERENCE_PENDING_VERIFIED_OUTER_CLEANUP'
+        summary['numeric_acceptance']=HOST_DIAGNOSTIC_SCOPE if admission['mode']==HOST_DIAGNOSTIC_MODE else 'FULL_M128_EXACT_REFERENCE_PENDING_VERIFIED_OUTER_CLEANUP'
         (args.output/'RESULT.json').write_text(json.dumps(summary,indent=2)+'\n')
     # Never assert Chisel/RTL numerical PASS from unapproved diagnostic policy.
-    print(json.dumps(summary,indent=2))
+    if admission['mode']==HOST_DIAGNOSTIC_MODE:print('SAME_JOB_P0_HOST_DIAGNOSTIC_LOCAL_RESULT_RECORDED_NOT_ACCEPTANCE')
+    else:print(json.dumps(summary,indent=2))
     raise SystemExit(1 if summary['status']=='FAIL_EXACT_REFERENCE' else 2)
 
 if __name__=='__main__': main()

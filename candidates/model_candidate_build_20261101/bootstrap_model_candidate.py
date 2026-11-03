@@ -97,20 +97,41 @@ def record_bootstrap_diagnostic(name,report,work):
  except OSError:
   print('BOOTSTRAP_DIAGNOSTIC_LOCAL_WRITE_UNAVAILABLE',flush=True)
 
+def budget_envelope(v,now):
+ if getattr(v,'samejob_host_diagnostic_binding',None)is None:
+  need(getattr(v,'samejob_host_diagnostic_binding_sha256',None)is None,'paired diagnostic binding')
+  need(v.remaining_tail_reserve_seconds==900 and v.maximum_build_seconds==7200 and 0<=now-v.job_started_monotonic<9000,'whole job clock and remaining tail reserve')
+  need(getattr(v,'host_profile_driver',None)is None and getattr(v,'host_profile_driver_sha256',None)is None,'host profile source forbidden outside explicit same-job mode')
+  return 9000,1800
+ import importlib.util
+ path=v.repo.resolve()/'candidates/same_job_execution_20261030/numeric/samejob_host_diagnostic.py'
+ binding=v.samejob_host_diagnostic_binding;need(binding.is_file()and binding.stat().st_size<=2<<20 and sha(binding)==v.samejob_host_diagnostic_binding_sha256,'same original owning controller binding')
+ b=json.loads(binding.read_text());need(b['pins'].get(str(path))==sha(path),'actual diagnostic bridge source')
+ spec=importlib.util.spec_from_file_location('samejob_bootstrap_diagnostic',path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);admission=m.admit_controller(b);_,tail,_=m.reservations(b,admission)
+ q=b['budgets'];remaining=v.remaining_tail_reserve_seconds;need(type(remaining)is int and 9900<=remaining<=13500,'remaining continuous prep plus minimum long diagnostic and tail')
+ need(dict(path=str(v.host_profile_driver),sha256=v.host_profile_driver_sha256)==b['host_profile_driver'],'same isolated host source relation')
+ need(v.hardware_source==m.HARDWARE_SOURCE and not(v.first_fault_readonly or v.terminal_finite_readonly),'separate host diagnostic producer selection')
+ need(v.job_started_monotonic==b['job_started_monotonic']and v.maximum_build_seconds==q['build']and v.remaining_tail_reserve_seconds==remaining,'unchanged original clock and exact remaining reservation')
+ need(v.work.resolve()==pathlib.Path(b['job_root'])/'build'and v.shared_owned_root.resolve()==pathlib.Path(b['job_root'])and v.repo.resolve()==pathlib.Path(b['repo']),'same job tree and source')
+ need(0<=now-v.job_started_monotonic and now-v.job_started_monotonic+v.maximum_build_seconds+remaining<=21000,'same whole350min deadline')
+ return 21000,b['host_diagnostic']['bootstrap_seconds']
+
 def main():
  global D
  a=argparse.ArgumentParser()
  for n in ['repo','pipeline','work']:a.add_argument('--'+n,type=pathlib.Path,required=True)
  a.add_argument('--shared-owned-root',type=pathlib.Path,required=True)
  a.add_argument('--materialization-dir',type=pathlib.Path,required=True);a.add_argument('--job-started-monotonic',type=float,required=True);a.add_argument('--remaining-tail-reserve-seconds',type=int,required=True);a.add_argument('--maximum-build-seconds',type=int,required=True)
- a.add_argument('--hardware-source',choices=('legacy','transposed-tile-address-v1'),default='legacy')
+ a.add_argument('--hardware-source',choices=('legacy','transposed-tile-address-v1','prefill-supply-overlap-v1'),default='legacy')
+ a.add_argument('--host-profile-driver',type=pathlib.Path);a.add_argument('--host-profile-driver-sha256')
+ a.add_argument('--samejob-host-diagnostic-binding',type=pathlib.Path);a.add_argument('--samejob-host-diagnostic-binding-sha256')
  a.add_argument('--first-fault-readonly',action='store_true')
  a.add_argument('--terminal-finite-readonly',action='store_true')
  a.add_argument('--reviewed-repo-sha',required=True);a.add_argument('--artifact-identity',type=pathlib.Path,required=True);a.add_argument('--execute-reviewed-once',action='store_true');a.add_argument('--fresh-host-contract',type=pathlib.Path);a.add_argument('--fresh-host-contract-sha256');v=a.parse_args()
  need(not(v.first_fault_readonly and v.terminal_finite_readonly),'one explicit readonly mode')
  need(v.hardware_source=='legacy' or not(v.first_fault_readonly or v.terminal_finite_readonly),'new hardware cannot use unchanged-SV diagnostic contracts')
  D=v.materialization_dir.resolve()
- need(v.remaining_tail_reserve_seconds==900 and v.maximum_build_seconds==7200 and 0<=time.monotonic()-v.job_started_monotonic<9000,'whole job clock and remaining tail reserve')
+ whole_job_seconds,bootstrap_seconds=budget_envelope(v,time.monotonic())
  R=v.repo.resolve();P=v.pipeline.resolve();W=v.work.resolve()
  sys.path.insert(0,str(C));from candidate_generation_gate import selected_inputs
  selection=selected_inputs(R,v.hardware_source,v.first_fault_readonly,v.terminal_finite_readonly)
@@ -123,9 +144,9 @@ def main():
  event=json.loads(pathlib.Path(os.environ['GITHUB_EVENT_PATH']).read_text())
  need(event.get('before')==identity['source_commit'] and event.get('after')==identity['launch_commit'] and event.get('ref')=='refs/heads/main','actual reviewed two-commit push')
  need(v.execute_reviewed_once and not W.exists(),'explicit mode and fresh work root')
- need(subprocess.check_output(['git','-C',str(R),'rev-parse','HEAD'],text=True).strip()==v.reviewed_repo_sha,'reviewed source commit')
+ need(subprocess.check_output(['git','-C',str(R),'rev-parse','HEAD'],text=True,env={k:v for k,v in os.environ.items()if k not in ('GH_TOKEN','GITHUB_TOKEN')}).strip()==v.reviewed_repo_sha,'reviewed source commit')
  need(P.is_relative_to(R) and D.is_relative_to(R),'published candidate source under reviewed checkout')
- subprocess.run(['git','-C',str(R),'diff','--quiet','HEAD','--'],check=True)
+ subprocess.run(['git','-C',str(R),'diff','--quiet','HEAD','--'],check=True,env={k:v for k,v in os.environ.items()if k not in ('GH_TOKEN','GITHUB_TOKEN')})
  fresh=None
  if v.fresh_host_contract is not None or v.fresh_host_contract_sha256 is not None:
   sys.path.insert(0,str(D));import fresh_host
@@ -156,9 +177,9 @@ def main():
    parent_failure('BOOTSTRAP_ALIAS','RUNTIME_ALIAS_REJECTED');raise
  def stage(name,argv,wall=300,rss=1,token=False):
   check_fresh_aliases()
-  need(time.monotonic()-started+wall+30<1800,'bounded bootstrap shared30min budget')
+  need(time.monotonic()-started+wall+30<bootstrap_seconds,'bounded bootstrap shared30min budget')
   need(time.monotonic()-started+wall+30<=v.maximum_build_seconds,'each setup stays inside reviewed build budget including cleanup')
-  need(time.monotonic()-v.job_started_monotonic+wall+30+v.remaining_tail_reserve_seconds<9000,'whole build-only deadline reserves export')
+  need(time.monotonic()-v.job_started_monotonic+wall+30+v.remaining_tail_reserve_seconds<whole_job_seconds,'whole build-only deadline reserves export')
   need(shutil.disk_usage(W).free>=1_500_000_000,'disk reserve')
   e=dict(env)
   if token:
@@ -192,15 +213,16 @@ def main():
    fresh_aliases=dict(host['aliases']);pins.update(host['pins']);pins[str(W/'fresh-host.json')]=sha(W/'fresh-host.json')
   except Exception:
    parent_failure('HOST_RECEIPT_ADMISSION','FRESH_HOST_RECEIPT_REJECTED');raise
- stage('binding',[py,'-B',str(C/'materialize_model_binding.py'),'--hardware-source',v.hardware_source,'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')]+(['--first-fault-readonly'] if v.first_fault_readonly else [])+(['--terminal-finite-readonly'] if v.terminal_finite_readonly else []))
+ stage('binding',[py,'-B',str(C/'materialize_model_binding.py'),'--hardware-source',v.hardware_source,'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')]+(['--first-fault-readonly'] if v.first_fault_readonly else [])+(['--terminal-finite-readonly'] if v.terminal_finite_readonly else [])+(['--profiled-host-diagnostic']if v.host_profile_driver is not None else []))
  # This entry owns its own stage-level process groups and aggregate memory budget.
  # Token is intentionally absent. Outer GitHub job timeout bounds all stages.
  binding=W/'FRONTEND_BINDING.json';bound=json.loads(binding.read_text());bound['mode']='BUILD_ONLY';bound['artifact_identity']=identity
+ if v.host_profile_driver is not None:bound['host_profile_driver']=dict(path=str(v.host_profile_driver),sha256=v.host_profile_driver_sha256)
  tool_inventory=json.loads((W/'compile-tools.json').read_text());need(tool_inventory['schema']=='INSTALLED_GNU_BUILD_TOOLS_V1' and tool_inventory['qualification']=='IDENTITY_AND_SUPPORTED_OPTIONS_ONLY_NOT_COMPILE_OR_NUMERICAL_PASS','installed tool identity scope');bound['compile_tools']=tool_inventory['compile_tools'];bound['compile_tool_pins']=tool_inventory['pins'];bound['compile_aliases']=tool_inventory['aliases'];bound['compile_tool_manifest']=str(W/'compile-tools.json');bound['pins'][str(W/'compile-tools.json')]=sha(W/'compile-tools.json');bound['pins'].update(tool_inventory['pins'])
  if fresh is not None:
   bound['fresh_host_identity_manifest']=str(W/'fresh-host.json');bound['pins'].update(host['pins']);bound['pins'][str(W/'fresh-host.json')]=sha(W/'fresh-host.json');bound['fresh_host_aliases']=host['aliases']
  need(v.shared_owned_root.resolve().is_dir() and W.is_relative_to(v.shared_owned_root.resolve()),'same job shared disk ownership');bound['materialized_roots'].append(str(v.shared_owned_root.resolve()))
- bound['job_budget_seconds']=min(v.maximum_build_seconds-int(time.monotonic()-started),int(9000-(time.monotonic()-v.job_started_monotonic))-v.remaining_tail_reserve_seconds);need(bound['job_budget_seconds']>0,'actual remaining build budget');binding.write_text(json.dumps(bound,indent=2)+'\n');binding.with_suffix('.sha256').write_text(sha(binding)+'\n')
+ bound['job_budget_seconds']=min(v.maximum_build_seconds-int(time.monotonic()-started),int(whole_job_seconds-(time.monotonic()-v.job_started_monotonic))-v.remaining_tail_reserve_seconds);need(bound['job_budget_seconds']>0,'actual remaining build budget');binding.write_text(json.dumps(bound,indent=2)+'\n');binding.with_suffix('.sha256').write_text(sha(binding)+'\n')
  command=[py,'-B',str(C/'one_job_model_candidate.py'),'--binding',str(W/'FRONTEND_BINDING.json'),'--binding-sha256',sha(W/'FRONTEND_BINDING.json'),'--execute-reviewed-once']
  os.execve(py,command,env)
 if __name__=='__main__':main()

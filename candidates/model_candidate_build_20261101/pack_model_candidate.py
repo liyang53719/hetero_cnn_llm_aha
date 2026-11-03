@@ -69,6 +69,10 @@ def strict(r):
 ADDRESS_GENERATION_SHA='0a5e09a27a447b028697a631e5207fc0af6cae15d4c324a55524f9d41a46a753'
 ADDRESS_OVERLAY_SHA='5ff6c6ee4887700b79f8bd3982250743575c3e3624d294d240b7bd92378bfc02'
 ADDRESS_SOURCE_DIR='candidates/transposed_tile_address_fix_20261103'
+SUPPLY_GENERATION_SHA='d6b8f476cb4f586ff47a44d4f2155891f15e3bac99f56e45039c459093feaabb'
+SUPPLY_OVERLAY_SHA='a43e536bc0d0af808429f0730e4ad5fd6f949f4b4e1deb8194c1518eeacb521b'
+SUPPLY_SOURCE_DIR='candidates/prefill_supply_overlap_20261103'
+SOURCE_GENERATIONS={'transposed-tile-address-v1':(ADDRESS_GENERATION_SHA,ADDRESS_OVERLAY_SHA,ADDRESS_SOURCE_DIR),'prefill-supply-overlap-v1':(SUPPLY_GENERATION_SHA,SUPPLY_OVERLAY_SHA,SUPPLY_SOURCE_DIR)}
 PRECONDITIONS_SHA='80c1426efa4a8f2740dadc1757a35d01913233e86c5fc5c2a35f9d3a8d044f0e'
 SCANNER_SHA='b49c75780d2bfb295d3e90df6d478475f42c3129dba73c850b4d564e4114965b'
 INVENTORY_SHA='685b15b4f9bee8d23ac25ffc7d26aa718d55621e5fe1b9b2f3519669f24768d4'
@@ -80,26 +84,33 @@ def named_hashes(rows):
  for r in rows:
   need(type(r)is dict and set(r)=={'name','sha256'}and type(r['name'])is str and re.fullmatch('[A-Za-z_][A-Za-z0-9_$]{0,127}',r['name'])and hex64(r['sha256']),'module identity');names.append(r['name'])
  need(len(set(names))==len(names),'unique module names')
+def source_generation(c):
+ matches=[(name,pair)for name,pair in SOURCE_GENERATIONS.items()if c.get('generation_contract_sha256')==pair[0]or c.get('source_overlay',{}).get('sha256')==pair[1]]
+ if not matches:return None
+ need(len(matches)==1,'one new source generation pair')
+ name,(generation,overlay,directory)=matches[0]
+ need(c.get('generation_contract_sha256')==generation and c.get('source_overlay',{}).get('sha256')==overlay and type(c.get('source_count'))is int and c['source_count']==159,'new hardware generation/overlay exact pair')
+ return name,generation,overlay,directory
+
 def address_generation_observation(c):
- """One new source generation pair, never learned from emitted IR/SV."""
- active=c.get('generation_contract_sha256')==ADDRESS_GENERATION_SHA or c.get('source_overlay',{}).get('sha256')==ADDRESS_OVERLAY_SHA
- if active:
-  need(c.get('generation_contract_sha256')==ADDRESS_GENERATION_SHA and c.get('source_overlay',{}).get('sha256')==ADDRESS_OVERLAY_SHA and type(c.get('source_count'))is int and c['source_count']==159,'new hardware generation/overlay exact pair')
- return active
+ """Known new source pairs only; never learn from emitted IR/SV."""
+ return source_generation(c)is not None
 
 def address_source_identity(source,obs,readonly=False):
- if not address_generation_observation(obs['source_closure']):return
+ selected=source_generation(obs['source_closure'])
+ if selected is None:return
+ _,generation,overlay_sha,directory=selected
  need(readonly is False and 'readonly_probe'not in source,'new hardware is not unchanged-SV diagnostic evidence')
  pins=source.get('generation_input_pins');need(type(pins)is dict,'new hardware full generation input pins')
- suffix='/'+ADDRESS_SOURCE_DIR+'/GENERATION_CONTRACT.json'
- matches=[p for p in pins if p.endswith(suffix)];need(len(matches)==1 and pins[matches[0]]==ADDRESS_GENERATION_SHA,'new hardware pinned generation contract')
+ suffix='/'+directory+'/GENERATION_CONTRACT.json'
+ matches=[p for p in pins if p.endswith(suffix)];need(len(matches)==1 and pins[matches[0]]==generation,'new hardware pinned generation contract')
  repo=matches[0][:-len(suffix)];need(repo.startswith('/')and str(P(repo))==repo and '..'not in P(repo).parts,'canonical new hardware producer root')
- overlay=repo+'/'+ADDRESS_SOURCE_DIR+'/MODEL_SOURCE_OVERLAY.json'
- need(source.get('fixed_source_overlay')==overlay and pins.get(overlay)==ADDRESS_OVERLAY_SHA,'new hardware exact selected overlay identity')
+ overlay=repo+'/'+directory+'/MODEL_SOURCE_OVERLAY.json'
+ need(source.get('fixed_source_overlay')==overlay and pins.get(overlay)==overlay_sha,'new hardware exact selected overlay identity')
  pre=repo+'/candidates/model_candidate_build_20261101/MODEL_CANDIDATE_PRECONDITIONS.json'
  need(pins.get(pre)==PRECONDITIONS_SHA,'new hardware preserves reviewed physical/interface preconditions')
  evidence=source.get('model_candidate_build_evidence',{}).get('fixed_source_overlay',{})
- text=evidence.get('text');need(type(text)is str and evidence.get('path')==overlay and evidence.get('sha256')==ADDRESS_OVERLAY_SHA and evidence.get('bytes')==len(text.encode()) and hashlib.sha256(text.encode()).hexdigest()==ADDRESS_OVERLAY_SHA,'new hardware retained exact overlay bytes')
+ text=evidence.get('text');need(type(text)is str and evidence.get('path')==overlay and evidence.get('sha256')==overlay_sha and evidence.get('bytes')==len(text.encode()) and hashlib.sha256(text.encode()).hexdigest()==overlay_sha,'new hardware retained exact overlay bytes')
  rows=json.loads(text)['files'];need(len(rows)==159,'new hardware actual159 selected source rows')
  for row in rows:need(pins.get(repo+'/'+row['repo_path'])==row['sha256'],'new hardware all159 source inputs pinned')
 
@@ -179,9 +190,9 @@ def _pack_impl(original,b,built,host,overlay,out,budget_check,observation_pin,_m
  check_pins(b['pins']);check_pins(b['admission']['make_closure_pins'])
  _mark('OBSERVATION')
  out=P(out).resolve(strict=True);host=regular(host);overlay=regular(overlay);obs=observation(observation_pin,original,host,overlay)
- if address_generation_observation(obs['source_closure']) or original.get('hardware_source')=='transposed-tile-address-v1' or original.get('generation_contract_sha256')==ADDRESS_GENERATION_SHA:
+ if address_generation_observation(obs['source_closure']) or original.get('hardware_source')in SOURCE_GENERATIONS or original.get('generation_contract_sha256')in (ADDRESS_GENERATION_SHA,SUPPLY_GENERATION_SHA):
   from candidate_generation_gate import require_generation_binding
-  need(original.get('hardware_source')==b.get('hardware_source')=='transposed-tile-address-v1','new hardware explicit same original/admitted source selection')
+  selected=source_generation(obs['source_closure']);need(selected is not None and original.get('hardware_source')==b.get('hardware_source')==selected[0],'new hardware explicit same original/admitted source selection')
   require_generation_binding(original);require_generation_binding(b)
   catalog=P(original['repo'])/'candidates/same_job_execution_20261030/SOURCE_PINS.json'
   need(obs['source_closure']['source_pins_sha256']==sha(catalog),'pack exact selected source catalog identity')
@@ -205,9 +216,11 @@ def _pack_impl(original,b,built,host,overlay,out,budget_check,observation_pin,_m
  with binary.open('rb')as f:need(f.read(6)==b'\x7fELF\x02\x01','actual ELF64LE')
  _mark('ENRICH')
  from first_fault_policy import binding_policy,FIRST_FAULT_MANIFEST_SCHEMA,FIRST_FAULT_SCOPE
- from finite_watchdog_policy import expected_driver_sha,binding_policy as finite_binding
+ from finite_watchdog_policy import binding_policy as finite_binding
+ from host_profile_policy import expected_driver_sha,binding_policy as profile_binding,retained_relation
  readonly=binding_policy(original);need(binding_policy(b)==readonly,'same original/admitted readonly policy')
  finite=finite_binding(original);need(finite_binding(b)==finite,'same original/admitted finite watchdog policy')
+ profile=profile_binding(original);need(profile_binding(b)==profile,'same original/admitted profiled mapper source policy')
  driver=regular(original['driver']);need(sha(driver)==expected_driver_sha(original),'frozen policy driver')
  source_path=regular(b['source_manifest'],16<<20);source=json_file(source_path,16<<20)
  need(source.get('source_commit')==original['repo_sha'],'source ledger commit')
@@ -237,6 +250,8 @@ def _pack_impl(original,b,built,host,overlay,out,budget_check,observation_pin,_m
  source['model_candidate_build_evidence']={'schema':'MODEL_CANDIDATE_ACTUAL_BUILD_EVIDENCE_V1','driver_dependency':dep,'actual_stage_receipts':stage_texts,'fixed_source_overlay':retained_text(overlay,2<<20),'actual_host_header':retained_text(header_path,2<<20)}
  need('finite_watchdog_driver'not in source,'no prefilled watchdog relation')
  if finite is not None:source['finite_watchdog_driver']=finite
+ need('host_profile_driver'not in source,'no prefilled profiled driver source relation')
+ if profile is not None:source['host_profile_driver']=retained_relation(original)
  source['model_candidate_observation']=obs;address_source_identity(source,obs,readonly is not None);enriched=(json.dumps(source,indent=2,allow_nan=False)+'\n').encode();need(len(enriched)<=16<<20,'source metadata16MiB')
  _mark('COPY')
  copies={'binary':binary,'sv':host,'driver':driver,'tool_manifest':regular(b['tool_manifest'],32<<20)}
@@ -301,8 +316,10 @@ def validate_export(root):
  if 'finite_watchdog_driver'in source or actual['driver']['sha256']=='def22c17427b929a8e339224799845d729ad56d24b9646d99390b25a4ecd6f59':
   from finite_watchdog_policy import artifact_policy as finite_artifact
   finite=finite_artifact(source,actual['driver']['sha256'])
- need(readonly is None or finite is None,'exclusive driver policy')
- need(actual['driver']['sha256']==(finite['finite_driver_sha256']if finite is not None else DRIVER_SHA if readonly is None else readonly['diagnostic_driver']['sha256']),'fixed policy driver');need(source.get('sv_sha256')==actual['sv']['sha256']and source.get('driver_sha256')==actual['driver']['sha256'],'source ledger exact actual SV/driver');obs=source.get('model_candidate_observation')
+ from host_profile_policy import artifact_policy as profile_artifact
+ profile=profile_artifact(source,actual['driver']['sha256'])
+ need(sum(x is not None for x in (readonly,finite,profile))<=1,'exclusive driver policy')
+ need(actual['driver']['sha256']==(profile['driver_sha256']if profile is not None else finite['finite_driver_sha256']if finite is not None else DRIVER_SHA if readonly is None else readonly['diagnostic_driver']['sha256']),'fixed policy driver');need(source.get('sv_sha256')==actual['sv']['sha256']and source.get('driver_sha256')==actual['driver']['sha256'],'source ledger exact actual SV/driver');obs=source.get('model_candidate_observation')
  validate_observation(obs);address_source_identity(source,obs,readonly is not None);need(hashlib.sha256(canonical(obs)).hexdigest()==m['model_candidate_observation_sha256'],'observation canonical integrity')
  r=json_file(root/NAMES['build_receipt'],65536);need(r.get('status')==STATUS and r.get('schema')=='MODEL_CANDIDATE_BUILD_RECEIPT_V1','candidate receipt')
  need(r.get('source_commit')==source.get('source_commit')==m['artifact_identity']['source_commit']and r.get('launch_commit')==m['artifact_identity']['launch_commit'],'receipt git chain')

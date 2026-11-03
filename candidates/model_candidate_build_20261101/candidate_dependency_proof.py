@@ -143,7 +143,185 @@ FINITE_STAGE_DIAGNOSTIC_REVISION={'candidates/model_candidate_build_20261101/one
 FINITE_WATCHDOG_IMPLEMENTATION_PINS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f', 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53', 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'efc916e3964edb11c89ebd644bd7432d4f07383167c0700f83a51c1cdc86f08c', 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': 'eefca1f83aad9dce833dd15ed6aa6a065230d908f095d9ec7ccd5d9cce72ae75', 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': 'ab3d9bc5471ffc25cee3a62970fc4c0b225bb865c482081b7ddc40344cfbb009', 'candidates/model_candidate_build_20261101/model_source_evidence.py': 'f23de70d574c5b33f9ad04230b86420519cfa435a7c23d81972fd52c9c81a250', 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': 'b6faa3dcde969e1b1b9489cd21a974e5ed81c4987fe84548448b7f21213f4c97', 'candidates/model_candidate_build_20261101/pack_model_candidate.py': '131cf5bf3e015994670a35c94a9f30d66e518429e409373c3289e938dbade103', 'candidates/model_candidate_build_20261101/finite_watchdog_policy.py': '64c0c273c7c4ef50d8116859f831ac96c7ab792d56db1ec2cef78b9133c19a96'}
 FINITE_POLICY_FIRST_FAULT_IMPLEMENTATIONS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f', 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53', 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'efc916e3964edb11c89ebd644bd7432d4f07383167c0700f83a51c1cdc86f08c', 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': 'eefca1f83aad9dce833dd15ed6aa6a065230d908f095d9ec7ccd5d9cce72ae75', 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': 'ab3d9bc5471ffc25cee3a62970fc4c0b225bb865c482081b7ddc40344cfbb009', 'candidates/model_candidate_build_20261101/first_fault_compilation.py': 'c548cbe0d5891c0a2d0bcb1e51cb3eb2ce48135b666b4857e0d84c2c9b1ab347', 'candidates/model_candidate_build_20261101/first_fault_policy.py': 'c095e177128e89c146275b421d76e84320ab0f9bced6de41bf0facd46580e6de', 'candidates/model_candidate_build_20261101/first_fault_probe.py': '6ce53ee4a74fd5ba9b533a7051fd1737aed215caa1ed1c3a314a4d0f79ce0766', 'candidates/model_candidate_build_20261101/model_source_evidence.py': 'f23de70d574c5b33f9ad04230b86420519cfa435a7c23d81972fd52c9c81a250', 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': 'b6faa3dcde969e1b1b9489cd21a974e5ed81c4987fe84548448b7f21213f4c97', 'candidates/model_candidate_build_20261101/pack_model_candidate.py': '131cf5bf3e015994670a35c94a9f30d66e518429e409373c3289e938dbade103', 'candidates/model_candidate_build_20261101/finite_watchdog_policy.py': '64c0c273c7c4ef50d8116859f831ac96c7ab792d56db1ec2cef78b9133c19a96'}
 FINITE_POLICY_TERMINAL_IMPLEMENTATIONS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f', 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53', 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'efc916e3964edb11c89ebd644bd7432d4f07383167c0700f83a51c1cdc86f08c', 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': 'eefca1f83aad9dce833dd15ed6aa6a065230d908f095d9ec7ccd5d9cce72ae75', 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': 'ab3d9bc5471ffc25cee3a62970fc4c0b225bb865c482081b7ddc40344cfbb009', 'candidates/model_candidate_build_20261101/first_fault_compilation.py': 'c548cbe0d5891c0a2d0bcb1e51cb3eb2ce48135b666b4857e0d84c2c9b1ab347', 'candidates/model_candidate_build_20261101/first_fault_policy.py': 'c095e177128e89c146275b421d76e84320ab0f9bced6de41bf0facd46580e6de', 'candidates/model_candidate_build_20261101/first_fault_probe.py': '6ce53ee4a74fd5ba9b533a7051fd1737aed215caa1ed1c3a314a4d0f79ce0766', 'candidates/model_candidate_build_20261101/model_source_evidence.py': 'f23de70d574c5b33f9ad04230b86420519cfa435a7c23d81972fd52c9c81a250', 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': 'b6faa3dcde969e1b1b9489cd21a974e5ed81c4987fe84548448b7f21213f4c97', 'candidates/model_candidate_build_20261101/pack_model_candidate.py': '131cf5bf3e015994670a35c94a9f30d66e518429e409373c3289e938dbade103', 'candidates/model_candidate_build_20261101/terminal_finite_probe.py': '17e9d268e0e5d3d74d0c5c79f53405553771652643bac5822b308dde15d3de18', 'candidates/model_candidate_build_20261101/finite_watchdog_policy.py': '64c0c273c7c4ef50d8116859f831ac96c7ab792d56db1ec2cef78b9133c19a96'}
+# Additive source-only implementation revision. Historical maps above remain frozen.
+# No source map grants compilation, protocol, numerical, or fullTop acceptance.
+PREFILL_TOOLING_IMPLEMENTATION_PINS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f',
+ 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53',
+ 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'efc916e3964edb11c89ebd644bd7432d4f07383167c0700f83a51c1cdc86f08c',
+ 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': 'eefca1f83aad9dce833dd15ed6aa6a065230d908f095d9ec7ccd5d9cce72ae75',
+ 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': '25411d052ef3de56ec46af2c70eb3858127ecb038e71ce8691f1f0d7cb36b5b4',
+ 'candidates/model_candidate_build_20261101/finite_watchdog_policy.py': '64c0c273c7c4ef50d8116859f831ac96c7ab792d56db1ec2cef78b9133c19a96',
+ 'candidates/model_candidate_build_20261101/model_source_evidence.py': '6706419ba214024963618e530baa712c3167f1ad30bdd4f62db8586a4bd831dc',
+ 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': 'b6faa3dcde969e1b1b9489cd21a974e5ed81c4987fe84548448b7f21213f4c97',
+ 'candidates/model_candidate_build_20261101/pack_model_candidate.py': 'ec1a13ab3d6eba3d319e88e33ff3fabdeb8ae5c86a24778cac8c5b8bbbf53a77'}
+PREFILL_TOOLING_FIRST_FAULT_IMPLEMENTATIONS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f',
+ 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53',
+ 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'efc916e3964edb11c89ebd644bd7432d4f07383167c0700f83a51c1cdc86f08c',
+ 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': 'eefca1f83aad9dce833dd15ed6aa6a065230d908f095d9ec7ccd5d9cce72ae75',
+ 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': '25411d052ef3de56ec46af2c70eb3858127ecb038e71ce8691f1f0d7cb36b5b4',
+ 'candidates/model_candidate_build_20261101/finite_watchdog_policy.py': '64c0c273c7c4ef50d8116859f831ac96c7ab792d56db1ec2cef78b9133c19a96',
+ 'candidates/model_candidate_build_20261101/first_fault_compilation.py': 'c548cbe0d5891c0a2d0bcb1e51cb3eb2ce48135b666b4857e0d84c2c9b1ab347',
+ 'candidates/model_candidate_build_20261101/first_fault_policy.py': 'c095e177128e89c146275b421d76e84320ab0f9bced6de41bf0facd46580e6de',
+ 'candidates/model_candidate_build_20261101/first_fault_probe.py': '6ce53ee4a74fd5ba9b533a7051fd1737aed215caa1ed1c3a314a4d0f79ce0766',
+ 'candidates/model_candidate_build_20261101/model_source_evidence.py': '6706419ba214024963618e530baa712c3167f1ad30bdd4f62db8586a4bd831dc',
+ 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': 'b6faa3dcde969e1b1b9489cd21a974e5ed81c4987fe84548448b7f21213f4c97',
+ 'candidates/model_candidate_build_20261101/pack_model_candidate.py': 'ec1a13ab3d6eba3d319e88e33ff3fabdeb8ae5c86a24778cac8c5b8bbbf53a77'}
+PREFILL_TOOLING_TERMINAL_IMPLEMENTATIONS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f',
+ 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53',
+ 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'efc916e3964edb11c89ebd644bd7432d4f07383167c0700f83a51c1cdc86f08c',
+ 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': 'eefca1f83aad9dce833dd15ed6aa6a065230d908f095d9ec7ccd5d9cce72ae75',
+ 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': '25411d052ef3de56ec46af2c70eb3858127ecb038e71ce8691f1f0d7cb36b5b4',
+ 'candidates/model_candidate_build_20261101/finite_watchdog_policy.py': '64c0c273c7c4ef50d8116859f831ac96c7ab792d56db1ec2cef78b9133c19a96',
+ 'candidates/model_candidate_build_20261101/first_fault_compilation.py': 'c548cbe0d5891c0a2d0bcb1e51cb3eb2ce48135b666b4857e0d84c2c9b1ab347',
+ 'candidates/model_candidate_build_20261101/first_fault_policy.py': 'c095e177128e89c146275b421d76e84320ab0f9bced6de41bf0facd46580e6de',
+ 'candidates/model_candidate_build_20261101/first_fault_probe.py': '6ce53ee4a74fd5ba9b533a7051fd1737aed215caa1ed1c3a314a4d0f79ce0766',
+ 'candidates/model_candidate_build_20261101/model_source_evidence.py': '6706419ba214024963618e530baa712c3167f1ad30bdd4f62db8586a4bd831dc',
+ 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': 'b6faa3dcde969e1b1b9489cd21a974e5ed81c4987fe84548448b7f21213f4c97',
+ 'candidates/model_candidate_build_20261101/pack_model_candidate.py': 'ec1a13ab3d6eba3d319e88e33ff3fabdeb8ae5c86a24778cac8c5b8bbbf53a77',
+ 'candidates/model_candidate_build_20261101/terminal_finite_probe.py': '17e9d268e0e5d3d74d0c5c79f53405553771652643bac5822b308dde15d3de18'}
+PREFILL_TOOLING_GENERATION_PAIRS={'0a5e09a27a447b028697a631e5207fc0af6cae15d4c324a55524f9d41a46a753': ('candidates/transposed_tile_address_fix_20261103',
+                                                                      '5ff6c6ee4887700b79f8bd3982250743575c3e3624d294d240b7bd92378bfc02'),
+ '3354827c1c9d2ac167b3b325dc07acbd50ea663ddd384dddfea1b1d037ae3851': ('candidates/model_candidate_build_20261101',
+                                                                      '51621bbffc5ab0dfc97e88d66fee93722e66b6b1ed2a8c2ba7d0f588d9345472'),
+ 'd6b8f476cb4f586ff47a44d4f2155891f15e3bac99f56e45039c459093feaabb': ('candidates/prefill_supply_overlap_20261103',
+                                                                      'a43e536bc0d0af808429f0730e4ad5fd6f949f4b4e1deb8194c1518eeacb521b')}
+def prefill_tooling_policy(source,readonly):
+ gate='candidates/model_candidate_build_20261101/candidate_generation_gate.py'
+ pins=source.get('generation_input_pins',{});paths=[p for p in pins if p.endswith('/'+gate)]
+ closure=source.get('model_candidate_observation',{}).get('source_closure',{})
+ supply_generation='d6b8f476cb4f586ff47a44d4f2155891f15e3bac99f56e45039c459093feaabb'
+ supply_overlay='a43e536bc0d0af808429f0730e4ad5fd6f949f4b4e1deb8194c1518eeacb521b'
+ supply_contract='2cdb20b502877708ab91d054f18b7032573569fafd9121144ca7466c68a0f1bd'
+ contract=source.get('model_source_evidence',{}).get('contract',{})
+ active=(any(pins[p]==PREFILL_TOOLING_IMPLEMENTATION_PINS[gate]for p in paths)or closure.get('generation_contract_sha256')==supply_generation or closure.get('source_overlay',{}).get('sha256')==supply_overlay or contract.get('sha256')==supply_contract or source.get('fixed_source_overlay','').endswith('/candidates/prefill_supply_overlap_20261103/MODEL_SOURCE_OVERLAY.json'))
+ if not active:return None
+ need(len(paths)==1 and pins[paths[0]]==PREFILL_TOOLING_IMPLEMENTATION_PINS[gate],'one exact prefill-capable tooling root')
+ repo=paths[0][:-len(gate)];need(repo.startswith('/')and str(pathlib.PurePosixPath(repo))+'/'==repo and '..'not in pathlib.PurePosixPath(repo).parts,'canonical tooling root')
+ generation=closure.get('generation_contract_sha256');need(generation in PREFILL_TOOLING_GENERATION_PAIRS,'fixed tooling generation domain')
+ directory,overlay=PREFILL_TOOLING_GENERATION_PAIRS[generation]
+ need(closure.get('source_overlay',{}).get('sha256')==overlay and type(closure.get('source_count'))is int and closure['source_count']==159,'exact tooling generation159 pair')
+ need(pins.get(repo+directory+'/GENERATION_CONTRACT.json')==generation and pins.get(repo+directory+'/MODEL_SOURCE_OVERLAY.json')==overlay and source.get('fixed_source_overlay')==repo+directory+'/MODEL_SOURCE_OVERLAY.json','exact tooling original hardware paths')
+ if readonly is not None:
+  need(directory=='candidates/model_candidate_build_20261101'and 'finite_watchdog_driver'not in source,'readonly remains legacy-only')
+  need(readonly.get('schema')in ('FIRST_FAULT_DRIVER_CONTRACT_V1','FIRST_FAULT_DRIVER_CONTRACT_V2'),'known readonly mode')
+  wanted_contract='b31095b3e118fe5a2639886bb3dbe3f6de8067cd886884d898c1220b85f8500f'
+  selected=PREFILL_TOOLING_TERMINAL_IMPLEMENTATIONS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else PREFILL_TOOLING_FIRST_FAULT_IMPLEMENTATIONS
+  contract_rel='candidates/same_job_execution_20261030/numeric/MODEL_P0_FIRST_FAULT_SOURCE_CONTRACT.json'
+ else:
+  from finite_watchdog_policy import artifact_policy,SOURCE_SHA,SOURCE_REL,OLD_SHA
+  finite=artifact_policy(source,source.get('driver_sha256'))
+  selected=PREFILL_TOOLING_IMPLEMENTATION_PINS
+  if generation==supply_generation:
+   need(finite is None and 'readonly_probe'not in source and source.get('driver_sha256')==OLD_SHA,'prefill ordinary original driver only')
+   wanted_contract=supply_contract;contract_rel='candidates/same_job_execution_20261030/numeric/MODEL_P0_PREFILL_SUPPLY_SOURCE_CONTRACT.json'
+  elif finite is not None:wanted_contract=SOURCE_SHA;contract_rel=SOURCE_REL
+  else:
+   need(source.get('driver_sha256')==OLD_SHA,'ordinary original driver remains exact')
+   wanted_contract='7b46242a1206f651e8fac111436b6cb515b6a69f981b6f01c1e1f26bd7f51f13';contract_rel='candidates/same_job_execution_20261030/numeric/MODEL_P0_SOURCE_CONTRACT.json'
+ need(contract.get('sha256')==wanted_contract and contract.get('path')==repo+contract_rel and pins.get(repo+contract_rel)==wanted_contract,'exact tooling source-role contract')
+ need(all(pins.get(repo+rel)==h for rel,h in selected.items()),'complete exact tooling implementation family')
+ return dict(selected)
+
+# Additive host-profile-capable source revision. No build/run acceptance is granted.
+# Historical producer maps and source domains above remain byte-for-byte frozen.
+HOST_PROFILE_TOOLING_IMPLEMENTATION_PINS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f',
+ 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53',
+ 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'f82485aebcd6b1ab967cd3c47a94529e6abe98f6254d1f72a44d3c87eacfb5fe',
+ 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': 'da97e877816469e6e63c8460dea4ef1aa0d7bd058c782ebaf310fd7a358347dc',
+ 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': '9131e8c6e2e0a3e357990b795ee808837d04ae8bc181862be7a143037166fac2',
+ 'candidates/model_candidate_build_20261101/finite_watchdog_policy.py': '64c0c273c7c4ef50d8116859f831ac96c7ab792d56db1ec2cef78b9133c19a96',
+ 'candidates/model_candidate_build_20261101/host_profile_policy.py': '01d80c5ca0d51abf2c4dd77480198ef5774911002c1313ba02290caa5038cba6',
+ 'candidates/model_candidate_build_20261101/materialize_model_binding.py': '085e57398717720f74ddb362998c23d132e0df7c49aa809963b1b81f4dabe0c6',
+ 'candidates/model_candidate_build_20261101/model_source_evidence.py': 'dafbcff98a0615ea0633422ae0a861309c9501a958908d0781f1a8726c01f6a5',
+ 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': 'dea6da1afa53fb5bb515f3374d0db2966a3c6baf558aa3ab9155938df537fda7',
+ 'candidates/model_candidate_build_20261101/pack_model_candidate.py': '6e3c1e65e699cd1eb19a68d9d85cd7f08e08761d0b0766b68be16264252700f0'}
+HOST_PROFILE_TOOLING_FIRST_FAULT_IMPLEMENTATIONS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f',
+ 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53',
+ 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'f82485aebcd6b1ab967cd3c47a94529e6abe98f6254d1f72a44d3c87eacfb5fe',
+ 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': 'da97e877816469e6e63c8460dea4ef1aa0d7bd058c782ebaf310fd7a358347dc',
+ 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': '9131e8c6e2e0a3e357990b795ee808837d04ae8bc181862be7a143037166fac2',
+ 'candidates/model_candidate_build_20261101/finite_watchdog_policy.py': '64c0c273c7c4ef50d8116859f831ac96c7ab792d56db1ec2cef78b9133c19a96',
+ 'candidates/model_candidate_build_20261101/first_fault_compilation.py': 'c548cbe0d5891c0a2d0bcb1e51cb3eb2ce48135b666b4857e0d84c2c9b1ab347',
+ 'candidates/model_candidate_build_20261101/first_fault_policy.py': 'c095e177128e89c146275b421d76e84320ab0f9bced6de41bf0facd46580e6de',
+ 'candidates/model_candidate_build_20261101/first_fault_probe.py': '6ce53ee4a74fd5ba9b533a7051fd1737aed215caa1ed1c3a314a4d0f79ce0766',
+ 'candidates/model_candidate_build_20261101/host_profile_policy.py': '01d80c5ca0d51abf2c4dd77480198ef5774911002c1313ba02290caa5038cba6',
+ 'candidates/model_candidate_build_20261101/materialize_model_binding.py': '085e57398717720f74ddb362998c23d132e0df7c49aa809963b1b81f4dabe0c6',
+ 'candidates/model_candidate_build_20261101/model_source_evidence.py': 'dafbcff98a0615ea0633422ae0a861309c9501a958908d0781f1a8726c01f6a5',
+ 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': 'dea6da1afa53fb5bb515f3374d0db2966a3c6baf558aa3ab9155938df537fda7',
+ 'candidates/model_candidate_build_20261101/pack_model_candidate.py': '6e3c1e65e699cd1eb19a68d9d85cd7f08e08761d0b0766b68be16264252700f0'}
+HOST_PROFILE_TOOLING_TERMINAL_IMPLEMENTATIONS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f',
+ 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53',
+ 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'f82485aebcd6b1ab967cd3c47a94529e6abe98f6254d1f72a44d3c87eacfb5fe',
+ 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': 'da97e877816469e6e63c8460dea4ef1aa0d7bd058c782ebaf310fd7a358347dc',
+ 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': '9131e8c6e2e0a3e357990b795ee808837d04ae8bc181862be7a143037166fac2',
+ 'candidates/model_candidate_build_20261101/finite_watchdog_policy.py': '64c0c273c7c4ef50d8116859f831ac96c7ab792d56db1ec2cef78b9133c19a96',
+ 'candidates/model_candidate_build_20261101/first_fault_compilation.py': 'c548cbe0d5891c0a2d0bcb1e51cb3eb2ce48135b666b4857e0d84c2c9b1ab347',
+ 'candidates/model_candidate_build_20261101/first_fault_policy.py': 'c095e177128e89c146275b421d76e84320ab0f9bced6de41bf0facd46580e6de',
+ 'candidates/model_candidate_build_20261101/first_fault_probe.py': '6ce53ee4a74fd5ba9b533a7051fd1737aed215caa1ed1c3a314a4d0f79ce0766',
+ 'candidates/model_candidate_build_20261101/host_profile_policy.py': '01d80c5ca0d51abf2c4dd77480198ef5774911002c1313ba02290caa5038cba6',
+ 'candidates/model_candidate_build_20261101/materialize_model_binding.py': '085e57398717720f74ddb362998c23d132e0df7c49aa809963b1b81f4dabe0c6',
+ 'candidates/model_candidate_build_20261101/model_source_evidence.py': 'dafbcff98a0615ea0633422ae0a861309c9501a958908d0781f1a8726c01f6a5',
+ 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': 'dea6da1afa53fb5bb515f3374d0db2966a3c6baf558aa3ab9155938df537fda7',
+ 'candidates/model_candidate_build_20261101/pack_model_candidate.py': '6e3c1e65e699cd1eb19a68d9d85cd7f08e08761d0b0766b68be16264252700f0',
+ 'candidates/model_candidate_build_20261101/terminal_finite_probe.py': '17e9d268e0e5d3d74d0c5c79f53405553771652643bac5822b308dde15d3de18'}
+HOST_PROFILE_TOOLING_EXTRA_IMPLEMENTATIONS={'candidates/model_candidate_build_20261101/finite_watchdog_policy.py','candidates/model_candidate_build_20261101/host_profile_policy.py','candidates/model_candidate_build_20261101/materialize_model_binding.py'}
+HOST_PROFILE_DRIVER_SHA='e4b23d01ee81a738220512eb24d63b4e323723f686c8af340ad64849a00b5887'
+HOST_PROFILE_CONTRACT_SHA='634ecd3e0187844b7f97ef7ca9b0d38fdd274960bccc210a2419923164e05c24'
+
+def host_profile_checker():
+ path=P(__file__).resolve().with_name('host_profile_policy.py')
+ want=HOST_PROFILE_TOOLING_IMPLEMENTATION_PINS['candidates/model_candidate_build_20261101/host_profile_policy.py']
+ need(path.is_file()and path==path.resolve()and all(not p.is_symlink()for p in(path,*path.parents))and 0<path.stat().st_size<=1<<20 and sha(path)==want,'exact local host-profile policy before import')
+ spec=importlib.util.spec_from_file_location('_reviewed_host_profile_source_policy',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+ return module
+
+def host_profile_tooling_policy(source,readonly):
+ gate='candidates/model_candidate_build_20261101/candidate_generation_gate.py'
+ pins=source.get('generation_input_pins',{});paths=[p for p in pins if p.endswith('/'+gate)]
+ contract=source.get('model_source_evidence',{}).get('contract',{})
+ active=(any(pins[p]==HOST_PROFILE_TOOLING_IMPLEMENTATION_PINS[gate]for p in paths)or 'host_profile_driver'in source or source.get('driver_sha256')==HOST_PROFILE_DRIVER_SHA or contract.get('sha256')==HOST_PROFILE_CONTRACT_SHA)
+ if not active:return None
+ need(len(paths)==1 and pins[paths[0]]==HOST_PROFILE_TOOLING_IMPLEMENTATION_PINS[gate],'one exact host-profile-capable tooling root')
+ repo=paths[0][:-len(gate)];need(repo.startswith('/')and not repo.startswith('//')and str(pathlib.PurePosixPath(repo))+'/'==repo and '..'not in pathlib.PurePosixPath(repo).parts,'canonical host-profile tooling root')
+ closure=source.get('model_candidate_observation',{}).get('source_closure',{})
+ generation=closure.get('generation_contract_sha256');need(generation in PREFILL_TOOLING_GENERATION_PAIRS,'fixed host-profile tooling hardware domain')
+ directory,overlay=PREFILL_TOOLING_GENERATION_PAIRS[generation]
+ need(closure.get('source_overlay',{}).get('sha256')==overlay and type(closure.get('source_count'))is int and closure['source_count']==159,'exact host-profile tooling generation159 pair')
+ need(pins.get(repo+directory+'/GENERATION_CONTRACT.json')==generation and pins.get(repo+directory+'/MODEL_SOURCE_OVERLAY.json')==overlay and source.get('fixed_source_overlay')==repo+directory+'/MODEL_SOURCE_OVERLAY.json','exact host-profile tooling original hardware paths')
+ checker=host_profile_checker();profile=checker.artifact_policy(source,source.get('driver_sha256'))
+ if readonly is not None:
+  need(profile is None and directory=='candidates/model_candidate_build_20261101'and 'finite_watchdog_driver'not in source,'readonly remains legacy-only without host profiling')
+  need(readonly.get('schema')in ('FIRST_FAULT_DRIVER_CONTRACT_V1','FIRST_FAULT_DRIVER_CONTRACT_V2'),'known readonly mode')
+  wanted_contract='b31095b3e118fe5a2639886bb3dbe3f6de8067cd886884d898c1220b85f8500f'
+  contract_rel='candidates/same_job_execution_20261030/numeric/MODEL_P0_FIRST_FAULT_SOURCE_CONTRACT.json'
+  selected=HOST_PROFILE_TOOLING_TERMINAL_IMPLEMENTATIONS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else HOST_PROFILE_TOOLING_FIRST_FAULT_IMPLEMENTATIONS
+ else:
+  from finite_watchdog_policy import artifact_policy,SOURCE_SHA,SOURCE_REL,OLD_SHA
+  finite=artifact_policy(source,source.get('driver_sha256'))
+  selected=HOST_PROFILE_TOOLING_IMPLEMENTATION_PINS
+  if profile is not None:
+   need(finite is None and generation==checker.GENERATION_SHA and overlay==checker.OVERLAY_SHA and directory=='candidates/prefill_supply_overlap_20261103','profiled driver only on exact supply159')
+   need(source['model_candidate_build_evidence']['driver_dependency']['driver']==repo+checker.DRIVER_REL,'same original profiled driver/compiler root')
+   need(source['host_profile_driver']['path']==repo+checker.REL and pins.get(repo+checker.REL)==checker.REL_SHA,'same original profiled relation root')
+   wanted_contract=checker.CONTRACT_SHA;contract_rel=checker.CONTRACT_REL
+  elif generation=='d6b8f476cb4f586ff47a44d4f2155891f15e3bac99f56e45039c459093feaabb':
+   need(finite is None and 'readonly_probe'not in source and source.get('driver_sha256')==OLD_SHA,'ordinary prefill preserves original driver')
+   wanted_contract='2cdb20b502877708ab91d054f18b7032573569fafd9121144ca7466c68a0f1bd';contract_rel='candidates/same_job_execution_20261030/numeric/MODEL_P0_PREFILL_SUPPLY_SOURCE_CONTRACT.json'
+  elif finite is not None:wanted_contract=SOURCE_SHA;contract_rel=SOURCE_REL
+  else:
+   need(source.get('driver_sha256')==OLD_SHA,'ordinary legacy/address driver remains exact')
+   wanted_contract='7b46242a1206f651e8fac111436b6cb515b6a69f981b6f01c1e1f26bd7f51f13';contract_rel='candidates/same_job_execution_20261030/numeric/MODEL_P0_SOURCE_CONTRACT.json'
+ need(contract.get('sha256')==wanted_contract and contract.get('path')==repo+contract_rel and pins.get(repo+contract_rel)==wanted_contract,'exact host-profile tooling source-role contract')
+ for rel,want in selected.items():
+  matches=[path for path in pins if path.endswith('/'+rel)]
+  need(matches==[repo+rel]and pins[matches[0]]==want,'complete exact host-profile tooling implementation '+rel)
+ return dict(selected)
+
 def selector_producer_policy(source,readonly):
+ profile=host_profile_tooling_policy(source,readonly)
+ if profile is not None:return profile
+ prefill=prefill_tooling_policy(source,readonly)
+ if prefill is not None:return prefill
  gate='candidates/model_candidate_build_20261101/candidate_generation_gate.py'
  pins=source.get('generation_input_pins',{});matches=[p for p in pins if p.endswith('/'+gate)]
  new_policy=any(pins[p]==FINITE_WATCHDOG_IMPLEMENTATION_PINS[gate]for p in matches)
@@ -184,7 +362,7 @@ def selector_producer_policy(source,readonly):
  historical=TERMINAL_IMPLEMENTATION_PINS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else FIRST_FAULT_IMPLEMENTATION_PINS
  return dict(historical,**(SELECTOR_DIAGNOSTIC_REVISIONS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else SELECTOR_FIRST_FAULT_REVISIONS))
 
-LOCAL_PACK_READER_SHA='131cf5bf3e015994670a35c94a9f30d66e518429e409373c3289e938dbade103'
+LOCAL_PACK_READER_SHA='6e3c1e65e699cd1eb19a68d9d85cd7f08e08761d0b0766b68be16264252700f0'
 
 COLLECTOR_PATH='candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py'
 def compilation_policy(r,m,build_receipt,manifest=None):
@@ -202,7 +380,11 @@ def compilation_policy(r,m,build_receipt,manifest=None):
   readonly=None
  selector=selector_producer_policy(m,readonly)
  if selector is not None:
-  need(set(selector)==(CANDIDATE_REQUIRED_IMPLEMENTATIONS|{'candidates/model_candidate_build_20261101/finite_watchdog_policy.py'} if selector==FINITE_WATCHDOG_IMPLEMENTATION_PINS else FIRST_FAULT_REQUIRED_IMPLEMENTATIONS|{'candidates/model_candidate_build_20261101/finite_watchdog_policy.py'} if selector==FINITE_POLICY_FIRST_FAULT_IMPLEMENTATIONS else TERMINAL_REQUIRED_IMPLEMENTATIONS|{'candidates/model_candidate_build_20261101/finite_watchdog_policy.py'} if selector==FINITE_POLICY_TERMINAL_IMPLEMENTATIONS else CANDIDATE_REQUIRED_IMPLEMENTATIONS if readonly is None else TERMINAL_REQUIRED_IMPLEMENTATIONS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else FIRST_FAULT_REQUIRED_IMPLEMENTATIONS)and all(type(h)is str and re.fullmatch('[0-9a-f]{64}',h)for h in selector.values()),'selector-aware producer contract frozen')
+  if selector in (HOST_PROFILE_TOOLING_IMPLEMENTATION_PINS,HOST_PROFILE_TOOLING_FIRST_FAULT_IMPLEMENTATIONS,HOST_PROFILE_TOOLING_TERMINAL_IMPLEMENTATIONS):
+   required=CANDIDATE_REQUIRED_IMPLEMENTATIONS if readonly is None else TERMINAL_REQUIRED_IMPLEMENTATIONS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else FIRST_FAULT_REQUIRED_IMPLEMENTATIONS
+   need(set(selector)==required|HOST_PROFILE_TOOLING_EXTRA_IMPLEMENTATIONS and all(type(h)is str and re.fullmatch('[0-9a-f]{64}',h)for h in selector.values()),'host-profile producer contract frozen')
+  else:
+   need(set(selector)==(CANDIDATE_REQUIRED_IMPLEMENTATIONS|{'candidates/model_candidate_build_20261101/finite_watchdog_policy.py'} if selector in (FINITE_WATCHDOG_IMPLEMENTATION_PINS,PREFILL_TOOLING_IMPLEMENTATION_PINS) else FIRST_FAULT_REQUIRED_IMPLEMENTATIONS|{'candidates/model_candidate_build_20261101/finite_watchdog_policy.py'} if selector in (FINITE_POLICY_FIRST_FAULT_IMPLEMENTATIONS,PREFILL_TOOLING_FIRST_FAULT_IMPLEMENTATIONS) else TERMINAL_REQUIRED_IMPLEMENTATIONS|{'candidates/model_candidate_build_20261101/finite_watchdog_policy.py'} if selector in (FINITE_POLICY_TERMINAL_IMPLEMENTATIONS,PREFILL_TOOLING_TERMINAL_IMPLEMENTATIONS) else CANDIDATE_REQUIRED_IMPLEMENTATIONS if readonly is None else TERMINAL_REQUIRED_IMPLEMENTATIONS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else FIRST_FAULT_REQUIRED_IMPLEMENTATIONS)and all(type(h)is str and re.fullmatch('[0-9a-f]{64}',h)for h in selector.values()),'selector-aware producer contract frozen')
   if readonly is None:need('dependency_rule_policy'not in r,'ordinary new hardware has no readonly dependency policy')
   else:
    from first_fault_compilation import DEPENDENCY_RULE_POLICY

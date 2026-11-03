@@ -117,7 +117,7 @@ class BindingAndPack(unittest.TestCase):
   with self.assertRaises(ValueError):pack.address_source_identity(self.source,self.obs,True)
  def test_actual_pack_generation_join_rejects_bad_binding_or_catalog(self):
   f=flow.function(D/'pack_model_candidate.py','_pack_impl');nodes=[n for n in f.body if isinstance(n,ast.If)and 'address_generation_observation'in ast.unparse(n.test)];self.assertEqual(len(nodes),1)
-  env=dict(address_generation_observation=pack.address_generation_observation,original=self.b,b=copy.deepcopy(self.b),obs=self.obs,overlay=self.overlay,need=pack.need,P=pathlib.Path,sha=sha,ADDRESS_GENERATION_SHA=pack.ADDRESS_GENERATION_SHA)
+  env=dict(address_generation_observation=pack.address_generation_observation,original=self.b,b=copy.deepcopy(self.b),obs=self.obs,overlay=self.overlay,need=pack.need,P=pathlib.Path,sha=sha,ADDRESS_GENERATION_SHA=pack.ADDRESS_GENERATION_SHA,source_generation=pack.source_generation,SOURCE_GENERATIONS=pack.SOURCE_GENERATIONS,SUPPLY_GENERATION_SHA=pack.SUPPLY_GENERATION_SHA)
   flow.execute_nodes(nodes,env)
   env['b']['hardware_source']='legacy'
   with self.assertRaises(ValueError):flow.execute_nodes(nodes,env)

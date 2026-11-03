@@ -9,8 +9,11 @@ GENERATION_CONTRACT_SHA256='3354827c1c9d2ac167b3b325dc07acbd50ea663ddd384dddfea1
 ADDRESS_GENERATION_CONTRACT_SHA256='0a5e09a27a447b028697a631e5207fc0af6cae15d4c324a55524f9d41a46a753' # Source-only proposal, independently reviewed before publication.
 LEGACY_SOURCE='legacy'
 ADDRESS_SOURCE='transposed-tile-address-v1'
-SOURCE_CHOICES=(LEGACY_SOURCE,ADDRESS_SOURCE)
-SOURCE_DIRS={LEGACY_SOURCE:'candidates/model_candidate_build_20261101',ADDRESS_SOURCE:'candidates/transposed_tile_address_fix_20261103'}
+SUPPLY_SOURCE='prefill-supply-overlap-v1'
+SUPPLY_GENERATION_CONTRACT_SHA256='d6b8f476cb4f586ff47a44d4f2155891f15e3bac99f56e45039c459093feaabb' # Isolated unreviewed source proposal; no numeric/build execution grant.
+SUPPLY_OVERLAY_SHA256='a43e536bc0d0af808429f0730e4ad5fd6f949f4b4e1deb8194c1518eeacb521b'
+SOURCE_CHOICES=(LEGACY_SOURCE,ADDRESS_SOURCE,SUPPLY_SOURCE)
+SOURCE_DIRS={LEGACY_SOURCE:'candidates/model_candidate_build_20261101',ADDRESS_SOURCE:'candidates/transposed_tile_address_fix_20261103',SUPPLY_SOURCE:'candidates/prefill_supply_overlap_20261103'}
 ADDRESS_OVERLAY_SHA256='5ff6c6ee4887700b79f8bd3982250743575c3e3624d294d240b7bd92378bfc02'
 LEGACY_OVERLAY_SHA256='51621bbffc5ab0dfc97e88d66fee93722e66b6b1ed2a8c2ba7d0f588d9345472'
 CONTRACT_FIELDS={'schema','scope','source_overlay_sha256','source_count','unchanged_module_contract_sha256','host_ports_sha256','driver_sha256','cpp_build_policy','matrix_macs','vector_lanes','tokens','profiles','numeric_execution_authorized','final_rtl_accepted'}
@@ -21,7 +24,7 @@ def sha(p):
 def regular(p,cap=2<<20):
  p=P(p);need(p.is_absolute()and all(not q.is_symlink()for q in(p,*p.parents))and p.is_file()and 0<p.stat().st_size<=cap,'bounded canonical regular input');return p
 def load_contract(path,expected):
- need(type(GENERATION_CONTRACT_SHA256)is str and re.fullmatch('[0-9a-f]{64}',GENERATION_CONTRACT_SHA256)and expected in (GENERATION_CONTRACT_SHA256,ADDRESS_GENERATION_CONTRACT_SHA256),'candidate source review not frozen')
+ need(type(GENERATION_CONTRACT_SHA256)is str and re.fullmatch('[0-9a-f]{64}',GENERATION_CONTRACT_SHA256)and expected in (GENERATION_CONTRACT_SHA256,ADDRESS_GENERATION_CONTRACT_SHA256,SUPPLY_GENERATION_CONTRACT_SHA256),'candidate source review not frozen')
  p=regular(path);need(sha(p)==expected,'candidate contract drift');d=json.loads(p.read_text())
  need(set(d)==CONTRACT_FIELDS and d['schema']=='MODEL_CANDIDATE_GENERATION_CONTRACT_V1'and d['scope']=='SOURCE_STRUCTURAL_PRECONDITIONS_ONLY_NOT_NUMERICAL_ACCEPTANCE','candidate contract exact schema')
  need(d['matrix_macs']==4096 and d['vector_lanes']==32 and d['tokens']==128 and d['profiles']==list(range(5))and all(type(v)is int for v in d['profiles']),'single full physical candidate configuration')
@@ -38,7 +41,7 @@ def validate_source_selection(name=LEGACY_SOURCE,first_fault_readonly=False,term
 def selected_inputs(repo,name=LEGACY_SOURCE,first_fault_readonly=False,terminal_finite_readonly=False):
  name=validate_source_selection(name,first_fault_readonly,terminal_finite_readonly)
  repo=P(repo).resolve();directory=repo/SOURCE_DIRS[name]
- expected=GENERATION_CONTRACT_SHA256 if name==LEGACY_SOURCE else ADDRESS_GENERATION_CONTRACT_SHA256
+ expected={LEGACY_SOURCE:GENERATION_CONTRACT_SHA256,ADDRESS_SOURCE:ADDRESS_GENERATION_CONTRACT_SHA256,SUPPLY_SOURCE:SUPPLY_GENERATION_CONTRACT_SHA256}[name]
  contract_path=directory/'GENERATION_CONTRACT.json';overlay=directory/'MODEL_SOURCE_OVERLAY.json'
  contract=load_contract(contract_path,expected)
  need(sha(regular(overlay))==contract['source_overlay_sha256'],'selected source overlay exact contract')
@@ -49,15 +52,18 @@ def require_generation_binding(b):
  diagnostic=binding_policy(b)
  from finite_watchdog_policy import binding_policy as finite_binding
  finite=finite_binding(b)
+ from host_profile_policy import binding_policy as profile_binding
+ profile=profile_binding(b)
+ need(sum(x is not None for x in (diagnostic,finite,profile))<=1,'exclusive explicit driver source policy')
  selection=selected_inputs(b['repo'],b.get('hardware_source',LEGACY_SOURCE),diagnostic is not None,False)
  need(b['generation_contract']==str(selection['contract_path'])and b['generation_contract_sha256']==selection['contract_sha256']and b['fixed_source_overlay']==str(selection['overlay']),'exact selected generation/overlay path identity')
  d=load_contract(b['generation_contract'],b['generation_contract_sha256'])
  need(b['generation_contract']in b['pins']and b['pins'][b['generation_contract']]==b['generation_contract_sha256'],'generation contract in source closure')
  for field,key in [('fixed_source_overlay','source_overlay_sha256'),('unchanged_module_contract','unchanged_module_contract_sha256'),('host_port_contract','host_ports_sha256'),('driver','driver_sha256')]:
-  p=regular(b[field]);expected=finite['finite_driver_sha256'] if finite is not None and field=='driver' else diagnostic['diagnostic_driver']['sha256'] if diagnostic is not None and field=='driver' else d[key]
+  p=regular(b[field]);expected=profile['driver_sha256'] if profile is not None and field=='driver' else finite['finite_driver_sha256'] if finite is not None and field=='driver' else diagnostic['diagnostic_driver']['sha256'] if diagnostic is not None and field=='driver' else d[key]
   need(sha(p)==expected and b['pins'].get(str(p))==expected,'pre-reviewed generation input '+field)
  need(b.get('candidate_status')=='UNREVIEWED_MODEL_BUILD'and b.get('numeric_execution_authorized')is False,'candidate cannot self-admit')
- if selection['name']==ADDRESS_SOURCE:
+ if selection['name'] in (ADDRESS_SOURCE,SUPPLY_SOURCE):
   original=json.loads(regular(P(b['repo'])/'candidates/fresh_original_top_recovery_20261028/SOURCE_AND_TOOLCHAIN_PINS.json').read_text())
   selected=checked_paths(b['repo'],b['fixed_source_overlay'],original,d)
   catalog=regular(P(b['repo'])/'candidates/same_job_execution_20261030/SOURCE_PINS.json');need(b['pins'].get(str(catalog))==sha(catalog),'new source catalog in generation closure')
@@ -82,6 +88,14 @@ def checked_paths(repo,overlay,original,contract):
   need(len(changed)==8 and len(old)-len(changed)==147 and names[155:]==prior['added_names'],'eight changed147 preserved and original four additions')
   target=next(r for r in rows if r['name']=='TransposedDenseBanks.scala')
   need(target['repo_path']==SOURCE_DIRS[ADDRESS_SOURCE]+'/source/TransposedDenseBanks.scala','corrected source exact repo path')
+ if contract['source_overlay_sha256']==SUPPLY_OVERLAY_SHA256:
+  priorpath=regular(repo/SOURCE_DIRS[ADDRESS_SOURCE]/'MODEL_SOURCE_OVERLAY.json')
+  need(sha(priorpath)==ADDRESS_OVERLAY_SHA256,'retain independently reviewed corrected-bank159 source')
+  prior=json.loads(priorpath.read_text());delta=[r['name']for r,o in zip(rows,prior['files'])if r!=o]
+  need(len(rows)==len(prior['files'])==159 and delta==['BurstProtocol.scala', 'DenseOwnerIO.scala', 'HostBlockTopV4.scala', 'IdmaWeightBurst.scala', 'QwenOwnerProtocol.scala', 'TransposedDenseOwner.scala'],'exact six real control/interface replacements on corrected159')
+  need(names[155:]==prior['added_names'],'no extra arithmetic source or per-profile elaboration')
+  for target in (r for r in rows if r['name']in delta):
+   need(target['repo_path']==SOURCE_DIRS[SUPPLY_SOURCE]+'/source/'+target['name'],'exact supply source path')
  paths=[]
  for r in rows:
   rel=pathlib.PurePosixPath(r['repo_path']);need(not rel.is_absolute()and '..'not in rel.parts and str(rel)==r['repo_path']and rel.name==r['name']and rel.suffix=='.scala','canonical Scala source path')

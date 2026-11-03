@@ -1,0 +1,126 @@
+name: hetero-p0-m128-prefill-host-diagnostic-summary-only
+on:
+  push:
+    branches: [main]
+    paths: [ci_launch/p0_m128_prefill_host_diagnostic_20261103_once.json]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: hetero-exclusive-numeric-bootstrap
+  cancel-in-progress: false
+jobs:
+  samejob_p0_host_diagnostic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 350
+    env:
+      MAKEFLAGS: -j1
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record original clock and bounded safe fallback before checkout
+        id: start
+        timeout-minutes: 1
+        run: |
+          set -euo pipefail
+          python3 -I -B - <<'PY'
+          import json, os, pathlib, time
+          root = pathlib.Path(os.environ['RUNNER_TEMP'])
+          clock = dict(schema='SAME_JOB_START_V1', started_monotonic=time.monotonic(), run_id=int(os.environ['GITHUB_RUN_ID']), launch_commit=os.environ['GITHUB_SHA'], job_budget_seconds=21000)
+          with (root/'prefill-host-diagnostic-job-start.json').open('x') as f:
+              json.dump(clock, f, sort_keys=True); f.write('\n')
+          safe = root/'prefill-host-diagnostic-state'
+          safe.mkdir()
+          with (safe/'ENTRY_SUMMARY.json').open('x') as f:
+              json.dump(dict(schema='P0_HOST_DIAGNOSTIC_SAFE_ENTRY_V1', status='NOT_STARTED', reason_code='JOB_DID_NOT_REACH_VALIDATED_EXPORT', execution_mode='SAME_JOB_P0_M128_HOST_DIAGNOSTIC', numerical_pass=False, raw_payloads_uploaded=False), f, sort_keys=True); f.write('\n')
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        timeout-minutes: 1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 3
+      - name: Validate the separately authorized unique launch and reviewed source parent
+        id: launch
+        timeout-minutes: 1
+        run: python3 -B candidates/prefill_host_diagnostic_20261103/validate_launch.py
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        id: source
+        timeout-minutes: 1
+        with:
+          ref: ${{ steps.launch.outputs.source_sha }}
+          persist-credentials: false
+          fetch-depth: 2
+      - name: One real common supply159 build and P0 full-M128 host diagnostic
+        timeout-minutes: 345
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 -B candidates/prefill_host_diagnostic_20261103/prepare_and_run.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --identity "$RUNNER_TEMP/prefill-host-diagnostic-identity.json" \
+            --job-start "$RUNNER_TEMP/prefill-host-diagnostic-job-start.json" \
+            --launch-admission "$RUNNER_TEMP/prefill-host-diagnostic-launch.json" \
+            --work "$RUNNER_TEMP/prefill-host-diagnostic" \
+            --safe-export "$RUNNER_TEMP/prefill-host-diagnostic-safe-export" \
+            --entry-summary "$RUNNER_TEMP/prefill-host-diagnostic-state/ENTRY_SUMMARY.json" \
+            > "$RUNNER_TEMP/prefill-host-diagnostic-local-entry.log" 2>&1
+      - name: Seal only typed summary JSON or one fixed safe failure RESULT
+        id: summary
+        if: ${{ always() && steps.start.outcome == 'success' }}
+        timeout-minutes: 2
+        run: |
+          set -euo pipefail
+          if [[ '${{ steps.launch.outcome == 'success' && steps.source.outcome == 'success' }}' == 'true' ]]; then
+            python3 -I -B candidates/prefill_host_diagnostic_20261103/prepare_and_run.py \
+              --summarize \
+              --work "$RUNNER_TEMP/prefill-host-diagnostic" \
+              --entry-summary "$RUNNER_TEMP/prefill-host-diagnostic-state/ENTRY_SUMMARY.json" \
+              --safe-export "$RUNNER_TEMP/prefill-host-diagnostic-safe-export"
+          else
+            python3 -I -B - <<'PYSAFE'
+          import json, os, pathlib
+          root = pathlib.Path(os.environ['RUNNER_TEMP'])
+          reason = 'LAUNCH_OR_CHECKOUT_REJECTED'
+          state = root/'prefill-host-diagnostic-state/ENTRY_SUMMARY.json'
+          if state.is_file() and not state.is_symlink() and state.stat().st_size <= 4096:
+              try:
+                  value = json.loads(state.read_text())
+                  if value.get('reason_code') == 'LAUNCH_REJECTED': reason = 'LAUNCH_REJECTED'
+              except Exception: pass
+          value = dict(schema='P0_HOST_DIAGNOSTIC_SAFE_FAILURE_V1', status='FAILED_HOST_DIAGNOSTIC', scope='SAME_JOB_P0_M128_HOST_DIAGNOSTIC_NOT_FULL_ACCEPTANCE', numerical_pass=False, full_block_numerical_pass=False, final_rtl_executed=False, diagnostic_failure=True, reason_code=reason, raw_payloads_uploaded=False)
+          output = root/'prefill-host-diagnostic-safe-export'
+          output.mkdir()
+          with (output/'RESULT.json').open('x') as f:
+              json.dump(value, f, indent=2); f.write('\n')
+          PYSAFE
+          fi
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ always() && steps.summary.outcome == 'success' }}
+        timeout-minutes: 2
+        with:
+          name: p0-m128-prefill-host-diagnostic-summary-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/prefill-host-diagnostic-safe-export/RESULT.json
+            ${{ runner.temp }}/prefill-host-diagnostic-safe-export/PHASE_SUMMARY.json
+            ${{ runner.temp }}/prefill-host-diagnostic-safe-export/HOST_TIMING.json
+          if-no-files-found: error
+          retention-days: 7
+          overwrite: false
+# DORMANT SOURCE ONLY. This patch contains no ci_launch file or dispatch trigger.
+# A separate exact source/launch/nonce/attempt1 authorization is still required.
+# Original first-step clock: job21000s/350min, platform ceiling21600s/360min.
+# Control300 + build7200 + preparation3600 + minimumDUT9000 + tail900 = 21000.
+# After real preparation, the original live budget freezes one9000..14400s window.
+# Native stage caps retain cleanup; all gaps and source/resource checks are charged.
+# ALL original70weights/53archives/3runtimes/5references, only P0provider/DUT.
+# GH_TOKEN exists only for the original bootstrap's read-only official acquisition.
+# The original controller strips it from installers/reference/provider/ABI/DUT.
+# Only the three exact JSON paths above may leave the job. No raw logs, tensors,
+# weights, archives, generated binary/SV, local receipts or work-directory upload.
+# Internal ENTRY state never leaves the job. A failed seal uploads nothing.
+# Transport2 remains diagnostic/incomplete; no numerical PASS or final RTL claim.
+# Step maxima are not additive reservations. The owning clock can refuse work.

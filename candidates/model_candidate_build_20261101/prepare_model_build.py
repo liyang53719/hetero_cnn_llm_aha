@@ -22,7 +22,7 @@ def source_pins(repo):
 def run(a):
  need(not(a.first_fault_readonly and getattr(a,'terminal_finite_readonly',False)),'one explicit readonly mode')
  hardware_source=getattr(a,'hardware_source','legacy')
- need(hardware_source in ('legacy','transposed-tile-address-v1'),'explicit bounded hardware source selection')
+ need(hardware_source in ('legacy','transposed-tile-address-v1','prefill-supply-overlap-v1'),'explicit bounded hardware source selection')
  need(hardware_source=='legacy' or not(a.first_fault_readonly or getattr(a,'terminal_finite_readonly',False)),'new hardware cannot use unchanged-SV diagnostic contracts')
  repo=a.repo.resolve();work=a.work;identity=read(a.identity);clock=read(a.job_start)
  need(D.is_relative_to(repo)and subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()==identity['source_commit'],'reviewed checkout')
@@ -49,7 +49,7 @@ def run(a):
 if __name__=='__main__':
  p=argparse.ArgumentParser()
  for n in('repo','work','identity','job-start'):p.add_argument('--'+n,type=P,required=True)
- p.add_argument('--hardware-source',choices=('legacy','transposed-tile-address-v1'),default='legacy')
+ p.add_argument('--hardware-source',choices=('legacy','transposed-tile-address-v1','prefill-supply-overlap-v1'),default='legacy')
  p.add_argument('--first-fault-readonly',action='store_true')
  p.add_argument('--terminal-finite-readonly',action='store_true')
  run(p.parse_args())

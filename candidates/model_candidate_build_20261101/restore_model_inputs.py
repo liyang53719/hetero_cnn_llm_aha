@@ -3,7 +3,7 @@ import argparse,hashlib,importlib.util,json,pathlib,urllib.request,urllib.error,
 P=pathlib.Path
 D=P(__file__).resolve().parent
 TOOLCHAIN_MANIFEST_SHA256='7c8d4bd1f7a0a080f06161e70361a3c3676ede483703a90986fe9dfcf091d85b'
-GENERATION_GATE_SHA256='ab3d9bc5471ffc25cee3a62970fc4c0b225bb865c482081b7ddc40344cfbb009'
+GENERATION_GATE_SHA256='9131e8c6e2e0a3e357990b795ee808837d04ae8bc181862be7a143037166fac2'
 STATUS_SCHEMA='MODEL_CANDIDATE_JAR_INPUT_STATUS_V1'
 REASONS=frozenset({'SOURCE_OR_CONTRACT_REJECTED','JAR_INVENTORY_REJECTED','JAR_CACHE_REJECTED','JAR_MISSING','JAR_CONTENT_REJECTED','JAR_HTTP_ERROR','JAR_NETWORK_ERROR','JAR_TIMEOUT','JAR_IO_ERROR','UNCLASSIFIED_FAILURE'})
 class Rejected(ValueError):
@@ -62,7 +62,7 @@ def run(download=False,verify_only=False,hardware_source='legacy'):
  return status
 
 def main():
- ap=argparse.ArgumentParser();g=ap.add_mutually_exclusive_group();g.add_argument('--download-jars',action='store_true');g.add_argument('--verify-only',action='store_true');ap.add_argument('--status-json',type=P);ap.add_argument('--hardware-source',choices=('legacy','transposed-tile-address-v1'),default='legacy');a=ap.parse_args();result=run(a.download_jars,a.verify_only,a.hardware_source);data=(json.dumps(result,sort_keys=True,allow_nan=False)+'\n').encode();need(len(data)<=2048,'UNCLASSIFIED_FAILURE')
+ ap=argparse.ArgumentParser();g=ap.add_mutually_exclusive_group();g.add_argument('--download-jars',action='store_true');g.add_argument('--verify-only',action='store_true');ap.add_argument('--status-json',type=P);ap.add_argument('--hardware-source',choices=('legacy','transposed-tile-address-v1','prefill-supply-overlap-v1'),default='legacy');a=ap.parse_args();result=run(a.download_jars,a.verify_only,a.hardware_source);data=(json.dumps(result,sort_keys=True,allow_nan=False)+'\n').encode();need(len(data)<=2048,'UNCLASSIFIED_FAILURE')
  if a.status_json is not None:
   need(a.status_json.is_absolute()and a.status_json.parent.is_dir()and all(not p.is_symlink()for p in(a.status_json,*a.status_json.parents)),'JAR_IO_ERROR')
   with a.status_json.open('xb')as f:f.write(data)

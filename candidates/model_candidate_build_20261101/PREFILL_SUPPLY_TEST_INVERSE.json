@@ -1,0 +1,675 @@
+{
+  "scope": "TEST_ONLY_EXACT_PREFILL_TO_FINITE_BASE_INVERSE_NOT_PRODUCER_ACCEPTANCE",
+  "files": {
+    "candidates/model_candidate_build_20261101/bootstrap_model_candidate.py": {
+      "base_sha256": "445c6b47790016c7aaa5a46a72cdb95f295720bcc89d60cf3b85ea8c76e47a86",
+      "candidate_sha256": "ae93da96a1385860135b22adad7542bf19cbd5b25c7e9d3759325cc2f4774485",
+      "base_bytes": 18760,
+      "candidate_bytes": 21604,
+      "inverse": [
+        {
+          "start": 6984,
+          "end": 9253,
+          "before": "def budget_envelope(v,now):\n if getattr(v,'samejob_host_diagnostic_binding',None)is None:\n  need(getattr(v,'samejob_host_diagnostic_binding_sha256',None)is None,'paired diagnostic binding')\n  need(v.remaining_tail_reserve_seconds==900 and v.maximum_build_seconds==7200 and 0<=now-v.job_started_monotonic<9000,'whole job clock and remaining tail reserve')\n  need(getattr(v,'host_profile_driver',None)is None and getattr(v,'host_profile_driver_sha256',None)is None,'host profile source forbidden outside explicit same-job mode')\n  return 9000,1800\n import importlib.util\n path=v.repo.resolve()/'candidates/same_job_execution_20261030/numeric/samejob_host_diagnostic.py'\n binding=v.samejob_host_diagnostic_binding;need(binding.is_file()and binding.stat().st_size<=2<<20 and sha(binding)==v.samejob_host_diagnostic_binding_sha256,'same original owning controller binding')\n b=json.loads(binding.read_text());need(b['pins'].get(str(path))==sha(path),'actual diagnostic bridge source')\n spec=importlib.util.spec_from_file_location('samejob_bootstrap_diagnostic',path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);admission=m.admit_controller(b);_,tail,_=m.reservations(b,admission)\n q=b['budgets'];remaining=v.remaining_tail_reserve_seconds;need(type(remaining)is int and 9900<=remaining<=13500,'remaining continuous prep plus minimum long diagnostic and tail')\n need(dict(path=str(v.host_profile_driver),sha256=v.host_profile_driver_sha256)==b['host_profile_driver'],'same isolated host source relation')\n need(v.hardware_source==m.HARDWARE_SOURCE and not(v.first_fault_readonly or v.terminal_finite_readonly),'separate host diagnostic producer selection')\n need(v.job_started_monotonic==b['job_started_monotonic']and v.maximum_build_seconds==q['build']and v.remaining_tail_reserve_seconds==remaining,'unchanged original clock and exact remaining reservation')\n need(v.work.resolve()==pathlib.Path(b['job_root'])/'build'and v.shared_owned_root.resolve()==pathlib.Path(b['job_root'])and v.repo.resolve()==pathlib.Path(b['repo']),'same job tree and source')\n need(0<=now-v.job_started_monotonic and now-v.job_started_monotonic+v.maximum_build_seconds+remaining<=21000,'same whole350min deadline')\n return 21000,b['host_diagnostic']['bootstrap_seconds']\n\n",
+          "after": ""
+        },
+        {
+          "start": 9746,
+          "end": 10112,
+          "before": " a.add_argument('--hardware-source',choices=('legacy','transposed-tile-address-v1','prefill-supply-overlap-v1'),default='legacy')\n a.add_argument('--host-profile-driver',type=pathlib.Path);a.add_argument('--host-profile-driver-sha256')\n a.add_argument('--samejob-host-diagnostic-binding',type=pathlib.Path);a.add_argument('--samejob-host-diagnostic-binding-sha256')\n",
+          "after": " a.add_argument('--hardware-source',choices=('legacy','transposed-tile-address-v1'),default='legacy')\n"
+        },
+        {
+          "start": 10833,
+          "end": 10906,
+          "before": " whole_job_seconds,bootstrap_seconds=budget_envelope(v,time.monotonic())\n",
+          "after": " need(v.remaining_tail_reserve_seconds==900 and v.maximum_build_seconds==7200 and 0<=time.monotonic()-v.job_started_monotonic<9000,'whole job clock and remaining tail reserve')\n"
+        },
+        {
+          "start": 12444,
+          "end": 12658,
+          "before": " need(subprocess.check_output(['git','-C',str(R),'rev-parse','HEAD'],text=True,env={k:v for k,v in os.environ.items()if k not in ('GH_TOKEN','GITHUB_TOKEN')}).strip()==v.reviewed_repo_sha,'reviewed source commit')\n",
+          "after": " need(subprocess.check_output(['git','-C',str(R),'rev-parse','HEAD'],text=True).strip()==v.reviewed_repo_sha,'reviewed source commit')\n"
+        },
+        {
+          "start": 12762,
+          "end": 12918,
+          "before": " subprocess.run(['git','-C',str(R),'diff','--quiet','HEAD','--'],check=True,env={k:v for k,v in os.environ.items()if k not in ('GH_TOKEN','GITHUB_TOKEN')})\n",
+          "after": " subprocess.run(['git','-C',str(R),'diff','--quiet','HEAD','--'],check=True)\n"
+        },
+        {
+          "start": 15169,
+          "end": 15267,
+          "before": "  need(time.monotonic()-started+wall+30<bootstrap_seconds,'bounded bootstrap shared30min budget')\n",
+          "after": "  need(time.monotonic()-started+wall+30<1800,'bounded bootstrap shared30min budget')\n"
+        },
+        {
+          "start": 15399,
+          "end": 15551,
+          "before": "  need(time.monotonic()-v.job_started_monotonic+wall+30+v.remaining_tail_reserve_seconds<whole_job_seconds,'whole build-only deadline reserves export')\n",
+          "after": "  need(time.monotonic()-v.job_started_monotonic+wall+30+v.remaining_tail_reserve_seconds<9000,'whole build-only deadline reserves export')\n"
+        },
+        {
+          "start": 18915,
+          "end": 19536,
+          "before": " stage('binding',[py,'-B',str(C/'materialize_model_binding.py'),'--hardware-source',v.hardware_source,'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')]+(['--first-fault-readonly'] if v.first_fault_readonly else [])+(['--terminal-finite-readonly'] if v.terminal_finite_readonly else [])+(['--profiled-host-diagnostic']if v.host_profile_driver is not None else []))\n",
+          "after": " stage('binding',[py,'-B',str(C/'materialize_model_binding.py'),'--hardware-source',v.hardware_source,'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')]+(['--first-fault-readonly'] if v.first_fault_readonly else [])+(['--terminal-finite-readonly'] if v.terminal_finite_readonly else []))\n"
+        },
+        {
+          "start": 19833,
+          "end": 19974,
+          "before": " if v.host_profile_driver is not None:bound['host_profile_driver']=dict(path=str(v.host_profile_driver),sha256=v.host_profile_driver_sha256)\n",
+          "after": ""
+        },
+        {
+          "start": 21004,
+          "end": 21372,
+          "before": " bound['job_budget_seconds']=min(v.maximum_build_seconds-int(time.monotonic()-started),int(whole_job_seconds-(time.monotonic()-v.job_started_monotonic))-v.remaining_tail_reserve_seconds);need(bound['job_budget_seconds']>0,'actual remaining build budget');binding.write_text(json.dumps(bound,indent=2)+'\\n');binding.with_suffix('.sha256').write_text(sha(binding)+'\\n')\n",
+          "after": " bound['job_budget_seconds']=min(v.maximum_build_seconds-int(time.monotonic()-started),int(9000-(time.monotonic()-v.job_started_monotonic))-v.remaining_tail_reserve_seconds);need(bound['job_budget_seconds']>0,'actual remaining build budget');binding.write_text(json.dumps(bound,indent=2)+'\\n');binding.with_suffix('.sha256').write_text(sha(binding)+'\\n')\n"
+        }
+      ]
+    },
+    "candidates/model_candidate_build_20261101/candidate_dependency_proof.py": {
+      "base_sha256": "605997044be396ddc37483f7e4d34193111d7ddab8084956be54d594b4b77810",
+      "candidate_sha256": "95ddbaed06f8b533fa08aded6459f37d8201a8e9295c4d869169ec1e7608f17c",
+      "base_bytes": 47506,
+      "candidate_bytes": 69456,
+      "inverse": [
+        {
+          "start": 22656,
+          "end": 43724,
+          "before": "# Additive source-only implementation revision. Historical maps above remain frozen.\n# No source map grants compilation, protocol, numerical, or fullTop acceptance.\nPREFILL_TOOLING_IMPLEMENTATION_PINS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f',\n 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53',\n 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'efc916e3964edb11c89ebd644bd7432d4f07383167c0700f83a51c1cdc86f08c',\n 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': 'eefca1f83aad9dce833dd15ed6aa6a065230d908f095d9ec7ccd5d9cce72ae75',\n 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': '25411d052ef3de56ec46af2c70eb3858127ecb038e71ce8691f1f0d7cb36b5b4',\n 'candidates/model_candidate_build_20261101/finite_watchdog_policy.py': '64c0c273c7c4ef50d8116859f831ac96c7ab792d56db1ec2cef78b9133c19a96',\n 'candidates/model_candidate_build_20261101/model_source_evidence.py': '6706419ba214024963618e530baa712c3167f1ad30bdd4f62db8586a4bd831dc',\n 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': 'b6faa3dcde969e1b1b9489cd21a974e5ed81c4987fe84548448b7f21213f4c97',\n 'candidates/model_candidate_build_20261101/pack_model_candidate.py': 'ec1a13ab3d6eba3d319e88e33ff3fabdeb8ae5c86a24778cac8c5b8bbbf53a77'}\nPREFILL_TOOLING_FIRST_FAULT_IMPLEMENTATIONS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f',\n 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53',\n 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'efc916e3964edb11c89ebd644bd7432d4f07383167c0700f83a51c1cdc86f08c',\n 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': 'eefca1f83aad9dce833dd15ed6aa6a065230d908f095d9ec7ccd5d9cce72ae75',\n 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': '25411d052ef3de56ec46af2c70eb3858127ecb038e71ce8691f1f0d7cb36b5b4',\n 'candidates/model_candidate_build_20261101/finite_watchdog_policy.py': '64c0c273c7c4ef50d8116859f831ac96c7ab792d56db1ec2cef78b9133c19a96',\n 'candidates/model_candidate_build_20261101/first_fault_compilation.py': 'c548cbe0d5891c0a2d0bcb1e51cb3eb2ce48135b666b4857e0d84c2c9b1ab347',\n 'candidates/model_candidate_build_20261101/first_fault_policy.py': 'c095e177128e89c146275b421d76e84320ab0f9bced6de41bf0facd46580e6de',\n 'candidates/model_candidate_build_20261101/first_fault_probe.py': '6ce53ee4a74fd5ba9b533a7051fd1737aed215caa1ed1c3a314a4d0f79ce0766',\n 'candidates/model_candidate_build_20261101/model_source_evidence.py': '6706419ba214024963618e530baa712c3167f1ad30bdd4f62db8586a4bd831dc',\n 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': 'b6faa3dcde969e1b1b9489cd21a974e5ed81c4987fe84548448b7f21213f4c97',\n 'candidates/model_candidate_build_20261101/pack_model_candidate.py': 'ec1a13ab3d6eba3d319e88e33ff3fabdeb8ae5c86a24778cac8c5b8bbbf53a77'}\nPREFILL_TOOLING_TERMINAL_IMPLEMENTATIONS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f',\n 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53',\n 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'efc916e3964edb11c89ebd644bd7432d4f07383167c0700f83a51c1cdc86f08c',\n 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': 'eefca1f83aad9dce833dd15ed6aa6a065230d908f095d9ec7ccd5d9cce72ae75',\n 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': '25411d052ef3de56ec46af2c70eb3858127ecb038e71ce8691f1f0d7cb36b5b4',\n 'candidates/model_candidate_build_20261101/finite_watchdog_policy.py': '64c0c273c7c4ef50d8116859f831ac96c7ab792d56db1ec2cef78b9133c19a96',\n 'candidates/model_candidate_build_20261101/first_fault_compilation.py': 'c548cbe0d5891c0a2d0bcb1e51cb3eb2ce48135b666b4857e0d84c2c9b1ab347',\n 'candidates/model_candidate_build_20261101/first_fault_policy.py': 'c095e177128e89c146275b421d76e84320ab0f9bced6de41bf0facd46580e6de',\n 'candidates/model_candidate_build_20261101/first_fault_probe.py': '6ce53ee4a74fd5ba9b533a7051fd1737aed215caa1ed1c3a314a4d0f79ce0766',\n 'candidates/model_candidate_build_20261101/model_source_evidence.py': '6706419ba214024963618e530baa712c3167f1ad30bdd4f62db8586a4bd831dc',\n 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': 'b6faa3dcde969e1b1b9489cd21a974e5ed81c4987fe84548448b7f21213f4c97',\n 'candidates/model_candidate_build_20261101/pack_model_candidate.py': 'ec1a13ab3d6eba3d319e88e33ff3fabdeb8ae5c86a24778cac8c5b8bbbf53a77',\n 'candidates/model_candidate_build_20261101/terminal_finite_probe.py': '17e9d268e0e5d3d74d0c5c79f53405553771652643bac5822b308dde15d3de18'}\nPREFILL_TOOLING_GENERATION_PAIRS={'0a5e09a27a447b028697a631e5207fc0af6cae15d4c324a55524f9d41a46a753': ('candidates/transposed_tile_address_fix_20261103',\n                                                                      '5ff6c6ee4887700b79f8bd3982250743575c3e3624d294d240b7bd92378bfc02'),\n '3354827c1c9d2ac167b3b325dc07acbd50ea663ddd384dddfea1b1d037ae3851': ('candidates/model_candidate_build_20261101',\n                                                                      '51621bbffc5ab0dfc97e88d66fee93722e66b6b1ed2a8c2ba7d0f588d9345472'),\n 'd6b8f476cb4f586ff47a44d4f2155891f15e3bac99f56e45039c459093feaabb': ('candidates/prefill_supply_overlap_20261103',\n                                                                      'a43e536bc0d0af808429f0730e4ad5fd6f949f4b4e1deb8194c1518eeacb521b')}\ndef prefill_tooling_policy(source,readonly):\n gate='candidates/model_candidate_build_20261101/candidate_generation_gate.py'\n pins=source.get('generation_input_pins',{});paths=[p for p in pins if p.endswith('/'+gate)]\n closure=source.get('model_candidate_observation',{}).get('source_closure',{})\n supply_generation='d6b8f476cb4f586ff47a44d4f2155891f15e3bac99f56e45039c459093feaabb'\n supply_overlay='a43e536bc0d0af808429f0730e4ad5fd6f949f4b4e1deb8194c1518eeacb521b'\n supply_contract='2cdb20b502877708ab91d054f18b7032573569fafd9121144ca7466c68a0f1bd'\n contract=source.get('model_source_evidence',{}).get('contract',{})\n active=(any(pins[p]==PREFILL_TOOLING_IMPLEMENTATION_PINS[gate]for p in paths)or closure.get('generation_contract_sha256')==supply_generation or closure.get('source_overlay',{}).get('sha256')==supply_overlay or contract.get('sha256')==supply_contract or source.get('fixed_source_overlay','').endswith('/candidates/prefill_supply_overlap_20261103/MODEL_SOURCE_OVERLAY.json'))\n if not active:return None\n need(len(paths)==1 and pins[paths[0]]==PREFILL_TOOLING_IMPLEMENTATION_PINS[gate],'one exact prefill-capable tooling root')\n repo=paths[0][:-len(gate)];need(repo.startswith('/')and str(pathlib.PurePosixPath(repo))+'/'==repo and '..'not in pathlib.PurePosixPath(repo).parts,'canonical tooling root')\n generation=closure.get('generation_contract_sha256');need(generation in PREFILL_TOOLING_GENERATION_PAIRS,'fixed tooling generation domain')\n directory,overlay=PREFILL_TOOLING_GENERATION_PAIRS[generation]\n need(closure.get('source_overlay',{}).get('sha256')==overlay and type(closure.get('source_count'))is int and closure['source_count']==159,'exact tooling generation159 pair')\n need(pins.get(repo+directory+'/GENERATION_CONTRACT.json')==generation and pins.get(repo+directory+'/MODEL_SOURCE_OVERLAY.json')==overlay and source.get('fixed_source_overlay')==repo+directory+'/MODEL_SOURCE_OVERLAY.json','exact tooling original hardware paths')\n if readonly is not None:\n  need(directory=='candidates/model_candidate_build_20261101'and 'finite_watchdog_driver'not in source,'readonly remains legacy-only')\n  need(readonly.get('schema')in ('FIRST_FAULT_DRIVER_CONTRACT_V1','FIRST_FAULT_DRIVER_CONTRACT_V2'),'known readonly mode')\n  wanted_contract='b31095b3e118fe5a2639886bb3dbe3f6de8067cd886884d898c1220b85f8500f'\n  selected=PREFILL_TOOLING_TERMINAL_IMPLEMENTATIONS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else PREFILL_TOOLING_FIRST_FAULT_IMPLEMENTATIONS\n  contract_rel='candidates/same_job_execution_20261030/numeric/MODEL_P0_FIRST_FAULT_SOURCE_CONTRACT.json'\n else:\n  from finite_watchdog_policy import artifact_policy,SOURCE_SHA,SOURCE_REL,OLD_SHA\n  finite=artifact_policy(source,source.get('driver_sha256'))\n  selected=PREFILL_TOOLING_IMPLEMENTATION_PINS\n  if generation==supply_generation:\n   need(finite is None and 'readonly_probe'not in source and source.get('driver_sha256')==OLD_SHA,'prefill ordinary original driver only')\n   wanted_contract=supply_contract;contract_rel='candidates/same_job_execution_20261030/numeric/MODEL_P0_PREFILL_SUPPLY_SOURCE_CONTRACT.json'\n  elif finite is not None:wanted_contract=SOURCE_SHA;contract_rel=SOURCE_REL\n  else:\n   need(source.get('driver_sha256')==OLD_SHA,'ordinary original driver remains exact')\n   wanted_contract='7b46242a1206f651e8fac111436b6cb515b6a69f981b6f01c1e1f26bd7f51f13';contract_rel='candidates/same_job_execution_20261030/numeric/MODEL_P0_SOURCE_CONTRACT.json'\n need(contract.get('sha256')==wanted_contract and contract.get('path')==repo+contract_rel and pins.get(repo+contract_rel)==wanted_contract,'exact tooling source-role contract')\n need(all(pins.get(repo+rel)==h for rel,h in selected.items()),'complete exact tooling implementation family')\n return dict(selected)\n\n# Additive host-profile-capable source revision. No build/run acceptance is granted.\n# Historical producer maps and source domains above remain byte-for-byte frozen.\nHOST_PROFILE_TOOLING_IMPLEMENTATION_PINS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f',\n 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53',\n 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'f82485aebcd6b1ab967cd3c47a94529e6abe98f6254d1f72a44d3c87eacfb5fe',\n 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': 'da97e877816469e6e63c8460dea4ef1aa0d7bd058c782ebaf310fd7a358347dc',\n 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': '9131e8c6e2e0a3e357990b795ee808837d04ae8bc181862be7a143037166fac2',\n 'candidates/model_candidate_build_20261101/finite_watchdog_policy.py': '64c0c273c7c4ef50d8116859f831ac96c7ab792d56db1ec2cef78b9133c19a96',\n 'candidates/model_candidate_build_20261101/host_profile_policy.py': '01d80c5ca0d51abf2c4dd77480198ef5774911002c1313ba02290caa5038cba6',\n 'candidates/model_candidate_build_20261101/materialize_model_binding.py': '085e57398717720f74ddb362998c23d132e0df7c49aa809963b1b81f4dabe0c6',\n 'candidates/model_candidate_build_20261101/model_source_evidence.py': 'dafbcff98a0615ea0633422ae0a861309c9501a958908d0781f1a8726c01f6a5',\n 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': 'dea6da1afa53fb5bb515f3374d0db2966a3c6baf558aa3ab9155938df537fda7',\n 'candidates/model_candidate_build_20261101/pack_model_candidate.py': '6e3c1e65e699cd1eb19a68d9d85cd7f08e08761d0b0766b68be16264252700f0'}\nHOST_PROFILE_TOOLING_FIRST_FAULT_IMPLEMENTATIONS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f',\n 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53',\n 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'f82485aebcd6b1ab967cd3c47a94529e6abe98f6254d1f72a44d3c87eacfb5fe',\n 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': 'da97e877816469e6e63c8460dea4ef1aa0d7bd058c782ebaf310fd7a358347dc',\n 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': '9131e8c6e2e0a3e357990b795ee808837d04ae8bc181862be7a143037166fac2',\n 'candidates/model_candidate_build_20261101/finite_watchdog_policy.py': '64c0c273c7c4ef50d8116859f831ac96c7ab792d56db1ec2cef78b9133c19a96',\n 'candidates/model_candidate_build_20261101/first_fault_compilation.py': 'c548cbe0d5891c0a2d0bcb1e51cb3eb2ce48135b666b4857e0d84c2c9b1ab347',\n 'candidates/model_candidate_build_20261101/first_fault_policy.py': 'c095e177128e89c146275b421d76e84320ab0f9bced6de41bf0facd46580e6de',\n 'candidates/model_candidate_build_20261101/first_fault_probe.py': '6ce53ee4a74fd5ba9b533a7051fd1737aed215caa1ed1c3a314a4d0f79ce0766',\n 'candidates/model_candidate_build_20261101/host_profile_policy.py': '01d80c5ca0d51abf2c4dd77480198ef5774911002c1313ba02290caa5038cba6',\n 'candidates/model_candidate_build_20261101/materialize_model_binding.py': '085e57398717720f74ddb362998c23d132e0df7c49aa809963b1b81f4dabe0c6',\n 'candidates/model_candidate_build_20261101/model_source_evidence.py': 'dafbcff98a0615ea0633422ae0a861309c9501a958908d0781f1a8726c01f6a5',\n 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': 'dea6da1afa53fb5bb515f3374d0db2966a3c6baf558aa3ab9155938df537fda7',\n 'candidates/model_candidate_build_20261101/pack_model_candidate.py': '6e3c1e65e699cd1eb19a68d9d85cd7f08e08761d0b0766b68be16264252700f0'}\nHOST_PROFILE_TOOLING_TERMINAL_IMPLEMENTATIONS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f',\n 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53',\n 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'f82485aebcd6b1ab967cd3c47a94529e6abe98f6254d1f72a44d3c87eacfb5fe',\n 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': 'da97e877816469e6e63c8460dea4ef1aa0d7bd058c782ebaf310fd7a358347dc',\n 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': '9131e8c6e2e0a3e357990b795ee808837d04ae8bc181862be7a143037166fac2',\n 'candidates/model_candidate_build_20261101/finite_watchdog_policy.py': '64c0c273c7c4ef50d8116859f831ac96c7ab792d56db1ec2cef78b9133c19a96',\n 'candidates/model_candidate_build_20261101/first_fault_compilation.py': 'c548cbe0d5891c0a2d0bcb1e51cb3eb2ce48135b666b4857e0d84c2c9b1ab347',\n 'candidates/model_candidate_build_20261101/first_fault_policy.py': 'c095e177128e89c146275b421d76e84320ab0f9bced6de41bf0facd46580e6de',\n 'candidates/model_candidate_build_20261101/first_fault_probe.py': '6ce53ee4a74fd5ba9b533a7051fd1737aed215caa1ed1c3a314a4d0f79ce0766',\n 'candidates/model_candidate_build_20261101/host_profile_policy.py': '01d80c5ca0d51abf2c4dd77480198ef5774911002c1313ba02290caa5038cba6',\n 'candidates/model_candidate_build_20261101/materialize_model_binding.py': '085e57398717720f74ddb362998c23d132e0df7c49aa809963b1b81f4dabe0c6',\n 'candidates/model_candidate_build_20261101/model_source_evidence.py': 'dafbcff98a0615ea0633422ae0a861309c9501a958908d0781f1a8726c01f6a5',\n 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': 'dea6da1afa53fb5bb515f3374d0db2966a3c6baf558aa3ab9155938df537fda7',\n 'candidates/model_candidate_build_20261101/pack_model_candidate.py': '6e3c1e65e699cd1eb19a68d9d85cd7f08e08761d0b0766b68be16264252700f0',\n 'candidates/model_candidate_build_20261101/terminal_finite_probe.py': '17e9d268e0e5d3d74d0c5c79f53405553771652643bac5822b308dde15d3de18'}\nHOST_PROFILE_TOOLING_EXTRA_IMPLEMENTATIONS={'candidates/model_candidate_build_20261101/finite_watchdog_policy.py','candidates/model_candidate_build_20261101/host_profile_policy.py','candidates/model_candidate_build_20261101/materialize_model_binding.py'}\nHOST_PROFILE_DRIVER_SHA='e4b23d01ee81a738220512eb24d63b4e323723f686c8af340ad64849a00b5887'\nHOST_PROFILE_CONTRACT_SHA='634ecd3e0187844b7f97ef7ca9b0d38fdd274960bccc210a2419923164e05c24'\n\ndef host_profile_checker():\n path=P(__file__).resolve().with_name('host_profile_policy.py')\n want=HOST_PROFILE_TOOLING_IMPLEMENTATION_PINS['candidates/model_candidate_build_20261101/host_profile_policy.py']\n need(path.is_file()and path==path.resolve()and all(not p.is_symlink()for p in(path,*path.parents))and 0<path.stat().st_size<=1<<20 and sha(path)==want,'exact local host-profile policy before import')\n spec=importlib.util.spec_from_file_location('_reviewed_host_profile_source_policy',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\n return module\n\ndef host_profile_tooling_policy(source,readonly):\n gate='candidates/model_candidate_build_20261101/candidate_generation_gate.py'\n pins=source.get('generation_input_pins',{});paths=[p for p in pins if p.endswith('/'+gate)]\n contract=source.get('model_source_evidence',{}).get('contract',{})\n active=(any(pins[p]==HOST_PROFILE_TOOLING_IMPLEMENTATION_PINS[gate]for p in paths)or 'host_profile_driver'in source or source.get('driver_sha256')==HOST_PROFILE_DRIVER_SHA or contract.get('sha256')==HOST_PROFILE_CONTRACT_SHA)\n if not active:return None\n need(len(paths)==1 and pins[paths[0]]==HOST_PROFILE_TOOLING_IMPLEMENTATION_PINS[gate],'one exact host-profile-capable tooling root')\n repo=paths[0][:-len(gate)];need(repo.startswith('/')and not repo.startswith('//')and str(pathlib.PurePosixPath(repo))+'/'==repo and '..'not in pathlib.PurePosixPath(repo).parts,'canonical host-profile tooling root')\n closure=source.get('model_candidate_observation',{}).get('source_closure',{})\n generation=closure.get('generation_contract_sha256');need(generation in PREFILL_TOOLING_GENERATION_PAIRS,'fixed host-profile tooling hardware domain')\n directory,overlay=PREFILL_TOOLING_GENERATION_PAIRS[generation]\n need(closure.get('source_overlay',{}).get('sha256')==overlay and type(closure.get('source_count'))is int and closure['source_count']==159,'exact host-profile tooling generation159 pair')\n need(pins.get(repo+directory+'/GENERATION_CONTRACT.json')==generation and pins.get(repo+directory+'/MODEL_SOURCE_OVERLAY.json')==overlay and source.get('fixed_source_overlay')==repo+directory+'/MODEL_SOURCE_OVERLAY.json','exact host-profile tooling original hardware paths')\n checker=host_profile_checker();profile=checker.artifact_policy(source,source.get('driver_sha256'))\n if readonly is not None:\n  need(profile is None and directory=='candidates/model_candidate_build_20261101'and 'finite_watchdog_driver'not in source,'readonly remains legacy-only without host profiling')\n  need(readonly.get('schema')in ('FIRST_FAULT_DRIVER_CONTRACT_V1','FIRST_FAULT_DRIVER_CONTRACT_V2'),'known readonly mode')\n  wanted_contract='b31095b3e118fe5a2639886bb3dbe3f6de8067cd886884d898c1220b85f8500f'\n  contract_rel='candidates/same_job_execution_20261030/numeric/MODEL_P0_FIRST_FAULT_SOURCE_CONTRACT.json'\n  selected=HOST_PROFILE_TOOLING_TERMINAL_IMPLEMENTATIONS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else HOST_PROFILE_TOOLING_FIRST_FAULT_IMPLEMENTATIONS\n else:\n  from finite_watchdog_policy import artifact_policy,SOURCE_SHA,SOURCE_REL,OLD_SHA\n  finite=artifact_policy(source,source.get('driver_sha256'))\n  selected=HOST_PROFILE_TOOLING_IMPLEMENTATION_PINS\n  if profile is not None:\n   need(finite is None and generation==checker.GENERATION_SHA and overlay==checker.OVERLAY_SHA and directory=='candidates/prefill_supply_overlap_20261103','profiled driver only on exact supply159')\n   need(source['model_candidate_build_evidence']['driver_dependency']['driver']==repo+checker.DRIVER_REL,'same original profiled driver/compiler root')\n   need(source['host_profile_driver']['path']==repo+checker.REL and pins.get(repo+checker.REL)==checker.REL_SHA,'same original profiled relation root')\n   wanted_contract=checker.CONTRACT_SHA;contract_rel=checker.CONTRACT_REL\n  elif generation=='d6b8f476cb4f586ff47a44d4f2155891f15e3bac99f56e45039c459093feaabb':\n   need(finite is None and 'readonly_probe'not in source and source.get('driver_sha256')==OLD_SHA,'ordinary prefill preserves original driver')\n   wanted_contract='2cdb20b502877708ab91d054f18b7032573569fafd9121144ca7466c68a0f1bd';contract_rel='candidates/same_job_execution_20261030/numeric/MODEL_P0_PREFILL_SUPPLY_SOURCE_CONTRACT.json'\n  elif finite is not None:wanted_contract=SOURCE_SHA;contract_rel=SOURCE_REL\n  else:\n   need(source.get('driver_sha256')==OLD_SHA,'ordinary legacy/address driver remains exact')\n   wanted_contract='7b46242a1206f651e8fac111436b6cb515b6a69f981b6f01c1e1f26bd7f51f13';contract_rel='candidates/same_job_execution_20261030/numeric/MODEL_P0_SOURCE_CONTRACT.json'\n need(contract.get('sha256')==wanted_contract and contract.get('path')==repo+contract_rel and pins.get(repo+contract_rel)==wanted_contract,'exact host-profile tooling source-role contract')\n for rel,want in selected.items():\n  matches=[path for path in pins if path.endswith('/'+rel)]\n  need(matches==[repo+rel]and pins[matches[0]]==want,'complete exact host-profile tooling implementation '+rel)\n return dict(selected)\n\n",
+          "after": ""
+        },
+        {
+          "start": 43771,
+          "end": 43952,
+          "before": " profile=host_profile_tooling_policy(source,readonly)\n if profile is not None:return profile\n prefill=prefill_tooling_policy(source,readonly)\n if prefill is not None:return prefill\n",
+          "after": ""
+        },
+        {
+          "start": 48158,
+          "end": 48247,
+          "before": "LOCAL_PACK_READER_SHA='6e3c1e65e699cd1eb19a68d9d85cd7f08e08761d0b0766b68be16264252700f0'\n",
+          "after": "LOCAL_PACK_READER_SHA='131cf5bf3e015994670a35c94a9f30d66e518429e409373c3289e938dbade103'\n"
+        },
+        {
+          "start": 49695,
+          "end": 51230,
+          "before": "  if selector in (HOST_PROFILE_TOOLING_IMPLEMENTATION_PINS,HOST_PROFILE_TOOLING_FIRST_FAULT_IMPLEMENTATIONS,HOST_PROFILE_TOOLING_TERMINAL_IMPLEMENTATIONS):\n   required=CANDIDATE_REQUIRED_IMPLEMENTATIONS if readonly is None else TERMINAL_REQUIRED_IMPLEMENTATIONS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else FIRST_FAULT_REQUIRED_IMPLEMENTATIONS\n   need(set(selector)==required|HOST_PROFILE_TOOLING_EXTRA_IMPLEMENTATIONS and all(type(h)is str and re.fullmatch('[0-9a-f]{64}',h)for h in selector.values()),'host-profile producer contract frozen')\n  else:\n   need(set(selector)==(CANDIDATE_REQUIRED_IMPLEMENTATIONS|{'candidates/model_candidate_build_20261101/finite_watchdog_policy.py'} if selector in (FINITE_WATCHDOG_IMPLEMENTATION_PINS,PREFILL_TOOLING_IMPLEMENTATION_PINS) else FIRST_FAULT_REQUIRED_IMPLEMENTATIONS|{'candidates/model_candidate_build_20261101/finite_watchdog_policy.py'} if selector in (FINITE_POLICY_FIRST_FAULT_IMPLEMENTATIONS,PREFILL_TOOLING_FIRST_FAULT_IMPLEMENTATIONS) else TERMINAL_REQUIRED_IMPLEMENTATIONS|{'candidates/model_candidate_build_20261101/finite_watchdog_policy.py'} if selector in (FINITE_POLICY_TERMINAL_IMPLEMENTATIONS,PREFILL_TOOLING_TERMINAL_IMPLEMENTATIONS) else CANDIDATE_REQUIRED_IMPLEMENTATIONS if readonly is None else TERMINAL_REQUIRED_IMPLEMENTATIONS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else FIRST_FAULT_REQUIRED_IMPLEMENTATIONS)and all(type(h)is str and re.fullmatch('[0-9a-f]{64}',h)for h in selector.values()),'selector-aware producer contract frozen')\n",
+          "after": "  need(set(selector)==(CANDIDATE_REQUIRED_IMPLEMENTATIONS|{'candidates/model_candidate_build_20261101/finite_watchdog_policy.py'} if selector==FINITE_WATCHDOG_IMPLEMENTATION_PINS else FIRST_FAULT_REQUIRED_IMPLEMENTATIONS|{'candidates/model_candidate_build_20261101/finite_watchdog_policy.py'} if selector==FINITE_POLICY_FIRST_FAULT_IMPLEMENTATIONS else TERMINAL_REQUIRED_IMPLEMENTATIONS|{'candidates/model_candidate_build_20261101/finite_watchdog_policy.py'} if selector==FINITE_POLICY_TERMINAL_IMPLEMENTATIONS else CANDIDATE_REQUIRED_IMPLEMENTATIONS if readonly is None else TERMINAL_REQUIRED_IMPLEMENTATIONS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else FIRST_FAULT_REQUIRED_IMPLEMENTATIONS)and all(type(h)is str and re.fullmatch('[0-9a-f]{64}',h)for h in selector.values()),'selector-aware producer contract frozen')\n"
+        }
+      ]
+    },
+    "candidates/model_candidate_build_20261101/candidate_generation_gate.py": {
+      "base_sha256": "ab3d9bc5471ffc25cee3a62970fc4c0b225bb865c482081b7ddc40344cfbb009",
+      "candidate_sha256": "9131e8c6e2e0a3e357990b795ee808837d04ae8bc181862be7a143037166fac2",
+      "base_bytes": 8904,
+      "candidate_bytes": 10552,
+      "inverse": [
+        {
+          "start": 712,
+          "end": 1273,
+          "before": "SUPPLY_SOURCE='prefill-supply-overlap-v1'\nSUPPLY_GENERATION_CONTRACT_SHA256='d6b8f476cb4f586ff47a44d4f2155891f15e3bac99f56e45039c459093feaabb' # Isolated unreviewed source proposal; no numeric/build execution grant.\nSUPPLY_OVERLAY_SHA256='a43e536bc0d0af808429f0730e4ad5fd6f949f4b4e1deb8194c1518eeacb521b'\nSOURCE_CHOICES=(LEGACY_SOURCE,ADDRESS_SOURCE,SUPPLY_SOURCE)\nSOURCE_DIRS={LEGACY_SOURCE:'candidates/model_candidate_build_20261101',ADDRESS_SOURCE:'candidates/transposed_tile_address_fix_20261103',SUPPLY_SOURCE:'candidates/prefill_supply_overlap_20261103'}\n",
+          "after": "SOURCE_CHOICES=(LEGACY_SOURCE,ADDRESS_SOURCE)\nSOURCE_DIRS={LEGACY_SOURCE:'candidates/model_candidate_build_20261101',ADDRESS_SOURCE:'candidates/transposed_tile_address_fix_20261103'}\n"
+        },
+        {
+          "start": 2075,
+          "end": 2331,
+          "before": " need(type(GENERATION_CONTRACT_SHA256)is str and re.fullmatch('[0-9a-f]{64}',GENERATION_CONTRACT_SHA256)and expected in (GENERATION_CONTRACT_SHA256,ADDRESS_GENERATION_CONTRACT_SHA256,SUPPLY_GENERATION_CONTRACT_SHA256),'candidate source review not frozen')\n",
+          "after": " need(type(GENERATION_CONTRACT_SHA256)is str and re.fullmatch('[0-9a-f]{64}',GENERATION_CONTRACT_SHA256)and expected in (GENERATION_CONTRACT_SHA256,ADDRESS_GENERATION_CONTRACT_SHA256),'candidate source review not frozen')\n"
+        },
+        {
+          "start": 4024,
+          "end": 4181,
+          "before": " expected={LEGACY_SOURCE:GENERATION_CONTRACT_SHA256,ADDRESS_SOURCE:ADDRESS_GENERATION_CONTRACT_SHA256,SUPPLY_SOURCE:SUPPLY_GENERATION_CONTRACT_SHA256}[name]\n",
+          "after": " expected=GENERATION_CONTRACT_SHA256 if name==LEGACY_SOURCE else ADDRESS_GENERATION_CONTRACT_SHA256\n"
+        },
+        {
+          "start": 4751,
+          "end": 4954,
+          "before": " from host_profile_policy import binding_policy as profile_binding\n profile=profile_binding(b)\n need(sum(x is not None for x in (diagnostic,finite,profile))<=1,'exclusive explicit driver source policy')\n",
+          "after": ""
+        },
+        {
+          "start": 5732,
+          "end": 6014,
+          "before": "  p=regular(b[field]);expected=profile['driver_sha256'] if profile is not None and field=='driver' else finite['finite_driver_sha256'] if finite is not None and field=='driver' else diagnostic['diagnostic_driver']['sha256'] if diagnostic is not None and field=='driver' else d[key]\n",
+          "after": "  p=regular(b[field]);expected=finite['finite_driver_sha256'] if finite is not None and field=='driver' else diagnostic['diagnostic_driver']['sha256'] if diagnostic is not None and field=='driver' else d[key]\n"
+        },
+        {
+          "start": 6252,
+          "end": 6309,
+          "before": " if selection['name'] in (ADDRESS_SOURCE,SUPPLY_SOURCE):\n",
+          "after": " if selection['name']==ADDRESS_SOURCE:\n"
+        },
+        {
+          "start": 9261,
+          "end": 10146,
+          "before": " if contract['source_overlay_sha256']==SUPPLY_OVERLAY_SHA256:\n  priorpath=regular(repo/SOURCE_DIRS[ADDRESS_SOURCE]/'MODEL_SOURCE_OVERLAY.json')\n  need(sha(priorpath)==ADDRESS_OVERLAY_SHA256,'retain independently reviewed corrected-bank159 source')\n  prior=json.loads(priorpath.read_text());delta=[r['name']for r,o in zip(rows,prior['files'])if r!=o]\n  need(len(rows)==len(prior['files'])==159 and delta==['BurstProtocol.scala', 'DenseOwnerIO.scala', 'HostBlockTopV4.scala', 'IdmaWeightBurst.scala', 'QwenOwnerProtocol.scala', 'TransposedDenseOwner.scala'],'exact six real control/interface replacements on corrected159')\n  need(names[155:]==prior['added_names'],'no extra arithmetic source or per-profile elaboration')\n  for target in (r for r in rows if r['name']in delta):\n   need(target['repo_path']==SOURCE_DIRS[SUPPLY_SOURCE]+'/source/'+target['name'],'exact supply source path')\n",
+          "after": ""
+        }
+      ]
+    },
+    "candidates/model_candidate_build_20261101/materialize_model_binding.py": {
+      "base_sha256": "e4e7cd00eff6224ba7c35fffdd66c041b371138686b728188376c2b231bd068c",
+      "candidate_sha256": "085e57398717720f74ddb362998c23d132e0df7c49aa809963b1b81f4dabe0c6",
+      "base_bytes": 11300,
+      "candidate_bytes": 12549,
+      "inverse": [
+        {
+          "start": 1015,
+          "end": 1145,
+          "before": " a.add_argument('--hardware-source',choices=('legacy','transposed-tile-address-v1','prefill-supply-overlap-v1'),default='legacy')\n",
+          "after": " a.add_argument('--hardware-source',choices=('legacy','transposed-tile-address-v1'),default='legacy')\n"
+        },
+        {
+          "start": 1387,
+          "end": 1457,
+          "before": " flags.add_argument('--profiled-host-diagnostic',action='store_true')\n",
+          "after": ""
+        },
+        {
+          "start": 1745,
+          "end": 2098,
+          "before": " source_contract=R/'candidates/same_job_execution_20261030/numeric/MODEL_P0_SOURCE_CONTRACT.json'\n if selection['name']=='prefill-supply-overlap-v1':\n  from model_source_evidence import PREFILL_CONTRACT_REL,PREFILL_CONTRACT_SHA\n  source_contract=R/PREFILL_CONTRACT_REL;need(sha(source_contract)==PREFILL_CONTRACT_SHA,'exact prefill P0 source contract')\n",
+          "after": ""
+        },
+        {
+          "start": 6650,
+          "end": 7089,
+          "before": " host_profile=None\n if v.profiled_host_diagnostic:\n  from host_profile_policy import load as load_profile,REL as PROFILE_REL,REL_SHA as PROFILE_REL_SHA,DRIVER_REL as PROFILE_DRIVER_REL,CONTRACT_REL as PROFILE_CONTRACT_REL,HARDWARE as PROFILE_HARDWARE\n  need(v.hardware_source==PROFILE_HARDWARE,'profiled mapper requires explicit supply159')\n  host_profile=load_profile(R);driver=R/PROFILE_DRIVER_REL;source_contract=R/PROFILE_CONTRACT_REL\n",
+          "after": ""
+        },
+        {
+          "start": 8139,
+          "end": 8318,
+          "before": " paths += [str(R/'candidates/same_job_execution_20261030/SOURCE_PINS.json'),str(source_contract),str(R/'candidates/p0_newboundary_input_provider_20261028/PROGRAM_MANIFEST.json')]\n",
+          "after": " paths += [str(R/'candidates/same_job_execution_20261030/SOURCE_PINS.json'),str(R/'candidates/same_job_execution_20261030/numeric/MODEL_P0_SOURCE_CONTRACT.json'),str(R/'candidates/p0_newboundary_input_provider_20261028/PROGRAM_MANIFEST.json')]\n"
+        },
+        {
+          "start": 10132,
+          "end": 10422,
+          "before": " if host_profile is not None:\n  profile_paths=[R/PROFILE_REL,R/PROFILE_CONTRACT_REL]+[R/x['repo_path']for x in host_profile['sources'].values()]\n  need(all(str(p.relative_to(R))in tracked for p in profile_paths),'tracked profiled host source closure')\n  paths+=list(map(str,profile_paths))\n",
+          "after": ""
+        },
+        {
+          "start": 10496,
+          "end": 11880,
+          "before": " b=dict(provider_root_receipt=provider_root_receipt,schema='MODEL_CANDIDATE_BUILD_BINDING_V1',mode='BUILD_ONLY',candidate_status='UNREVIEWED_MODEL_BUILD',numeric_execution_authorized=False,generation_contract=str(selection['contract_path']),generation_contract_sha256=selection['contract_sha256'],hardware_source=selection['name'],unchanged_module_contract=str(K/'MODEL_CANDIDATE_PRECONDITIONS.json'),host_port_contract=str(C/'OBSERVER_HOST_PORTS_122.json'),model_source_contract=str(source_contract),jdk_aliases=jdk_aliases,repo=str(R),repo_sha=v.expected_repo_sha,java=str(java),verilator=str(T/'verilator'),make=str(pathlib.Path('/usr/bin/make').resolve()),python=str(pathlib.Path('/usr/bin/python3').resolve()),pins=pins,provider_sources=providers,idma_include_dirs=inc,idma_defines=defs,hierarchy=str(D/'hierarchy_r7.vlt'),driver=str(driver),driver_include=str(driver_headers),helper_sources=list(map(str,helpers)),output=str(v.output.resolve()),fixed_source_overlay=str(selection['overlay']),fixed_source_validator=str(K/'candidate_generation_gate.py'),sv_identity_script=str(K/'observe_model_sv.py'),materialized_roots=[str(T),str(I.parent.parent),str(M),str(C),str(D),str(K)])\n if host_profile is not None:\n  b['host_profile_driver']={'path':str(R/PROFILE_REL),'sha256':PROFILE_REL_SHA}\n  from host_profile_policy import binding_policy as profile_binding\n  profile_binding(b)\n",
+          "after": " b=dict(provider_root_receipt=provider_root_receipt,schema='MODEL_CANDIDATE_BUILD_BINDING_V1',mode='BUILD_ONLY',candidate_status='UNREVIEWED_MODEL_BUILD',numeric_execution_authorized=False,generation_contract=str(selection['contract_path']),generation_contract_sha256=selection['contract_sha256'],hardware_source=selection['name'],unchanged_module_contract=str(K/'MODEL_CANDIDATE_PRECONDITIONS.json'),host_port_contract=str(C/'OBSERVER_HOST_PORTS_122.json'),model_source_contract=str(R/'candidates/same_job_execution_20261030/numeric/MODEL_P0_SOURCE_CONTRACT.json'),jdk_aliases=jdk_aliases,repo=str(R),repo_sha=v.expected_repo_sha,java=str(java),verilator=str(T/'verilator'),make=str(pathlib.Path('/usr/bin/make').resolve()),python=str(pathlib.Path('/usr/bin/python3').resolve()),pins=pins,provider_sources=providers,idma_include_dirs=inc,idma_defines=defs,hierarchy=str(D/'hierarchy_r7.vlt'),driver=str(driver),driver_include=str(driver_headers),helper_sources=list(map(str,helpers)),output=str(v.output.resolve()),fixed_source_overlay=str(selection['overlay']),fixed_source_validator=str(K/'candidate_generation_gate.py'),sv_identity_script=str(K/'observe_model_sv.py'),materialized_roots=[str(T),str(I.parent.parent),str(M),str(C),str(D),str(K)])\n"
+        }
+      ]
+    },
+    "candidates/model_candidate_build_20261101/model_source_evidence.py": {
+      "base_sha256": "f23de70d574c5b33f9ad04230b86420519cfa435a7c23d81972fd52c9c81a250",
+      "candidate_sha256": "dafbcff98a0615ea0633422ae0a861309c9501a958908d0781f1a8726c01f6a5",
+      "base_bytes": 4302,
+      "candidate_bytes": 6986,
+      "inverse": [
+        {
+          "start": 505,
+          "end": 1266,
+          "before": "# Source-only prefill revision; these pins do not qualify fullTop or authorize execution.\nPREFILL_SOURCE='prefill-supply-overlap-v1'\nPREFILL_DIR='candidates/prefill_supply_overlap_20261103'\nPREFILL_GENERATION_SHA='d6b8f476cb4f586ff47a44d4f2155891f15e3bac99f56e45039c459093feaabb'\nPREFILL_OVERLAY_SHA='a43e536bc0d0af808429f0730e4ad5fd6f949f4b4e1deb8194c1518eeacb521b'\nPREFILL_CONTRACT_SHA='2cdb20b502877708ab91d054f18b7032573569fafd9121144ca7466c68a0f1bd'\nPREFILL_CONTRACT_REL='candidates/same_job_execution_20261030/numeric/MODEL_P0_PREFILL_SUPPLY_SOURCE_CONTRACT.json'\nPREFILL_DRIVER_REL='candidates/moe_router_score_observation_20261030/driver/host_axi_driver_non_dpi.cpp'\nPREFILL_DRIVER_SHA='343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61'\n",
+          "after": ""
+        },
+        {
+          "start": 1803,
+          "end": 3546,
+          "before": "def prefill_contract(b):\n \"\"\"Select only the exact ordinary prefill source domain; no legacy aliases.\"\"\"\n active=(b.get('hardware_source')==PREFILL_SOURCE or b.get('generation_contract_sha256')==PREFILL_GENERATION_SHA or str(b.get('fixed_source_overlay','')).endswith('/'+PREFILL_DIR+'/MODEL_SOURCE_OVERLAY.json') or str(b.get('model_source_contract','')).endswith('/'+PREFILL_CONTRACT_REL))\n if not active:return None\n need(b.get('hardware_source')==PREFILL_SOURCE and 'first_fault_driver_contract'not in b and 'finite_watchdog_driver'not in b,'prefill requires explicit ordinary source selection, no readonly/finite crossover')\n repo=P(b['repo']).resolve()\n from host_profile_policy import binding_policy as profile_binding,CONTRACT_REL as PROFILE_CONTRACT_REL,CONTRACT_SHA as PROFILE_CONTRACT_SHA,DRIVER_REL as PROFILE_DRIVER_REL,DRIVER_SHA as PROFILE_DRIVER_SHA\n profile=profile_binding(b)\n contract_rel,contract_sha,driver_rel,driver_sha=(PROFILE_CONTRACT_REL,PROFILE_CONTRACT_SHA,PROFILE_DRIVER_REL,PROFILE_DRIVER_SHA)if profile is not None else(PREFILL_CONTRACT_REL,PREFILL_CONTRACT_SHA,PREFILL_DRIVER_REL,PREFILL_DRIVER_SHA)\n for field,rel,want in [('generation_contract',PREFILL_DIR+'/GENERATION_CONTRACT.json',PREFILL_GENERATION_SHA),('fixed_source_overlay',PREFILL_DIR+'/MODEL_SOURCE_OVERLAY.json',PREFILL_OVERLAY_SHA),('model_source_contract',contract_rel,contract_sha),('driver',driver_rel,driver_sha)]:\n  path=repo/rel;need(b.get(field)==str(path),'exact prefill source path '+field)\n  actual=pin(path);need(actual['sha256']==want and b['pins'].get(str(path))==want,'exact pinned prefill input '+field)\n need(b.get('generation_contract_sha256')==PREFILL_GENERATION_SHA,'exact prefill generation selection')\n return contract_sha\n\n",
+          "after": ""
+        },
+        {
+          "start": 3700,
+          "end": 3844,
+          "before": " prefill=prefill_contract(original)\n if prefill is not None:need(prefill_contract(b)==prefill,'same original/admitted prefill source contract')\n",
+          "after": ""
+        },
+        {
+          "start": 4117,
+          "end": 4271,
+          "before": " want_contract=prefill if prefill is not None else FINITE_SOURCE_SHA if finite is not None else CONTRACT_SHA if readonly is None else SOURCE_CONTRACT_SHA\n",
+          "after": " want_contract=FINITE_SOURCE_SHA if finite is not None else CONTRACT_SHA if readonly is None else SOURCE_CONTRACT_SHA\n"
+        }
+      ]
+    },
+    "candidates/model_candidate_build_20261101/pack_model_candidate.py": {
+      "base_sha256": "131cf5bf3e015994670a35c94a9f30d66e518429e409373c3289e938dbade103",
+      "candidate_sha256": "6e3c1e65e699cd1eb19a68d9d85cd7f08e08761d0b0766b68be16264252700f0",
+      "base_bytes": 36781,
+      "candidate_bytes": 38097,
+      "inverse": [
+        {
+          "start": 5839,
+          "end": 6280,
+          "before": "SUPPLY_GENERATION_SHA='d6b8f476cb4f586ff47a44d4f2155891f15e3bac99f56e45039c459093feaabb'\nSUPPLY_OVERLAY_SHA='a43e536bc0d0af808429f0730e4ad5fd6f949f4b4e1deb8194c1518eeacb521b'\nSUPPLY_SOURCE_DIR='candidates/prefill_supply_overlap_20261103'\nSOURCE_GENERATIONS={'transposed-tile-address-v1':(ADDRESS_GENERATION_SHA,ADDRESS_OVERLAY_SHA,ADDRESS_SOURCE_DIR),'prefill-supply-overlap-v1':(SUPPLY_GENERATION_SHA,SUPPLY_OVERLAY_SHA,SUPPLY_SOURCE_DIR)}\n",
+          "after": ""
+        },
+        {
+          "start": 7145,
+          "end": 7730,
+          "before": "def source_generation(c):\n matches=[(name,pair)for name,pair in SOURCE_GENERATIONS.items()if c.get('generation_contract_sha256')==pair[0]or c.get('source_overlay',{}).get('sha256')==pair[1]]\n if not matches:return None\n need(len(matches)==1,'one new source generation pair')\n name,(generation,overlay,directory)=matches[0]\n need(c.get('generation_contract_sha256')==generation and c.get('source_overlay',{}).get('sha256')==overlay and type(c.get('source_count'))is int and c['source_count']==159,'new hardware generation/overlay exact pair')\n return name,generation,overlay,directory\n\n",
+          "after": ""
+        },
+        {
+          "start": 7769,
+          "end": 7877,
+          "before": " \"\"\"Known new source pairs only; never learn from emitted IR/SV.\"\"\"\n return source_generation(c)is not None\n",
+          "after": " \"\"\"One new source generation pair, never learned from emitted IR/SV.\"\"\"\n active=c.get('generation_contract_sha256')==ADDRESS_GENERATION_SHA or c.get('source_overlay',{}).get('sha256')==ADDRESS_OVERLAY_SHA\n if active:\n  need(c.get('generation_contract_sha256')==ADDRESS_GENERATION_SHA and c.get('source_overlay',{}).get('sha256')==ADDRESS_OVERLAY_SHA and type(c.get('source_count'))is int and c['source_count']==159,'new hardware generation/overlay exact pair')\n return active\n"
+        },
+        {
+          "start": 7934,
+          "end": 8058,
+          "before": " selected=source_generation(obs['source_closure'])\n if selected is None:return\n _,generation,overlay_sha,directory=selected\n",
+          "after": " if not address_generation_observation(obs['source_closure']):return\n"
+        },
+        {
+          "start": 8280,
+          "end": 8476,
+          "before": " suffix='/'+directory+'/GENERATION_CONTRACT.json'\n matches=[p for p in pins if p.endswith(suffix)];need(len(matches)==1 and pins[matches[0]]==generation,'new hardware pinned generation contract')\n",
+          "after": " suffix='/'+ADDRESS_SOURCE_DIR+'/GENERATION_CONTRACT.json'\n matches=[p for p in pins if p.endswith(suffix)];need(len(matches)==1 and pins[matches[0]]==ADDRESS_GENERATION_SHA,'new hardware pinned generation contract')\n"
+        },
+        {
+          "start": 8625,
+          "end": 8815,
+          "before": " overlay=repo+'/'+directory+'/MODEL_SOURCE_OVERLAY.json'\n need(source.get('fixed_source_overlay')==overlay and pins.get(overlay)==overlay_sha,'new hardware exact selected overlay identity')\n",
+          "after": " overlay=repo+'/'+ADDRESS_SOURCE_DIR+'/MODEL_SOURCE_OVERLAY.json'\n need(source.get('fixed_source_overlay')==overlay and pins.get(overlay)==ADDRESS_OVERLAY_SHA,'new hardware exact selected overlay identity')\n"
+        },
+        {
+          "start": 9101,
+          "end": 9374,
+          "before": " text=evidence.get('text');need(type(text)is str and evidence.get('path')==overlay and evidence.get('sha256')==overlay_sha and evidence.get('bytes')==len(text.encode()) and hashlib.sha256(text.encode()).hexdigest()==overlay_sha,'new hardware retained exact overlay bytes')\n",
+          "after": " text=evidence.get('text');need(type(text)is str and evidence.get('path')==overlay and evidence.get('sha256')==ADDRESS_OVERLAY_SHA and evidence.get('bytes')==len(text.encode()) and hashlib.sha256(text.encode()).hexdigest()==ADDRESS_OVERLAY_SHA,'new hardware retained exact overlay bytes')\n"
+        },
+        {
+          "start": 19926,
+          "end": 20136,
+          "before": " if address_generation_observation(obs['source_closure']) or original.get('hardware_source')in SOURCE_GENERATIONS or original.get('generation_contract_sha256')in (ADDRESS_GENERATION_SHA,SUPPLY_GENERATION_SHA):\n",
+          "after": " if address_generation_observation(obs['source_closure']) or original.get('hardware_source')=='transposed-tile-address-v1' or original.get('generation_contract_sha256')==ADDRESS_GENERATION_SHA:\n"
+        },
+        {
+          "start": 20203,
+          "end": 20421,
+          "before": "  selected=source_generation(obs['source_closure']);need(selected is not None and original.get('hardware_source')==b.get('hardware_source')==selected[0],'new hardware explicit same original/admitted source selection')\n",
+          "after": "  need(original.get('hardware_source')==b.get('hardware_source')=='transposed-tile-address-v1','new hardware explicit same original/admitted source selection')\n"
+        },
+        {
+          "start": 22653,
+          "end": 22827,
+          "before": " from finite_watchdog_policy import binding_policy as finite_binding\n from host_profile_policy import expected_driver_sha,binding_policy as profile_binding,retained_relation\n",
+          "after": " from finite_watchdog_policy import expected_driver_sha,binding_policy as finite_binding\n"
+        },
+        {
+          "start": 23050,
+          "end": 23174,
+          "before": " profile=profile_binding(original);need(profile_binding(b)==profile,'same original/admitted profiled mapper source policy')\n",
+          "after": ""
+        },
+        {
+          "start": 26294,
+          "end": 26465,
+          "before": " need('host_profile_driver'not in source,'no prefilled profiled driver source relation')\n if profile is not None:source['host_profile_driver']=retained_relation(original)\n",
+          "after": ""
+        },
+        {
+          "start": 33321,
+          "end": 33983,
+          "before": " from host_profile_policy import artifact_policy as profile_artifact\n profile=profile_artifact(source,actual['driver']['sha256'])\n need(sum(x is not None for x in (readonly,finite,profile))<=1,'exclusive driver policy')\n need(actual['driver']['sha256']==(profile['driver_sha256']if profile is not None else finite['finite_driver_sha256']if finite is not None else DRIVER_SHA if readonly is None else readonly['diagnostic_driver']['sha256']),'fixed policy driver');need(source.get('sv_sha256')==actual['sv']['sha256']and source.get('driver_sha256')==actual['driver']['sha256'],'source ledger exact actual SV/driver');obs=source.get('model_candidate_observation')\n",
+          "after": " need(readonly is None or finite is None,'exclusive driver policy')\n need(actual['driver']['sha256']==(finite['finite_driver_sha256']if finite is not None else DRIVER_SHA if readonly is None else readonly['diagnostic_driver']['sha256']),'fixed policy driver');need(source.get('sv_sha256')==actual['sv']['sha256']and source.get('driver_sha256')==actual['driver']['sha256'],'source ledger exact actual SV/driver');obs=source.get('model_candidate_observation')\n"
+        }
+      ]
+    },
+    "candidates/model_candidate_build_20261101/prepare_model_build.py": {
+      "base_sha256": "d9c2b96abd75c32e1989aa159e4d1bc7e5b4e7799be82f5c4aad8855bcf434e6",
+      "candidate_sha256": "022fd5b1941f18c918b277863ffbae0dadd1c04f8c298e9b65bce9500246f0c8",
+      "base_bytes": 5350,
+      "candidate_bytes": 5406,
+      "inverse": [
+        {
+          "start": 1385,
+          "end": 1524,
+          "before": " need(hardware_source in ('legacy','transposed-tile-address-v1','prefill-supply-overlap-v1'),'explicit bounded hardware source selection')\n",
+          "after": " need(hardware_source in ('legacy','transposed-tile-address-v1'),'explicit bounded hardware source selection')\n"
+        },
+        {
+          "start": 5127,
+          "end": 5257,
+          "before": " p.add_argument('--hardware-source',choices=('legacy','transposed-tile-address-v1','prefill-supply-overlap-v1'),default='legacy')\n",
+          "after": " p.add_argument('--hardware-source',choices=('legacy','transposed-tile-address-v1'),default='legacy')\n"
+        }
+      ]
+    },
+    "candidates/model_candidate_build_20261101/restore_model_inputs.py": {
+      "base_sha256": "6fa921b094094a61e7c1a7d88e05aff14c1161672164f38281209aaa71e2fa2b",
+      "candidate_sha256": "52cf08821a982a4e0cadc8661d0d7e6c9877a4541b5389a79231410b2e10f15d",
+      "base_bytes": 5894,
+      "candidate_bytes": 5922,
+      "inverse": [
+        {
+          "start": 314,
+          "end": 404,
+          "before": "GENERATION_GATE_SHA256='9131e8c6e2e0a3e357990b795ee808837d04ae8bc181862be7a143037166fac2'\n",
+          "after": "GENERATION_GATE_SHA256='ab3d9bc5471ffc25cee3a62970fc4c0b225bb865c482081b7ddc40344cfbb009'\n"
+        },
+        {
+          "start": 5000,
+          "end": 5536,
+          "before": " ap=argparse.ArgumentParser();g=ap.add_mutually_exclusive_group();g.add_argument('--download-jars',action='store_true');g.add_argument('--verify-only',action='store_true');ap.add_argument('--status-json',type=P);ap.add_argument('--hardware-source',choices=('legacy','transposed-tile-address-v1','prefill-supply-overlap-v1'),default='legacy');a=ap.parse_args();result=run(a.download_jars,a.verify_only,a.hardware_source);data=(json.dumps(result,sort_keys=True,allow_nan=False)+'\\n').encode();need(len(data)<=2048,'UNCLASSIFIED_FAILURE')\n",
+          "after": " ap=argparse.ArgumentParser();g=ap.add_mutually_exclusive_group();g.add_argument('--download-jars',action='store_true');g.add_argument('--verify-only',action='store_true');ap.add_argument('--status-json',type=P);ap.add_argument('--hardware-source',choices=('legacy','transposed-tile-address-v1'),default='legacy');a=ap.parse_args();result=run(a.download_jars,a.verify_only,a.hardware_source);data=(json.dumps(result,sort_keys=True,allow_nan=False)+'\\n').encode();need(len(data)<=2048,'UNCLASSIFIED_FAILURE')\n"
+        }
+      ]
+    },
+    "candidates/same_job_execution_20261030/numeric/candidate_observation_contract.py": {
+      "base_sha256": "78f9dcadf4cc08f9dd11aa0e5a66035dafe86a4b49a0a2ef45dd287fd7502be9",
+      "candidate_sha256": "cac9a33fd9434e3b9ccdaf91270ab26efb57126d8c3bcdefdd6f9987069a4292",
+      "base_bytes": 17896,
+      "candidate_bytes": 22564,
+      "inverse": [
+        {
+          "start": 338,
+          "end": 1006,
+          "before": "# A separate source-only candidate domain, not evidence of actual fullTop acceptance.\nPREFILL_CONTRACT_SHA='2cdb20b502877708ab91d054f18b7032573569fafd9121144ca7466c68a0f1bd'\nPREFILL_CONTRACT_FILE='MODEL_P0_PREFILL_SUPPLY_SOURCE_CONTRACT.json'\nPREFILL_DIR='candidates/prefill_supply_overlap_20261103'\nPREFILL_GENERATION_SHA='d6b8f476cb4f586ff47a44d4f2155891f15e3bac99f56e45039c459093feaabb'\nPREFILL_OVERLAY_SHA='a43e536bc0d0af808429f0730e4ad5fd6f949f4b4e1deb8194c1518eeacb521b'\nPREFILL_DRIVER_REL='candidates/moe_router_score_observation_20261030/driver/host_axi_driver_non_dpi.cpp'\nPREFILL_DRIVER_SHA='343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61'\n",
+          "after": ""
+        },
+        {
+          "start": 2549,
+          "end": 2981,
+          "before": "def host_context(context):\n return type(context)is dict and context.get('schema')=='ADMITTED_SAME_JOB_P0_HOST_DIAGNOSTIC_V1' and context.get('candidate_scope')=='SAME_JOB_P0_M128_HOST_DIAGNOSTIC_NOT_FULL_ACCEPTANCE'\ndef host_module():\n path=HERE/'samejob_host_diagnostic.py';spec=importlib.util.spec_from_file_location('actual_samejob_host_context',path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m\n\n",
+          "after": ""
+        },
+        {
+          "start": 3013,
+          "end": 3180,
+          "before": " if host_context(context):\n  b=host_module().admitted_context(context);row=b['host_diagnostic']['source_contract'];return row['sha256'],pathlib.Path(row['path']).name\n",
+          "after": ""
+        },
+        {
+          "start": 3218,
+          "end": 4025,
+          "before": " if row['sha256']==PREFILL_CONTRACT_SHA:\n  review=json.loads(pin(context['model_candidate_review']).read_text())\n  need(review.get('schema')=='INDEPENDENT_MODEL_CANDIDATE_EXECUTION_REVIEW_V1'and review.get('scope')==SCOPE and review.get('status')=='REVIEWED_FOR_MODEL_NUMERICAL_EVALUATION','independently admitted ordinary prefill review')\n  need('first_fault_diagnostic'not in review and (type(review.get('data_reference_contract'))is not dict or 'finite_watchdog_driver'not in review['data_reference_contract']),'prefill review cannot borrow readonly/finite authority')\n  overlay=pin(review['source_overlay']);need(overlay.stat().st_size<=2<<20 and review['source_overlay']['sha256']==PREFILL_OVERLAY_SHA,'independently reviewed exact prefill overlay')\n  return PREFILL_CONTRACT_SHA,PREFILL_CONTRACT_FILE\n",
+          "after": ""
+        },
+        {
+          "start": 4683,
+          "end": 4756,
+          "before": " if host_context(context):return host_module().admitted_context(context)\n",
+          "after": ""
+        },
+        {
+          "start": 6670,
+          "end": 8787,
+          "before": "def prefill_source_domain(manifest,selected_sha):\n \"\"\"Join new contract to original generation paths, without rewriting provenance.\"\"\"\n closure=manifest.get('model_candidate_observation',{}).get('source_closure',{})\n fixed=manifest.get('fixed_source_overlay','')\n active=(selected_sha==PREFILL_CONTRACT_SHA or closure.get('generation_contract_sha256')==PREFILL_GENERATION_SHA or closure.get('source_overlay',{}).get('sha256')==PREFILL_OVERLAY_SHA or (type(fixed)is str and fixed.endswith('/'+PREFILL_DIR+'/MODEL_SOURCE_OVERLAY.json')))\n if not active:return\n need(selected_sha==PREFILL_CONTRACT_SHA,'prefill hardware requires its own reviewed source contract')\n need('readonly_probe'not in manifest and 'finite_watchdog_driver'not in manifest and manifest.get('driver_sha256')==PREFILL_DRIVER_SHA,'prefill uses only ordinary original driver, never readonly/finite evidence')\n need(closure.get('generation_contract_sha256')==PREFILL_GENERATION_SHA and closure.get('source_overlay',{}).get('sha256')==PREFILL_OVERLAY_SHA and type(closure.get('source_count'))is int and closure['source_count']==159,'exact prefill generation159 pair')\n suffix='/'+PREFILL_DIR+'/MODEL_SOURCE_OVERLAY.json'\n need(type(fixed)is str and fixed.endswith(suffix),'exact prefill original overlay role');repo=fixed[:-len(suffix)]\n need(repo.startswith('/')and str(pathlib.PurePosixPath(repo))==repo and '..'not in pathlib.PurePosixPath(repo).parts,'canonical prefill original builder root')\n pins=manifest['generation_input_pins']\n for rel,want in [(PREFILL_DIR+'/GENERATION_CONTRACT.json',PREFILL_GENERATION_SHA),(PREFILL_DIR+'/MODEL_SOURCE_OVERLAY.json',PREFILL_OVERLAY_SHA),('candidates/same_job_execution_20261030/numeric/'+PREFILL_CONTRACT_FILE,PREFILL_CONTRACT_SHA),(PREFILL_DRIVER_REL,PREFILL_DRIVER_SHA)]:\n  matches=[p for p in pins if p.endswith('/'+rel)]\n  need(matches==[repo+'/'+rel]and pins[matches[0]]==want,'exact original prefill source input '+rel)\n need(manifest['model_source_evidence']['contract']['path']==repo+'/candidates/same_job_execution_20261030/numeric/'+PREFILL_CONTRACT_FILE,'exact original prefill contract role')\n\n",
+          "after": ""
+        },
+        {
+          "start": 9286,
+          "end": 9361,
+          "before": " if not host_context(context):prefill_source_domain(manifest,selected_sha)\n",
+          "after": ""
+        },
+        {
+          "start": 10384,
+          "end": 10384,
+          "before": "",
+          "after": " module=reviewed_module('candidate_artifact_handoff',context)\n"
+        },
+        {
+          "start": 10446,
+          "end": 10792,
+          "before": " if host_context(context):\n  helper=host_module();helper.verify_candidate_payload(root,identity,context['artifact_manifest']['sha256'],context['repo'],review['pins'])\n else:\n  module=reviewed_module('candidate_artifact_handoff',context)\n  module.verify_compilation_policy(artifact,root,receipt,context['current_source_pins_pin'],context['repo'])\n",
+          "after": " module.verify_compilation_policy(artifact,root,receipt,context['current_source_pins_pin'],context['repo'])\n"
+        },
+        {
+          "start": 15851,
+          "end": 16178,
+          "before": "  need((host_context(source_relocation) or source_relocation['schema']=='ADMITTED_CLOUD_P0_SOURCE_RELOCATION_V1')and source_relocation['builder_source_commit']==identity['source_commit']and source_relocation['source_manifest_sha256']==common['source_manifest']['sha256'],'same independently admitted frozen source relocation')\n",
+          "after": "  need(source_relocation['schema']=='ADMITTED_CLOUD_P0_SOURCE_RELOCATION_V1'and source_relocation['builder_source_commit']==identity['source_commit']and source_relocation['source_manifest_sha256']==common['source_manifest']['sha256'],'same independently admitted frozen source relocation')\n"
+        },
+        {
+          "start": 17163,
+          "end": 17279,
+          "before": "    if host_context(source_relocation):need(r['origin_path']==p['path'],'same-job source path cannot be relocated')\n",
+          "after": ""
+        }
+      ]
+    },
+    "candidates/model_candidate_build_20261101/one_job_model_candidate.py": {
+      "base_sha256": "b6faa3dcde969e1b1b9489cd21a974e5ed81c4987fe84548448b7f21213f4c97",
+      "candidate_sha256": "dea6da1afa53fb5bb515f3374d0db2966a3c6baf558aa3ab9155938df537fda7",
+      "base_bytes": 25573,
+      "candidate_bytes": 25570,
+      "inverse": [
+        {
+          "start": 13139,
+          "end": 13192,
+          "before": " from host_profile_policy import expected_driver_sha\n",
+          "after": " from finite_watchdog_policy import expected_driver_sha\n"
+        }
+      ]
+    },
+    "candidates/model_candidate_build_20261101/candidate_build_producer.py": {
+      "base_sha256": "efc916e3964edb11c89ebd644bd7432d4f07383167c0700f83a51c1cdc86f08c",
+      "candidate_sha256": "f82485aebcd6b1ab967cd3c47a94529e6abe98f6254d1f72a44d3c87eacfb5fe",
+      "base_bytes": 9080,
+      "candidate_bytes": 9077,
+      "inverse": [
+        {
+          "start": 2780,
+          "end": 2833,
+          "before": " from host_profile_policy import expected_driver_sha\n",
+          "after": " from finite_watchdog_policy import expected_driver_sha\n"
+        }
+      ]
+    },
+    "candidates/model_candidate_build_20261101/candidate_conditional_admission.py": {
+      "base_sha256": "eefca1f83aad9dce833dd15ed6aa6a065230d908f095d9ec7ccd5d9cce72ae75",
+      "candidate_sha256": "da97e877816469e6e63c8460dea4ef1aa0d7bd058c782ebaf310fd7a358347dc",
+      "base_bytes": 13561,
+      "candidate_bytes": 13558,
+      "inverse": [
+        {
+          "start": 5615,
+          "end": 5668,
+          "before": " from host_profile_policy import expected_driver_sha\n",
+          "after": " from finite_watchdog_policy import expected_driver_sha\n"
+        }
+      ]
+    },
+    "candidates/same_job_execution_20261030/numeric/connect_owned.py": {
+      "base_sha256": "672c6ff3f1ae2d90752d9c831474256e542cab268b2fa41c4c1f9c52c71d71bc",
+      "candidate_sha256": "dfa830aaa1974fd0ec8a45e6f00f21f284880941a612e2c7f783fdfa43eb0740",
+      "base_bytes": 16766,
+      "candidate_bytes": 17469,
+      "inverse": [
+        {
+          "start": 1192,
+          "end": 1307,
+          "before": " if context is None or ('model_candidate_review'not in context and not consumer.host_context(context)):return None\n",
+          "after": " if context is None or 'model_candidate_review'not in context:return None\n"
+        },
+        {
+          "start": 1379,
+          "end": 1556,
+          "before": " consumer.need(consumer.host_context(context) or first_fault or context.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL','admitted model scope')\n",
+          "after": " consumer.need(first_fault or context.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL','admitted model scope')\n"
+        },
+        {
+          "start": 10592,
+          "end": 10839,
+          "before": " if consumer.host_context(source_relocation):argv+=['--execution-mode',consumer.HOST_DIAGNOSTIC_MODE,'--samejob-diagnostic-binding',str(args.samejob_diagnostic_binding),'--samejob-diagnostic-binding-sha256',args.samejob_diagnostic_binding_sha256]\n",
+          "after": ""
+        },
+        {
+          "start": 11934,
+          "end": 12045,
+          "before": " ap.add_argument('--samejob-diagnostic-binding',type=P);ap.add_argument('--samejob-diagnostic-binding-sha256')\n",
+          "after": ""
+        },
+        {
+          "start": 13509,
+          "end": 13779,
+          "before": " elif consumer.host_context(source_relocation):\n  consumer.host_diagnostic_module().admitted_context(source_relocation);consumer.need(args.profile==0 and frozen['common']['driver']['sha256']==consumer.host_diagnostic_module().DRIVER_SHA,'new same-job P0 driver domain')\n",
+          "after": ""
+        }
+      ]
+    },
+    "candidates/same_job_execution_20261030/numeric/consumer_owned.py": {
+      "base_sha256": "5513ca59dd2f3bf9dc48337fc1a97966bb5fc3f527f5d3d86a76a48e73ccf773",
+      "candidate_sha256": "19df2986355a75a65c85331abebd670044d7e243d3cd0312576b46a345ef79bc",
+      "base_bytes": 59535,
+      "candidate_bytes": 65851,
+      "inverse": [
+        {
+          "start": 9935,
+          "end": 10082,
+          "before": "    need('diagnostic_deadline_monotonic'not in limits,'same-job diagnostic uses existing closed raw-log execution, no unbound streaming deadline')\n",
+          "after": ""
+        },
+        {
+          "start": 12452,
+          "end": 12599,
+          "before": "        diagnostic_launch=host_diagnostic_module().cap_before_popen(limits,time.monotonic()) if 'diagnostic_deadline_monotonic'in limits else None\n",
+          "after": ""
+        },
+        {
+          "start": 13045,
+          "end": 13112,
+          "before": "        observed_exit_monotonic=None;diagnostic_wall_timeout=False\n",
+          "after": ""
+        },
+        {
+          "start": 13307,
+          "end": 13953,
+          "before": "                proof=dict(schema='ACTUAL_DUT_POPEN_V1',pid=p.pid,consumer_pid=os.getpid(),consumer_start_tick=int(pathlib.Path('/proc/self/stat').read_text().rsplit(')',1)[1].split()[19]),inherited_group=os.getpgrp(),inherited_session=os.getsid(0),binary_sha256=binary_sha,runtime_sha256=runtime_sha)\n                if diagnostic_launch is not None:\n                    proof['host_diagnostic_execution']=dict(diagnostic_launch,popen_after_monotonic=time.monotonic())\n                    proof.update(started_monotonic=diagnostic_launch['popen_before_monotonic'],effective_runtime_limits=dict(limits))\n                json.dump(proof,evidence)\n",
+          "after": "                json.dump(dict(schema='ACTUAL_DUT_POPEN_V1',pid=p.pid,consumer_pid=os.getpid(),consumer_start_tick=int(pathlib.Path('/proc/self/stat').read_text().rsplit(')',1)[1].split()[19]),inherited_group=os.getpgrp(),inherited_session=os.getsid(0),binary_sha256=binary_sha,runtime_sha256=runtime_sha),evidence)\n"
+        },
+        {
+          "start": 14014,
+          "end": 14131,
+          "before": "            if diagnostic_launch is not None:deadline=min(deadline,diagnostic_launch['absolute_deadline_monotonic'])\n",
+          "after": ""
+        },
+        {
+          "start": 14356,
+          "end": 14450,
+          "before": "                    if diagnostic_launch is not None:observed_exit_monotonic=time.monotonic()\n",
+          "after": ""
+        },
+        {
+          "start": 14547,
+          "end": 14728,
+          "before": "                if time.monotonic()>=deadline:\n                    diagnostic_wall_timeout=diagnostic_launch is not None\n                    raise TimeoutError('DUT wall deadline')\n",
+          "after": "                if time.monotonic()>=deadline: raise TimeoutError('DUT wall deadline')\n"
+        },
+        {
+          "start": 15018,
+          "end": 16787,
+          "before": "            if diagnostic_launch is None:\n                if p.poll() is None:p.kill()\n                p.wait()\n            else:\n                # Never poll/reap first: wait4 supplies this actual child's CPU,\n                # separate from outer controller/supervisor wall and CPU.\n                state=os.waitid(os.P_PID,p.pid,os.WEXITED|os.WNOHANG|os.WNOWAIT)\n                cleanup_started=time.monotonic()\n                if state is None:\n                    try:p.kill()\n                    except ProcessLookupError:pass\n                while True:\n                    try:waited,status,usage=os.wait4(p.pid,0);break\n                    except InterruptedError:continue\n                need(waited==p.pid,'actual diagnostic child wait identity')\n                p.returncode=os.waitstatus_to_exitcode(status);reaped=time.monotonic()\n                termination=dict(schema='ACTUAL_DUT_TERMINATION_V1',scope=HOST_DIAGNOSTIC_SCOPE,pid=p.pid,consumer_pid=os.getpid(),binary_sha256=binary_sha,runtime_sha256=runtime_sha,started_monotonic=diagnostic_launch['popen_before_monotonic'],observed_exit_monotonic=observed_exit_monotonic,cleanup_started_monotonic=cleanup_started,reaped_monotonic=reaped,elapsed_through_reap_seconds=reaped-diagnostic_launch['popen_before_monotonic'],wait4_child_user_seconds=usage.ru_utime,wait4_child_system_seconds=usage.ru_stime,wait4_child_cpu_seconds=usage.ru_utime+usage.ru_stime,native_exit=p.returncode,wall_deadline_triggered=diagnostic_wall_timeout,effective_runtime_limits=dict(limits),measurement_scope='DIRECT_DUT_CHILD_HOST_TIME_NOT_RTL_CYCLES_NOT_OUTER_STAGE',outer_cleanup_still_required=True)\n                with pathlib.Path(log).with_suffix('.termination.json').open('x')as evidence:json.dump(termination,evidence)\n",
+          "after": "            if p.poll() is None:\n                p.kill()\n            p.wait()\n"
+        },
+        {
+          "start": 17058,
+          "end": 17715,
+          "before": "HOST_DIAGNOSTIC_MODE='SAME_JOB_P0_M128_HOST_DIAGNOSTIC'\nHOST_DIAGNOSTIC_SCOPE=HOST_DIAGNOSTIC_MODE+'_NOT_FULL_ACCEPTANCE'\nclass HostDiagnosticBoundary(Exception):pass\n\ndef host_diagnostic_module():\n    import importlib.util\n    path=pathlib.Path(__file__).resolve().with_name('samejob_host_diagnostic.py')\n    spec=importlib.util.spec_from_file_location('actual_samejob_host_diagnostic',path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m\n\ndef host_context(context):\n    return type(context)is dict and context.get('schema')=='ADMITTED_SAME_JOB_P0_HOST_DIAGNOSTIC_V1' and context.get('candidate_scope')==HOST_DIAGNOSTIC_SCOPE\n\n",
+          "after": ""
+        },
+        {
+          "start": 19361,
+          "end": 19664,
+          "before": "    elif frozen['schema']=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1' and host_context(source_relocation):\n        host_diagnostic_module().admitted_context(source_relocation)\n        need(source_relocation['builder_identity']==frozen['artifact_identity'],'same-job diagnostic artifact identity')\n",
+          "after": ""
+        },
+        {
+          "start": 21842,
+          "end": 22022,
+          "before": "    elif host_context(source_relocation) or (source_relocation is not None and source_relocation.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL'):\n",
+          "after": "    elif source_relocation is not None and source_relocation.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL':\n"
+        },
+        {
+          "start": 25414,
+          "end": 25664,
+          "before": "    elif host_context(source_relocation):\n        host_diagnostic_module().admitted_context(source_relocation)\n        need(profile==0 and common['driver']['sha256']==host_diagnostic_module().DRIVER_SHA,'exact independent same-job host driver only')\n",
+          "after": ""
+        },
+        {
+          "start": 32044,
+          "end": 32273,
+          "before": "    if getattr(args,'samejob_diagnostic_binding',None)is not None:return host_diagnostic_module().verify_build(args,frozen)\n    need(getattr(args,'samejob_diagnostic_binding_sha256',None)is None,'no unpaired diagnostic binding')\n",
+          "after": ""
+        },
+        {
+          "start": 34700,
+          "end": 34826,
+          "before": "    if getattr(args,'samejob_diagnostic_binding',None)is not None:return host_diagnostic_module().source_context(args,frozen)\n",
+          "after": ""
+        },
+        {
+          "start": 41351,
+          "end": 41934,
+          "before": "    if getattr(args,'execution_mode',None)==HOST_DIAGNOSTIC_MODE:\n        helper=host_diagnostic_module();binding,row,admission=helper.load_binding(args)\n        need(args.calibration_wall_seconds is None,'no calibration fallback for host diagnostic')\n        if not args.validate_only:need('frozen_window'in admission,'actual execution requires frozen one-shot long window')\n        return helper,admission\n    need(getattr(args,'samejob_diagnostic_binding',None)is None and getattr(args,'samejob_diagnostic_binding_sha256',None)is None,'diagnostic binding forbidden in old modes')\n",
+          "after": ""
+        },
+        {
+          "start": 47628,
+          "end": 47755,
+          "before": "    a.add_argument('--samejob-diagnostic-binding',type=pathlib.Path)\n    a.add_argument('--samejob-diagnostic-binding-sha256')\n",
+          "after": ""
+        },
+        {
+          "start": 48782,
+          "end": 48984,
+          "before": "    a.add_argument('--execution-mode',choices=('BOUNDED_CALIBRATION','FULL_BLOCK_ACCEPTANCE','STAGE_COVERAGE_DIAGNOSTIC','P0_FIRST_FAULT_DIAGNOSTIC',HOST_DIAGNOSTIC_MODE),default='BOUNDED_CALIBRATION')\n",
+          "after": "    a.add_argument('--execution-mode',choices=('BOUNDED_CALIBRATION','FULL_BLOCK_ACCEPTANCE','STAGE_COVERAGE_DIAGNOSTIC','P0_FIRST_FAULT_DIAGNOSTIC'),default='BOUNDED_CALIBRATION')\n"
+        },
+        {
+          "start": 54767,
+          "end": 56043,
+          "before": "        if host_context(source_relocation):summary.update(diagnostic_binding_sha256=source_relocation['diagnostic_binding']['sha256'],candidate_scope=HOST_DIAGNOSTIC_SCOPE)\n        elif source_relocation.get('candidate_scope') is not None:summary.update(model_candidate_review_sha256=source_relocation['model_candidate_review']['sha256'],candidate_scope=source_relocation['candidate_scope'])\n    summary['execution_admission']={'scope':HOST_DIAGNOSTIC_SCOPE if admission['mode']==HOST_DIAGNOSTIC_MODE else 'P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE' if admission['mode']==mode.FIRST_FAULT else 'CALIBRATION_SAME_FULL_M128_STIMULUS' if admission['mode']==mode.CALIBRATION else 'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE' if admission['mode']==mode.STAGE else 'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE', 'execution_mode':admission['mode'], 'reviewed_budget_sha256':admission['reviewed_budget_sha256'],'original_limits':dict(limits),'effective_limits':execution_limits,'outer_cleanup_proof_required':True,'peak_resource_qualification':'INCOMPLETE_SAMPLED','numerical_pass':False}\n    if admission['mode']==HOST_DIAGNOSTIC_MODE:summary['execution_admission'].update(frozen_window=admission['frozen_window'],diagnostic_profiles=[0])\n",
+          "after": "        if source_relocation.get('candidate_scope') is not None:summary.update(model_candidate_review_sha256=source_relocation['model_candidate_review']['sha256'],candidate_scope=source_relocation['candidate_scope'])\n    summary['execution_admission']={'scope':'P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE' if admission['mode']==mode.FIRST_FAULT else 'CALIBRATION_SAME_FULL_M128_STIMULUS' if admission['mode']==mode.CALIBRATION else 'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE' if admission['mode']==mode.STAGE else 'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE', 'execution_mode':admission['mode'], 'reviewed_budget_sha256':admission['reviewed_budget_sha256'],'original_limits':dict(limits),'effective_limits':execution_limits,'outer_cleanup_proof_required':True,'peak_resource_qualification':'INCOMPLETE_SAMPLED','numerical_pass':False}\n"
+        },
+        {
+          "start": 58162,
+          "end": 58392,
+          "before": "            if admission['mode']==HOST_DIAGNOSTIC_MODE:\n                execution_limits=mode.remaining_limits(execution_limits,admission,time.monotonic());summary['execution_admission']['effective_limits']=dict(execution_limits)\n",
+          "after": ""
+        },
+        {
+          "start": 59245,
+          "end": 59392,
+          "before": "            if admission['mode']==HOST_DIAGNOSTIC_MODE:raise HostDiagnosticBoundary() # no full final-value comparison/qualification in this scope\n",
+          "after": ""
+        },
+        {
+          "start": 63990,
+          "end": 64066,
+          "before": "        except HostDiagnosticBoundary:r['diagnostic_process_complete']=True\n",
+          "after": ""
+        },
+        {
+          "start": 64166,
+          "end": 64295,
+          "before": "            if admission['mode']==HOST_DIAGNOSTIC_MODE:summary['execution_admission']['effective_limits']=dict(execution_limits)\n",
+          "after": ""
+        },
+        {
+          "start": 64876,
+          "end": 65058,
+          "before": "        r['qualification']=dict(status='INCOMPLETE',scope=HOST_DIAGNOSTIC_SCOPE,numerical_pass=False) if admission['mode']==HOST_DIAGNOSTIC_MODE else required_acceptance.evaluate(r)\n",
+          "after": "        r['qualification']=required_acceptance.evaluate(r)\n"
+        },
+        {
+          "start": 65247,
+          "end": 65414,
+          "before": "        summary['numeric_acceptance']=HOST_DIAGNOSTIC_SCOPE if admission['mode']==HOST_DIAGNOSTIC_MODE else 'FULL_M128_EXACT_REFERENCE_PENDING_VERIFIED_OUTER_CLEANUP'\n",
+          "after": "        summary['numeric_acceptance']='FULL_M128_EXACT_REFERENCE_PENDING_VERIFIED_OUTER_CLEANUP'\n"
+        },
+        {
+          "start": 65576,
+          "end": 65742,
+          "before": "    if admission['mode']==HOST_DIAGNOSTIC_MODE:print('SAME_JOB_P0_HOST_DIAGNOSTIC_LOCAL_RESULT_RECORDED_NOT_ACCEPTANCE')\n    else:print(json.dumps(summary,indent=2))\n",
+          "after": "    print(json.dumps(summary,indent=2))\n"
+        }
+      ]
+    }
+  }
+}

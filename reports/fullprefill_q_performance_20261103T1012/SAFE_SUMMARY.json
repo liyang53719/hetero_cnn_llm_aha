@@ -1,0 +1,156 @@
+{
+  "scope": "ACTUAL_Q_ONLY_COMPLETION_TO_COMPLETION_NOT_FULL_BLOCK",
+  "producer_source_commit": "acee98254a7c6adba0bd5f00dd4db8f045072021",
+  "program_manifest": {
+    "bytes": 15000,
+    "sha256": "4f201e1744b8aa2c604a478ca837076abaf41a7235b62d8aa7ef14fcdc830163",
+    "independently_rehashed": true,
+    "matches_current_fresh_provider_manifest": true
+  },
+  "operation": {
+    "pc": 1,
+    "operation": "l0.q",
+    "opcode": "MATRIX_GEMM",
+    "owner": "MATRIX",
+    "roots": [
+      10,
+      15,
+      18
+    ],
+    "a": "n0",
+    "b": "wq",
+    "dst": "qraw",
+    "outputs": [
+      "qraw"
+    ]
+  },
+  "shape": {
+    "M": 128,
+    "N": 1536,
+    "K": 1536
+  },
+  "capacity_macs_per_cycle": 4096,
+  "actual_counter_delta": {
+    "cycles": 999385,
+    "active_cycles": 999385,
+    "pc": 1,
+    "completions": 1,
+    "read_bursts": 86028,
+    "read_beats": 86028,
+    "read_acks": 86028,
+    "write_bursts": 2048,
+    "write_beats": 12288,
+    "write_acks": 12288,
+    "write_ack_bytes": 786432,
+    "pipeline_issues": 73728,
+    "pipeline_stalls": 3048,
+    "idma_transfers": 88076,
+    "idma_cache_hits": 0,
+    "idma_streamed_read_beats": 86016,
+    "idma_streamed_write_beats": 12288,
+    "owner_jobs": 1,
+    "useful_macs": 301989888,
+    "executed_macs": 301989888,
+    "host_write_bytes": 786432,
+    "memory_accepted_0": 12,
+    "memory_returned_0": 12,
+    "memory_accepted_1": 0,
+    "memory_returned_1": 0,
+    "reset_required": 0
+  },
+  "useful_macs": 301989888,
+  "ideal_full_width_issue_cycles": 73728,
+  "observed_interval_cycles": 999385,
+  "effective_useful_macs_per_cycle": 302.175726071534,
+  "effective_capacity_utilization": 0.0737733706229331,
+  "reported_ready_backpressure_cycles": 3048,
+  "other_nonissue_cycles_not_fully_attributable": 922609,
+  "payload_beat_reconciliation": {
+    "activation_fp32_beats": 12288,
+    "weight_bf16_beats": 73728,
+    "expected_stream_read_beats": 86016,
+    "actual_stream_read_beats": 86016,
+    "extra_nonstream_read_beats": 12,
+    "output_fp32_beats": 12288,
+    "actual_output_write_beats": 12288,
+    "streamed_write_beats": 12288,
+    "cache_hits": 0
+  },
+  "fixed_protocol_lower_bound": {
+    "assumptions": "Exact observed one-beat read transaction count, serialized driver pending valid, no pre-boundary/outstanding transaction at completion; count nonoverlapping AR,R,W,B cycles, allow AW/W overlap and all compute overlap.",
+    "read_address_cycles": 86028,
+    "read_data_cycles": 86028,
+    "write_data_cycles": 12288,
+    "write_response_cycles": 2048,
+    "minimum_interval_cycles": 186392,
+    "maximum_possible_capacity_utilization_under_this_lower_bound": 0.395553457229924,
+    "ignores_all_additional_bridge_owner_queue_and_compute_latency": true
+  },
+  "even_arbitrarily_coalesced_payload_lower_bound_same_serial_R_W": {
+    "cycles": 98316,
+    "maximum_utilization": 0.7499084584401318,
+    "qualification": "Keeps measured payload and serialized R/W service; not a proposal to change driver or idealize supply."
+  },
+  "targets": {
+    "0.8": {
+      "maximum_interval_cycles": 92160.0,
+      "required_cycle_reduction_factor": 10.84402126736111,
+      "below_fixed_protocol_lower_bound": true
+    },
+    "0.9": {
+      "maximum_interval_cycles": 81920.0,
+      "required_cycle_reduction_factor": 12.19952392578125,
+      "below_fixed_protocol_lower_bound": true
+    }
+  },
+  "boundary_notes": [
+    "Counts begin after real n0 pc0 clean completion and end at qraw pc1 clean completion.",
+    "Includes next-command fetch/descriptor/owner scheduling, activation load, weight load/compute overlap, result writeback and AXI completion fence.",
+    "Excludes preceding norm and later q_bias, rest of block, reference comparison.",
+    "Host file dump is synchronous host code with no DUT step/eval inside observe; its wall time is not added to cycle denominator.",
+    "Output events prove command completion, not independent full numerical PASS."
+  ],
+  "source_pins": [
+    {
+      "name": "HostBlockTopV4.scala",
+      "path": "candidates/moe_router_score_observation_20261030/source/HostBlockTopV4.scala",
+      "sha256": "3f32de4e2049721e2005687e61fea1215c388aa7fe93a7183a4151312fc38b9b"
+    },
+    {
+      "name": "IdmaWeightBurst.scala",
+      "path": "candidates/fresh_original_top_recovery_20261028/source/IdmaWeightBurst.scala",
+      "sha256": "935365723aba8d79675c84a1e23ce531741707d736d88e40ff2355eeda431ba4"
+    },
+    {
+      "name": "MatrixPipeline.scala",
+      "path": "candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala",
+      "sha256": "d6bd82725d6b20788080b5bd17ab672a419c84212cfa50d21d175bae0d8c56d8"
+    },
+    {
+      "name": "QwenOwnerProtocol.scala",
+      "path": "candidates/p0_resident_observation_20261030/source/QwenOwnerProtocol.scala",
+      "sha256": "84dd372fe7a8dc13c90ff86c060dc2f44e375ed6e4343764619f323af8f46210"
+    },
+    {
+      "name": "RetainedIdma.scala",
+      "path": "candidates/fresh_original_top_recovery_20261028/source/RetainedIdma.scala",
+      "sha256": "5d8873911046d0c4202e3f92ccfdc03c2ede3d8db06502473960ae3ed644f91e"
+    },
+    {
+      "name": "TransposedDenseBanks.scala",
+      "path": "candidates/transposed_tile_address_fix_20261103/source/TransposedDenseBanks.scala",
+      "sha256": "c23f36805d78671e6fa8736668a0a837003cc620a413488fb3db530690e1bb53"
+    },
+    {
+      "name": "TransposedDenseOwner.scala",
+      "path": "candidates/fresh_original_top_recovery_20261028/source/TransposedDenseOwner.scala",
+      "sha256": "961f4e650b499fc1f15918d2e0f6aa51b4905431ba35ba681a609c98b42c5d14"
+    },
+    {
+      "path": "candidates/moe_router_score_observation_20261030/driver/host_axi_driver_non_dpi.cpp",
+      "sha256": "343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61"
+    }
+  ],
+  "execution_source_commit": "75b9fc21e6d8a4a13bb82307969d9a0d9a953a79",
+  "execution_uuid": "23bd64b8-ac75-4b36-860f-3c4d9831b0d9"
+}

@@ -968,3 +968,13 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 修正先前长档空间门的解释：12.25/15.5GiB是20Hz压力情景预留，不是实现必然占用或不可变门。原RSS循环为采样→完整census→sleep50ms，11849完整样本/9321s的实测频率约1.271Hz，间隔0.594–1.229s；这不是长期频率保证。保留所有采样与原资源门，条件2Hz×512B的150d raw约12.36GiB、当前gzip每秒速率×3约866MiB，可由原16GiB raw/1GiB gzip作有限尝试。若实际先触上限则RESOURCE_LIMIT/INCOMPLETE，不能当数值FAIL。
 - 原DUT128MiB与RSS1GiB日志合计1.125GiB，加8GiB free保留线及示例512MiB非日志增量约需9.625GiB；仍必须按实际材料/输出reserve、新全census和RAM即时准入，不能凭示例启动。更紧的是DUT日志按当前分布35.63d可能耗尽128MiB，2倍字节余量仅17.82d，长档需合理有限cap/性能与总disk匹配，不应预知会早止仍盲开长跑。P3还需真实新driver artifact，旧artifact不能冒1.29b能力。
 - 09:23:56工作区free10388541440B，MemAvailable8580656KiB，/tmp284164096B；清单root1154/tmp310，无清理或迁移。下一步沿同一FULL继续后续投影/attention数值链，五块准备并行、实际重job按资源串行。
+
+
+## 2026-11-03 10:12 UTC：完整 Q 阶段实际效率 7.3773%，后续数值链继续（TEMP / INCOMPLETE）
+
+- 原FULL同一任务继续，10:11 active2553792、pc4/completions4，日志未封口，无整块终态。pc3为SFU_ROPE后的q，cycles2467488输出后已闭合并双读稳定，128×1536共196608 FP32全有限、NaN/±Inf均0；SHA256 0f1bfe6b5eda5b3da7f8511da509cf35590c088674db71c8e57dd5c4da8aea77。冻结参考没有post-RoPE Q，故此处仅有限性，不用pre-RoPE q_proj硬比，不生成新参考，不报pc3数值PASS。pc0 n0/pc2完整qr逐位通过范围不变，整块模型0/5、最终RTL0/5。
+- 首个完整Q矩阵阶段实际校准：冻结M/N/K=128/1536/1536，共301989888 MAC；固定4096资源理想73728 issue cycles。从n0 completion607643至qraw completion1607028，实际999385周期，有效302.176 MAC/周期，容量利用率7.377337%。这是同一真实Chisel仿真完整Q阶段（含供数/调度/retire）的测量，不是完整block分母，也不是最终RTL实测，明显没有达到80%/90%。
+- 实际计数增量：读86028个单beat事务，其中stream86016=activation FP32 12288 beats+weights BF16 73728 beats，另12 metadata；写12288 beats/2048 bursts；合法wide issues73728。pipeline stalls3048只计valid&&!ready，不包含供数饥饿，剩余922609非issue周期还不能精确分桶。cache_hits=0是stream绕普通cache的既定路径，不是重复整份权重读取。
+- 固定当前单beat读/单outstanding及串行driver R/W语义，允许计算全部理想重叠后的乐观事务下界仍为2×86028+12288+2048=186392周期，对应阶段上界39.5553%。即使只合并burst、保留相同payload及串行R/W，payload下界98316周期，上界仍仅74.9908%。这些是有明确假设的架构界，不是已经实现的优化。
+- 因而host-only mapper/O3只能改仿真墙钟，不能把同一周期语义的7.38%变成80%/90%。下一架构需真实减少流量/数据驻留、实现供数和依赖有序并发等；不得换理想内存冒目标内存/实测，也不能仅改burst即称达标。任何硬件定义变化都需同一新SV五块重测；本轮冻结硬件/原运行不修改、不重启。
+- pc0 n0/pc2 qr已验证的数值范围，与pc1 Q阶段效率不达标分开记录；qraw/pc3 q仅有限性。继续原FULL KV/attention/FFN完整数值链，同时按实测约束准备后续架构审计；资源限制执行并发，不缩4096 MAC。

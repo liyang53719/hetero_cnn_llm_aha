@@ -139,7 +139,29 @@ SELECTOR_GENERATION_PAIRS={'0a5e09a27a447b028697a631e5207fc0af6cae15d4c324a55524
 # tile-address producer only. Historical maps/readonly contracts are unchanged.
 FINITE_STAGE_DIAGNOSTIC_REVISION={'candidates/model_candidate_build_20261101/one_job_model_candidate.py':'ac4ba44560ed7d73d6459fbe237e9cac0de2e3141d1e6a1e86feae130364d58d'}
 
+
+FINITE_WATCHDOG_IMPLEMENTATION_PINS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f', 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53', 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'efc916e3964edb11c89ebd644bd7432d4f07383167c0700f83a51c1cdc86f08c', 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': 'eefca1f83aad9dce833dd15ed6aa6a065230d908f095d9ec7ccd5d9cce72ae75', 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': 'ab3d9bc5471ffc25cee3a62970fc4c0b225bb865c482081b7ddc40344cfbb009', 'candidates/model_candidate_build_20261101/model_source_evidence.py': 'f23de70d574c5b33f9ad04230b86420519cfa435a7c23d81972fd52c9c81a250', 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': 'b6faa3dcde969e1b1b9489cd21a974e5ed81c4987fe84548448b7f21213f4c97', 'candidates/model_candidate_build_20261101/pack_model_candidate.py': '131cf5bf3e015994670a35c94a9f30d66e518429e409373c3289e938dbade103', 'candidates/model_candidate_build_20261101/finite_watchdog_policy.py': '64c0c273c7c4ef50d8116859f831ac96c7ab792d56db1ec2cef78b9133c19a96'}
+FINITE_POLICY_FIRST_FAULT_IMPLEMENTATIONS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f', 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53', 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'efc916e3964edb11c89ebd644bd7432d4f07383167c0700f83a51c1cdc86f08c', 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': 'eefca1f83aad9dce833dd15ed6aa6a065230d908f095d9ec7ccd5d9cce72ae75', 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': 'ab3d9bc5471ffc25cee3a62970fc4c0b225bb865c482081b7ddc40344cfbb009', 'candidates/model_candidate_build_20261101/first_fault_compilation.py': 'c548cbe0d5891c0a2d0bcb1e51cb3eb2ce48135b666b4857e0d84c2c9b1ab347', 'candidates/model_candidate_build_20261101/first_fault_policy.py': 'c095e177128e89c146275b421d76e84320ab0f9bced6de41bf0facd46580e6de', 'candidates/model_candidate_build_20261101/first_fault_probe.py': '6ce53ee4a74fd5ba9b533a7051fd1737aed215caa1ed1c3a314a4d0f79ce0766', 'candidates/model_candidate_build_20261101/model_source_evidence.py': 'f23de70d574c5b33f9ad04230b86420519cfa435a7c23d81972fd52c9c81a250', 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': 'b6faa3dcde969e1b1b9489cd21a974e5ed81c4987fe84548448b7f21213f4c97', 'candidates/model_candidate_build_20261101/pack_model_candidate.py': '131cf5bf3e015994670a35c94a9f30d66e518429e409373c3289e938dbade103', 'candidates/model_candidate_build_20261101/finite_watchdog_policy.py': '64c0c273c7c4ef50d8116859f831ac96c7ab792d56db1ec2cef78b9133c19a96'}
+FINITE_POLICY_TERMINAL_IMPLEMENTATIONS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f', 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53', 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'efc916e3964edb11c89ebd644bd7432d4f07383167c0700f83a51c1cdc86f08c', 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': 'eefca1f83aad9dce833dd15ed6aa6a065230d908f095d9ec7ccd5d9cce72ae75', 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': 'ab3d9bc5471ffc25cee3a62970fc4c0b225bb865c482081b7ddc40344cfbb009', 'candidates/model_candidate_build_20261101/first_fault_compilation.py': 'c548cbe0d5891c0a2d0bcb1e51cb3eb2ce48135b666b4857e0d84c2c9b1ab347', 'candidates/model_candidate_build_20261101/first_fault_policy.py': 'c095e177128e89c146275b421d76e84320ab0f9bced6de41bf0facd46580e6de', 'candidates/model_candidate_build_20261101/first_fault_probe.py': '6ce53ee4a74fd5ba9b533a7051fd1737aed215caa1ed1c3a314a4d0f79ce0766', 'candidates/model_candidate_build_20261101/model_source_evidence.py': 'f23de70d574c5b33f9ad04230b86420519cfa435a7c23d81972fd52c9c81a250', 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': 'b6faa3dcde969e1b1b9489cd21a974e5ed81c4987fe84548448b7f21213f4c97', 'candidates/model_candidate_build_20261101/pack_model_candidate.py': '131cf5bf3e015994670a35c94a9f30d66e518429e409373c3289e938dbade103', 'candidates/model_candidate_build_20261101/terminal_finite_probe.py': '17e9d268e0e5d3d74d0c5c79f53405553771652643bac5822b308dde15d3de18', 'candidates/model_candidate_build_20261101/finite_watchdog_policy.py': '64c0c273c7c4ef50d8116859f831ac96c7ab792d56db1ec2cef78b9133c19a96'}
 def selector_producer_policy(source,readonly):
+ gate='candidates/model_candidate_build_20261101/candidate_generation_gate.py'
+ pins=source.get('generation_input_pins',{});matches=[p for p in pins if p.endswith('/'+gate)]
+ new_policy=any(pins[p]==FINITE_WATCHDOG_IMPLEMENTATION_PINS[gate]for p in matches)
+ if 'finite_watchdog_driver'in source or new_policy:
+  from finite_watchdog_policy import artifact_policy
+  need(new_policy and len(matches)==1,'exact finite-cap-capable producer identity')
+  if readonly is None:artifact_policy(source,source.get('driver_sha256'))
+  else:need('finite_watchdog_driver'not in source,'readonly cannot carry ordinary watchdog relation')
+  closure=source['model_candidate_observation']['source_closure'];generation=closure.get('generation_contract_sha256')
+  need(generation in SELECTOR_GENERATION_PAIRS,'same fixed hardware generation choices')
+  directory,overlay=SELECTOR_GENERATION_PAIRS[generation];repo=matches[0][:-len(gate)]
+  need(closure.get('source_overlay',{}).get('sha256')==overlay and type(closure.get('source_count'))is int and closure['source_count']==159,'same generation159 overlay')
+  need(pins.get(repo+directory+'/GENERATION_CONTRACT.json')==generation and pins.get(repo+directory+'/MODEL_SOURCE_OVERLAY.json')==overlay and source.get('fixed_source_overlay')==repo+directory+'/MODEL_SOURCE_OVERLAY.json','same exact original hardware paths')
+  if readonly is not None:
+   need(directory=='candidates/model_candidate_build_20261101','same readonly legacy hardware only')
+   return dict(FINITE_POLICY_TERMINAL_IMPLEMENTATIONS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else FINITE_POLICY_FIRST_FAULT_IMPLEMENTATIONS)
+  return dict(FINITE_WATCHDOG_IMPLEMENTATION_PINS)
+
  pins=source.get('generation_input_pins',{})
  gate='candidates/model_candidate_build_20261101/candidate_generation_gate.py'
  paths=[p for p in pins if p.endswith('/'+gate)]
@@ -162,7 +184,7 @@ def selector_producer_policy(source,readonly):
  historical=TERMINAL_IMPLEMENTATION_PINS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else FIRST_FAULT_IMPLEMENTATION_PINS
  return dict(historical,**(SELECTOR_DIAGNOSTIC_REVISIONS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else SELECTOR_FIRST_FAULT_REVISIONS))
 
-LOCAL_PACK_READER_SHA='70ca666a19f2e51bbaf32f4a96a0c4f416d1105b54b23f812c4a223fefc32dbc'
+LOCAL_PACK_READER_SHA='131cf5bf3e015994670a35c94a9f30d66e518429e409373c3289e938dbade103'
 
 COLLECTOR_PATH='candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py'
 def compilation_policy(r,m,build_receipt,manifest=None):
@@ -180,7 +202,7 @@ def compilation_policy(r,m,build_receipt,manifest=None):
   readonly=None
  selector=selector_producer_policy(m,readonly)
  if selector is not None:
-  need(set(selector)==(CANDIDATE_REQUIRED_IMPLEMENTATIONS if readonly is None else TERMINAL_REQUIRED_IMPLEMENTATIONS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else FIRST_FAULT_REQUIRED_IMPLEMENTATIONS)and all(type(h)is str and re.fullmatch('[0-9a-f]{64}',h)for h in selector.values()),'selector-aware producer contract frozen')
+  need(set(selector)==(CANDIDATE_REQUIRED_IMPLEMENTATIONS|{'candidates/model_candidate_build_20261101/finite_watchdog_policy.py'} if selector==FINITE_WATCHDOG_IMPLEMENTATION_PINS else FIRST_FAULT_REQUIRED_IMPLEMENTATIONS|{'candidates/model_candidate_build_20261101/finite_watchdog_policy.py'} if selector==FINITE_POLICY_FIRST_FAULT_IMPLEMENTATIONS else TERMINAL_REQUIRED_IMPLEMENTATIONS|{'candidates/model_candidate_build_20261101/finite_watchdog_policy.py'} if selector==FINITE_POLICY_TERMINAL_IMPLEMENTATIONS else CANDIDATE_REQUIRED_IMPLEMENTATIONS if readonly is None else TERMINAL_REQUIRED_IMPLEMENTATIONS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else FIRST_FAULT_REQUIRED_IMPLEMENTATIONS)and all(type(h)is str and re.fullmatch('[0-9a-f]{64}',h)for h in selector.values()),'selector-aware producer contract frozen')
   if readonly is None:need('dependency_rule_policy'not in r,'ordinary new hardware has no readonly dependency policy')
   else:
    from first_fault_compilation import DEPENDENCY_RULE_POLICY

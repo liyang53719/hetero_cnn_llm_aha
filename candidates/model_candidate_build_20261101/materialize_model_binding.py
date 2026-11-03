@@ -21,6 +21,7 @@ def main():
  flags=a.add_mutually_exclusive_group()
  flags.add_argument('--first-fault-readonly',action='store_true')
  flags.add_argument('--terminal-finite-readonly',action='store_true')
+ flags.add_argument('--finite-full-watchdog',action='store_true')
  v=a.parse_args();R=v.repo.resolve();C=v.pipeline.resolve();I=v.idma.resolve();T=v.tools.resolve();M=v.matrix.resolve()
  import sys
  sys.path.insert(0,str(C))
@@ -73,6 +74,11 @@ def main():
  helpers=[C/n for n in ['CanonicalHighGate.scala','CanonicalInfoMicroTest.scala','PortableHostDenseAccMemoryLowering.scala','PortableHostMatrixResultFifoMemoryLowering.scala']]+[K/n for n in ['CandidateDenseAccMemoryLoweringV2.scala','ModelCandidateHighDescriptorV1.scala','ModelCandidateHostSimulationEmitterV1.scala','ModelCandidateTransformGateV1.scala']]+[backend/n for n in ['PhysicalFmaStageLibrary.scala','RetainedBackendCircuitGate.scala','RetainedEndpointPortContract.scala','RetainedServicePhaseObserver.scala']]
  driver=R/'candidates/moe_router_score_observation_20261030/driver/host_axi_driver_non_dpi.cpp'
  need(sha(driver)=='343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61','V3 driver')
+ finite=None
+ if v.finite_full_watchdog:
+  from finite_watchdog_policy import RELATION,OLD_REL,NEW_REL,SOURCE_REL,SELF_REL,inverse
+  need(v.hardware_source=='transposed-tile-address-v1','finite ordinary watchdog only corrected159')
+  inverse((R/OLD_REL).read_bytes(),(R/NEW_REL).read_bytes());finite=dict(RELATION);driver=R/NEW_REL
  diagnostic=None
  if v.first_fault_readonly or v.terminal_finite_readonly:
   from first_fault_policy import load_source_contract,contract_path,contract_sha,contract_roles,SOURCE_CONTRACT_REPO_PATH,SOURCE_CONTRACT_SHA
@@ -93,12 +99,19 @@ def main():
  for x in om['jars']:
   p=original/'cache'/x['maven_path'];need(sha(p)==x['sha256'],'exact JAR/toolchain pin');paths.append(str(p))
  paths += [str((jh/x['path']).resolve(strict=True)) for x in j['files'] if 'sha256' in x]
+ if finite is not None:
+  paths += [str(R/rel)for rel in(OLD_REL,NEW_REL,SOURCE_REL,SELF_REL)]
+  need(all(rel in tracked for rel in(OLD_REL,NEW_REL,SOURCE_REL,SELF_REL)),'tracked finite ordinary watchdog inputs')
  if diagnostic is not None:
   paths += [str(R/diagnostic[n]['repo_path']) for n in ROLES]+[str(R/CONTRACT_REPO_PATH),str(R/SOURCE_CONTRACT_REPO_PATH)]
   need(sha(R/SOURCE_CONTRACT_REPO_PATH)==SOURCE_CONTRACT_SHA,'first-fault P0 source contract')
   need(all(str(Path.relative_to(R))in tracked for Path in [R/diagnostic[n]['repo_path'] for n in ROLES]+[R/CONTRACT_REPO_PATH,R/SOURCE_CONTRACT_REPO_PATH]),'tracked first-fault inputs')
  pins={p:sha(p) for p in dict.fromkeys(paths)};pins.update(external_pins)
  b=dict(provider_root_receipt=provider_root_receipt,schema='MODEL_CANDIDATE_BUILD_BINDING_V1',mode='BUILD_ONLY',candidate_status='UNREVIEWED_MODEL_BUILD',numeric_execution_authorized=False,generation_contract=str(selection['contract_path']),generation_contract_sha256=selection['contract_sha256'],hardware_source=selection['name'],unchanged_module_contract=str(K/'MODEL_CANDIDATE_PRECONDITIONS.json'),host_port_contract=str(C/'OBSERVER_HOST_PORTS_122.json'),model_source_contract=str(R/'candidates/same_job_execution_20261030/numeric/MODEL_P0_SOURCE_CONTRACT.json'),jdk_aliases=jdk_aliases,repo=str(R),repo_sha=v.expected_repo_sha,java=str(java),verilator=str(T/'verilator'),make=str(pathlib.Path('/usr/bin/make').resolve()),python=str(pathlib.Path('/usr/bin/python3').resolve()),pins=pins,provider_sources=providers,idma_include_dirs=inc,idma_defines=defs,hierarchy=str(D/'hierarchy_r7.vlt'),driver=str(driver),driver_include=str(driver_headers),helper_sources=list(map(str,helpers)),output=str(v.output.resolve()),fixed_source_overlay=str(selection['overlay']),fixed_source_validator=str(K/'candidate_generation_gate.py'),sv_identity_script=str(K/'observe_model_sv.py'),materialized_roots=[str(T),str(I.parent.parent),str(M),str(C),str(D),str(K)])
+ if finite is not None:
+  b['finite_watchdog_driver']=finite;b['model_source_contract']=str(R/SOURCE_REL)
+  from finite_watchdog_policy import binding_policy as finite_binding
+  finite_binding(b)
  if diagnostic is not None:
   b['first_fault_driver_contract']={'path':str(R/CONTRACT_REPO_PATH),'sha256':CONTRACT_SHA}
   b['model_source_contract']=str(R/SOURCE_CONTRACT_REPO_PATH)

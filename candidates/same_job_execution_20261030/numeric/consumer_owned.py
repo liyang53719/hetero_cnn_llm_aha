@@ -292,7 +292,29 @@ def coverage_policy(profile,common,identity,bundle_root,source_relocation=None):
     if source_relocation is None:return module.validate(profile,common,identity,bundle_root)
     return module.validate(profile,common,identity,bundle_root,source_relocation)
 
-def load_binding(manifest,expected_sha,bundle_path,profile,source_relocation=None):
+
+def finite_long_connection_admission(args):
+    if getattr(args,'cloud_binding',None)is None:return None
+    binding=cloud_invocation(args)
+    if binding.get('execution_mode')!='FULL_BLOCK_ACCEPTANCE':return None
+    row=binding.get('full_block_budget');need(type(row)is dict,'full connection budget pin')
+    doc=json.loads(pin(row).read_text())
+    if 'finite_long_policy'not in doc:return None
+    need(binding['artifact_manifest']['sha256']==args.artifact_manifest_sha256 and binding['builder_handoff']['sha256']==args.builder_handoff_sha256,'finite long connector actual artifact')
+    need(binding['executor_identity']==executor_context(args),'finite long connector actual executor')
+    import importlib.util
+    path=pathlib.Path(__file__).resolve().parent.parent/'execution_mode.py'
+    need(binding['pins'].get(str(path))==sha(path),'finite long connector policy source pin')
+    spec=importlib.util.spec_from_file_location('finite_long_connection_mode',path);mode=importlib.util.module_from_spec(spec);spec.loader.exec_module(mode)
+    admission=mode.admit(binding);need(mode.finite_long(admission),'actual finite long connector admission')
+    return admission
+
+def finite_long_mode():
+    import importlib.util
+    path=pathlib.Path(__file__).resolve().parent.parent/'execution_mode.py'
+    spec=importlib.util.spec_from_file_location('finite_long_runtime_mode',path);mode=importlib.util.module_from_spec(spec);spec.loader.exec_module(mode);return mode
+
+def load_binding(manifest,expected_sha,bundle_path,profile,source_relocation=None,admission=None):
     verify_frozen(manifest,expected_sha)
     frozen=json.loads(manifest.read_text())
     identity=artifact_identity(frozen,source_relocation);commit=identity['source_commit']
@@ -308,6 +330,7 @@ def load_binding(manifest,expected_sha,bundle_path,profile,source_relocation=Non
         common[name]=dict(p,path=str(full.absolute()));pin(common[name])
     if frozen['schema']==FIRST_FAULT_SCHEMA:
         need(type(profile)is int and profile==0,'first fault execution is P0 only');diagnostic_driver(frozen,source_relocation,common['driver'])
+    elif admission is not None and 'finite_long_policy'in admission:finite_long_mode().verify_finite_driver(admission,common['driver']['sha256'],expected_sha)
     else:need(common['driver']['sha256']==V3_DRIVER_SHA256,'exact original V3 driver, no config-only replacement')
     receipt=json.loads(pathlib.Path(common['build_receipt']['path']).read_text())
     need(receipt['tool_manifest_sha256']==tool['sha256'] and receipt['source_commit']==commit and receipt['launch_commit']==identity['launch_commit'],'source/launch/tool provenance')
@@ -578,7 +601,7 @@ def main():
     require_outer_context(args.strict_outer_supervised)
     verify_frozen(args.artifact_manifest,args.artifact_manifest_sha256)
     source_relocation=approved_source_relocation(args,json.loads(args.artifact_manifest.read_text()))
-    b, frozen=load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile,source_relocation)
+    b, frozen=load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile,source_relocation,admission)
     download=verify_local_build(args,frozen)
     abi=verify_runtime_abi(args,frozen)
     runtime_bundle_sha=sha(args.runtime_bundle)
@@ -594,7 +617,7 @@ def main():
     need(len(b['profiles'])==1 and b['profiles'][0]['id']==args.profile,'one requested profile')
     limits=b['limits']
     need(0 < limits['file_bytes'] <= 64*1024*1024, 'bounded log/output file cap')
-    need(0 < limits['max_active_cycles'] <= 1000000000, 'driver cycle bound')
+    mode.validate_runtime_cycles(limits,admission,common['driver']['sha256'],args.artifact_manifest_sha256)
     need(0 < limits['wall_seconds'] <= 21600 and 0 < limits['cpu_seconds'] <= 21600, 'bounded job time')
     need(0 < limits['address_space_bytes'] <= 16*1024**3, 'bounded process AS')
     execution_limits=dict(limits)if admission is None and args.validate_only else mode.consumer_limits(limits,admission,args.profile)
@@ -639,6 +662,7 @@ def main():
     summary['execution_admission']={'scope':'P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE' if admission['mode']==mode.FIRST_FAULT else 'CALIBRATION_SAME_FULL_M128_STIMULUS' if admission['mode']==mode.CALIBRATION else 'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE' if admission['mode']==mode.STAGE else 'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE', 'execution_mode':admission['mode'], 'reviewed_budget_sha256':admission['reviewed_budget_sha256'],'original_limits':dict(limits),'effective_limits':execution_limits,'outer_cleanup_proof_required':True,'peak_resource_qualification':'INCOMPLETE_SAMPLED','numerical_pass':False}
     if admission['mode']==mode.FIRST_FAULT:summary['execution_admission'].update(first_fault_document_sha256=admission['reviewed_budget_sha256'],diagnostic_profiles=[0],numerical_pass=False)
     if admission['mode']==mode.STAGE:summary['execution_admission']['stage_budget_sha256']=admission['reviewed_budget_sha256']
+    if mode.finite_long(admission):summary['execution_admission']['finite_long_policy']=dict(admission['finite_long_policy'])
     if FULL_LOG_POLICY is not None:summary['execution_admission'].update(budget_version=admission['budget_version'],log_policy=FULL_LOG_POLICY)
     postprocess_limits=None
     if FULL_LOG_POLICY is not None:
@@ -649,7 +673,7 @@ def main():
         postprocess=None
         try:
             # Reverify common frozen identity before AND after every process.
-            load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile,source_relocation)
+            load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile,source_relocation,admission)
             verify_local_build(args,frozen)
             verify_runtime_abi(args,frozen)
             need(sha(args.runtime_bundle)==runtime_bundle_sha,'runtime bundle changed')
@@ -659,7 +683,7 @@ def main():
             if FULL_LOG_POLICY is not None:need(time.monotonic()-consumer_started<=30 and time.process_time()-consumer_cpu_started<=30,'full V2 preflight within reserved 30 seconds')
             rc=(execute_streaming if FULL_LOG_POLICY is not None else execute)(files['binary'],runtime,target,log,execution_limits);r['exit_code']=rc
             if FULL_LOG_POLICY is not None:postprocess=full_log_module().PostprocessBudget(postprocess_limits).start()
-            load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile,source_relocation)
+            load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile,source_relocation,admission)
             verify_local_build(args,frozen)
             verify_runtime_abi(args,frozen)
             need(sha(args.runtime_bundle)==runtime_bundle_sha,'runtime bundle changed')

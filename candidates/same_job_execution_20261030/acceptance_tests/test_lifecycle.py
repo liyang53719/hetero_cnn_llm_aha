@@ -1,3 +1,10 @@
+# Only historical source/AST assertions use the exact finite-layer inverse.
+# Runtime tests still import and execute the actual candidate implementations.
+import pathlib as _finite_pathlib, importlib.util as _finite_importlib
+_finite_path=_finite_pathlib.Path(__file__).resolve().parents[3]/'candidates/model_candidate_build_20261101/finite_watchdog_test_inverse.py'
+_finite_spec=_finite_importlib.spec_from_file_location('finite_watchdog_test_inverse',_finite_path)
+_finite_module=_finite_importlib.module_from_spec(_finite_spec);_finite_spec.loader.exec_module(_finite_module)
+prior_text=_finite_module.prior_text;prior_sha=_finite_module.prior_sha
 import hashlib
 import argparse,ast,importlib.util,json,pathlib,tempfile,types,unittest
 from unittest.mock import patch
@@ -149,7 +156,7 @@ def undo_first_fault_function(test,tree,relative):
 class Tests(unittest.TestCase):
  def test_original_functions_ast(self):
   old={n.name:n for n in ast.parse(BASE.read_text()).body if isinstance(n,ast.FunctionDef)}
-  new={n.name:n for n in ast.parse((D/'consumer_owned.py').read_text()).body if isinstance(n,ast.FunctionDef)}
+  new={n.name:n for n in ast.parse(prior_text(D/'consumer_owned.py')).body if isinstance(n,ast.FunctionDef)}
   for name in FIRST_FAULT_FUNCTION_INVERSE:undo_first_fault_function(self,new[name],name)
   dump=lambda n:ast.dump(n,include_attributes=False)
   # Only this reviewed split dispatch may precede the unchanged original path.

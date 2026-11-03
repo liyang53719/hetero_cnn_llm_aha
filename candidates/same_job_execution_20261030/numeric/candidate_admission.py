@@ -30,6 +30,15 @@ def first_fault_module(repo,catalog_pin):
  path=P(repo)/rel;need(path==P(__file__).resolve().with_name('first_fault_driver_contract.py'),'fixed local diagnostic checker')
  raw=pin(dict(rows[0],path=str(path)),1<<20).read_bytes()
  m=types.ModuleType('reviewed_first_fault_driver_contract');m.__file__=str(path);exec(compile(raw,str(path),'exec'),m.__dict__);return m
+
+def finite_watchdog_module(repo,catalog_pin):
+ rel='candidates/model_candidate_build_20261101/finite_watchdog_policy.py'
+ catalog=load(catalog_pin,2<<20);rows=[r for r in catalog['files']if r['path']==rel]
+ need(len(rows)==1,'one source-pinned finite watchdog checker')
+ path=P(repo)/rel;raw=pin(dict(rows[0],path=str(path)),1<<20).read_bytes()
+ need(path==P(__file__).resolve().parents[2]/'model_candidate_build_20261101/finite_watchdog_policy.py','fixed local finite watchdog checker')
+ m=types.ModuleType('reviewed_finite_watchdog_policy');m.__file__=str(path);exec(compile(raw,str(path),'exec'),m.__dict__);return m
+
 def verify_review(review_pin,artifact_manifest_pin,builder_identity,*,repo=None,current_source_pins_pin=None):
  r=load(review_pin,2<<20);f=load(artifact_manifest_pin,65536)
  first_fault=r.get('schema')==FIRST_FAULT_REVIEW
@@ -61,6 +70,14 @@ def verify_review(review_pin,artifact_manifest_pin,builder_identity,*,repo=None,
  need(source['generation_input_pins'].get(embedded['path'])==embedded['sha256'],'actual source contract generation input pin')
  need(structural=={'schema':'MODEL_CANDIDATE_STRUCTURAL_REVIEW_V1','status':'VERIFIED_SOURCE_AND_ACTUAL_STRUCTURE_NOT_NUMERICAL','artifact_manifest_sha256':artifact_manifest_pin['sha256'],'observation_sha256':r['observation_sha256'],'source_overlay_sha256':r['source_overlay']['sha256'],'source_contract_sha256':r['source_contract']['sha256'],'matrix_macs':4096,'shared_vector_banks':1,'bank_alu_instances':32,'profiles':[0,1,2,3,4],'typed_port_count':122,'numerical_pass':False,'final_rtl_executed':False},'exact independent actual structural review')
  need(all(type(structural[k])is int for k in('matrix_macs','shared_vector_banks','bank_alu_instances','typed_port_count'))and all(type(x)is int for x in structural['profiles']),'typed structural counts, no bool aliases')
+ finite_present='finite_watchdog_driver'in source or f.get('common',{}).get('driver',{}).get('sha256')=='def22c17427b929a8e339224799845d729ad56d24b9646d99390b25a4ecd6f59'
+ if finite_present:
+  need(not first_fault,'finite ordinary watchdog not diagnostic')
+  finite=finite_watchdog_module(repo,current_source_pins_pin);relation=finite.artifact_policy(source,f['common']['driver']['sha256'])
+  need(type(r['data_reference_contract'])is dict,'finite watchdog data contract object')
+  need(r['data_reference_contract'].get('finite_watchdog_driver')==relation,'independent review exact watchdog relation')
+  need(r['source_contract']['sha256']==finite.SOURCE_SHA,'reviewed watchdog source role contract')
+ else:need(type(r['data_reference_contract'])is not dict or 'finite_watchdog_driver'not in r['data_reference_contract'],'no unused watchdog review relation')
  roots=sorted({str(root),*[str(P(r[k]['path']).parent)for k in('source_overlay','source_contract','structural_review')],str(P(review_pin['path']).parent)})
  if first_fault:
   probe=first_fault_module(repo,current_source_pins_pin).verify_probe(r,artifact_manifest_pin,repo,current_source_pins_pin)
@@ -73,5 +90,7 @@ def verify(review_pin,b):
  need(approval.get('model_candidate_review_sha256')==review_pin['sha256']and budget.get('model_candidate_review')==review_pin and approval.get('budget_sha256')==b['cloud_budget']['sha256'],'review independently pinned by approved budget')
  need(approval.get('source_commit')==b['identity']['source_commit']and approval.get('execution_id')==b['identity']['execution_id']and approval.get('artifact_manifest_sha256')==b['artifact_manifest']['sha256'],'same actual invocation authority')
  f=load(b['artifact_manifest'],65536)
+ if f.get('common',{}).get('driver',{}).get('sha256')=='def22c17427b929a8e339224799845d729ad56d24b9646d99390b25a4ecd6f59':
+  need(b.get('execution_mode')=='FULL_BLOCK_ACCEPTANCE' and b.get('full_block_budget')is not None,'finite watchdog ordinary FULL only')
  if f.get('schema')==FIRST_FAULT_SCHEMA:need(b.get('execution_mode')=='P0_FIRST_FAULT_DIAGNOSTIC'and approval.get('purpose')=='P0_FIRST_FAULT_DIAGNOSTIC'and budget.get('execution_mode')=='P0_FIRST_FAULT_DIAGNOSTIC','diagnostic review only explicit diagnostic mode')
  return verify_review(review_pin,b['artifact_manifest'],f['artifact_identity'],repo=b.get('repo'),current_source_pins_pin=b.get('source_pins'))

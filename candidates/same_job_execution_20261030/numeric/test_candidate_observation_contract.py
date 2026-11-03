@@ -1,3 +1,10 @@
+# Only historical source/AST assertions use the exact finite-layer inverse.
+# Runtime tests still import and execute the actual candidate implementations.
+import pathlib as _finite_pathlib, importlib.util as _finite_importlib
+_finite_path=_finite_pathlib.Path(__file__).resolve().parents[3]/'candidates/model_candidate_build_20261101/finite_watchdog_test_inverse.py'
+_finite_spec=_finite_importlib.spec_from_file_location('finite_watchdog_test_inverse',_finite_path)
+_finite_module=_finite_importlib.module_from_spec(_finite_spec);_finite_spec.loader.exec_module(_finite_module)
+prior_text=_finite_module.prior_text;prior_sha=_finite_module.prior_sha
 """Synthetic source-domain tests; not compilation/DUT/numerical acceptance."""
 import ast,copy,hashlib,json,pathlib,tempfile,unittest
 from unittest import mock
@@ -105,7 +112,7 @@ def undo_reviewed_first_fault_preflight(test,fn):
 
 class OriginalValidationPreservation(unittest.TestCase):
  def test_original_full_p0_validation_ast(self):
-  new=ast.parse(P(m.__file__).read_text())
+  new=ast.parse(prior_text(P(m.__file__)))
   b=next(n for n in new.body if isinstance(n,ast.FunctionDef)and n.name=='validate')
   first=b.body.pop(0)
   self.assertEqual(ast.dump(first,include_attributes=False),ast.dump(ast.parse('admitted_context(source_relocation)').body[0],include_attributes=False))
@@ -113,7 +120,7 @@ class OriginalValidationPreservation(unittest.TestCase):
   self.assertEqual(len(calls),1);self.assertEqual(ast.dump(calls[0].args[0]),"Name(id='source_relocation', ctx=Load())");calls[0].args=[]
   self.assertEqual(hashlib.sha256(ast.dump(b,include_attributes=False).encode()).hexdigest(),LEGACY_VALIDATE_AST_SHA256)
  def test_unchanged_default_connection_functions(self):
-  new=ast.parse((P(m.__file__).parent/'connect_owned.py').read_text())
+  new=ast.parse(prior_text(P(m.__file__).parent/'connect_owned.py'))
   for name in ('pin','source_guard','base','add_arguments','preflight_artifact','main'):
    b=next(n for n in new.body if isinstance(n,ast.FunctionDef)and n.name==name)
    if name=='preflight_artifact':

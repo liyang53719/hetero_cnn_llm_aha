@@ -77,6 +77,7 @@ def connect(args,out):
  source_guard();out=P(out).resolve();original=out/'runtime_bundle.json';old_pin=pin(original)
  consumer.need(original.is_file() and not original.is_symlink(),'original fresh bundle required')
  old=json.loads(original.read_text());result=base(old,args.profile)
+ long_admission=consumer.finite_long_connection_admission(args)
  consumer.verify_frozen(args.artifact_manifest,args.artifact_manifest_sha256)
  frozen=json.loads(args.artifact_manifest.read_text())
  if frozen.get('schema')in('MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1',consumer.FIRST_FAULT_SCHEMA):
@@ -109,6 +110,9 @@ def connect(args,out):
   result=attach_bundle.assemble(old,pin(policy),pin(retained))
  else:
   consumer.need(all(getattr(args,k,None) is None for k in p0_fields),'P1-P4 cannot request P0 exception')
+ if long_admission is not None:
+  import provider_from_frozen
+  result=provider_from_frozen.finite_long_runtime_metadata(result,long_admission,args.profile,consumer.finite_long_mode())
  abi_copy=out/'STARTUP_ABI.json'
  with abi_copy.open('xb') as f:f.write(args.local_runtime_abi.read_bytes())
  consumer.need(consumer.sha(abi_copy)==args.local_runtime_abi_sha256,'startup ABI retained exact bytes')
@@ -117,7 +121,7 @@ def connect(args,out):
  consumer.need(not final.exists() and not staged.exists(),'fresh V3 metadata only')
  with staged.open('x') as f:json.dump(result,f,indent=2);f.write('\n')
  # Fail closed on missing real source mapping/retained receipts/header evidence.
- consumer.load_binding(args.artifact_manifest,args.artifact_manifest_sha256,staged,args.profile,source_relocation)
+ consumer.load_binding(args.artifact_manifest,args.artifact_manifest_sha256,staged,args.profile,source_relocation,long_admission)
  consumer.verify_local_build(args,frozen);consumer.pin(old_pin)
  os.link(staged,final);staged.unlink()
  argv=[sys.executable,str(HERE/'consumer_owned.py'),'--artifact-manifest',str(args.artifact_manifest),'--artifact-manifest-sha256',args.artifact_manifest_sha256,'--expected-run-id',str(args.expected_run_id),'--expected-launch-commit',args.expected_launch_commit,'--expected-source-commit',args.expected_source_commit,'--local-runtime-abi',str(abi_copy),'--local-runtime-abi-sha256',args.local_runtime_abi_sha256,'--owned-environment',str(args.owned_environment),'--owned-environment-sha256',args.owned_environment_sha256,'--runtime-bundle',str(final),'--profile',str(args.profile),'--output',str(out/'dut_result')]
@@ -153,7 +157,10 @@ def preflight_artifact(args,frozen,source_relocation=None):
   full=root/rel;consumer.need(full.resolve().is_relative_to(root),'artifact member escape');paths[name]=consumer.pin(dict(row,path=str(full)))
  if frozen['schema']==consumer.FIRST_FAULT_SCHEMA:
   consumer.need(type(args.profile)is int and args.profile==0,'first fault connection is P0 only');consumer.diagnostic_driver(frozen,source_relocation,frozen['common']['driver'])
- else:consumer.need(frozen['common']['driver']['sha256']==consumer.V3_DRIVER_SHA256,'original V3 driver')
+ else:
+  long_admission=consumer.finite_long_connection_admission(args)
+  if long_admission is not None:consumer.finite_long_mode().verify_finite_driver(long_admission,frozen['common']['driver']['sha256'],args.artifact_manifest_sha256)
+  else:consumer.need(frozen['common']['driver']['sha256']==consumer.V3_DRIVER_SHA256,'original V3 driver')
  receipt=json.loads(paths['build_receipt'].read_text())
  consumer.need(receipt['source_commit']==identity['source_commit'] and receipt['launch_commit']==identity['launch_commit'],'build source/launch')
  consumer.need(receipt['tool_manifest_sha256']==frozen['tool_manifest']['sha256'],'build tool pin')

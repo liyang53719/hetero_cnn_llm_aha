@@ -204,8 +204,10 @@ def _pack_impl(original,b,built,host,overlay,out,budget_check,observation_pin,_m
  need(built['binary']==phases[-1]['output'],'final linked binary');binary=regular(built['binary']['path'])
  with binary.open('rb')as f:need(f.read(6)==b'\x7fELF\x02\x01','actual ELF64LE')
  _mark('ENRICH')
- from first_fault_policy import binding_policy,expected_driver_sha,FIRST_FAULT_MANIFEST_SCHEMA,FIRST_FAULT_SCOPE
+ from first_fault_policy import binding_policy,FIRST_FAULT_MANIFEST_SCHEMA,FIRST_FAULT_SCOPE
+ from finite_watchdog_policy import expected_driver_sha,binding_policy as finite_binding
  readonly=binding_policy(original);need(binding_policy(b)==readonly,'same original/admitted readonly policy')
+ finite=finite_binding(original);need(finite_binding(b)==finite,'same original/admitted finite watchdog policy')
  driver=regular(original['driver']);need(sha(driver)==expected_driver_sha(original),'frozen policy driver')
  source_path=regular(b['source_manifest'],16<<20);source=json_file(source_path,16<<20)
  need(source.get('source_commit')==original['repo_sha'],'source ledger commit')
@@ -233,6 +235,8 @@ def _pack_impl(original,b,built,host,overlay,out,budget_check,observation_pin,_m
  def retained_text(path,cap):
   path=regular(path,cap);raw=path.read_bytes();need(b'\0'not in raw,'retained metadata text only');return dict(pin(path),text=raw.decode('utf-8'))
  source['model_candidate_build_evidence']={'schema':'MODEL_CANDIDATE_ACTUAL_BUILD_EVIDENCE_V1','driver_dependency':dep,'actual_stage_receipts':stage_texts,'fixed_source_overlay':retained_text(overlay,2<<20),'actual_host_header':retained_text(header_path,2<<20)}
+ need('finite_watchdog_driver'not in source,'no prefilled watchdog relation')
+ if finite is not None:source['finite_watchdog_driver']=finite
  source['model_candidate_observation']=obs;address_source_identity(source,obs,readonly is not None);enriched=(json.dumps(source,indent=2,allow_nan=False)+'\n').encode();need(len(enriched)<=16<<20,'source metadata16MiB')
  _mark('COPY')
  copies={'binary':binary,'sv':host,'driver':driver,'tool_manifest':regular(b['tool_manifest'],32<<20)}
@@ -293,7 +297,12 @@ def validate_export(root):
  if readonly_schema:readonly=artifact_policy(m,source)
  else:
   need('readonly_probe'not in source and 'readonly_probe_contract'not in m,'original artifact cannot carry readonly evidence');readonly=None
- need(actual['driver']['sha256']==(DRIVER_SHA if readonly is None else readonly['diagnostic_driver']['sha256']),'fixed policy driver');need(source.get('sv_sha256')==actual['sv']['sha256']and source.get('driver_sha256')==actual['driver']['sha256'],'source ledger exact actual SV/driver');obs=source.get('model_candidate_observation')
+ finite=None
+ if 'finite_watchdog_driver'in source or actual['driver']['sha256']=='def22c17427b929a8e339224799845d729ad56d24b9646d99390b25a4ecd6f59':
+  from finite_watchdog_policy import artifact_policy as finite_artifact
+  finite=finite_artifact(source,actual['driver']['sha256'])
+ need(readonly is None or finite is None,'exclusive driver policy')
+ need(actual['driver']['sha256']==(finite['finite_driver_sha256']if finite is not None else DRIVER_SHA if readonly is None else readonly['diagnostic_driver']['sha256']),'fixed policy driver');need(source.get('sv_sha256')==actual['sv']['sha256']and source.get('driver_sha256')==actual['driver']['sha256'],'source ledger exact actual SV/driver');obs=source.get('model_candidate_observation')
  validate_observation(obs);address_source_identity(source,obs,readonly is not None);need(hashlib.sha256(canonical(obs)).hexdigest()==m['model_candidate_observation_sha256'],'observation canonical integrity')
  r=json_file(root/NAMES['build_receipt'],65536);need(r.get('status')==STATUS and r.get('schema')=='MODEL_CANDIDATE_BUILD_RECEIPT_V1','candidate receipt')
  need(r.get('source_commit')==source.get('source_commit')==m['artifact_identity']['source_commit']and r.get('launch_commit')==m['artifact_identity']['launch_commit'],'receipt git chain')

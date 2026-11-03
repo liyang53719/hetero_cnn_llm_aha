@@ -39,7 +39,7 @@ def adaptation_module(adaptation_pin):
  need(type(rows[0].get('bytes'))is int and len(raw)==rows[0]['bytes']and hashlib.sha256(raw).hexdigest()==rows[0]['sha256'],'reviewed adaptation checker bytes before import')
  module=types.ModuleType('reviewed_executor_adaptation');module.__file__=str(path);exec(compile(raw,str(path),'exec'),module.__dict__);return module
 
-def load_candidate_checker(current_source_pins_pin,repo,first_fault=False,terminal=False):
+def load_candidate_checker(current_source_pins_pin,repo,first_fault=False,terminal=False,finite_watchdog=False):
  import sys
  catalog=read_pin(current_source_pins_pin['path'],current_source_pins_pin['sha256'],2<<20)
  need(catalog['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1','reviewed executor source closure')
@@ -48,6 +48,8 @@ def load_candidate_checker(current_source_pins_pin,repo,first_fault=False,termin
  need(type(terminal)is bool and (not terminal or first_fault),'explicit terminal checker domain')
  result={};names=('first_fault_probe','first_fault_policy','pack_model_candidate','first_fault_compilation','candidate_dependency_proof')if first_fault else('pack_model_candidate','candidate_dependency_proof')
  if terminal:names=('first_fault_probe','terminal_finite_probe',*names[1:])
+ need(type(finite_watchdog)is bool,'explicit finite helper dependency')
+ if finite_watchdog:names=('finite_watchdog_policy',*names)
  prior={name:sys.modules.get(name)for name in names}
  try:
   for name in names:
@@ -65,7 +67,9 @@ def verify_compilation_policy(frozen,root,receipt,current_source_pins_pin,repo):
  import sys
  first_fault=frozen.get('schema')=='MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1'
  terminal=first_fault and frozen.get('readonly_probe_contract',{}).get('sha256')=='199a9b9470c80aa321d9d1ae4846f71fd17945a2dfbfcf64c45669f9db567b79'
- modules=load_candidate_checker(current_source_pins_pin,repo,first_fault=first_fault,terminal=terminal);prior={name:sys.modules.get(name)for name in modules}
+ source=json.loads((root/'source_manifest.json').read_text())
+ finite_watchdog='finite_watchdog_driver'in source or frozen['common']['driver']['sha256']=='def22c17427b929a8e339224799845d729ad56d24b9646d99390b25a4ecd6f59' or any(path.endswith('/candidates/model_candidate_build_20261101/finite_watchdog_policy.py')for path in source.get('generation_input_pins',{}))
+ modules=load_candidate_checker(current_source_pins_pin,repo,first_fault=first_fault,terminal=terminal,finite_watchdog=finite_watchdog);prior={name:sys.modules.get(name)for name in modules}
  try:
   for name,m in modules.items():
    need(prior[name]is None or getattr(prior[name],'__file__',None)==m.__file__,'no foreign cached candidate verifier');sys.modules[name]=m
@@ -114,6 +118,6 @@ def verify(handoff_path,handoff_sha,manifest,manifest_sha,frozen,executor_identi
  review_path=P(__file__).with_name('candidate_admission.py');catalog=read_pin(current_source_pins_pin['path'],current_source_pins_pin['sha256'],2<<20);rows=[r for r in catalog['files']if r['path']=='candidates/same_job_execution_20261030/numeric/candidate_admission.py'];raw=review_path.read_bytes()
  need(len(rows)==1 and len(raw)==rows[0]['bytes']and hashlib.sha256(raw).hexdigest()==rows[0]['sha256'],'source-pinned candidate admission')
  checker=types.ModuleType('candidate_admission');checker.__file__=str(review_path);exec(compile(raw,str(review_path),'exec'),checker.__dict__)
- extra_review=dict(repo=repo,current_source_pins_pin=current_source_pins_pin)if frozen['schema']=='MODEL_CANDIDATE_FIRST_FAULT_BUILD_ARTIFACT_V1'else{}
+ extra_review=dict(repo=repo,current_source_pins_pin=current_source_pins_pin)
  reviewed=checker.verify_review(model_candidate_review,dict(path=str(manifest),bytes=manifest.stat().st_size,sha256=manifest_sha),i,**extra_review)
  return dict(model_candidate_review_sha256=model_candidate_review['sha256'],scope=reviewed['scope'],compilation_policy=compilation,status='VERIFIED_IMPORTED_BUILD_BYTES_NOT_NUMERICAL',builder_identity=i,executor_identity=executor_identity,handoff_sha256=handoff_sha,artifact_manifest_sha256=manifest_sha,source_pins_sha256=h['source_pins_sha256'],executor_adaptation=adaptation,remote_receipt=r,numerical_pass=False,final_rtl_executed=False)

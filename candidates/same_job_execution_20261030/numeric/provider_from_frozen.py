@@ -85,6 +85,11 @@ def prepare(repo,materializer,out,profile,wrapper,payload,reference,stage,source
  return out/'runtime_bundle.json'
 
 
+
+def finite_long_runtime_metadata(original,admission,profile,mode):
+ """No provider math or mutation; used only for a fresh separately admitted V3 bundle."""
+ return mode.finite_long_runtime_bundle(original,admission,profile)
+
 def initialize(repo,materializer,out,profile,reference,reference_data_reuse=None,reuse_context=None,reuse_source_pin=None):
  repo=P(repo).resolve();materializer=P(materializer).resolve();out=P(out).resolve()
  need(not out.exists() and profile in range(5),'fresh supervised material initialization');out.mkdir()

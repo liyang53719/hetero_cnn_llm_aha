@@ -1,0 +1,265 @@
+{
+  "scope": "TEST_ONLY_EXACT_SOURCE_INVERSE_NOT_PRODUCER_ACCEPTANCE",
+  "files": {
+    "candidates/model_candidate_build_20261101/one_job_model_candidate.py": {
+      "original_sha256": "ac4ba44560ed7d73d6459fbe237e9cac0de2e3141d1e6a1e86feae130364d58d",
+      "candidate_sha256": "b6faa3dcde969e1b1b9489cd21a974e5ed81c4987fe84548448b7f21213f4c97",
+      "inverse": [
+        {
+          "before": "from first_fault_policy import binding_policy\n from finite_watchdog_policy import expected_driver_sha",
+          "after": "from first_fault_policy import binding_policy,expected_driver_sha",
+          "count": 1
+        }
+      ]
+    },
+    "candidates/model_candidate_build_20261101/candidate_dependency_proof.py": {
+      "original_sha256": "3e3323c6160fba463620b8b5f959c510f99165782e19b912fcf3f2225bafd1cd",
+      "candidate_sha256": "605997044be396ddc37483f7e4d34193111d7ddab8084956be54d594b4b77810",
+      "inverse": [
+        {
+          "before": "if readonly is None:artifact_policy(source,source.get('driver_sha256'))",
+          "after": "if readonly is None:artifact_policy(source,source['driver_sha256'])",
+          "count": 1
+        },
+        {
+          "before": "131cf5bf3e015994670a35c94a9f30d66e518429e409373c3289e938dbade103",
+          "after": "e0516c2d4a241684b6b8785f38ebf69ae77e08d0760cdfc48bb982f95c02f65b",
+          "count": 4
+        },
+        {
+          "before": "LOCAL_PACK_READER_SHA='e0516c2d4a241684b6b8785f38ebf69ae77e08d0760cdfc48bb982f95c02f65b'",
+          "after": "LOCAL_PACK_READER_SHA='70ca666a19f2e51bbaf32f4a96a0c4f416d1105b54b23f812c4a223fefc32dbc'",
+          "count": 1
+        },
+        {
+          "before": "CANDIDATE_REQUIRED_IMPLEMENTATIONS|{'candidates/model_candidate_build_20261101/finite_watchdog_policy.py'} if selector==FINITE_WATCHDOG_IMPLEMENTATION_PINS else FIRST_FAULT_REQUIRED_IMPLEMENTATIONS|{'candidates/model_candidate_build_20261101/finite_watchdog_policy.py'} if selector==FINITE_POLICY_FIRST_FAULT_IMPLEMENTATIONS else TERMINAL_REQUIRED_IMPLEMENTATIONS|{'candidates/model_candidate_build_20261101/finite_watchdog_policy.py'} if selector==FINITE_POLICY_TERMINAL_IMPLEMENTATIONS else CANDIDATE_REQUIRED_IMPLEMENTATIONS if readonly is None else TERMINAL_REQUIRED_IMPLEMENTATIONS",
+          "after": "CANDIDATE_REQUIRED_IMPLEMENTATIONS if readonly is None else TERMINAL_REQUIRED_IMPLEMENTATIONS",
+          "count": 1
+        },
+        {
+          "before": "\nFINITE_WATCHDOG_IMPLEMENTATION_PINS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f', 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53', 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'efc916e3964edb11c89ebd644bd7432d4f07383167c0700f83a51c1cdc86f08c', 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': 'eefca1f83aad9dce833dd15ed6aa6a065230d908f095d9ec7ccd5d9cce72ae75', 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': 'ab3d9bc5471ffc25cee3a62970fc4c0b225bb865c482081b7ddc40344cfbb009', 'candidates/model_candidate_build_20261101/model_source_evidence.py': 'f23de70d574c5b33f9ad04230b86420519cfa435a7c23d81972fd52c9c81a250', 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': 'b6faa3dcde969e1b1b9489cd21a974e5ed81c4987fe84548448b7f21213f4c97', 'candidates/model_candidate_build_20261101/pack_model_candidate.py': 'e0516c2d4a241684b6b8785f38ebf69ae77e08d0760cdfc48bb982f95c02f65b', 'candidates/model_candidate_build_20261101/finite_watchdog_policy.py': '64c0c273c7c4ef50d8116859f831ac96c7ab792d56db1ec2cef78b9133c19a96'}\nFINITE_POLICY_FIRST_FAULT_IMPLEMENTATIONS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f', 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53', 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'efc916e3964edb11c89ebd644bd7432d4f07383167c0700f83a51c1cdc86f08c', 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': 'eefca1f83aad9dce833dd15ed6aa6a065230d908f095d9ec7ccd5d9cce72ae75', 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': 'ab3d9bc5471ffc25cee3a62970fc4c0b225bb865c482081b7ddc40344cfbb009', 'candidates/model_candidate_build_20261101/first_fault_compilation.py': 'c548cbe0d5891c0a2d0bcb1e51cb3eb2ce48135b666b4857e0d84c2c9b1ab347', 'candidates/model_candidate_build_20261101/first_fault_policy.py': 'c095e177128e89c146275b421d76e84320ab0f9bced6de41bf0facd46580e6de', 'candidates/model_candidate_build_20261101/first_fault_probe.py': '6ce53ee4a74fd5ba9b533a7051fd1737aed215caa1ed1c3a314a4d0f79ce0766', 'candidates/model_candidate_build_20261101/model_source_evidence.py': 'f23de70d574c5b33f9ad04230b86420519cfa435a7c23d81972fd52c9c81a250', 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': 'b6faa3dcde969e1b1b9489cd21a974e5ed81c4987fe84548448b7f21213f4c97', 'candidates/model_candidate_build_20261101/pack_model_candidate.py': 'e0516c2d4a241684b6b8785f38ebf69ae77e08d0760cdfc48bb982f95c02f65b', 'candidates/model_candidate_build_20261101/finite_watchdog_policy.py': '64c0c273c7c4ef50d8116859f831ac96c7ab792d56db1ec2cef78b9133c19a96'}\nFINITE_POLICY_TERMINAL_IMPLEMENTATIONS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f', 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53', 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'efc916e3964edb11c89ebd644bd7432d4f07383167c0700f83a51c1cdc86f08c', 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': 'eefca1f83aad9dce833dd15ed6aa6a065230d908f095d9ec7ccd5d9cce72ae75', 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': 'ab3d9bc5471ffc25cee3a62970fc4c0b225bb865c482081b7ddc40344cfbb009', 'candidates/model_candidate_build_20261101/first_fault_compilation.py': 'c548cbe0d5891c0a2d0bcb1e51cb3eb2ce48135b666b4857e0d84c2c9b1ab347', 'candidates/model_candidate_build_20261101/first_fault_policy.py': 'c095e177128e89c146275b421d76e84320ab0f9bced6de41bf0facd46580e6de', 'candidates/model_candidate_build_20261101/first_fault_probe.py': '6ce53ee4a74fd5ba9b533a7051fd1737aed215caa1ed1c3a314a4d0f79ce0766', 'candidates/model_candidate_build_20261101/model_source_evidence.py': 'f23de70d574c5b33f9ad04230b86420519cfa435a7c23d81972fd52c9c81a250', 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': 'b6faa3dcde969e1b1b9489cd21a974e5ed81c4987fe84548448b7f21213f4c97', 'candidates/model_candidate_build_20261101/pack_model_candidate.py': 'e0516c2d4a241684b6b8785f38ebf69ae77e08d0760cdfc48bb982f95c02f65b', 'candidates/model_candidate_build_20261101/terminal_finite_probe.py': '17e9d268e0e5d3d74d0c5c79f53405553771652643bac5822b308dde15d3de18', 'candidates/model_candidate_build_20261101/finite_watchdog_policy.py': '64c0c273c7c4ef50d8116859f831ac96c7ab792d56db1ec2cef78b9133c19a96'}\ndef selector_producer_policy(source,readonly):\n gate='candidates/model_candidate_build_20261101/candidate_generation_gate.py'\n pins=source.get('generation_input_pins',{});matches=[p for p in pins if p.endswith('/'+gate)]\n new_policy=any(pins[p]==FINITE_WATCHDOG_IMPLEMENTATION_PINS[gate]for p in matches)\n if 'finite_watchdog_driver'in source or new_policy:\n  from finite_watchdog_policy import artifact_policy\n  need(new_policy and len(matches)==1,'exact finite-cap-capable producer identity')\n  if readonly is None:artifact_policy(source,source['driver_sha256'])\n  else:need('finite_watchdog_driver'not in source,'readonly cannot carry ordinary watchdog relation')\n  closure=source['model_candidate_observation']['source_closure'];generation=closure.get('generation_contract_sha256')\n  need(generation in SELECTOR_GENERATION_PAIRS,'same fixed hardware generation choices')\n  directory,overlay=SELECTOR_GENERATION_PAIRS[generation];repo=matches[0][:-len(gate)]\n  need(closure.get('source_overlay',{}).get('sha256')==overlay and type(closure.get('source_count'))is int and closure['source_count']==159,'same generation159 overlay')\n  need(pins.get(repo+directory+'/GENERATION_CONTRACT.json')==generation and pins.get(repo+directory+'/MODEL_SOURCE_OVERLAY.json')==overlay and source.get('fixed_source_overlay')==repo+directory+'/MODEL_SOURCE_OVERLAY.json','same exact original hardware paths')\n  if readonly is not None:\n   need(directory=='candidates/model_candidate_build_20261101','same readonly legacy hardware only')\n   return dict(FINITE_POLICY_TERMINAL_IMPLEMENTATIONS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else FINITE_POLICY_FIRST_FAULT_IMPLEMENTATIONS)\n  return dict(FINITE_WATCHDOG_IMPLEMENTATION_PINS)\n",
+          "after": "def selector_producer_policy(source,readonly):",
+          "count": 1
+        }
+      ]
+    },
+    "candidates/model_candidate_build_20261101/candidate_build_producer.py": {
+      "original_sha256": "ad794f49f2b6d9274ebcda8110a82467847b358b80c569a716614695c276c36f",
+      "candidate_sha256": "efc916e3964edb11c89ebd644bd7432d4f07383167c0700f83a51c1cdc86f08c",
+      "inverse": [
+        {
+          "before": "from finite_watchdog_policy import expected_driver_sha",
+          "after": "from first_fault_policy import expected_driver_sha",
+          "count": 1
+        }
+      ]
+    },
+    "candidates/model_candidate_build_20261101/candidate_conditional_admission.py": {
+      "original_sha256": "4eeb7d204f8401f2d886f4240b3b1d19fc427e1776b44860a4531cd3b58e325c",
+      "candidate_sha256": "eefca1f83aad9dce833dd15ed6aa6a065230d908f095d9ec7ccd5d9cce72ae75",
+      "inverse": [
+        {
+          "before": "from finite_watchdog_policy import expected_driver_sha",
+          "after": "from first_fault_policy import expected_driver_sha",
+          "count": 1
+        }
+      ]
+    },
+    "candidates/model_candidate_build_20261101/candidate_generation_gate.py": {
+      "original_sha256": "ced35f0d6b669b7e7619e787aa4411bcdbccc626f95400799eae4acc8fa23112",
+      "candidate_sha256": "ab3d9bc5471ffc25cee3a62970fc4c0b225bb865c482081b7ddc40344cfbb009",
+      "inverse": [
+        {
+          "before": "expected=finite['finite_driver_sha256'] if finite is not None and field=='driver' else diagnostic['diagnostic_driver']['sha256'] if diagnostic is not None and field=='driver' else d[key]",
+          "after": "expected=diagnostic['diagnostic_driver']['sha256'] if diagnostic is not None and field=='driver' else d[key]",
+          "count": 1
+        },
+        {
+          "before": " diagnostic=binding_policy(b)\n from finite_watchdog_policy import binding_policy as finite_binding\n finite=finite_binding(b)",
+          "after": " diagnostic=binding_policy(b)",
+          "count": 1
+        }
+      ]
+    },
+    "candidates/model_candidate_build_20261101/model_source_evidence.py": {
+      "original_sha256": "ab07b41bbfb201e9b58146bac6d202405ac2e606f1d22bff0ef78fc9be98a523",
+      "candidate_sha256": "f23de70d574c5b33f9ad04230b86420519cfa435a7c23d81972fd52c9c81a250",
+      "inverse": [
+        {
+          "before": " from finite_watchdog_policy import binding_policy as finite_binding,SOURCE_SHA as FINITE_SOURCE_SHA,SOURCE_REL\n finite=finite_binding(original)\n want_contract=FINITE_SOURCE_SHA if finite is not None else CONTRACT_SHA if readonly is None else SOURCE_CONTRACT_SHA\n if finite is not None:need(contract_path==repo/SOURCE_REL,'exact finite watchdog source contract')",
+          "after": " want_contract=CONTRACT_SHA if readonly is None else SOURCE_CONTRACT_SHA",
+          "count": 1
+        }
+      ]
+    },
+    "candidates/model_candidate_build_20261101/pack_model_candidate.py": {
+      "original_sha256": "70ca666a19f2e51bbaf32f4a96a0c4f416d1105b54b23f812c4a223fefc32dbc",
+      "candidate_sha256": "131cf5bf3e015994670a35c94a9f30d66e518429e409373c3289e938dbade103",
+      "inverse": [
+        {
+          "before": " finite=None\n if 'finite_watchdog_driver'in source or actual['driver']['sha256']=='def22c17427b929a8e339224799845d729ad56d24b9646d99390b25a4ecd6f59':\n  from finite_watchdog_policy import artifact_policy as finite_artifact\n  finite=finite_artifact(source,actual['driver']['sha256'])\n need(readonly is None or finite is None,'exclusive driver policy')",
+          "after": " from finite_watchdog_policy import artifact_policy as finite_artifact\n finite=finite_artifact(source,actual['driver']['sha256']);need(readonly is None or finite is None,'exclusive driver policy')",
+          "count": 1
+        },
+        {
+          "before": " from finite_watchdog_policy import artifact_policy as finite_artifact\n finite=finite_artifact(source,actual['driver']['sha256']);need(readonly is None or finite is None,'exclusive driver policy')\n need(actual['driver']['sha256']==(finite['finite_driver_sha256']if finite is not None else DRIVER_SHA if readonly is None else readonly['diagnostic_driver']['sha256']),'fixed policy driver');",
+          "after": " need(actual['driver']['sha256']==(DRIVER_SHA if readonly is None else readonly['diagnostic_driver']['sha256']),'fixed policy driver');",
+          "count": 1
+        },
+        {
+          "before": " need('finite_watchdog_driver'not in source,'no prefilled watchdog relation')\n if finite is not None:source['finite_watchdog_driver']=finite\n source['model_candidate_observation']=obs;address_source_identity",
+          "after": " source['model_candidate_observation']=obs;address_source_identity",
+          "count": 1
+        },
+        {
+          "before": " readonly=binding_policy(original);need(binding_policy(b)==readonly,'same original/admitted readonly policy')\n finite=finite_binding(original);need(finite_binding(b)==finite,'same original/admitted finite watchdog policy')",
+          "after": " readonly=binding_policy(original);need(binding_policy(b)==readonly,'same original/admitted readonly policy')",
+          "count": 1
+        },
+        {
+          "before": "from first_fault_policy import binding_policy,FIRST_FAULT_MANIFEST_SCHEMA,FIRST_FAULT_SCOPE\n from finite_watchdog_policy import expected_driver_sha,binding_policy as finite_binding",
+          "after": "from first_fault_policy import binding_policy,expected_driver_sha,FIRST_FAULT_MANIFEST_SCHEMA,FIRST_FAULT_SCOPE",
+          "count": 1
+        }
+      ]
+    },
+    "candidates/same_job_execution_20261030/numeric/candidate_observation_contract.py": {
+      "original_sha256": "760e1090f0b68fa5691f32556b418069ff5f7f481616abeecc39f2d08635af35",
+      "candidate_sha256": "78f9dcadf4cc08f9dd11aa0e5a66035dafe86a4b49a0a2ef45dd287fd7502be9",
+      "inverse": [
+        {
+          "before": "policy['independent_source_contract_sha256']==selected_contract(source_relocation)[0]",
+          "after": "policy['independent_source_contract_sha256']==CONTRACT_SHA",
+          "count": 1
+        },
+        {
+          "before": "link['contract_sha256']==selected_sha",
+          "after": "link['contract_sha256']==CONTRACT_SHA",
+          "count": 1
+        },
+        {
+          "before": " selected_sha,_=selected_contract(source_relocation)\n link=manifest['observation_policy_bindings']['P0']",
+          "after": " link=manifest['observation_policy_bindings']['P0']",
+          "count": 1
+        },
+        {
+          "before": " selected_sha,selected_name=selected_contract(source_relocation)\n need(sha(HERE/selected_name)==selected_sha,'locked selected source contract')\n locked=json.loads((HERE/selected_name).read_text())['sources']",
+          "after": " need(sha(HERE/'MODEL_P0_SOURCE_CONTRACT.json')==CONTRACT_SHA,'locked original source contract')\n locked=json.loads((HERE/'MODEL_P0_SOURCE_CONTRACT.json').read_text())['sources']",
+          "count": 1
+        },
+        {
+          "before": "spec.loader.exec_module(m);m.CONTRACT_SHA=selected_sha;m.CONTRACT_FILE=selected_name;return m",
+          "after": "spec.loader.exec_module(m);return m",
+          "count": 1
+        },
+        {
+          "before": " selected_sha,selected_name=selected_contract(source_relocation)\n need(sha(HERE/selected_name)==selected_sha,'reviewed independent contract')",
+          "after": " need(sha(HERE/'MODEL_P0_SOURCE_CONTRACT.json')==CONTRACT_SHA,'reviewed independent contract')",
+          "count": 1
+        },
+        {
+          "before": "contract_sha256=selected_sha,corrector_sha256=CORRECTOR_SHA",
+          "after": "contract_sha256=CONTRACT_SHA,corrector_sha256=CORRECTOR_SHA",
+          "count": 1
+        },
+        {
+          "before": "e['contract']['sha256']==selected_sha,'actual embedded candidate contract'",
+          "after": "e['contract']['sha256']==CONTRACT_SHA,'actual embedded candidate contract'",
+          "count": 1
+        },
+        {
+          "before": " admitted_context(context)\n selected_sha,_=selected_contract(context)\n e=manifest",
+          "after": " admitted_context(context)\n e=manifest",
+          "count": 1
+        },
+        {
+          "before": "rows[0]['sha256']==selected_sha,'exact admitted local contract bytes'",
+          "after": "rows[0]['sha256']==CONTRACT_SHA,'exact admitted local contract bytes'",
+          "count": 1
+        },
+        {
+          "before": "sha256=selected_sha);pin(local_pin)",
+          "after": "sha256=CONTRACT_SHA);pin(local_pin)",
+          "count": 1
+        },
+        {
+          "before": " local=HERE/selected_name;relative='candidates/same_job_execution_20261030/numeric/'+selected_name",
+          "after": " local=HERE/'MODEL_P0_SOURCE_CONTRACT.json';relative='candidates/same_job_execution_20261030/numeric/MODEL_P0_SOURCE_CONTRACT.json'",
+          "count": 1
+        },
+        {
+          "before": " selected_sha,selected_name=selected_contract(context)\n need(sha(contract)==selected_sha,'fixed reviewed candidate source contract')",
+          "after": " need(sha(contract)==CONTRACT_SHA,'fixed reviewed candidate source contract')",
+          "count": 1
+        },
+        {
+          "before": "\ndef selected_contract(context):\n row=context['model_source_contract']\n if row['sha256']==CONTRACT_SHA:return CONTRACT_SHA,'MODEL_P0_SOURCE_CONTRACT.json'\n need(row['sha256']=='5b7f12fa31a6ddef6256322fd8f19f46cb764c4b56f42bc599c87e752760d911','only exact watchdog source contract alternative')\n review=json.loads(pin(context['model_candidate_review']).read_text())\n need(review['data_reference_contract'].get('finite_watchdog_driver',{}).get('finite_driver_sha256')=='def22c17427b929a8e339224799845d729ad56d24b9646d99390b25a4ecd6f59','independently reviewed watchdog relation')\n return '5b7f12fa31a6ddef6256322fd8f19f46cb764c4b56f42bc599c87e752760d911','MODEL_P0_FINITE_LONG_SOURCE_CONTRACT.json'\n\ndef admitted_context(context):",
+          "after": "def admitted_context(context):",
+          "count": 1
+        },
+        {
+          "before": "CORRECTOR_SHA='4de01038fc1c916f37bb2ec25880f1247243d6d031695ed56a21712966f93819'",
+          "after": "CORRECTOR_SHA='77e948cdf9fa9e923ae3861d3505a93f3ecb44b204b03d56bd19a19a8037bb86'",
+          "count": 1
+        }
+      ]
+    },
+    "candidates/same_job_execution_20261030/numeric/connect_owned.py": {
+      "original_sha256": "973eec779074089c40b87ecafbad08f286de94e46312fc9334048fc07a3c8ab4",
+      "candidate_sha256": "672c6ff3f1ae2d90752d9c831474256e542cab268b2fa41c4c1f9c52c71d71bc",
+      "inverse": [
+        {
+          "before": " else:\n  long_admission=consumer.finite_long_connection_admission(args)\n  if long_admission is not None:consumer.finite_long_mode().verify_finite_driver(long_admission,frozen['common']['driver']['sha256'],args.artifact_manifest_sha256)\n  else:consumer.need(frozen['common']['driver']['sha256']==consumer.V3_DRIVER_SHA256,'original V3 driver')",
+          "after": " else:consumer.need(frozen['common']['driver']['sha256']==consumer.V3_DRIVER_SHA256,'original V3 driver')",
+          "count": 1
+        },
+        {
+          "before": "staged,args.profile,source_relocation,long_admission)",
+          "after": "staged,args.profile,source_relocation)",
+          "count": 1
+        },
+        {
+          "before": " if long_admission is not None:\n  import provider_from_frozen\n  result=provider_from_frozen.finite_long_runtime_metadata(result,long_admission,args.profile,consumer.finite_long_mode())\n abi_copy=out/'STARTUP_ABI.json'",
+          "after": " abi_copy=out/'STARTUP_ABI.json'",
+          "count": 1
+        },
+        {
+          "before": " old=json.loads(original.read_text());result=base(old,args.profile)\n long_admission=consumer.finite_long_connection_admission(args)",
+          "after": " old=json.loads(original.read_text());result=base(old,args.profile)",
+          "count": 1
+        }
+      ]
+    },
+    "candidates/same_job_execution_20261030/numeric/consumer_owned.py": {
+      "original_sha256": "a5a8337ba8974d174dadc2141d73d181cffdebee9585485f03afd39937cbac46",
+      "candidate_sha256": "5513ca59dd2f3bf9dc48337fc1a97966bb5fc3f527f5d3d86a76a48e73ccf773",
+      "inverse": [
+        {
+          "before": "    if mode.finite_long(admission):summary['execution_admission']['finite_long_policy']=dict(admission['finite_long_policy'])\n    if FULL_LOG_POLICY is not None:summary['execution_admission'].update(budget_version=admission['budget_version'],log_policy=FULL_LOG_POLICY)",
+          "after": "    if FULL_LOG_POLICY is not None:summary['execution_admission'].update(budget_version=admission['budget_version'],log_policy=FULL_LOG_POLICY)",
+          "count": 1
+        },
+        {
+          "before": "    mode.validate_runtime_cycles(limits,admission,common['driver']['sha256'],args.artifact_manifest_sha256)",
+          "after": "    need(0 < limits['max_active_cycles'] <= 1000000000, 'driver cycle bound')",
+          "count": 1
+        },
+        {
+          "before": "args.runtime_bundle,args.profile,source_relocation,admission)",
+          "after": "args.runtime_bundle,args.profile,source_relocation)",
+          "count": 3
+        },
+        {
+          "before": "    elif admission is not None and 'finite_long_policy'in admission:finite_long_mode().verify_finite_driver(admission,common['driver']['sha256'],expected_sha)\n    else:need(common['driver']['sha256']==V3_DRIVER_SHA256,'exact original V3 driver, no config-only replacement')",
+          "after": "    else:need(common['driver']['sha256']==V3_DRIVER_SHA256,'exact original V3 driver, no config-only replacement')",
+          "count": 1
+        },
+        {
+          "before": "\ndef finite_long_connection_admission(args):\n    if getattr(args,'cloud_binding',None)is None:return None\n    binding=cloud_invocation(args)\n    if binding.get('execution_mode')!='FULL_BLOCK_ACCEPTANCE':return None\n    row=binding.get('full_block_budget');need(type(row)is dict,'full connection budget pin')\n    doc=json.loads(pin(row).read_text())\n    if 'finite_long_policy'not in doc:return None\n    need(binding['artifact_manifest']['sha256']==args.artifact_manifest_sha256 and binding['builder_handoff']['sha256']==args.builder_handoff_sha256,'finite long connector actual artifact')\n    need(binding['executor_identity']==executor_context(args),'finite long connector actual executor')\n    import importlib.util\n    path=pathlib.Path(__file__).resolve().parent.parent/'execution_mode.py'\n    need(binding['pins'].get(str(path))==sha(path),'finite long connector policy source pin')\n    spec=importlib.util.spec_from_file_location('finite_long_connection_mode',path);mode=importlib.util.module_from_spec(spec);spec.loader.exec_module(mode)\n    admission=mode.admit(binding);need(mode.finite_long(admission),'actual finite long connector admission')\n    return admission\n\ndef finite_long_mode():\n    import importlib.util\n    path=pathlib.Path(__file__).resolve().parent.parent/'execution_mode.py'\n    spec=importlib.util.spec_from_file_location('finite_long_runtime_mode',path);mode=importlib.util.module_from_spec(spec);spec.loader.exec_module(mode);return mode\n\ndef load_binding(manifest,expected_sha,bundle_path,profile,source_relocation=None,admission=None):",
+          "after": "def load_binding(manifest,expected_sha,bundle_path,profile,source_relocation=None):",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

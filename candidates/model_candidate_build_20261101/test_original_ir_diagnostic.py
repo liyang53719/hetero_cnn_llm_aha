@@ -1,3 +1,10 @@
+# Only historical source/AST assertions use the exact finite-layer inverse.
+# Runtime tests still import and execute the actual candidate implementations.
+import pathlib as _finite_pathlib, importlib.util as _finite_importlib
+_finite_path=_finite_pathlib.Path(__file__).resolve().parents[2]/'candidates/model_candidate_build_20261101/finite_watchdog_test_inverse.py'
+_finite_spec=_finite_importlib.spec_from_file_location('finite_watchdog_test_inverse',_finite_path)
+_finite_module=_finite_importlib.module_from_spec(_finite_spec);_finite_spec.loader.exec_module(_finite_module)
+prior_text=_finite_module.prior_text;prior_sha=_finite_module.prior_sha
 import ast,copy,gzip,hashlib,importlib.util,json,pathlib,tempfile,unittest
 from unittest import mock
 D=pathlib.Path(__file__).resolve().parent
@@ -90,7 +97,7 @@ class Tests(unittest.TestCase):
  def test_report_not_mutated(self):
   r=copy.deepcopy(self.r);self.put('x');self.read();self.assertEqual(r,self.r)
  def test_caller_ast_preserved(self):
-  self.check_original_caller_ast((D/'one_job_model_candidate.py').read_text())
+  self.check_original_caller_ast(prior_text(D/'one_job_model_candidate.py'))
  def check_original_caller_ast(self,text):
   tree=finite_stage_diagnostic_inverse(ast.parse(first_fault_inverse(text)))
   # The separately reviewed finite post-build projector is diagnostic-only.
@@ -109,7 +116,7 @@ class Tests(unittest.TestCase):
     return self.generic_visit(n)
   got=hashlib.sha256(ast.dump(Strip().visit(tree),include_attributes=False).encode()).hexdigest();self.assertEqual(got,'ddd182da38eb18363d491a68faca437e81010b4bf9abfa92cf91456b24cc544b')
  def test_finite_stage_inverse_rejects_missing_duplicate_and_mutated_nodes(self):
-  original=ast.parse((D/'one_job_model_candidate.py').read_text())
+  original=ast.parse(prior_text(D/'one_job_model_candidate.py'))
   for change in ('missing_helper','duplicate_helper','extra_reason','changed_keyword'):
    import copy
    tree=copy.deepcopy(original)
@@ -122,14 +129,14 @@ class Tests(unittest.TestCase):
     projection=next(n for n in tree.body if isinstance(n,ast.FunctionDef)and n.name=='build_stage_diagnostic');keyword=next(n for n in ast.walk(projection)if isinstance(n,ast.keyword)and n.arg=='error_details_truncated');keyword.value=ast.Constant(False)
    with self.subTest(change=change),self.assertRaises(ValueError):finite_stage_diagnostic_inverse(tree)
  def test_unrelated_caller_delta_still_rejected_by_original_hash(self):
-  text=(D/'one_job_model_candidate.py').read_text()
+  text=prior_text(D/'one_job_model_candidate.py')
   with self.assertRaises(AssertionError):self.check_original_caller_ast(text+'\nUNRELATED_UNREVIEWED_CHANGE=True\n')
  def test_first_fault_inverse_rejects_duplicate_or_mutated_addition(self):
-  text=(D/'one_job_model_candidate.py').read_text();added=FIRST_FAULT_INVERSE[0][0]
+  text=prior_text(D/'one_job_model_candidate.py');added=FIRST_FAULT_INVERSE[0][0]
   with self.assertRaises(ValueError):first_fault_inverse(text+added)
   with self.assertRaises(ValueError):first_fault_inverse(text.replace(added,added.replace('first_fault','wrong_fault',1),1))
  def test_terminal_inverse_rejects_duplicate_and_mutated_additions(self):
-  text=(D/'one_job_model_candidate.py').read_text()
+  text=prior_text(D/'one_job_model_candidate.py')
   for added,_,_ in TERMINAL_INVERSE:
    with self.assertRaises(ValueError):terminal_inverse(text+added)
    with self.assertRaises(ValueError):terminal_inverse(text.replace(added,added.replace('terminal','changed_terminal',1),1))

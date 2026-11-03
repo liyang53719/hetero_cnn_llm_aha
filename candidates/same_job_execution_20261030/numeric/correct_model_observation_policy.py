@@ -6,6 +6,7 @@ contracts. Reads source/metadata only; no weight or reference tensor payloads.
 import argparse, hashlib, json, pathlib, re, resource
 P=pathlib.Path
 HERE=P(__file__).resolve().parent
+CONTRACT_FILE='MODEL_P0_SOURCE_CONTRACT.json'
 CONTRACT_SHA='7b46242a1206f651e8fac111436b6cb515b6a69f981b6f01c1e1f26bd7f51f13'
 RUNTIME_SEMANTIC_SHA='184bd5c1785b8ef756838a60c90aa38906372041c018f0acce5e469b48e494f6'
 VIEWS_SEMANTIC_SHA='06ce2ef0332a5dc14385b353c15ad57a5d26c305a57cd38dc848e9d2c4c9bb0d'
@@ -22,7 +23,7 @@ def read_small(path,limit=2*1024*1024):
     data=p.read_bytes();need(len(data)<=limit,'source/metadata grew');return data
 
 def contract():
-    data=read_small(HERE/'MODEL_P0_SOURCE_CONTRACT.json',65536)
+    data=read_small(HERE/CONTRACT_FILE,65536)
     need(digest(data)==CONTRACT_SHA,'independent source contract drift')
     c=json.loads(data);need(c['schema']=='MODEL_CANDIDATE_P0_OBSERVATION_CONTRACT_V1','source contract schema');return c
 

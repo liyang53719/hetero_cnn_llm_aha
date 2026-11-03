@@ -945,3 +945,14 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 有效 MAC / 完整 block 周期利用率尚无结果；当前 useful/executed MAC 均为 0，不以初始向量阶段计算或宣称达到 80%/90%。已有各块周期与时长属于条件预测，不是 RTL 测量。
 - 资源实查：工作区剩余 10465447936 B，MemAvailable 8587292 KiB，/tmp 占用 279642112 B。最新已缓冲 RSS 样本 elapsed=1930.13 s、aggregate=245747712 B、DUT=194179072 B；该样本不是即时读数。运行前原 8 GiB 门已通过，运行监督仍保留，不以之后单次快照重新解释准入。
 - 已列工作区根目录 1137 项及 /tmp 298 项；本次无清理、无额外迁移、无新 nonce / 第二 DUT / 第二构建。保留原失败、原 ZIP、完整输入参考和当前运行证据。下一步继续同一 FULL 到终态、检查修复边界及原数值链；任何失败沿原身份定位，不盲重启。
+
+
+## 2026-11-03 08:14 UTC：ordinary FULL 有限长预算源码 R4（TEMP，未构建/未激活）
+
+- 此次新增显式 ordinary FULL V3 finite_long_policy，最长150天；新独立driver仅将 maxCycles 上限从1,000,000,000改为1,290,000,000，原driver和无策略旧模式保留。固定4096 Matrix MAC/Vector32、硬件定义、原Chisel M128、时钟、FP32/BF16运算/舍入、刺激参考均不变。新策略属于软件有限监督，不是架构或数值验收。
+- 34个精确文件包含23个生产/契约/catalog、11个测试文件，SOURCE_PINS共932项。覆盖consumer/provider/connect、producer/pack/source、retained/review/handoff和restore verify-only；保持历史producer/artifact身份，新driver仍必须有独立真实artifact与完整编译来源证明。host-only adapter白名单未放宽，不得用现有artifact冒新driver能力。
+- 发布前原有37测试文件normal/-O共74进程全部PASS；新增可复现22-test入口normal/-O及独审复跑PASS。138个拆分方法和8次restore实际verify-only证据来自同字节R3依赖，明确复用，不称R4重跑。真实fixture E2E明确skip；>4GiB sparse负测因运行中的磁盘预算排除。不宣称完整suite或真实compilation proof通过。
+- 独审修复了P0 assembly覆盖策略、handoff缺上下文、旧reader强制新依赖、minimal旧review API与restore gate pin遗漏。历史静态hash/AST断言使用精确、全文件受限的测试逆变换；所有runtime测试执行实际候选。新增测试入口为 candidates/model_candidate_build_20261101/check_finite_long_regression.py，复现见 reports/finite_long_source_20261103T0814/REPRODUCE.md。
+- 五块P0/P1/P2/P3/P4有限尝试watchdog规划为70m/560m/140m/1290m/530m cycles；100 cycles/s敏感性估计约9/65/17/150/62天，不是实测完整吞吐率。P1/P3/P4日志与总体资源仍未闭合，规划最小free分别12.25/15.5/12.25GiB，实际当前约10.41GB不足，绝不降低8GiB保留线、RAM或采样覆盖。现有raw/compressed/file与后处理cap仍拒绝超额；无READY伪造。
+- 本次仅源码发布，无nonce、新构建或新DUT。原P0 UUID23bd64b8-ac75-4b36-860f-3c4d9831b0d9继续固定75b9源/原artifact；08:05观察active1331712、pc1/completions1，未封口、未终态。超过旧诊断停止周期不能证明非有限值已消失。模型完整数值0/5、最终RTL0/5，完整block利用率未测。
+- 后续先完成实际资源与日志预算、与host性能候选组合独审，再决定必要的唯一新artifact路径，避免cap与mapper各重复昂贵构建。watchdog-only精确关系不覆盖mapper，组合后必须重新验证。无需用户重复逐步批准，但每次实际运行仍须满足身份一致的执行准入。

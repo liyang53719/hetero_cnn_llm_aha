@@ -1,3 +1,10 @@
+# Only historical source/AST assertions use the exact finite-layer inverse.
+# Runtime tests still import and execute the actual candidate implementations.
+import pathlib as _finite_pathlib, importlib.util as _finite_importlib
+_finite_path=_finite_pathlib.Path(__file__).resolve().parents[2]/'candidates/model_candidate_build_20261101/finite_watchdog_test_inverse.py'
+_finite_spec=_finite_importlib.spec_from_file_location('finite_watchdog_test_inverse',_finite_path)
+_finite_module=_finite_importlib.module_from_spec(_finite_spec);_finite_spec.loader.exec_module(_finite_module)
+prior_text=_finite_module.prior_text;prior_sha=_finite_module.prior_sha
 """Source-only exact producer-revision closure tests, no build/EDA/DUT.
 Synthetic catalogs exercise loader integrity, not execution authorization.
 """
@@ -33,17 +40,17 @@ def receipt():
 
 class Tests(unittest.TestCase):
  def test_exact_new_source_and_minimal_map(self):
-  self.assertEqual(proof.FINITE_STAGE_DIAGNOSTIC_REVISION,{JOB:NEW});self.assertEqual(sha(R/JOB),NEW)
+  self.assertEqual(proof.FINITE_STAGE_DIAGNOSTIC_REVISION,{JOB:NEW});self.assertEqual(prior_sha(R/JOB),NEW)
   selected=proof.selector_producer_policy(source(),None)
   self.assertEqual({k for k in selected if selected[k]!=proof.SELECTOR_IMPLEMENTATION_PINS[k]},{JOB})
   self.assertEqual(selected[JOB],NEW)
-  for k,v in selected.items():self.assertEqual(sha(R/k),v,k)
+  for k,v in selected.items():self.assertEqual(prior_sha(R/k),v,k)
  def test_all_historical_maps_unchanged(self):
   raw=json.dumps({n:getattr(proof,n)for n in HISTORICAL_NAMES},sort_keys=True,separators=(',',':')).encode()
   self.assertEqual(hashlib.sha256(raw).hexdigest(),HISTORICAL_MAPS_SHA256)
   self.assertEqual(proof.SELECTOR_IMPLEMENTATION_PINS[JOB],OLD);self.assertEqual(proof.TERMINAL_IMPLEMENTATION_PINS[JOB],OLD)
  def test_all_nonselector_proof_ast_unchanged(self):
-  tree=ast.parse((D/'candidate_dependency_proof.py').read_text())
+  tree=ast.parse(prior_text(D/'candidate_dependency_proof.py'))
   tree.body=[n for n in tree.body if not(isinstance(n,ast.FunctionDef)and n.name=='selector_producer_policy'or isinstance(n,ast.Assign)and any(isinstance(t,ast.Name)and t.id=='FINITE_STAGE_DIAGNOSTIC_REVISION'for t in n.targets))]
   self.assertEqual(hashlib.sha256(ast.dump(tree,include_attributes=False).encode()).hexdigest(),'4c08408c5b7fb692aedb3e7f7fff43963380864bcddebd2cdc76898ee834fb55')
  def test_ordinary_corrected_old_variant_retained(self):self.assertEqual(proof.selector_producer_policy(source(False),None),proof.SELECTOR_IMPLEMENTATION_PINS)

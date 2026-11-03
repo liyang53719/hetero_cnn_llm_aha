@@ -1,3 +1,10 @@
+# Only historical source/AST assertions use the exact finite-layer inverse.
+# Runtime tests still import and execute the actual candidate implementations.
+import pathlib as _finite_pathlib, importlib.util as _finite_importlib
+_finite_path=_finite_pathlib.Path(__file__).resolve().parents[2]/'candidates/model_candidate_build_20261101/finite_watchdog_test_inverse.py'
+_finite_spec=_finite_importlib.spec_from_file_location('finite_watchdog_test_inverse',_finite_path)
+_finite_module=_finite_importlib.module_from_spec(_finite_spec);_finite_spec.loader.exec_module(_finite_module)
+prior_text=_finite_module.prior_text;prior_sha=_finite_module.prior_sha
 """Finite stage-error diagnostic projection tests only; no build/EDA.
 Frozen orchestration AST fingerprint comes from original 79020 source.
 """
@@ -30,6 +37,6 @@ class Tests(unittest.TestCase):
  def test_log_reader(self):
   q=self.project(['log_reader: OSError: [Errno 5] SECRET']);self.assertEqual(q['error_details'][0]['origin'],'LOG_READER');self.assertEqual(q['error_details'][0]['errno'],5);self.assertNotIn('SECRET',json.dumps(q))
  def test_no_orchestration_change(self):
-  def rest(p):return ast.dump(ast.Module(body=[n for n in ast.parse(p.read_text()).body if not(isinstance(n,ast.FunctionDef) and n.name in {'build_error_details','build_stage_diagnostic'} or isinstance(n,ast.Assign) and any(isinstance(q,ast.Name)and q.id=='BUILD_ERROR_CODES'for q in n.targets))],type_ignores=[]))
+  def rest(p):return ast.dump(ast.Module(body=[n for n in ast.parse(prior_text(p)).body if not(isinstance(n,ast.FunctionDef) and n.name in {'build_error_details','build_stage_diagnostic'} or isinstance(n,ast.Assign) and any(isinstance(q,ast.Name)and q.id=='BUILD_ERROR_CODES'for q in n.targets))],type_ignores=[]))
   self.assertEqual(hashlib.sha256(rest(PROP).encode()).hexdigest(),'aecb99b17acd89aae11030564041fa2ba930ed0197d538722812cbe960db5332')
 if __name__=='__main__':unittest.main(verbosity=2)

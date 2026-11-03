@@ -85,7 +85,7 @@ def admit_build(b,obj,host,frontend_receipt,out):
  obj=Path(obj).resolve();out=Path(out)
  for p in (obj,host,out,b['driver'],b['driver_include'],b['verilator_root']):need(re.fullmatch(r'[/A-Za-z0-9_.+\-]+',str(p)) is not None,'make path metacharacter')
  out.mkdir(exist_ok=False)
- from first_fault_policy import expected_driver_sha
+ from finite_watchdog_policy import expected_driver_sha
  need(sha(b['driver'])==expected_driver_sha(b),'fixed policy driver identity')
  check_pins(b['pins']);check_pins(b['verified_gate_pins'])
  receipt=json.loads(Path(frontend_receipt).read_text())

@@ -1,3 +1,10 @@
+# Only historical source/AST assertions use the exact finite-layer inverse.
+# Runtime tests still import and execute the actual candidate implementations.
+import pathlib as _finite_pathlib, importlib.util as _finite_importlib
+_finite_path=_finite_pathlib.Path(__file__).resolve().parents[2]/'candidates/model_candidate_build_20261101/finite_watchdog_test_inverse.py'
+_finite_spec=_finite_importlib.spec_from_file_location('finite_watchdog_test_inverse',_finite_path)
+_finite_module=_finite_importlib.module_from_spec(_finite_spec);_finite_spec.loader.exec_module(_finite_module)
+prior_text=_finite_module.prior_text;prior_sha=_finite_module.prior_sha
 """Finite failure diagnostics only. No compiler, ELF or network."""
 import ast,hashlib,importlib.util,json,pathlib,tempfile,unittest
 D=pathlib.Path(__file__).resolve().parent
@@ -48,23 +55,23 @@ def restore_original_pack(tree):
 
 class Tests(unittest.TestCase):
  def test_original_pack_algorithm_ast_exact_after_stage_markers(self):
-  tree=ast.parse((D/'pack_model_candidate.py').read_text());f=restore_original_pack(tree)
+  tree=ast.parse(prior_text(D/'pack_model_candidate.py'));f=restore_original_pack(tree)
   f.name='pack';self.assertEqual(f.args.args[-1].arg,'_mark');f.args.args.pop()
   marks=[x for x in f.body if isinstance(x,ast.Expr)and isinstance(x.value,ast.Call)and isinstance(x.value.func,ast.Name)and x.value.func.id=='_mark']
   self.assertEqual([x.value.args[0].value for x in marks],['SOURCE_PINS','OBSERVATION','STAGE_RECEIPTS','COMPILE_OUTPUTS','ENRICH','COPY','FINAL'])
   f.body=[x for x in f.body if x not in marks]
   self.assertEqual(hashlib.sha256(ast.dump(f,include_attributes=False).encode()).hexdigest(),'c62ca11efa3c23acfb78c52da14d372c81ff75ccc61a4bd11528864bc23487a1')
  def test_address_inverse_duplicate_and_mutation_rejected(self):
-  tree=ast.parse((D/'pack_model_candidate.py').read_text());f=next(n for n in tree.body if isinstance(n,ast.FunctionDef)and n.name=='_pack_impl');f.body.extend(ast.parse(ADDRESS_PACK_INVERSE[0][1]).body)
+  tree=ast.parse(prior_text(D/'pack_model_candidate.py'));f=next(n for n in tree.body if isinstance(n,ast.FunctionDef)and n.name=='_pack_impl');f.body.extend(ast.parse(ADDRESS_PACK_INVERSE[0][1]).body)
   with self.assertRaises(ValueError):restore_address_pack(tree)
-  tree=ast.parse((D/'pack_model_candidate.py').read_text());hits=[n for n in ast.walk(tree)if isinstance(n,ast.Constant)and n.value=='pack exact selected source catalog identity'];self.assertEqual(len(hits),1);hits[0].value='mutated'
+  tree=ast.parse(prior_text(D/'pack_model_candidate.py'));hits=[n for n in ast.walk(tree)if isinstance(n,ast.Constant)and n.value=='pack exact selected source catalog identity'];self.assertEqual(len(hits),1);hits[0].value='mutated'
   with self.assertRaises(ValueError):restore_address_pack(tree)
  def test_readonly_inverse_duplicate_rejected(self):
-  tree=ast.parse((D/'pack_model_candidate.py').read_text());f=next(x for x in tree.body if isinstance(x,ast.FunctionDef)and x.name=='_pack_impl')
+  tree=ast.parse(prior_text(D/'pack_model_candidate.py'));f=next(x for x in tree.body if isinstance(x,ast.FunctionDef)and x.name=='_pack_impl')
   f.body.extend(ast.parse(READONLY_INVERSE[-1][1]).body)
   with self.assertRaises(ValueError):restore_original_pack(tree)
  def test_readonly_inverse_mutation_rejected(self):
-  tree=ast.parse((D/'pack_model_candidate.py').read_text())
+  tree=ast.parse(prior_text(D/'pack_model_candidate.py'))
   matches=[x for x in ast.walk(tree)if isinstance(x,ast.Constant)and x.value=='same original/admitted readonly policy']
   self.assertEqual(len(matches),1);matches[0].value='changed policy'
   with self.assertRaises(ValueError):restore_original_pack(tree)
@@ -79,11 +86,11 @@ class Tests(unittest.TestCase):
  def test_size_over_limit_is_not_reported_as_in_range(self):
   d=m.ModelPackFailure('SOURCE_PINS','SOURCE_PIN_SIZE',size=(4<<30)+1).model_pack_diagnostic;self.assertIsNone(d['bytes'])
  def test_terminal_inverse_duplicate_and_mutation_rejected(self):
-  tree=ast.parse((D/'pack_model_candidate.py').read_text())
+  tree=ast.parse(prior_text(D/'pack_model_candidate.py'))
   f=next(n for n in tree.body if isinstance(n,ast.FunctionDef)and n.name=='_pack_impl')
   f.body.extend(ast.parse(TERMINAL_PACK_FRAGMENT).body)
   with self.assertRaises(ValueError):restore_terminal_pack(tree)
-  tree=ast.parse((D/'pack_model_candidate.py').read_text())
+  tree=ast.parse(prior_text(D/'pack_model_candidate.py'))
   hits=[n for n in ast.walk(tree)if isinstance(n,ast.Constant)and n.value=='terminal actual evidence pin']
   self.assertEqual(len(hits),1);hits[0].value='mutated terminal pin'
   with self.assertRaises(ValueError):restore_terminal_pack(tree)

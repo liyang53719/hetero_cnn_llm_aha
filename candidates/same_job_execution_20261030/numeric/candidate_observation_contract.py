@@ -1,7 +1,7 @@
 """Required P0 coverage contract; does not execute DUT or reference arithmetic."""
 import hashlib,importlib.util,json,pathlib,types
 HERE=pathlib.Path(__file__).resolve().parent
-CORRECTOR_SHA='77e948cdf9fa9e923ae3861d3505a93f3ecb44b204b03d56bd19a19a8037bb86'
+CORRECTOR_SHA='4de01038fc1c916f37bb2ec25880f1247243d6d031695ed56a21712966f93819'
 CONTRACT_SHA='7b46242a1206f651e8fac111436b6cb515b6a69f981b6f01c1e1f26bd7f51f13'
 def need(v,s):
  if not v:raise ValueError(s)
@@ -22,6 +22,15 @@ def reviewed_module(name,context):
  raw=path.read_bytes();need(len(raw)==rows[0]['bytes']and hashlib.sha256(raw).hexdigest()==rows[0]['sha256'],'candidate module bytes before import')
  module=types.ModuleType('reviewed_'+name);module.__file__=str(path);exec(compile(raw,str(path),'exec'),module.__dict__);return module
 
+
+def selected_contract(context):
+ row=context['model_source_contract']
+ if row['sha256']==CONTRACT_SHA:return CONTRACT_SHA,'MODEL_P0_SOURCE_CONTRACT.json'
+ need(row['sha256']=='5b7f12fa31a6ddef6256322fd8f19f46cb764c4b56f42bc599c87e752760d911','only exact watchdog source contract alternative')
+ review=json.loads(pin(context['model_candidate_review']).read_text())
+ need(review['data_reference_contract'].get('finite_watchdog_driver',{}).get('finite_driver_sha256')=='def22c17427b929a8e339224799845d729ad56d24b9646d99390b25a4ecd6f59','independently reviewed watchdog relation')
+ return '5b7f12fa31a6ddef6256322fd8f19f46cb764c4b56f42bc599c87e752760d911','MODEL_P0_FINITE_LONG_SOURCE_CONTRACT.json'
+
 def admitted_context(context):
  # Only the caller's independently admitted invocation creates this mapping.
  # There is deliberately no bundle/CLI deserializer for this authority.
@@ -31,24 +40,26 @@ def admitted_context(context):
  contract=pin(context['model_source_contract'])
  # The external review pins builder provenance; the executor's fixed local role
  # is independently source-catalogued. Equal bytes do not rewrite either path.
- need(sha(contract)==CONTRACT_SHA,'fixed reviewed candidate source contract')
- local=HERE/'MODEL_P0_SOURCE_CONTRACT.json';relative='candidates/same_job_execution_20261030/numeric/MODEL_P0_SOURCE_CONTRACT.json'
+ selected_sha,selected_name=selected_contract(context)
+ need(sha(contract)==selected_sha,'fixed reviewed candidate source contract')
+ local=HERE/selected_name;relative='candidates/same_job_execution_20261030/numeric/'+selected_name
  need(pathlib.Path(context['repo'])/relative==local,'fixed executor contract source role')
- local_pin=dict(path=str(local),bytes=context['model_source_contract']['bytes'],sha256=CONTRACT_SHA);pin(local_pin)
+ local_pin=dict(path=str(local),bytes=context['model_source_contract']['bytes'],sha256=selected_sha);pin(local_pin)
  catalog_path=pin(context['current_source_pins_pin']);need(catalog_path.stat().st_size<=2<<20,'bounded admitted contract catalog')
  catalog=json.loads(catalog_path.read_text());need(catalog['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1','reviewed current contract source catalog')
  rows=[r for r in catalog['files']if r['path']==relative]
- need(len(rows)==1 and set(rows[0])=={'path','bytes','sha256'}and rows[0]['bytes']==local_pin['bytes']and rows[0]['sha256']==CONTRACT_SHA,'exact admitted local contract bytes')
+ need(len(rows)==1 and set(rows[0])=={'path','bytes','sha256'}and rows[0]['bytes']==local_pin['bytes']and rows[0]['sha256']==selected_sha,'exact admitted local contract bytes')
  need(review['scope']==SCOPE and review['source_contract']==context['model_source_contract']and review['builder_identity']['source_commit']==context['builder_identity']['source_commit']and review['source_manifest_sha256']==context['source_manifest_sha256'],'same independently reviewed source domain')
  return review
 
 def source_view(manifest,context):
  admitted_context(context)
+ selected_sha,_=selected_contract(context)
  e=manifest['model_source_evidence']
  need(set(e)=={'schema','contract','files','anchors','program_contract'}and e['schema']=='MODEL_CANDIDATE_P0_SOURCE_EVIDENCE_V1','exact candidate source evidence domain')
- raw=e['contract']['text'].encode();need(len(raw)==e['contract']['bytes']and hashlib.sha256(raw).hexdigest()==e['contract']['sha256']==CONTRACT_SHA,'actual embedded candidate contract')
+ raw=e['contract']['text'].encode();need(len(raw)==e['contract']['bytes']and hashlib.sha256(raw).hexdigest()==e['contract']['sha256']==selected_sha,'actual embedded candidate contract')
  # Private projection for shared12-role checks; never rewrites the artifact.
- return dict(manifest,files=e['files'],observation_policy_bindings={'P0':dict(schema='MODEL_CANDIDATE_P0_SOURCE_LINK_V1',contract_sha256=CONTRACT_SHA,corrector_sha256=CORRECTOR_SHA,anchors=e['anchors'])},p0_retained_evidence={'program_contract':e['program_contract']})
+ return dict(manifest,files=e['files'],observation_policy_bindings={'P0':dict(schema='MODEL_CANDIDATE_P0_SOURCE_LINK_V1',contract_sha256=selected_sha,corrector_sha256=CORRECTOR_SHA,anchors=e['anchors'])},p0_retained_evidence={'program_contract':e['program_contract']})
 
 def verify_build(manifest,common,identity,evidence,context):
  review=admitted_context(context)
@@ -75,8 +86,9 @@ def verify_build(manifest,common,identity,evidence,context):
 def corrector(source_relocation):
  admitted_context(source_relocation)
  p=HERE/'correct_model_observation_policy.py';need(sha(p)==CORRECTOR_SHA,'reviewed r2 corrector source')
- need(sha(HERE/'MODEL_P0_SOURCE_CONTRACT.json')==CONTRACT_SHA,'reviewed independent contract')
- spec=importlib.util.spec_from_file_location('p0_model_corrector',p);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
+ selected_sha,selected_name=selected_contract(source_relocation)
+ need(sha(HERE/selected_name)==selected_sha,'reviewed independent contract')
+ spec=importlib.util.spec_from_file_location('p0_model_corrector',p);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);m.CONTRACT_SHA=selected_sha;m.CONTRACT_FILE=selected_name;return m
 
 def relocation_records(manifest,repo,current_pins,current_catalog,source_relocation):
  """Pure byte/path projection, NOT execution approval. Caller admits invocation.
@@ -84,8 +96,9 @@ def relocation_records(manifest,repo,current_pins,current_catalog,source_relocat
  """
  manifest=source_view(manifest,source_relocation)
  root=pathlib.Path(repo);need(root.is_absolute()and root==root.resolve()and root.is_dir()and all(not p.is_symlink()for p in(root,*root.parents)),'canonical admitted executor source root')
- need(sha(HERE/'MODEL_P0_SOURCE_CONTRACT.json')==CONTRACT_SHA,'locked original source contract')
- locked=json.loads((HERE/'MODEL_P0_SOURCE_CONTRACT.json').read_text())['sources']
+ selected_sha,selected_name=selected_contract(source_relocation)
+ need(sha(HERE/selected_name)==selected_sha,'locked selected source contract')
+ locked=json.loads((HERE/selected_name).read_text())['sources']
  rows={}
  for r in manifest['files']:
   key=r['path'];rel=pathlib.PurePosixPath(key)
@@ -121,8 +134,9 @@ def source_links(manifest,policy,identity,common,evidence,source_relocation=None
   name=r['path'];p=pathlib.PurePosixPath(name)
   need(not p.is_absolute() and '..' not in p.parts and name not in files,'unique relative source manifest file')
   files[name]=r
+ selected_sha,_=selected_contract(source_relocation)
  link=manifest['observation_policy_bindings']['P0']
- need(link['schema']=='MODEL_CANDIDATE_P0_SOURCE_LINK_V1' and link['contract_sha256']==CONTRACT_SHA and link['corrector_sha256']==CORRECTOR_SHA,'actual source manifest policy binding')
+ need(link['schema']=='MODEL_CANDIDATE_P0_SOURCE_LINK_V1' and link['contract_sha256']==selected_sha and link['corrector_sha256']==CORRECTOR_SHA,'actual source manifest policy binding')
  anchors=link['anchors'];need(set(anchors)==set(policy['source_pins']),'all 12 actual artifact anchors')
  if source_relocation is not None:
   need(source_relocation['schema']=='ADMITTED_CLOUD_P0_SOURCE_RELOCATION_V1'and source_relocation['builder_source_commit']==identity['source_commit']and source_relocation['source_manifest_sha256']==common['source_manifest']['sha256'],'same independently admitted frozen source relocation')
@@ -163,7 +177,7 @@ def validate(profile,common,identity,bundle_root,source_relocation=None):
  need(policy['schema']=='P0_RESIDENT_OBSERVATION_CORRECTION_V1' and policy['status']=='CORRECTED_METADATA_ONLY_REQUIRED_GATES_INCOMPLETE','required policy status')
  need(policy['hardware_executed'] is False and policy['numeric_acceptance'] is False,'metadata-only policy')
  for field in ('zero_fill','reference_fill','other_ddr_borrowing','raw_payloads_read'):need(policy[field] is False,'no fabricated internal gate '+field)
- need(policy['corrector_source_sha256']==CORRECTOR_SHA and policy['independent_source_contract_sha256']==CONTRACT_SHA,'reviewed r2 policy source pins')
+ need(policy['corrector_source_sha256']==CORRECTOR_SHA and policy['independent_source_contract_sha256']==selected_contract(source_relocation)[0],'reviewed r2 policy source pins')
  for key,bkey in [('original_runtime','original_runtime'),('corrected_runtime','runtime'),('views','views')]:
   p=pin(profile[bkey]);need(all(policy[key][f]==profile[bkey][f] for f in ('path','bytes','sha256')),'sidecar/bundle '+key+' mismatch')
  for key in ('original_runtime','views'):need(policy[key]['unchanged'] is True,'original input retained')

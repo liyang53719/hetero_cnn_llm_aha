@@ -1,0 +1,41 @@
+{
+  "scope": "R4_SOURCE_BRANCH_EXISTING_REGRESSION_ONLY",
+  "baseline_commit": "75b9fc21e6d8a4a13bb82307969d9a0d9a953a79",
+  "ordinary_test_files": 37,
+  "normal_and_optimized_file_runs": 74,
+  "file_runs_pass": 74,
+  "test_invocations_in_file_runs": 978,
+  "actual_fixture_skips_in_file_runs": 2,
+  "split_test_files": 2,
+  "split_executed_methods": 138,
+  "split_actual_fixture_skips": 2,
+  "excluded_test": "SourcePinTests.test_oversize_sparse_before_read: creates >4GiB logical sparse fixture; not permitted during running DUT disk census",
+  "new_pure_test_runs": 44,
+  "restore_real_verify_only_runs": 8,
+  "peak_observed_rss_kib": 38312,
+  "limits": {
+    "process_address_space_bytes": 134217728,
+    "process_cpu_seconds": 12,
+    "process_wall_seconds": 18,
+    "per_file_bytes": 8388608
+  },
+  "dut_executed": false,
+  "compiler_executed": false,
+  "artifact_proven": false,
+  "resources_ready": false,
+  "baseline_failures_remaining": false,
+  "notes": [
+    "Initial R2/R3 failures were compared with fixed baseline and repaired only in independent R3.",
+    "Historical source/AST assertions use exact full-hash + fragment-count + baseline-hash inverse; dynamic runtime tests use actual candidate code.",
+    "Original full terminal test process exceeded 12 CPU seconds; rerun split by method passed within limits.",
+    "Whole suite is not claimed: exact selected 39-file scope and skipped/excluded cases recorded.",
+    "R4 changes only test_post_build_diagnostic runtime projection input, added published pure test entry, and SOURCE_PINS; all production algorithm bytes equal R3.",
+    "R4 existing37 files repeated normal/-O all74 PASS; split terminal/source-pin and restore tests retain exact R3 evidence, not represented as newly executed R4 runs."
+  ],
+  "ordinary_test_evidence": "R4_FINAL_RESULTS.json",
+  "split_test_evidence": "SPLIT_RESULTS.json: R3 exact unchanged source/test dependency bytes, reused rather than reexecuted",
+  "restore_test_evidence": "RESTORE_ENTRY_RESULTS.json: R3 unchanged production module/gate/source inputs",
+  "published_reproducible_test_entry": "candidates/model_candidate_build_20261101/check_finite_long_regression.py",
+  "published_entry_runs": 44,
+  "postbuild_runtime_actual_source_tests": 26
+}

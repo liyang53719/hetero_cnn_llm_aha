@@ -74,6 +74,9 @@ def candidate_material_contract(manifest_pin,d,old,b):
  c=review['data_reference_contract']
  keys={'schema','scope','old_artifact_manifest_sha256','new_artifact_manifest_sha256','retained_materials_sha256','old_source_pins_sha256','reference_sources','weights_sha256','references_sha256','profiles','tokens','routing'}
  if first_fault:keys=keys|{'readonly_driver_contract_sha256'}
+ finite='finite_watchdog_driver'in c
+ if finite:
+  need(not first_fault,'ordinary watchdog relation cannot use readonly bridge');keys=keys|{'finite_watchdog_driver'}
  need(type(c)is dict and set(c)==keys and c['schema']==('MODEL_CANDIDATE_DATA_REFERENCE_ONLY_READONLY_DRIVER_V1'if first_fault else'MODEL_CANDIDATE_DATA_REFERENCE_ONLY_V1')and c['scope']==CANDIDATE_SCOPE,'exact candidate data-only contract')
  need(c['profiles']==list(range(5))and all(type(x)is int for x in c['profiles'])and type(c['tokens'])is int and c['tokens']==128 and c['routing']=='UNMODIFIED_OFFICIAL_TORCH_TOPK','unchanged all-five M128/routing')
  for field,pin in (('old_artifact_manifest_sha256',old['artifact_manifest']),('new_artifact_manifest_sha256',b['artifact_manifest']),('retained_materials_sha256',manifest_pin),('old_source_pins_sha256',old['source_pins'])):
@@ -91,6 +94,12 @@ def candidate_material_contract(manifest_pin,d,old,b):
  if first_fault:
   probe=module.first_fault_module(b['repo'],b['source_pins']).verify_probe(review,b['artifact_manifest'],b['repo'],b['source_pins'])
   need(drivers[0]['sha256']=='343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61'and drivers[0]['bytes']==27317 and drivers[1]['sha256']==probe['driver_sha256']and c['readonly_driver_contract_sha256']==probe['readonly_driver_contract_sha256'],'independent exact readonly stimulus relation')
+ elif finite:
+  helper=module.finite_watchdog_module(b['repo'],b['source_pins'])
+  need(c['finite_watchdog_driver']==helper.RELATION,'exact reviewed ordinary watchdog relation')
+  old_driver=checked(dict(drivers[0],path=str(P(old['artifact_manifest']['path']).parent/'driver.cpp')),65536)
+  new_driver=checked(dict(drivers[1],path=str(P(b['artifact_manifest']['path']).parent/'driver.cpp')),65536)
+  helper.inverse(old_driver.read_bytes(),new_driver.read_bytes())
  else:need(drivers[0]==drivers[1],'candidate may not change stimulus driver')
  rows=c['reference_sources']
  need(type(rows)is list and len(rows)==51 and len({r['path']for r in rows})==51,'exact51 unchanged reference sources')

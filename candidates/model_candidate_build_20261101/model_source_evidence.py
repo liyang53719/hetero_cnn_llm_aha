@@ -16,7 +16,10 @@ def record(original,b,built):
  repo=P(original['repo']).resolve();contract_path=P(original['model_source_contract']);contract_doc=text_pin(contract_path)
  from first_fault_policy import binding_policy,SOURCE_CONTRACT_SHA,SOURCE_CONTRACT_REPO_PATH
  readonly=binding_policy(original)
- want_contract=CONTRACT_SHA if readonly is None else SOURCE_CONTRACT_SHA
+ from finite_watchdog_policy import binding_policy as finite_binding,SOURCE_SHA as FINITE_SOURCE_SHA,SOURCE_REL
+ finite=finite_binding(original)
+ want_contract=FINITE_SOURCE_SHA if finite is not None else CONTRACT_SHA if readonly is None else SOURCE_CONTRACT_SHA
+ if finite is not None:need(contract_path==repo/SOURCE_REL,'exact finite watchdog source contract')
  if readonly is not None:need(contract_path==repo/SOURCE_CONTRACT_REPO_PATH,'exact readonly P0 source contract path')
  need(original['pins'].get(str(contract_path))==contract_doc['sha256']==want_contract,'independently reviewed candidate P0 contract')
  doc=json.loads(contract_doc['text']);need(doc['schema']==('MODEL_CANDIDATE_P0_OBSERVATION_CONTRACT_V1' if readonly is None else 'MODEL_CANDIDATE_P0_FIRST_FAULT_OBSERVATION_CONTRACT_V1'),'candidate source contract only');contract=doc['sources']

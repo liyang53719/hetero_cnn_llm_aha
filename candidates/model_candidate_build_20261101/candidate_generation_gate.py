@@ -47,12 +47,14 @@ def selected_inputs(repo,name=LEGACY_SOURCE,first_fault_readonly=False,terminal_
 def require_generation_binding(b):
  from first_fault_policy import binding_policy
  diagnostic=binding_policy(b)
+ from finite_watchdog_policy import binding_policy as finite_binding
+ finite=finite_binding(b)
  selection=selected_inputs(b['repo'],b.get('hardware_source',LEGACY_SOURCE),diagnostic is not None,False)
  need(b['generation_contract']==str(selection['contract_path'])and b['generation_contract_sha256']==selection['contract_sha256']and b['fixed_source_overlay']==str(selection['overlay']),'exact selected generation/overlay path identity')
  d=load_contract(b['generation_contract'],b['generation_contract_sha256'])
  need(b['generation_contract']in b['pins']and b['pins'][b['generation_contract']]==b['generation_contract_sha256'],'generation contract in source closure')
  for field,key in [('fixed_source_overlay','source_overlay_sha256'),('unchanged_module_contract','unchanged_module_contract_sha256'),('host_port_contract','host_ports_sha256'),('driver','driver_sha256')]:
-  p=regular(b[field]);expected=diagnostic['diagnostic_driver']['sha256'] if diagnostic is not None and field=='driver' else d[key]
+  p=regular(b[field]);expected=finite['finite_driver_sha256'] if finite is not None and field=='driver' else diagnostic['diagnostic_driver']['sha256'] if diagnostic is not None and field=='driver' else d[key]
   need(sha(p)==expected and b['pins'].get(str(p))==expected,'pre-reviewed generation input '+field)
  need(b.get('candidate_status')=='UNREVIEWED_MODEL_BUILD'and b.get('numeric_execution_authorized')is False,'candidate cannot self-admit')
  if selection['name']==ADDRESS_SOURCE:

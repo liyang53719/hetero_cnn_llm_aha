@@ -30,6 +30,54 @@ FULL_V2_HOST_PHASES=('postprocess','evidence_verification','summary_verification
 IDS=tuple(map(str,range(5)))
 D=pathlib.Path(__file__).resolve().parent
 
+# Additive ordinary-FULL-only finite attempt; old modes keep their exact ceilings.
+FULL_LONG_SCHEMA='FULL_PREFILL_FINITE_LONG_WATCHDOG_V1'
+FULL_LONG_MAX_SECONDS=150*24*60*60
+FULL_LONG_MAX_ACTIVE_CYCLES=1290000000
+FULL_LONG_DRIVER_SHA256='def22c17427b929a8e339224799845d729ad56d24b9646d99390b25a4ecd6f59'
+FULL_ORIGINAL_DRIVER_SHA256='343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61'
+
+def validate_finite_long_policy(value,driver_sha,artifact_sha):
+ need(type(value)is dict and set(value)=={'schema','driver_sha256','artifact_manifest_sha256','max_active_cycles'},'exact finite long capability')
+ need(value['schema']==FULL_LONG_SCHEMA and value['driver_sha256']==driver_sha and value['artifact_manifest_sha256']==artifact_sha,'finite long actual driver/artifact identity')
+ need(type(driver_sha)is str and re.fullmatch('[0-9a-f]{64}',driver_sha)is not None and type(artifact_sha)is str and re.fullmatch('[0-9a-f]{64}',artifact_sha)is not None,'finite long SHA identities')
+ cap=value['max_active_cycles'];need(type(cap)is int,'finite long integer capability')
+ need((driver_sha,cap)in((FULL_ORIGINAL_DRIVER_SHA256,1000000000),(FULL_LONG_DRIVER_SHA256,FULL_LONG_MAX_ACTIVE_CYCLES)),'known exact driver cycle capability')
+ return dict(value)
+
+def finite_long(admission):
+ if admission is None or 'finite_long_policy'not in admission:return False
+ need(admission.get('mode')==FULL and type(admission.get('budget_version'))is int and admission['budget_version']==3,'finite long ordinary FULL V3 only')
+ p=admission['finite_long_policy'];validate_finite_long_policy(p,p.get('driver_sha256')if type(p)is dict else None,p.get('artifact_manifest_sha256')if type(p)is dict else None)
+ return True
+
+def finite_cycle_cap(admission):
+ return admission['finite_long_policy']['max_active_cycles']if finite_long(admission)else FULL_MAX_ACTIVE_CYCLES
+
+def finite_wall_cap(admission):
+ return FULL_LONG_MAX_SECONDS if finite_long(admission)else FULL_V2_MAX_SECONDS
+
+def verify_finite_driver(admission,actual_driver,actual_artifact):
+ need(finite_long(admission),'explicit finite long admission required')
+ p=admission['finite_long_policy'];validate_finite_long_policy(p,actual_driver,actual_artifact)
+ return p['max_active_cycles']
+
+def validate_runtime_cycles(original,admission,actual_driver,actual_artifact):
+ cap=verify_finite_driver(admission,actual_driver,actual_artifact)if finite_long(admission)else 1000000000
+ value=original['max_active_cycles'];need((type(value)is int if finite_long(admission)else True) and 0<value<=cap,'actual runtime within exact driver capability')
+ return value
+
+def finite_long_runtime_bundle(original,admission,profile):
+ # Pure metadata copy. The caller writes a fresh sibling; never edits provider input.
+ import copy
+ need(finite_long(admission) and type(profile)is int and profile in ready_queue_profiles(admission),'selected finite long runtime profile')
+ need(type(original)is dict and original.get('schema')in('SINGLE_PROFILE_RUNTIME_BUNDLE_V1','SINGLE_PROFILE_RUNTIME_BUNDLE_V3'),'known original bundle schema')
+ need(original.get('hardware_executed')is False and original.get('raw_payloads_upload_allowed')is False,'original nonexecuting provider bundle')
+ need(type(original.get('profiles'))is list and len(original['profiles'])==1 and original['profiles'][0]['id']==profile,'same single profile')
+ need(type(original.get('limits'))is dict and type(original['limits'].get('max_active_cycles'))is int and original['limits']['max_active_cycles']==1000000000,'original exact finite cycle limit')
+ result=copy.deepcopy(original);result['limits']['max_active_cycles']=finite_cycle_cap(admission)
+ return result
+
 def need(v,message):
  if not v:raise ValueError(message)
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
@@ -160,6 +208,9 @@ def admit(binding):
   v2=doc.get('schema')==FULL_V2_SCHEMA or v3
   if v3:common_fields=(common_fields-{'ready'})|{'selected_profiles','queue_policy'}
   extra={'budget_contract','completion_guaranteed','executor_source_commit','executor_source_pins_sha256','log_policy','rss_telemetry_policy'}if v2 else set()
+  if 'finite_long_policy'in doc:
+   need(v3,'finite long only ordinary V3');extra|={'finite_long_policy'}
+   validate_finite_long_policy(doc['finite_long_policy'],doc['driver_sha256'],doc['artifact_manifest_sha256'])
   need(type(doc)is dict and set(doc)==common_fields|{'artifact_manifest_sha256','model_candidate_review_sha256'}|extra,'exact candidate full admission fields, no legacy baseline')
   need(doc['schema']in('MODEL_CANDIDATE_FIVE_M128_FULL_EXECUTION_BUDGET_V1',FULL_V2_SCHEMA,FULL_V3_SCHEMA),'candidate requires separate full budget version')
   candidate_path=D/'numeric/candidate_admission.py'
@@ -178,7 +229,10 @@ def admit(binding):
  need((doc.get('schema')==FULL_V3_SCHEMA or doc['ready']is True) and doc['scope']=='WATCHDOG_ADMISSION_ONLY_NOT_NUMERICAL_ACCEPTANCE','full admission not ready')
  need(all(type(doc[k])is int and doc[k]==v for k,v in [('tokens',128),('matrix_macs',4096),('vector_lanes',32)]),'unchanged full hardware/stimulus')
  root=D.parent
- need(doc['driver_sha256']==sha(root/'moe_router_score_observation_20261030/driver/host_axi_driver_non_dpi.cpp'),'unchanged calibrated numerical driver')
+ if 'finite_long_policy'in doc:
+  need(candidate and v3,'finite long actual candidate V3');validate_finite_long_policy(doc['finite_long_policy'],doc['driver_sha256'],binding['artifact_manifest']['sha256'])
+  need(artifact['common']['driver']['sha256']==doc['driver_sha256'],'finite long actual artifact driver')
+ else:need(doc['driver_sha256']==sha(root/'moe_router_score_observation_20261030/driver/host_axi_driver_non_dpi.cpp'),'unchanged calibrated numerical driver')
  if v2:
   return full_v3_document(binding,doc,request,approved) if v3 else full_v2_document(binding,doc,request,approved)
  need(type(doc['basis'])is dict and set(doc['basis'])=={'calibration_summary','independent_budget_review'},'actual calibration and independent budget review required')
@@ -232,6 +286,9 @@ def full_v3_document(binding,doc,request,cloud):
 def _full_finite_document(binding,doc,request,cloud,rows,version):
  need(binding.get('execution_context')=='CLOUD_EXECUTOR_V1'and binding.get('execution_mode')==FULL,'V2 full budget is cloud-only')
  need(doc['budget_contract']==FULL_V2_CONTRACT and doc['completion_guaranteed']is False,'V2 watchdog never guarantees completion')
+ long_context=dict(mode=FULL,budget_version=version)
+ if 'finite_long_policy'in doc:
+  long_context['finite_long_policy']=validate_finite_long_policy(doc['finite_long_policy'],doc['driver_sha256'],doc['artifact_manifest_sha256']);finite_long(long_context)
  log=doc['log_policy']
  need(type(log)is dict and log==FULL_V2_LOG_POLICY and all(type(log[k])is int for k in ('compressed_bytes','raw_bytes','line_bytes')),'V2 exact bounded lossless log policy')
  rss=doc['rss_telemetry_policy']
@@ -256,8 +313,8 @@ def _full_finite_document(binding,doc,request,cloud,rows,version):
    log_caps[i]=row.get('log_compressed_bytes',log['compressed_bytes']);rss_caps[i]=row.get('rss_telemetry_compressed_bytes',rss['compressed_bytes'])
    need(type(log_caps[i])is int and 0<log_caps[i]<=FULL_V3_LOG_MAX and type(rss_caps[i])is int and 0<rss_caps[i]<=FULL_V3_RSS_MAX,'finite independently reviewed V3 compressed quotas')
   need(all(type(value)is int and value>0 for value in row.values()),'V2 strictly positive integer watchdogs')
-  need(row['cpu_seconds']<=row['wall_seconds']<=FULL_V2_MAX_SECONDS,'V2 finite CPU/wall bounds for one CPU')
-  need(row['max_active_cycles']<=FULL_MAX_ACTIVE_CYCLES,'V2 unchanged binary cycle watchdog ceiling')
+  need(row['cpu_seconds']<=row['wall_seconds']<=finite_wall_cap(long_context),'V2 finite CPU/wall bounds for one CPU')
+  need(row['max_active_cycles']<=finite_cycle_cap(long_context),'V2 unchanged binary cycle watchdog ceiling')
   need(row['log_raw_bytes']<=log['raw_bytes'],'V2 explicit per-profile raw log ceiling')
   need(row['rss_telemetry_raw_bytes']<=rss['raw_bytes'],'V2 explicit per-profile raw RSS telemetry ceiling')
   rss_raw[i]=row['rss_telemetry_raw_bytes']
@@ -267,7 +324,7 @@ def _full_finite_document(binding,doc,request,cloud,rows,version):
    host[wall][i]=row[wall];host[cpu][i]=row[cpu]
   raw_bytes[i]=row['log_raw_bytes']
   windows[i]=row['wall_seconds'];cpus[i]=row['cpu_seconds'];cycles[i]=row['max_active_cycles']
- return dict(**(dict(profile_log_compressed_bytes=log_caps,profile_rss_telemetry_compressed_bytes=rss_caps)if version==3 else {}),mode=FULL,budget_version=version,dut_rss_bytes=cloud['dut_rss_bytes'],dut_address_space_bytes=cloud['dut_address_space_bytes'],budget_contract=FULL_V2_CONTRACT,completion_guaranteed=False,log_policy=dict(log),rss_telemetry_policy=dict(rss),profile_rss_telemetry_raw_bytes=rss_raw,profile_log_raw_bytes=raw_bytes,**{'profile_'+name:values for name,values in host.items()},profile_seconds=windows,profile_cpu_seconds=cpus,profile_max_active_cycles=cycles,reviewed_budget_sha256=request['sha256'])
+ return dict(**(dict(profile_log_compressed_bytes=log_caps,profile_rss_telemetry_compressed_bytes=rss_caps)if version==3 else {}),**({'finite_long_policy':dict(long_context['finite_long_policy'])}if finite_long(long_context)else {}),mode=FULL,budget_version=version,dut_rss_bytes=cloud['dut_rss_bytes'],dut_address_space_bytes=cloud['dut_address_space_bytes'],budget_contract=FULL_V2_CONTRACT,completion_guaranteed=False,log_policy=dict(log),rss_telemetry_policy=dict(rss),profile_rss_telemetry_raw_bytes=rss_raw,profile_log_raw_bytes=raw_bytes,**{'profile_'+name:values for name,values in host.items()},profile_seconds=windows,profile_cpu_seconds=cpus,profile_max_active_cycles=cycles,reviewed_budget_sha256=request['sha256'])
 
 def cap_fields_present(row):
  return bool({'log_compressed_bytes','rss_telemetry_compressed_bytes'}&set(row))
@@ -295,10 +352,10 @@ def ready_queue_profiles(admission):
 
 def queue_report_fields(admission):
  if admission.get('budget_version')!=3:return {}
- return dict(budget_version=3,profiles_registered=list(range(5)),selected_profiles=ready_queue_profiles(admission),blocked_profiles=admission['blocked_profiles'],queue_policy=FULL_V3_QUEUE_POLICY)
+ return dict(**({'finite_long_policy':dict(admission['finite_long_policy'])}if finite_long(admission)else {}),budget_version=3,profiles_registered=list(range(5)),selected_profiles=ready_queue_profiles(admission),blocked_profiles=admission['blocked_profiles'],queue_policy=FULL_V3_QUEUE_POLICY)
 
 def profile_wall_ceiling(admission):
- return FULL_V2_MAX_SECONDS if full_v2(admission) else 20000
+ return finite_wall_cap(admission) if full_v2(admission) else 20000
 
 def dut_parent_cpu_seconds(admission,profile):
  """The consumer is exec'd under this hard ceiling before it forks the DUT.
@@ -307,7 +364,7 @@ def dut_parent_cpu_seconds(admission,profile):
  """
  if not full_v2(admission):return 18000
  wall=admission['profile_seconds'][str(profile)];cpu=admission['profile_cpu_seconds'][str(profile)]
- need(type(wall)is int and type(cpu)is int and 0<cpu<=wall<=FULL_V2_MAX_SECONDS,'finite V2 inherited CPU ceiling')
+ need(type(wall)is int and type(cpu)is int and 0<cpu<=wall<=finite_wall_cap(admission),'finite V2 inherited CPU ceiling')
  return cpu+admission['profile_postprocess_cpu_seconds'][str(profile)]+30
 
 def install_full_v2_parent_cpu_limit(admission,job_seconds):
@@ -363,6 +420,7 @@ def host_phase_limits(admission,profile,phase):
 
 def verify_consumer_admission(admission,reported,profile):
  """Use the independent admission, never a report's self-selected log version."""
+ if finite_long(admission):need(type(reported)is dict and reported.get('finite_long_policy')==admission['finite_long_policy'],'actual independently admitted finite long policy')
  need(type(reported)is dict and reported.get('execution_mode')==admission['mode'] and reported.get('reviewed_budget_sha256')==admission['reviewed_budget_sha256'],'actual independently admitted consumer mode/budget')
  if full_v2(admission):
   need(type(reported.get('budget_version'))is int and reported['budget_version']==admission['budget_version'],'actual expected full V2/V3 consumer version')
@@ -524,8 +582,10 @@ def consumer_limits(original,admission,profile):
  if admission['mode']==FIRST_FAULT:need(type(profile)is int and profile==0 and admission.get('diagnostic_profiles')==[0],'first fault consumer profile0 only')
  if admission.get('budget_version')==3:need(type(profile)is int and profile in ready_queue_profiles(admission),'profile not independently admitted ready')
  i=str(profile);result=dict(original);wall=admission['profile_seconds'][i]
+ if finite_long(admission):
+  need(type(original.get('max_active_cycles'))is int and original['max_active_cycles']<=finite_cycle_cap(admission),'finite long runtime capability before override')
  if full_v2(admission):
-  need(type(wall)is int and 0<wall<=FULL_V2_MAX_SECONDS,'explicit V2 finite wall')
+  need(type(wall)is int and 0<wall<=finite_wall_cap(admission),'explicit V2 finite wall')
   cpu=admission['profile_cpu_seconds'][i]
   need(type(cpu)is int and 0<cpu<=wall,'explicit V2 finite CPU within wall')
   result['cpu_seconds']=cpu

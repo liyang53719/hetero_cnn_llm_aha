@@ -4,7 +4,7 @@ No model weights, runtime reference, full Top elaboration or MAC numerical claim
 import argparse,gzip,hashlib,json,os,pathlib,re,resource,shutil,struct,subprocess,sys,time
 P=pathlib.Path;HERE=P(__file__).resolve().parent
 ROOT=P('/workspace/scratch/f28987e955ed');D=ROOT/'prefill_supply_overlap_candidate_20261103T1130';A=D/'next_protocol_resource_analysis';N=A/'native_protocol';W=D/'remote_ci';IR=A/'owner_chirrtl_r1/run/design/TransposedDenseDownOwner.fir';SV=A/'owner_lowering_r1/run/TransposedDenseDownOwner.sv';OBJ=N/'translation_r2/run/obj';V=ROOT/'verilator_dependency_recovery_20261030T0534/tools/verilator-package/usr';VR=V/'share/verilator';VB=V/'bin/verilator_bin'
-START=time.monotonic();START_CPU=time.process_time();BASE_USAGE=resource.getrusage(resource.RUSAGE_CHILDREN);OBSERVED_CPU=0.;CPU=0.;PINS={};PHASES=[];ENV={};JOB_START=None
+START=time.monotonic();START_CPU=time.process_time();BASE_USAGE=resource.getrusage(resource.RUSAGE_CHILDREN);OBSERVED_CPU=0.;CPU=0.;PINS={};PHASES=[];ENV={};JOB_START=None;EXPORT_OWNED=False
 
 def need(v,m):
  if not v:raise ValueError(m)
@@ -76,12 +76,17 @@ def bounded_probe(argv,label):
  need(p.stat().st_size<=1<<20,'bounded ELF tool output');light_guard();return p.read_text()
 
 def main(repo):
- global ENV,JOB_START
+ global ENV,JOB_START,EXPORT_OWNED
  need(os.environ.get('GITHUB_ACTIONS')=='true'and os.environ.get('GITHUB_REPOSITORY')=='liyang53719/hetero_cnn_llm_aha'and os.environ.get('GITHUB_RUN_ATTEMPT')=='1','only explicitly launched fresh hosted job')
+ # Retain even identity, Git, or resource preflight failures before any child phase.
+ need(ROOT.is_dir()and not list(ROOT.iterdir()),'new independent VM root must be empty');W.mkdir(parents=True);(W/'export').mkdir();EXPORT_OWNED=True
  ident=json.loads((P(os.environ['RUNNER_TEMP'])/'owner-protocol-identity.json').read_text());clock=json.loads((P(os.environ['RUNNER_TEMP'])/'owner-protocol-clock.json').read_text());JOB_START=clock['started_monotonic']
  need(ident['run_id']==clock['run_id']==os.environ['GITHUB_RUN_ID']and ident['through']=='compile_and_protocol8'and ident['driver_sha256']==load('EXPECTED_GENERATED.json')['driver_sha256'],'exact run identity and preapproved bounded mode')
- head=subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True,timeout=5).strip();need(head==ident['source_commit'],'reviewed source checkout');subprocess.run(['git','-C',str(repo),'diff','--quiet','HEAD','--'],check=True,timeout=5)
- need(ROOT.is_dir()and not list(ROOT.iterdir()),'new independent VM root must be empty');W.mkdir(parents=True);(W/'export').mkdir();save(W/'export'/'START.json',dict(identity=ident,clock=clock,gate=freegate(),scope='ACTUAL_OWNER_PROTOCOL_ONLY_NOT_NUMERICAL'))
+ # No threaded index preload or optional fsmonitor helper under the wrapper's bounded AS.
+ # These flags change metadata-check scheduling, not the clean tracked-content predicate.
+ git=['git','-c','core.preloadIndex=false','-c','index.threads=1','-c','core.fsmonitor=false','-C',str(repo)]
+ head=subprocess.check_output([*git,'rev-parse','HEAD'],text=True,timeout=5).strip();need(head==ident['source_commit'],'reviewed source checkout');subprocess.run([*git,'diff','--quiet','HEAD','--'],check=True,timeout=5)
+ save(W/'export'/'START.json',dict(identity=ident,clock=clock,gate=freegate(),scope='ACTUAL_OWNER_PROTOCOL_ONLY_NOT_NUMERICAL'))
  for p in HERE.rglob('*'):
   if p.is_file():pin(p)
  ENV={'PATH':'/usr/bin:/bin','LANG':'C.UTF-8','LC_ALL':'C.UTF-8','PYTHONDONTWRITEBYTECODE':'1','JAVA_HOME_21_X64':os.environ['JAVA_HOME_21_X64'],'ImageOS':os.environ.get('ImageOS',''),'ImageVersion':os.environ.get('ImageVersion','')}
@@ -172,5 +177,5 @@ if __name__=='__main__':
  resource.setrlimit(resource.RLIMIT_AS,(256<<20,8<<30));resource.setrlimit(resource.RLIMIT_CORE,(0,0));p=argparse.ArgumentParser();p.add_argument('--execute-compile-and-protocol8',action='store_true');p.add_argument('--repo',type=P,required=True);args=p.parse_args();need(args.execute_compile_and_protocol8,'explicit reviewed whole route required');sys.path.insert(0,str(HERE/'supervisor'));import supervise_multiroot
  try:main(args.repo.resolve())
  except BaseException as e:
-  if(W/'export').is_dir():save(W/'export'/'FAILED.json',dict(status='FAIL_OR_INCOMPLETE',error=type(e).__name__+': '+str(e),phases=PHASES,cumulative_CPU_seconds=CPU,no_automatic_retry=True))
+  if EXPORT_OWNED and(W/'export').is_dir():save(W/'export'/'FAILED.json',dict(status='FAIL_OR_INCOMPLETE',error=type(e).__name__+': '+str(e),phases=PHASES,cumulative_CPU_seconds=CPU,no_automatic_retry=True))
   raise

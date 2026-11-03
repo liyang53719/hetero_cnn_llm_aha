@@ -2,7 +2,7 @@ name: hetero-prefill-owner-protocol-source-only-protocol8
 on:
   push:
     branches: [main]
-    paths: [ci_launch/prefill_owner_protocol_20261103_once.json]
+    paths: [ci_launch/prefill_owner_protocol_20261103_repair_r2.json]
 permissions:
   contents: read
 concurrency:
@@ -53,6 +53,6 @@ jobs:
           retention-days: 7
           overwrite: false
           compression-level: 0
-# Dormant source-only proposal: no launch file.
+# Dormant repair source: only a separate new r2 launch may trigger; original nonce unchanged.
 # Preauthorized exact compile_and_protocol8 mode only; all intermediate failures stop.
 # No IR/SV/C++/ELF upload and no model weights/reference acquisition.

@@ -1,8 +1,8 @@
 {
-  "status": "DESIGN_ONLY_NOT_PUBLISHED_OR_DISPATCHED",
+  "status": "REPAIR_R2_DORMANT_SOURCE_PROPOSAL_NOT_DISPATCHED",
   "repository": "liyang53719/hetero_cnn_llm_aha",
   "verified_visibility": "public",
-  "read_only_base_ref": "cac5674d7084017819bd1194ad968d848e328df4",
+  "read_only_base_ref": "f11efce45bd0b15593cfcda1e09c3ed654a7f743",
   "runner": "ubuntu-24.04 x86_64 standard GitHub-hosted fresh VM",
   "scope": "SOURCE_ONLY_REAL_OWNER_PROTOCOL_NOT_FULL4096_OR_NUMERICAL",
   "publish": {
@@ -138,7 +138,7 @@
   },
   "runtime_gate": "Single reviewed compile_and_protocol8 launch; no manual mid-job pause. Prior native0/EOF/cleanup,52TU/full-MD/tool pins/new ELF and fresh runtime resource gate required; failures stop. No retry or second cloud job.",
   "launch_policy": {
-    "trigger": "unique added ci_launch/prefill_owner_protocol_20261103_once.json on main only",
+    "trigger": "unique added ci_launch/prefill_owner_protocol_20261103_repair_r2.json on main only",
     "no_launch_file_in_dormant_source_publication": true,
     "attempt_must_equal": 1,
     "source_sha_must_equal_launch_parent": true,
@@ -147,7 +147,8 @@
     "cancel_in_progress": false,
     "no_workflow_dispatch": true,
     "mode": "compile_and_protocol8",
-    "driver_sha256": "2c66667ae5ed85b5712f5e946d82dc881a41a45bd3835af64ced1e66ccec0688"
+    "driver_sha256": "2c66667ae5ed85b5712f5e946d82dc881a41a45bd3835af64ced1e66ccec0688",
+    "nonce": "prefill_owner_protocol_20261103_repair_r2"
   },
   "actions": {
     "checkout": "11bd71901bbe5b1630ceea73d27597364c9af683",
@@ -182,5 +183,22 @@
     "new linked x86_64 ELF with actual owner symbols and pinned PT_INTERP/NEEDED, no RPATH/RUNPATH",
     "fresh runtime memory/disk and whole CPU/wall remainder"
   ],
-  "fullTop_followup": "Deferred exact shared-helper integration, producer revision, new source-observation contract and five-block same-stimulus acceptance; owner protocol PASS is not that acceptance."
+  "fullTop_followup": "Deferred exact shared-helper integration, producer revision, new source-observation contract and five-block same-stimulus acceptance; owner protocol PASS is not that acceptance.",
+  "repair_r2": {
+    "prior_run_id": 41677651838,
+    "prior_job_id": 126062482790,
+    "prior_source": "87a4384817a72c6c209017f3f02ce99565d6804d",
+    "prior_launch": "f11efce45bd0b15593cfcda1e09c3ed654a7f743",
+    "prior_log_sha256": "bdc7cdd6d61caf5981881c29c2164f55c0c0497e28dd149f550ccf24da01f976",
+    "failure": "Git tracked clean-check threaded lstat exited128 before acquire/JVM/EDA/model; early export absent",
+    "change": "Single-threaded Git index/preload and no fsmonitor helper; identical tracked-clean predicate. Export ownership starts before preflight; never write existing root.",
+    "runner_sha256": "1b32be500b7f1985d4abbe47220b2d522e142c028458d536e47a58810ca53d8a",
+    "validator_sha256": "49624ea477611bcd38142ecec8f103a9d14bde7e6e98751118a9e7477f5196ce",
+    "workflow_sha256": "b4907b7723fccfb14943a0a85a25f2e9107bfe8b7c29021612898900e3afb287",
+    "resource_caps_changed": false,
+    "production_Scala_SV_driver_changed": false,
+    "prior_run_retained": true,
+    "old_nonce_reused": false,
+    "local_test_scope": "Git2.52 at AS256MiB with20452 tracked files reproduces exit128; fixed clean0,dirty1,invalidrev128. Synthetic early failure/launch fixtures only, not hosted EDA/protocol PASS"
+  }
 }

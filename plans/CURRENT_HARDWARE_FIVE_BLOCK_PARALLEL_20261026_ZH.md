@@ -1005,3 +1005,11 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 后续单一独立 GitHub job 拟按明确预授权流程串行完成 159源编译→owner CHIRRTL→固定firtool→固定Verilator→52TU C++编译/链接→8case协议。各阶段原始hash/actual-MD依赖/tool/ELF及native0/EOF/cleanup、fresh资源门需闭合才进入下一阶段；任一失败即停，无自动加额/重试。运行不读取权重、用户输入、reference或原FULL材料。
 - 8case 的外部 Matrix responder 只产生协议payload并检查真实owner的握手/标签/搬运次序；该模型无 Matrix4096算术、DMA或TileSumBridge。N192/N320、M128/K128为控制激励，next-N在旧ACK前真正发起只证明owner依赖窗口，不代表目标单outstanding内存吞吐。slot2/window整链及五块数值/有效MAC80%或90%仍未验收；任何专用协议PASS不得替代这些门。
 - 本次分拆后的独立出版源树已运行27个纯协议/源码检查和6个真实selected159选择检查，均PASS（AS64MiB/CPU10s/wall15s单进程上限）；不含JVM、EDA、ELF执行。撤回的共享helper方案首轮测试失败保留，不冒全Top集成修复。
+
+
+## TEMP：owner protocol CI r2 前置 Git 修复（2026-11-03 16:52 UTC）
+
+- 已发布源码 `87a4384817a72c6c209017f3f02ce99565d6804d` 的普通 CI `41677383020` 成功；一次性启动提交 `f11efce45bd0b15593cfcda1e09c3ed654a7f743` 的专用 run `41677651838` / job `126062482790` 已失败。原日志明确停在 `run_remote.py` 的 Git tracked clean-check：`unable to create threaded lstat`，exit 128。工具获取、JVM、EDA、C++ 编译和8 case模型均尚未启动；不能称硬件或协议失败。原 run 与旧 nonce 保留，不重跑 attempt2。
+- 原日志本地完整解码文本 SHA256：`bdc7cdd6d61caf5981881c29c2164f55c0c0497e28dd149f550ccf24da01f976`。本地 Git2.52 / AS256MiB / 20,452个tracked小文件复现同exit128；固定 `core.preloadIndex=false`、`index.threads=1`、`core.fsmonitor=false` 后，clean返回0、tracked内容改变返回1、坏revision返回128。只是调度与禁止可选外部fsmonitor helper，不取消clean检查；本地工具不是云端Git2.56，不冒相同二进制验证。
+- 修复将本次独占export创建提前到preflight，异常只在本次确实创建的export内写FAILED，旧非空ROOT仍拒绝且不覆写旧证据。Git/identity失败留档及13项r2 launch正负fixture已通过；这些是软件前置测试，不是实际protocol8通过。所有阶段资源门、159源、生成IR/SV预期hash、完整banks与原driver八case不变。
+- 本批只有小源码修复、PLAN/catalog同步与此计划追加，没有任何launch文件。专用workflow只监听新的 `ci_launch/prefill_owner_protocol_20261103_repair_r2.json`；必须另一个唯一新增nonce提交、exact source parent、attempt1、相同driver/mode，并验证旧nonce原身份。源push保持dormant，旧nonce修改不会触发。下一步由单writer在独审/普通CI后启动一次r2，不自动重试。原FULL继续冻结；新fullTop联接仍在独立目录准备，五块数值/80–90%目标未通过。

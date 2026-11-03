@@ -1,0 +1,32 @@
+{
+  "schema": "SAFE_ORDINARY_FULL_INTERMEDIATE_V1",
+  "status": "PARTIAL_NUMERIC_PASS_FULL_BLOCK_INCOMPLETE",
+  "execution_uuid": "23bd64b8-ac75-4b36-860f-3c4d9831b0d9",
+  "source_commit": "75b9fc21e6d8a4a13bb82307969d9a0d9a953a79",
+  "tokens": 128,
+  "profile": "Qwen2-1.5B",
+  "matrix_macs": 4096,
+  "vector_lanes": 32,
+  "n0": {
+    "words": 196608,
+    "bitwise_equal": true,
+    "nonfinite": 0,
+    "sha256": "ddee5fd75094777c51ef1104c7a18dfe527fef9de2a24646aad1d83160a6e421"
+  },
+  "qraw": {
+    "words": 196608,
+    "nonfinite": 0,
+    "numeric_comparison": "UNAVAILABLE_NO_FROZEN_PREBIAS_REFERENCE",
+    "sha256": "22e2a6808d40f04091b4aa02b3f2c3fb555020a5e4ac0c70aba62f62e27b6835"
+  },
+  "qr": {
+    "words": 196608,
+    "bitwise_equal": true,
+    "nonfinite": 0,
+    "sha256": "913b3b261ec0407cd3cb22651556bf036691611373491bfbdcb09debc16fd6bf"
+  },
+  "full_model_pass_profiles": 0,
+  "final_rtl_pass_profiles": 0,
+  "terminal": false,
+  "cleanup_performed": false
+}

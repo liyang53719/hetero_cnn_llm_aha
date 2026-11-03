@@ -956,3 +956,15 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 五块P0/P1/P2/P3/P4有限尝试watchdog规划为70m/560m/140m/1290m/530m cycles；100 cycles/s敏感性估计约9/65/17/150/62天，不是实测完整吞吐率。P1/P3/P4日志与总体资源仍未闭合，规划最小free分别12.25/15.5/12.25GiB，实际当前约10.41GB不足，绝不降低8GiB保留线、RAM或采样覆盖。现有raw/compressed/file与后处理cap仍拒绝超额；无READY伪造。
 - 本次仅源码发布，无nonce、新构建或新DUT。原P0 UUID23bd64b8-ac75-4b36-860f-3c4d9831b0d9继续固定75b9源/原artifact；08:05观察active1331712、pc1/completions1，未封口、未终态。超过旧诊断停止周期不能证明非有限值已消失。模型完整数值0/5、最终RTL0/5，完整block利用率未测。
 - 后续先完成实际资源与日志预算、与host性能候选组合独审，再决定必要的唯一新artifact路径，避免cap与mapper各重复昂贵构建。watchdog-only精确关系不覆盖mapper，组合后必须重新验证。无需用户重复逐步批准，但每次实际运行仍须满足身份一致的执行准入。
+
+
+## 2026-11-03 09:24 UTC：原 FULL M128 完整 Q 投影中间值逐位通过（整块仍 INCOMPLETE）
+
+- 同一原执行UUID23bd64b8-ac75-4b36-860f-3c4d9831b0d9、源码75b9fc21e6d8a4a13bb82307969d9a0d9a953a79、同一4096/32硬件继续；没有采用后来finite-long源码或mapper，没有新DUT/EDA。09:23 active2066176，pc3/completions3，日志与RSS gzip尚未封口，无终态结果。
+- pc0 n0：完整128×1536、196608个FP32词，与本次冻结input_layernorm BF16参考按原uint16<<16规则展开逐位一致，0差异、0非有限值。实际/期望SHA256 ddee5fd75094777c51ef1104c7a18dfe527fef9de2a24646aad1d83160a6e421。
+- pc1 qraw：cycles1607028输出后已闭合，196608个FP32词全有限，原ng160对应最终128×32区域4096词也全有限。SHA256 22e2a6808d40f04091b4aa02b3f2c3fb555020a5e4ac0c70aba62f62e27b6835。没有冻结pre-bias参考，因此只报有限性，不报qraw数值PASS；旧first-K partial与此full-K输出不是同阶段对照。
+- pc2 qr：cycles2024970输出后已闭合，完整128×1536含bias Q投影，与冻结official self_attn.q_proj.0 BF16参考按原uint16<<16规则展开逐位一致。byte/word/bit差异、最大绝对/相对误差、relative L2、RMSE均0，双方非有限值0；SHA256 913b3b261ec0407cd3cb22651556bf036691611373491bfbdcb09debc16fd6bf。只读验证依据原driver输出关闭路径及两次stat/hash稳定，未读取仍运行的pc3输出。
+- 以上是同一次原完整prefill真实DUT中间值范围，不是独立叶子替代整块，不是consumer整体验收，也不是最终RTL验收。Qwen2整块仍运行，其余四块未宣称完整通过；模型完整0/5、最终RTL0/5。完整block周期分母尚不存在，利用率80%/90%目标未验收。
+- 修正先前长档空间门的解释：12.25/15.5GiB是20Hz压力情景预留，不是实现必然占用或不可变门。原RSS循环为采样→完整census→sleep50ms，11849完整样本/9321s的实测频率约1.271Hz，间隔0.594–1.229s；这不是长期频率保证。保留所有采样与原资源门，条件2Hz×512B的150d raw约12.36GiB、当前gzip每秒速率×3约866MiB，可由原16GiB raw/1GiB gzip作有限尝试。若实际先触上限则RESOURCE_LIMIT/INCOMPLETE，不能当数值FAIL。
+- 原DUT128MiB与RSS1GiB日志合计1.125GiB，加8GiB free保留线及示例512MiB非日志增量约需9.625GiB；仍必须按实际材料/输出reserve、新全census和RAM即时准入，不能凭示例启动。更紧的是DUT日志按当前分布35.63d可能耗尽128MiB，2倍字节余量仅17.82d，长档需合理有限cap/性能与总disk匹配，不应预知会早止仍盲开长跑。P3还需真实新driver artifact，旧artifact不能冒1.29b能力。
+- 09:23:56工作区free10388541440B，MemAvailable8580656KiB，/tmp284164096B；清单root1154/tmp310，无清理或迁移。下一步沿同一FULL继续后续投影/attention数值链，五块准备并行、实际重job按资源串行。

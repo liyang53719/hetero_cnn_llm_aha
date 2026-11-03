@@ -22,7 +22,7 @@ def module(name,path,pins):
 def complete(r):
  return (r.get('cleanup_proof') or {}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP' and (r.get('log_capture') or {}).get('pipe_eof_observed')is True and (r.get('log_capture') or {}).get('gzip_finalized')is True
 
-PRELAUNCH_SUPERVISOR_SHA='c298efb15564b052c7aec7aaf42326de10f392f0e7d28c511fa5def1fcd97791'
+PRELAUNCH_SUPERVISOR_SHA='54e7f539df5c7356cb2d10637cee3a8de896b739196e6066d8755c1b62c1d3ed'
 PRELAUNCH_ERRORS=('ValueError: locked memory gate','ValueError: locked disk gate','ValueError: prelaunch work deadline')
 def prelaunch_rejection(r,run_dir,supervisor_path):
  # This exact supervisor tests these gates before mkdir/Popen. False worker_started

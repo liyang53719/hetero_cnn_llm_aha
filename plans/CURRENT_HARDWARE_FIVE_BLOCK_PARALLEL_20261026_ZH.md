@@ -899,3 +899,15 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 新单次 build workflow 仅为普通模型 Chisel 仿真硬件构建，保持 single4096/M128、七文件包、单任务资源约束；源码审查和 CI 通过后仅一个新 nonce 激活。它不属于模型数值通过后冻结的最终 RTL 验收。
 - 当前完整 block 模型 0/5、最终 RTL 数值 0/5，80%/90% 完整 block 有效 MAC 利用率均无新实测。组件回归不当利用率证据。下一步唯一新硬件构建、七文件身份/资源接收、五块原 prefill 同刺激实际回归，完整数值通过后才冻结最终 RTL。
 - 临时文件均保留；本日不再常规清理。独立源码 checkout 新增约 640MiB，后续若挡 DUT 预算，只审计已由 Git 完整保存且无运行引用文件的可逆稀疏化，不删除唯一证据。
+
+
+## 2026-11-03 03:55 UTC：FAIL/INCOMPLETE 原构建身份归因；恢复源码仅修监督竞态与故障可观测性
+
+- 地址修复 source 79020f69c648c94b4d6d5ed653f48073ef6b8ee7 已发布；源码 CI 41569629523 成功。单次 activation 074b21d8cc7c6a8f51cbb1420510fb0bd1914777 对应 build 41569844828/job125699935635，于 03:40:45 在 host_archive 失败，verify/upload 均 skipped，API artifact 数量 0。未重跑该身份，未接收新 ELF/SV 包、未运行新 DUT。
+- 原公开日志：host_archive elapsed121.10s、native_exit=null、error_count1/UNCLASSIFIED_SUPERVISOR_ERROR；cleanup/groupabsence、pipeEOF、gzip均闭合。原错误文本与 RESULT 未导出，现存接口无法恢复，根因仍 UNKNOWN。不能用 CPU110.31s/RSS475156480B 的 snapshot 推断 OOM/超时或排除所有瞬时问题。之前实际 Chisel IR/host SV 发射、native前端/三个provider archive native0，仅构建日志范围证据；丢失的产物不能沿用 PASS。
+- 独立真实 Linux host 复现一个监督缺陷：已打开的 /proc/<已退出pid>/stat 在 read 时抛 ProcessLookupError(errno3)，旧 scanner 只捕获 FileNotFoundError。最小恢复补丁仅将同义退出竞态计为 vanished，PermissionError/EIO 仍失败；原严格资源、采样频率、组清理/EOF和数值门不变。此缺陷复现不是原 GitHub 失败因果证明。
+- 恢复源码增加有限安全诊断分类，最多16个已允许异常类别/errno/精确原因，不导出路径、任意错误文本或数据；失败阶段仍严格失败。新增 exact producer revision 只覆盖明确审查的普通 corrected-selector 字节，不覆盖旧历史映射，不允许任意自哈希 producer。
+- 恢复构建必须等新源码与独立审查/CI闭合后用全新单次 nonce；原已消费 nonce 和旧源全部保留。硬件仍同一4096 MAC/32-lane/159原源选择，五块M128全重测路线不变；不缩硬件、不用DPI替代。
+- 五块完整prefill连续运行的 host V2 长时监督/无损日志/采样闭包正在独立树审查，不夹带进本次最小producer恢复。旧300s五块只到pc0，已撤回短重启方案；P0仅搬运下界加旧norm量级即约6.83h，不能把旧18000s当完整预算。所有估算是条件host运行预测，不是RTL性能/利用率。
+- 本轮完整模型数值0/5，最终RTL数值0/5。先新模型实际完整数值通过，再冻结同源码/输入/参考/配置的最终RTL回放；1024/1224澄清不阻塞128。
+- 原工作区证据全部保留；本日没有额外常规清理。仅已独审的独立checkout reports 10303份Git完整可恢复副本作可逆稀疏迁移，3份代码引用报告和donor对象库保留，净释放540020736B；恢复依赖对象库不得gc/prune/repack。

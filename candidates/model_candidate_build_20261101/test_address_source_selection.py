@@ -116,18 +116,24 @@ class BindingAndPack(unittest.TestCase):
   with self.assertRaises(ValueError):flow.execute_nodes(nodes,env)
   env['b']=copy.deepcopy(self.b);env['obs']=copy.deepcopy(self.obs);env['obs']['source_closure']['source_pins_sha256']='f'*64
   with self.assertRaises(ValueError):flow.execute_nodes(nodes,env)
- def test_current_legacy_modes_use_exact_current_producer_bytes(self):
+ def test_legacy_modes_retain_exact_prediagnostic_producer_bytes(self):
   self.source['fixed_source_overlay']=str(self.repo/'candidates/model_candidate_build_20261101/MODEL_SOURCE_OVERLAY.json')
   self.closure['generation_contract_sha256']=gate.GENERATION_CONTRACT_SHA256;self.closure['source_overlay']['sha256']=gate.LEGACY_OVERLAY_SHA256
   for mode in (None,{'schema':'FIRST_FAULT_DRIVER_CONTRACT_V1'},{'schema':'FIRST_FAULT_DRIVER_CONTRACT_V2'}):
    selected=proof.selector_producer_policy(self.source,mode)
    with self.subTest(mode=mode):
     self.assertIsNotNone(selected)
-    for rel,h in selected.items():self.assertEqual(sha(R/rel),h,rel)
+    for rel,h in selected.items():
+     # This test intentionally selects retained pre-diagnostic producer modes.
+     if rel.endswith('/one_job_model_candidate.py'):self.assertEqual(h,'7e04700f063728cf1df376a563565830f7e1544f8b2e439b507cc649975749ff')
+     else:self.assertEqual(sha(R/rel),h,rel)
   b=copy.deepcopy(self.b);b.update(hardware_source='legacy',generation_contract=str(self.repo/'candidates/model_candidate_build_20261101/GENERATION_CONTRACT.json'),generation_contract_sha256=gate.GENERATION_CONTRACT_SHA256,fixed_source_overlay=self.source['fixed_source_overlay']);gate.require_generation_binding(b)
   del b['hardware_source'];gate.require_generation_binding(b)
  def test_selector_producer_map_is_exact_and_old_map_retained(self):
-  for rel,h in proof.SELECTOR_IMPLEMENTATION_PINS.items():self.assertEqual(sha(R/rel),h)
+  for rel,h in proof.SELECTOR_IMPLEMENTATION_PINS.items():
+   if rel.endswith('/one_job_model_candidate.py'):self.assertEqual(h,'7e04700f063728cf1df376a563565830f7e1544f8b2e439b507cc649975749ff')
+   else:self.assertEqual(sha(R/rel),h)
+  for rel,h in proof.FINITE_STAGE_DIAGNOSTIC_REVISION.items():self.assertEqual(sha(R/rel),h)
   self.source['generation_input_pins'][str(self.repo/'candidates/model_candidate_build_20261101/candidate_generation_gate.py')]=proof.SELECTOR_IMPLEMENTATION_PINS['candidates/model_candidate_build_20261101/candidate_generation_gate.py']
   self.assertEqual(proof.selector_producer_policy(self.source,None),proof.SELECTOR_IMPLEMENTATION_PINS)
   for mutate in (lambda s:s['generation_input_pins'].update({str(self.repo/'candidates/model_candidate_build_20261101/candidate_generation_gate.py'):'0'*64}),lambda s:s['model_candidate_observation']['source_closure'].update(generation_contract_sha256='0'*64),lambda s:s.update(fixed_source_overlay='/else/MODEL_SOURCE_OVERLAY.json')):

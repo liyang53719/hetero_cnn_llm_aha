@@ -135,6 +135,10 @@ SELECTOR_DIAGNOSTIC_REVISIONS={'candidates/model_candidate_build_20261101/candid
 SELECTOR_FIRST_FAULT_REVISIONS={'candidates/model_candidate_build_20261101/candidate_generation_gate.py': 'ced35f0d6b669b7e7619e787aa4411bcdbccc626f95400799eae4acc8fa23112', 'candidates/model_candidate_build_20261101/pack_model_candidate.py': '70ca666a19f2e51bbaf32f4a96a0c4f416d1105b54b23f812c4a223fefc32dbc', 'candidates/model_candidate_build_20261101/first_fault_compilation.py': 'c548cbe0d5891c0a2d0bcb1e51cb3eb2ce48135b666b4857e0d84c2c9b1ab347', 'candidates/model_candidate_build_20261101/first_fault_policy.py': 'c095e177128e89c146275b421d76e84320ab0f9bced6de41bf0facd46580e6de', 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': '7e04700f063728cf1df376a563565830f7e1544f8b2e439b507cc649975749ff'}
 SELECTOR_GENERATION_PAIRS={'0a5e09a27a447b028697a631e5207fc0af6cae15d4c324a55524f9d41a46a753':('candidates/transposed_tile_address_fix_20261103','5ff6c6ee4887700b79f8bd3982250743575c3e3624d294d240b7bd92378bfc02'),'3354827c1c9d2ac167b3b325dc07acbd50ea663ddd384dddfea1b1d037ae3851':('candidates/model_candidate_build_20261101','51621bbffc5ab0dfc97e88d66fee93722e66b6b1ed2a8c2ba7d0f588d9345472')}
 
+# Exact finite stage-error projection revision for the already fixed ordinary
+# tile-address producer only. Historical maps/readonly contracts are unchanged.
+FINITE_STAGE_DIAGNOSTIC_REVISION={'candidates/model_candidate_build_20261101/one_job_model_candidate.py':'ac4ba44560ed7d73d6459fbe237e9cac0de2e3141d1e6a1e86feae130364d58d'}
+
 def selector_producer_policy(source,readonly):
  pins=source.get('generation_input_pins',{})
  gate='candidates/model_candidate_build_20261101/candidate_generation_gate.py'
@@ -147,6 +151,12 @@ def selector_producer_policy(source,readonly):
  directory,overlay=SELECTOR_GENERATION_PAIRS[generation]
  need(closure.get('source_overlay',{}).get('sha256')==overlay and type(closure.get('source_count'))is int and closure['source_count']==159,'selector-aware generation/overlay pair')
  need(pins.get(repo+directory+'/GENERATION_CONTRACT.json')==generation and pins.get(repo+directory+'/MODEL_SOURCE_OVERLAY.json')==overlay and source.get('fixed_source_overlay')==repo+directory+'/MODEL_SOURCE_OVERLAY.json','selector-aware exact generation input paths')
+ orchestrator='candidates/model_candidate_build_20261101/one_job_model_candidate.py'
+ diagnostic_paths=[p for p in pins if p.endswith('/'+orchestrator)]
+ if any(pins[p]==FINITE_STAGE_DIAGNOSTIC_REVISION[orchestrator]for p in diagnostic_paths):
+  need(readonly is None and directory=='candidates/transposed_tile_address_fix_20261103','finite stage diagnostics require corrected ordinary producer')
+  need(diagnostic_paths==[repo+orchestrator]and pins[repo+orchestrator]==FINITE_STAGE_DIAGNOSTIC_REVISION[orchestrator],'one exact finite diagnostic producer root')
+  return dict(SELECTOR_IMPLEMENTATION_PINS,**FINITE_STAGE_DIAGNOSTIC_REVISION)
  if readonly is None:return dict(SELECTOR_IMPLEMENTATION_PINS)
  need(directory=='candidates/model_candidate_build_20261101','new hardware cannot inherit unchanged-SV diagnostic producer')
  historical=TERMINAL_IMPLEMENTATION_PINS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else FIRST_FAULT_IMPLEMENTATION_PINS

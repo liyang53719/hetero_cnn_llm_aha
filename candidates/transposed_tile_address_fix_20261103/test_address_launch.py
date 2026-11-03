@@ -20,5 +20,5 @@ class AddressLaunch(unittest.TestCase):
   self.assertIn('paths: ['+g.LAUNCH+']',s);self.assertEqual(s.count('--hardware-source transposed-tile-address-v1'),1)
   self.assertNotIn('--terminal-finite-readonly',s);self.assertNotIn('--first-fault-readonly',s)
   self.assertIn('group: hetero-exclusive-numeric-bootstrap',s);self.assertIn('cancel-in-progress: false',s)
-  self.assertFalse((r/g.LAUNCH).exists())
+  self.assertEqual(g.NONCE,'five_m128_model_tile_address_20261103_once')
 if __name__=='__main__':unittest.main()

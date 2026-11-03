@@ -101,7 +101,8 @@ def execute(argv,run,lock_path,caps,env,pins,inject_monitor_error=False,resource
   for name in names:
    if not name.isascii() or not name.isdecimal():continue
    try:raw=(Path('/proc')/name/'stat').read_bytes()
-   except FileNotFoundError:continue
+   except (FileNotFoundError,ProcessLookupError):
+    report['proc_stat_vanished_count']=report.get('proc_stat_vanished_count',0)+1;continue
    row=strict.parse_stat(raw);snapshot[row['pid']]=row;rawfields[row['pid']]=raw[raw.rindex(b')')+1:].split()
   selected={pid for pid,row in snapshot.items() if row['group']==leader['group'] or (pid in observed and row['start']==observed[pid]['start'])}
   changed=True

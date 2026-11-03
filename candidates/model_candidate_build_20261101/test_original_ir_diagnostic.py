@@ -21,6 +21,33 @@ def first_fault_inverse(text):
   text=text.replace(added,original,1)
  return text
 
+# Invert only the independently reviewed finite stage-error diagnostic delta.
+# Every modified node is fingerprinted before inversion; older baselines below
+# remain unchanged. Any unrelated caller delta remains for those hashes to reject.
+def finite_stage_diagnostic_inverse(tree):
+ import copy
+ tree=copy.deepcopy(tree)
+ def exact(name,kind,wanted):
+  rows=[n for n in ast.walk(tree)if isinstance(n,kind)and (getattr(n,'name',None)==name if kind is ast.FunctionDef else any(isinstance(t,ast.Name)and t.id==name for t in n.targets))]
+  if len(rows)!=1 or rows[0]not in tree.body or hashlib.sha256(ast.dump(rows[0],include_attributes=False).encode()).hexdigest()!=wanted:raise ValueError('unique exact finite diagnostic addition: '+name)
+  return rows[0]
+ mapping=exact('BUILD_ERROR_CODES',ast.Assign,'a729e7597bafab5f6701ae9d1c1da3baf400055353220bb043d6f2a94d0fbab0')
+ helper=exact('build_error_details',ast.FunctionDef,'250067d1136c1f9a4bf536748426ef7a90c6350430ce421e7241fbcee0ef29bb')
+ projection=exact('build_stage_diagnostic',ast.FunctionDef,'d4f21a1995a62cb703ae6f39a943f428613e12d74a5b06484e9825ce37670bc4')
+ remove=set(['ValueError: proc enumeration cap', 'ValueError: observed process cap', 'ValueError: tracked PID reused within owned set', 'ValueError: RSS telemetry 64MiB cap', 'ValueError: output link forbidden', 'ValueError: nonregular output', 'ValueError: observed identities remain after group cleanup', 'InterruptedError: signal 2', 'InterruptedError: signal 15'])
+ pairs=[(k,v)for k,v in zip(mapping.value.keys,mapping.value.values)if ast.literal_eval(k)not in remove]
+ if len(mapping.value.keys)-len(pairs)!=len(remove):raise ValueError('exact finite reason additions')
+ mapping.value.keys=[k for k,v in pairs];mapping.value.values=[v for k,v in pairs]
+ if hashlib.sha256(ast.dump(mapping,include_attributes=False).encode()).hexdigest()!='4dafad7e30bf9fe6b37c7c8ccf39bd00c6a32e78da15d47a62eada98de6aa65a':raise ValueError('original finite reason map restored')
+ calls=[n.value for n in projection.body if isinstance(n,ast.Assign)and any(isinstance(t,ast.Name)and t.id=='result'for t in n.targets)and isinstance(n.value,ast.Call)and isinstance(n.value.func,ast.Name)and n.value.func.id=='dict']
+ if len(calls)!=1:raise ValueError('unique finite result projection')
+ keys=('error_details','error_details_truncated')
+ if any(sum(k.arg==name for k in calls[0].keywords)!=1 for name in keys):raise ValueError('exact finite detail keywords')
+ calls[0].keywords=[k for k in calls[0].keywords if k.arg not in keys]
+ if hashlib.sha256(ast.dump(projection,include_attributes=False).encode()).hexdigest()!='95cb21dc353efc0491dfaab9134bb31e769fabfcfe1aecafaa4f23e6a8c53c29':raise ValueError('original finite projection restored')
+ tree.body.remove(helper)
+ return tree
+
 class Tests(unittest.TestCase):
  def setUp(self):
   self.t=tempfile.TemporaryDirectory();self.addCleanup(self.t.cleanup);self.p=pathlib.Path(self.t.name);self.r=dict(native_exit=1,errors=[],cleanup_proof={'status':'COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP'},log_capture={'pipe_eof_observed':True,'gzip_finalized':True})
@@ -63,7 +90,9 @@ class Tests(unittest.TestCase):
  def test_report_not_mutated(self):
   r=copy.deepcopy(self.r);self.put('x');self.read();self.assertEqual(r,self.r)
  def test_caller_ast_preserved(self):
-  tree=ast.parse(first_fault_inverse((D/'one_job_model_candidate.py').read_text()))
+  self.check_original_caller_ast((D/'one_job_model_candidate.py').read_text())
+ def check_original_caller_ast(self,text):
+  tree=finite_stage_diagnostic_inverse(ast.parse(first_fault_inverse(text)))
   # The separately reviewed finite post-build projector is diagnostic-only.
   # Require its exact AST before removing it; retain the original caller hash.
   additions=[n for n in ast.walk(tree) if isinstance(n,ast.FunctionDef)and n.name=='post_build_failure_diagnostic']
@@ -79,6 +108,22 @@ class Tests(unittest.TestCase):
     if ast.unparse(n.test)=="name == 'original_high'"and any(isinstance(x,ast.ImportFrom)and x.module=='original_ir_diagnostic'for x in n.body):return None
     return self.generic_visit(n)
   got=hashlib.sha256(ast.dump(Strip().visit(tree),include_attributes=False).encode()).hexdigest();self.assertEqual(got,'ddd182da38eb18363d491a68faca437e81010b4bf9abfa92cf91456b24cc544b')
+ def test_finite_stage_inverse_rejects_missing_duplicate_and_mutated_nodes(self):
+  original=ast.parse((D/'one_job_model_candidate.py').read_text())
+  for change in ('missing_helper','duplicate_helper','extra_reason','changed_keyword'):
+   import copy
+   tree=copy.deepcopy(original)
+   helper=next(n for n in tree.body if isinstance(n,ast.FunctionDef)and n.name=='build_error_details')
+   if change=='missing_helper':tree.body.remove(helper)
+   elif change=='duplicate_helper':tree.body.append(copy.deepcopy(helper))
+   elif change=='extra_reason':
+    mapping=next(n for n in tree.body if isinstance(n,ast.Assign)and any(isinstance(t,ast.Name)and t.id=='BUILD_ERROR_CODES'for t in n.targets));mapping.value.keys.append(ast.Constant('ValueError: arbitrary'));mapping.value.values.append(ast.Constant('ARBITRARY'))
+   else:
+    projection=next(n for n in tree.body if isinstance(n,ast.FunctionDef)and n.name=='build_stage_diagnostic');keyword=next(n for n in ast.walk(projection)if isinstance(n,ast.keyword)and n.arg=='error_details_truncated');keyword.value=ast.Constant(False)
+   with self.subTest(change=change),self.assertRaises(ValueError):finite_stage_diagnostic_inverse(tree)
+ def test_unrelated_caller_delta_still_rejected_by_original_hash(self):
+  text=(D/'one_job_model_candidate.py').read_text()
+  with self.assertRaises(AssertionError):self.check_original_caller_ast(text+'\nUNRELATED_UNREVIEWED_CHANGE=True\n')
  def test_first_fault_inverse_rejects_duplicate_or_mutated_addition(self):
   text=(D/'one_job_model_candidate.py').read_text();added=FIRST_FAULT_INVERSE[0][0]
   with self.assertRaises(ValueError):first_fault_inverse(text+added)

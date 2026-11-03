@@ -1404,11 +1404,22 @@ def undo_reviewed_stage_delta(test,tree,relative):
   visit(tree);test.assertEqual(count,1,'exact reviewed inverse snippet matched once: '+digest)
  return tree
 
+# Exact independent inverse for the narrow proc-stat census source revision.
+# All older production AST baselines remain unchanged.
+def undo_proc_stat_supervisor_pin(test,tree):
+ rows=[n for n in tree.body if isinstance(n,ast.Assign)and any(isinstance(t,ast.Name)and t.id=='PRELAUNCH_SUPERVISOR_SHA'for t in n.targets)]
+ test.assertEqual(len(rows),1,'one exact supervisor identity assignment')
+ test.assertIsInstance(rows[0].value,ast.Constant)
+ test.assertEqual(rows[0].value.value,'54e7f539df5c7356cb2d10637cee3a8de896b739196e6066d8755c1b62c1d3ed')
+ rows[0].value=ast.Constant(value='c298efb15564b052c7aec7aaf42326de10f392f0e7d28c511fa5def1fcd97791')
+ return tree
+
 class Test(unittest.TestCase):
  def tree(self,rel):return ast.parse((D/rel).read_text())
  def test_exact_save_and_reviewed_version_ast(self):
   for rel,wanted in EXPECTED.items():
    t=self.tree(rel)
+   if rel=='numeric/numeric_tail.py':t=undo_proc_stat_supervisor_pin(self,t)
    if rel in REVIEWED_STAGE_INVERSE:t=undo_reviewed_stage_delta(self,t,rel)
    if rel=='controller/cloud_flow.py':
     # Undo only the separately reviewed finite prelaunch receipt, not arbitrary flow changes.
@@ -1428,6 +1439,16 @@ class Test(unittest.TestCase):
      return self.generic_visit(n)
    st=Strip();t=st.visit(t)
    with self.subTest(rel=rel):self.assertEqual(st.count,1);self.assertEqual(hashlib.sha256(ast.dump(t).encode()).hexdigest(),BASE_AST[rel])
+ def test_proc_stat_inverse_rejects_unknown_or_duplicate_pin(self):
+  import copy
+  for duplicate in (False,True):
+   tree=self.tree('numeric/numeric_tail.py');row=next(n for n in tree.body if isinstance(n,ast.Assign)and any(isinstance(t,ast.Name)and t.id=='PRELAUNCH_SUPERVISOR_SHA'for t in n.targets))
+   if duplicate:tree.body.append(copy.deepcopy(row))
+   else:row.value=ast.Constant(value='0'*64)
+   with self.subTest(duplicate=duplicate),self.assertRaises(AssertionError):undo_proc_stat_supervisor_pin(self,tree)
+ def test_proc_stat_supervisor_exact_source_identity(self):
+  actual=D.parent/'ci_frontend_pipeline_r2_20261029/supervise_multiroot.py'
+  self.assertEqual(hashlib.sha256(actual.read_bytes()).hexdigest(),'54e7f539df5c7356cb2d10637cee3a8de896b739196e6066d8755c1b62c1d3ed')
  def test_actual_stage_statement_order(self):
   for rel,wanted in EXPECTED.items():
    stage=next(n for n in ast.walk(self.tree(rel))if isinstance(n,ast.FunctionDef)and n.name=='stage')

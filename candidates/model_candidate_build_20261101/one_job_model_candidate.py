@@ -44,7 +44,38 @@ BUILD_ERROR_CODES={
  'ValueError: reader completion deadline':'READER_DEADLINE',
  'ValueError: reader join deadline':'READER_DEADLINE',
  'ValueError: post-cleanup deadline':'POST_CLEANUP_DEADLINE',
+ 'ValueError: proc enumeration cap':'PROC_ENUMERATION_CAP',
+ 'ValueError: observed process cap':'OBSERVED_PROCESS_CAP',
+ 'ValueError: tracked PID reused within owned set':'TRACKED_PID_REUSED',
+ 'ValueError: RSS telemetry 64MiB cap':'RSS_TELEMETRY_CAP',
+ 'ValueError: output link forbidden':'OUTPUT_LINK_FORBIDDEN',
+ 'ValueError: nonregular output':'NONREGULAR_OUTPUT',
+ 'ValueError: observed identities remain after group cleanup':'OBSERVED_IDENTITIES_REMAIN',
+ 'InterruptedError: signal 2':'MONITOR_SIGINT',
+ 'InterruptedError: signal 15':'MONITOR_SIGTERM',
 }
+def build_error_details(errors):
+ # Deliberately no paths, arbitrary class names, raw messages, argv, or tracebacks.
+ # A recorded class/errno is a symptom, not a process location or root cause.
+ import re
+ classes={'OSError','FileNotFoundError','ProcessLookupError','PermissionError','InterruptedError','TimeoutError','BlockingIOError','ChildProcessError','BrokenPipeError','IsADirectoryError','NotADirectoryError','FileExistsError','ConnectionError','ValueError','RuntimeError','TypeError','KeyError','IndexError','StopIteration','MemoryError','OverflowError','UnicodeDecodeError','SystemExit','KeyboardInterrupt','_Invalid','_Deadline','CleanupFailure'}
+ os_classes={'OSError','FileNotFoundError','ProcessLookupError','PermissionError','InterruptedError','TimeoutError','BlockingIOError','ChildProcessError','BrokenPipeError','IsADirectoryError','NotADirectoryError','FileExistsError','ConnectionError'}
+ rows=[]
+ if type(errors)is not list:return rows
+ for error in errors[:16]:
+  row={'origin':'UNKNOWN','exception_class':'UNKNOWN','errno':None,'reason_code':'MALFORMED_ERROR'}
+  if type(error)is str:
+   row.update(origin='LOG_READER' if error.startswith('log_reader: ') else 'SUPERVISOR',reason_code=BUILD_ERROR_CODES.get(error,'UNCLASSIFIED_SUPERVISOR_ERROR'))
+   prefix=error[:192]
+   if row['origin']=='LOG_READER':prefix=prefix[len('log_reader: '):]
+   name,separator,rest=prefix.partition(': ')
+   if separator and name in classes:
+    row['exception_class']=name
+    matched=re.match(r'^\[Errno ([1-9][0-9]{0,3})\](?: |$)',rest) if name in os_classes else None
+    if matched and int(matched.group(1))<=4095:row['errno']=int(matched.group(1))
+  rows.append(row)
+ return rows
+
 def build_stage_diagnostic(name,report,receipt_path):
  import math
  def number(v):
@@ -61,7 +92,7 @@ def build_stage_diagnostic(name,report,receipt_path):
   if receipt_path.is_file()and not receipt_path.is_symlink():receipt_sha=sha(receipt_path)
  except OSError:pass
  result=dict(schema='BOUNDED_BUILD_STAGE_DIAGNOSTIC_V1',stage=name if name in BUILD_STAGE_NAMES else 'UNKNOWN_STAGE',receipt_sha256=receipt_sha,
-  worker_started=boolean(r.get('worker_started')),native_exit=native,error_count=min(len(errors),2**31-1) if valid_errors else None,error_categories=categories,
+  worker_started=boolean(r.get('worker_started')),native_exit=native,error_count=min(len(errors),2**31-1) if valid_errors else None,error_categories=categories,error_details=build_error_details(errors),error_details_truncated=valid_errors and len(errors)>16,
   elapsed_seconds=number(r.get('elapsed_seconds')),observed_cpu_seconds=number(r.get('observed_cpu_seconds')),observed_peak_rss=number(r.get('observed_peak_rss')),peak_tree_bytes=number(r.get('peak_tree_bytes')),peak_file_bytes=number(r.get('peak_file_bytes')),
   caps={k:number(caps.get(k)) for k in ('wall_seconds','cleanup_seconds','rss_bytes','cpu_seconds','per_process_as_bytes','per_process_cpu_seconds','file_bytes','tree_bytes','watch_tree_bytes','max_entries')},
   cleanup_complete=cleanup.get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP',pipe_eof_observed=boolean(capture.get('pipe_eof_observed')),gzip_finalized=boolean(capture.get('gzip_finalized')),

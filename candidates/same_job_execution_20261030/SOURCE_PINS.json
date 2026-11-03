@@ -21,6 +21,11 @@
       "sha256": "97bc6a6bea426ef736ec2f1e7fd3e6a6a8cadf3366a352310ba4e3bf3aaa359a"
     },
     {
+      "bytes": 4116,
+      "path": ".github/workflows/hetero-five-m128-tile-address-recovery-build.yml",
+      "sha256": "322a581d5dc6e94d13e547dca5cf314401cfa92b3ccdeca40143e4f1285ae35d"
+    },
+    {
       "bytes": 190729,
       "path": "candidates/attention_policy_count_fix_20261029T0054/source/HostBlockCommandsV4.scala",
       "sha256": "8cea5e8863e47ca14978871d23b7f80639e43ae3192c3e6c0ccf372b1c73a20f"
@@ -336,14 +341,19 @@
       "sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047"
     },
     {
-      "bytes": 15617,
+      "bytes": 15721,
       "path": "candidates/ci_frontend_pipeline_r2_20261029/supervise_multiroot.py",
-      "sha256": "c298efb15564b052c7aec7aaf42326de10f392f0e7d28c511fa5def1fcd97791"
+      "sha256": "54e7f539df5c7356cb2d10637cee3a8de896b739196e6066d8755c1b62c1d3ed"
     },
     {
       "bytes": 4073,
       "path": "candidates/ci_frontend_pipeline_r2_20261029/test_build_stage_diagnostic.py",
       "sha256": "5a341bd0a0c71b6c1833729a31683b6651489c368b88ce4c91724745e59e3817"
+    },
+    {
+      "bytes": 3127,
+      "path": "candidates/ci_frontend_pipeline_r2_20261029/test_proc_stat_vanish.py",
+      "sha256": "5831cb4e10fc74ddc8a1d54295325561cc70db0788e035b0962c61fa8bb2980d"
     },
     {
       "bytes": 6245,
@@ -1721,9 +1731,9 @@
       "sha256": "4eeb7d204f8401f2d886f4240b3b1d19fc427e1776b44860a4531cd3b58e325c"
     },
     {
-      "bytes": 39469,
+      "bytes": 40442,
       "path": "candidates/model_candidate_build_20261101/candidate_dependency_proof.py",
-      "sha256": "6530f691b24cf761f698d80f23a374840fc3c1dc5089a6abe8078e34ab483fd7"
+      "sha256": "3e3323c6160fba463620b8b5f959c510f99165782e19b912fcf3f2225bafd1cd"
     },
     {
       "bytes": 3382,
@@ -1816,9 +1826,9 @@
       "sha256": "3928d6f024e40610f9fc251ca4e0b10d025a93e0333f91e553ed1dbe0d14433e"
     },
     {
-      "bytes": 23191,
+      "bytes": 25537,
       "path": "candidates/model_candidate_build_20261101/one_job_model_candidate.py",
-      "sha256": "7e04700f063728cf1df376a563565830f7e1544f8b2e439b507cc649975749ff"
+      "sha256": "ac4ba44560ed7d73d6459fbe237e9cac0de2e3141d1e6a1e86feae130364d58d"
     },
     {
       "bytes": 11142,
@@ -1866,9 +1876,9 @@
       "sha256": "17e9d268e0e5d3d74d0c5c79f53405553771652643bac5822b308dde15d3de18"
     },
     {
-      "bytes": 15827,
+      "bytes": 16296,
       "path": "candidates/model_candidate_build_20261101/test_address_source_selection.py",
-      "sha256": "c9d26cbb75679b890f9e636ed1968101d341d3f9761a88a84129f349d2fb673e"
+      "sha256": "e26cab9292c7bae193584dc52a24eb7c947ab253d5788ad11b80e02a43814726"
     },
     {
       "bytes": 13939,
@@ -1894,6 +1904,16 @@
       "bytes": 702,
       "path": "candidates/model_candidate_build_20261101/test_export_path.py",
       "sha256": "b20783df56d6bf1889c2c9a8ccbba983458f04b835b73e7ad271910cfec0bc74"
+    },
+    {
+      "bytes": 7742,
+      "path": "candidates/model_candidate_build_20261101/test_finite_diagnostic_revision.py",
+      "sha256": "9e086dea43cc47a5b225990295de0a6414f8419c640f353d1ba1be1fdd2bf2e3"
+    },
+    {
+      "bytes": 4452,
+      "path": "candidates/model_candidate_build_20261101/test_finite_stage_diagnostic.py",
+      "sha256": "2b2beb3ac47029d80b003e3999893c4f3c77865925f6eeb8a3eee5c56a907021"
     },
     {
       "bytes": 7459,
@@ -1941,9 +1961,9 @@
       "sha256": "1e6e493d1b630f1479cc5ea4c4bd441d774652f8ce41e5f692df175f156dd0e8"
     },
     {
-      "bytes": 12424,
+      "bytes": 16743,
       "path": "candidates/model_candidate_build_20261101/test_original_ir_diagnostic.py",
-      "sha256": "158a8f3b2b38c873f3d5a9d0d58e17de99ed9a6fb50a682c4896c0656fbc59d7"
+      "sha256": "d4d6a618e4822411f184d5943412e91f278b37a3794d7fceeaf70ec5f5d7c100"
     },
     {
       "bytes": 10331,
@@ -1956,9 +1976,9 @@
       "sha256": "e38d5775c9e83aa9297e712501db4c3f59e4fe8fab830056dc061c88cc39ebf9"
     },
     {
-      "bytes": 10102,
+      "bytes": 14421,
       "path": "candidates/model_candidate_build_20261101/test_post_build_diagnostic.py",
-      "sha256": "7870097920dfa60b517d3c6fca343f72403aa5a31dae7ac35bfb41a0796ddc6f"
+      "sha256": "162636674dc238918962a3323179c14c2426d5a9823c91e3523494f5fe20b70e"
     },
     {
       "bytes": 5785,
@@ -3008,7 +3028,7 @@
     {
       "bytes": 30170,
       "path": "candidates/same_job_execution_20261030/numeric/numeric_tail.py",
-      "sha256": "322c1a8ec1f7c9e5a0a7df7dd64c32c25fbd118e466d481dcbb68c98f42a9abc"
+      "sha256": "cbcf65d4cdf7b640d20394b344040ad1bc142d63bf1a9bcb4e9f3bd37c56b230"
     },
     {
       "bytes": 11258,
@@ -3646,9 +3666,9 @@
       "sha256": "095fe6fae21889f9e4b8f115e49399c8b5e37619c712b329c2765afba3093190"
     },
     {
-      "bytes": 125167,
+      "bytes": 126701,
       "path": "candidates/same_job_execution_20261030/test_stage_return_retention.py",
-      "sha256": "aff14055ee109378ea6c54e29b822eefc6a7c750d6054f80554ebbbe50c14611"
+      "sha256": "e5a11c827e5af8ab8a1caac22841dc0cb64592fadd793a86fc4e0863c0bffd41"
     },
     {
       "bytes": 3796,
@@ -3841,9 +3861,14 @@
       "sha256": "c23f36805d78671e6fa8736668a0a837003cc620a413488fb3db530690e1bb53"
     },
     {
-      "bytes": 1774,
+      "bytes": 1805,
       "path": "candidates/transposed_tile_address_fix_20261103/test_address_launch.py",
-      "sha256": "2bb768efea570067cabb5ec15f01298fe24c9a409bbce2486f3832762abc370e"
+      "sha256": "0f8e8a39adff79cfe7b73eee8e0f08593f0c78bcea76e5b517c5e280e89f5f28"
+    },
+    {
+      "bytes": 1911,
+      "path": "candidates/transposed_tile_address_fix_20261103/test_address_recovery_launch.py",
+      "sha256": "ee0bceb892ea674df35be1777eded5801989166b27432479188d6a65f0a34834"
     },
     {
       "bytes": 5690,
@@ -3884,6 +3909,11 @@
       "bytes": 2994,
       "path": "candidates/transposed_tile_address_fix_20261103/validate_address_launch.py",
       "sha256": "669afc85e0db6b1bd5429eef2e287d302f70f9bb5a8ff034d006c00436c0b9e4"
+    },
+    {
+      "bytes": 3012,
+      "path": "candidates/transposed_tile_address_fix_20261103/validate_address_recovery_launch.py",
+      "sha256": "eea58bda325a953f92b7ea029b2f40b027749dda1c83a236f90a8534e595318d"
     },
     {
       "bytes": 5759,

@@ -857,3 +857,20 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 新 unique canonical R2 path/nonce 仅是源码接线；schema/profile、eligible P1–P4、P0 原策略延期、两 flags、预算/并发/摘要限制不变。全部已消耗 launch 保留并拒绝重用。source 与之后的单文件 activation 必须分开。
 - PASS 范围：119 项合并 metadata/lifecycle/mock/launch 测试在 normal 和 -O 各通过；本机可信路径解析复现通过。没有新 host inventory、backend、runtime、DUT 或数值通过。下一步必须绑定本源码新身份后做一次独立受限运行；不重试旧 run。
 
+
+
+## 2026-11-03 00:42 UTC — 只读 terminal V2 实际构建/接收完成；DUT 资源 BLOCKED
+
+- **BUILD PASS ONLY / 数值 INCOMPLETE**：源码 `b58ae26eacf8038a3eabec95704e6b3ee71a3a35`（tree `45f9405c48ef72085ff1f7670493b59184594879`）已审42文件/896 pins；唯一激活 `9fe1762f361795bc090987bd9be2867d98094eec`，原 run `41540528584` 在 00:22:51 UTC 成功。8 bootstrap + 20 build 闭合阶段均 native 0、无错误并 EOF/cleanup。没有重试 CI/EDA。
+- 实际七文件 artifact `13192851528`，ZIP 314936633 B，SHA256 `b10759f83682f823f81f2add57ba5b5e552ea22b9d05d84759a888af0b07f5f1`；manifest `f682c2a6de0552d3b00c515ca6368c252a27902428037c90b6d5ee5b43ba3640`，新 ELF `1a5b03eaba09a0face898dabe902547a40e18708fb5616b0542dc03d67ff21dc`。SV 仍 `3d148277114ff5d968d0e200f4ab117839a3b6c0c0d33e5388e6e5268d42d029`，driver 仍 `abedbe2a3a25d6b02c4b4dc03f6f4a852c63415ca981f26d29930273a0f9f420`。
+- 接收前核预算，ZIP 在 tmpfs，完整摘要/CRC/七文件语义检查通过；SV 全字节比对后同设备 hardlink，未 chmod 原 inode。硬链不是不可变隔离。实际独审 159 硬件源码、1058模块、122端口、4096 Matrix MAC / 32 Vector lane，114控制字段和4096 terminal FP32映射；GCC 18 tokens /17 unique。完整生成 header 未传输，以固定契约声明及实际 GCC header hash 绑定证明，不声称本地重生成。
+- 新 executor/control 的实际静态 ELF+6 DSO、来源/输入/参考/诊断文档闭包通过；原完整 M128 刺激、FP32顺序、10800s/1500000 cycles 限制不改。准备 execution ID `0e2afe02-8e29-4aae-921f-b37f865c2e7d`，**live ABI 和 DUT 尚未启动**，旧 PASS 不迁移。
+- **资源 BLOCKED**：当前 tmpfs 594182144 B + 原 consumer 536870912 B =1131053056 B，超过 non-DUT 1073741824 B 预算 **57311232 B**。即使瞬时 MemAvailable 高于8GiB，也不构成准入。保留未知旧owner5GiB及全部资源门；不缩 consumer、不忽略 ZIP。已核临时清单，本轮未再次清理；仅审计完整保留字节的可逆迁移候选，未执行。
+- 五块 M128 完整 block 模型数值 **0/5**、最终冻结 RTL 数值 **0/5**，无新增完整 block MAC 利用率实测。TODO：先消除资源超额且重新核完整门，再唯一 P0 V2 故障定位；返回硬件修复后同一4096/32定义重测五块。
+
+### 00:47 UTC 后续：完整可逆迁移解除该预算阻塞；唯一入口 prestage 中
+
+- 经授权只将新 ZIP 全字节迁移到 gzip：35234833 B，SHA256 `df3369828d2a229e080f3b12890553d30a40bc16cd2e4b7aeefaff6cf5597833`。独立第二进程流式恢复314936633 B，原 ZIP SHA256一致、gzip CRC/EOF完整，审计无运行引用后才移除tmpfs原副本；保留归档、位置记录和恢复命令。fixture/其他文件未动，不是丢弃数据或额外缓存清理。
+- 原 nonDUT 1GiB / consumer512MiB、未知旧owner5GiB、DUT实时8GiB门全部保留。00:47即时tmpfs279244800 + consumer536870912 +额外134217728 B满足1GiB；MemAvailable8932265984 B；磁盘余量12449554432 B满足原门。该快照仅允许进入原prepare，绝非预授DUT通过。
+- 新资源review `ab721dc582843febc37991beba95d9e701631266d38f554cd6f2bf821939fa4b`，11输入及executor Git闭包独审通过；唯一 invocation SHA `946788d0109a005127cd46e40f3be76459d94502484615483f7f0eac1a999015`，execution ID仍 `0e2afe02-8e29-4aae-921f-b37f865c2e7d`。00:47原prepare入口已启动，处prestage/连接准备；尚无DUT数值结果。沿唯一身份追踪，不重建或重复启动。
+- 五块M128模型及最终RTL仍各0/5，无新增利用率。以上00:42 BLOCKED是历史真实状态，不回写成当时已准入。

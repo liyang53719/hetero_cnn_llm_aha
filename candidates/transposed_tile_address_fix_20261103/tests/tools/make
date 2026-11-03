@@ -1,0 +1,7 @@
+#!/bin/sh
+set -eu
+ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+# Keep generated link/archive/user-object rules, replace ONLY default C++ rules.
+# no_pch.mk follows the generated -f file, so object lists are already defined.
+exec /usr/bin/make "$@" -j1 VM_DEFAULT_RULES=0 \
+  OPT_FAST=-O0 OPT_SLOW=-O0 OPT_GLOBAL=-O0 -f "$ROOT/no_pch.mk"

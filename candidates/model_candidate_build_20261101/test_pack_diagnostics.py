@@ -17,8 +17,22 @@ def restore_terminal_pack(tree):
   def visit_If(self,n):return None if n is hits[0]else self.generic_visit(n)
  return Strip().visit(tree)
 
+# Exact additional new-hardware source checks; legacy algorithm hash stays frozen.
+ADDRESS_PACK_INVERSE = (('b2d18046fcd73a3f818789f9de75fa56d2567133e9ed6f20f7e3f46b145aa3c8', "if address_generation_observation(obs['source_closure']) or original.get('hardware_source') == 'transposed-tile-address-v1' or original.get('generation_contract_sha256') == ADDRESS_GENERATION_SHA:\n    from candidate_generation_gate import require_generation_binding\n    need(original.get('hardware_source') == b.get('hardware_source') == 'transposed-tile-address-v1', 'new hardware explicit same original/admitted source selection')\n    require_generation_binding(original)\n    require_generation_binding(b)\n    catalog = P(original['repo']) / 'candidates/same_job_execution_20261030/SOURCE_PINS.json'\n    need(obs['source_closure']['source_pins_sha256'] == sha(catalog), 'pack exact selected source catalog identity')\n    need(obs['source_closure']['generation_contract_sha256'] == original['generation_contract_sha256'] == b['generation_contract_sha256'] and str(overlay) == original['fixed_source_overlay'] == b['fixed_source_overlay'], 'pack exact new generation/overlay join')"), ('e59928f4655ffa6b8f77220e3e92987768d0f894310eec4cba0331e1818728a6', 'address_source_identity(source, obs, readonly is not None)'))
+
+def restore_address_pack(tree):
+ f=next(n for n in tree.body if isinstance(n,ast.FunctionDef)and n.name=='_pack_impl')
+ for expected,text in ADDRESS_PACK_INVERSE:
+  parsed=ast.parse(text)
+  if hashlib.sha256(ast.dump(parsed,include_attributes=False).encode()).hexdigest()!=expected:raise ValueError('fixed address source AST')
+  wanted=ast.dump(parsed.body[0],include_attributes=False)
+  hits=[i for i,n in enumerate(f.body)if ast.dump(n,include_attributes=False)==wanted]
+  if len(hits)!=1:raise ValueError('unique exact address source branch')
+  f.body.pop(hits[0])
+ return tree
+
 def restore_original_pack(tree):
- tree=restore_terminal_pack(tree)
+ tree=restore_terminal_pack(restore_address_pack(tree))
  fs=[x for x in ast.walk(tree)if isinstance(x,ast.FunctionDef)and x.name=='_pack_impl']
  if len(fs)!=1:raise ValueError('unique actual pack implementation')
  f=fs[0]
@@ -40,6 +54,11 @@ class Tests(unittest.TestCase):
   self.assertEqual([x.value.args[0].value for x in marks],['SOURCE_PINS','OBSERVATION','STAGE_RECEIPTS','COMPILE_OUTPUTS','ENRICH','COPY','FINAL'])
   f.body=[x for x in f.body if x not in marks]
   self.assertEqual(hashlib.sha256(ast.dump(f,include_attributes=False).encode()).hexdigest(),'c62ca11efa3c23acfb78c52da14d372c81ff75ccc61a4bd11528864bc23487a1')
+ def test_address_inverse_duplicate_and_mutation_rejected(self):
+  tree=ast.parse((D/'pack_model_candidate.py').read_text());f=next(n for n in tree.body if isinstance(n,ast.FunctionDef)and n.name=='_pack_impl');f.body.extend(ast.parse(ADDRESS_PACK_INVERSE[0][1]).body)
+  with self.assertRaises(ValueError):restore_address_pack(tree)
+  tree=ast.parse((D/'pack_model_candidate.py').read_text());hits=[n for n in ast.walk(tree)if isinstance(n,ast.Constant)and n.value=='pack exact selected source catalog identity'];self.assertEqual(len(hits),1);hits[0].value='mutated'
+  with self.assertRaises(ValueError):restore_address_pack(tree)
  def test_readonly_inverse_duplicate_rejected(self):
   tree=ast.parse((D/'pack_model_candidate.py').read_text());f=next(x for x in tree.body if isinstance(x,ast.FunctionDef)and x.name=='_pack_impl')
   f.body.extend(ast.parse(READONLY_INVERSE[-1][1]).body)

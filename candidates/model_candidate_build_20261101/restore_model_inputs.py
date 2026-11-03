@@ -3,7 +3,7 @@ import argparse,hashlib,importlib.util,json,pathlib,urllib.request,urllib.error,
 P=pathlib.Path
 D=P(__file__).resolve().parent
 TOOLCHAIN_MANIFEST_SHA256='7c8d4bd1f7a0a080f06161e70361a3c3676ede483703a90986fe9dfcf091d85b'
-GENERATION_GATE_SHA256='92a0155d5317a6a74a66feee1caf18fc85d7331b1633327caffcda802254114d'
+GENERATION_GATE_SHA256='ced35f0d6b669b7e7619e787aa4411bcdbccc626f95400799eae4acc8fa23112'
 STATUS_SCHEMA='MODEL_CANDIDATE_JAR_INPUT_STATUS_V1'
 REASONS=frozenset({'SOURCE_OR_CONTRACT_REJECTED','JAR_INVENTORY_REJECTED','JAR_CACHE_REJECTED','JAR_MISSING','JAR_CONTENT_REJECTED','JAR_HTTP_ERROR','JAR_NETWORK_ERROR','JAR_TIMEOUT','JAR_IO_ERROR','UNCLASSIFIED_FAILURE'})
 class Rejected(ValueError):
@@ -16,13 +16,13 @@ def sha(p):
 def regular(p,cap,reason):
  p=P(p);need(p.is_absolute()and all(not q.is_symlink()for q in(p,*p.parents))and p.is_file()and 0<p.stat().st_size<=cap,reason);return p
 
-def source_inputs():
+def source_inputs(hardware_source='legacy'):
  repo=D.parent.parent;fresh=repo/'candidates/fresh_original_top_recovery_20261028';mp=regular(fresh/'SOURCE_AND_TOOLCHAIN_PINS.json',2<<20,'SOURCE_OR_CONTRACT_REJECTED');need(sha(mp)==TOOLCHAIN_MANIFEST_SHA256,'SOURCE_OR_CONTRACT_REJECTED');original=json.loads(mp.read_text())
  gatepath=regular(D/'candidate_generation_gate.py',1<<20,'SOURCE_OR_CONTRACT_REJECTED');need(sha(gatepath)==GENERATION_GATE_SHA256,'SOURCE_OR_CONTRACT_REJECTED')
  spec=importlib.util.spec_from_file_location('reviewed_model_jar_source_gate',gatepath);gate=importlib.util.module_from_spec(spec);spec.loader.exec_module(gate)
  try:
-  contract=gate.load_contract(D/'GENERATION_CONTRACT.json',gate.GENERATION_CONTRACT_SHA256)
-  paths=gate.checked_paths(repo,D/'MODEL_SOURCE_OVERLAY.json',original,contract)
+  selection=gate.selected_inputs(repo,hardware_source);contract=selection['contract']
+  paths=gate.checked_paths(repo,selection['overlay'],original,contract)
  except (ValueError,KeyError,TypeError,OSError):raise Rejected('SOURCE_OR_CONTRACT_REJECTED')from None
  return fresh,original,paths,contract
 
@@ -46,10 +46,10 @@ def acquire(cache,row,download):
   with q.open('xb')as f:f.write(data)
  regular(q,64<<20,'JAR_CACHE_REJECTED');need(q.stat().st_size==row['bytes']and sha(q)==row['sha256'],'JAR_CONTENT_REJECTED')
 
-def run(download=False,verify_only=False):
+def run(download=False,verify_only=False,hardware_source='legacy'):
  status=dict(schema=STATUS_SCHEMA,status='INCOMPLETE',reason=None,jar_index=None,http_status=None,source_count=None,required_jar_count=107,verified_jar_count=0,download_requested=download,verify_only=verify_only,compiler_executed=False,numerical_pass=False)
  try:
-  fresh,original,paths,contract=source_inputs();status['source_count']=len(paths);rows=inventory(original)
+  fresh,original,paths,contract=source_inputs(hardware_source);status['source_count']=len(paths);rows=inventory(original)
   if verify_only:status['status']='SOURCE_AND_JAR_INVENTORY_VERIFIED_ONLY';return status
   for i,row in enumerate(rows):status['jar_index']=i;acquire(fresh/'cache',row,download);status['verified_jar_count']+=1
   status.update(status='SOURCE_AND_ALL_JAR_BYTES_VERIFIED',jar_index=None);return status
@@ -62,7 +62,7 @@ def run(download=False,verify_only=False):
  return status
 
 def main():
- ap=argparse.ArgumentParser();g=ap.add_mutually_exclusive_group();g.add_argument('--download-jars',action='store_true');g.add_argument('--verify-only',action='store_true');ap.add_argument('--status-json',type=P);a=ap.parse_args();result=run(a.download_jars,a.verify_only);data=(json.dumps(result,sort_keys=True,allow_nan=False)+'\n').encode();need(len(data)<=2048,'UNCLASSIFIED_FAILURE')
+ ap=argparse.ArgumentParser();g=ap.add_mutually_exclusive_group();g.add_argument('--download-jars',action='store_true');g.add_argument('--verify-only',action='store_true');ap.add_argument('--status-json',type=P);ap.add_argument('--hardware-source',choices=('legacy','transposed-tile-address-v1'),default='legacy');a=ap.parse_args();result=run(a.download_jars,a.verify_only,a.hardware_source);data=(json.dumps(result,sort_keys=True,allow_nan=False)+'\n').encode();need(len(data)<=2048,'UNCLASSIFIED_FAILURE')
  if a.status_json is not None:
   need(a.status_json.is_absolute()and a.status_json.parent.is_dir()and all(not p.is_symlink()for p in(a.status_json,*a.status_json.parents)),'JAR_IO_ERROR')
   with a.status_json.open('xb')as f:f.write(data)

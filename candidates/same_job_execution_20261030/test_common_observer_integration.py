@@ -17,6 +17,12 @@ class SourceIntegration(unittest.TestCase):
   self.assertEqual(contract['source_overlay_sha256'],'51621bbffc5ab0dfc97e88d66fee93722e66b6b1ed2a8c2ba7d0f588d9345472')
   original=json.loads((R/'candidates/fresh_original_top_recovery_20261028/SOURCE_AND_TOOLCHAIN_PINS.json').read_text());paths=m.checked_paths(R,c/'MODEL_SOURCE_OVERLAY.json',original,contract)
   self.assertEqual(len(paths),159);self.assertEqual(len({pathlib.Path(p).name for p in paths}),159)
+ def test_address_candidate159_actual_bytes_separate_identity(self):
+  c=R/'candidates/model_candidate_build_20261101';m=module('address_candidate_generation',c/'candidate_generation_gate.py');selected=m.selected_inputs(R,'transposed-tile-address-v1')
+  self.assertEqual(selected['contract_sha256'],'0a5e09a27a447b028697a631e5207fc0af6cae15d4c324a55524f9d41a46a753')
+  self.assertEqual(selected['contract']['source_overlay_sha256'],'5ff6c6ee4887700b79f8bd3982250743575c3e3624d294d240b7bd92378bfc02')
+  original=json.loads((R/'candidates/fresh_original_top_recovery_20261028/SOURCE_AND_TOOLCHAIN_PINS.json').read_text());paths=m.checked_paths(R,selected['overlay'],original,selected['contract'])
+  self.assertEqual(len(paths),159);self.assertEqual([p for p in paths if pathlib.Path(p).name=='TransposedDenseBanks.scala'],[str(R/'candidates/transposed_tile_address_fix_20261103/source/TransposedDenseBanks.scala')])
  def test_tampered_selection_rejected(self):
   m=module('observer_fixed_sources_negative',M/'fixed_sources.py')
   with self.assertRaises(ValueError):m.validate_overlay((M/'FIXED_SOURCE_OVERLAY_R2.json').read_bytes()+b' ',{})

@@ -103,15 +103,17 @@ def main():
  for n in ['repo','pipeline','work']:a.add_argument('--'+n,type=pathlib.Path,required=True)
  a.add_argument('--shared-owned-root',type=pathlib.Path,required=True)
  a.add_argument('--materialization-dir',type=pathlib.Path,required=True);a.add_argument('--job-started-monotonic',type=float,required=True);a.add_argument('--remaining-tail-reserve-seconds',type=int,required=True);a.add_argument('--maximum-build-seconds',type=int,required=True)
+ a.add_argument('--hardware-source',choices=('legacy','transposed-tile-address-v1'),default='legacy')
  a.add_argument('--first-fault-readonly',action='store_true')
  a.add_argument('--terminal-finite-readonly',action='store_true')
  a.add_argument('--reviewed-repo-sha',required=True);a.add_argument('--artifact-identity',type=pathlib.Path,required=True);a.add_argument('--execute-reviewed-once',action='store_true');a.add_argument('--fresh-host-contract',type=pathlib.Path);a.add_argument('--fresh-host-contract-sha256');v=a.parse_args()
  need(not(v.first_fault_readonly and v.terminal_finite_readonly),'one explicit readonly mode')
+ need(v.hardware_source=='legacy' or not(v.first_fault_readonly or v.terminal_finite_readonly),'new hardware cannot use unchanged-SV diagnostic contracts')
  D=v.materialization_dir.resolve()
  need(v.remaining_tail_reserve_seconds==900 and v.maximum_build_seconds==7200 and 0<=time.monotonic()-v.job_started_monotonic<9000,'whole job clock and remaining tail reserve')
  R=v.repo.resolve();P=v.pipeline.resolve();W=v.work.resolve()
- sys.path.insert(0,str(C));from candidate_generation_gate import load_contract,GENERATION_CONTRACT_SHA256
- load_contract(C/'GENERATION_CONTRACT.json',GENERATION_CONTRACT_SHA256)
+ sys.path.insert(0,str(C));from candidate_generation_gate import selected_inputs
+ selection=selected_inputs(R,v.hardware_source,v.first_fault_readonly,v.terminal_finite_readonly)
  identity=json.loads(v.artifact_identity.read_text())
  need(set(identity)=={'run_id','artifact_name','source_commit','launch_commit','launch_manifest_path','launch_manifest_blob_sha'},'V2 six-field artifact identity')
  need(type(identity['run_id'])is int and identity['run_id']>0 and re.fullmatch('[A-Za-z0-9_.-]{1,128}',identity['artifact_name']),'bounded run/name')
@@ -136,6 +138,7 @@ def main():
  if fresh is not None:
   env.update({k:os.environ[k] for k in ('GITHUB_RUN_ID','GITHUB_SHA','GITHUB_RUN_ATTEMPT')});env['PATH']='/usr/bin:/bin'
  pins={str(p):sha(p) for root in (P,D,C) for p in root.iterdir() if p.is_file() and p.suffix in ('.py','.json','.scala','.vlt','.tsv')}
+ pins.update({str(selection[k]):sha(selection[k])for k in ('overlay','contract_path')})
  pins[str(pathlib.Path(__file__).resolve())]=sha(__file__)
  pins.update({py:sha(py),gh:sha(gh),'/usr/bin/dpkg-deb':sha('/usr/bin/dpkg-deb')})
  if fresh is not None:pins[str(v.fresh_host_contract.resolve())]=v.fresh_host_contract_sha256
@@ -175,7 +178,7 @@ def main():
   try:fresh_host.validate_compile_inventory(json.loads((W/'compile-tools.json').read_text()))
   except Exception:
    parent_failure('GNU_RUNTIME_ADMISSION','GNU_RUNTIME_DEPENDENCIES_UNQUALIFIED');raise
- stage('jars',[py,'-B',str(C/'restore_model_inputs.py'),'--download-jars','--status-json',str(W/'MODEL_JAR_STATUS.json')],600)
+ stage('jars',[py,'-B',str(C/'restore_model_inputs.py'),'--download-jars','--hardware-source',v.hardware_source,'--status-json',str(W/'MODEL_JAR_STATUS.json')],600)
  stage('verilator',[py,'-B',str(D/'materialize_verilator.py'),'--output',str(W/'verilator'),'--execute-reviewed-acquisition'])
  stage('idma',[py,'-B',str(D/'acquire_idma_artifact.py'),'--gh',gh,'--gh-sha256',sha(gh),'--output',str(W/'idma'),'--execute-reviewed-acquisition'],240,token=True)
  stage('matrix',[py,'-B',str(D/'recover_matrix_portable.py'),'--repo',str(R),'--output',str(W/'matrix')])
@@ -189,7 +192,7 @@ def main():
    fresh_aliases=dict(host['aliases']);pins.update(host['pins']);pins[str(W/'fresh-host.json')]=sha(W/'fresh-host.json')
   except Exception:
    parent_failure('HOST_RECEIPT_ADMISSION','FRESH_HOST_RECEIPT_REJECTED');raise
- stage('binding',[py,'-B',str(C/'materialize_model_binding.py'),'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')]+(['--first-fault-readonly'] if v.first_fault_readonly else [])+(['--terminal-finite-readonly'] if v.terminal_finite_readonly else []))
+ stage('binding',[py,'-B',str(C/'materialize_model_binding.py'),'--hardware-source',v.hardware_source,'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')]+(['--first-fault-readonly'] if v.first_fault_readonly else [])+(['--terminal-finite-readonly'] if v.terminal_finite_readonly else []))
  # This entry owns its own stage-level process groups and aggregate memory budget.
  # Token is intentionally absent. Outer GitHub job timeout bounds all stages.
  binding=W/'FRONTEND_BINDING.json';bound=json.loads(binding.read_text());bound['mode']='BUILD_ONLY';bound['artifact_identity']=identity

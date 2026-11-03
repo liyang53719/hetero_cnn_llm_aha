@@ -1,0 +1,93 @@
+{
+  "schema": "TILE_ADDRESS_FIX_COMPONENT_VALIDATION_V1",
+  "scope": "ACTUAL_CHISEL_BANK_STORAGE_AND_PROTOCOL_ONLY",
+  "status": "PASS_COMPONENT_REGRESSION_FULL_BLOCK_INCOMPLETE",
+  "source_sha256": "c23f36805d78671e6fa8736668a0a837003cc620a413488fb3db530690e1bb53",
+  "full_block_model_passes": 0,
+  "final_rtl_passes": 0,
+  "hardware_arithmetic_verified": false,
+  "owner_lease_verified": false,
+  "capacity": {
+    "a_banks": 16,
+    "a_depth": 1376,
+    "a_word_bits": 256,
+    "b_banks": 16,
+    "b_depth": 160,
+    "b_word_bits": 256
+  },
+  "actual_ir": {
+    "actual-high.fir": "87db6350e994e59573fcf0b96e01be18bde5fc382fc0315ac1dd7cf96c5d19e5",
+    "Slot2BankFixture.lo.fir": "83d7f4e5a733068a00caa090fbb545fbcce75d913fd3f85c6f9b1581be290cc3",
+    "Slot2BankFixture.sv": "6fbd4625aa5abb3d90e4c2094d0a63b89c1b5af8cd5bdfda9f5a34fe3d19051f"
+  },
+  "stages": {
+    "compile": {
+      "native_exit": 0,
+      "elapsed_seconds": 17.12817816104507,
+      "observed_peak_rss": 291950592,
+      "peak_tree_bytes": 833888,
+      "receipt_sha256": "9b04a8d83e4c187844d96df22badf452c77fa123bcc43abee7ceb4e19f3c1950",
+      "cleanup": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+      "pipe_eof": true
+    },
+    "emit": {
+      "native_exit": 0,
+      "elapsed_seconds": 7.909058818011545,
+      "observed_peak_rss": 209256448,
+      "peak_tree_bytes": 4221703,
+      "receipt_sha256": "d73501420153381c0c77806c2a00dfd88803f89c0076c99d79597e3936ff487f",
+      "cleanup": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+      "pipe_eof": true
+    },
+    "all": {
+      "native_exit": 0,
+      "elapsed_seconds": 33.63653684401652,
+      "observed_peak_rss": 548368384,
+      "peak_tree_bytes": 15878862,
+      "receipt_sha256": "68fa9747b4543db4abd297928ac968a870ecca71be37e4ef5ec2d7697b8bff1b",
+      "cleanup": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+      "pipe_eof": true
+    }
+  },
+  "simulation": {
+    "address_checks": 64800,
+    "geometry_writes": 21600,
+    "geometry_reads": 21600,
+    "total_writes": 29280,
+    "total_reads": 29280,
+    "a_halfwords_checked_each_scan": 196608,
+    "a_scans": 3,
+    "activation_loads": 12288,
+    "ng_windows": [
+      0,
+      160
+    ],
+    "malformed_begin_cases": 7,
+    "sum_values": "HOST_STIMULUS_NOT_HARDWARE_SUM_PROOF"
+  },
+  "legacy_negative": {
+    "status": "EXPECTED_EXACT_IR_WIDTH_REJECTION",
+    "message": "SLOT2_BASE_CARRY_TRUNCATED: 10,10",
+    "native_emit_exit": 1,
+    "source_sha256": "9fb0df82d82084ed7b6f68150c6117276eefd3d045f8d3b527a14486f2d9028d",
+    "receipt_sha256": "60d1e6c80b7d823c33642631e2088e369b9007f35e6afb335e59b97f547b2a5a"
+  },
+  "first_attempt": {
+    "status": "INCOMPLETE_BEFORE_SIMULATION",
+    "reason": "GCC_PCH_FILE_SIZE_LIMIT",
+    "file_limit_bytes": 67108864,
+    "resolution": "VERILATOR_VM_DEFAULT_RULES_0_REAL_OBJECT_COMPILATION_NO_PCH_NO_CAP_INCREASE"
+  },
+  "interface_scope": "278 old full-top bank ports retained; fixture adds nine diagnostic outputs and exposes existing optimized-away activationWritten",
+  "tools": {
+    "scala": "2.13.16",
+    "chisel": "6.7.0",
+    "chiseltest": "6.0.0",
+    "java": "21",
+    "compiler_policy": "O0_NO_PCH_SINGLE_JOB"
+  },
+  "next": "SELECT_NEW_159_SOURCE_HARDWARE_IDENTITY_AND_RETEST_ALL_FIVE_M128_BLOCKS",
+  "independent_hardware_review_sha256": "34a15b6bb99dc3046aca2edd464371ad2e41b7a5491871f7d23f5a1affb2e029",
+  "independent_source_review_sha256": "b176a0e7009b6aba8a5ec30096acaf07cd4a75bbd02e6fa0c2d02a937d984062",
+  "public_runner_scope": "EXPLICIT_WORKSPACE_ROOT_AND_REPOSITORY_BASELINE_PATH_ADAPTATION; PREPARE_VERIFIED; SCALA_AND_CANDIDATE_SOURCE_AND_MAKE_RULES_IDENTICAL_TO_ACTUAL_R2"
+}

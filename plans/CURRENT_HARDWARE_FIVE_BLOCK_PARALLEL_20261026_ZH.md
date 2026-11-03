@@ -886,3 +886,16 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 独立事后 n0 精确比较通过（只限该中间值）：196608个FP32词/786432 B，与冻结BF16 norm参考按既定零扩展到FP32后逐字节相同，SHA `ddee5fd75094777c51ef1104c7a18dfe527fef9de2a24646aad1d83160a6e421`。原consumer在DUT rc检查失败处退出，没有执行comparisons；不可将独立事后比较冒充原consumer数值通过。新旧3条V1控制槽文本完全一致；terminal的first index是本次样本内索引顺序，不是时间上首次异常。
 
 - 源码进一步限定：第11个terminal属于第二ng的**第一K partial/context0**，不是最终qraw完整dot。Public21QkvReductionRouter固定K[0,1024)、[1024,1536)且pairReverse；DenseBlockReductionCoordinator每ng完成两partial+sum+drain后ng+=160。故该样本对应K顺序1,0,3,2,…1023,1022；先核ng0后的A复用、新B half装载及context clear，仍未确定唯一根因。
+
+
+## 2026-11-03 02:55 UTC：TEMP 地址进位修复接回原模型，完整数值仍 INCOMPLETE
+
+- 已确认原 TransposedDownDenseBanks 的 issue/commit 首次加法为 10-bit：slot2 的 1088 截断为 64，落入 A 区。独立候选仅将共享 tileWord 首次加法显式扩为 11-bit；固定容量、接口、4096 Matrix MAC、32-lane Vector 和算术顺序不变。旧冻结源码/契约保留。
+- PASS 精确范围：真实 Chisel 高/低 FIRRTL 发射、真实 Verilator banks 存储/协议回归。64800 地址检查，29280 写/读；三次各 196608 BF16 A 半字扫描，slot2 sum 刺激及 drain 后不重载 A，覆盖后续 ng160/ng320 的存储保留；7 个非法 begin 拒绝。sum 数值由 host 提供，不是硬件 sum 或完整 owner 调度数值证明。原源码真实 IR 负例按预期拒绝 10,10-bit。首次 PCH 文件上限失败保留，第二次改用官方无 PCH 编译规则，未放宽预算。
+- 新源码 SHA256 c23f36805d78671e6fa8736668a0a837003cc620a413488fb3db530690e1bb53。组件 SV 6fbd4625aa5abb3d90e4c2094d0a63b89c1b5af8cd5bdfda9f5a34fe3d19051f，只是测试 fixture，不是新完整硬件生成哈希。独立实际回归审查 34a15b6bb99dc3046aca2edd464371ad2e41b7a5491871f7d23f5a1affb2e029。
+- 已接回原 159-source 模型：transposed-tile-address-v1 selector；overlay 5ff6c6ee4887700b79f8bd3982250743575c3e3624d294d240b7bd92378bfc02；generation 0a5e09a27a447b028697a631e5207fc0af6cae15d4c324a55524f9d41a46a753。旧 same-SV 诊断与新硬件 selector 组合提前拒绝，不从旧 16/32-lane 或旧完整 SV 迁移 PASS。
+- 五块 M128 同时进入准备队列：P0 Qwen2-1.5B L0，P1/P2 Qwen3.5-0.8B L0/L3，P3/P4 Qwen3.5-35B-A3B L0/L3。122 个冻结参考/输入张量共 44262400 bytes 全量重哈希通过；70 权重共 3531306272 bytes 在场且长度匹配、70 receipt 重哈希通过，本轮未重扫全部权重数据。必须在新 artifact 上复核 retained_materials 合同，不把旧诊断专用 reuse 快捷分支当 ordinary 模型资格。
+- 五块正式 fullblock 预算均仍 PENDING：旧 10800 秒仅前两命令诊断，不能给完整 block 发准入。新 artifact 实际校准、独立预算审查、重新检查资源后执行；资源限制并发数可以串行，不缩物理硬件。
+- 新单次 build workflow 仅为普通模型 Chisel 仿真硬件构建，保持 single4096/M128、七文件包、单任务资源约束；源码审查和 CI 通过后仅一个新 nonce 激活。它不属于模型数值通过后冻结的最终 RTL 验收。
+- 当前完整 block 模型 0/5、最终 RTL 数值 0/5，80%/90% 完整 block 有效 MAC 利用率均无新实测。组件回归不当利用率证据。下一步唯一新硬件构建、七文件身份/资源接收、五块原 prefill 同刺激实际回归，完整数值通过后才冻结最终 RTL。
+- 临时文件均保留；本日不再常规清理。独立源码 checkout 新增约 640MiB，后续若挡 DUT 预算，只审计已由 Git 完整保存且无运行引用文件的可逆稀疏化，不删除唯一证据。

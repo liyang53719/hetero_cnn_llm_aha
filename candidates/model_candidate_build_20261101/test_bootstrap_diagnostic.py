@@ -2,6 +2,14 @@ import ast,contextlib,copy,hashlib,importlib.util,io,json,pathlib,tempfile,unitt
 D=pathlib.Path(__file__).resolve().parent
 s=importlib.util.spec_from_file_location('bootstrap_diag',D/'bootstrap_model_candidate.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
 
+# Exact selector edits projected away before all historical bootstrap AST checks.
+ADDRESS_INVERSE = [(" a.add_argument('--hardware-source',choices=('legacy','transposed-tile-address-v1'),default='legacy')\n", '', 'aa25f7e690195b33218d2f62c25aca20a601d0bb1c1692dfef47283c0e554ac7'), (" need(v.hardware_source=='legacy' or not(v.first_fault_readonly or v.terminal_finite_readonly),'new hardware cannot use unchanged-SV diagnostic contracts')\n", '', 'ceddc958908d616b8bfab1839e3be3fb0d90104f250011c58c5128e703a3fdf9'), (' sys.path.insert(0,str(C));from candidate_generation_gate import selected_inputs\n selection=selected_inputs(R,v.hardware_source,v.first_fault_readonly,v.terminal_finite_readonly)\n', " sys.path.insert(0,str(C));from candidate_generation_gate import load_contract,GENERATION_CONTRACT_SHA256\n load_contract(C/'GENERATION_CONTRACT.json',GENERATION_CONTRACT_SHA256)\n", '4d5a80da98b08e0fbffaf5c3bc89679b67009f60e2809e0af012af8bc93498b1'), (" pins.update({str(selection[k]):sha(selection[k])for k in ('overlay','contract_path')})\n", '', '86b63133f475d5f9eaeb5eb1af821e6f650ade12c557aea2e848ca67f293b200'), (" stage('jars',[py,'-B',str(C/'restore_model_inputs.py'),'--download-jars','--hardware-source',v.hardware_source,'--status-json',str(W/'MODEL_JAR_STATUS.json')],600)\n", " stage('jars',[py,'-B',str(C/'restore_model_inputs.py'),'--download-jars','--status-json',str(W/'MODEL_JAR_STATUS.json')],600)\n", '7ab069ea54585bdb7ceb9f230196a9788dc996ecddc877dc2ff3ad577e76d53c'), (" stage('binding',[py,'-B',str(C/'materialize_model_binding.py'),'--hardware-source',v.hardware_source,'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')]+(['--first-fault-readonly'] if v.first_fault_readonly else [])+(['--terminal-finite-readonly'] if v.terminal_finite_readonly else []))\n", " stage('binding',[py,'-B',str(C/'materialize_model_binding.py'),'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')]+(['--first-fault-readonly'] if v.first_fault_readonly else [])+(['--terminal-finite-readonly'] if v.terminal_finite_readonly else []))\n", '058b83a06e7317fc7e36431784067a66d201ac8cadc38c490806c86416756032')]
+def address_inverse(text):
+ for added,original,expected in ADDRESS_INVERSE:
+  if hashlib.sha256(added.encode()).hexdigest()!=expected or text.count(added)!=1:raise ValueError('unique exact hardware selector addition')
+  text=text.replace(added,original,1)
+ return text
+
 # Exact inverse of the independently reviewed read-only build branch only.
 FIRST_FAULT_INVERSE = [(" a.add_argument('--first-fault-readonly',action='store_true')\n", '', '793e0c515eb48d727f4d62ab5139a4cb7e257b12945a8e645338732df0ba26c5'), (" stage('binding',[py,'-B',str(C/'materialize_model_binding.py'),'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')]+(['--first-fault-readonly'] if v.first_fault_readonly else []))\n", " stage('binding',[py,'-B',str(C/'materialize_model_binding.py'),'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')])\n", '81aac29514dd880e221e6451ec0b30b0759ed77bd195e057492d4e0091593960')]
 def first_fault_inverse(text):
@@ -14,6 +22,7 @@ def first_fault_inverse(text):
 TERMINAL_INVERSE = [(" a.add_argument('--terminal-finite-readonly',action='store_true')\n", '', '22099f59b102782ebe15919440dd236925559d975836763ce6f323b073610382'), (" need(not(v.first_fault_readonly and v.terminal_finite_readonly),'one explicit readonly mode')\n", '', '80a77b5eedcf7e06500ae1acfb039e4da046e602dcfa32fb248576706d0ce231'), (" stage('binding',[py,'-B',str(C/'materialize_model_binding.py'),'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')]+(['--first-fault-readonly'] if v.first_fault_readonly else [])+(['--terminal-finite-readonly'] if v.terminal_finite_readonly else []))\n", " stage('binding',[py,'-B',str(C/'materialize_model_binding.py'),'--repo',str(R),'--expected-repo-sha',v.reviewed_repo_sha,'--pipeline',str(P),'--jdk-inventory',str(W/'jdk.json'),'--java',str(java),'--tools',str(W/'verilator'),'--idma',str(W/'idma/extracted/idma_export'),'--matrix',str(W/'matrix'),'--binding',str(W/'FRONTEND_BINDING.json'),'--output',str(W/'frontend')]+(['--first-fault-readonly'] if v.first_fault_readonly else []))\n", 'bd38c8d1fa2269a18e7504aff93fd512dc12b3b30d5a7b3c64c01737e3b394ec')]
 TERMINAL_BASE_AST_SHA = '5588a1d0ffd238b160307f8c368e0a13f0fa6a02aba8a301f9ee6737922aff33'
 def terminal_inverse(text):
+ text=address_inverse(text)
  for added,original,expected in TERMINAL_INVERSE:
   if hashlib.sha256(added.encode()).hexdigest()!=expected or text.count(added)!=1:raise ValueError('unique exact terminal addition')
   text=text.replace(added,original,1)
@@ -23,6 +32,10 @@ def terminal_inverse(text):
  return text
 
 class Tests(unittest.TestCase):
+ def test_address_inverse_rejects_duplicate_mutation(self):
+  text=(D/'bootstrap_model_candidate.py').read_text();added=ADDRESS_INVERSE[0][0]
+  with self.assertRaises(ValueError):address_inverse(text+added)
+  with self.assertRaises(ValueError):address_inverse(text.replace(added,added.replace('hardware-source','unbounded-source',1),1))
  def test_terminal_inverse_rejects_duplicate_mutation(self):
   text=(D/'bootstrap_model_candidate.py').read_text();added=TERMINAL_INVERSE[0][0]
   with self.assertRaises(ValueError):terminal_inverse(text+added)

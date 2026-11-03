@@ -16,6 +16,11 @@
       "sha256": "9ba777ffa4a5f4ca88af4c8d93aebdec2c1c6daf93bc3e3fee833cb66701c886"
     },
     {
+      "bytes": 4095,
+      "path": ".github/workflows/hetero-five-m128-tile-address-build.yml",
+      "sha256": "97bc6a6bea426ef736ec2f1e7fd3e6a6a8cadf3366a352310ba4e3bf3aaa359a"
+    },
+    {
       "bytes": 190729,
       "path": "candidates/attention_policy_count_fix_20261029T0054/source/HostBlockCommandsV4.scala",
       "sha256": "8cea5e8863e47ca14978871d23b7f80639e43ae3192c3e6c0ccf372b1c73a20f"
@@ -1696,9 +1701,9 @@
       "sha256": "6df79f9f5c1088c1f79caf90c713aa1cf223cba264c7bbeb8f1845cff29010ba"
     },
     {
-      "bytes": 18337,
+      "bytes": 18760,
       "path": "candidates/model_candidate_build_20261101/bootstrap_model_candidate.py",
-      "sha256": "40af5b9c174cfd3f005392fc40cd60831c20193d0a527eddcb222126225bff90"
+      "sha256": "445c6b47790016c7aaa5a46a72cdb95f295720bcc89d60cf3b85ea8c76e47a86"
     },
     {
       "bytes": 1816,
@@ -1716,9 +1721,9 @@
       "sha256": "4eeb7d204f8401f2d886f4240b3b1d19fc427e1776b44860a4531cd3b58e325c"
     },
     {
-      "bytes": 34111,
+      "bytes": 39469,
       "path": "candidates/model_candidate_build_20261101/candidate_dependency_proof.py",
-      "sha256": "c0161b41cf02fe55cf06085b0ef796883025c845933f3d6c6508d6867b2c10e3"
+      "sha256": "6530f691b24cf761f698d80f23a374840fc3c1dc5089a6abe8078e34ab483fd7"
     },
     {
       "bytes": 3382,
@@ -1726,9 +1731,9 @@
       "sha256": "bf91ce15f2adc4ff407e1393f8e18d3c1a28146000d2775a199371b96746be58"
     },
     {
-      "bytes": 4771,
+      "bytes": 8731,
       "path": "candidates/model_candidate_build_20261101/candidate_generation_gate.py",
-      "sha256": "92a0155d5317a6a74a66feee1caf18fc85d7331b1633327caffcda802254114d"
+      "sha256": "ced35f0d6b669b7e7619e787aa4411bcdbccc626f95400799eae4acc8fa23112"
     },
     {
       "bytes": 6250,
@@ -1796,9 +1801,9 @@
       "sha256": "dea7b8c076a03182b61363f1fcc7ac7ed4f29ae7d4f722cecaa29550358c78ef"
     },
     {
-      "bytes": 10053,
+      "bytes": 10493,
       "path": "candidates/model_candidate_build_20261101/materialize_model_binding.py",
-      "sha256": "ccd920f0949d8819773d7fae667278503fb277d697d1ca9ad06645d0bc2c2eae"
+      "sha256": "002d0c5cbbfedf0fc95959d6759624d387f2ada9b0506090dfd216b6d27e5adc"
     },
     {
       "bytes": 4012,
@@ -1821,14 +1826,14 @@
       "sha256": "2665c932f197573e72ca6915f285ca14fce9cf1a226dcb7be58464f63599e7bf"
     },
     {
-      "bytes": 32486,
+      "bytes": 36051,
       "path": "candidates/model_candidate_build_20261101/pack_model_candidate.py",
-      "sha256": "02714c6677e749e71b285d2512c779e5687d009eb49dd7da883aab68cc376d20"
+      "sha256": "70ca666a19f2e51bbaf32f4a96a0c4f416d1105b54b23f812c4a223fefc32dbc"
     },
     {
-      "bytes": 4875,
+      "bytes": 5350,
       "path": "candidates/model_candidate_build_20261101/prepare_model_build.py",
-      "sha256": "c93ae3f5433f8837ff60aa86b20a69c3bfb092727b5fec8ef01f0b5ebbdf523f"
+      "sha256": "d9c2b96abd75c32e1989aa159e4d1bc7e5b4e7799be82f5c4aad8855bcf434e6"
     },
     {
       "bytes": 4283,
@@ -1836,9 +1841,9 @@
       "sha256": "122e5d48d87f67c1ad75808aeca552dc2b931e727f374216c0527bf0f74050c6"
     },
     {
-      "bytes": 5725,
+      "bytes": 5894,
       "path": "candidates/model_candidate_build_20261101/restore_model_inputs.py",
-      "sha256": "6126422fc10182ef8b44a111e6defc1f23810cd3eada75533c87657fb64c8640"
+      "sha256": "7f6aae9fba45130be3fc90c44917cccc7ddb297db45fdbbcc997a9b34790360d"
     },
     {
       "bytes": 3978,
@@ -1861,9 +1866,14 @@
       "sha256": "17e9d268e0e5d3d74d0c5c79f53405553771652643bac5822b308dde15d3de18"
     },
     {
-      "bytes": 10679,
+      "bytes": 15827,
+      "path": "candidates/model_candidate_build_20261101/test_address_source_selection.py",
+      "sha256": "c9d26cbb75679b890f9e636ed1968101d341d3f9761a88a84129f349d2fb673e"
+    },
+    {
+      "bytes": 13939,
       "path": "candidates/model_candidate_build_20261101/test_bootstrap_diagnostic.py",
-      "sha256": "2fb4179d50c7d2505144fd807579d7b74b3a75204699a441a45b64932d93c458"
+      "sha256": "69dcc0208bf6bb8770c005dad738fc42b4ab2a156c29527b5d5065c720daa352"
     },
     {
       "bytes": 3117,
@@ -1936,9 +1946,9 @@
       "sha256": "158a8f3b2b38c873f3d5a9d0d58e17de99ed9a6fb50a682c4896c0656fbc59d7"
     },
     {
-      "bytes": 7794,
+      "bytes": 10331,
       "path": "candidates/model_candidate_build_20261101/test_pack_diagnostics.py",
-      "sha256": "186d23e822412cd936a9514719f475f5788382630a9c216c99eaab4def1f1c6f"
+      "sha256": "35232eb2eebfccfdcf15bd90cbd3d01b7976a0c28dbcde1ec71ec2e6092a2999"
     },
     {
       "bytes": 15611,
@@ -3516,9 +3526,9 @@
       "sha256": "9bb6b23716df6acb5cc37a757e0a5890c6303d94bde5159b20150159b34b898b"
     },
     {
-      "bytes": 4483,
+      "bytes": 5397,
       "path": "candidates/same_job_execution_20261030/test_common_observer_integration.py",
-      "sha256": "387745bdafe6862e10419bb27cff37dee4df5b37f31fb2b27c2e06f960f261fb"
+      "sha256": "5170b6a01d6254f56aec12f30f4b4655cc6bf36f25a5ade76792842be534b1ff"
     },
     {
       "bytes": 3173,
@@ -3804,6 +3814,76 @@
       "bytes": 2979,
       "path": "candidates/split_build_only_20261031/validate_launch.py",
       "sha256": "39c92a345ca5436837f78bf55a0e0e16fab66adfa36126c874cd85d7deabe5c9"
+    },
+    {
+      "bytes": 766,
+      "path": "candidates/transposed_tile_address_fix_20261103/GENERATION_CONTRACT.json",
+      "sha256": "0a5e09a27a447b028697a631e5207fc0af6cae15d4c324a55524f9d41a46a753"
+    },
+    {
+      "bytes": 5188,
+      "path": "candidates/transposed_tile_address_fix_20261103/MODEL_INPUT_RECIPE.zh.md",
+      "sha256": "ebea420feeebac5613fbf20701072843bdbd41db756d9c62b32cfba44fae39ea"
+    },
+    {
+      "bytes": 45415,
+      "path": "candidates/transposed_tile_address_fix_20261103/MODEL_SOURCE_OVERLAY.json",
+      "sha256": "5ff6c6ee4887700b79f8bd3982250743575c3e3624d294d240b7bd92378bfc02"
+    },
+    {
+      "bytes": 3660,
+      "path": "candidates/transposed_tile_address_fix_20261103/VALIDATION_SUMMARY.json",
+      "sha256": "e40c45ebc8609e975a1b13c6e7cbcd98bbd37582bf594ecb70c837abae0e2d4e"
+    },
+    {
+      "bytes": 19511,
+      "path": "candidates/transposed_tile_address_fix_20261103/source/TransposedDenseBanks.scala",
+      "sha256": "c23f36805d78671e6fa8736668a0a837003cc620a413488fb3db530690e1bb53"
+    },
+    {
+      "bytes": 1774,
+      "path": "candidates/transposed_tile_address_fix_20261103/test_address_launch.py",
+      "sha256": "2bb768efea570067cabb5ec15f01298fe24c9a409bbce2486f3832762abc370e"
+    },
+    {
+      "bytes": 5690,
+      "path": "candidates/transposed_tile_address_fix_20261103/tests/README_CN.md",
+      "sha256": "47ee2f736d98260323365bed05293ee834ddbed0c89b4984668328da08e6442d"
+    },
+    {
+      "bytes": 2904,
+      "path": "candidates/transposed_tile_address_fix_20261103/tests/Slot2BankEmit.scala",
+      "sha256": "e64ad86aa081400b313f6f151c615a45d318879fb524cded84a3211a19874380"
+    },
+    {
+      "bytes": 1038,
+      "path": "candidates/transposed_tile_address_fix_20261103/tests/Slot2BankFixture.scala",
+      "sha256": "2821cac29eadc5e6309030bf8c0e199d26bb10e903492dd010a89889abf8796a"
+    },
+    {
+      "bytes": 10828,
+      "path": "candidates/transposed_tile_address_fix_20261103/tests/Slot2BankRegression.scala",
+      "sha256": "990f792cc8a2e5a919d1c6e6e3e8b6aa5f6ac8af2f75e9d446a2c9d3206ee616"
+    },
+    {
+      "bytes": 8578,
+      "path": "candidates/transposed_tile_address_fix_20261103/tests/run_stage.py",
+      "sha256": "e054c165751985a9f4801e9a6fcb5739512967c72ac2aa8234fb4e3b245fd7af"
+    },
+    {
+      "bytes": 342,
+      "path": "candidates/transposed_tile_address_fix_20261103/tests/tools/make",
+      "sha256": "2c7dac3d4c221cd49173581437d492cec9651fbfe932d7963517aa258bb40908"
+    },
+    {
+      "bytes": 943,
+      "path": "candidates/transposed_tile_address_fix_20261103/tests/tools/no_pch.mk",
+      "sha256": "0f04148af197fa04c58e5a9396528ed2fbde2bd7902d2ca18743badd69f2c136"
+    },
+    {
+      "bytes": 2994,
+      "path": "candidates/transposed_tile_address_fix_20261103/validate_address_launch.py",
+      "sha256": "669afc85e0db6b1bd5429eef2e287d302f70f9bb5a8ff034d006c00436c0b9e4"
     },
     {
       "bytes": 5759,

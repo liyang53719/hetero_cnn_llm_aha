@@ -129,7 +129,30 @@ TERMINAL_IMPLEMENTATION_PINS={'candidates/ci_frontend_pipeline_r2_20261029/drive
  'candidates/model_candidate_build_20261101/one_job_model_candidate.py': '7e04700f063728cf1df376a563565830f7e1544f8b2e439b507cc649975749ff',
  'candidates/model_candidate_build_20261101/pack_model_candidate.py': '02714c6677e749e71b285d2512c779e5687d009eb49dd7da883aab68cc376d20',
  'candidates/model_candidate_build_20261101/terminal_finite_probe.py': '17e9d268e0e5d3d74d0c5c79f53405553771652643bac5822b308dde15d3de18'}
-LOCAL_PACK_READER_SHA='02714c6677e749e71b285d2512c779e5687d009eb49dd7da883aab68cc376d20'
+# Selector-aware revision is separate from every retained historical map.
+SELECTOR_IMPLEMENTATION_PINS={'candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py': '0b63202e401b1477087a246d5ea233bfd4dcd36ccd80e0c0a03ee323c030a60f', 'candidates/model_candidate_build_20261101/candidate_binary_producer.py': 'd0418ba1fde333633cc0642c118cbf07fccb598f3d966b7977df5f9947e38d53', 'candidates/model_candidate_build_20261101/candidate_build_producer.py': 'ad794f49f2b6d9274ebcda8110a82467847b358b80c569a716614695c276c36f', 'candidates/model_candidate_build_20261101/candidate_conditional_admission.py': '4eeb7d204f8401f2d886f4240b3b1d19fc427e1776b44860a4531cd3b58e325c', 'candidates/model_candidate_build_20261101/candidate_generation_gate.py': 'ced35f0d6b669b7e7619e787aa4411bcdbccc626f95400799eae4acc8fa23112', 'candidates/model_candidate_build_20261101/model_source_evidence.py': 'ab07b41bbfb201e9b58146bac6d202405ac2e606f1d22bff0ef78fc9be98a523', 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': '7e04700f063728cf1df376a563565830f7e1544f8b2e439b507cc649975749ff', 'candidates/model_candidate_build_20261101/pack_model_candidate.py': '70ca666a19f2e51bbaf32f4a96a0c4f416d1105b54b23f812c4a223fefc32dbc'}
+SELECTOR_DIAGNOSTIC_REVISIONS={'candidates/model_candidate_build_20261101/candidate_generation_gate.py': 'ced35f0d6b669b7e7619e787aa4411bcdbccc626f95400799eae4acc8fa23112', 'candidates/model_candidate_build_20261101/pack_model_candidate.py': '70ca666a19f2e51bbaf32f4a96a0c4f416d1105b54b23f812c4a223fefc32dbc'}
+SELECTOR_FIRST_FAULT_REVISIONS={'candidates/model_candidate_build_20261101/candidate_generation_gate.py': 'ced35f0d6b669b7e7619e787aa4411bcdbccc626f95400799eae4acc8fa23112', 'candidates/model_candidate_build_20261101/pack_model_candidate.py': '70ca666a19f2e51bbaf32f4a96a0c4f416d1105b54b23f812c4a223fefc32dbc', 'candidates/model_candidate_build_20261101/first_fault_compilation.py': 'c548cbe0d5891c0a2d0bcb1e51cb3eb2ce48135b666b4857e0d84c2c9b1ab347', 'candidates/model_candidate_build_20261101/first_fault_policy.py': 'c095e177128e89c146275b421d76e84320ab0f9bced6de41bf0facd46580e6de', 'candidates/model_candidate_build_20261101/one_job_model_candidate.py': '7e04700f063728cf1df376a563565830f7e1544f8b2e439b507cc649975749ff'}
+SELECTOR_GENERATION_PAIRS={'0a5e09a27a447b028697a631e5207fc0af6cae15d4c324a55524f9d41a46a753':('candidates/transposed_tile_address_fix_20261103','5ff6c6ee4887700b79f8bd3982250743575c3e3624d294d240b7bd92378bfc02'),'3354827c1c9d2ac167b3b325dc07acbd50ea663ddd384dddfea1b1d037ae3851':('candidates/model_candidate_build_20261101','51621bbffc5ab0dfc97e88d66fee93722e66b6b1ed2a8c2ba7d0f588d9345472')}
+
+def selector_producer_policy(source,readonly):
+ pins=source.get('generation_input_pins',{})
+ gate='candidates/model_candidate_build_20261101/candidate_generation_gate.py'
+ paths=[p for p in pins if p.endswith('/'+gate)]
+ closure=source.get('model_candidate_observation',{}).get('source_closure',{})
+ active=any(pins[p]==SELECTOR_IMPLEMENTATION_PINS[gate]for p in paths)or closure.get('generation_contract_sha256')=='0a5e09a27a447b028697a631e5207fc0af6cae15d4c324a55524f9d41a46a753'or source.get('fixed_source_overlay','').endswith('/candidates/transposed_tile_address_fix_20261103/MODEL_SOURCE_OVERLAY.json')
+ if not active:return None
+ need(len(paths)==1 and pins[paths[0]]==SELECTOR_IMPLEMENTATION_PINS[gate],'one exact selector-aware producer root');repo=paths[0][:-len(gate)]
+ generation=closure.get('generation_contract_sha256');need(generation in SELECTOR_GENERATION_PAIRS,'selector-aware producer requires independently fixed generation')
+ directory,overlay=SELECTOR_GENERATION_PAIRS[generation]
+ need(closure.get('source_overlay',{}).get('sha256')==overlay and type(closure.get('source_count'))is int and closure['source_count']==159,'selector-aware generation/overlay pair')
+ need(pins.get(repo+directory+'/GENERATION_CONTRACT.json')==generation and pins.get(repo+directory+'/MODEL_SOURCE_OVERLAY.json')==overlay and source.get('fixed_source_overlay')==repo+directory+'/MODEL_SOURCE_OVERLAY.json','selector-aware exact generation input paths')
+ if readonly is None:return dict(SELECTOR_IMPLEMENTATION_PINS)
+ need(directory=='candidates/model_candidate_build_20261101','new hardware cannot inherit unchanged-SV diagnostic producer')
+ historical=TERMINAL_IMPLEMENTATION_PINS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else FIRST_FAULT_IMPLEMENTATION_PINS
+ return dict(historical,**(SELECTOR_DIAGNOSTIC_REVISIONS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else SELECTOR_FIRST_FAULT_REVISIONS))
+
+LOCAL_PACK_READER_SHA='70ca666a19f2e51bbaf32f4a96a0c4f416d1105b54b23f812c4a223fefc32dbc'
 
 COLLECTOR_PATH='candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py'
 def compilation_policy(r,m,build_receipt,manifest=None):
@@ -145,6 +168,14 @@ def compilation_policy(r,m,build_receipt,manifest=None):
  else:
   need('readonly_probe'not in m and 'readonly_probe_contract_sha256'not in build_receipt and (manifest is None or 'readonly_probe_contract'not in manifest),'readonly proof requires explicit new actual manifest')
   readonly=None
+ selector=selector_producer_policy(m,readonly)
+ if selector is not None:
+  need(set(selector)==(CANDIDATE_REQUIRED_IMPLEMENTATIONS if readonly is None else TERMINAL_REQUIRED_IMPLEMENTATIONS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else FIRST_FAULT_REQUIRED_IMPLEMENTATIONS)and all(type(h)is str and re.fullmatch('[0-9a-f]{64}',h)for h in selector.values()),'selector-aware producer contract frozen')
+  if readonly is None:need('dependency_rule_policy'not in r,'ordinary new hardware has no readonly dependency policy')
+  else:
+   from first_fault_compilation import DEPENDENCY_RULE_POLICY
+   need(r.get('dependency_rule_policy')==DEPENDENCY_RULE_POLICY,'unchanged readonly GCC prerequisite policy')
+  return CPP_O1_POLICY,list(CPP_O1_OVERRIDES),selector
  if readonly is None:
   need('dependency_rule_policy'not in r,'legacy dependency rule unchanged')
   return CPP_O1_POLICY,list(CPP_O1_OVERRIDES),dict(OLD_CANDIDATE_IMPLEMENTATION_PINS)

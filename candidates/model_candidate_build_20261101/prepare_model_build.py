@@ -21,6 +21,9 @@ def source_pins(repo):
  return sha(path)
 def run(a):
  need(not(a.first_fault_readonly and getattr(a,'terminal_finite_readonly',False)),'one explicit readonly mode')
+ hardware_source=getattr(a,'hardware_source','legacy')
+ need(hardware_source in ('legacy','transposed-tile-address-v1'),'explicit bounded hardware source selection')
+ need(hardware_source=='legacy' or not(a.first_fault_readonly or getattr(a,'terminal_finite_readonly',False)),'new hardware cannot use unchanged-SV diagnostic contracts')
  repo=a.repo.resolve();work=a.work;identity=read(a.identity);clock=read(a.job_start)
  need(D.is_relative_to(repo)and subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()==identity['source_commit'],'reviewed checkout')
  subprocess.run(['git','-C',str(repo),'diff','--quiet','HEAD','--'],check=True)
@@ -39,13 +42,14 @@ def run(a):
  with contract.open('x')as f:json.dump(fresh,f,sort_keys=True);f.write('\n')
  with (work/'BUILD_INVOCATION.json').open('x')as f:json.dump(dict(schema='MODEL_CANDIDATE_BUILD_INVOCATION_V1',artifact_identity=identity,source_pins_sha256=closure,job_started_monotonic=started,maximum_build_seconds=BUILD_SECONDS,whole_seconds=WHOLE_SECONDS,numerical_pass=False),f)
  py=str(P('/usr/bin/python3').resolve());bootstrap=D/'bootstrap_model_candidate.py'
- args=[py,'-B',str(bootstrap),'--repo',str(repo),'--pipeline',str(repo/'candidates/ci_frontend_pipeline_r2_20261029'),'--work',str(work/'shared/build'),'--shared-owned-root',str(work/'shared'),'--materialization-dir',str(material),'--job-started-monotonic',str(started),'--remaining-tail-reserve-seconds',str(EXPORT_RESERVE_SECONDS),'--maximum-build-seconds',str(BUILD_SECONDS),'--reviewed-repo-sha',identity['source_commit'],'--artifact-identity',str(a.identity),'--fresh-host-contract',str(contract),'--fresh-host-contract-sha256',sha(contract),'--execute-reviewed-once']
+ args=[py,'-B',str(bootstrap),'--hardware-source',hardware_source,'--repo',str(repo),'--pipeline',str(repo/'candidates/ci_frontend_pipeline_r2_20261029'),'--work',str(work/'shared/build'),'--shared-owned-root',str(work/'shared'),'--materialization-dir',str(material),'--job-started-monotonic',str(started),'--remaining-tail-reserve-seconds',str(EXPORT_RESERVE_SECONDS),'--maximum-build-seconds',str(BUILD_SECONDS),'--reviewed-repo-sha',identity['source_commit'],'--artifact-identity',str(a.identity),'--fresh-host-contract',str(contract),'--fresh-host-contract-sha256',sha(contract),'--execute-reviewed-once']
  if a.first_fault_readonly:args.append('--first-fault-readonly')
  if getattr(a,'terminal_finite_readonly',False):args.append('--terminal-finite-readonly')
  os.execve(py,args,dict(os.environ)) # bootstrap forwards GH_TOKEN only to its original idma acquisition.
 if __name__=='__main__':
  p=argparse.ArgumentParser()
  for n in('repo','work','identity','job-start'):p.add_argument('--'+n,type=P,required=True)
+ p.add_argument('--hardware-source',choices=('legacy','transposed-tile-address-v1'),default='legacy')
  p.add_argument('--first-fault-readonly',action='store_true')
  p.add_argument('--terminal-finite-readonly',action='store_true')
  run(p.parse_args())

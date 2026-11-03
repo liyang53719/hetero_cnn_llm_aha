@@ -1,6 +1,10 @@
 {
   "candidate_id": "P0_QWEN2_FULL128_DEFAULT_REFERENCE_V1",
   "files": {
+    ".github/workflows/hetero-p0-header-repair-41720209902.yml": {
+      "bytes": 4012,
+      "sha256": "8231c26b86bd470cc2822673da0cefe8da0012e3650de84a3182ff554c3c392e"
+    },
     ".github/workflows/hetero-p0-portable-reference-default.yml": {
       "bytes": 4030,
       "sha256": "60ac81d31959d833e9d048502612214fb497e2148345091fefccd1e928545a22"
@@ -9,13 +13,17 @@
       "bytes": 33521,
       "sha256": "e93e1a8ff6e54f7f82ddd3d0134785350a09726e257c2cb73b6823625fa09c76"
     },
+    "candidates/p0_portable_reference_20261103/default_v1/HEADER_REPAIR_PLAN.zh.md": {
+      "bytes": 3778,
+      "sha256": "0eb4ab9f79a7897ae00229cca04299415d40ce879a5afcbb9192c7e7b27a6fce"
+    },
     "candidates/p0_portable_reference_20261103/default_v1/PLAN.zh.md": {
       "bytes": 7668,
       "sha256": "62cc9555513a22d3a47db7233bd42c500627451f29bb93f95d45fdf228354566"
     },
     "candidates/p0_portable_reference_20261103/default_v1/acquire_weights.py": {
-      "bytes": 7757,
-      "sha256": "395cc87883e275fd419d80d39d8a119447139a6779452627eb9e44988e8e2e35"
+      "bytes": 7777,
+      "sha256": "42daf1edd967f37af5f092a540975d7f0cf1ca16af0c8a832f9f430e8e483678"
     },
     "candidates/p0_portable_reference_20261103/default_v1/config.json": {
       "bytes": 660,
@@ -37,6 +45,14 @@
       "bytes": 4115,
       "sha256": "17e80ac155b7d723a388b8fa17d8790b8aa2b68daa5ea936557c60db4664f115"
     },
+    "candidates/p0_portable_reference_20261103/default_v1/header_probe.py": {
+      "bytes": 9734,
+      "sha256": "ad0bdef4655846736a4667f9289c41884e1a4bb1c4ed24fa801a740a8c973858"
+    },
+    "candidates/p0_portable_reference_20261103/default_v1/header_repair_export.py": {
+      "bytes": 8450,
+      "sha256": "5ada442a6dc72758977569625e39030a275d7b20651d32879649a8ebe61d247f"
+    },
     "candidates/p0_portable_reference_20261103/default_v1/host_checks.py": {
       "bytes": 3524,
       "sha256": "4691c9d13bd6a3a105d4fedfc3c18bf346e22624bcb9a34de6be9a4fdc8543a7"
@@ -56,6 +72,10 @@
     "candidates/p0_portable_reference_20261103/default_v1/rss_telemetry.py": {
       "bytes": 17041,
       "sha256": "6ab13bb9f1f9db95f284dd1a0121bcf748eec087b035eb9e1e32b77d64eec8f4"
+    },
+    "candidates/p0_portable_reference_20261103/default_v1/run_header_repair.py": {
+      "bytes": 9702,
+      "sha256": "1dad603e043d69e05a612a89d37246199a3382aca1a7c06819c576ae4db85283"
     },
     "candidates/p0_portable_reference_20261103/default_v1/run_portable.py": {
       "bytes": 19409,
@@ -78,8 +98,8 @@
       "sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047"
     },
     "candidates/p0_portable_reference_20261103/default_v1/supervise_multiroot.py": {
-      "bytes": 21652,
-      "sha256": "014d0628ebf66f02fb3eeb1b2fcb494ed007dea09d149a5bd1b9b928e6be5312"
+      "bytes": 21807,
+      "sha256": "38dce8a62ba77364a9cf46b1ce072ff9f89c09a36f90352b0bf7587c623eae22"
     },
     "candidates/p0_portable_reference_20261103/default_v1/tensor_acquisition_plan.json": {
       "bytes": 31287,
@@ -88,6 +108,14 @@
     "candidates/p0_portable_reference_20261103/default_v1/test_controller_mock.py": {
       "bytes": 13582,
       "sha256": "e3baff7cb0cb9be10e997ef2f2fea6cb834f01bcc02e040e3b40ea802abdc21c"
+    },
+    "candidates/p0_portable_reference_20261103/default_v1/test_header_controller.py": {
+      "bytes": 7988,
+      "sha256": "fd099fa4b8d9bb4c73b23531bf8871caea2eecde596ac72efce944f40debb06d"
+    },
+    "candidates/p0_portable_reference_20261103/default_v1/test_header_probe.py": {
+      "bytes": 9397,
+      "sha256": "55d27b63174312e30eeb7c304519e47cd1b0d9d590e2de433a90663151231a76"
     },
     "candidates/p0_portable_reference_20261103/default_v1/test_reference_contract.py": {
       "bytes": 5396,
@@ -101,13 +129,17 @@
       "bytes": 9866,
       "sha256": "edc448e6b86dda99ae5cb257e37dde3b9fa91299823f66bbedb7de737c3ac1fa"
     },
+    "candidates/p0_portable_reference_20261103/default_v1/validate_header_repair_launch.py": {
+      "bytes": 2046,
+      "sha256": "349665fab7d342527ccc8bfaf1f234e71dbd9b8ebc24db2122d2abe5c1113a5b"
+    },
     "candidates/p0_portable_reference_20261103/default_v1/validate_launch.py": {
       "bytes": 2324,
       "sha256": "161747f0108665a06ee8fd905a28efeca6c29e30a3eb8f91b6c306a38982ab10"
     },
     "candidates/p0_portable_reference_20261103/default_v1/validate_source.py": {
-      "bytes": 1814,
-      "sha256": "29c4a392deb9a6b40e41a66d56750a7bfb5db917632a43fde074811f1be47245"
+      "bytes": 1877,
+      "sha256": "2a15b476242b879cda08d7f25df48b87c13269060ff0856837ceac1ac0948597"
     }
   },
   "schema": "P0_DEFAULT_SOURCE_CLOSURE_V1"

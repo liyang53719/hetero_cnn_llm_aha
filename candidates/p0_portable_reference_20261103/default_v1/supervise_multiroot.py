@@ -25,6 +25,8 @@ def verify_aliases(aliases):
   need(os.readlink(p)==row['link'] and str(p.resolve(strict=True))==row['target'],'JDK alias mapping drift')
 
 def _v2_validate_numeric_caps(caps):
+ job_cpu=caps.get('job_cpu_budget_seconds',3600)
+ need(type(job_cpu)is int and 0<job_cpu<=3600,'finite job CPU budget')
  # Validate before opening the lock or claiming signals. In particular, no
  # malformed arithmetic operand may escape between ownership and the try.
  need(type(caps)is dict,'V2 numeric caps object')
@@ -172,7 +174,7 @@ def execute(argv,run,lock_path,caps,env,pins,inject_monitor_error=False,resource
    f=rawfields[pid];observed[pid]['peak_cpu_ticks']=max(observed[pid]['peak_cpu_ticks'],int(f[11])+int(f[12]));observed[pid]['ever_outside_group']|=row['group']!=leader['group'];pid_rss=max(0,int(f[21]))*os.sysconf('SC_PAGE_SIZE');rss+=pid_rss;observed[pid]['peak_rss_bytes']=max(observed[pid].get('peak_rss_bytes',0),pid_rss);observed[pid]['peak_virtual_bytes']=max(observed[pid].get('peak_virtual_bytes',0),int(f[20]));sample_rows.append([pid,row['start'],row['ppid'],row['group'],pid_rss,int(f[11])+int(f[12]),int(f[20])])
   cpu=sum(r['peak_cpu_ticks'] for r in observed.values())/os.sysconf('SC_CLK_TCK');report['observed_peak_rss']=max(report['observed_peak_rss'],rss);report['observed_cpu_seconds']=cpu
   need(time.monotonic()<caps['job_deadline_monotonic'],'global wall cap')
-  need(cpu+caps['prior_child_cpu_seconds']+time.process_time()-caps['job_process_cpu_started']<=3600,'global charged CPU cap')
+  need(cpu+caps['prior_child_cpu_seconds']+time.process_time()-caps['job_process_cpu_started']<=caps.get('job_cpu_budget_seconds',3600),'global charged CPU cap')
   available=host_checks.available_memory();need(available>=1<<30,'actual memory reserve');reserve_warning=available<1024**3;report['minimum_MemAvailable_bytes']=min(report.get('minimum_MemAvailable_bytes',available),available);report['memory_reserve_warning_samples']=report.get('memory_reserve_warning_samples',0)+int(reserve_warning)
   telemetry.write(json.dumps({'elapsed':time.monotonic()-started,'aggregate_rss_bytes':rss,'processes':sample_rows,'MemAvailable_bytes':available,'reserve_below_1GiB_warning':reserve_warning},separators=(',',':'))+'\n')
   if telemetry_policy is None:telemetry.flush();need(telemetry.tell()<=64*1024*1024,'RSS telemetry 64MiB cap')

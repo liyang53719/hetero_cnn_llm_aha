@@ -1,0 +1,85 @@
+name: hetero-p0-header-repair-41720209902-only
+on:
+  push:
+    branches: [main]
+    paths: [ci_launch/p0_portable_header_repair_41720209902_once.json]
+permissions:
+  contents: read
+concurrency:
+  group: hetero-exclusive-numeric-bootstrap
+  cancel-in-progress: false
+jobs:
+  header_only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONNOUSERSITE: '1'
+    steps:
+      - name: Start original 180-second controller clock
+        run: |
+          set -euo pipefail
+          python3 -B - <<'PY'
+          import json, os, pathlib, time
+          with (pathlib.Path(os.environ['RUNNER_TEMP']) / 'p0-header-repair-start.json').open('x') as f:
+              json.dump(dict(schema='P0_HEADER_REPAIR_START_V1', run_id=int(os.environ['GITHUB_RUN_ID']), launch_commit=os.environ['GITHUB_SHA'], started_monotonic=time.monotonic(), job_budget_seconds=180), f)
+              f.write('\n')
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 2
+      - name: Admit one repair launch linked to failed run41720209902
+        id: launch
+        run: python3 -S -B candidates/p0_portable_reference_20261103/default_v1/validate_header_repair_launch.py
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ steps.launch.outputs.source_sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Request only original 38536-byte header and verify twelve metadata rows
+        id: controller
+        run: |
+          set -euo pipefail
+          python3 -S -B candidates/p0_portable_reference_20261103/default_v1/run_header_repair.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --identity "$RUNNER_TEMP/p0-header-repair-identity.json" \
+            --job-start "$RUNNER_TEMP/p0-header-repair-start.json" \
+            --output "$RUNNER_TEMP/p0-header-repair-$GITHUB_RUN_ID"
+      - name: Check private terminal seal and three fixed safe JSON outputs
+        id: summary
+        if: ${{ always() && steps.launch.outputs.source_sha != '' }}
+        env:
+          CONTROLLER_OUTCOME: ${{ steps.controller.outcome }}
+        run: |
+          set -euo pipefail
+          python3 -S -B - <<'PY'
+          import os, pathlib, sys
+          try:
+              source = pathlib.Path('candidates/p0_portable_reference_20261103/default_v1').resolve()
+              sys.path.insert(0, str(source))
+              from fixture_gate import frozen, strict_json
+              from header_repair_export import verify_sealed
+              frozen()
+              root = pathlib.Path(os.environ['RUNNER_TEMP'])
+              identity = strict_json(root / 'p0-header-repair-identity.json')
+              verify_sealed(root / ('p0-header-repair-' + os.environ['GITHUB_RUN_ID']), identity, os.environ['CONTROLLER_OUTCOME'])
+          except BaseException:
+              raise SystemExit('EXPORT_SCHEMA') from None
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ always() && steps.summary.outcome == 'success' }}
+        with:
+          name: p0-header-repair-safe-json-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/p0-header-repair-${{ github.run_id }}/export/RESULT.json
+            ${{ runner.temp }}/p0-header-repair-${{ github.run_id }}/export/CHECKS.json
+            ${{ runner.temp }}/p0-header-repair-${{ github.run_id }}/export/HOST_RESOURCES.json
+          if-no-files-found: error
+          retention-days: 14
+          overwrite: false
+# DORMANT: no repair activation nonce is included in source publication.
+# Exact historical header only. No runtime install, weights, Torch, reference, RoPE or EDA.
+# No headers/body/signed URLs/raw logs are exported; only the three exact JSON files.
+# PASS_HEADER_ONLY proves this request and metadata, never original failure cause or numerics.

@@ -24,7 +24,7 @@ WEIGHT_BYTES = 93595648
 MAX_BLOCK = 8 << 20
 # Exact service endpoints only, not arbitrary suffix matches or HTTP downgrades.
 HOSTS = {'huggingface.co', 'cdn-lfs.huggingface.co', 'cdn-lfs-us-1.huggingface.co',
-         'cdn-lfs.hf.co', 'cdn-lfs-us-1.hf.co', 'cas-bridge.xethub.hf.co'}
+         'cdn-lfs.hf.co', 'cdn-lfs-us-1.hf.co', 'cas-bridge.xethub.hf.co', 'us.aws.cdn.hf.co'}
 
 
 def weight_check(ok, reason='PRECHECK_PIN', mismatch=False):

@@ -17,7 +17,7 @@ def verify_source(repo, expected):
     need(type(data['files']) is dict and 10 <= len(data['files']) <= 64, 'PRECHECK_PIN')
     for relative, record in data['files'].items():
         p = Path(relative)
-        need(not p.is_absolute() and '..' not in p.parts and (relative.startswith(RELATIVE + '/') or relative == '.github/workflows/hetero-p0-portable-reference-default.yml'), 'PRECHECK_PIN')
+        need(not p.is_absolute() and '..' not in p.parts and (relative.startswith(RELATIVE + '/') or relative in ('.github/workflows/hetero-p0-portable-reference-default.yml', '.github/workflows/hetero-p0-header-repair-41720209902.yml')), 'PRECHECK_PIN')
         need(set(record) == {'bytes', 'sha256'} and type(record['bytes']) is int and 0 < record['bytes'] <= 1 << 20, 'PRECHECK_PIN')
         target = repo / p
         for node in (target, *target.parents):

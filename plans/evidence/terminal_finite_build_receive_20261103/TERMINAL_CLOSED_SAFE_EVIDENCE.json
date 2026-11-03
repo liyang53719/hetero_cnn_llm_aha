@@ -1,0 +1,81 @@
+{
+  "schema": "P0_TERMINAL_V2_CLOSED_DIAGNOSTIC_SAFE_V1",
+  "execution_id": "0e2afe02-8e29-4aae-921f-b37f865c2e7d",
+  "status": "FAIL_OR_INCOMPLETE",
+  "numerical_pass": false,
+  "full_block_model_passes": 0,
+  "final_rtl_passes": 0,
+  "terminal_summary": {
+    "schema_sha256": "10ef123a49d3490454b9f62ceb2ec63a1ac7325eb688cb001729b68af3c1fde4",
+    "sample_valid": "1",
+    "accepted_samples": "11",
+    "cycle": "852611",
+    "active_cycle": "852606",
+    "pc": "1",
+    "completions": "1",
+    "ng": "160",
+    "context": "0",
+    "result_last": "1",
+    "result_error": "0",
+    "mapping": "SUPPORTED",
+    "words": "4096",
+    "finite": "2400",
+    "nan": "1632",
+    "positive_infinity": "34",
+    "negative_infinity": "30",
+    "effective_words": "4096",
+    "padding_words": "0",
+    "unknown_region_words": "0",
+    "nonfinite_effective": "1696",
+    "nonfinite_padding": "0",
+    "nonfinite_unknown_region": "0",
+    "first_nonfinite_index": "0",
+    "first_nonfinite_kind": "NAN",
+    "first_nonfinite_region": "EFFECTIVE",
+    "fault_pc": "1",
+    "fault_at_target_pc": "1"
+  },
+  "supervisor": {
+    "native_exit": 2,
+    "errors": [],
+    "elapsed_seconds": 5061.944072602957,
+    "observed_peak_rss": 262377472,
+    "minimum_MemAvailable_bytes": 8514473984,
+    "peak_tree_bytes": 8221836022
+  },
+  "cleanup": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+  "pipe_eof": true,
+  "gzip_crc_verified": true,
+  "evidence_sha256": {
+    "FLOW_RESULT.json": "a95dd89187f9e6b4b0f419ac0f882f718f6b9dd65a0720bc9139d40655fa9c44",
+    "materials/numeric/RESULT.json": "5d2645955ba03ebc6b4addfe8e2c3b8a45e3fc7f3010bb8b8fa942c5539e6275",
+    "materials/numeric/profile0/material/dut_result/RESULT.json": "952ac53d2a8a8345630333eb76f1ae4521e4b953ee12e24ae6877f2faae7a3fe",
+    "materials/numeric/profile0/material/dut_result/profile0.log": "22fee4d3db2e6160c95f5ffccd2f30861f8e76782048937821ecc62f3620b40d",
+    "materials/numeric/runs/p0_dut/RESULT.json": "88fc58acd3fefab25d1d54aa6f1d72ab8c2448a32398e94a9bf4cf25e74bce16"
+  },
+  "interpretation": "ACTUAL_EFFECTIVE_TERMINAL_NONFINITE_NOT_PADDING; UPSTREAM_ARITHMETIC_ROOT_CAUSE_NOT_ESTABLISHED",
+  "independent_posthoc_norm_comparison": {
+    "fp32_words": 196608,
+    "bytes": 786432,
+    "sha256": "ddee5fd75094777c51ef1104c7a18dfe527fef9de2a24646aad1d83160a6e421",
+    "status": "EXACT_BF16_REFERENCE_TO_FP32_EXPANSION_MATCH",
+    "original_consumer_comparisons_executed": false
+  },
+  "old_three_v1_lines_exact_match": true,
+  "first_nonfinite_index_scope": "ORDERED_INDEX_IN_THIS_ACCEPTED_SAMPLE_NOT_FIRST_TEMPORAL_GENERATION",
+  "independent_review_sha256": "b95369096c87abfc12ab2cfa5886b6832a24dbbec863cbf6b307fddee94fd055",
+  "source_mapping": {
+    "operation": "l0.q",
+    "ng": 160,
+    "context": 0,
+    "scope": "FIRST_K_PARTIAL_NOT_FINAL_QRAW_DOT",
+    "k_range": [
+      0,
+      1024
+    ],
+    "pair_reverse": true,
+    "first_physical_index_logical_token": 0,
+    "first_physical_index_logical_channel": 160,
+    "root_cause": "NOT_ESTABLISHED"
+  }
+}

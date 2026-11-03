@@ -874,3 +874,15 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 原 nonDUT 1GiB / consumer512MiB、未知旧owner5GiB、DUT实时8GiB门全部保留。00:47即时tmpfs279244800 + consumer536870912 +额外134217728 B满足1GiB；MemAvailable8932265984 B；磁盘余量12449554432 B满足原门。该快照仅允许进入原prepare，绝非预授DUT通过。
 - 新资源review `ab721dc582843febc37991beba95d9e701631266d38f554cd6f2bf821939fa4b`，11输入及executor Git闭包独审通过；唯一 invocation SHA `946788d0109a005127cd46e40f3be76459d94502484615483f7f0eac1a999015`，execution ID仍 `0e2afe02-8e29-4aae-921f-b37f865c2e7d`。00:47原prepare入口已启动，处prestage/连接准备；尚无DUT数值结果。沿唯一身份追踪，不重建或重复启动。
 - 五块M128模型及最终RTL仍各0/5，无新增利用率。以上00:42 BLOCKED是历史真实状态，不回写成当时已准入。
+
+### 2026-11-03 02:15 UTC：唯一 terminal V2 原运行闭合 FAIL / 数值 INCOMPLETE
+
+- execution `0e2afe02-8e29-4aae-921f-b37f865c2e7d` 沿原session闭合，外层native2；DUT监督5061.944s、native2、errors为空，严格cleanup/EOF及gzip全解压CRC/hash完整。不是超时，也没有重启。新startup ABI与initialize/provider/transport/connect均真实native0闭合，仍非完整block数值通过。
+- 新实际terminal证据：active852606、pc1/completions1、ng160/context0、accepted_samples11、last1/error0；4096有效FP32字中finite2400、NaN1632、+Inf34、-Inf30，非有限有效字1696，padding/unknown均0；首个非有限physical index0为NaN。下一拍active852607产生DownOwnerNumerical8/resetRequired，与旧故障拍一致。确证真实terminal有效区已非有限，不能再归为padding误报；不能据此跳判首次产生NaN/Inf的具体算术步骤。
+- pc1源程序是 `l0.q`（n0×wq→qraw），不是FFN down；DownOwner为复用owner名。原TransposedDenseOwner映射下该tile为128行×输出列160..191，physical index0对应token0/channel160。下一步沿真实供数、FP32累加及中间值定位后修硬件，不改参考/容差，不重复EDA碰运气。
+- 观测RSS峰262377472 B、watched tree峰8221836022 B，最低MemAvailable8514473984 B低于8GiB入口阈值；入口准入不是持续峰值保证，未隐去该事实。无资源错误，所有原cap保持；未额外清理。
+- 本次是Chisel发射SV数值backend故障定位，不是冻结后的最终RTL回放。完整五块M128模型/最终RTL仍各0/5，无新增有效MAC利用率。仅交安全标量/hash，原张量、权重、ZIP及ELF不提交。
+
+- 独立事后 n0 精确比较通过（只限该中间值）：196608个FP32词/786432 B，与冻结BF16 norm参考按既定零扩展到FP32后逐字节相同，SHA `ddee5fd75094777c51ef1104c7a18dfe527fef9de2a24646aad1d83160a6e421`。原consumer在DUT rc检查失败处退出，没有执行comparisons；不可将独立事后比较冒充原consumer数值通过。新旧3条V1控制槽文本完全一致；terminal的first index是本次样本内索引顺序，不是时间上首次异常。
+
+- 源码进一步限定：第11个terminal属于第二ng的**第一K partial/context0**，不是最终qraw完整dot。Public21QkvReductionRouter固定K[0,1024)、[1024,1536)且pairReverse；DenseBlockReductionCoordinator每ng完成两partial+sum+drain后ng+=160。故该样本对应K顺序1,0,3,2,…1023,1022；先核ng0后的A复用、新B half装载及context clear，仍未确定唯一根因。

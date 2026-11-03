@@ -757,6 +757,329 @@ REVIEWED_FIRST_FAULT_INVERSE = {'controller/cloud_flow.py': [('d27e6a891963716c4
                                '    roots = list(dict.fromkeys(roots))',
                                '']]}
 
+
+# Fixed independently reviewed V2 host deltas; not a new historical baseline.
+
+# Fixed source-reviewed V3 delta, layered before the unchanged V2 inverse.
+
+# Exact aggregate-cap layer; every prior inverse and baseline stays unchanged.
+REVIEWED_AGGREGATE_CAP_INVERSE = {'controller/cloud_flow.py': [('e3aa1f8d83294c141307ae458d8b6f4891364b5429b5a7393a7bed767841c619',
+                               "flow_result = dict(execution_context='CLOUD_EXECUTOR_V1', identity=identity, "
+                               'executor_identity=identity, artifact_identity=builder, '
+                               "builder_identity=builder, source_pins=b['source_pins'], "
+                               "executor_identity_pin=b['executor_identity_pin'], "
+                               "builder_handoff=b['builder_handoff'], "
+                               "artifact_manifest=b['artifact_manifest'], cloud_budget=b['cloud_budget'], "
+                               "execution_approval=b['execution_approval'], job_budget_seconds=limit, "
+                               'execution_binding=pin(binding_path), execution_admission=admission, '
+                               "execution_mode=admission['mode'], transport_exit_code=code, "
+                               'qualification=qualification, execution_policy=execution_policy, '
+                               "status=qualification['status'], "
+                               "scope='P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE' "
+                               "if admission['mode'] == 'P0_FIRST_FAULT_DIAGNOSTIC' else "
+                               "'MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL' if "
+                               "'model_candidate_review' in b else "
+                               "'CHISEL_TEST_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL', stages=history, "
+                               "retained_materials_scope=imported.get('retained_materials_verified', "
+                               "{}).get('scope'), upfront_disk_admission=disk_admission, "
+                               'numeric_result=pin(numeric_path), hardware_definitions=1, '
+                               'profiles=list(range(5)), uploaded_payloads=False, **{k: b[k] for k in '
+                               "('executor_adaptation', 'workspace_loader', 'retained_materials', "
+                               "'model_candidate_review', 'p0_provider_reuse', 'reference_data_reuse', "
+                               "'aggregate_tree_cap_bytes') if k in b}, "
+                               "**dict(stage_coverage_budget=b['stage_coverage_budget'], "
+                               "stage_coverage_budget_sha256=b['stage_coverage_budget']['sha256'], "
+                               "execution_scope='STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE') if "
+                               "admission['mode'] == 'STAGE_COVERAGE_DIAGNOSTIC' else {})\n"
+                               "if 'fullprefill_disk_budget' in budget:\n"
+                               '    final_bytes = len((json.dumps(flow_result, indent=2) + '
+                               "'\\n').encode('utf-8'))\n"
+                               '    need(final_bytes <= '
+                               "budget['fullprefill_disk_budget']['shared_output_reservations']['final_evidence_bytes'], "
+                               "'finite FULL final evidence fits reviewed reservation')\n"
+                               "    final_snapshot = mod('cloud_final_live_budget', "
+                               'census_path).census(roots, max_entries=150000, max_seconds=60)\n'
+                               "    need(final_snapshot['bytes'] + final_bytes <= tree_cap and "
+                               "final_snapshot['free_bytes'] - final_bytes >= 8 << 30, 'finite FULL final "
+                               "lifetime bytes and8GiB floor')\n"
+                               "save(job / 'FLOW_RESULT.json', flow_result)",
+                               'c7b64431c8013d5cce3b29849b80cef0ab40665c836584de248f5cc58b73fa75',
+                               "save(job / 'FLOW_RESULT.json', dict(execution_context='CLOUD_EXECUTOR_V1', "
+                               'identity=identity, executor_identity=identity, artifact_identity=builder, '
+                               "builder_identity=builder, source_pins=b['source_pins'], "
+                               "executor_identity_pin=b['executor_identity_pin'], "
+                               "builder_handoff=b['builder_handoff'], "
+                               "artifact_manifest=b['artifact_manifest'], cloud_budget=b['cloud_budget'], "
+                               "execution_approval=b['execution_approval'], job_budget_seconds=limit, "
+                               'execution_binding=pin(binding_path), execution_admission=admission, '
+                               "execution_mode=admission['mode'], transport_exit_code=code, "
+                               'qualification=qualification, execution_policy=execution_policy, '
+                               "status=qualification['status'], "
+                               "scope='P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE' "
+                               "if admission['mode'] == 'P0_FIRST_FAULT_DIAGNOSTIC' else "
+                               "'MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL' if "
+                               "'model_candidate_review' in b else "
+                               "'CHISEL_TEST_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL', stages=history, "
+                               "retained_materials_scope=imported.get('retained_materials_verified', "
+                               "{}).get('scope'), upfront_disk_admission=disk_admission, "
+                               'numeric_result=pin(numeric_path), hardware_definitions=1, '
+                               'profiles=list(range(5)), uploaded_payloads=False, **{k: b[k] for k in '
+                               "('executor_adaptation', 'workspace_loader', 'retained_materials', "
+                               "'model_candidate_review', 'p0_provider_reuse', 'reference_data_reuse', "
+                               "'aggregate_tree_cap_bytes') if k in b}, "
+                               "**dict(stage_coverage_budget=b['stage_coverage_budget'], "
+                               "stage_coverage_budget_sha256=b['stage_coverage_budget']['sha256'], "
+                               "execution_scope='STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE') if "
+                               "admission['mode'] == 'STAGE_COVERAGE_DIAGNOSTIC' else {}))"),
+                              ('6f6ea188db870206049043b2e4a733f2d4a8e7472ff50749c50375f2bd5727fb',
+                               "if 'fullprefill_disk_budget' in budget:\n"
+                               "    caps['min_free_disk_bytes'] = 8 << 30",
+                               '3543b4693a36a1098850b8bc928887694ed59a6deb7d3dfd0339de01f55a77b6',
+                               ''),
+                              ('061b497c1a36d2d2530ad83751f8c22ed3e9bd08edd2e957bb9411e2450f1fee',
+                               'disk_admission = upfront_disk_admission(snapshot, '
+                               "P(binding_path).with_name(P(binding_path).name + '.UPFRONT_DISK.json'), "
+                               'binding_sha, tree_cap=tree_cap, '
+                               "disk_plan=budget.get('fullprefill_disk_budget'))",
+                               '830f31807c87421b8f5177d9ca8e4af1391e2d3feac56ffb1b4d1a135cf002e2',
+                               'disk_admission = upfront_disk_admission(snapshot, '
+                               "P(binding_path).with_name(P(binding_path).name + '.UPFRONT_DISK.json'), "
+                               'binding_sha, tree_cap=tree_cap)'),
+                              ('d7dfcb07515411fc00161860f598974de872a116b73c5d24fcb46c45356c7be6',
+                               'def upfront_disk_admission(snapshot, evidence_path=None, binding_sha=None, '
+                               'tree_cap=TREE, disk_plan=None):\n'
+                               '    need(type(tree_cap) is int and (tree_cap in (TREE, 12037043872) if '
+                               "disk_plan is None else 0 < tree_cap <= TREE), 'explicit reviewed unchanged "
+                               "or tighter aggregate cap')\n"
+                               '    if disk_plan is not None:\n'
+                               "        mod('finite_disk_snapshot', D.parent / "
+                               "'cloud_budget.py').fullprefill_disk_snapshot(disk_plan, snapshot, tree_cap)\n"
+                               "    need(snapshot.get('schema') == 'SAMPLED_OWNED_LIVE_BYTES_V1' and "
+                               "snapshot.get('complete') is True, 'complete upfront watched-root census')\n"
+                               "    live = snapshot['bytes']\n"
+                               "    free = snapshot['free_bytes']\n"
+                               '    need(type(live) is int and 0 <= live <= tree_cap and (type(free) is int) '
+                               "and (free >= 0), 'bounded existing watched bytes/free')\n"
+                               '    incremental = tree_cap - live\n'
+                               '    required = incremental + (8 << 30)\n'
+                               '    if evidence_path is not None:\n'
+                               '        bounded = lambda v: v if type(v) is int and 0 <= v < 2 ** 64 else '
+                               'None\n'
+                               '        digest = binding_sha if isinstance(binding_sha, str) and '
+                               "len(binding_sha) == 64 and all((c in '0123456789abcdef' for c in "
+                               'binding_sha)) else None\n'
+                               "        save(evidence_path, dict(schema='CLOUD_UPFRONT_DISK_OBSERVATION_V1', "
+                               "scope='SAMPLED_PLANNING_ONLY_PHASE_GATES_UNCHANGED', binding_sha256=digest, "
+                               "census_schema='SAMPLED_OWNED_LIVE_BYTES_V1', census_complete=True, "
+                               'existing_watched_bytes=bounded(live), '
+                               'maximum_additional_bytes=bounded(incremental), free_reserve_bytes=8 << 30, '
+                               'required_free_bytes=bounded(required), observed_free_bytes=bounded(free), '
+                               'shortfall_bytes=bounded(max(0, required - free)), '
+                               "status='SUFFICIENT_SAMPLED_SPACE' if free >= required else "
+                               "'REJECTED_INSUFFICIENT_SAMPLED_SPACE', numerical_pass=False, "
+                               'job_created=False))\n'
+                               "    need(free >= required, 'remaining aggregate growth plus unchanged "
+                               "free8GiB')\n"
+                               '    return dict(existing_watched_bytes=live, '
+                               'maximum_additional_bytes=incremental, free_reserve_bytes=8 << 30, '
+                               'required_free_bytes=required, observed_free_bytes=free, '
+                               "scope='SAMPLED_PLANNING_ONLY_PHASE_GATES_UNCHANGED')",
+                               '954b92e949a5a5de0717163fad52e1f92e5c85402d5e1bc4e7c9859a8748fd1a',
+                               'def upfront_disk_admission(snapshot, evidence_path=None, binding_sha=None, '
+                               'tree_cap=TREE):\n'
+                               '    need(type(tree_cap) is int and tree_cap in (TREE, 12037043872), '
+                               "'explicit reviewed unchanged or tighter aggregate cap')\n"
+                               "    need(snapshot.get('schema') == 'SAMPLED_OWNED_LIVE_BYTES_V1' and "
+                               "snapshot.get('complete') is True, 'complete upfront watched-root census')\n"
+                               "    live = snapshot['bytes']\n"
+                               "    free = snapshot['free_bytes']\n"
+                               '    need(type(live) is int and 0 <= live <= tree_cap and (type(free) is int) '
+                               "and (free >= 0), 'bounded existing watched bytes/free')\n"
+                               '    incremental = tree_cap - live\n'
+                               '    required = incremental + (8 << 30)\n'
+                               '    if evidence_path is not None:\n'
+                               '        bounded = lambda v: v if type(v) is int and 0 <= v < 2 ** 64 else '
+                               'None\n'
+                               '        digest = binding_sha if isinstance(binding_sha, str) and '
+                               "len(binding_sha) == 64 and all((c in '0123456789abcdef' for c in "
+                               'binding_sha)) else None\n'
+                               "        save(evidence_path, dict(schema='CLOUD_UPFRONT_DISK_OBSERVATION_V1', "
+                               "scope='SAMPLED_PLANNING_ONLY_PHASE_GATES_UNCHANGED', binding_sha256=digest, "
+                               "census_schema='SAMPLED_OWNED_LIVE_BYTES_V1', census_complete=True, "
+                               'existing_watched_bytes=bounded(live), '
+                               'maximum_additional_bytes=bounded(incremental), free_reserve_bytes=8 << 30, '
+                               'required_free_bytes=bounded(required), observed_free_bytes=bounded(free), '
+                               'shortfall_bytes=bounded(max(0, required - free)), '
+                               "status='SUFFICIENT_SAMPLED_SPACE' if free >= required else "
+                               "'REJECTED_INSUFFICIENT_SAMPLED_SPACE', numerical_pass=False, "
+                               'job_created=False))\n'
+                               "    need(free >= required, 'remaining aggregate growth plus unchanged "
+                               "free8GiB')\n"
+                               '    return dict(existing_watched_bytes=live, '
+                               'maximum_additional_bytes=incremental, free_reserve_bytes=8 << 30, '
+                               'required_free_bytes=required, observed_free_bytes=free, '
+                               "scope='SAMPLED_PLANNING_ONLY_PHASE_GATES_UNCHANGED')")]}
+PRE_AGGREGATE_AST_SHA256 = {'controller/cloud_flow.py': '8b0ded17c7ffbeddd6d098ca6ca90e883606232c9be8e4ad48ff9f2c07a28bed'}
+
+def undo_reviewed_aggregate_cap_delta(test,tree,relative):
+ # Only exact approved aggregate-cap fragments, in reverse source order, before
+ # finite-log/V3/V2/history and before their mutation or duplicate fixtures.
+ import copy
+ tree=copy.deepcopy(tree)
+ for digest,new_text,old_digest,old_text in REVIEWED_AGGREGATE_CAP_INVERSE.get(relative,()):
+  want=ast.parse(new_text).body;replacement=ast.parse(old_text).body
+  fingerprint=lambda body:hashlib.sha256(ast.dump(ast.Module(body=body,type_ignores=[]),include_attributes=False).encode()).hexdigest()
+  test.assertEqual(fingerprint(want),digest,'fixed approved aggregate-cap fragment')
+  test.assertEqual(fingerprint(replacement),old_digest,'fixed pre-aggregate replacement')
+  want_dump=[ast.dump(n,include_attributes=False)for n in want];matches=[]
+  def visit(node):
+   for field,value in ast.iter_fields(node):
+    if isinstance(value,list):
+     for i in range(len(value)-len(want)+1):
+      if all(isinstance(n,ast.AST)for n in value[i:i+len(want)])and [ast.dump(n,include_attributes=False)for n in value[i:i+len(want)]]==want_dump:matches.append((value,i))
+     for item in value:
+      if isinstance(item,ast.AST):visit(item)
+    elif isinstance(value,ast.AST):visit(value)
+  visit(tree)
+  test.assertEqual(len(matches),1,'one exact aggregate-cap fragment: '+digest)
+  container,index=matches[0];container[index:index+len(want)]=copy.deepcopy(replacement)
+ return tree
+
+REVIEWED_V3_INVERSE = {'controller/cloud_flow.py': [('ae46be8c44f19e9f505128b511499d6089c69065b3f80270e111ff1514aac0ef',
+                               "if admission.get('budget_version') in (2, 3):\n"
+                               "    path = D.parent / 'execution_mode.py'\n"
+                               "    need(pins.get(str(path)) == sha(path), 'V2 parent CPU verifier source "
+                               "pin')\n"
+                               "    parent_cpu_policy = mod('cloud_full_parent_cpu', "
+                               'path).install_full_v2_parent_cpu_limit(admission, limit)',
+                               '31df4786460a13ca6bcd1e1569bc32267407633159107cb034efa18f34cd09d4',
+                               "if admission.get('budget_version') == 2:\n"
+                               "    path = D.parent / 'execution_mode.py'\n"
+                               "    need(pins.get(str(path)) == sha(path), 'V2 parent CPU verifier source "
+                               "pin')\n"
+                               "    parent_cpu_policy = mod('cloud_full_parent_cpu', "
+                               'path).install_full_v2_parent_cpu_limit(admission, limit)',
+                               17),
+                              ('e7ca15582c3173b52ab729169a3d0f1153af3265e3fdd37036dbeb4523e85691',
+                               "if admission.get('budget_version') == 3:\n"
+                               '    expected_profiles = set(map(str, '
+                               'verifier.ready_queue_profiles(admission)))',
+                               '3543b4693a36a1098850b8bc928887694ed59a6deb7d3dfd0339de01f55a77b6',
+                               '',
+                               16)]}
+PRE_V3_AST_SHA256 = {'controller/cloud_flow.py': 'a3464884eb5ee27b7122c74541741e47d6295b9c80af2589b209aebd2941469e'}
+
+def undo_reviewed_v3_delta(test,tree,relative):
+ # Reverse only the exact reviewed V3 fragments, in reverse author order,
+ # before the unchanged V2 and older inverses or their negative fixtures.
+ import copy
+ tree=copy.deepcopy(tree)
+ for digest,new_text,old_digest,old_text,author_index in REVIEWED_V3_INVERSE.get(relative,()):
+  want=ast.parse(new_text).body;replacement=ast.parse(old_text).body
+  fingerprint=lambda body:hashlib.sha256(ast.dump(ast.Module(body=body,type_ignores=[]),include_attributes=False).encode()).hexdigest()
+  test.assertEqual(fingerprint(want),digest,'fixed reviewed V3 fragment')
+  test.assertEqual(fingerprint(replacement),old_digest,'fixed pre-V3 replacement')
+  want_dump=[ast.dump(n,include_attributes=False)for n in want];matches=[]
+  def visit(node):
+   for field,value in ast.iter_fields(node):
+    if isinstance(value,list):
+     for i in range(len(value)-len(want)+1):
+      if all(isinstance(n,ast.AST)for n in value[i:i+len(want)])and [ast.dump(n,include_attributes=False)for n in value[i:i+len(want)]]==want_dump:matches.append((value,i))
+     for item in value:
+      if isinstance(item,ast.AST):visit(item)
+    elif isinstance(value,ast.AST):visit(value)
+  visit(tree)
+  test.assertEqual(len(matches),1,'one exact reviewed V3 fragment: '+digest)
+  container,index=matches[0];container[index:index+len(want)]=copy.deepcopy(replacement)
+ return tree
+
+REVIEWED_V2_INVERSE = {'controller/cloud_flow.py': [('9f04a054f91ce500ad5d6277b1e105e493cc09729e298596873e16c9d8c54848',
+                               'ceiling = 20000\n'
+                               "if 'budget_version' in admission:\n"
+                               "    path = D.parent / 'execution_mode.py'\n"
+                               "    need(b['pins'].get(str(path)) == sha(path), 'V2 reservation verifier "
+                               "source pin')\n"
+                               "    verifier = mod('cloud_full_watchdog_reservation', path)\n"
+                               '    ceiling = verifier.profile_wall_ceiling(admission)\n'
+                               'need(set(cal) == expected_profiles and all((type(x) is int and 0 < x <= '
+                               "ceiling for x in cal.values())), 'all five explicit unchanged-stimulus "
+                               "execution windows')",
+                               '41388bf815a5772dd357ae6aa91566e622efe11bffa7cb2fe34a072ad2c9f92d',
+                               'need(set(cal) == expected_profiles and all((type(x) is int and 0 < x <= '
+                               "20000 for x in cal.values())), 'all five explicit unchanged-stimulus "
+                               "calibration windows')"),
+                              ('20f253392ccd25b4c799dc13acd332db73df8afeff791b21465d3b39f013f73b',
+                               "reserved = verifier.profile_reserved_seconds(admission) if 'budget_version' "
+                               'in admission else cal\n'
+                               "tail = sum(reserved.values()) + 7 * q['provider'] + 11 * 120 + 1530 + "
+                               "q['parent']",
+                               '72ccda91da816d092ffa247de9115e7e2ccf91126607226c4c87f5cf23cbb1f9',
+                               "tail = sum(cal.values()) + 7 * q['provider'] + 11 * 120 + 1530 + "
+                               "q['parent']"),
+                              ('36d956d6c1ec7b5bc58a43f89983d5c1d3b213dafc4fb52bca15f69d64f6eb33',
+                               'roots = list(dict.fromkeys([str(job), str(repo), '
+                               "*[str(P(b[k]['path']).parent) for k in ('artifact_manifest', "
+                               "'builder_handoff', 'executor_identity_pin', 'cloud_budget', "
+                               "'execution_approval', 'executor_adaptation', 'workspace_loader', "
+                               "'retained_materials', 'model_candidate_review', 'stage_coverage_budget', "
+                               "'full_block_budget') if b.get(k) is not None]]))",
+                               '1009a961dc429317db183e83665aed262217b25b2eb70ba7f20ac0bb02b45ebe',
+                               'roots = list(dict.fromkeys([str(job), str(repo), '
+                               "*[str(P(b[k]['path']).parent) for k in ('artifact_manifest', "
+                               "'builder_handoff', 'executor_identity_pin', 'cloud_budget', "
+                               "'execution_approval', 'executor_adaptation', 'workspace_loader', "
+                               "'retained_materials', 'model_candidate_review', 'stage_coverage_budget') if "
+                               'k in b]]))'),
+                              ('27e3a2b0bb103d898e609ebc3ac093d05e7e3ee394f83348b3d802b015c21d3c',
+                               "if b.get('full_block_budget') is not None:\n"
+                               "    full_doc = json.loads(P(b['full_block_budget']['path']).read_text())\n"
+                               "    for evidence in full_doc['basis'].values():\n"
+                               "        parent = str(P(evidence['path']).parent)\n"
+                               '        if parent not in roots:\n'
+                               '            roots.append(parent)',
+                               '3543b4693a36a1098850b8bc928887694ed59a6deb7d3dfd0339de01f55a77b6',
+                               ''),
+                              ('6dc47e62ce796f55c05eb733d9020fc2d952701b9569f01b1431850e8d2a9530',
+                               'parent_cpu_policy = None\n'
+                               "if admission.get('budget_version') == 2:\n"
+                               "    path = D.parent / 'execution_mode.py'\n"
+                               "    need(pins.get(str(path)) == sha(path), 'V2 parent CPU verifier source "
+                               "pin')\n"
+                               "    parent_cpu_policy = mod('cloud_full_parent_cpu', "
+                               'path).install_full_v2_parent_cpu_limit(admission, limit)',
+                               '3543b4693a36a1098850b8bc928887694ed59a6deb7d3dfd0339de01f55a77b6',
+                               ''),
+                              ('1ec9f7313f129e63fb0099489ff82bd709657574b5620bd39006e795e1aba125',
+                               'if parent_cpu_policy is not None:\n'
+                               "    save(job / 'bindings/FULL_V2_PARENT_CPU_LIMIT.json', parent_cpu_policy)",
+                               '3543b4693a36a1098850b8bc928887694ed59a6deb7d3dfd0339de01f55a77b6',
+                               '')]}
+PRE_V2_AST_SHA256 = {'controller/cloud_flow.py': 'c13b49f746d533261dcb0debf381364bdf9c717ce81cbe876fe4a9c2c559f90d'}
+
+def undo_reviewed_v2_delta(test,tree,relative):
+ # Exact reviewed V2 host fragments only. This inverse runs before all historical
+ # inverses and before constructing their mutation/duplicate fixtures.
+ import copy
+ tree=copy.deepcopy(tree)
+ for digest,new_text,old_digest,old_text in REVIEWED_V2_INVERSE.get(relative,()):
+  want=ast.parse(new_text).body;replacement=ast.parse(old_text).body
+  fingerprint=lambda body:hashlib.sha256(ast.dump(ast.Module(body=body,type_ignores=[]),include_attributes=False).encode()).hexdigest()
+  test.assertEqual(fingerprint(want),digest,'fixed reviewed V2 fragment')
+  test.assertEqual(fingerprint(replacement),old_digest,'fixed pre-V2 replacement')
+  want_dump=[ast.dump(n,include_attributes=False)for n in want];matches=[]
+  def visit(node):
+   for field,value in ast.iter_fields(node):
+    if isinstance(value,list):
+     for i in range(len(value)-len(want)+1):
+      if all(isinstance(n,ast.AST)for n in value[i:i+len(want)])and [ast.dump(n,include_attributes=False)for n in value[i:i+len(want)]]==want_dump:matches.append((value,i))
+     for item in value:
+      if isinstance(item,ast.AST):visit(item)
+    elif isinstance(value,ast.AST):visit(value)
+  visit(tree)
+  test.assertEqual(len(matches),1,'one exact reviewed V2 fragment: '+digest)
+  container,index=matches[0];container[index:index+len(want)]=copy.deepcopy(replacement)
+ return tree
+
 FIRST_FAULT_FLOW_SCOPE_EXPRESSION="'P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE' if admission['mode'] == 'P0_FIRST_FAULT_DIAGNOSTIC' else 'MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL' if 'model_candidate_review' in b else 'CHISEL_TEST_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL'"
 FIRST_FAULT_FLOW_SCOPE_AST_SHA256='7c1de0423b45634c9b1ee7f4cbf706794aab8548086ebd0125f124a231ac3f93'
 def undo_first_fault_flow_scope(test,tree):
@@ -866,7 +1189,9 @@ class Tests(unittest.TestCase):
  def test_actual_call_is_binding_sibling_before_job_creation(self):
   text=(D/'controller/cloud_flow.py').read_text();self.assertIn("P(binding_path).with_name(P(binding_path).name+'.UPFRONT_DISK.json'),binding_sha",text);self.assertLess(text.index(' disk_admission=upfront_disk_admission('),text.index(' job.mkdir()'))
  def test_only_diagnostic_delta_ast(self):
-  tree=ast.parse((D/'controller/cloud_flow.py').read_text())
+  self.check_original_ast(undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,ast.parse((D/'controller/cloud_flow.py').read_text()),'controller/cloud_flow.py'),'controller/cloud_flow.py'))
+ def check_original_ast(self,tree):
+  tree=undo_reviewed_v2_delta(self,tree,'controller/cloud_flow.py')
   tree=undo_reviewed_stage_delta(self,tree,'controller/cloud_flow.py')
   definitions=[n for n in ast.walk(tree)if isinstance(n,ast.FunctionDef)and n.name=='upfront_disk_admission']
   calls=[n for n in ast.walk(tree)if isinstance(n,ast.Call)and isinstance(n.func,ast.Name)and n.func.id=='upfront_disk_admission']
@@ -883,9 +1208,9 @@ class InverseNegativeTests(unittest.TestCase):
  def test_reviewed_delta_mutation_and_duplicate_rejected(self):
   for relative,rows in REVIEWED_STAGE_INVERSE.items():
    root=D.parent if D.name=='numeric'else D
-   original=ast.parse((root/relative).read_text())
+   original=undo_reviewed_v2_delta(self,undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,ast.parse((root/relative).read_text()),relative),relative),relative)
    # An additional copy cannot silently disappear: unique match count must fail.
-   duplicate=ast.parse((root/relative).read_text());duplicate.body.extend(ast.parse(rows[0][1]).body)
+   duplicate=undo_reviewed_v2_delta(self,undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,ast.parse((root/relative).read_text()),relative),relative),relative);duplicate.body.extend(ast.parse(rows[0][1]).body)
    with self.subTest(relative=relative,case='duplicate'),self.assertRaises(AssertionError):undo_reviewed_stage_delta(self,duplicate,relative)
    # Mutating the stage discriminator anywhere is not accepted as the reviewed delta.
    hit=False
@@ -901,8 +1226,8 @@ class ReferenceInverseNegativeTests(unittest.TestCase):
  def test_reference_gate_mutation_and_duplicate_rejected(self):
   for relative,rows in REVIEWED_REFERENCE_INVERSE.items():
    root=D.parent if D.name=='numeric'else D
-   original=ast.parse((root/relative).read_text())
-   duplicate=ast.parse((root/relative).read_text());duplicate.body.extend(ast.parse(rows[0][1]).body)
+   original=undo_reviewed_v2_delta(self,undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,ast.parse((root/relative).read_text()),relative),relative),relative)
+   duplicate=undo_reviewed_v2_delta(self,undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,ast.parse((root/relative).read_text()),relative),relative),relative);duplicate.body.extend(ast.parse(rows[0][1]).body)
    with self.subTest(relative=relative,case='duplicate'),self.assertRaises(AssertionError):undo_reviewed_reference_delta(self,duplicate,relative)
    hit=False
    for n in ast.walk(original):
@@ -915,11 +1240,11 @@ class FirstFaultInverseNegativeTests(unittest.TestCase):
  def test_exact_first_fault_snippets_changed_or_duplicate_fail(self):
   import copy
   for relative,rows in REVIEWED_FIRST_FAULT_INVERSE.items():
-   raw=(D/relative).read_text()
+   raw=(D/relative).read_text();normalized=undo_reviewed_v2_delta(self,undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,ast.parse(raw),relative),relative),relative)
    for digest,new_text,old_text in rows:
-    duplicate=ast.parse(raw);duplicate.body.extend(ast.parse(new_text).body)
+    duplicate=copy.deepcopy(normalized);duplicate.body.extend(ast.parse(new_text).body)
     with self.subTest(relative=relative,digest=digest,case='duplicate'),self.assertRaises(AssertionError):undo_reviewed_first_fault_delta(self,duplicate,relative)
-   changed=ast.parse(raw);hits=0
+   changed=copy.deepcopy(normalized);hits=0
    for n in ast.walk(changed):
     if isinstance(n,ast.Constant)and n.value=='P0_FIRST_FAULT_DIAGNOSTIC':n.value='UNREVIEWED_FIRST_FAULT';hits+=1
     elif isinstance(n,ast.Attribute)and n.attr=='FIRST_FAULT':n.attr='UNREVIEWED_FIRST_FAULT';hits+=1
@@ -933,5 +1258,116 @@ class FlowScopeInverseNegativeTests(unittest.TestCase):
  def test_mutated_scope_rejected(self):
   tree=ast.parse('x='+FIRST_FAULT_FLOW_SCOPE_EXPRESSION.replace('P0_FIRST_FAULT_DIAGNOSTIC','UNREVIEWED_MODE'))
   with self.assertRaises(AssertionError):undo_first_fault_flow_scope(self,tree)
+
+
+class V2InverseNegativeTests(unittest.TestCase):
+ def test_v2_restores_exact_pre_v2_source_ast(self):
+  for relative,wanted in PRE_V2_AST_SHA256.items():
+   tree=undo_reviewed_v2_delta(self,undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,ast.parse((D/relative).read_text()),relative),relative),relative)
+   with self.subTest(relative=relative):self.assertEqual(hashlib.sha256(ast.dump(tree,include_attributes=False).encode()).hexdigest(),wanted)
+ def test_each_v2_fragment_missing_mutated_or_duplicated_is_rejected(self):
+  import copy
+  for relative,rows in REVIEWED_V2_INVERSE.items():
+   for digest,new_text,old_digest,old_text in rows:
+    want=ast.parse(new_text).body;want_dump=[ast.dump(n,include_attributes=False)for n in want]
+    for case in ('missing','mutated','duplicate'):
+     tree=undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,ast.parse((D/relative).read_text()),relative),relative);hits=[]
+     for parent in ast.walk(tree):
+      for field,value in ast.iter_fields(parent):
+       if isinstance(value,list):
+        for i in range(len(value)-len(want)+1):
+         if all(isinstance(n,ast.AST)for n in value[i:i+len(want)])and [ast.dump(n,include_attributes=False)for n in value[i:i+len(want)]]==want_dump:hits.append((value,i))
+     self.assertEqual(len(hits),1);container,index=hits[0]
+     if case=='missing':del container[index:index+len(want)]
+     elif case=='duplicate':container[index:index]=copy.deepcopy(want)
+     else:
+      names=[n for node in container[index:index+len(want)]for n in ast.walk(node)if isinstance(n,ast.Name)]
+      self.assertTrue(names);names[0].id='UNREVIEWED_V2_MUTATION'
+     with self.subTest(relative=relative,digest=digest,case=case),self.assertRaises(AssertionError):undo_reviewed_v2_delta(self,tree,relative)
+ def test_unrelated_caller_delta_survives_inverse_and_fails_old_baseline(self):
+  for relative in PRE_V2_AST_SHA256:
+   tree=undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,ast.parse((D/relative).read_text()),relative),relative);tree.body.extend(ast.parse('UNREVIEWED_CALLER_DELTA = 1').body)
+   before=ast.dump(tree,include_attributes=False)
+   restored=undo_reviewed_v2_delta(self,tree,relative)
+   self.assertEqual(ast.dump(tree,include_attributes=False),before,'V2 inverse preserves its caller input')
+   self.assertIn('UNREVIEWED_CALLER_DELTA',ast.unparse(restored))
+   with self.subTest(relative=relative),self.assertRaises(AssertionError)as caught:Tests().check_original_ast(tree)
+   self.assertIn(EXPECTED_BASE_AST,str(caught.exception),'unrelated delta fails the unchanged historical AST hash')
+   self.assertNotIn('one exact reviewed V2 fragment',str(caught.exception))
+
+
+class V3InverseNegativeTests(unittest.TestCase):
+ def test_v3_restores_exact_frozen_v2_source_ast(self):
+  for relative,wanted in PRE_V3_AST_SHA256.items():
+   tree=undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,ast.parse((D/relative).read_text()),relative),relative)
+   with self.subTest(relative=relative):self.assertEqual(hashlib.sha256(ast.dump(tree,include_attributes=False).encode()).hexdigest(),wanted)
+ def test_each_v3_fragment_missing_mutated_or_duplicated_is_rejected(self):
+  import copy
+  for relative,rows in REVIEWED_V3_INVERSE.items():
+   self.assertEqual([row[4]for row in rows],sorted((row[4]for row in rows),reverse=True),'reverse reviewed author order')
+   for digest,new_text,old_digest,old_text,author_index in rows:
+    want=ast.parse(new_text).body;want_dump=[ast.dump(n,include_attributes=False)for n in want]
+    for case in ('missing','mutated','duplicate'):
+     tree=undo_reviewed_aggregate_cap_delta(self,ast.parse((D/relative).read_text()),relative);hits=[]
+     for parent in ast.walk(tree):
+      for field,value in ast.iter_fields(parent):
+       if isinstance(value,list):
+        for i in range(len(value)-len(want)+1):
+         if all(isinstance(n,ast.AST)for n in value[i:i+len(want)])and [ast.dump(n,include_attributes=False)for n in value[i:i+len(want)]]==want_dump:hits.append((value,i))
+     self.assertEqual(len(hits),1);container,index=hits[0]
+     if case=='missing':del container[index:index+len(want)]
+     elif case=='duplicate':container[index:index]=copy.deepcopy(want)
+     else:
+      names=[n for node in container[index:index+len(want)]for n in ast.walk(node)if isinstance(n,ast.Name)]
+      self.assertTrue(names);names[0].id='UNREVIEWED_V3_MUTATION'
+     with self.subTest(relative=relative,author_index=author_index,case=case),self.assertRaisesRegex(AssertionError,'one exact reviewed V3 fragment: '+digest):undo_reviewed_v3_delta(self,tree,relative)
+ def test_unrelated_caller_delta_reaches_unchanged_historical_baseline(self):
+  for relative in PRE_V3_AST_SHA256:
+   tree=undo_reviewed_aggregate_cap_delta(self,ast.parse((D/relative).read_text()),relative);tree.body.extend(ast.parse('UNREVIEWED_V3_CALLER_DELTA = 1').body)
+   before=ast.dump(tree,include_attributes=False);restored=undo_reviewed_v3_delta(self,tree,relative)
+   self.assertEqual(ast.dump(tree,include_attributes=False),before,'V3 inverse preserves its caller input')
+   self.assertIn('UNREVIEWED_V3_CALLER_DELTA',ast.unparse(restored))
+   with self.subTest(relative=relative),self.assertRaises(AssertionError)as caught:Tests().check_original_ast(restored)
+   self.assertIn(EXPECTED_BASE_AST,str(caught.exception),'unrelated delta fails original historical AST hash')
+   self.assertNotIn('one exact reviewed V3 fragment',str(caught.exception))
+   self.assertNotIn('one exact reviewed V2 fragment',str(caught.exception))
+
+
+class AggregateCapInverseTests(unittest.TestCase):
+ def test_aggregate_restores_exact_prior_source_ast(self):
+  for relative,wanted in PRE_AGGREGATE_AST_SHA256.items():
+   restored=undo_reviewed_aggregate_cap_delta(self,ast.parse((D/relative).read_text()),relative)
+   with self.subTest(relative=relative):self.assertEqual(hashlib.sha256(ast.dump(restored,include_attributes=False).encode()).hexdigest(),wanted)
+ def test_each_aggregate_fragment_missing_mutated_or_duplicated_rejected(self):
+  import copy
+  for relative,rows in REVIEWED_AGGREGATE_CAP_INVERSE.items():
+   for digest,new_text,old_digest,old_text in rows:
+    want=ast.parse(new_text).body;want_dump=[ast.dump(n,include_attributes=False)for n in want]
+    for case in ('missing','mutated','duplicate'):
+     tree=copy.deepcopy(ast.parse((D/relative).read_text()));hits=[]
+     for parent in ast.walk(tree):
+      for field,value in ast.iter_fields(parent):
+       if isinstance(value,list):
+        for i in range(len(value)-len(want)+1):
+         if all(isinstance(n,ast.AST)for n in value[i:i+len(want)])and [ast.dump(n,include_attributes=False)for n in value[i:i+len(want)]]==want_dump:hits.append((value,i))
+     self.assertEqual(len(hits),1);container,index=hits[0]
+     if case=='missing':del container[index:index+len(want)]
+     elif case=='duplicate':container[index:index]=copy.deepcopy(want)
+     else:
+      names=[n for node in container[index:index+len(want)]for n in ast.walk(node)if isinstance(n,ast.Name)]
+      self.assertTrue(names);names[0].id='UNREVIEWED_AGGREGATE_MUTATION'
+     with self.subTest(relative=relative,digest=digest,case=case),self.assertRaisesRegex(AssertionError,'one exact aggregate-cap fragment: '+digest):undo_reviewed_aggregate_cap_delta(self,tree,relative)
+ def test_unrelated_delta_reaches_original_historical_hash(self):
+  import copy
+  for relative in PRE_AGGREGATE_AST_SHA256:
+   tree=copy.deepcopy(ast.parse((D/relative).read_text()));tree.body.extend(ast.parse('UNREVIEWED_AGGREGATE_CALLER_DELTA = 1').body)
+   before=ast.dump(tree,include_attributes=False);restored=undo_reviewed_aggregate_cap_delta(self,tree,relative)
+   self.assertEqual(ast.dump(tree,include_attributes=False),before,'aggregate inverse preserves input')
+   self.assertIn('UNREVIEWED_AGGREGATE_CALLER_DELTA',ast.unparse(restored))
+   with self.subTest(relative=relative),self.assertRaises(AssertionError)as caught:Tests().check_original_ast(undo_reviewed_v3_delta(self,restored,relative))
+   self.assertIn(EXPECTED_BASE_AST,str(caught.exception),'original historical hash is rejection reason')
+   self.assertNotIn('one exact aggregate-cap fragment',str(caught.exception))
+   self.assertNotIn('one exact finite-log fragment',str(caught.exception))
+   self.assertNotIn('one exact reviewed V3 fragment',str(caught.exception))
 
 if __name__=='__main__':unittest.main()

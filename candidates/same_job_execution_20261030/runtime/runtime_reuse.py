@@ -40,7 +40,8 @@ def admit(b,current=False):
  need(0<=time.monotonic()-b['job_started_monotonic']<b['job_budget_seconds'],'runtime import executor deadline expired')
  need(b['stage_resources']==budget['stage_resources']and b['reserved_other_owner_bytes']==budget['reserved_other_owner_bytes']==5<<30,'same reviewed runtime role/unknown-owner reserve')
  if 'aggregate_tree_cap_bytes'in b or 'aggregate_tree_cap_bytes'in budget:
-  need(type(b.get('aggregate_tree_cap_bytes'))is int and b['aggregate_tree_cap_bytes']==budget.get('aggregate_tree_cap_bytes')==12037043872,'runtime exact reviewed aggregate cap')
+  cap=budget.get('aggregate_tree_cap_bytes')
+  need(type(b.get('aggregate_tree_cap_bytes'))is int and b['aggregate_tree_cap_bytes']==cap and (0<cap<=12_081_306_272 if 'fullprefill_disk_budget'in budget else cap==12037043872),'runtime exact reviewed aggregate cap')
  return budget
 
 def manifest(b):
@@ -133,11 +134,12 @@ def lease(manifest_path,expected_sha,job,profile,out):
 
 def phase_caps(b):
  role=b['stage_resources']['install'];wall=b['install_wall_seconds']
- tree_cap=12_081_306_272
+ tree_cap=12_081_306_272;disk_floor=1610612736
  if 'aggregate_tree_cap_bytes'in b:
-  tree_cap=admit(b)['aggregate_tree_cap_bytes']
+  budget=admit(b);tree_cap=budget['aggregate_tree_cap_bytes']
+  if 'fullprefill_disk_budget'in budget:disk_floor=8<<30
  need(type(wall)is int and 0<wall<=1800,'original finite import validation wall')
- return dict(wall_seconds=wall,cleanup_seconds=30,file_bytes=2<<30,tree_bytes=tree_cap,watch_tree_bytes=tree_cap,extra_watch_roots=b['owned_roots'],min_free_disk_bytes=1610612736,log_bytes=16777216,raw_log_bytes=33554432,max_entries=150000,per_process_as_bytes=role['as_bytes'],per_process_cpu_seconds=wall,rss_bytes=role['rss_bytes'],cpu_seconds=wall)
+ return dict(wall_seconds=wall,cleanup_seconds=30,file_bytes=2<<30,tree_bytes=tree_cap,watch_tree_bytes=tree_cap,extra_watch_roots=b['owned_roots'],min_free_disk_bytes=disk_floor,log_bytes=16777216,raw_log_bytes=33554432,max_entries=150000,per_process_as_bytes=role['as_bytes'],per_process_cpu_seconds=wall,rss_bytes=role['rss_bytes'],cpu_seconds=wall)
 
 def run(b,binding_path,binding_sha):
  need(pin(binding_path)['sha256']==binding_sha,'independently pinned reuse controller binding');admit(b,current=True);m,helper=manifest(b)

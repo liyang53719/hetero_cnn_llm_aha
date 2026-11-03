@@ -48,6 +48,9 @@ def stage_coverage_input(a):
  return roles
 
 def preserve_stage_coverage_input(binding,approved):
+ if 'fullprefill_disk_budget'in approved:
+  need(approved['execution_mode']=='FULL_BLOCK_ACCEPTANCE'and binding.get('execution_mode',approved['execution_mode'])==approved['execution_mode'],'explicit V3 finite FULL disk route')
+  binding['aggregate_tree_cap_bytes']=approved['aggregate_tree_cap_bytes']
  if approved['execution_mode']=='P0_FIRST_FAULT_DIAGNOSTIC' or binding.get('execution_mode')=='P0_FIRST_FAULT_DIAGNOSTIC':
   need(binding.get('execution_mode')==approved['execution_mode']=='P0_FIRST_FAULT_DIAGNOSTIC','explicit first-fault CLI equals reviewed mode')
  if 'reference_data_reuse'in binding or 'reference_data_reuse'in approved:
@@ -139,6 +142,15 @@ def prepare_identity(a):
  budget_document=json.loads(P(roles['cloud_budget']['path']).read_text())
  budget_module.verify_host(budget_document['host_identity'],identity)
  stub.update(admitted)
+ # Only the separately versioned ordinary full-prefill budget needs the exact
+ # executor catalog in the pre-publication identity admission. Legacy modes
+ # retain their original stub shape and diagnostic authority paths.
+ if admitted['execution_mode']=='FULL_BLOCK_ACCEPTANCE':
+  full=admitted['full_block_budget']
+  checked=input_pin(full['path'],full['sha256'])
+  need(checked==full,'actual full identity budget pin')
+  if json.loads(P(full['path']).read_text()).get('schema')in('MODEL_CANDIDATE_FIVE_M128_FULL_EXECUTION_BUDGET_V2','MODEL_CANDIDATE_FIVE_M128_FULL_READY_QUEUE_V3'):
+   stub.update(repo=str(repo),source_pins=dict(path=str(manifest),bytes=manifest.stat().st_size,sha256=sha(manifest)))
  load('cloud_identity_live',D/'executor_identity.py').verify_current(identity)
  need(subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()==identity['source_commit'],'actual immutable executor source commit')
  mode=load('cloud_identity_mode',D/'execution_mode.py').admit(stub)

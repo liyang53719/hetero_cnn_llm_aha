@@ -27,6 +27,8 @@ def main():
   if sha(p)!=h:raise ValueError('phase source drift')
  check_environment(b)
  snapshot=live_budget.census(b['owned_roots'])
+ if 'preserve_free_8gib'in b:
+  if b['preserve_free_8gib']is not True or type(b['extra_bytes'])is not int or snapshot['free_bytes']-b['extra_bytes']<8<<30:raise ValueError('finite FULL phase preserves8GiB after allocation')
  admission=live_budget.admit(snapshot,extra_bytes=b['extra_bytes'],phase_seconds=b['seconds'],job_started=b['job_started'],job_seconds=b.get('job_budget_seconds',21000),acquisition=False,tree_cap=b.get('tree_cap',live_budget.TREE_CAP))
  with open(b['admission_output'],'x') as f:json.dump(admission,f,indent=2)
  cap=b['write_file_bytes']

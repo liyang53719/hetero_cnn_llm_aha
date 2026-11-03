@@ -1,6 +1,7 @@
 """Explicit Python execution budget admission; never numerical acceptance.
-Full budget remains unavailable until actual calibration and independent review
-are frozen in a separately source-pinned admission. No deadline is inferred.
+V1 requires observed calibration. Cloud-only V2 admits independently reviewed
+finite full-stimulus watchdogs without pretending completion bounds are known.
+Neither version infers a deadline or grants numerical acceptance.
 """
 import hashlib,json,pathlib,re,importlib.util
 CALIBRATION='BOUNDED_CALIBRATION'
@@ -11,6 +12,21 @@ FIRST_FAULT_SCOPE='P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL
 STAGE_SCOPE='STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE'
 ACCEPTED_FULL_ADMISSION_SHA256=None
 FULL_POLICY='FULL_FIVE_ORIGINAL_HOST_POLICY'
+FULL_V2_SCHEMA='MODEL_CANDIDATE_FIVE_M128_FULL_EXECUTION_BUDGET_V2'
+FULL_V2_CONTRACT='FINITE_WATCHDOG_NOT_COMPLETION_ESTIMATE'
+FULL_V3_SCHEMA='MODEL_CANDIDATE_FIVE_M128_FULL_READY_QUEUE_V3'
+FULL_V3_QUEUE_POLICY='PARALLEL_INDEPENDENT_FEASIBILITY_NO_PROFILE_COMPLETION_DEPENDENCY'
+# Source-reviewed absolute ceilings, not defaults or predicted completion times.
+# Actual per-profile limits still require the externally approved exact budget.
+FULL_V2_MAX_SECONDS=31*24*60*60
+FULL_MAX_ACTIVE_CYCLES=1000000000
+FULL_V2_LOG_POLICY=dict(schema='FULL_PREFILL_LOSSLESS_GZIP_LOG_V1',compressed_bytes=64<<20,raw_bytes=16<<30,line_bytes=8192)
+FULL_V2_RSS_POLICY=dict(schema='FULL_PREFILL_RSS_GZIP_V1',compressed_bytes=64<<20,raw_bytes=16<<30,line_bytes=1048576,verification_wall_seconds=3600,verification_cpu_seconds=3600)
+FULL_V3_LOG_SCHEMA='FULL_PREFILL_LOSSLESS_GZIP_LOG_V3'
+FULL_V3_RSS_SCHEMA='FULL_PREFILL_RSS_GZIP_V3'
+FULL_V3_LOG_MAX=128<<20
+FULL_V3_RSS_MAX=1<<30
+FULL_V2_HOST_PHASES=('postprocess','evidence_verification','summary_verification','rss_telemetry_verification')
 IDS=tuple(map(str,range(5)))
 D=pathlib.Path(__file__).resolve().parent
 
@@ -140,8 +156,12 @@ def admit(binding):
  common_fields={'schema','ready','scope','tokens','matrix_macs','vector_lanes','driver_sha256','basis','profiles'}
  if candidate:
   need(binding.get('execution_context')=='CLOUD_EXECUTOR_V1','candidate full budget requires approved cloud invocation')
-  need(type(doc)is dict and set(doc)==common_fields|{'artifact_manifest_sha256','model_candidate_review_sha256'},'exact candidate full admission fields, no legacy baseline')
-  need(doc['schema']=='MODEL_CANDIDATE_FIVE_M128_FULL_EXECUTION_BUDGET_V1','candidate requires separate full budget version')
+  v3=doc.get('schema')==FULL_V3_SCHEMA
+  v2=doc.get('schema')==FULL_V2_SCHEMA or v3
+  if v3:common_fields=(common_fields-{'ready'})|{'selected_profiles','queue_policy'}
+  extra={'budget_contract','completion_guaranteed','executor_source_commit','executor_source_pins_sha256','log_policy','rss_telemetry_policy'}if v2 else set()
+  need(type(doc)is dict and set(doc)==common_fields|{'artifact_manifest_sha256','model_candidate_review_sha256'}|extra,'exact candidate full admission fields, no legacy baseline')
+  need(doc['schema']in('MODEL_CANDIDATE_FIVE_M128_FULL_EXECUTION_BUDGET_V1',FULL_V2_SCHEMA,FULL_V3_SCHEMA),'candidate requires separate full budget version')
   candidate_path=D/'numeric/candidate_admission.py'
   need(binding['pins'].get(str(candidate_path))==sha(candidate_path),'candidate full admission verifier source pin')
   candidate_spec=importlib.util.spec_from_file_location('actual_candidate_for_full',candidate_path);candidate_gate=importlib.util.module_from_spec(candidate_spec);candidate_spec.loader.exec_module(candidate_gate)
@@ -154,10 +174,13 @@ def admit(binding):
   need(type(doc)is dict and set(doc)==common_fields|{'hardware_baseline_sha256'},'exact full admission fields')
   need(doc['schema']=='FIVE_M128_FULL_EXECUTION_BUDGET_V1','legacy full budget version')
   need(doc['hardware_baseline_sha256']==sha(D.parent/'ci_frontend_materialization_r2_20261029/OBSERVER_BASELINE_ACCEPTANCE.json'),'same reviewed hardware observation baseline')
- need(doc['ready']is True and doc['scope']=='WATCHDOG_ADMISSION_ONLY_NOT_NUMERICAL_ACCEPTANCE','full admission not ready')
- need(doc['tokens']==128 and doc['matrix_macs']==4096 and doc['vector_lanes']==32,'unchanged full hardware/stimulus')
+  v2=False
+ need((doc.get('schema')==FULL_V3_SCHEMA or doc['ready']is True) and doc['scope']=='WATCHDOG_ADMISSION_ONLY_NOT_NUMERICAL_ACCEPTANCE','full admission not ready')
+ need(all(type(doc[k])is int and doc[k]==v for k,v in [('tokens',128),('matrix_macs',4096),('vector_lanes',32)]),'unchanged full hardware/stimulus')
  root=D.parent
  need(doc['driver_sha256']==sha(root/'moe_router_score_observation_20261030/driver/host_axi_driver_non_dpi.cpp'),'unchanged calibrated numerical driver')
+ if v2:
+  return full_v3_document(binding,doc,request,approved) if v3 else full_v2_document(binding,doc,request,approved)
  need(type(doc['basis'])is dict and set(doc['basis'])=={'calibration_summary','independent_budget_review'},'actual calibration and independent budget review required')
  for evidence in doc['basis'].values():pin(evidence,2<<20)
  if candidate:
@@ -174,11 +197,339 @@ def admit(binding):
   windows[i]=p['wall_seconds'];cycles[i]=p['max_active_cycles']
  return dict(mode=mode,profile_seconds=windows,profile_max_active_cycles=cycles,reviewed_budget_sha256=request['sha256'])
 
+def full_v2_document(binding,doc,request,cloud):
+ """Full-stimulus finite attempt. This does not turn a lower bound or historical
+ host throughput into a promised completion time, nor authorize a short probe.
+ The external cloud approval and ordinary candidate review were checked first.
+ """
+ need(doc['schema']==FULL_V2_SCHEMA,'explicit V2 full document')
+ need(type(doc['profiles'])is dict and set(doc['profiles'])==set(IDS),'all five full watchdogs before any execution')
+ return _full_finite_document(binding,doc,request,cloud,doc['profiles'],2)
+
+def full_v3_selection(doc):
+ need(doc.get('schema')==FULL_V3_SCHEMA and doc.get('queue_policy')==FULL_V3_QUEUE_POLICY,'explicit V3 independent ready queue')
+ selected=doc.get('selected_profiles')
+ need(type(selected)is list and 0<len(selected)<=5 and all(type(i)is int and 0<=i<5 for i in selected) and selected==sorted(set(selected)),'exact nonempty ordered selected subset')
+ need(type(doc.get('profiles'))is dict and set(doc['profiles'])==set(IDS),'all five queue inventory rows required')
+ return selected
+
+def full_v3_document(binding,doc,request,cloud):
+ selected=full_v3_selection(doc);rows={};blocked={}
+ for i in IDS:
+  row=doc['profiles'][i]
+  if int(i)in selected:
+   need(type(row)is dict and set(row)=={'state','watchdog'} and row['state']=='READY_FULL_PREFILL','selected profile needs actual ready watchdog')
+   rows[i]=row['watchdog']
+  else:
+   need(type(row)is dict and set(row)=={'state','reason','analysis'} and row['state']=='BLOCKED_NOT_RUN','unselected profile blocked without fake executable values')
+   need(type(row['reason'])is str and 0<len(row['reason'].strip())<=4096,'exact nonempty blocked reason')
+   pin(row['analysis'],2<<20)
+   blocked[i]=dict(row)
+ result=_full_finite_document(binding,doc,request,cloud,rows,3)
+ result.update(selected_profiles=list(selected),blocked_profiles=blocked,queue_policy=FULL_V3_QUEUE_POLICY)
+ return result
+
+def _full_finite_document(binding,doc,request,cloud,rows,version):
+ need(binding.get('execution_context')=='CLOUD_EXECUTOR_V1'and binding.get('execution_mode')==FULL,'V2 full budget is cloud-only')
+ need(doc['budget_contract']==FULL_V2_CONTRACT and doc['completion_guaranteed']is False,'V2 watchdog never guarantees completion')
+ log=doc['log_policy']
+ need(type(log)is dict and log==FULL_V2_LOG_POLICY and all(type(log[k])is int for k in ('compressed_bytes','raw_bytes','line_bytes')),'V2 exact bounded lossless log policy')
+ rss=doc['rss_telemetry_policy']
+ need(type(rss)is dict and rss==FULL_V2_RSS_POLICY and all(type(rss[k])is int for k in rss if k!='schema'),'V2 exact bounded lossless RSS telemetry policy')
+ need(doc['executor_source_commit']==binding['identity']['source_commit'],'V2 exact reviewed executor source')
+ catalog=binding.get('source_pins');pin(catalog,2<<20)
+ need(doc['executor_source_pins_sha256']==catalog['sha256'],'V2 exact reviewed executor catalog')
+ need(type(cloud)is dict and cloud['execution_mode']==FULL and cloud['full_block_budget']==request,'V2 externally approved full watchdog')
+ # Keep the current cloud envelopes rather than silently inheriting V1 full
+ # mode's larger historical maxima. CPU affinity is still the supervisor's one.
+ for key,ceiling in (('dut_rss_bytes',2<<30),('dut_address_space_bytes',2684354560)):
+  need(type(cloud[key])is int and 0<cloud[key]<=ceiling,'V2 preserved RSS2GiB/AS2.5GiB resource envelope')
+ need(cloud['consumer_address_space_bytes']==512<<20 and cloud['reserved_other_owner_bytes']==5<<30,'V2 preserved consumer and other-owner reservations')
+ need(type(doc['basis'])is dict and set(doc['basis'])=={'cycle_analysis','host_rate_evidence','independent_budget_review'},'V2 explicit analysis, host-rate uncertainty and independent review')
+ for evidence in doc['basis'].values():pin(evidence,2<<20)
+ windows={};cpus={};cycles={};raw_bytes={};rss_raw={};log_caps={};rss_caps={}
+ host={name+'_'+kind+'_seconds':{}for name in FULL_V2_HOST_PHASES for kind in ('wall','cpu')}
+ for i,row in rows.items():
+  cap_fields={'log_compressed_bytes','rss_telemetry_compressed_bytes'} if version==3 and type(row)is dict and cap_fields_present(row) else set()
+  need(type(row)is dict and set(row)=={'wall_seconds','cpu_seconds','max_active_cycles','log_raw_bytes','rss_telemetry_raw_bytes'}|set(host)|cap_fields,'exact V2 finite full watchdog; no invented completion estimate')
+  if version==3:
+   log_caps[i]=row.get('log_compressed_bytes',log['compressed_bytes']);rss_caps[i]=row.get('rss_telemetry_compressed_bytes',rss['compressed_bytes'])
+   need(type(log_caps[i])is int and 0<log_caps[i]<=FULL_V3_LOG_MAX and type(rss_caps[i])is int and 0<rss_caps[i]<=FULL_V3_RSS_MAX,'finite independently reviewed V3 compressed quotas')
+  need(all(type(value)is int and value>0 for value in row.values()),'V2 strictly positive integer watchdogs')
+  need(row['cpu_seconds']<=row['wall_seconds']<=FULL_V2_MAX_SECONDS,'V2 finite CPU/wall bounds for one CPU')
+  need(row['max_active_cycles']<=FULL_MAX_ACTIVE_CYCLES,'V2 unchanged binary cycle watchdog ceiling')
+  need(row['log_raw_bytes']<=log['raw_bytes'],'V2 explicit per-profile raw log ceiling')
+  need(row['rss_telemetry_raw_bytes']<=rss['raw_bytes'],'V2 explicit per-profile raw RSS telemetry ceiling')
+  rss_raw[i]=row['rss_telemetry_raw_bytes']
+  for phase in FULL_V2_HOST_PHASES:
+   wall=phase+'_wall_seconds';cpu=phase+'_cpu_seconds'
+   need(row[cpu]<=row[wall]<=3600,'V2 independent finite host-phase CPU/wall reservation')
+   host[wall][i]=row[wall];host[cpu][i]=row[cpu]
+  raw_bytes[i]=row['log_raw_bytes']
+  windows[i]=row['wall_seconds'];cpus[i]=row['cpu_seconds'];cycles[i]=row['max_active_cycles']
+ return dict(**(dict(profile_log_compressed_bytes=log_caps,profile_rss_telemetry_compressed_bytes=rss_caps)if version==3 else {}),mode=FULL,budget_version=version,dut_rss_bytes=cloud['dut_rss_bytes'],dut_address_space_bytes=cloud['dut_address_space_bytes'],budget_contract=FULL_V2_CONTRACT,completion_guaranteed=False,log_policy=dict(log),rss_telemetry_policy=dict(rss),profile_rss_telemetry_raw_bytes=rss_raw,profile_log_raw_bytes=raw_bytes,**{'profile_'+name:values for name,values in host.items()},profile_seconds=windows,profile_cpu_seconds=cpus,profile_max_active_cycles=cycles,reviewed_budget_sha256=request['sha256'])
+
+def cap_fields_present(row):
+ return bool({'log_compressed_bytes','rss_telemetry_compressed_bytes'}&set(row))
+
+def full_v2(admission):
+ if 'budget_version'not in admission:return False
+ need(type(admission['budget_version'])is int and admission['budget_version']in(2,3) and admission['mode']==FULL,'only explicit V2/V3 full execution')
+ if admission['budget_version']==3:ready_queue_profiles(admission)
+ need(admission.get('budget_contract')==FULL_V2_CONTRACT and admission.get('completion_guaranteed')is False,'V2 finite watchdog admission contract')
+ return True
+
+def ready_queue_profiles(admission):
+ """Exact selection boundary; no implicit queue expansion or blocked budgets."""
+ need(type(admission.get('budget_version'))is int and admission['budget_version']==3 and admission.get('mode')==FULL,'explicit V3 full admission')
+ selected=admission.get('selected_profiles')
+ need(type(selected)is list and 0<len(selected)<=5 and all(type(i)is int and 0<=i<5 for i in selected)and selected==sorted(set(selected)),'exact admitted selected subset')
+ need(admission.get('queue_policy')==FULL_V3_QUEUE_POLICY,'independent parallel queue feasibility')
+ blocked=admission.get('blocked_profiles')
+ need(type(blocked)is dict and set(blocked)==set(IDS)-set(map(str,selected)),'exact blocked complement')
+ for row in blocked.values():
+  need(type(row)is dict and set(row)=={'state','reason','analysis'} and row['state']=='BLOCKED_NOT_RUN','blocked inventory never PASS')
+ keys=['log_compressed_bytes','rss_telemetry_compressed_bytes','seconds','cpu_seconds','max_active_cycles','log_raw_bytes','rss_telemetry_raw_bytes']+[phase+'_'+kind+'_seconds'for phase in FULL_V2_HOST_PHASES for kind in ('wall','cpu')]
+ for name in keys:need(type(admission.get('profile_'+name))is dict and set(admission['profile_'+name])==set(map(str,selected)),'only actually selected watchdogs')
+ return list(selected)
+
+def queue_report_fields(admission):
+ if admission.get('budget_version')!=3:return {}
+ return dict(budget_version=3,profiles_registered=list(range(5)),selected_profiles=ready_queue_profiles(admission),blocked_profiles=admission['blocked_profiles'],queue_policy=FULL_V3_QUEUE_POLICY)
+
+def profile_wall_ceiling(admission):
+ return FULL_V2_MAX_SECONDS if full_v2(admission) else 20000
+
+def dut_parent_cpu_seconds(admission,profile):
+ """The consumer is exec'd under this hard ceiling before it forks the DUT.
+ Its child must never try to raise an inherited 18000s RLIMIT_CPU. Thirty seconds
+ preserve preflight allowance; explicit postprocessing CPU is separate.
+ """
+ if not full_v2(admission):return 18000
+ wall=admission['profile_seconds'][str(profile)];cpu=admission['profile_cpu_seconds'][str(profile)]
+ need(type(wall)is int and type(cpu)is int and 0<cpu<=wall<=FULL_V2_MAX_SECONDS,'finite V2 inherited CPU ceiling')
+ return cpu+admission['profile_postprocess_cpu_seconds'][str(profile)]+30
+
+def install_full_v2_parent_cpu_limit(admission,job_seconds):
+ """Finite lifecycle ceiling before any worker starts. Never raise an inherited
+ hard limit. The strict per-phase supervisor continues enforcing its own caps.
+ """
+ import resource
+ need(full_v2(admission),'parent CPU adaptation is V2-only')
+ need(type(job_seconds)is int and 0<job_seconds<=2**31-1,'finite reviewed lifecycle CPU limit')
+ need(max(dut_parent_cpu_seconds(admission,int(i))for i in admission['profile_seconds'])<=job_seconds,'lifecycle CPU contains every inherited phase bound')
+ old_soft,old_hard=resource.getrlimit(resource.RLIMIT_CPU)
+ need(old_hard==resource.RLIM_INFINITY or job_seconds<=old_hard,'inherited CPU hard limit insufficient for reviewed full lifecycle')
+ usage=resource.getrusage(resource.RUSAGE_SELF)
+ need(usage.ru_utime+usage.ru_stime<job_seconds,'parent CPU already exceeds full lifecycle')
+ resource.setrlimit(resource.RLIMIT_CPU,(job_seconds,job_seconds))
+ return dict(schema='FULL_PREFILL_PARENT_CPU_LIMIT_V1',job_cpu_seconds=job_seconds,previous_soft=old_soft,previous_hard=old_hard,inherited_hard_raised=False)
+
+def expected_log_policy(admission,profile):
+ if not full_v2(admission):return None
+ value=dict(admission['log_policy'],raw_bytes=admission['profile_log_raw_bytes'][str(profile)])
+ if admission['budget_version']==3:
+  value.update(compressed_bytes=admission['profile_log_compressed_bytes'][str(profile)])
+  if value['compressed_bytes']>FULL_V2_LOG_POLICY['compressed_bytes']:value['schema']=FULL_V3_LOG_SCHEMA
+ return value
+
+def expected_rss_telemetry_policy(admission,profile):
+ if not full_v2(admission):return None
+ i=str(profile)
+ value=dict(admission['rss_telemetry_policy'],raw_bytes=admission['profile_rss_telemetry_raw_bytes'][i],verification_wall_seconds=admission['profile_rss_telemetry_verification_wall_seconds'][i],verification_cpu_seconds=admission['profile_rss_telemetry_verification_cpu_seconds'][i])
+ if admission['budget_version']==3:
+  value.update(compressed_bytes=admission['profile_rss_telemetry_compressed_bytes'][i])
+  if value['compressed_bytes']!=FULL_V2_RSS_POLICY['compressed_bytes']:value['schema']=FULL_V3_RSS_SCHEMA
+ return value
+
+def full_v3_log_disk_bytes(admission,profile=None):
+ if admission.get('budget_version')!=3:return 0
+ selected=ready_queue_profiles(admission)
+ if profile is not None:
+  need(type(profile)is int and profile in selected,'selected V3 disk reservation')
+  selected=[profile]
+ total=0
+ for i in selected:
+  log=admission['profile_log_compressed_bytes'][str(i)];rss=admission['profile_rss_telemetry_compressed_bytes'][str(i)]
+  need(type(log)is int and 0<log<=FULL_V3_LOG_MAX and type(rss)is int and 0<rss<=FULL_V3_RSS_MAX,'finite V3 disk quota')
+  total+=log+rss
+ return total
+
+def host_phase_limits(admission,profile,phase):
+ need(phase in FULL_V2_HOST_PHASES,'known bounded host phase')
+ if not full_v2(admission):return None
+ i=str(profile)
+ return dict(wall_seconds=admission['profile_'+phase+'_wall_seconds'][i],cpu_seconds=admission['profile_'+phase+'_cpu_seconds'][i])
+
+def verify_consumer_admission(admission,reported,profile):
+ """Use the independent admission, never a report's self-selected log version."""
+ need(type(reported)is dict and reported.get('execution_mode')==admission['mode'] and reported.get('reviewed_budget_sha256')==admission['reviewed_budget_sha256'],'actual independently admitted consumer mode/budget')
+ if full_v2(admission):
+  need(type(reported.get('budget_version'))is int and reported['budget_version']==admission['budget_version'],'actual expected full V2/V3 consumer version')
+  expected=expected_log_policy(admission,profile);actual=reported.get('log_policy')
+  need(type(actual)is dict and actual==expected and all(type(actual[k])is type(expected[k])for k in expected),'actual independently admitted per-profile log policy')
+  expected=host_phase_limits(admission,profile,'postprocess');actual=reported.get('postprocess_limits')
+  need(type(actual)is dict and actual==expected and all(type(actual[k])is int for k in expected),'actual independently admitted postprocess limits')
+ else:
+  need('budget_version'not in reported and 'log_policy'not in reported and 'postprocess_limits'not in reported,'legacy admission cannot claim V2 log or postprocess policy')
+ return expected_log_policy(admission,profile)
+
+def verify_supervisor_telemetry(outer_pin,admission,profile,supervisor_dir,pins):
+ """Rebind the strict supervisor's complete proof to actual compressed bytes.
+ The supervisor already decoded all samples under its separate budget. This
+ bounded reread does not consume another full raw-file verification pass.
+ """
+ import types
+ expected=expected_rss_telemetry_policy(admission,profile)
+ need(expected is not None,'explicit V2 supervisor telemetry expected')
+ path=pin(outer_pin,16<<20);outer=json.loads(path.read_text())
+ caps=outer.get('caps',{})
+ need(type(caps)is dict and all(type(caps.get(k))is int for k in ('wall_seconds','cleanup_seconds','cpu_seconds','per_process_cpu_seconds','rss_bytes','per_process_as_bytes')),'typed actual supervisor resource ceilings')
+ need(type(caps)is dict and caps.get('wall_seconds')==consumer_phase_seconds(admission,profile)+30 and caps.get('cleanup_seconds')==30 and caps.get('cpu_seconds')==dut_aggregate_cpu_seconds(admission,profile,0) and caps.get('per_process_cpu_seconds')==dut_parent_cpu_seconds(admission,profile),'actual finite supervisor time and cleanup ceilings')
+ need(caps.get('rss_bytes')==admission['dut_rss_bytes'] and caps.get('per_process_as_bytes')==admission['dut_address_space_bytes'],'actual unchanged supervisor RSS/address-space ceilings')
+ helper=pathlib.Path(supervisor_dir)/'rss_telemetry.py'
+ need(helper.is_file() and not any(q.is_symlink()for q in(helper,*helper.parents)),'regular RSS telemetry verifier')
+ need(0<helper.stat().st_size<=1<<20,'bounded RSS telemetry verifier source')
+ raw=helper.read_bytes();need(pins.get(str(helper))==hashlib.sha256(raw).hexdigest(),'source-pinned RSS receipt verifier')
+ module=types.ModuleType('reviewed_full_rss_receipt');module.__file__=str(helper);exec(compile(raw,str(helper),'exec'),module.__dict__)
+ need(module.policy(caps.get('rss_telemetry_policy'))==expected,'actual independently admitted supervisor telemetry policy')
+ return module.check_receipt(path.with_name('rss_samples.jsonl.gz'),outer.get('rss_telemetry'),expected,outer.get('process_sample_count'))
+
+def profile_reserved_seconds(admission):
+ values=dict(admission['profile_seconds'])
+ if full_v2(admission):
+  for i in values:values[i]+=sum(admission['profile_'+phase+'_wall_seconds'][i]for phase in FULL_V2_HOST_PHASES)
+ return values
+
+def consumer_phase_seconds(admission,profile):
+ i=str(profile);seconds=admission['profile_seconds'][i]+30
+ if full_v2(admission):seconds+=admission['profile_postprocess_wall_seconds'][i]
+ return seconds
+
+def dut_admission_seconds(admission,profile,parent_seconds):
+ """Reserve all deferred summary work before a new full DUT process starts.
+ This is a remaining-job admission reserve, not a work-wall extension.
+ """
+ need(full_v2(admission),'explicit V2 lifecycle reserve')
+ need(type(parent_seconds)is int and 0<parent_seconds<=600,'existing reviewed parent reserve')
+ i=str(profile)
+ return consumer_phase_seconds(admission,profile)+admission['profile_rss_telemetry_verification_wall_seconds'][i]+admission['profile_evidence_verification_wall_seconds'][i]+sum(admission['profile_summary_verification_wall_seconds'].values())+parent_seconds
+
+def dut_aggregate_cpu_seconds(admission,profile,legacy_seconds):
+ if not full_v2(admission):return legacy_seconds+30
+ i=str(profile)
+ return admission['profile_cpu_seconds'][i]+admission['profile_postprocess_cpu_seconds'][i]+60
+
+class HostVerificationBudgetExceeded(RuntimeError):pass
+
+class host_verification_budget:
+ """Owned current-process wall/CPU timers with strict nested deadlines.
+ Foreign timers, blocked watchdogs and pre-existing pending signals reject.
+ This is not a process-tree/cgroup hard CPU limit.
+ """
+ _active=[]
+ def __init__(self,wall_seconds,cpu_seconds):
+  need(type(wall_seconds)is int and type(cpu_seconds)is int and 0<cpu_seconds<=wall_seconds<=86400,'explicit bounded host verification wall/CPU')
+  self.wall=wall_seconds;self.cpu=cpu_seconds;self.running=False;self.expired=False
+ def __enter__(self):
+  import signal,threading,time
+  need(not self.running and threading.current_thread()is threading.main_thread(),'host verification main-thread ownership')
+  self.signal=signal;self.time=time;self.signals={signal.SIGALRM,signal.SIGPROF}
+  self.entry_mask=signal.pthread_sigmask(signal.SIG_BLOCK,self.signals)
+  changed=False
+  try:
+   need(not self.signals.intersection(self.entry_mask),'unblocked host watchdog signals required')
+   need(not self.signals.intersection(signal.sigpending()),'no pending external host watchdog signal')
+   self.parent=self._active[-1]if self._active else None
+   self.old={timer:signal.getitimer(timer)for timer in(signal.ITIMER_REAL,signal.ITIMER_PROF)}
+   self.handlers={signum:signal.getsignal(signum)for signum in self.signals}
+   if self.parent is None:
+    need(all(value==(0.,0.)for value in self.old.values()),'unused or explicitly owned host watchdog timers')
+   else:
+    need(self.parent.running and not self.parent.expired and self.parent._owns_watchdogs()and all(handler is self.parent.handler for handler in self.handlers.values())and all(value[0]>0 and value[1]==0 for value in self.old.values()),'same active host watchdog owner')
+   self.started=time.monotonic();self.cpu_started=time.process_time()
+   self.wall_deadline=min(self.started+self.wall,self.parent.wall_deadline)if self.parent else self.started+self.wall
+   self.cpu_deadline=min(self.cpu_started+self.cpu,self.parent.cpu_deadline)if self.parent else self.cpu_started+self.cpu
+   need(self.wall_deadline>self.started and self.cpu_deadline>self.cpu_started,'unexpired enclosing host verification budget')
+   def expired(signum,frame):
+    self.expired=True
+    raise HostVerificationBudgetExceeded('host verification '+('wall'if signum==signal.SIGALRM else 'CPU')+' budget exhausted')
+   self.handler=expired;changed=True
+   for signum in self.signals:signal.signal(signum,self.handler)
+   self.running=True;self._active.append(self)
+   signal.setitimer(signal.ITIMER_REAL,self.wall_deadline-time.monotonic())
+   signal.setitimer(signal.ITIMER_PROF,self.cpu_deadline-time.process_time())
+   self._restore_owned_mask()
+   return self
+  except BaseException:
+   if changed:self._restore()
+   else:self._restore_owned_mask()
+   raise
+ def _restore_owned_mask(self):
+  signal=self.signal
+  # Change only owned bits; a reentrant unrelated handler may change its own
+  # mask at any call boundary, so never write a whole-mask snapshot back.
+  blocked=self.entry_mask&self.signals;unblocked=self.signals-self.entry_mask
+  try:
+   if blocked:signal.pthread_sigmask(signal.SIG_BLOCK,blocked)
+  finally:
+   if unblocked:signal.pthread_sigmask(signal.SIG_UNBLOCK,unblocked)
+ def _owns_watchdogs(self):
+  signal=self.signal
+  if any(signal.getsignal(signum)is not self.handler for signum in self.signals):return False
+  pending=signal.sigpending()
+  for timer,clock,deadline,signum in ((signal.ITIMER_REAL,self.time.monotonic,self.wall_deadline,signal.SIGALRM),(signal.ITIMER_PROF,self.time.process_time,self.cpu_deadline,signal.SIGPROF)):
+   before=clock();remaining,interval=signal.getitimer(timer);after=clock()
+   if interval!=0:return False
+   if remaining==0:
+    if not(self.expired or signum in pending or after>=deadline):return False
+   elif not max(0,deadline-after)-.02<=remaining<=max(0,deadline-before)+.02:return False
+  return True
+ def _restore(self):
+  signal=self.signal
+  signal.pthread_sigmask(signal.SIG_BLOCK,self.signals)
+  try:
+   self.ownership_lost=not self._owns_watchdogs()
+   signal.setitimer(signal.ITIMER_REAL,0);signal.setitimer(signal.ITIMER_PROF,0)
+   for signum in self.signals:
+    if signum in signal.sigpending():
+     self.expired=True
+     signal.sigtimedwait({signum},0)
+   wall_now=self.time.monotonic();cpu_now=self.time.process_time()
+   self.expired=self.expired or wall_now>=self.wall_deadline or cpu_now>=self.cpu_deadline
+   if self.parent is not None:
+    self.parent.expired=self.parent.expired or wall_now>=self.parent.wall_deadline or cpu_now>=self.parent.cpu_deadline
+   for signum,handler in self.handlers.items():signal.signal(signum,handler)
+   if self.running:
+    need(bool(self._active)and self._active[-1]is self,'LIFO host watchdog ownership')
+    self._active.pop();self.running=False
+   if self.parent is not None:
+    # Restore its original absolute deadlines, never a fresh allowance.
+    # An expired parent is rearmed immediately under its OWN handler.
+    signal.setitimer(signal.ITIMER_REAL,max(.000001,self.parent.wall_deadline-self.time.monotonic()))
+    signal.setitimer(signal.ITIMER_PROF,max(.000001,self.parent.cpu_deadline-self.time.process_time()))
+  finally:
+   self._restore_owned_mask()
+ def __exit__(self,*exc):
+  import threading
+  need(threading.current_thread()is threading.main_thread()and self.running and bool(self._active)and self._active[-1]is self,
+       'active main-thread LIFO host verification owner required')
+  self._restore()
+  if exc[0]is None and self.ownership_lost:raise HostVerificationBudgetExceeded('host watchdog ownership changed')
+  if exc[0]is None and self.expired:raise HostVerificationBudgetExceeded('host verification budget exhausted')
+  return False
+
 def consumer_limits(original,admission,profile):
  """Only watchdog limits change; never stimulus, data, hardware or success predicate."""
  if admission['mode']==FIRST_FAULT:need(type(profile)is int and profile==0 and admission.get('diagnostic_profiles')==[0],'first fault consumer profile0 only')
+ if admission.get('budget_version')==3:need(type(profile)is int and profile in ready_queue_profiles(admission),'profile not independently admitted ready')
  i=str(profile);result=dict(original);wall=admission['profile_seconds'][i]
- need(type(wall)is int and 0<wall<=original['wall_seconds'],'explicit wall within original runtime bound')
+ if full_v2(admission):
+  need(type(wall)is int and 0<wall<=FULL_V2_MAX_SECONDS,'explicit V2 finite wall')
+  cpu=admission['profile_cpu_seconds'][i]
+  need(type(cpu)is int and 0<cpu<=wall,'explicit V2 finite CPU within wall')
+  result['cpu_seconds']=cpu
+ else:need(type(wall)is int and 0<wall<=original['wall_seconds'],'explicit wall within original runtime bound')
  result['wall_seconds']=wall
  if admission['mode']in(FULL,STAGE,FIRST_FAULT):
   cycles=admission['profile_max_active_cycles'][i]

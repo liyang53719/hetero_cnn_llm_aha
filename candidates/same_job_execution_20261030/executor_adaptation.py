@@ -20,6 +20,15 @@ CATALOG_PATH = PREFIX + 'SOURCE_PINS.json'
 # or stimulus source may change through this host adapter. The exact host-only
 # P0 data-reuse wrapper paths below require independent source/data review.
 ALLOWED_PATHS = frozenset(PREFIX + x for x in (
+    'test_fullprefill_supervision.py',
+    'test_fullprefill_ready_queue.py',
+    'acceptance_tests/test_stream_supervisor_hash.py',
+    'numeric/full_log.py',
+    'test_full_log.py',
+    'summary_progress.py',
+    'numeric/dut_evidence.py',
+    'numeric/moe_score_compare.py',
+    'summarize_same_job.py',
     'test_model_candidate_inputs.py',
     'evidence/first_fault_summary_join_20261102/README_CN.md',
     'evidence/first_fault_summary_join_20261102/SYNTHETIC_FULL_SUMMARY_JOIN.json',
@@ -107,7 +116,12 @@ ALLOWED_PATHS = frozenset(PREFIX + x for x in (
     'numeric/ACTUAL_MAKE_CHECKER_REVIEW.json', 'numeric/test_workspace_loader.py',
     'numeric/test_workspace_abi_adapter.py', 'numeric/test_owned_abi_environment.py',
     'test_common_observer_integration.py', 'WORKSPACE_EXECUTOR_ADAPTATION.zh.md',
-)) | {'plans/CURRENT_HARDWARE_FIVE_BLOCK_PARALLEL_20261026_ZH.md',
+)) | {'candidates/ci_frontend_pipeline_r2_20261029/supervise_multiroot.py',
+       'candidates/ci_frontend_pipeline_r2_20261029/rss_telemetry.py',
+       'candidates/ci_frontend_pipeline_r2_20261029/test_rss_telemetry.py',
+       'candidates/ci_frontend_pipeline_r2_20261029/test_rss_signal_ownership.py',
+       'candidates/ci_frontend_pipeline_r2_20261029/test_rss_signal_bits.py',
+       'plans/CURRENT_HARDWARE_FIVE_BLOCK_PARALLEL_20261026_ZH.md',
        'candidates/same_job_materialization_20261029/REPO_DEPENDENCIES.json',
        'candidates/same_job_materialization_20261029/CONNECTION_SOURCE_PINS.json'}
 BUILDER_FIELDS = {'run_id', 'artifact_name', 'source_commit', 'launch_commit',

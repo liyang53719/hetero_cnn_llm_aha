@@ -14,11 +14,17 @@ def extract(file,names,namespace):
 class StageNumericTests(unittest.TestCase):
  def setUp(self):
   self.t=tempfile.TemporaryDirectory();self.addCleanup(self.t.cleanup);self.root=pathlib.Path(self.t.name).resolve()
-  self.mode=types.SimpleNamespace(CALIBRATION=CAL,FULL=FULL,STAGE=STAGE,FIRST_FAULT=FIRST_FAULT)
+  spec=importlib.util.spec_from_file_location('stage_numeric_actual_execution_mode',D.parent/'execution_mode.py')
+  self.mode=importlib.util.module_from_spec(spec);spec.loader.exec_module(self.mode)
   self.n=extract('numeric_tail.py',{'execution_command','mode_budget_fields'},{'D':D,'need':need,'execution_mode':self.mode,'material':types.SimpleNamespace(checked=lambda p:p)})
   self.admit=dict(mode=STAGE,profile_seconds={str(i):1000+i for i in range(5)},profile_max_active_cycles={str(i):10000 for i in range(5)},reviewed_budget_sha256='e'*64)
   self.b=dict(execution_context='CLOUD_EXECUTOR_V1',full_block_budget=None,stage_coverage_budget=dict(path=str(self.root/'stage.json'),sha256='e'*64),controller_binding=dict(path=str(self.root/'binding.json'),sha256='c'*64))
   self.generated=['python',str(D/'consumer_owned.py')]
+ def test_phase_duration_uses_actual_helper_and_preserves_legacy_windows(self):
+  self.assertEqual(pathlib.Path(self.mode.__file__).resolve(),(D.parent/'execution_mode.py').resolve())
+  for mode in(CAL,FULL,STAGE,FIRST_FAULT):
+   admission=dict(self.admit,mode=mode)
+   self.assertEqual(self.mode.consumer_phase_seconds(admission,0),1030)
  def test_stage_command_exact_paired_budget_no_old_flags(self):
   for i in range(5):
    argv,seconds=self.n['execution_command'](self.generated,self.b,self.admit,i)

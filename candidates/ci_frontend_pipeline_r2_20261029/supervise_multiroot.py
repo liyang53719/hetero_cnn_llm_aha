@@ -23,17 +23,62 @@ def verify_aliases(aliases):
   p=Path(row['path']);need(p.is_absolute() and p.is_symlink(),'JDK alias missing')
   need(os.readlink(p)==row['link'] and str(p.resolve(strict=True))==row['target'],'JDK alias mapping drift')
 
+def _v2_validate_numeric_caps(caps):
+ # Validate before opening the lock or claiming signals. In particular, no
+ # malformed arithmetic operand may escape between ownership and the try.
+ need(type(caps)is dict,'V2 numeric caps object')
+ for key in ('wall_seconds','cleanup_seconds','cpu_seconds'):
+  value=caps.get(key)
+  need(type(value)in(int,float) and 0<value<=sys.float_info.max,'V2 finite positive numeric cap '+key)
+ need(float(caps['wall_seconds'])+float(caps['cleanup_seconds'])<=sys.float_info.max,'V2 finite combined work and cleanup cap')
+ required=('file_bytes','tree_bytes','log_bytes','max_entries','per_process_as_bytes','per_process_cpu_seconds','rss_bytes')
+ optional=('raw_log_bytes','watch_tree_bytes','min_free_disk_bytes')
+ for key in required+optional:
+  if key in optional and key not in caps:continue
+  value=caps.get(key);minimum=0 if key=='min_free_disk_bytes' else 1
+  need(type(value)is int and minimum<=value<=sys.maxsize,'V2 finite integer cap '+key)
+
+def _v2_set_owned_signal_mask(desired):
+ # Alter only bits claimed by this V2 scope. Never restore an old whole mask:
+ # unrelated signal changes made while the scope ran belong to their caller.
+ owned=SIGNALS|{signal.SIGPROF}
+ try:signal.pthread_sigmask(signal.SIG_BLOCK,owned&desired)
+ finally:signal.pthread_sigmask(signal.SIG_UNBLOCK,owned-desired)
+
+def _v2_claim_signal_ownership():
+ # Only V2 opts into this stricter entry contract. Reject before installing a
+ # handler or changing any timer, and preserve all rejected caller state.
+ need(threading.current_thread() is threading.main_thread(),'V2 supervisor requires main thread')
+ reserved=SIGNALS|{signal.SIGPROF}
+ previous=signal.pthread_sigmask(signal.SIG_BLOCK,reserved)
+ try:
+  need(not ({signal.SIGALRM,signal.SIGPROF}&previous),'V2 watchdog signal initially blocked')
+  need(not (reserved&signal.sigpending()),'V2 monitor signal initially pending')
+  need(signal.getitimer(signal.ITIMER_REAL)==(0.,0.) and signal.getitimer(signal.ITIMER_PROF)==(0.,0.),'V2 watchdog timer initially active')
+ except BaseException:
+  _v2_set_owned_signal_mask(previous)
+  raise
+ return previous
+
 def execute(argv,run,lock_path,caps,env,pins,inject_monitor_error=False,resource_gate=None):
+ v2_signal_ownership='rss_telemetry_policy' in caps
+ if v2_signal_ownership:need(threading.current_thread() is threading.main_thread(),'V2 supervisor requires main thread')
  strict=helper();run=Path(run).absolute();lock_path=Path(lock_path).absolute()
  need(not run.exists() and not run.is_symlink(),'one-shot output already exists')
  for q in run.parents:need(not q.is_symlink(),'symlink output parent')
  need(lock_path.parent.is_dir() and not lock_path.is_symlink(),'lock path')
  need(hasattr(os,'pidfd_open') and hasattr(signal,'pidfd_send_signal'),'pidfd support required')
+ if v2_signal_ownership:_v2_validate_numeric_caps(caps)
  lock=os.open(lock_path,os.O_CREAT|os.O_RDWR|os.O_NOFOLLOW,0o600)
  try:fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
  except BaseException:os.close(lock);raise
+ if v2_signal_ownership:
+  try:v2_oldmask=_v2_claim_signal_ownership()
+  except BaseException:
+   fcntl.flock(lock,fcntl.LOCK_UN);os.close(lock);raise
  parent_cpu_started=time.process_time()
- started=time.monotonic();work_stop=started+caps['wall_seconds'];stop=work_stop+caps['cleanup_seconds'];owner=None;log=None;telemetry=None;capture=None;leader=None;observed={};pidfds={};report={'status':'IN_PROGRESS','scope':'ORIGINAL_PROCESS_GROUP_AND_OBSERVED_DESCENDANTS_ONLY','argv':argv,'caps':caps,'worker_started':False,'errors':[],'observed_peak_rss':0,'observed_cpu_seconds':0,'peak_tree_bytes':0,'peak_file_bytes':0,'native_exit':None,'cleanup_proof':None};oldmask=signal.pthread_sigmask(signal.SIG_BLOCK,SIGNALS);oldhandlers={s:signal.getsignal(s) for s in SIGNALS};api=strict._Linux()
+ started=time.monotonic();work_stop=started+caps['wall_seconds'];stop=work_stop+caps['cleanup_seconds'];owner=None;log=None;telemetry=None;capture=None;leader=None;observed={};pidfds={};report={'status':'IN_PROGRESS','scope':'ORIGINAL_PROCESS_GROUP_AND_OBSERVED_DESCENDANTS_ONLY','argv':argv,'caps':caps,'worker_started':False,'errors':[],'observed_peak_rss':0,'observed_cpu_seconds':0,'peak_tree_bytes':0,'peak_file_bytes':0,'native_exit':None,'cleanup_proof':None};oldmask=v2_oldmask if v2_signal_ownership else signal.pthread_sigmask(signal.SIG_BLOCK,SIGNALS);oldhandlers={s:signal.getsignal(s) for s in SIGNALS};api=strict._Linux()
+ telemetry_module=None;telemetry_policy=None;telemetry_closed_in_cleanup=False
  reader=None;reader_stop=threading.Event();reader_done=threading.Event();reader_errors=queue.SimpleQueue();last_process_sample=None
  def fail(e):report['errors'].append(type(e).__name__+': '+str(e))
  def drain_reader_errors():
@@ -122,25 +167,31 @@ def execute(argv,run,lock_path,caps,env,pins,inject_monitor_error=False,resource
    f=rawfields[pid];observed[pid]['peak_cpu_ticks']=max(observed[pid]['peak_cpu_ticks'],int(f[11])+int(f[12]));observed[pid]['ever_outside_group']|=row['group']!=leader['group'];pid_rss=max(0,int(f[21]))*os.sysconf('SC_PAGE_SIZE');rss+=pid_rss;observed[pid]['peak_rss_bytes']=max(observed[pid].get('peak_rss_bytes',0),pid_rss);observed[pid]['peak_virtual_bytes']=max(observed[pid].get('peak_virtual_bytes',0),int(f[20]));sample_rows.append([pid,row['start'],row['ppid'],row['group'],pid_rss,int(f[11])+int(f[12]),int(f[20])])
   cpu=sum(r['peak_cpu_ticks'] for r in observed.values())/os.sysconf('SC_CLK_TCK');report['observed_peak_rss']=max(report['observed_peak_rss'],rss);report['observed_cpu_seconds']=cpu
   available=int(next(s.split()[1] for s in Path('/proc/meminfo').read_text().splitlines() if s.startswith('MemAvailable:')))*1024;reserve_warning=available<1024**3;report['minimum_MemAvailable_bytes']=min(report.get('minimum_MemAvailable_bytes',available),available);report['memory_reserve_warning_samples']=report.get('memory_reserve_warning_samples',0)+int(reserve_warning)
-  telemetry.write(json.dumps({'elapsed':time.monotonic()-started,'aggregate_rss_bytes':rss,'processes':sample_rows,'MemAvailable_bytes':available,'reserve_below_1GiB_warning':reserve_warning},separators=(',',':'))+'\n');telemetry.flush();need(telemetry.tell()<=64*1024*1024,'RSS telemetry 64MiB cap')
+  telemetry.write(json.dumps({'elapsed':time.monotonic()-started,'aggregate_rss_bytes':rss,'processes':sample_rows,'MemAvailable_bytes':available,'reserve_below_1GiB_warning':reserve_warning},separators=(',',':'))+'\n')
+  if telemetry_policy is None:telemetry.flush();need(telemetry.tell()<=64*1024*1024,'RSS telemetry 64MiB cap')
   need(rss<=caps['rss_bytes'],'sampled observed aggregate RSS cap');need(cpu<=caps['cpu_seconds'],'sampled observed aggregate CPU cap')
  try:
   need(signal.getitimer(signal.ITIMER_REAL)==(0.,0.),'preexisting alarm')
   for s in SIGNALS:signal.signal(s,interrupted)
-  signal.setitimer(signal.ITIMER_REAL,max(.001,work_stop-time.monotonic()));signal.pthread_sigmask(signal.SIG_SETMASK,oldmask-SIGNALS)
+  signal.setitimer(signal.ITIMER_REAL,max(.001,work_stop-time.monotonic()));(_v2_set_owned_signal_mask(oldmask-SIGNALS) if v2_signal_ownership else signal.pthread_sigmask(signal.SIG_SETMASK,oldmask-SIGNALS))
   verify_aliases(caps.get('jdk_aliases',[]))
   for path,digest in pins.items():need(sha(regular(path))==digest,'input pin mismatch '+path)
+  if 'rss_telemetry_policy' in caps:
+   telemetry_source=Path(__file__).with_name('rss_telemetry.py').absolute();telemetry_bytes=regular(telemetry_source).read_bytes()
+   need(pins.get(str(telemetry_source))==hashlib.sha256(telemetry_bytes).hexdigest(),'RSS telemetry source pin')
+   telemetry_module=types.ModuleType('admitted_rss_telemetry');exec(compile(telemetry_bytes,str(telemetry_source),'exec'),telemetry_module.__dict__)
+   telemetry_policy=telemetry_module.policy(caps['rss_telemetry_policy'])
   if resource_gate:
    available=int(next(s.split()[1] for s in Path('/proc/meminfo').read_text().splitlines() if s.startswith('MemAvailable:')))*1024
    need(available>=resource_gate['min_available_memory'],'locked memory gate');need(shutil.disk_usage(run.parent).free>=resource_gate['min_disk_free'],'locked disk gate')
-  need(time.monotonic()<work_stop,'prelaunch work deadline');run.mkdir();(run/'home').mkdir();(run/'tmp').mkdir();log=(run/'frontend.log.gz').open('xb');telemetry=(run/'rss_samples.jsonl').open('x')
+  need(time.monotonic()<work_stop,'prelaunch work deadline');run.mkdir();(run/'home').mkdir();(run/'tmp').mkdir();log=(run/'frontend.log.gz').open('xb');telemetry=telemetry_module.Writer(run/'rss_samples.jsonl.gz',telemetry_policy) if telemetry_policy is not None else (run/'rss_samples.jsonl').open('x')
   signal.pthread_sigmask(signal.SIG_BLOCK,SIGNALS)
   need(threading.active_count()==1,'preexec requires no existing reader/background threads')
   p=subprocess.Popen(argv,cwd=run,env={**env,'HOME':str(run/'home'),'TMPDIR':str(run/'tmp')},stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,start_new_session=True,preexec_fn=limits)
   owner={'process':p,'identity':None};capture=lossless_log.Capture(p.stdout,log,caps.get('raw_log_bytes',caps['log_bytes']),caps['log_bytes']);boot=api.boot();leader,_=strict._verify_leader(owner,api,None,boot);report['worker_started']=True;report['owner_identity']=dict(owner['identity']);(run/'STARTED.json').write_text(json.dumps({'owner_identity':owner['identity'],'run_started_monotonic':started,'work_stop':work_stop,'cleanup_stop':stop})+'\n')
   # Popen/preexec completed; reader inherits blocked monitor signals.
   reader=threading.Thread(target=log_reader,name='bounded-lossless-reader',daemon=True);reader.start();report['reader_started_after_popen']=True
-  signal.pthread_sigmask(signal.SIG_SETMASK,oldmask-SIGNALS)
+  (_v2_set_owned_signal_mask(oldmask-SIGNALS) if v2_signal_ownership else signal.pthread_sigmask(signal.SIG_SETMASK,oldmask-SIGNALS))
   if inject_monitor_error:raise OSError('injected monitor failure')
   while True:
    drain_reader_errors();need(not report['errors'],'log reader failure');process_sample();timed_output_sample();drain_reader_errors();need(not report['errors'],'log reader failure');need(time.monotonic()<work_stop,'wall cap')
@@ -150,7 +201,7 @@ def execute(argv,run,lock_path,caps,env,pins,inject_monitor_error=False,resource
  except BaseException as e:fail(e)
  finally:
   signal.pthread_sigmask(signal.SIG_BLOCK,SIGNALS);signal.setitimer(signal.ITIMER_REAL,0)
-  for s in SIGNALS:
+  for s in ({signal.SIGALRM} if v2_signal_ownership else SIGNALS):
    if s in signal.sigpending():signal.sigtimedwait({s},0)
   try:
    if owner is not None:
@@ -166,9 +217,11 @@ def execute(argv,run,lock_path,caps,env,pins,inject_monitor_error=False,resource
      if actual is not None and actual['start']==row['start']:present.append(actual)
     report['observed_remaining']=present;need(not present,'observed identities remain after group cleanup')
    need(time.monotonic()<stop,'post-cleanup deadline')
-   signal.setitimer(signal.ITIMER_REAL,max(.001,stop-time.monotonic()));signal.pthread_sigmask(signal.SIG_SETMASK,oldmask-SIGNALS)
+   signal.setitimer(signal.ITIMER_REAL,max(.001,stop-time.monotonic()));(_v2_set_owned_signal_mask(oldmask-SIGNALS) if v2_signal_ownership else signal.pthread_sigmask(signal.SIG_SETMASK,oldmask-SIGNALS))
    if reader:
     need(reader_done.wait(max(0.,stop-time.monotonic())),'reader completion deadline');reader.join(max(0.,stop-time.monotonic()));need(not reader.is_alive(),'reader join deadline');drain_reader_errors();need(capture.eof,'log EOF missing after cleanup');report['log_capture']=capture.receipt()
+   if telemetry_policy is not None and telemetry:
+    telemetry.finish();telemetry.close();telemetry_closed_in_cleanup=True;report['rss_telemetry']=telemetry.receipt()
    if log:timed_output_sample()
    verify_aliases(caps.get('jdk_aliases',[]))
    for path,digest in pins.items():need(sha(regular(path))==digest,'post-input pin mismatch '+path)
@@ -177,7 +230,7 @@ def execute(argv,run,lock_path,caps,env,pins,inject_monitor_error=False,resource
    if hasattr(e,'evidence'):report['cleanup_failure_evidence']=e.evidence
   finally:
    signal.pthread_sigmask(signal.SIG_BLOCK,SIGNALS);signal.setitimer(signal.ITIMER_REAL,0)
-   for s in SIGNALS:
+   for s in ({signal.SIGALRM} if v2_signal_ownership else SIGNALS):
     if s in signal.sigpending():signal.sigtimedwait({s},0)
    reader_stop.set()
    if reader:
@@ -193,12 +246,35 @@ def execute(argv,run,lock_path,caps,env,pins,inject_monitor_error=False,resource
     report['log_capture']=capture.receipt();capture.pipe.close()
     if not capture.eof:fail(RuntimeError('capture missing EOF; no full log claim'))
    if log and not reader_alive:log.close()
-   if telemetry:telemetry.close()
+   if telemetry:
+    if telemetry_policy is None:telemetry.close()
+    else:
+     try:telemetry.close()
+     except BaseException as e:fail(e)
    if last_process_sample is not None:report['process_sample_terminal_gap_seconds']=time.monotonic()-last_process_sample
+   if telemetry_policy is not None and telemetry:
+    report['rss_telemetry']=telemetry.receipt()
+    try:
+     # Original cleanup/EOF deadline has already elapsed or completed. This
+     # separate V2-only phase cannot extend group ownership cleanup or hide
+     # a missing barrier. Its explicit reserve belongs to caller lifecycle.
+     need(telemetry_closed_in_cleanup and not reader_alive and capture is not None and capture.eof and report['cleanup_proof'] is not None and not report.get('observed_remaining'), 'RSS verification requires completed cleanup/EOF barrier')
+     verify_stop=time.monotonic()+telemetry_policy['verification_wall_seconds']
+     report['rss_telemetry_verification_started_monotonic']=time.monotonic()
+     signal.setitimer(signal.ITIMER_REAL,max(.001,verify_stop-time.monotonic()));(_v2_set_owned_signal_mask(oldmask-SIGNALS) if v2_signal_ownership else signal.pthread_sigmask(signal.SIG_SETMASK,oldmask-SIGNALS))
+     report['rss_telemetry']=telemetry_module.verify(run/'rss_samples.jsonl.gz',report['rss_telemetry'],telemetry_policy,report.get('process_sample_count',0))
+     need(time.monotonic()<=verify_stop,'RSS verification deadline')
+    except BaseException as e:fail(e)
+    finally:
+     signal.pthread_sigmask(signal.SIG_BLOCK,SIGNALS);signal.setitimer(signal.ITIMER_REAL,0)
+     for s in {signal.SIGALRM}:
+      if s in signal.sigpending():signal.sigtimedwait({s},0)
    report['supervisor_cpu_seconds']=time.process_time()-parent_cpu_started;report['supervisor_cpu_scope']='Parent process including logreader; excludes child/DUT observed CPU'
    report['observed_processes']=list(observed.values());report['elapsed_seconds']=time.monotonic()-started;report['status']='PASS_PROCESS_ONLY' if not report['errors'] and report['native_exit']==0 and report['cleanup_proof'] else 'FAIL_OR_INCOMPLETE';report['limitations']=['Unobserved double-fork/setsid escape between samples is not contained.','Aggregate RSS/CPU/output limits are sampled; per-process RLIMIT is not aggregate cgroup containment.','Exited unobserved processes may contribute CPU not counted; reported observed CPU is a lower bound.','Advisory lock only coordinates runners using this same lock; unrelated old launchers are not excluded.','OS-level uninterruptible processes may prevent cleanup proof; this is FAIL_OR_INCOMPLETE, never a successful absence claim.']
    if run.exists():(run/'RESULT.json').write_text(json.dumps(report,indent=2)+'\n')
+   if v2_signal_ownership and not reader_alive:fcntl.flock(lock,fcntl.LOCK_UN);os.close(lock)
    for s,h in oldhandlers.items():signal.signal(s,h)
-   signal.pthread_sigmask(signal.SIG_SETMASK,oldmask)
-   if not reader_alive:fcntl.flock(lock,fcntl.LOCK_UN);os.close(lock)
+   if v2_signal_ownership:_v2_set_owned_signal_mask(oldmask)
+   else:signal.pthread_sigmask(signal.SIG_SETMASK,oldmask)
+   if not v2_signal_ownership and not reader_alive:fcntl.flock(lock,fcntl.LOCK_UN);os.close(lock)
  return report

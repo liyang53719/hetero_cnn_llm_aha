@@ -35,6 +35,66 @@ def model_candidate_inputs(b):
  else:need('model_candidate_review'not in b,'model review cannot relabel legacy artifact')
  return candidate
 
+
+FULL_TREE_CAP=12_081_306_272
+
+def fullprefill_disk_plan(b,d):
+ """Only an externally pinned V3 ordinary FULL budget can tighten disk limits.
+ This is a finite allocation/failure bound, never a completion prediction.
+ """
+ need(b.get('execution_mode',d['execution_mode'])=='FULL_BLOCK_ACCEPTANCE' and d['execution_mode']=='FULL_BLOCK_ACCEPTANCE','finite disk plan ordinary FULL only')
+ need(d['runtime_mode']=='IMPORT_EXISTING_PINNED_RUNTIME' and d['archive_mode']=='READ_EXISTING_PINNED_ARCHIVES' and 'retained_materials'in b,'finite disk plan retains reviewed inputs/runtime/archives')
+ path=D/'execution_mode.py';need(b['pins'].get(str(path))==sha(path),'finite disk exact execution policy source')
+ spec=importlib.util.spec_from_file_location('finite_disk_execution_mode',path);mode=importlib.util.module_from_spec(spec);spec.loader.exec_module(mode)
+ need(d['full_block_budget']==b.get('full_block_budget',d['full_block_budget']),'finite disk exact full budget binding')
+ doc=json.loads(pin(d['full_block_budget'],65536).read_text());selected=mode.full_v3_selection(doc)
+ audit=json.loads(pin(d['basis']['resource_audit'],2<<20).read_text());plan=audit.get('fullprefill_disk_budget')
+ fields={'schema','source_commit','artifact_manifest_sha256','full_block_budget_sha256','initial_census','owned_roots','binding_preparation_bytes','protected_existing_bytes','selected_log_bytes','profile_output_reservations','shared_output_reservations'}
+ need(type(plan)is dict and set(plan)==fields and plan['schema']=='FULL_PREFILL_FINITE_DISK_PLAN_V3','exact reviewed finite disk plan')
+ need(plan['source_commit']==b['identity']['source_commit']==d['source_commit'] and plan['artifact_manifest_sha256']==b['artifact_manifest']['sha256']==d['artifact_manifest_sha256'] and plan['full_block_budget_sha256']==d['full_block_budget']['sha256'],'finite disk exact source/artifact/selected budget identity')
+ roots=plan['owned_roots'];need(type(roots)is list and 0<len(roots)<=64 and all(type(x)is str for x in roots) and roots==sorted(set(roots)),'finite disk exact canonical root inventory')
+ for raw in roots:
+  root=P(raw);need(root.is_absolute()and root==root.resolve()and root.is_dir()and all(not q.is_symlink()for q in(root,*root.parents)),'finite disk retained root identity')
+ need(all(not P(x).is_relative_to(P(y))for x in roots for y in roots if x!=y),'finite disk inode-census root antichain')
+ for evidence in (d['basis']['resource_audit'],plan['initial_census']):
+  evidence_path=pin(evidence,2<<20);need(any(evidence_path.is_relative_to(P(root))for root in roots),'finite disk audit/census inside watched protected roots')
+ census=json.loads(pin(plan['initial_census'],2<<20).read_text())
+ need(census.get('schema')=='SAMPLED_OWNED_LIVE_BYTES_V1' and census.get('complete')is True and sorted(census.get('roots',[]))==roots,'finite disk pinned initial complete root census')
+ preparation=plan['binding_preparation_bytes'];need(type(preparation)is int and 0<=preparation<=16<<20,'finite disk bounded binding preparation growth')
+ protected=plan['protected_existing_bytes'];need(type(protected)is int and 0<protected<FULL_TREE_CAP and type(census.get('bytes'))is int and 0<=census['bytes'] and census['bytes']+preparation==protected,'finite disk measured protected bytes plus reviewed preparation')
+ logs=0
+ for i in selected:
+  row=doc['profiles'][str(i)];need(type(row)is dict and row.get('state')=='READY_FULL_PREFILL'and type(row.get('watchdog'))is dict,'finite disk selected ready watchdog')
+  w=row['watchdog'];log=w.get('log_compressed_bytes',64<<20);rss=w.get('rss_telemetry_compressed_bytes',64<<20)
+  need(type(log)is int and 0<log<=mode.FULL_V3_LOG_MAX and type(rss)is int and 0<rss<=mode.FULL_V3_RSS_MAX,'finite disk selected finite log quotas');logs+=log+rss
+ need(type(plan['selected_log_bytes'])is int and plan['selected_log_bytes']==logs,'finite disk exact cumulative selected log reservation')
+ outputs=plan['profile_output_reservations'];need(type(outputs)is dict and set(outputs)==set(map(str,selected)),'finite disk every selected future material reservation')
+ # Known tensor copies and P0 input+RoPE are lower bounds, not a new provider.
+ reference_min=(10659438,6447325,7268772,9571816,10360498)
+ remaining=0
+ for i,row in outputs.items():
+  need(type(row)is dict and set(row)=={'provider_bytes','reference_bytes'}and all(type(v)is int and 0<v<=FULL_TREE_CAP for v in row.values()),'finite disk explicit finite selected preparation bytes')
+  need(row['provider_bytes']>=(95440896 if i=='0'else 20119)and row['reference_bytes']>=reference_min[int(i)],'finite disk preserved known material lower bounds');remaining+=sum(row.values())
+ shared=plan['shared_output_reservations'];need(type(shared)is dict and set(shared)=={'stage_logs_and_metadata_bytes','cache_bytes','final_evidence_bytes'}and all(type(v)is int and 0<v<=FULL_TREE_CAP for v in shared.values()),'finite disk cumulative stage/cache/final output reservations')
+ remaining+=sum(shared.values());need(remaining>=1<<30,'finite disk cumulative future-output reserve at least1GiB')
+ cap=d['aggregate_tree_cap_bytes'];need(type(cap)is int and cap==protected+logs+remaining<=FULL_TREE_CAP,'finite disk exact lifetime sum within original aggregate ceiling')
+ need('aggregate_tree_cap_bytes'not in b or (type(b['aggregate_tree_cap_bytes'])is int and b['aggregate_tree_cap_bytes']==cap),'finite disk exact binding aggregate cap')
+ return dict(plan)
+
+def fullprefill_disk_snapshot(plan,snapshot,tree_cap,now=None):
+ import time
+ now=time.monotonic()if now is None else now
+ initial=json.loads(pin(plan['initial_census'],2<<20).read_text())
+ for observation,age in ((initial,600),(snapshot,2)):
+  finish=observation.get('finished_monotonic')
+  need(type(finish)in(int,float)and math.isfinite(finish)and type(now)in(int,float)and math.isfinite(now)and 0<=now-finish<=age,'finite disk fresh initial and launch census')
+  need(observation.get('schema')=='SAMPLED_OWNED_LIVE_BYTES_V1'and observation.get('complete')is True and sorted(observation.get('roots',[]))==plan['owned_roots'],'finite disk exact protected root census')
+ need(type(snapshot.get('bytes'))is int and 0<=snapshot['bytes']<=plan['protected_existing_bytes']==initial['bytes']+plan['binding_preparation_bytes'],'finite disk no unreserved protected material growth')
+ remaining=sum(sum(v.values())for v in plan['profile_output_reservations'].values())+sum(plan['shared_output_reservations'].values())
+ need(type(tree_cap)is int and tree_cap==plan['protected_existing_bytes']+plan['selected_log_bytes']+remaining<=FULL_TREE_CAP,'finite disk unchanged exact lifetime sum')
+ need(type(snapshot.get('free_bytes'))is int and snapshot['free_bytes']-(tree_cap-snapshot['bytes'])>=8<<30,'finite disk full future growth plus original8GiB floor')
+ return dict(protected_existing_bytes=plan['protected_existing_bytes'],selected_log_bytes=plan['selected_log_bytes'],remaining_output_bytes=remaining,aggregate_tree_cap_bytes=tree_cap,initial_census_sha256=plan['initial_census']['sha256'])
+
 def admit(b):
  need(b.get('execution_context')=='CLOUD_EXECUTOR_V1','explicit cloud executor context')
  need(b.get('execution_approval') is not None,'OPERATOR_APPROVED_EXECUTION_INPUT_REQUIRED')
@@ -47,7 +107,6 @@ def admit(b):
  need('p0_provider_reuse'not in b or ((stage or first_fault) and candidate),'P0 provider reuse requires stage candidate')
  reference_reuse='reference_data_reuse'in b
  need(not reference_reuse or ((stage or first_fault) and candidate),'reference data reuse requires stage candidate')
- need(reference_reuse or 'aggregate_tree_cap_bytes'not in b,'tree cap requires reference data reuse')
  adaptation_fields={'executor_adaptation','workspace_loader'}
  adapted=bool(adaptation_fields & set(b))
  need(not adapted or adaptation_fields<=set(b),'paired executor adaptation and workspace loader required')
@@ -65,7 +124,11 @@ def admit(b):
    pin(b[k],2<<20);need(approval[k+'_sha256']==b[k]['sha256'],'approved exact '+k)
  p=pin(b['cloud_budget'],65536);need(b['cloud_budget']['sha256']==approval['budget_sha256'],'externally approved exact cloud budget')
  d=json.loads(p.read_text())
- need(set(d)=={'schema','ready','source_commit','host_identity','artifact_manifest_sha256','basis','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','execution_mode','full_block_budget','reserved_other_owner_bytes','consumer_address_space_bytes','resource_scope','stage_resources','runtime_mode','archive_mode','runtime_reuse_manifest'}|extra_fields|({'aggregate_tree_cap_bytes'}if reference_reuse else set()),'exact cloud lifecycle admission')
+ finite_tree=False
+ if candidate and d.get('execution_mode')=='FULL_BLOCK_ACCEPTANCE'and 'aggregate_tree_cap_bytes'in d:
+  finite_tree=json.loads(pin(d.get('full_block_budget'),65536).read_text()).get('schema')=='MODEL_CANDIDATE_FIVE_M128_FULL_READY_QUEUE_V3'
+ need(reference_reuse or finite_tree or 'aggregate_tree_cap_bytes'not in b,'tree cap requires reference data reuse or explicit V3 finite disk plan')
+ need(set(d)=={'schema','ready','source_commit','host_identity','artifact_manifest_sha256','basis','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','execution_mode','full_block_budget','reserved_other_owner_bytes','consumer_address_space_bytes','resource_scope','stage_resources','runtime_mode','archive_mode','runtime_reuse_manifest'}|extra_fields|({'aggregate_tree_cap_bytes'}if reference_reuse or finite_tree else set()),'exact cloud lifecycle admission')
  if extra_fields:
   for k in extra_fields:need(d[k]==b[k],'reviewed adaptation input '+k)
  if reference_reuse:
@@ -114,6 +177,9 @@ def admit(b):
  result={k:d[k]for k in('runtime_mode','archive_mode','runtime_reuse_manifest','stage_resources','consumer_address_space_bytes','reserved_other_owner_bytes','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','execution_mode','full_block_budget')}
  if extra_fields:result.update({k:d[k]for k in extra_fields})
  if reference_reuse:result['aggregate_tree_cap_bytes']=d['aggregate_tree_cap_bytes']
+ if finite_tree:
+  result['fullprefill_disk_budget']=fullprefill_disk_plan(b,d)
+  result['aggregate_tree_cap_bytes']=d['aggregate_tree_cap_bytes']
  if candidate:
   path=D/'numeric/candidate_admission.py';need(b['pins'].get(str(path))==sha(path),'model candidate admission source pin')
   spec=importlib.util.spec_from_file_location('budget_model_candidate_admission',path);helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)

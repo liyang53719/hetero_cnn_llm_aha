@@ -1,0 +1,90 @@
+{
+  "schema": "FULL_PREFILL_HOST_FINITE_QUEUE_SAFE_SOURCE_EVIDENCE_V1",
+  "status": "TEMP_SOURCE_VALIDATION_NOT_NUMERICAL_ACCEPTANCE",
+  "producer_source": "acee98254a7c6adba0bd5f00dd4db8f045072021",
+  "producer_catalog_sha256": "d3db858b3d0f4c8fdf7aa1d85ff584b903a8e7f46308608745d13765d0011490",
+  "hardware_changed_by_this_host_patch": false,
+  "matrix_macs": 4096,
+  "vector_lanes": 32,
+  "tokens": 128,
+  "required_profiles": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "whole_block_numerical_pass_count": 0,
+  "final_rtl_numerical_pass_count": 0,
+  "source_validation": [
+    {
+      "scope": "finite log runtime",
+      "normal_tests": 127,
+      "optimized_tests": 127,
+      "actual_synthetic_pipe_gzip_bytes": 70372847,
+      "cap_exhaustion_rejected": true,
+      "numeric_scope": false
+    },
+    {
+      "scope": "aggregate cap routing and authority",
+      "normal_tests": 157,
+      "optimized_tests": 157,
+      "additional_independent_boundary_tests_per_mode": 3,
+      "numeric_scope": false
+    }
+  ],
+  "preserved_limits": {
+    "dut_rss_bytes": 2147483648,
+    "dut_address_space_bytes": 2684354560,
+    "consumer_address_space_bytes": 536870912,
+    "unknown_owner_bytes": 5368709120,
+    "available_memory_entry_floor_bytes": 8589934592,
+    "free_disk_floor_bytes": 8589934592,
+    "maximum_aggregate_bytes": 12081306272
+  },
+  "limitations": [
+    "One initial synthetic selected-summary UNAVAILABLE has unknown cause; later passes do not establish a fix. Test-only diagnostics retain future unexpected exceptions and fixtures.",
+    "No new actual seven-file artifact, source handoff, fresh resource admission or DUT execution is established by this source report.",
+    "Finite time, cycle, compressed/raw log and cumulative disk quotas are attempt limits, not guaranteed completion estimates.",
+    "V3 partial selection remains INCOMPLETE; blocked profiles do not become PASS and are not conditioned on P0 success.",
+    "Lossless capture tests use synthetic streams, not numeric DUT output."
+  ],
+  "reviewed_evidence": [
+    {
+      "scope": "finite lossless log production/test delta",
+      "evidence_sha256": "9a697e19e68852d3810b46f322271d50cac42c79845d77e520f3927c492e191e",
+      "evidence_bytes": 23327
+    },
+    {
+      "scope": "V3 explicit aggregate disk quota routing",
+      "evidence_sha256": "7409a7e33bf1f42c3226e8cf3a82f0701849334c8de19139051807da6461a01a",
+      "evidence_bytes": 38804
+    },
+    {
+      "scope": "independent actual pipe, cap exhaustion, RSS full verification",
+      "evidence_sha256": "d5a4f05cc569f470fe40330f5c69f90f9127178eb93a7e4db5afc32dbe1f06cb",
+      "evidence_bytes": 5340
+    },
+    {
+      "scope": "independent aggregate authority and resource boundaries",
+      "evidence_sha256": "ca3753d5d2d9b07023bcce107b020e535377b35c17846bb0ebab389edb13447f",
+      "evidence_bytes": 4556
+    },
+    {
+      "scope": "test-only unexpected-summary evidence retention",
+      "evidence_sha256": "144b7141f238cc5ad118f5f4b86c54ff8303d8390a2e96f4cd4a70620ccd1c6e",
+      "evidence_bytes": 1549
+    }
+  ],
+  "comprehensive_source_sweep": {
+    "prior_frozen_methods_per_mode": 1271,
+    "passed_per_mode": 1260,
+    "optional_skip_per_mode": 1,
+    "known_preexisting_legacy_controller_unsuccessful_methods": 7,
+    "new_test_checkout_closure_methods": 3,
+    "both_normal_and_optimized": true,
+    "production_source_unchanged": true,
+    "new_closure_resolution": "Three exact historical tracked launch files restored; two test-only exact-context/inverse patches independently reviewed. Fifteen affected tests and fourteen backend tests pass in each mode; no production change.",
+    "all_legacy_tests_pass": false
+  }
+}

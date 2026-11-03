@@ -985,3 +985,13 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - pc4 kraw、pc7 vraw仅全量有限性检查，原参考不含对应pre-bias张量，不能冒数值PASS。先前pc0 n0/pc2 qr逐位PASS及pc1 qraw/pc3 q有限性范围不变。
 - pc9两个HOST_OUTPUT和completion10均在cycle3316242；只检查已闭合、双读stat/hash稳定的.actual.bin快照，未读取后续正在写的输出。driver终局会另写.final.bin且原consumer最终读取后者，因此这些快照尚不证明终局cache持久性、attention/FFN/完整block通过。
 - 此次只更新中文计划与可复现身份/误差摘要，无硬件/source选择/nonce变更、不触当前运行。新供数/驻留候选正在独立目录审查，尚未集成或激活；旧SV任何通过范围不得转移给新硬件。固定完整block分母80%/争取90%目标未通过，已测Q阶段7.377337%仍是阶段校准而非整块或最终RTL利用率。
+
+## 2026-11-03 14:50 UTC：供数/驻留候选实做与完整 block 必要带宽界（TEMP）
+
+- 原 M128 FULL 仍保持 source75b9 / SVcdbe95 不变继续，14:45观察active4814080、pc12/completions10，即原融合QK→softmax→PV尚未退休。最新已闭合数值证据仍pc9 cache快照；完整Chisel模型0/5、最终同刺激RTL0/5，不把控制/结构证据冒完整数值通过。
+- 隔离候选 prefill-supply-overlap-v1 实改6个生产源，包含有限读burst、1KiB写暂存、普通单chunk next-N预取、真实window A快照复用/全形状身份/写snoop。接回159源选择链，不改变原冻结运行。新增存储约8590bit明确计入，4096 Matrix/物理Vector32及A/B容量不缩。快照coherence仅针对现五块合法不可变输入/独占生命周期，不保证任意外部并发同址写。
+- 实际验证精确范围：35项纯软件检查；真实生产credit叶80个Treadle协议case；159源码分10批完整Scala类型/bytecode编译，889个全新class，实际Top联接逐hash独审通过。原整体typer heap256/384 OOM保留为历史失败；分批未借旧class、未缩硬件、未重置累计预算。候选patch仍未发布或激活，因此这些结果不表示main已实现该架构。
+- 进一步实际发射生产DownOwner CHIRRTL 17903025B（SHA b10ad391b2fcedd335f305adfcc93422725ad37ecb83348f116bc0070a7790ae），独立官方firtool1.62.1 native0生成owner SV34294411B（SHA 8f2c4a5093b848f8b5c33a0b5aae6062315e625505bde21c6a11e9230a8b69ed）。仅内部owner：4737 flat接口逐一匹配方向/宽度；A16×1376×256、B16×160×256及每bank同步1R1W保持；slot2读与RMW写提交的11bit地址保留base1088..1247，不与低A别名。合法drain索引源级≤159，旧同类W004警告仍保留，不当动态安全证明。工具合法空白/hoisted memory helper引起的库存误拒保留，只针对同一产物修复检查，未重跑昂贵发射。尚未进行owner动态/新统一Top RTL/五块完整数值验收；不能把内部4737口冒整Top外部122口。
+- 原始cold M128/BF16/未改PyTorch路由下，P3/P4非空专家E=226/218，分别至少读取1421869056/1371537408B routed weights。固定每周期最多64B读口时，这些读取单独要求22216704/21430272周期。以完整block严格非padding Matrix有效MAC分子8002994176/7248543744计算，整块利用率乐观上界为8.794535859%/8.257776663%，不是RTL实测、周期预测或routed阶段冒整块。其他读写、Vector/Scalar、启动及最终drain只会增加完整分母。现有GQA counter含causal-zero项，不能原样冒严格有效MAC。
+- 若额外宽计P3 GDN dot/solve及conv归约，扩展分子上界8342159360仍只给9.167246411%。该口径与Matrix口径分列，不把所有非Matrix算子任意折成MAC。只改burst、A驻留或独立R/W不能消除这个只读瓶颈，当前候选不是80%/90%完整block最终方案。达到80%/90%的必要读带宽（仅这些routed weights）P3至少9.0966/10.2336、P4至少9.6878/10.8988个64B拍/周期；不能把理想供数压力bench冒目标内存实测。
+- 后续继续原完整数值链，同时受限推进候选真实owner动态协议；保留Python参考/Chisel模型/最终RTL分层。任何共享硬件变动均须五块同一新定义/同一RTL hash全部重测，不能迁移旧通过结果。没有清理/迁移，未上传权重、原输入、原route IDs或npz。

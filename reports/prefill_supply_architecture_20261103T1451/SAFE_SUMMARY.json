@@ -1,0 +1,251 @@
+{
+  "status": "TEMP_ARCHITECTURE_CANDIDATE_NOT_PUBLISHED_OR_ACTIVATED",
+  "scope": "SOURCE_TYPECHECK_AND_OWNER_STRUCTURE_ONLY_NOT_DYNAMIC_OR_FULL_NUMERIC",
+  "full_model_pass": 0,
+  "final_rtl_pass": 0,
+  "candidate_source_choice": "prefill-supply-overlap-v1",
+  "candidate_overlay_sha256": "a43e536bc0d0af808429f0730e4ad5fd6f949f4b4e1deb8194c1518eeacb521b",
+  "candidate_patch_sha256": "4be02731e806fac689c9a12ae9bdfb4236b7dc57e92acc3d2341b459c6d29286",
+  "compile": {
+    "source_count": 159,
+    "fresh_class_count": 889,
+    "stages": 10,
+    "scope": "SCALA_TYPE_AND_BYTECODE_ONLY"
+  },
+  "owner_CHIRRTL": {
+    "bytes": 17903025,
+    "sha256": "b10ad391b2fcedd335f305adfcc93422725ad37ecb83348f116bc0070a7790ae"
+  },
+  "owner_SV": {
+    "bytes": 34294411,
+    "sha256": "8f2c4a5093b848f8b5c33a0b5aae6062315e625505bde21c6a11e9230a8b69ed"
+  },
+  "owner_interface": {
+    "method": "Recursively expand original CHIRRTL bundle flips and Vec dimensions; compare each flattened SV ANSI port name, direction and width.",
+    "expected_ports": 4737,
+    "actual_ports": 4737,
+    "missing": 0,
+    "extra": 0,
+    "direction_or_width_mismatches": 0,
+    "input_ports": 4298,
+    "output_ports": 439,
+    "total_bits": 146230,
+    "normalized_sha256": "4aba39c5df91a78c431ea7a080f9fe2422a828278610e4af254d18a387cd5ce4",
+    "normalization": "SHA256 of compact JSON sorted(name,(direction,width)) pairs",
+    "scope": "Internal standalone DownOwner interface, NOT final HostTop external122 ports."
+  },
+  "bound_assumptions": [
+    "Cold M128 full-block timer includes cold fills, all phases and final successful drains.",
+    "Unmodified original PyTorch reference routes: P3 E226, P4 E218;1024 top8 assignments each. No route IDs or expert injection.",
+    "Original uncompressed BF16 weight storage and retained load contract; no precision, arithmetic or routing change.",
+    "No preloaded persistent copies of the expert matrices. A+B capacity is768KiB while one expert requires6MiB.",
+    "At most one64B external read beat per DUT cycle. Independent R/W cannot remove read-only demand.",
+    "Other weights, activations, writes, metadata, Scalar/Vector work, startup and drain are omitted only to make an optimistic bound."
+  ],
+  "strict_Matrix_definition": [
+    "Complete-block nonpadding mathematical work assigned to Matrix4096: projections, router, routed/shared FFN, logical N1 shared gate, causal-valid QK/PV.",
+    "Exclude31 structural-zero shared-gate columns, padded M/N lanes, masked QK and causal-zero PV.",
+    "Selected GDN chunk uses unchanged physical Vector32 via16-lane compatibility; convolution uses shared Scalar plus format. Their current Matrix useful counters are zero.",
+    "Do not convert norm, RoPE, activation, scaling, softmax, merge or format operations to Matrix MAC-equivalents. Their cycles remain in the complete-block denominator."
+  ],
+  "bound_components": {
+    "P3_dense": {
+      "QKV": 2147483648,
+      "Z": 1073741824,
+      "AB": 16777216,
+      "O": 1073741824
+    },
+    "P4_dense": {
+      "Q_with_gate": 2147483648,
+      "K": 134217728,
+      "V": 134217728,
+      "O": 1073741824
+    },
+    "common_MoE": {
+      "router": 67108864,
+      "routed_FFN": 3221225472,
+      "shared_FFN": 402653184,
+      "shared_gate_N1": 262144
+    },
+    "P4_GQA": {
+      "query_heads": 16,
+      "kv_heads": 2,
+      "head_dim": 256,
+      "tokens": 128,
+      "causal_pairs_per_head": 8256,
+      "strict_QK_plus_PV_MACs": 67633152,
+      "existing_GQA_counter_MACs": 134217728,
+      "counter_excess": 66584576
+    }
+  },
+  "bounds": [
+    {
+      "name": "P3_complete_block_strict_Matrix",
+      "complete_block_MAC_numerator_or_upper": 8002994176,
+      "routed_weight_bytes_lower": 1421869056,
+      "routed_read_beats_64B_lower": 22216704,
+      "whole_block_cycles_lower_at_one_read_beat_per_cycle": 22216704,
+      "utilization_upper": {
+        "numerator": 30529,
+        "denominator": 347136,
+        "decimal": "0.087945358591"
+      },
+      "utilization_upper_percent": {
+        "numerator": 763225,
+        "denominator": 86784,
+        "decimal": "8.794535859145"
+      },
+      "necessary_read_beats_per_cycle_for80": {
+        "numerator": 1388544,
+        "denominator": 152645,
+        "decimal": "9.096557371679"
+      },
+      "necessary_read_beats_per_cycle_for90": {
+        "numerator": 1562112,
+        "denominator": 152645,
+        "decimal": "10.233627043139"
+      }
+    },
+    {
+      "name": "P4_complete_block_strict_Matrix",
+      "complete_block_MAC_numerator_or_upper": 7248543744,
+      "routed_weight_bytes_lower": 1371537408,
+      "routed_read_beats_64B_lower": 21430272,
+      "whole_block_cycles_lower_at_one_read_beat_per_cycle": 21430272,
+      "utilization_upper": {
+        "numerator": 9217,
+        "denominator": 111616,
+        "decimal": "0.082577766628"
+      },
+      "utilization_upper_percent": {
+        "numerator": 230425,
+        "denominator": 27904,
+        "decimal": "8.257776662844"
+      },
+      "necessary_read_beats_per_cycle_for80": {
+        "numerator": 446464,
+        "denominator": 46085,
+        "decimal": "9.687837691223"
+      },
+      "necessary_read_beats_per_cycle_for90": {
+        "numerator": 502272,
+        "denominator": 46085,
+        "decimal": "10.898817402626"
+      }
+    },
+    {
+      "name": "P4_relaxed_GQA_term_only_NOT_verified_whole_RTL_counter",
+      "complete_block_MAC_numerator_or_upper": 7315128320,
+      "routed_weight_bytes_lower": 1371537408,
+      "routed_read_beats_64B_lower": 21430272,
+      "whole_block_cycles_lower_at_one_read_beat_per_cycle": 21430272,
+      "utilization_upper": {
+        "numerator": 27905,
+        "denominator": 334848,
+        "decimal": "0.083336319763"
+      },
+      "utilization_upper_percent": {
+        "numerator": 697625,
+        "denominator": 83712,
+        "decimal": "8.333631976300"
+      },
+      "necessary_read_beats_per_cycle_for80": {
+        "numerator": 1339392,
+        "denominator": 139525,
+        "decimal": "9.599655975632"
+      },
+      "necessary_read_beats_per_cycle_for90": {
+        "numerator": 1506816,
+        "denominator": 139525,
+        "decimal": "10.799612972586"
+      }
+    },
+    {
+      "name": "P3_specified_GDN_dot_solve_and_conv_extension_upper",
+      "complete_block_MAC_numerator_or_upper": 8342159360,
+      "routed_weight_bytes_lower": 1421869056,
+      "routed_read_beats_64B_lower": 22216704,
+      "whole_block_cycles_lower_at_one_read_beat_per_cycle": 22216704,
+      "utilization_upper": {
+        "numerator": 509165,
+        "denominator": 5554176,
+        "decimal": "0.091672464106"
+      },
+      "utilization_upper_percent": {
+        "numerator": 12729125,
+        "denominator": 1388544,
+        "decimal": "9.167246410629"
+      },
+      "necessary_read_beats_per_cycle_for80": {
+        "numerator": 22216704,
+        "denominator": 2545825,
+        "decimal": "8.726720807597"
+      },
+      "necessary_read_beats_per_cycle_for90": {
+        "numerator": 24993792,
+        "denominator": 2545825,
+        "decimal": "9.817560908546"
+      }
+    }
+  ],
+  "optional_P3_extension": {
+    "definition": "Specified optional model-contraction extension, not a universal all-operator MAC-equivalent total.",
+    "GDN_dot_shapes_per_head_chunk": [
+      {
+        "phase": 5,
+        "M": 64,
+        "N": 64,
+        "K": 128
+      },
+      {
+        "phase": 6,
+        "M": 64,
+        "N": 64,
+        "K": 128
+      },
+      {
+        "phase": 9,
+        "M": 64,
+        "N": 128,
+        "K": 128
+      },
+      {
+        "phase": 11,
+        "M": 64,
+        "N": 128,
+        "K": 128
+      },
+      {
+        "phase": 12,
+        "M": 64,
+        "N": 128,
+        "K": 64
+      },
+      {
+        "phase": 14,
+        "M": 128,
+        "N": 128,
+        "K": 64
+      }
+    ],
+    "GDN_heads": 32,
+    "chunks_per_head": 2,
+    "chunk_rows": 64,
+    "dot_rectangular_upper_per_head_chunk": 4718592,
+    "two_unit_lower_solves_per_head_chunk": 516096,
+    "GDN_dot_solve_MAC_upper": 335020032,
+    "caveat": "Rectangular counts conservatively bound useful work; masked/cold-zero products are NOT called useful completions.",
+    "cold_conv_channels": 8192,
+    "cold_conv_kernel": 4,
+    "cold_conv_nonpadding_MACs": 4145152,
+    "cold_conv_formula": "8192*(4*128-(3+2+1))",
+    "excluded": "No recasting norm, softmax, activation, merge, format or other Scalar/Vector operations as MAC-equivalents."
+  },
+  "not_claimed": [
+    "No measured P3/P4 RTL routing, full numerical pass, common generated RTL acceptance or cycle prediction.",
+    "No claim that the P0 Q measurement proves these P3/P4 complete-block bounds.",
+    "No exact all-operator FLOP/MAC-equivalent total; that requires explicit treatment of vector reductions and weighted merge.",
+    "Relaxed P4 substitutes only the existing GQA term, not a verified whole-block hardware counter."
+  ],
+  "reproducer_sha256": "c83f111cbea44a290f40847c8fa2a94e323fdd3d6270b7c97ef50b4f3d52b330"
+}

@@ -932,3 +932,16 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - TEMP测试风险保留：一次合成selected-summary返回UNAVAILABLE，原内部原因未保存，后续独立/重复测试通过不能冒根因已修复。已实现且独立审查测试-only异常诊断，保留未来意外的内部异常和合成fixture；生产fail-closed、所有300秒测试监督预算和负例不变。未发生真实新DUT数值结果。
 
 - 广扫精确范围：原最终组合每模式1271方法，1260通过、1可选skip、7个干净ace同样存在的legacy-controller问题；另3个新测试/checkout闭包问题已由恢复3份原Git历史fixture及2个精确测试-only补丁修复，独立15 affected与14 backend用例 normal/-O均通过。不是声称所有历史测试全绿。生产源码不因这些测试适配改变。
+
+
+## 2026-11-03 06:29 UTC：原 FULL M128 已实际运行，仍 TEMP / INCOMPLETE
+
+- 实际执行源码 `75b9fc21e6d8a4a13bb82307969d9a0d9a953a79`，source CI [41583933451](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/41583933451) SUCCESS，仅源码/载荷检查。唯一模型构建 [41576990692](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/41576990692) SUCCESS，七文件已按 ZIP CRC、大小、SHA、159 源码选择及加载依赖独立复核；构建成功不是数值通过。
+- 新模拟 ELF SHA256 `bd3048bf90bea06870ee9247a207cac42b0cff6e550ce2ceb88bcbd9d3d6cea8`；同一硬件 SV `cdbe95b38fe3d0722f6d685fd64b2894cdd07962994f251c976bb6080f291a8c`；保持 4096 Matrix MAC / 32 Vector lane。此 SV 是 Chisel 模型仿真生成物，不是模型通过后冻结的最终 RTL 验收。旧硬件 PASS 不迁移。
+- 05:42:46 启动唯一原 FULL 执行，UUID `23bd64b8-ac75-4b36-860f-3c4d9831b0d9`。53 archives、三套 runtime、startup ABI、原 provider/RoPE/initialize/transport/connect 已真实执行并正常退出，然后进入原完整 DUT。P0 采用有限 70000000 active cycles / 9 天 watchdog，保留原资源门、复位、EOF、清理与错误分类，未用短启动资格代替完整执行。
+- 06:29 部分日志：P0 active_cycles=489536、pc=0、completions=0、read ACK=19826、write ACK=9888；仍初始向量阶段，尚未到旧 slot2 地址截断故障边界。当前日志和 RSS gzip 均未封口，终态 RESULT/transport exit 不存在。无完整 ERROR 行并不代表成功。完整模型数值 0/5，最终 RTL 数值 0/5。
+- 五块保持 M128 队列：P0 Qwen2-1.5B；P1/P2 Qwen3.5-0.8B L0/L3；P3/P4 Qwen3.5-35B-A3B L0/L3。其余四块的原始参考、权重 pin、周期/日志/时长预算已独立准备；P2 准备不依赖 P0 数值通过，实际执行因共享资源串行。P1/P3/P4 的长时预算和模拟速度仍待闭合，不能永久以软件 31 天上限替代设计验收。
+- 本小时针对五块共用 host readonly beat mapper 完成原方法整合对照：baseline/candidate 各 26 cases / 1759 assertions 通过，所选事件指纹一致。只验证 host 方法/事件，非完整模型等价、非 DUT 加速实测；候选未发布/未用于当前执行，mutable scratch 与原 AXI 时序未替换。继续补失败路径验证，禁止将微基准倍数冒整个 block 性能。
+- 有效 MAC / 完整 block 周期利用率尚无结果；当前 useful/executed MAC 均为 0，不以初始向量阶段计算或宣称达到 80%/90%。已有各块周期与时长属于条件预测，不是 RTL 测量。
+- 资源实查：工作区剩余 10465447936 B，MemAvailable 8587292 KiB，/tmp 占用 279642112 B。最新已缓冲 RSS 样本 elapsed=1930.13 s、aggregate=245747712 B、DUT=194179072 B；该样本不是即时读数。运行前原 8 GiB 门已通过，运行监督仍保留，不以之后单次快照重新解释准入。
+- 已列工作区根目录 1137 项及 /tmp 298 项；本次无清理、无额外迁移、无新 nonce / 第二 DUT / 第二构建。保留原失败、原 ZIP、完整输入参考和当前运行证据。下一步继续同一 FULL 到终态、检查修复边界及原数值链；任何失败沿原身份定位，不盲重启。

@@ -14,6 +14,7 @@ import stat
 TENSOR_ORDER = ('hidden_native', 'hidden_storage', 'positions', 'rope_cos', 'rope_sin', 'causal_mask', 'baseline_output', 'baseline_cache.keys', 'baseline_cache.values', 'stage.input_layernorm.0', 'stage.self_attn.q_proj.0', 'stage.self_attn.k_proj.0', 'stage.self_attn.v_proj.0', 'stage.self_attn.o_proj.0', 'stage.self_attn.0.0', 'stage.self_attn.0.1', 'stage.post_attention_layernorm.0', 'stage.mlp.gate_proj.0', 'stage.mlp.up_proj.0', 'stage.mlp.down_proj.0', 'stage.mlp.0', 'final_cache.keys', 'final_cache.values', 'output_storage')
 TENSOR_NAMES = frozenset(TENSOR_ORDER)
 CANDIDATE_ID = 'P0_QWEN2_FULL128_DEFAULT_REFERENCE_V1'
+REPAIR_CANDIDATE_ID = 'P0_QWEN2_FULL128_DEFAULT_REFERENCE_REPAIR_41720209902_V1'
 FILENAMES = ('RESULT.json', 'CHECKS.json', 'HOST_RESOURCES.json')
 GIB = 1024 ** 3
 MIB = 1024 ** 2
@@ -31,6 +32,8 @@ STAGE_BUDGETS = {
 REASONS = frozenset(('PRECHECK_PIN', 'ABI', 'CPU_PROOF', 'RESOURCE_ADMISSION',
     'INSTALL', 'WEIGHT_HASH', 'REFERENCE_HASH', 'REFERENCE_GEOMETRY',
     'REFERENCE_INVENTORY', 'ROPE_HASH', 'LIMIT', 'OWNERSHIP_INCOMPLETE', 'EXPORT_SCHEMA'))
+from weight_errors import WEIGHT_FAILURE_REASONS
+REASONS = REASONS | WEIGHT_FAILURE_REASONS
 RESULT_FIELDS = frozenset(('schema', 'candidate_id', 'status', 'reason',
     'candidate_source_sha256', 'frozen_manifest_sha256', 'runtime_receipt_sha256',
     'weight_expected', 'weight_checked', 'tensor_expected', 'tensor_checked',
@@ -141,7 +144,7 @@ def validate_records(result, checks, host, frozen):
     pins, frozen_sha = _frozen(frozen)
     exact(result, RESULT_FIELDS)
     enum(result['schema'], ('P0_PORTABLE_REFERENCE_RESULT_V1',))
-    enum(result['candidate_id'], (CANDIDATE_ID,))
+    enum(result['candidate_id'], (CANDIDATE_ID, REPAIR_CANDIDATE_ID))
     enum(result['status'], ('PASS_EXACT_VISIBLE_FIXTURE', 'FAIL', 'INCOMPLETE', 'NOT_STARTED'))
     enum(result['reason'], REASONS, nullable=True)
     require((result['reason'] is None) == (result['status'] in ('PASS_EXACT_VISIBLE_FIXTURE', 'NOT_STARTED')))

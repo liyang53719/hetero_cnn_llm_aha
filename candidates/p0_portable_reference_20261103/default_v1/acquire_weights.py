@@ -11,8 +11,11 @@ import math
 from pathlib import Path
 import struct
 import time
+import urllib.error
+import urllib.parse
 import urllib.request
-from prepare_runtime import StageFailure, failure_receipt, Redirect, allowed_url, need, read_json, safe_name, sha, unique, write_json
+import http.client
+from prepare_runtime import StageFailure, failure_receipt, allowed_url, need, read_json, safe_name, sha, unique, write_json
 
 CREATED_OUTPUT = None
 REVISION = 'ba1cf1846d7df0a0591d6c00649f57e798519da8'
@@ -42,6 +45,41 @@ def progress(output, checked, mismatch_count):
     temporary.replace(path)
 
 
+def weight_url(url):
+    try:
+        allowed_url(url, HOSTS)
+    except (ValueError, TypeError):
+        raise StageFailure('WEIGHT_REDIRECT_POLICY') from None
+    return url
+
+
+class BoundedWeightRedirect(urllib.request.HTTPRedirectHandler):
+    """No redirect-body reads and no global/cross-range redirect accounting."""
+    def http_error_302(self, req, fp, code, msg, headers):
+        # Close first, including policy rejection. Never drain an unbounded body.
+        fp.close()
+        locations = headers.get_all('Location', [])
+        weight_check(len(locations) == 1 and isinstance(locations[0], str)
+                     and 0 < len(locations[0]) <= 8192,
+                     'WEIGHT_REDIRECT_POLICY')
+        location = locations[0]
+        weight_check(not any(ord(c) < 32 or ord(c) == 127 for c in location),
+                     'WEIGHT_REDIRECT_POLICY')
+        try:
+            target = urllib.parse.urljoin(req.full_url, location)
+            weight_url(target)
+        except (ValueError, TypeError):
+            raise StageFailure('WEIGHT_REDIRECT_POLICY') from None
+        hops = getattr(req, '_weight_redirect_hops', 0)
+        weight_check(hops < 4, 'WEIGHT_REDIRECT_LIMIT')
+        next_req = urllib.request.Request(target, headers={
+            'Range': req.get_header('Range'), 'Accept-Encoding': 'identity'})
+        next_req._weight_redirect_hops = hops + 1
+        return self.parent.open(next_req, timeout=req.timeout)
+
+    http_error_301 = http_error_303 = http_error_307 = http_error_308 = http_error_302
+
+
 def fetch(opener, start, end, budget):
     n = end - start + 1
     need(type(start) is int and type(end) is int and 0 <= start <= end < SHARD_BYTES
@@ -51,17 +89,49 @@ def fetch(opener, start, end, budget):
     budget['requested'] += n
     req = urllib.request.Request(URL, headers={'Range': f'bytes={start}-{end}',
                                               'Accept-Encoding': 'identity'})
-    with opener.open(req, timeout=60) as response:
-        allowed_url(response.geturl(), HOSTS)
-        need(response.status == 206, 'range status')
-        need(response.headers.get('Content-Range') == f'bytes {start}-{end}/{SHARD_BYTES}', 'range identity')
-        need(response.headers.get('Content-Length') == str(n), 'range length')
-        need(response.headers.get('Content-Encoding', 'identity') == 'identity', 'encoded range')
-        body = response.read(n + 1)
-        need(len(body) == n, 'exact range body')
+    req._weight_redirect_hops = 0
+    try:
+        with opener.open(req, timeout=60) as response:
+            weight_url(response.geturl())
+            weight_check(response.status == 206, 'WEIGHT_RANGE_STATUS')
+            weight_check(response.headers.get('Content-Range') == f'bytes {start}-{end}/{SHARD_BYTES}',
+                         'WEIGHT_RANGE_HEADER')
+            weight_check(response.headers.get('Content-Length') == str(n), 'WEIGHT_RANGE_LENGTH')
+            weight_check(response.headers.get('Content-Encoding', 'identity') == 'identity',
+                         'WEIGHT_ENCODING')
+            body = response.read(n + 1)
+            weight_check(len(body) == n, 'WEIGHT_BODY_SIZE')
+    except urllib.error.HTTPError as exc:
+        code = exc.code
+        exc.close()
+        reason = ('WEIGHT_HTTP' + str(code) if code in
+                  (401, 403, 404, 408, 429, 500, 502, 503, 504) else 'WEIGHT_HTTP_OTHER')
+        raise StageFailure(reason) from None
+    except (urllib.error.URLError, TimeoutError, OSError, http.client.HTTPException):
+        raise StageFailure('WEIGHT_TRANSPORT') from None
     budget['received'] += n
     need(time.monotonic() - budget['started'] < 600, 'acquisition wall limit')
     return body
+
+
+def validate_header(header, weights):
+    weight_check(hashlib.sha256(header).hexdigest() == HEADER_SHA, 'WEIGHT_HEADER_HASH')
+    weight_check(len(header) >= 8 and struct.unpack('<Q', header[:8])[0] == HEADER_BYTES - 8,
+                 'WEIGHT_HEADER_PREFIX')
+    try:
+        parsed = json.loads(header[8:].decode('utf-8'), object_pairs_hook=unique,
+                            parse_constant=lambda x: (_ for _ in ()).throw(ValueError()))
+    except (ValueError, UnicodeError):
+        raise StageFailure('WEIGHT_HEADER_JSON') from None
+    # The pinned header is independently re-bound to every semantic range.
+    try:
+        for w in weights:
+            h = parsed[w['name']]
+            weight_check(h['dtype'] == w['dtype'] and h['shape'] == w['shape']
+                 and h['data_offsets'] == [w['start'] - HEADER_BYTES, w['end'] + 1 - HEADER_BYTES],
+                 'WEIGHT_HEADER_GEOMETRY', mismatch=True)
+    except (KeyError, TypeError, IndexError):
+        raise StageFailure('WEIGHT_HEADER_GEOMETRY', mismatch=True) from None
 
 
 def acquire(output, frozen):
@@ -83,18 +153,10 @@ def acquire(output, frozen):
     progress(output, 0, 0)
     folder = output / 'qwen2_1p5b'
     folder.mkdir()
-    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), Redirect(HOSTS))
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), BoundedWeightRedirect())
     budget = {'started': time.monotonic(), 'received': 0, 'requested': 0}
     header = fetch(opener, 0, HEADER_BYTES - 1, budget)
-    weight_check(hashlib.sha256(header).hexdigest() == HEADER_SHA, 'PRECHECK_PIN')
-    need(struct.unpack('<Q', header[:8])[0] == HEADER_BYTES - 8, 'header prefix')
-    parsed = json.loads(header[8:].decode('utf-8'), object_pairs_hook=unique)
-    # The pinned header is independently re-bound to every semantic range.
-    for w in weights:
-        h = parsed[w['name']]
-        weight_check(h['dtype'] == w['dtype'] and h['shape'] == w['shape']
-             and h['data_offsets'] == [w['start'] - HEADER_BYTES, w['end'] + 1 - HEADER_BYTES],
-             'WEIGHT_HASH', mismatch=True)
+    validate_header(header, weights)
     with (output / 'header.bin').open('xb') as f:
         f.write(header)
     records = []

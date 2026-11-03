@@ -21,7 +21,7 @@ from fixture_gate import FixtureMismatch
 
 
 class ControllerMockTests(unittest.TestCase):
-    def exercise(self, mode, fault=None):
+    def exercise(self, mode, fault=None, repair=False):
         fixture = controller.frozen()
         affinity = sorted(os.sched_getaffinity(0))
         evidence = dict(architecture='x86_64', python_implementation='CPython',
@@ -77,7 +77,10 @@ class ControllerMockTests(unittest.TestCase):
                 # Include the real acquisition schema field: omission masks a
                 # controller schema mismatch that unit exporter tests cannot see.
                 write(output / 'WEIGHT_CHECKS.json', dict(schema='P0_WEIGHT_CHECKS_V1',
-                                                         checked=12, mismatch_count=0))
+                                                         checked=0 if mode=='weight_http_failure' else 12, mismatch_count=0))
+                if mode=='weight_http_failure':
+                    write(output/'FAILURE.json',dict(schema='P0_STAGE_FAILURE_V1',status='FAIL',reason='WEIGHT_HTTP403'))
+                    report.update(native_exit=1,status='FAIL_OR_INCOMPLETE')
             elif name == 'reference':
                 if mode == 'incomplete':
                     report.update(native_exit=None, errors=['MOCK_OWNERSHIP_INCOMPLETE'],
@@ -116,6 +119,10 @@ class ControllerMockTests(unittest.TestCase):
             write(identity, dict(schema='P0_DEFAULT_ONE_SHOT_IDENTITY_V1', run_id=123,
                                  source_commit='b' * 40, launch_commit='c' * 40,
                                  source_manifest_sha256='d' * 64, nonce='e' * 32))
+            if repair:
+                repair_identity=json.loads(identity.read_text())
+                repair_identity.update(schema='P0_DEFAULT_REFERENCE_REPAIR_IDENTITY_V1', failed_run_id=41720209902, header_proof_run_id=41732318207)
+                write(identity,repair_identity)
             write(started, dict(schema='P0_DEFAULT_JOB_START_V1', run_id=123,
                                 launch_commit='c' * 40, started_monotonic=time.monotonic(),
                                 job_budget_seconds=3600))

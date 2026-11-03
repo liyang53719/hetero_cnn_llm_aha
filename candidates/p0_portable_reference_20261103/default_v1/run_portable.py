@@ -16,7 +16,7 @@ import shutil
 from fixture_gate import FixtureMismatch, frozen, sha, strict_json, need, FROZEN_SHA256
 from host_checks import available_memory, host_evidence
 from validate_source import verify_source, RELATIVE
-from safe_export import STAGE_BUDGETS, CANDIDATE_ID, COMPLETE_CLEANUP, write_exports, validate_exports, REASONS
+from safe_export import STAGE_BUDGETS, CANDIDATE_ID, REPAIR_CANDIDATE_ID, COMPLETE_CLEANUP, write_exports, validate_exports, REASONS
 import supervise_multiroot
 from export_seal import seal_export
 
@@ -71,8 +71,13 @@ def stage_summary(name, report, charged):
 def check_identity(identity, job_start, repo):
     need(os.environ.get('GITHUB_ACTIONS') == 'true' and os.environ.get('GITHUB_RUN_ATTEMPT') == '1', 'PRECHECK_PIN')
     need(os.environ.get('RUNNER_ENVIRONMENT') == 'github-hosted', 'RESOURCE_ADMISSION')
-    need(set(identity) == {'schema', 'run_id', 'source_commit', 'launch_commit', 'source_manifest_sha256', 'nonce'}, 'PRECHECK_PIN')
-    need(identity['schema'] == 'P0_DEFAULT_ONE_SHOT_IDENTITY_V1' and identity['run_id'] == int(os.environ['GITHUB_RUN_ID']) and identity['launch_commit'] == os.environ['GITHUB_SHA'], 'PRECHECK_PIN')
+    fields = {'schema', 'run_id', 'source_commit', 'launch_commit', 'source_manifest_sha256', 'nonce'}
+    if identity.get('schema') == 'P0_DEFAULT_REFERENCE_REPAIR_IDENTITY_V1':
+        need(set(identity) == fields | {'failed_run_id', 'header_proof_run_id'}, 'PRECHECK_PIN')
+        need(type(identity['failed_run_id']) is int and identity['failed_run_id'] == 41720209902 and type(identity['header_proof_run_id']) is int and identity['header_proof_run_id'] == 41732318207, 'PRECHECK_PIN')
+    else:
+        need(set(identity) == fields and identity['schema'] == 'P0_DEFAULT_ONE_SHOT_IDENTITY_V1', 'PRECHECK_PIN')
+    need(identity['run_id'] == int(os.environ['GITHUB_RUN_ID']) and identity['launch_commit'] == os.environ['GITHUB_SHA'], 'PRECHECK_PIN')
     need(identity['source_commit'] != identity['launch_commit'], 'PRECHECK_PIN')
     actual = subprocess.check_output(['git', '-C', str(repo), 'rev-parse', 'HEAD'], env={'PATH':'/usr/bin:/bin'}, timeout=10, text=True).strip()
     need(actual == identity['source_commit'], 'PRECHECK_PIN')
@@ -86,6 +91,7 @@ def run(args):
     child_cpu = 0.0
     identity = strict_json(args.identity)
     job_start = strict_json(args.job_start)
+    candidate_id = REPAIR_CANDIDATE_ID if identity.get('schema') == 'P0_DEFAULT_REFERENCE_REPAIR_IDENTITY_V1' else CANDIDATE_ID
     repo = args.repo.absolute()
     work = args.output.absolute()
     expected_root = Path(os.environ.get('RUNNER_TEMP', '/INVALID')) / ('p0-portable-default-' + os.environ.get('GITHUB_RUN_ID', 'INVALID'))
@@ -123,8 +129,9 @@ def run(args):
         host.update(cpu_affinity_count=len(affinity), cpu_evidence_sha256=cpu_sha,
                     isa={k:k in evidence['flags_intersection'] for k in host['isa']})
         (work / 'CPU_EVIDENCE.json').write_text(json.dumps(evidence, sort_keys=True, separators=(',', ':')) + '\n')
-        owner = dict(schema='P0_DEFAULT_OWNED_ROOT_V1', candidate_id=CANDIDATE_ID, run_id=identity['run_id'],
+        owner = dict(schema='P0_DEFAULT_OWNED_ROOT_V1', candidate_id=candidate_id, run_id=identity['run_id'],
                      source_commit=identity['source_commit'], launch_commit=identity['launch_commit'],
+                     repair_lineage={key:identity[key] for key in ('failed_run_id','header_proof_run_id') if key in identity},
                      pid=os.getpid(), process_stat=Path('/proc/self/stat').read_text().strip(),
                      boot_id=Path('/proc/sys/kernel/random/boot_id').read_text().strip(),
                      nonce=uuid.uuid4().hex, job_started_monotonic=job_start['started_monotonic'],
@@ -249,7 +256,7 @@ def run(args):
                 row[key] = source[key]
         rows.append(row)
     mismatch = next((r['name'] for r in rows if r['status']=='MISMATCH'),None)
-    result = dict(schema='P0_PORTABLE_REFERENCE_RESULT_V1',candidate_id=CANDIDATE_ID,status=status,reason=reason,
+    result = dict(schema='P0_PORTABLE_REFERENCE_RESULT_V1',candidate_id=candidate_id,status=status,reason=reason,
                   candidate_source_sha256=identity['source_manifest_sha256'],frozen_manifest_sha256=FROZEN_SHA256,
                   runtime_receipt_sha256=runtime_sha,weight_expected=12,weight_checked=wc['checked'],tensor_expected=25,
                   tensor_checked=sum(r['status']!='NOT_REACHED' for r in rows),first_mismatch_name=mismatch,

@@ -21,6 +21,7 @@ import time
 import urllib.parse
 import urllib.request
 import zipfile
+from weight_errors import WEIGHT_FAILURE_REASONS
 
 CREATED_OUTPUT = None
 BLOCK = 1 << 20
@@ -38,7 +39,7 @@ class StageFailure(ValueError):
 def failure_receipt(output, exc, default_reason):
     # Never serialize exception strings, URLs, paths, headers, or response bodies.
     reason = exc.reason if isinstance(exc, StageFailure) else default_reason
-    need(reason in {'PRECHECK_PIN', 'INSTALL', 'WEIGHT_HASH'}, 'failure enum')
+    need(reason in ({'PRECHECK_PIN', 'INSTALL', 'WEIGHT_HASH'} | WEIGHT_FAILURE_REASONS), 'failure enum')
     if output.is_dir() and not output.is_symlink() and not (output / 'FAILURE.json').exists():
         write_json(output / 'FAILURE.json', {'schema': 'P0_STAGE_FAILURE_V1',
                    'status': 'FAIL', 'reason': reason})

@@ -1,0 +1,21 @@
+# TEMP：原完整128-token reference-only 的最小修复衔接
+
+## 最新实际证据
+
+- 原full reference-only run41720209902：runtime安装及实际import PASS，DEFAULT/4 intra-op/1 inter-op；weights native1、PRECHECK_PIN、checked0，reference/RoPE未到达。没有数值不符证据。
+- header-only源码7ca8b6b6f74d92f0367ae2fac4e92a25903b7dd3的普通CI41732031755 success；激活61dc8aa386d15312ab8361cc684f5f969d214f2c的普通CI41732318377 success。
+- 实际header job41732318207为PASS_HEADER_ONLY：HTTP206、精确38536字节、原SHA124516afba769374e2b948e185dd3e9203e2412daaef3f2ccf7bdbaca0f88987、12元数据一致；一次redirect后host枚举HF_US_AWS_CDN。该job没有安装runtime、获取权重、执行reference或DUT。它只证明当次header路径/字节/元数据，不证明原失败完整因果，不转移reference资格。
+
+## 本次只接回原完整reference
+
+新一次入口ci_launch/p0_portable_reference_repair_41720209902_once.json，显式绑定failed_run_id41720209902、header_proof_run_id41732318207及新的source commit/SOURCE_MANIFEST SHA。只允许first attempt、单commit仅新增此文件，parent必须是该source；不修改、重用或rerun旧reference/header nonce。
+
+repair identity为P0_DEFAULT_REFERENCE_REPAIR_IDENTITY_V1；安全RESULT candidate_id为P0_QWEN2_FULL128_DEFAULT_REFERENCE_REPAIR_41720209902_V1。数学fixture身份完全保留，完整原两forward及24tensor+1024RoPE仍按原字节hash严格门控。原12权重历史SHA、26wheel/native/source、原seed34930816、M128、FP32storage、DEFAULT/4线程、全部预算/清理/EOF与三JSON隐私门均保留。此次重新fresh安装、重新按原range获取原权重，不借header-only的PASS作为数值通过。
+
+唯一transport修正是已证实历史使用并在header run再次实际通过的精确us.aws.cdn.hf.co。完整weight acquisition采用小型有界redirect handler：HTTPS及精确hosts、每个原range至多4hop、redirect body直接关闭不read、保留同一Range/Accept-Encoding；不重试，不扩大8MiB单响应/总bytes预算。所有原range/length/hash守卫不变。
+
+为避免再次只有不透明PRECHECK_PIN，weights失败只通过现有RESULT.reason导出有限enum：HTTP已列状态或OTHER、redirect policy/limit、range status/header/length、encoding/body length、header hash/prefix/JSON/geometry、transport以及原WEIGHT_HASH。不给出URL、signed参数、headers、body、异常自由文本；没有新增载荷出口。首失败后不进入reference，任一reference hash不同也立即停止，不改golden或容差。
+
+私有terminal seal同时绑定repair lineage与原三JSON hash；PASS仍必须GitHub真实controller outcome成功，末deadline/alarm失败不能上传残留PASS。无DUT/provider/build/EDA步骤，无二进制或编码上传。原未知owner/FULL终态不借用、不修改、不重启、不清理。
+
+当前仅最小源码和pure/mock测试准备，未进行本次真实下载、runtime安装、reference、RoPE或EDA；源码发布无nonce，由父统一发布后另加唯一repair nonce才启动。

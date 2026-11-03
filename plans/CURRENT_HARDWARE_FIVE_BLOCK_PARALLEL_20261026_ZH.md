@@ -978,3 +978,10 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 固定当前单beat读/单outstanding及串行driver R/W语义，允许计算全部理想重叠后的乐观事务下界仍为2×86028+12288+2048=186392周期，对应阶段上界39.5553%。即使只合并burst、保留相同payload及串行R/W，payload下界98316周期，上界仍仅74.9908%。这些是有明确假设的架构界，不是已经实现的优化。
 - 因而host-only mapper/O3只能改仿真墙钟，不能把同一周期语义的7.38%变成80%/90%。下一架构需真实减少流量/数据驻留、实现供数和依赖有序并发等；不得换理想内存冒目标内存/实测，也不能仅改burst即称达标。任何硬件定义变化都需同一新SV五块重测；本轮冻结硬件/原运行不修改、不重启。
 - pc0 n0/pc2 qr已验证的数值范围，与pc1 Q阶段效率不达标分开记录；qraw/pc3 q仅有限性。继续原FULL KV/attention/FFN完整数值链，同时按实测约束准备后续架构审计；资源限制执行并发，不缩4096 MAC。
+## 2026-11-03 12:03 UTC：原 M128 FULL 的 K/V 与 cache 中途快照数值范围
+
+- 状态仍为 INCOMPLETE；仅同一原 FULL 继续运行，没有重启/重建。执行源码75b9fc21e6d8a4a13bb82307969d9a0d9a953a79，固定4096 MAC/Vector32，仿真SV cdbe95b38fe3d0722f6d685fd64b2894cdd07962994f251c976bb6080f291a8c。12:03可读取进度active3579200、pc12/completions10，无终态结果；pc12不代表已完成十二条命令。完整模型0/5，最终同刺激RTL验收0/5。
+- 新增精确PASS范围：pc5 kr（完整K投影含bias）、pc6 k（post-RoPE K按原cache-key布局比较）、pc8 v（完整V投影含bias）、pc9 cache_k/cache_v中途快照。每份128×256共32768 FP32字，与原冻结对应参考按原consumer布局/BF16位扩展规则全量逐位一致；byte/word/bit差异、max abs/rel、RMSE及双方nonfinite均0。没有重新生成参考或更改算术契约。
+- pc4 kraw、pc7 vraw仅全量有限性检查，原参考不含对应pre-bias张量，不能冒数值PASS。先前pc0 n0/pc2 qr逐位PASS及pc1 qraw/pc3 q有限性范围不变。
+- pc9两个HOST_OUTPUT和completion10均在cycle3316242；只检查已闭合、双读stat/hash稳定的.actual.bin快照，未读取后续正在写的输出。driver终局会另写.final.bin且原consumer最终读取后者，因此这些快照尚不证明终局cache持久性、attention/FFN/完整block通过。
+- 此次只更新中文计划与可复现身份/误差摘要，无硬件/source选择/nonce变更、不触当前运行。新供数/驻留候选正在独立目录审查，尚未集成或激活；旧SV任何通过范围不得转移给新硬件。固定完整block分母80%/争取90%目标未通过，已测Q阶段7.377337%仍是阶段校准而非整块或最终RTL利用率。

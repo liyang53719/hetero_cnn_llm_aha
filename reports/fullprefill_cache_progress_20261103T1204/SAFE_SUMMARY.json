@@ -1,0 +1,50 @@
+{
+  "schema": "P0_M128_INTERMEDIATE_CACHE_NUMERIC_PROGRESS_V1",
+  "status": "INCOMPLETE",
+  "scope": "CLOSED_INTERMEDIATE_OUTPUTS_ONLY_NOT_FULL_BLOCK_OR_FINAL_RTL",
+  "source_commit": "75b9fc21e6d8a4a13bb82307969d9a0d9a953a79",
+  "sv_sha256": "cdbe95b38fe3d0722f6d685fd64b2894cdd07962994f251c976bb6080f291a8c",
+  "full_model_pass_count": 0,
+  "final_rtl_pass_count": 0,
+  "reports": [
+    {
+      "report": "review_running_k_outputs_20261103T1043",
+      "result_sha256": "94a212cadbb6efc42ae51059a17c958c1d0df17026b01f9cec76281cd02bf212"
+    },
+    {
+      "report": "review_running_k_rope_output_20261103T1101",
+      "result_sha256": "1e8b63ee408ab13d11912b2eab67fe86ac8728cda970cb3f835fbb567e600a89"
+    },
+    {
+      "report": "review_running_v_outputs_20261103T1125",
+      "result_sha256": "70443b028fee41012d19ca19b6a0332d06d6c51f0602e0cc35b62cc4695baa08"
+    },
+    {
+      "report": "review_running_cache_outputs_20261103T1140",
+      "result_sha256": "220a5b62fe647b24a0e518ce32c23227c92bedd96beddf7944d9606f44d15a2e"
+    }
+  ],
+  "cache_limitation": "pc9 actual.bin snapshots, not terminal final.bin acceptance",
+  "no_hardware_activation": true,
+  "bitwise_pass_outputs": {
+    "kr": "4d95684fbe4f9b7c48902c16035d301b1ffdc829d00ac4fda664070e25529b9d",
+    "k_post_rope_and_cache_k_snapshot": "d182f60430723ddd1aaff2d6d2e29caa73f825685e1e4a5bc31492598ebda5d9",
+    "v_and_cache_v_snapshot": "c563b04a1f84e2f59a0de16150dd6711e9c8026e727821e4d1a4bd1ce92befed"
+  },
+  "words_per_output": 32768,
+  "bytes_per_output": 131072,
+  "differences": {
+    "byte": 0,
+    "word": 0,
+    "bit": 0,
+    "max_absolute": 0,
+    "max_relative": 0,
+    "rmse": 0,
+    "actual_nonfinite": 0,
+    "expected_nonfinite": 0
+  },
+  "finite_only_outputs": [
+    "kraw",
+    "vraw"
+  ]
+}

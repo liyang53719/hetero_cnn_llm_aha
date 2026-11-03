@@ -1,0 +1,806 @@
+{
+  "candidate_id": "P0_QWEN2_FULL128_DEFAULT_REFERENCE_V1",
+  "execution_identity": {
+    "actual_torch_capability": "DEFAULT",
+    "affinity": "EXACT_ADMITTED_HOST_SET_NOT_HISTORICAL_AFFINITY",
+    "aten_cpu_capability": "default",
+    "interop_threads": 1,
+    "threads": 4
+  },
+  "frozen_fixture": {
+    "frozen_tensor_bytes": 10650624,
+    "frozen_tensor_count": 24,
+    "observed_module_calls": {
+      "input_layernorm": 1,
+      "mlp": 1,
+      "mlp.down_proj": 1,
+      "mlp.gate_proj": 1,
+      "mlp.up_proj": 1,
+      "post_attention_layernorm": 1,
+      "self_attn": 1,
+      "self_attn.k_proj": 1,
+      "self_attn.o_proj": 1,
+      "self_attn.q_proj": 1,
+      "self_attn.v_proj": 1
+    },
+    "original_profile": {
+      "checkpoint_revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+      "config_sha256": "a58e896d2756a7947f23f3db55667c19ca3b8524188a30c8c640cd7ff72a5136",
+      "configuration_class": "Qwen2Config",
+      "decoder_class": "Qwen2DecoderLayer",
+      "framework_revision": "4.40.1",
+      "layer": 0,
+      "model": "qwen2_1p5b",
+      "module": "qwen2",
+      "profile": 0,
+      "rotary_class": null,
+      "seed": 34930816,
+      "source_sha256": "f1c7a117ced20ee632e4c17d09982863304d6e30bb44f0ccdebd4b27dde259ad",
+      "storage": "FP32",
+      "threads": 4,
+      "torch_capability": "AVX512",
+      "width": 1536
+    },
+    "rope1024": {
+      "bytes": 524288,
+      "dtype": "FP32",
+      "sha256": "4060acc13a636cbd303e96552df99033cd348f238025f11bae1bc0fcab32c815",
+      "shape": [
+        2,
+        1024,
+        64
+      ]
+    },
+    "tensor_records": {
+      "baseline_cache.keys": {
+        "bytes": 65536,
+        "dtype": "torch.bfloat16",
+        "file": "reference_only/baseline_cache.keys.bin",
+        "sha256": "750698ea4c7c3cbfb556f4d8c5360bd1dbf8221eaeb6b89be50c1014512b2974",
+        "shape": [
+          1,
+          2,
+          128,
+          128
+        ]
+      },
+      "baseline_cache.values": {
+        "bytes": 65536,
+        "dtype": "torch.bfloat16",
+        "file": "reference_only/baseline_cache.values.bin",
+        "sha256": "fdded63f8e3e068408f73378abf76131fbe7efb8fa0a9c7fe3f1a7852c347645",
+        "shape": [
+          1,
+          2,
+          128,
+          128
+        ]
+      },
+      "baseline_output": {
+        "bytes": 393216,
+        "dtype": "torch.bfloat16",
+        "file": "reference_only/baseline_output.bin",
+        "sha256": "f31424ac57e19edfa03b7d95a8873dcee88a229c4f117abf6c4b26ef74a9de28",
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      },
+      "causal_mask": {
+        "bytes": 32768,
+        "dtype": "torch.bfloat16",
+        "file": "input_only/causal_mask.bin",
+        "sha256": "e867bc6f62d8ec12f687265532d551c7fe92cc53360a2196ebefbcff74901cdd",
+        "shape": [
+          1,
+          1,
+          128,
+          128
+        ]
+      },
+      "final_cache.keys": {
+        "bytes": 65536,
+        "dtype": "torch.bfloat16",
+        "file": "reference_only/final_cache.keys.bin",
+        "sha256": "750698ea4c7c3cbfb556f4d8c5360bd1dbf8221eaeb6b89be50c1014512b2974",
+        "shape": [
+          1,
+          2,
+          128,
+          128
+        ]
+      },
+      "final_cache.values": {
+        "bytes": 65536,
+        "dtype": "torch.bfloat16",
+        "file": "reference_only/final_cache.values.bin",
+        "sha256": "fdded63f8e3e068408f73378abf76131fbe7efb8fa0a9c7fe3f1a7852c347645",
+        "shape": [
+          1,
+          2,
+          128,
+          128
+        ]
+      },
+      "hidden_native": {
+        "bytes": 393216,
+        "dtype": "torch.bfloat16",
+        "file": "input_only/hidden_native.bin",
+        "sha256": "3c6c6833b8f8620cfc2cda87797e047b0eef99a70c2b0475665c0775d1ded90c",
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      },
+      "hidden_storage": {
+        "bytes": 786432,
+        "dtype": "torch.float32",
+        "file": "input_only/hidden_storage.bin",
+        "sha256": "f1039fa8dddce34b58ad421e987ef638de78d13a08ad679b3115493f6d800da5",
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      },
+      "output_storage": {
+        "bytes": 786432,
+        "dtype": "torch.float32",
+        "file": "reference_only/output_storage.bin",
+        "sha256": "66a2e7c6313d77e5b76726fda00838f97341c6e32e51feb51bd0ff8ae9c42870",
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      },
+      "positions": {
+        "bytes": 1024,
+        "dtype": "torch.int64",
+        "file": "input_only/positions.bin",
+        "sha256": "3e4f0a2fd9498da7c1440a355a22b6292161a5216c63aa0bc59b5a4742fd1e36",
+        "shape": [
+          1,
+          128
+        ]
+      },
+      "rope_cos": {
+        "bytes": 65536,
+        "dtype": "torch.float32",
+        "file": "input_only/rope_cos.bin",
+        "sha256": "53c6402c1052c7f30f1785b97682317f4fcc0dbc8f29bb87118c6c3a03d45547",
+        "shape": [
+          128,
+          128
+        ]
+      },
+      "rope_sin": {
+        "bytes": 65536,
+        "dtype": "torch.float32",
+        "file": "input_only/rope_sin.bin",
+        "sha256": "3a2b389f5a89caafc598cc5f6e6491d96ef783daf1b57cc1c2ef959a6b47779e",
+        "shape": [
+          128,
+          128
+        ]
+      },
+      "stage.input_layernorm.0": {
+        "bytes": 393216,
+        "dtype": "torch.bfloat16",
+        "file": "reference_only/stage.input_layernorm.0.bin",
+        "sha256": "a36384e92190d53a89d39d0f738fdab47f3a4a1f6af9c6244b533c77fe93e5bc",
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      },
+      "stage.mlp.0": {
+        "bytes": 393216,
+        "dtype": "torch.bfloat16",
+        "file": "reference_only/stage.mlp.0.bin",
+        "sha256": "90ee5039a9187fbf3886770ae3b247b2f96e3c20e9fc6e92377efa1042f45f2a",
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      },
+      "stage.mlp.down_proj.0": {
+        "bytes": 393216,
+        "dtype": "torch.bfloat16",
+        "file": "reference_only/stage.mlp.down_proj.0.bin",
+        "sha256": "90ee5039a9187fbf3886770ae3b247b2f96e3c20e9fc6e92377efa1042f45f2a",
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      },
+      "stage.mlp.gate_proj.0": {
+        "bytes": 2293760,
+        "dtype": "torch.bfloat16",
+        "file": "reference_only/stage.mlp.gate_proj.0.bin",
+        "sha256": "9c50b4ecf23b3ef8e565773515b4a1a5f8b8d38131bfab7fec160c841923c5f5",
+        "shape": [
+          1,
+          128,
+          8960
+        ]
+      },
+      "stage.mlp.up_proj.0": {
+        "bytes": 2293760,
+        "dtype": "torch.bfloat16",
+        "file": "reference_only/stage.mlp.up_proj.0.bin",
+        "sha256": "bbf996e38019274cd1f3f0e821b97e4df9f0545c1fc69e54d16767d02aa5e0bd",
+        "shape": [
+          1,
+          128,
+          8960
+        ]
+      },
+      "stage.post_attention_layernorm.0": {
+        "bytes": 393216,
+        "dtype": "torch.bfloat16",
+        "file": "reference_only/stage.post_attention_layernorm.0.bin",
+        "sha256": "0cb14c7c83e6a10abaf9159fff87de722cedbc488c155339e0c435f57fc28ef9",
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      },
+      "stage.self_attn.0.0": {
+        "bytes": 393216,
+        "dtype": "torch.bfloat16",
+        "file": "reference_only/stage.self_attn.0.0.bin",
+        "sha256": "034b5367fc7540916b0f34e3e97dfdbb85df11dc62b5c13ff3b35a6531a08b6a",
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      },
+      "stage.self_attn.0.1": {
+        "bytes": 393216,
+        "dtype": "torch.bfloat16",
+        "file": "reference_only/stage.self_attn.0.1.bin",
+        "sha256": "375523468652eec0a4765d67c08506ab1d441bdfe3dd69ef55d7ec0d0323335d",
+        "shape": [
+          1,
+          12,
+          128,
+          128
+        ]
+      },
+      "stage.self_attn.k_proj.0": {
+        "bytes": 65536,
+        "dtype": "torch.bfloat16",
+        "file": "reference_only/stage.self_attn.k_proj.0.bin",
+        "sha256": "e3ed33e271b833a73f39d60e8948a9e13acefdc1a77eca3b21ad295aaa7e70e8",
+        "shape": [
+          1,
+          128,
+          256
+        ]
+      },
+      "stage.self_attn.o_proj.0": {
+        "bytes": 393216,
+        "dtype": "torch.bfloat16",
+        "file": "reference_only/stage.self_attn.o_proj.0.bin",
+        "sha256": "034b5367fc7540916b0f34e3e97dfdbb85df11dc62b5c13ff3b35a6531a08b6a",
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      },
+      "stage.self_attn.q_proj.0": {
+        "bytes": 393216,
+        "dtype": "torch.bfloat16",
+        "file": "reference_only/stage.self_attn.q_proj.0.bin",
+        "sha256": "35419eaed5ae5a653c2963f65e4334b1f78d0ef26cdababa4472aa83dc088966",
+        "shape": [
+          1,
+          128,
+          1536
+        ]
+      },
+      "stage.self_attn.v_proj.0": {
+        "bytes": 65536,
+        "dtype": "torch.bfloat16",
+        "file": "reference_only/stage.self_attn.v_proj.0.bin",
+        "sha256": "9bce2fdd9ec713b5fa6b40e44b6954a034ef0b3ad3559a170112baf9ae03c000",
+        "shape": [
+          1,
+          128,
+          256
+        ]
+      }
+    }
+  },
+  "historical_reference_sha256": "9fb41a4edd3d771ef5dbbbf442c2387af78667aa06b3685fc8d2754dc29b25a6",
+  "lineage": {
+    "candidates/ci_frontend_pipeline_r2_20261029/lossless_log.py": "9dde4fd34639b79bd1bcbc0f76522770ba287a762fb0b08e41d7c8d92e627938",
+    "candidates/ci_frontend_pipeline_r2_20261029/rss_telemetry.py": "6ab13bb9f1f9db95f284dd1a0121bcf748eec087b035eb9e1e32b77d64eec8f4",
+    "candidates/ci_frontend_pipeline_r2_20261029/strict_cleanup.py": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+    "candidates/ci_frontend_pipeline_r2_20261029/supervise_multiroot.py": "8a7f08366b449f61ea1f18f87ced95f4b4cade4ec1e8359736e2def44c8da82a",
+    "candidates/five_profile_acquisition_resume_20261028/acquire_resumable.py": "394130861ef0c43c89c78c62312760e62fd30c22e19cf3ef26b13e18e0480b9d",
+    "candidates/five_profile_acquisition_resume_20261028/prefix.py": "b1cd8e44bb6a6f3b259f05c78c2a8c6c1297d1c177357ea7abf2548b05886c5d",
+    "candidates/five_profile_input_recovery_20261028/reconstruct_plan.py": "466c267f7a0c6eaaefc41705112196b6c4f29a037da03b692237f89b95b7baee",
+    "candidates/independent_reference_p0_cache_arm_20261028T2313/profiles.json": "d1c846e7b17fb07fab77643f0470c16660d0b872e9f66354f571e6585b6472b0",
+    "candidates/independent_reference_p0_cache_arm_20261028T2313/run_reference.py": "5e4f13f2117e675ca9e308bf01cb7003003df21d9b9d8c59776cef0e1b69e9e4",
+    "candidates/independent_reference_p0_cache_arm_20261028T2313/stimulus.py": "8fd56838120a7bd1c1edab91af5a5006137d23423747771214e8ac3c8eaa6e22",
+    "candidates/independent_reference_p0_cache_arm_20261028T2313/tensor_acquisition_plan.json": "df2d2a42cb3fa7c837b78ff5aabceca147f64015f1c3f36393deac76d826609f",
+    "candidates/same_job_execution_20261030/runtime/source/QWEN2_WHEEL_LOCK.json": "92e02a64b81a3433206ce85bfe1d65593088f0c4a40dbb0db3c3dd45d5ce0889",
+    "candidates/same_job_execution_20261030/runtime/source/RUNTIME_CONTRACT.json": "ae5cafb9d2294c890d6d5f2aae98761599cb92f354322cf16df27333a9c5f094",
+    "candidates/same_job_execution_20261030/runtime/source/derive_sidecar.py": "e96130e044520444758b913ba38f7fe774ac752675daf85aaa95da77e136e274",
+    "candidates/same_job_execution_20261030/runtime/source/prepare_runtimes.py": "6aa5755d1112093b3060e3e867c09bbb7a9723d96d1ce7ab0a3509a5c997588c",
+    "candidates/same_job_materialization_20261029/acquire_profile.py": "8cb63392772823ff76dfbe5c2fa0042ec329aaf3d978ce76add79fa8ca235002",
+    "candidates/same_job_materialization_20261029/generate_p0_rope.py": "9e96dec630f02b6aac0b1026172ea3524285ad6a13c6ea2019f73e3ba9aa748a",
+    "config/upstream/weight_headers/qwen2_1p5b/config.json": "a58e896d2756a7947f23f3db55667c19ca3b8524188a30c8c640cd7ff72a5136"
+  },
+  "runtime_sidecar": {
+    "content": {
+      "artifact_sha256": {
+        "framework": "9d5ee0c8142a60501faf9e49a0b42f8e9cb8611823bce4f195a9325a6816337e",
+        "torch": "ee40b8a4b4b2cf0670c6fd4f35a7ef23871af956fecb238fbf5da15a72650b1d"
+      },
+      "framework_revision": "4.40.1",
+      "identity": "ARCHIVE_DERIVED_NOT_LIVE_IMPORT_CALIBRATED",
+      "limits": "Imported helper set is not complete transitive framework source closure. Native Torch shared libraries are separately checked before and after execution.",
+      "module_relative_paths": {
+        "torch._C": "torch/_C.cpython-312-x86_64-linux-gnu.so",
+        "torch.nn.functional": "torch/nn/functional.py",
+        "transformers.activations": "transformers/activations.py",
+        "transformers.cache_utils": "transformers/cache_utils.py",
+        "transformers.models.qwen2.configuration_qwen2": "transformers/models/qwen2/configuration_qwen2.py",
+        "transformers.models.qwen2.modeling_qwen2": "transformers/models/qwen2/modeling_qwen2.py"
+      },
+      "module_sha256": {
+        "torch._C": "2a4e075c33f292a709006fe69bca669e681351fad1fcddd7c957fcf96362d1a8",
+        "torch.nn.functional": "f6335e443ce93ddf21ecf9d94bbb4d4a4d92e128c5bfb59826f35495c9c28703",
+        "transformers.activations": "10c37e915ce2b52d539a5b52ecaaf644e2b0c56d282db00778098d74342ebeee",
+        "transformers.cache_utils": "2a4b6b398f8ea8631450a871b0a1bbc6b9722148970648c678745a06573bf18c",
+        "transformers.models.qwen2.configuration_qwen2": "71aa00c48b4b586e283033afe11ce9df8c3e9bbc51613e11cd0617b103c5582b",
+        "transformers.models.qwen2.modeling_qwen2": "f1c7a117ced20ee632e4c17d09982863304d6e30bb44f0ccdebd4b27dde259ad"
+      },
+      "native_file_sha256": {
+        "torch/_C.cpython-312-x86_64-linux-gnu.so": "2a4e075c33f292a709006fe69bca669e681351fad1fcddd7c957fcf96362d1a8",
+        "torch/lib/libaoti_custom_ops.so": "249a640bf74e8e8ef69fa685b59ae4d46412144d39ffdd94338b729b75b27c7b",
+        "torch/lib/libbackend_with_compiler.so": "f3b85da9df199c6b735071c8a91278d20c95586f7fc782ac7607049f52334c4a",
+        "torch/lib/libc10.so": "7dc289cfb287f751eb8586c275022dba56979dd9e769cd01b73b2993f3442c84",
+        "torch/lib/libgomp.so.1": "78511033caddec6ccae8f4d62b94d56135f377c4cee33120e6d7df2ef499f69f",
+        "torch/lib/libjitbackend_test.so": "bb81f643ef833cc5afa3cef29281173c24984c50a8040c94def485db7913456f",
+        "torch/lib/libshm.so": "6705cdaa351819a15bdbd9688734a658dbf88bbd14224e59eeeaceec081658b3",
+        "torch/lib/libtorch.so": "59a95807d56ca89993351a173839f160ca9c2c6ec6f6b89a5e691d8f1392d3ff",
+        "torch/lib/libtorch_cpu.so": "4dc5b3a649b61d8f39be127866bc258dda19d74e339f449fe18103db63e8d76f",
+        "torch/lib/libtorch_global_deps.so": "2e5d497259a62960d95f4a7719abaeb24745429b49ffdf58e67672140205eb99",
+        "torch/lib/libtorch_python.so": "3c30b9ce8bc80e1a58f6c2288309439831b319d5af074bcbdb7c6c9f9d4e0c44",
+        "torch/lib/libtorchbind_test.so": "0db222a06ea5793086b895191e9857899daf2b3231eb3a865429999c971bb075"
+      }
+    },
+    "sha256": "17d159b19e98d6f104bbaba1bd62ea2de96b5bcde8185230135c6a96d445628f"
+  },
+  "schema": "P0_FROZEN_VISIBLE_FIXTURE_V1",
+  "weight_bytes": 93595648,
+  "weight_count": 12,
+  "weights": [
+    {
+      "bytes": 3072,
+      "dtype": "BF16",
+      "end": 466788999,
+      "historical_receipt_sha256": "84986a77c8472b433bd90e3e39dd9434e59cff757ad0d9cef37bee621cdf3fb3",
+      "name": "model.layers.0.input_layernorm.weight",
+      "sha256": "ea77d5968e396420086f0c6c45c08df4ca4228e0c8a0be5d6ec5d0d247110a0e",
+      "shape": [
+        1536
+      ],
+      "shard_bytes": 3087467144,
+      "start": 466785928,
+      "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors"
+    },
+    {
+      "bytes": 27525120,
+      "dtype": "BF16",
+      "end": 494314119,
+      "historical_receipt_sha256": "cec118fcd4dfc1f789eb424afcb03b91fbb98e6a4a814f92213f870315a1a705",
+      "name": "model.layers.0.mlp.down_proj.weight",
+      "sha256": "8a9657234cffb29cec816483e03454846d80d3a1f4171e6bc40479f3ba73ce5a",
+      "shape": [
+        1536,
+        8960
+      ],
+      "shard_bytes": 3087467144,
+      "start": 466789000,
+      "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors"
+    },
+    {
+      "bytes": 27525120,
+      "dtype": "BF16",
+      "end": 521839239,
+      "historical_receipt_sha256": "32544d19f8e18ed2ff91275da8e09d8152650424156d16825410db3a212ff708",
+      "name": "model.layers.0.mlp.gate_proj.weight",
+      "sha256": "0219acbf1f5bc38fc55ee56fa6b55c82150a1a4279915090e857beb382cc0d7e",
+      "shape": [
+        8960,
+        1536
+      ],
+      "shard_bytes": 3087467144,
+      "start": 494314120,
+      "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors"
+    },
+    {
+      "bytes": 27525120,
+      "dtype": "BF16",
+      "end": 549364359,
+      "historical_receipt_sha256": "19c3e5fdce865e60232b379e176c82382ce04fbbf51de6dd4feabd61fcda2b5f",
+      "name": "model.layers.0.mlp.up_proj.weight",
+      "sha256": "a403942b0dc208a543e8434d091564cfd4b7a091c291d02d7a62ae46884e61ed",
+      "shape": [
+        8960,
+        1536
+      ],
+      "shard_bytes": 3087467144,
+      "start": 521839240,
+      "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors"
+    },
+    {
+      "bytes": 3072,
+      "dtype": "BF16",
+      "end": 549367431,
+      "historical_receipt_sha256": "3e01a253642eb01172ef7a63f53e4f5e599e5ed32c4afea0cf814b4603a1dbde",
+      "name": "model.layers.0.post_attention_layernorm.weight",
+      "sha256": "762cfb39d378a8f4f1d2cdf1781a94089613e51d395acc0f4d3578be2459400a",
+      "shape": [
+        1536
+      ],
+      "shard_bytes": 3087467144,
+      "start": 549364360,
+      "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors"
+    },
+    {
+      "bytes": 512,
+      "dtype": "BF16",
+      "end": 549367943,
+      "historical_receipt_sha256": "d98047749326af3be020cbda4257eceb80520f4dea9c3b4f498b50a8e7eedd94",
+      "name": "model.layers.0.self_attn.k_proj.bias",
+      "sha256": "56a716f9fd535d659a918afc9b7d25ad1d159dc0e9bd6da68549a155bb62ada0",
+      "shape": [
+        256
+      ],
+      "shard_bytes": 3087467144,
+      "start": 549367432,
+      "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors"
+    },
+    {
+      "bytes": 786432,
+      "dtype": "BF16",
+      "end": 550154375,
+      "historical_receipt_sha256": "022e23f622d5553f16da5276ddd8ae0ddcc1f465151a0fdb709e5315546c8d27",
+      "name": "model.layers.0.self_attn.k_proj.weight",
+      "sha256": "addac2eb287cc8d8caa24178c94156c67bab35bc6a9f76927f50a4f0be0ade47",
+      "shape": [
+        256,
+        1536
+      ],
+      "shard_bytes": 3087467144,
+      "start": 549367944,
+      "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors"
+    },
+    {
+      "bytes": 4718592,
+      "dtype": "BF16",
+      "end": 554872967,
+      "historical_receipt_sha256": "644ec71fdc0e3769814cdcc5c35c99c5f05d4080cd1d0ac85ef3f8d2cf1a264f",
+      "name": "model.layers.0.self_attn.o_proj.weight",
+      "sha256": "7613bde8e47278a40bbf05222cd0799ed873194e56a96f2f6167d4580bb1a735",
+      "shape": [
+        1536,
+        1536
+      ],
+      "shard_bytes": 3087467144,
+      "start": 550154376,
+      "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors"
+    },
+    {
+      "bytes": 3072,
+      "dtype": "BF16",
+      "end": 554876039,
+      "historical_receipt_sha256": "d804d9e6b4a567160c923fe41d25af24c9eaf4dc35decbff69396d3953280cdc",
+      "name": "model.layers.0.self_attn.q_proj.bias",
+      "sha256": "c68e4379e1c3701dabe73e98cda2fc87c85cce47adb6e4dc7f871fba9f497d9d",
+      "shape": [
+        1536
+      ],
+      "shard_bytes": 3087467144,
+      "start": 554872968,
+      "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors"
+    },
+    {
+      "bytes": 4718592,
+      "dtype": "BF16",
+      "end": 559594631,
+      "historical_receipt_sha256": "73ec7b657db54e1015afe9f6bde9caebc0e4d0fdf059969d2e0fc59505a59c9a",
+      "name": "model.layers.0.self_attn.q_proj.weight",
+      "sha256": "142ece1271ee9eb6b1e91055e2a6293a5572bf9b5395c56c77f9584728ee89d4",
+      "shape": [
+        1536,
+        1536
+      ],
+      "shard_bytes": 3087467144,
+      "start": 554876040,
+      "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors"
+    },
+    {
+      "bytes": 512,
+      "dtype": "BF16",
+      "end": 559595143,
+      "historical_receipt_sha256": "52e41f83882b987a1e4254171b894ebb081c62cfe81adf33bbed3e601deaf6af",
+      "name": "model.layers.0.self_attn.v_proj.bias",
+      "sha256": "4ed960cd1895ac1bcc5012a0948f9b73e50b411b9b8015e9941d28e8d45fd29d",
+      "shape": [
+        256
+      ],
+      "shard_bytes": 3087467144,
+      "start": 559594632,
+      "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors"
+    },
+    {
+      "bytes": 786432,
+      "dtype": "BF16",
+      "end": 560381575,
+      "historical_receipt_sha256": "026318108ab446955bef5501297024c1827a02ccc0b6c4b3d587c38d64846d29",
+      "name": "model.layers.0.self_attn.v_proj.weight",
+      "sha256": "e99b01559f13e11a0c96309f5b4e11664223aa31a2f318e49597ad8e66b0ea32",
+      "shape": [
+        256,
+        1536
+      ],
+      "shard_bytes": 3087467144,
+      "start": 559595144,
+      "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors"
+    }
+  ],
+  "wheel_bytes": 238463458,
+  "wheel_count": 26,
+  "wheel_lock_sha256": "92e02a64b81a3433206ce85bfe1d65593088f0c4a40dbb0db3c3dd45d5ce0889",
+  "wheels": [
+    {
+      "filename": "certifi-2026.7.22-py3-none-any.whl",
+      "name": "certifi",
+      "role": "runtime",
+      "sha256": "62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775",
+      "size_bytes": 136983,
+      "url": "https://files.pythonhosted.org/packages/0b/a7/71ac2cff56fec219ed242bb11b8efb69fcc4bec75db06fb7bfe35de520e6/certifi-2026.7.22-py3-none-any.whl",
+      "version": "2026.7.22"
+    },
+    {
+      "filename": "charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+      "name": "charset-normalizer",
+      "role": "runtime",
+      "sha256": "3d31298449090ab8d47b7b1b2a555ff73cac7ed438a08b7ac160980c7ebed649",
+      "size_bytes": 257601,
+      "url": "https://files.pythonhosted.org/packages/7f/c5/38806a25ab5e65fc178f39affeda20858efafede2fce1ffc2556cfc9fe73/charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+      "version": "3.5.2"
+    },
+    {
+      "filename": "filelock-3.32.3-py3-none-any.whl",
+      "name": "filelock",
+      "role": "runtime",
+      "sha256": "7f0ca4bcc0e181c60dbbd8aa9ab5b120ebb99e4e064e83636340056f833a1f09",
+      "size_bytes": 98901,
+      "url": "https://files.pythonhosted.org/packages/a7/8e/50f46a9c0ce8d2861a394c1347caae037ea0431d2f67d7feb151cbc4649a/filelock-3.32.3-py3-none-any.whl",
+      "version": "3.32.3"
+    },
+    {
+      "filename": "fsspec-2026.7.0-py3-none-any.whl",
+      "name": "fsspec",
+      "role": "runtime",
+      "sha256": "b57ddbafedfaef7018c1ecab32aa200a9d7ca26b77965f64e48b70061249d279",
+      "size_bytes": 206583,
+      "url": "https://files.pythonhosted.org/packages/fd/3c/6a2bf344106328fd04963664a60b9bb6496fc25df8e962fcdc1367285fb9/fsspec-2026.7.0-py3-none-any.whl",
+      "version": "2026.7.0"
+    },
+    {
+      "filename": "hf_xet-1.7.0-cp38-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "name": "hf-xet",
+      "role": "runtime",
+      "sha256": "2814a6e999d13464c4d679b788cc5d784eb5a4edfc638a31f10e9a11ab531ef8",
+      "size_bytes": 4212180,
+      "url": "https://files.pythonhosted.org/packages/a3/4c/2bf3b66c215d409655f28de1622393dde04c9461280d48c7924bb3b2decd/hf_xet-1.7.0-cp38-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "version": "1.7.0"
+    },
+    {
+      "filename": "huggingface_hub-0.36.2-py3-none-any.whl",
+      "name": "huggingface-hub",
+      "role": "runtime",
+      "sha256": "48f0c8eac16145dfce371e9d2d7772854a4f591bcb56c9cf548accf531d54270",
+      "size_bytes": 566395,
+      "url": "https://files.pythonhosted.org/packages/a8/af/48ac8483240de756d2438c380746e7130d1c6f75802ef22f3c6d49982787/huggingface_hub-0.36.2-py3-none-any.whl",
+      "version": "0.36.2"
+    },
+    {
+      "filename": "idna-3.20-py3-none-any.whl",
+      "name": "idna",
+      "role": "runtime",
+      "sha256": "ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c",
+      "size_bytes": 69583,
+      "url": "https://files.pythonhosted.org/packages/58/a2/bb081bab032533a855d44de1d56f8e8426114ff1ba5d1f07a438a0a654f8/idna-3.20-py3-none-any.whl",
+      "version": "3.20"
+    },
+    {
+      "filename": "jinja2-3.1.6-py3-none-any.whl",
+      "name": "jinja2",
+      "role": "runtime",
+      "sha256": "85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67",
+      "size_bytes": 134899,
+      "url": "https://files.pythonhosted.org/packages/62/a1/3d680cbfd5f4b8f15abc1d571870c5fc3e594bb582bc3b64ea099db13e56/jinja2-3.1.6-py3-none-any.whl",
+      "version": "3.1.6"
+    },
+    {
+      "filename": "markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+      "name": "markupsafe",
+      "role": "runtime",
+      "sha256": "d6dd0be5b5b189d31db7cda48b91d7e0a9795f31430b7f271219ab30f1d3ac9d",
+      "size_bytes": 22947,
+      "url": "https://files.pythonhosted.org/packages/3c/2e/8d0c2ab90a8c1d9a24f0399058ab8519a3279d1bd4289511d74e909f060e/markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+      "version": "3.0.3"
+    },
+    {
+      "filename": "mpmath-1.3.0-py3-none-any.whl",
+      "name": "mpmath",
+      "role": "runtime",
+      "sha256": "a0b2b9fe80bbcd81a6647ff13108738cfb482d481d826cc0e02f5b35e5c88d2c",
+      "size_bytes": 536198,
+      "url": "https://files.pythonhosted.org/packages/43/e3/7d92a15f894aa0c9c4b49b8ee9ac9850d6e63b03c9c32c0367a13ae62209/mpmath-1.3.0-py3-none-any.whl",
+      "version": "1.3.0"
+    },
+    {
+      "filename": "networkx-3.6.1-py3-none-any.whl",
+      "name": "networkx",
+      "role": "runtime",
+      "sha256": "d47fbf302e7d9cbbb9e2555a0d267983d2aa476bac30e90dfbe5669bd57f3762",
+      "size_bytes": 2068504,
+      "url": "https://files.pythonhosted.org/packages/9e/c9/b2622292ea83fbb4ec318f5b9ab867d0a28ab43c5717bb85b0a5f6b3b0a4/networkx-3.6.1-py3-none-any.whl",
+      "version": "3.6.1"
+    },
+    {
+      "filename": "numpy-2.3.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+      "name": "numpy",
+      "role": "runtime",
+      "sha256": "0d8163f43acde9a73c2a33605353a4f1bc4798745a8b1d73183b28e5b435ae28",
+      "size_bytes": 16606086,
+      "url": "https://files.pythonhosted.org/packages/b6/23/2a1b231b8ff672b4c450dac27164a8b2ca7d9b7144f9c02d2396518352eb/numpy-2.3.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+      "version": "2.3.5"
+    },
+    {
+      "filename": "packaging-26.3-py3-none-any.whl",
+      "name": "packaging",
+      "role": "runtime",
+      "sha256": "d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c",
+      "size_bytes": 129956,
+      "url": "https://files.pythonhosted.org/packages/63/34/ba1c580383c9eada3711951fef0795c80b829a078d72188184bcab9dd527/packaging-26.3-py3-none-any.whl",
+      "version": "26.3"
+    },
+    {
+      "filename": "pip-25.0.1-py3-none-any.whl",
+      "name": "pip",
+      "role": "provisioning-tool",
+      "sha256": "c46efd13b6aa8279f33f2864459c8ce587ea6a1a59ee20de055868d8f7688f7f",
+      "size_bytes": 1841526,
+      "url": "https://files.pythonhosted.org/packages/c9/bc/b7db44f5f39f9d0494071bddae6880eb645970366d0a200022a1a93d57f5/pip-25.0.1-py3-none-any.whl",
+      "version": "25.0.1"
+    },
+    {
+      "filename": "pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+      "name": "pyyaml",
+      "role": "runtime",
+      "sha256": "ba1cc08a7ccde2d2ec775841541641e4548226580ab850948cbfda66a1befcdc",
+      "size_bytes": 807870,
+      "url": "https://files.pythonhosted.org/packages/8b/9d/b3589d3877982d4f2329302ef98a8026e7f4443c765c46cfecc8858c6b4b/pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+      "version": "6.0.3"
+    },
+    {
+      "filename": "regex-2026.9.29-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+      "name": "regex",
+      "role": "runtime",
+      "sha256": "39ab5894d971f9ac68baa6eca5c50387db579cfcacf36ae8df3feceb1815e6d0",
+      "size_bytes": 807783,
+      "url": "https://files.pythonhosted.org/packages/26/83/d2fbd2e4e3afb1167daa825187d196f313cbaa1a4768f311fb041bb0e3d2/regex-2026.9.29-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+      "version": "2026.9.29"
+    },
+    {
+      "filename": "requests-2.34.2-py3-none-any.whl",
+      "name": "requests",
+      "role": "runtime",
+      "sha256": "2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0",
+      "size_bytes": 73075,
+      "url": "https://files.pythonhosted.org/packages/a0/f4/c67b0b3f1b9245e8d266f0f112c500d50e5b4e83cb6f3b71b6528104182a/requests-2.34.2-py3-none-any.whl",
+      "version": "2.34.2"
+    },
+    {
+      "filename": "safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "name": "safetensors",
+      "role": "runtime",
+      "sha256": "fd6f3f93c9a0a7cc2788ee63fb763353d4bd2e89b0751bc78fcf7dda00bea774",
+      "size_bytes": 516040,
+      "url": "https://files.pythonhosted.org/packages/28/50/f203ff3a3ddfe19308efc83c5a3a29ed02bf786732ec35e68bf9162f3365/safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "version": "0.8.0"
+    },
+    {
+      "filename": "setuptools-78.1.0-py3-none-any.whl",
+      "name": "setuptools",
+      "role": "runtime",
+      "sha256": "3e386e96793c8702ae83d17b853fb93d3e09ef82ec62722e61da5cd22376dcd8",
+      "size_bytes": 1256108,
+      "url": "https://files.pythonhosted.org/packages/54/21/f43f0a1fa8b06b32812e0975981f4677d28e0f3271601dc88ac5a5b83220/setuptools-78.1.0-py3-none-any.whl",
+      "version": "78.1.0"
+    },
+    {
+      "filename": "sympy-1.14.0-py3-none-any.whl",
+      "name": "sympy",
+      "role": "runtime",
+      "sha256": "e091cc3e99d2141a0ba2847328f5479b05d94a6635cb96148ccb3f34671bd8f5",
+      "size_bytes": 6299353,
+      "url": "https://files.pythonhosted.org/packages/a2/09/77d55d46fd61b4a135c444fc97158ef34a095e5681d0a6c10b75bf356191/sympy-1.14.0-py3-none-any.whl",
+      "version": "1.14.0"
+    },
+    {
+      "filename": "tokenizers-0.19.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "name": "tokenizers",
+      "role": "runtime",
+      "sha256": "7c9d5b6c0e7a1e979bec10ff960fae925e947aab95619a6fdb4c1d8ff3708ce3",
+      "size_bytes": 3610961,
+      "url": "https://files.pythonhosted.org/packages/80/54/12047a69f5b382d7ee72044dc89151a2dd0d13b2c9bdcc22654883704d31/tokenizers-0.19.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "version": "0.19.1"
+    },
+    {
+      "filename": "torch-2.10.0+cpu-cp312-cp312-manylinux_2_28_x86_64.whl",
+      "name": "torch",
+      "role": "runtime",
+      "sha256": "ee40b8a4b4b2cf0670c6fd4f35a7ef23871af956fecb238fbf5da15a72650b1d",
+      "size_bytes": 188943803,
+      "url": "https://download-r2.pytorch.org/whl/cpu/torch-2.10.0%2Bcpu-cp312-cp312-manylinux_2_28_x86_64.whl",
+      "version": "2.10.0+cpu"
+    },
+    {
+      "filename": "tqdm-4.70.1-py3-none-any.whl",
+      "name": "tqdm",
+      "role": "runtime",
+      "sha256": "c293e525e6fef9c20e8728fd4612df02a0aa31bb5fe91ecd93e123b1b7bffa73",
+      "size_bytes": 80199,
+      "url": "https://files.pythonhosted.org/packages/a7/03/921a3d3c75785aca9ebfbfcabfbc3a1be12e2ab5265deb026d55a5a3f83e/tqdm-4.70.1-py3-none-any.whl",
+      "version": "4.70.1"
+    },
+    {
+      "filename": "transformers-4.40.1-py3-none-any.whl",
+      "name": "transformers",
+      "role": "runtime",
+      "sha256": "9d5ee0c8142a60501faf9e49a0b42f8e9cb8611823bce4f195a9325a6816337e",
+      "size_bytes": 8998636,
+      "url": "https://files.pythonhosted.org/packages/cf/90/2596ac2ab49c4df6ff1fceaf7f5afb18401ba2f326348ce1a6261a65e7ed/transformers-4.40.1-py3-none-any.whl",
+      "version": "4.40.1"
+    },
+    {
+      "filename": "typing_extensions-4.16.0-py3-none-any.whl",
+      "name": "typing-extensions",
+      "role": "runtime",
+      "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+      "size_bytes": 45571,
+      "url": "https://files.pythonhosted.org/packages/49/d3/b8441a820a491ddfc024b0b0cf0393375b75ea13866d9c66727e54c2fc80/typing_extensions-4.16.0-py3-none-any.whl",
+      "version": "4.16.0"
+    },
+    {
+      "filename": "urllib3-2.8.0-py3-none-any.whl",
+      "name": "urllib3",
+      "role": "runtime",
+      "sha256": "0cf3cae568d36aa9576b28dfb35f11328f1cb974ca7647d9475ebb86c75ac6e3",
+      "size_bytes": 135717,
+      "url": "https://files.pythonhosted.org/packages/92/9d/c4e665119135114480843e7ab388fa94d8480650450e6f8e26b70d323a4c/urllib3-2.8.0-py3-none-any.whl",
+      "version": "2.8.0"
+    }
+  ]
+}

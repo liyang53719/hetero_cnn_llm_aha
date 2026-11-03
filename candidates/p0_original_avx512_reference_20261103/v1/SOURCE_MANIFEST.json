@@ -1,0 +1,130 @@
+{
+  "candidate_id": "P0_QWEN2_FULL128_ORIGINAL_AVX512_REFERENCE_V1",
+  "files": {
+    ".github/workflows/hetero-p0-original-avx512-reference.yml": {
+      "bytes": 4210,
+      "sha256": "0834403dc23262e6dba24937bb82315abe4f20ec63f3cf91f23fa47d24b099fb"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/FROZEN_P0.json": {
+      "bytes": 33521,
+      "sha256": "e93e1a8ff6e54f7f82ddd3d0134785350a09726e257c2cb73b6823625fa09c76"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/PLAN.zh.md": {
+      "bytes": 6628,
+      "sha256": "c9e055aa4ccae043913064ce85b1f7c5061c546223bfe0e8eaa5d557a12af2dd"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/acquire_weights.py": {
+      "bytes": 10472,
+      "sha256": "0bc350957fd1feb3ce76ccb3a95c53cf0c3f915312156383fd4bf025ec5b797e"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/config.json": {
+      "bytes": 660,
+      "sha256": "a58e896d2756a7947f23f3db55667c19ca3b8524188a30c8c640cd7ff72a5136"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/export_seal.py": {
+      "bytes": 3632,
+      "sha256": "12ea05274e45f56f03c041596866413e6a8e651d020aed161f1395c549331da9"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/finalize.py": {
+      "bytes": 2705,
+      "sha256": "401f01a74b9e9dda31db7959321925f73b6ea86d3d02c0560136d65750857036"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/fixture_gate.py": {
+      "bytes": 4408,
+      "sha256": "b3b7e5645d726c4bd3ca306c08a330f0ea387d293b2549694160f89fdf4439a2"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/generate_p0_rope.py": {
+      "bytes": 4133,
+      "sha256": "53146dc2ac4d1a646a0d2fa1d8caa68d3dd8b229bac9759dbead385e974e4658"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/host_checks.py": {
+      "bytes": 3801,
+      "sha256": "0882866f9955c2777fc5b2ae38401ec4ae7b4d5373e6e872c554ea507d185383"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/lossless_log.py": {
+      "bytes": 2390,
+      "sha256": "9dde4fd34639b79bd1bcbc0f76522770ba287a762fb0b08e41d7c8d92e627938"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/prepare_runtime.py": {
+      "bytes": 15248,
+      "sha256": "d43fc7f2355653c1e610dccf01b3b6221752c4e7c1bacec6ccd3c44a8e885457"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/profiles.json": {
+      "bytes": 3338,
+      "sha256": "d1c846e7b17fb07fab77643f0470c16660d0b872e9f66354f571e6585b6472b0"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/rss_telemetry.py": {
+      "bytes": 17041,
+      "sha256": "6ab13bb9f1f9db95f284dd1a0121bcf748eec087b035eb9e1e32b77d64eec8f4"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/run_portable.py": {
+      "bytes": 19969,
+      "sha256": "f4c082911074bf863b9e980198dd4b1223bad843ab80f85e71837822f999513d"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/run_reference.py": {
+      "bytes": 17922,
+      "sha256": "07cf3a38775600be8e2881cccd17fb675a98a197d077aa3cc230ca6b8ca46162"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/safe_export.py": {
+      "bytes": 16492,
+      "sha256": "e31ea8c34daa7dc9aff8ae46c484ddb2180bbb7957f8c650e8601a210e9a977d"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/stimulus.py": {
+      "bytes": 1989,
+      "sha256": "8fd56838120a7bd1c1edab91af5a5006137d23423747771214e8ac3c8eaa6e22"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/strict_cleanup.py": {
+      "bytes": 23204,
+      "sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/supervise_multiroot.py": {
+      "bytes": 21807,
+      "sha256": "38dce8a62ba77364a9cf46b1ce072ff9f89c09a36f90352b0bf7587c623eae22"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/tensor_acquisition_plan.json": {
+      "bytes": 31287,
+      "sha256": "df2d2a42cb3fa7c837b78ff5aabceca147f64015f1c3f36393deac76d826609f"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/test_avx512_identity.py": {
+      "bytes": 6494,
+      "sha256": "758e1f8c7d041d4f9b33f06a9d06d0a9d0bdfd278fc9c34026c3a9f5bdcd9713"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/test_avx512_runtime.py": {
+      "bytes": 12389,
+      "sha256": "db27af1ed84632a2fa7a05743c3e09ca67b08fb604acdc53a8bf0bc42932341f"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/test_controller_mock.py": {
+      "bytes": 14284,
+      "sha256": "c9fd37e8d136d28e6694fa483225139f50ef0d49605678d49525261a2afe3426"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/test_reference_contract.py": {
+      "bytes": 5394,
+      "sha256": "b546a84b9c35eec77152c833f6654778d011dbd506e0b529fff31a80ab854df3"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/test_runtime_acquisition.py": {
+      "bytes": 5609,
+      "sha256": "077456730667d205d56c391f6e9b7f6ff86aa86568ff73d3b8cb8c02cdbcc16f"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/test_safe_export.py": {
+      "bytes": 9864,
+      "sha256": "1b0e36b8f91c01ae715a4e6c0916221295b544ac6c37783de34af504f2dca52f"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/test_weight_failure_codes.py": {
+      "bytes": 6972,
+      "sha256": "2053d5fa256a609607c8c4c4d259d9aa91829aa8c0b39c8092793be0b8a5aed8"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/validate_avx512_launch.py": {
+      "bytes": 2294,
+      "sha256": "076f9761325718df3c97022d17c84f40ebb65194627eb7987e7691d8088db48e"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/validate_source.py": {
+      "bytes": 1822,
+      "sha256": "8a19731e411887214483997628189de127d1260ac3518abfcdc9cd3d51af5ae2"
+    },
+    "candidates/p0_original_avx512_reference_20261103/v1/weight_errors.py": {
+      "bytes": 464,
+      "sha256": "1f1591c16dbe9a0d4d350b2b2d0a06161f98b2b06d78bfc4192dcfc547439600"
+    }
+  },
+  "schema": "P0_AVX512_SOURCE_CLOSURE_V1"
+}

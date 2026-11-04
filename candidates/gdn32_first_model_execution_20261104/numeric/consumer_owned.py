@@ -337,7 +337,7 @@ def coverage_policy(profile,common,identity,bundle_root,source_relocation=None):
     path=pathlib.Path(__file__).resolve().with_name('observation_contract.py')
     if source_relocation is not None and source_relocation.get('candidate_scope')==FIRST_FAULT_SCOPE:
         path=path.with_name('first_fault_observation_contract.py');row=source_relocation['candidate_observation_checker'];need(pin(row)==path,'admitted first fault observation checker')
-    elif host_context(source_relocation) or (source_relocation is not None and source_relocation.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL'):
+    elif gdn32_context(source_relocation) or host_context(source_relocation) or (source_relocation is not None and source_relocation.get('candidate_scope')=='MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL'):
         path=path.with_name('candidate_observation_contract.py');row=source_relocation['candidate_observation_checker'];need(pin(row)==path,'admitted candidate observation checker')
     else:need(sha(path)=='b8401fd6c8c238757103c3c093ea7dc6f3a0d37aab5f0d423e2a7edf2c293e71','reviewed observation contract module')
     spec=importlib.util.spec_from_file_location('required_observation_policy',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)

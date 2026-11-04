@@ -9,7 +9,7 @@ SCHEMA='GDN32_FULL_MODEL_SAME_JOB_BINDING_V1';CONTEXT='ADMITTED_SAME_JOB_GDN32_F
 PRODUCER='candidates/gdn32_first_model162_producer_20261104'
 SOURCE_CONTRACT_REL='candidates/gdn32_first_model_execution_20261104/numeric/MODEL_P0_GDN32_SOURCE_CONTRACT.json'
 SOURCE_CONTRACT_SHA='8ac291f2d129de351a19c95c643437a3600a01d8b40a8e55b5eafabb32975cbc'
-GENERATION_SHA='31dc0fabfd5d06d40eccf7194902bee245b8c98e25488b8993b676cae1fd90d3';OVERLAY_SHA='589e1e0f522aae929d25283b180ec566683254862f9537494aec26e2bd27efe1'
+GENERATION_SHA='c18dd273361ad7b5917dab8c780c61205a509adbf4e820e9b23fe11ed1cb4040';OVERLAY_SHA='589e1e0f522aae929d25283b180ec566683254862f9537494aec26e2bd27efe1'
 HARDWARE_GENERATION='2b2f02d698f16a57ba696c52c4669a1226a68c5378efdc8ebe392cc1b9098f52'
 DRIVER_SHA='e8aeaac48a407e27bcbf54db0d85867a904c67a2dce7e1d270999a8482453261'
 TREE=12081306272;JOB=21000
@@ -151,7 +151,7 @@ def verify_candidate_payload(root,identity,digest,repo,pins):
 
 def verify_build(args,frozen):
  b,row,a=load_binding(args);artifact=pin(b['artifact_manifest'],65536);resultpath=pin(b['build_result'],65536);r=json.loads(resultpath.read_text())
- need(resultpath==P(b['job_root'])/'build/frontend/BUILD_ONLY_RESULT.json'and artifact==resultpath.parent/'frozen_artifact/frozen_artifact.json','same freshly built local tree')
+ need(resultpath==P(b['job_root'])/'build/frontend/BUILD_ONLY_RESULT.json'and artifact==resultpath.parent/'model_candidate_artifact/frozen_artifact.json','same freshly built local tree')
  need(r['artifact']['manifest']==b['artifact_manifest']and frozen==json.loads(artifact.read_text())and frozen['artifact_identity']==b['identity'],'actual producer identity no fabricated PASS')
  need(frozen['schema']=='MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1'and frozen['profiles']==list(range(5))and frozen['common']['driver']['sha256']==DRIVER_SHA,'full registered hardware original driver')
  proof=verify_candidate_payload(artifact.parent,b['identity'],b['artifact_manifest']['sha256'],b['repo'],b['pins'])

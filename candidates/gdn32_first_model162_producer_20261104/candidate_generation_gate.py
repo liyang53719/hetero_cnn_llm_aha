@@ -9,7 +9,7 @@ MODEL162_DIR='candidates/gdn32_first_model162_producer_20261104'
 MODEL162_CATALOG_REL='candidates/gdn32_first_model_execution_20261104/GDN32_FULL_SOURCE_PINS.json'
 UPSTREAM_DIR='candidates/gdn_chunk32_actual_v2_20261104'
 LEGACY_DIR='candidates/model_candidate_build_20261101'
-MODEL162_GENERATION_SHA='31dc0fabfd5d06d40eccf7194902bee245b8c98e25488b8993b676cae1fd90d3'
+MODEL162_GENERATION_SHA='c18dd273361ad7b5917dab8c780c61205a509adbf4e820e9b23fe11ed1cb4040'
 MODEL162_OVERLAY_SHA='589e1e0f522aae929d25283b180ec566683254862f9537494aec26e2bd27efe1'
 UPSTREAM_GENERATION_SHA='2b2f02d698f16a57ba696c52c4669a1226a68c5378efdc8ebe392cc1b9098f52'
 UPSTREAM_OVERLAY_SHA='1bd1db80190d2d611cfeb15f50c2bbadec76f2aaad74280671b22e843240a945'
@@ -23,9 +23,12 @@ MODEL162_SOURCE_CONTRACT_SHA='8ac291f2d129de351a19c95c643437a3600a01d8b40a8e55b5
 MODEL162_RESOURCE_POLICY='ORIGINAL_SERIAL_FRONTEND_STAGE_TUPLES_V1'
 MODEL162_RESOURCE_ADAPTER_REL=MODEL162_DIR+'/model162_resources.py'
 MODEL162_RESOURCE_ADAPTER_SHA='97454e9a114370d0f6282ad5da693b9b3386003f3d5180f60798a9c9a3c25865'
+MODEL162_PACK_POLICY='ACTUAL162_CATALOG_AND_WRITER_CANONICAL_PATH_V1'
+MODEL162_PACK_REL=MODEL162_DIR+'/pack_model_candidate.py'
+MODEL162_PACK_SHA='047434165a66c20bd2d9a0b64db7acbde26fbd9c06fd206e7a890dab8a2e6609'
 SOURCE_CHOICES=('legacy','transposed-tile-address-v1','prefill-supply-overlap-v1',MODEL162_SOURCE)
 CORE_FIELDS={'schema','scope','source_overlay_sha256','source_count','unchanged_module_contract_sha256','host_ports_sha256','driver_sha256','cpp_build_policy','matrix_macs','vector_lanes','tokens','profiles','numeric_execution_authorized','final_rtl_accepted'}
-CONTRACT_FIELDS=CORE_FIELDS|{'hardware_source','upstream_generation_contract_repo_path','upstream_generation_contract_sha256','upstream_overlay_sha256','model_source_contract_repo_path','model_source_contract_sha256','old_artifact_reuse_permitted','host_resource_policy','resource_adapter_sha256'}
+CONTRACT_FIELDS=CORE_FIELDS|{'hardware_source','upstream_generation_contract_repo_path','upstream_generation_contract_sha256','upstream_overlay_sha256','model_source_contract_repo_path','model_source_contract_sha256','old_artifact_reuse_permitted','host_resource_policy','resource_adapter_sha256','pack_binding_policy','pack_source_sha256'}
 def need(v,s):
  if not v:raise ValueError(s)
 def sha(p):
@@ -47,9 +50,10 @@ def validate_source_selection(name='legacy',first_fault_readonly=False,terminal_
 def load_contract(path,expected):
  if expected!=MODEL162_GENERATION_SHA:return legacy_gate().load_contract(path,expected)
  p=regular(path);need(sha(p)==MODEL162_GENERATION_SHA,'independently pinned model162 adapter contract');d=json.loads(p.read_text())
- need(set(d)==CONTRACT_FIELDS and d['schema']=='MODEL162_GENERATION_CONTRACT_V2' and d['scope']=='SOURCE_STRUCTURAL_PRECONDITIONS_ONLY_NOT_NUMERICAL_ACCEPTANCE','exact independent model162 contract schema')
+ need(set(d)==CONTRACT_FIELDS and d['schema']=='MODEL162_GENERATION_CONTRACT_V3' and d['scope']=='SOURCE_STRUCTURAL_PRECONDITIONS_ONLY_NOT_NUMERICAL_ACCEPTANCE','exact independent model162 contract schema')
  need(d['hardware_source']==MODEL162_SOURCE and type(d['source_count'])is int and d['source_count']==162,'explicit actual162 selection')
  need(d['source_overlay_sha256']==MODEL162_OVERLAY_SHA and d['upstream_generation_contract_repo_path']==UPSTREAM_DIR+'/GENERATION_CONTRACT.json' and d['upstream_generation_contract_sha256']==UPSTREAM_GENERATION_SHA and d['upstream_overlay_sha256']==UPSTREAM_OVERLAY_SHA,'actual hardware and adapter identities')
+ need(d['pack_binding_policy']==MODEL162_PACK_POLICY and d['pack_source_sha256']==MODEL162_PACK_SHA,'exact actual162 writer binding contract')
  need(d['host_resource_policy']==MODEL162_RESOURCE_POLICY and d['resource_adapter_sha256']==MODEL162_RESOURCE_ADAPTER_SHA,'exact original serial frontend resource contract')
  need(d['model_source_contract_repo_path']==MODEL162_SOURCE_CONTRACT_REL and d['model_source_contract_sha256']==MODEL162_SOURCE_CONTRACT_SHA,'actual162 P0 source roles')
  need(d['unchanged_module_contract_sha256']==PRECONDITIONS_SHA and d['host_ports_sha256']==HOST_PORTS_SHA and d['driver_sha256']==DRIVER_SHA,'unchanged15 modules bank subtree typed122 and ordinary driver')
@@ -61,6 +65,7 @@ def selected_inputs(repo,name='legacy',first_fault_readonly=False,terminal_finit
  name=validate_source_selection(name,first_fault_readonly,terminal_finite_readonly);repo=P(repo).resolve()
  if name!=MODEL162_SOURCE:return legacy_gate(repo).selected_inputs(repo,name,first_fault_readonly,terminal_finite_readonly)
  directory=repo/MODEL162_DIR;contract_path=directory/'GENERATION_CONTRACT.json';overlay=directory/'MODEL_SOURCE_OVERLAY.json';contract=load_contract(contract_path,MODEL162_GENERATION_SHA)
+ need(sha(regular(repo/MODEL162_PACK_REL))==MODEL162_PACK_SHA,'actual reviewed writer source bytes')
  need(sha(regular(repo/MODEL162_RESOURCE_ADAPTER_REL))==MODEL162_RESOURCE_ADAPTER_SHA,'exact named original-stage resource adapter')
  need(sha(regular(overlay))==MODEL162_OVERLAY_SHA,'exact normalized actual162 source overlay')
  for n,h in [('GENERATION_CONTRACT.json',UPSTREAM_GENERATION_SHA),('MODEL_SOURCE_OVERLAY.json',UPSTREAM_OVERLAY_SHA)]:need(sha(regular(repo/UPSTREAM_DIR/n))==h,'upstream actual hardware source identity')
@@ -68,7 +73,7 @@ def selected_inputs(repo,name='legacy',first_fault_readonly=False,terminal_finit
 
 def checked_paths(repo,overlay,original,contract):
  repo=P(repo).resolve()
- if contract.get('schema')!='MODEL162_GENERATION_CONTRACT_V2':return legacy_gate(repo).checked_paths(repo,overlay,original,contract)
+ if contract.get('schema')!='MODEL162_GENERATION_CONTRACT_V3':return legacy_gate(repo).checked_paths(repo,overlay,original,contract)
  expected=selected_inputs(repo,MODEL162_SOURCE)
  need(P(overlay)==expected['overlay'] and contract==expected['contract'],'exact selected actual162 input object')
  doc=json.loads(regular(overlay).read_text());up=json.loads(regular(repo/UPSTREAM_DIR/'MODEL_SOURCE_OVERLAY.json').read_text());legacy_path=regular(repo/LEGACY_DIR/'MODEL_SOURCE_OVERLAY.json');need(sha(legacy_path)==LEGACY_OVERLAY_SHA,'legacy159 overlay unchanged')
@@ -103,7 +108,7 @@ def require_generation_binding(b):
  need(b['model_source_contract']==str(repo/MODEL162_SOURCE_CONTRACT_REL),'exact actual162 P0 contract path')
  need(b.get('candidate_status')=='UNREVIEWED_MODEL_BUILD' and b.get('numeric_execution_authorized')is False,'model162 builder never self-admits')
  original=json.loads(regular(repo/'candidates/fresh_original_top_recovery_20261028/SOURCE_AND_TOOLCHAIN_PINS.json').read_text());paths=checked_paths(repo,s['overlay'],original,d)
- required=paths+[str(s['overlay']),str(s['contract_path']),str(repo/UPSTREAM_DIR/'GENERATION_CONTRACT.json'),str(repo/UPSTREAM_DIR/'MODEL_SOURCE_OVERLAY.json'),str(repo/MODEL162_DIR/'candidate_generation_gate.py'),str(repo/MODEL162_RESOURCE_ADAPTER_REL)]
+ required=paths+[str(s['overlay']),str(s['contract_path']),str(repo/UPSTREAM_DIR/'GENERATION_CONTRACT.json'),str(repo/UPSTREAM_DIR/'MODEL_SOURCE_OVERLAY.json'),str(repo/MODEL162_DIR/'candidate_generation_gate.py'),str(repo/MODEL162_RESOURCE_ADAPTER_REL),str(repo/MODEL162_PACK_REL)]
  catalog=regular(repo/MODEL162_CATALOG_REL);need(b['pins'].get(str(catalog))==sha(catalog),'actual same-job catalog pin')
  rows=json.loads(catalog.read_text())['files'];index={r['path']:r for r in rows};need(len(index)==len(rows),'unique source catalog')
  for p in required:

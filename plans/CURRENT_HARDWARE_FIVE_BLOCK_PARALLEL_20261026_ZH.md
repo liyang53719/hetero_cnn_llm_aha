@@ -1174,3 +1174,19 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 确定缺陷二：原producer已有BUILD_STAGE_DIAGNOSTIC有限诊断，entry仅对整行json.loads导致带前缀记录未转发。本批新增严格schema的有限诊断投影和固定pre/supervisor/serial-plan标签，保留失败重抛，无fallback；不输出原始异常、路径、环境或payload，启动不确定使用null。缺失的旧runner本地日志/产物不可凭空恢复，原精确rootcause仍NOT_ESTABLISHED；没有证据断言OOM、timeout或额外hier分区。
 
 本批为12条model必要修改加5条独立retry1 listener源码及本计划；31ce旧153、旧once/旧listener均保留，旧commit/run不改、不rerun。新model generation 31dc0fabfd5d06d40eccf7194902bee245b8c98e25488b8993b676cae1fd90d3显式绑定资源策略；硬件generation/162源码/4096MAC/共享32/122接口保持不变。纯测试及联合stub回放只证控制/资源/诊断软件范围，不能冒新的真实frontend或FULL PASS。source批无新nonce；发布后须实际远端闭包和普通CI，再单独审定唯一retry激活。若再次运行，旧runner产物无法复用，已做构建前半段需重建；禁止为日志无限重复EDA，五块完整数值仍0/5，最终RTL验收未到。
+
+
+## 2026-11-04 retry1 编译链接完成、pack拒绝及真实writer链修复（TEMP / INCOMPLETE）
+
+固定source e0b52c64a805cd55f21f20d7f329682dee589a6e、launch1197ea611782fb5ad9bcce99e08b35e479b79ea2、run41804027022/job126486489221于10:38:41 UTC失败。原日志74417B，SHA256 f77c9294b55d0d280e5667b1951b6707d8ed140346fa55f50cb81ffc8e180e68。独立解析28个native阶段（8 bootstrap+20 build）均worker_started=true、exit0、error_count0、cleanup/EOF/gzip完整。已真实跨过frontend scanner、4个12GiB codegen、3个子archive、host_archive及host_link；累计stage wall5644.192s（不含阶段间检查），最高采样RSS9669124096B。host_archive3336.288s、host_link17.732s。此次12GiB原资源修复实跑有效，但这些仍是构建证据，不是硬件数值或最终RTL通过。
+
+最后失败为MODEL_POST_BUILD_FAILURE_DIAGNOSTIC_V1，phase=pack、pack_phase=OBSERVATION、STAGE_VALIDATION_FAILED/ValueError。未输出实际SV/ELF hash/bytes，不能从receipt哈希冒可复用产物身份；无结构accepted、派生窗口冻结或DUT启动证据。原runner无artifact，不能沿用该job临时产物；再次尝试必须fresh同链，约95分钟已测完整构建成本不应被忽略。
+
+真实源码及低成本回放查到三类确定缺口：
+- 实际collector按actual162写新catalog，pack却固定与旧same_job SOURCE_PINS比较。修复严格依已核generation选择对应catalog，不接受任意新旧身份。
+- 真实pack writer写model_candidate_artifact/frozen_artifact.json，而FIRST helper/bridge要求另一个frozen_artifact目录。修复两处固定canonical路径，以真实writer结果为准，不放宽任意路径或搬动fixture冒成功。
+- P0 coverage/source_links漏gdn32_context，会选旧checker或遗漏同job source relocation核验。仅补显式新context，保持原commit/hash和mandatory sidecar/internal gate要求；P1–P4不走此P0分支，不能当本次失败原因。
+
+此前实验的手造manifest目录和内存替换pack只用于定位，不作最终源码闭包证明。本次以真正候选pack文件及重封身份再次走实际collector→pack writer→严格七文件reader→FIRST freeze→bridge→consumer→numeric_tail至首startup_abi监督前截停。源码/路径/clock/typed输入检查真实执行；材料、生成物、native receipts仍明确synthetic，不能冒真实结构/运行证据。五profile CONDITIONAL测试仅选路及类型，不冒FIRST五块执行；FIRST实际纯链仅P1。P0 sidecar完整正例仍输出INCOMPLETE_REQUIRED_INTERNAL_GATES_UNOBSERVED，不跳过gate/up。旧catalog、旧generation、错目录、错commit/hash等负例继续拒绝。
+
+本批只修执行闭包，不改162硬件/4096MAC/共享32、driver或算术语义；新model身份显式绑定pack及catalog/path策略，原source/run保留。原12/13GiB frontend、DUT8GiB、21k总clock、7200构建cap、3000–7200单次DUT窗口、10470尾/census30/control60均不削减。source-only发布和独审/远端闭包/普通CI后，才能独立唯一retry2 nonce开展一次受控P1；旧once/retry1不可重触发或rerun。五块完整数值仍0/5，80%/90%完整block有效MAC目标无新实测结果。

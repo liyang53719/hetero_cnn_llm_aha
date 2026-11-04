@@ -200,10 +200,10 @@ def _pack_impl(original,b,built,host,overlay,out,budget_check,observation_pin,_m
  _mark('OBSERVATION')
  out=P(out).resolve(strict=True);host=regular(host);overlay=regular(overlay);obs=observation(observation_pin,original,host,overlay)
  if address_generation_observation(obs['source_closure']) or original.get('hardware_source')in SOURCE_GENERATIONS or original.get('generation_contract_sha256')in (ADDRESS_GENERATION_SHA,SUPPLY_GENERATION_SHA):
-  from candidate_generation_gate import require_generation_binding
+  from candidate_generation_gate import require_generation_binding,MODEL162_SOURCE,MODEL162_CATALOG_REL
   selected=source_generation(obs['source_closure']);need(selected is not None and original.get('hardware_source')==b.get('hardware_source')==selected[0],'new hardware explicit same original/admitted source selection')
   require_generation_binding(original);require_generation_binding(b)
-  catalog=P(original['repo'])/'candidates/same_job_execution_20261030/SOURCE_PINS.json'
+  catalog=P(original['repo'])/(MODEL162_CATALOG_REL if selected[0]==MODEL162_SOURCE else 'candidates/same_job_execution_20261030/SOURCE_PINS.json')
   need(obs['source_closure']['source_pins_sha256']==sha(catalog),'pack exact selected source catalog identity')
   need(obs['source_closure']['generation_contract_sha256']==original['generation_contract_sha256']==b['generation_contract_sha256'] and str(overlay)==original['fixed_source_overlay']==b['fixed_source_overlay'],'pack exact new generation/overlay join')
  obs_hash=hashlib.sha256(canonical(obs)).hexdigest()

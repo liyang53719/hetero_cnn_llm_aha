@@ -193,7 +193,7 @@ def source_links(manifest,policy,identity,common,evidence,source_relocation=None
  need(link['schema']=='MODEL_CANDIDATE_P0_SOURCE_LINK_V1' and link['contract_sha256']==selected_sha and link['corrector_sha256']==CORRECTOR_SHA,'actual source manifest policy binding')
  anchors=link['anchors'];need(set(anchors)==set(policy['source_pins']),'all 12 actual artifact anchors')
  if source_relocation is not None:
-  need((host_context(source_relocation) or source_relocation['schema']=='ADMITTED_CLOUD_P0_SOURCE_RELOCATION_V1')and source_relocation['builder_source_commit']==identity['source_commit']and source_relocation['source_manifest_sha256']==common['source_manifest']['sha256'],'same independently admitted frozen source relocation')
+  need((gdn32_context(source_relocation) or host_context(source_relocation) or source_relocation['schema']=='ADMITTED_CLOUD_P0_SOURCE_RELOCATION_V1')and source_relocation['builder_source_commit']==identity['source_commit']and source_relocation['source_manifest_sha256']==common['source_manifest']['sha256'],'same independently admitted frozen source relocation')
   need(set(source_relocation['anchors'])==set(anchors)-{'commands','descriptors','program_manifest'},'exact nine admitted source roles')
  for name,p in policy['source_pins'].items():
   key=anchors[name];need(key in files,'anchor missing actual source manifest file: '+name)
@@ -205,7 +205,7 @@ def source_links(manifest,policy,identity,common,evidence,source_relocation=None
    else:
     local=source_relocation['anchors'][name]
     need(local==dict(relative_path=key,origin_path=r['origin_path'],local=p),'exact admitted original/local source domains '+name)
-    if host_context(source_relocation):need(r['origin_path']==p['path'],'same-job source path cannot be relocated')
+    if gdn32_context(source_relocation) or host_context(source_relocation):need(r['origin_path']==p['path'],'same-job source path cannot be relocated')
     need(manifest['generation_input_pins'].get(r['origin_path'])==r['sha256'],'original source generation pin '+name)
     path=pin(p);need(path==path.resolve()and all(not q.is_symlink()for q in(path,*path.parents)),'actual local source remains canonical')
  program_record=files[anchors['program_manifest']]

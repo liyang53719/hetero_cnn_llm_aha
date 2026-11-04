@@ -321,7 +321,7 @@ def _verify_build_result(root, result_pin):
     need(result_pin.path == str(job / "build/frontend/BUILD_ONLY_RESULT.json"), "immutable FRESH same-job build-result path")
     result = read_json(result_pin)
     manifest_pin = Pin.parse(result["artifact"]["manifest"])
-    need(manifest_pin.path == str(job / "build/frontend/frozen_artifact/frozen_artifact.json"), "same newly built local manifest")
+    need(manifest_pin.path == str(job / "build/frontend/model_candidate_artifact/frozen_artifact.json"), "same newly built local manifest")
     manifest = read_json(manifest_pin)
     need(manifest.get("schema") == "MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1" and same(manifest.get("profiles"), list(range(5))) and same(manifest.get("artifact_identity"), root["artifact_identity"]), "actual owning build identity and all-five hardware")
     # The existing seven-file producer verifier is still mandatory. These bytes

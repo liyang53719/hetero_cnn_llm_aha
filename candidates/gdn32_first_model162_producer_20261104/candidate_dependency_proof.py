@@ -317,7 +317,7 @@ def host_profile_tooling_policy(source,readonly):
   need(matches==[repo+rel]and pins[matches[0]]==want,'complete exact host-profile tooling implementation '+rel)
  return dict(selected)
 
-MODEL162_IMPLEMENTATION_PINS_SHA='3e2b3d1bef14bde51fab68699b15fa2266c9518b24d88bb0f43be14fca367d12'
+MODEL162_IMPLEMENTATION_PINS_SHA='8da2a3256a3e751dd40d03bab1fadd83dfdd4994e5ea12552c044f4fdb32b4cf'
 def model162_implementation_pins():
  path=P(__file__).resolve().with_name('MODEL162_IMPLEMENTATION_PINS.json')
  need(path.is_file() and not path.is_symlink() and 0<path.stat().st_size<=1<<20 and sha(path)==MODEL162_IMPLEMENTATION_PINS_SHA,'independent model162 implementation contract')
@@ -392,7 +392,7 @@ def selector_producer_policy(source,readonly):
  historical=TERMINAL_IMPLEMENTATION_PINS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else FIRST_FAULT_IMPLEMENTATION_PINS
  return dict(historical,**(SELECTOR_DIAGNOSTIC_REVISIONS if readonly['schema']=='FIRST_FAULT_DRIVER_CONTRACT_V2'else SELECTOR_FIRST_FAULT_REVISIONS))
 
-LOCAL_PACK_READER_SHA='15a0df501513534a0e711d4d1ea76a2c2be4ef0bb3ae9df747b3c7fe51df03b4'
+LOCAL_PACK_READER_SHA='047434165a66c20bd2d9a0b64db7acbde26fbd9c06fd206e7a890dab8a2e6609'
 
 COLLECTOR_PATH='candidates/ci_frontend_pipeline_r2_20261029/driver_dependency_proof.py'
 def compilation_policy(r,m,build_receipt,manifest=None):

@@ -174,14 +174,36 @@ def verify_workspace(receipt,receipt_sha,binary,binary_sha,tool_manifest,tool_sh
  need(type(r['loader_output_sha256'])is str and re.fullmatch('[0-9a-f]{64}',r['loader_output_sha256']),'bounded loader-output digest');check_configs(r['configs'])
  return dict(status='PASS_STARTUP_ABI_IDENTITY_ONLY',receipt_sha256=receipt_sha,libraries=len(actual),workspace_loader=verified['manifest'])
 
+
+# Source-only safe failure projection; diagnostics never admit execution.
+_DIAGNOSTIC_COMPONENT='STARTUP_ABI'
+_DIAGNOSTIC_PHASES=('CLI', 'CONFIGURATION', 'INPUTS', 'ELF', 'LOADER_IDENTITY', 'LOADER_CONFIG', 'LOADER_LIST', 'LOADER_PARSE', 'LIBRARY_PINS', 'POSTCHECK', 'RECEIPT', 'WORKSPACE')
+_DIAGNOSTIC_CLASSES=('ValueError', 'TypeError', 'KeyError', 'IndexError', 'OSError', 'FileNotFoundError', 'PermissionError', 'JSONDecodeError', 'UnicodeDecodeError', 'UnicodeEncodeError', 'TimeoutExpired', 'SystemExit', 'OverflowError', 'MemoryError', 'RuntimeError', 'IsADirectoryError', 'NotADirectoryError', 'FileExistsError', 'error', 'OTHER')
+_diagnostic_phase=['CLI']
+def diagnostic_phase(value):
+ if value not in _DIAGNOSTIC_PHASES:raise ValueError('unknown internal startup diagnostic phase')
+ _diagnostic_phase[0]=value
+def startup_failure(exc):
+ phase=_diagnostic_phase[0]
+ name=type(exc).__name__
+ return dict(schema='GDN32_STARTUP_DIAGNOSTIC_V1',component=_DIAGNOSTIC_COMPONENT,stage='UNVERIFIED'if _DIAGNOSTIC_COMPONENT=='LOCKED_PHASE'else'startup_abi',phase=phase,status='FAILED',code=phase+'_REJECTED',exception_class=name if name in _DIAGNOSTIC_CLASSES else 'OTHER',native_started=None,dut_started=None if _DIAGNOSTIC_COMPONENT=='LOCKED_PHASE'else False,numerical_pass=False)
+
 def prepare(binary,binary_sha,tool_manifest,tool_sha,out):
- if _WORKSPACE_LOADER_BINDING is not None:return prepare_workspace(binary,binary_sha,tool_manifest,tool_sha,out)
- binary=P(binary).resolve();tool_manifest=P(tool_manifest).resolve();out=P(out);need(not out.exists(),'fresh ABI receipt');need(tool_manifest.stat().st_size<=32*1024**2,'bounded build tool manifest');need(sha(binary)==binary_sha and sha(tool_manifest)==tool_sha,'owning binary/tool manifest pins');tool=json.loads(tool_manifest.read_text());need(tool['schema']=='INSTALLED_GNU_BUILD_TOOLS_V1','tool manifest schema');pins=tool['pins'];info=elf_info(binary);loader=pin(info['interpreter']);need(pins.get(loader['resolved'])==loader['sha256'],'interpreter not in build tool pins');configs=config_pins();before=pin(binary,4*1024**3)
- text=_list(loader['resolved'],binary);resolved=parse_list(text);need(set(info['needed'])<=set(resolved),'direct dependencies absent from loader result');libraries={}
+ if _WORKSPACE_LOADER_BINDING is not None:
+  diagnostic_phase('WORKSPACE')
+  return prepare_workspace(binary,binary_sha,tool_manifest,tool_sha,out)
+ diagnostic_phase('INPUTS')
+ binary=P(binary).resolve();tool_manifest=P(tool_manifest).resolve();out=P(out);need(not out.exists(),'fresh ABI receipt');need(tool_manifest.stat().st_size<=32*1024**2,'bounded build tool manifest');need(sha(binary)==binary_sha and sha(tool_manifest)==tool_sha,'owning binary/tool manifest pins');tool=json.loads(tool_manifest.read_text());need(tool['schema']=='INSTALLED_GNU_BUILD_TOOLS_V1','tool manifest schema');pins=tool['pins']
+ diagnostic_phase('ELF');info=elf_info(binary)
+ diagnostic_phase('LOADER_IDENTITY');loader=pin(info['interpreter']);need(pins.get(loader['resolved'])==loader['sha256'],'interpreter not in build tool pins')
+ diagnostic_phase('LOADER_CONFIG');configs=config_pins();before=pin(binary,4*1024**3)
+ diagnostic_phase('LOADER_LIST');text=_list(loader['resolved'],binary)
+ diagnostic_phase('LOADER_PARSE');resolved=parse_list(text,expected_interpreter=info['interpreter']);need(set(info['needed'])<=set(resolved),'direct dependencies absent from loader result');libraries={}
+ diagnostic_phase('LIBRARY_PINS')
  for n,path in resolved.items():
   v=pin(path);need(pins.get(v['resolved'])==v['sha256'],'resolved library not bound by build tool inventory');libraries[n]=v
- need(loader['resolved']in {v['resolved']for v in libraries.values()},'interpreter absent from resolved list');need(pin(binary,4*1024**3)==before and pin(info['interpreter'])==loader and sha(tool_manifest)==tool_sha,'ABI probe inputs changed');check_configs(configs)
- receipt=dict(schema='SAME_JOB_ELF_STARTUP_ABI_OWNED_ENV_V2',status='STARTUP_RESOLUTION_MATCHES_BUILD_TOOL_PINS_NOT_DUT_EXECUTION',binary=before,tool_manifest={'path':str(tool_manifest),'sha256':tool_sha},elf=info,loader=loader,libraries=libraries,configs=configs,owned_environment=owned_environment_pin(),environment=clean_env(),later_dlopen='NOT_QUALIFIED',loader_output_sha256=hashlib.sha256(text.encode()).hexdigest());raw=json.dumps(receipt,indent=2)+'\n';need(len(raw.encode())<=65536,'bounded ABI receipt');
+ diagnostic_phase('POSTCHECK');need(loader['resolved']in {v['resolved']for v in libraries.values()},'interpreter absent from resolved list');need(pin(binary,4*1024**3)==before and pin(info['interpreter'])==loader and sha(tool_manifest)==tool_sha,'ABI probe inputs changed');check_configs(configs)
+ diagnostic_phase('RECEIPT');receipt=dict(schema='SAME_JOB_ELF_STARTUP_ABI_OWNED_ENV_V2',status='STARTUP_RESOLUTION_MATCHES_BUILD_TOOL_PINS_NOT_DUT_EXECUTION',binary=before,tool_manifest={'path':str(tool_manifest),'sha256':tool_sha},elf=info,loader=loader,libraries=libraries,configs=configs,owned_environment=owned_environment_pin(),environment=clean_env(),later_dlopen='NOT_QUALIFIED',loader_output_sha256=hashlib.sha256(text.encode()).hexdigest());raw=json.dumps(receipt,indent=2)+'\n';need(len(raw.encode())<=65536,'bounded ABI receipt');
  with out.open('x')as f:f.write(raw)
  return receipt
 
@@ -234,10 +256,22 @@ def configure_cli(args):
  configure_owned_environment(args.owned_environment,args.owned_environment_sha256,expected)
  if loader is not None:configure_workspace_loader(loader,loader_sha,args.expected_source_commit,artifact_sha)
 
-if __name__=='__main__':
+def _main_impl():
  import argparse
  ap=argparse.ArgumentParser();ap.add_argument('--binary',type=P,required=True);ap.add_argument('--binary-sha256',required=True);ap.add_argument('--tool-manifest',type=P,required=True);ap.add_argument('--tool-manifest-sha256',required=True);ap.add_argument('--output',type=P,required=True);ap.add_argument('--expected-run-id',type=int,required=True);ap.add_argument('--expected-source-commit',required=True);ap.add_argument('--expected-launch-commit',required=True);ap.add_argument('--owned-environment',type=P,required=True);ap.add_argument('--owned-environment-sha256',required=True);ap.add_argument('--executor-identity',type=P);ap.add_argument('--executor-identity-sha256');ap.add_argument('--workspace-loader',type=P);ap.add_argument('--workspace-loader-sha256');ap.add_argument('--executor-adaptation',type=P);ap.add_argument('--executor-adaptation-sha256');ap.add_argument('--artifact-manifest-sha256');ap.add_argument('--execute-reviewed-loader-list',action='store_true');args=ap.parse_args()
  need(args.execute_reviewed_loader_list,'explicit reviewed loader-list admission under strict outer supervisor required')
+ diagnostic_phase('CONFIGURATION')
  configure_cli(args)
  prepare(args.binary,args.binary_sha256,args.tool_manifest,args.tool_manifest_sha256,args.output)
  print(json.dumps({'status':'STARTUP_ABI_RECEIPT_ONLY_NOT_DUT_EXECUTION','receipt_sha256':sha(args.output)}))
+
+def main():
+ diagnostic_phase('CLI')
+ try:return _main_impl()
+ except SystemExit as exc:
+  if exc.code not in (0,None):print(json.dumps(startup_failure(exc),sort_keys=True),flush=True)
+  raise
+ except Exception as exc:
+  print(json.dumps(startup_failure(exc),sort_keys=True),flush=True)
+  raise
+if __name__=='__main__':main()

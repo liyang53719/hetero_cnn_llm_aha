@@ -1518,13 +1518,13 @@
     },
     {
       "path": "candidates/gdn32_first_model162_producer_20261104/GENERATION_CONTRACT.json",
-      "bytes": 1733,
-      "sha256": "c18dd273361ad7b5917dab8c780c61205a509adbf4e820e9b23fe11ed1cb4040"
+      "bytes": 1910,
+      "sha256": "df43bc8f2f68dd993a0e50b9365e68533c5ab404f2787959b27e58460b7d19eb"
     },
     {
       "path": "candidates/gdn32_first_model162_producer_20261104/MODEL162_IMPLEMENTATION_PINS.json",
       "bytes": 8458,
-      "sha256": "8da2a3256a3e751dd40d03bab1fadd83dfdd4994e5ea12552c044f4fdb32b4cf"
+      "sha256": "4d7a26067eec28697617703c695ce99fdfe849d8aa0e7f398e975805be19101f"
     },
     {
       "path": "candidates/gdn32_first_model162_producer_20261104/MODEL_CANDIDATE_PRECONDITIONS.json",
@@ -1604,7 +1604,7 @@
     {
       "path": "candidates/gdn32_first_model162_producer_20261104/candidate_dependency_proof.py",
       "bytes": 73522,
-      "sha256": "34c2d9195d91a17476242a3b968e2a144926e3ffab8b1e011b5c6d2438477eb5"
+      "sha256": "fa97a3fa7cc665fd8562b00991eb727d803431ddc9b031d9cf02500c6d543f62"
     },
     {
       "path": "candidates/gdn32_first_model162_producer_20261104/candidate_diagnostic.py",
@@ -1613,8 +1613,8 @@
     },
     {
       "path": "candidates/gdn32_first_model162_producer_20261104/candidate_generation_gate.py",
-      "bytes": 12029,
-      "sha256": "1cee39b5531dd32f7ade52d4a3868a75074dd3390c0e9047352b3ea20f709f80"
+      "bytes": 12359,
+      "sha256": "071716d69f93bbe0b59aa56cd3d6939fc39d8fa91d0e68a2f013d64533c67c3b"
     },
     {
       "path": "candidates/gdn32_first_model162_producer_20261104/candidate_observation.py",
@@ -1718,8 +1718,8 @@
     },
     {
       "path": "candidates/gdn32_first_model162_producer_20261104/pack_model_candidate.py",
-      "bytes": 40158,
-      "sha256": "047434165a66c20bd2d9a0b64db7acbde26fbd9c06fd206e7a890dab8a2e6609"
+      "bytes": 41078,
+      "sha256": "c17309bbe7c8ad481a682fe59f3eee93737c5b57953eb7409e6370cbe10e6ae4"
     },
     {
       "path": "candidates/gdn32_first_model162_producer_20261104/prepare_model_build.py",
@@ -1734,7 +1734,7 @@
     {
       "path": "candidates/gdn32_first_model162_producer_20261104/restore_model_inputs.py",
       "bytes": 5945,
-      "sha256": "bece6c4e3c7a480392781e421bcff99fdbcddacc52dcd5c79e551f12e62e5123"
+      "sha256": "3f98b4505a00c9e35e6ea647face1cc6829d93883347fbdb41e5a4a2b67a0022"
     },
     {
       "path": "candidates/gdn32_first_model162_producer_20261104/run_retained_o1_metadata_regression.py",
@@ -1814,7 +1814,7 @@
     {
       "path": "candidates/gdn32_first_model_execution_20261104/numeric/CONNECTION_OWNED_SOURCE_PINS.json",
       "bytes": 4261,
-      "sha256": "35670f1a89921fed57a7017623e8accb1ba95145da4afccbd7bdd6e0a9015c4f"
+      "sha256": "2de50c1c4449e5c685492158ebb0e992f66e2597908a4431de97c7bddbb0fabe"
     },
     {
       "path": "candidates/gdn32_first_model_execution_20261104/numeric/FIXED_NONHIER_SCHEMA.json",
@@ -1893,8 +1893,8 @@
     },
     {
       "path": "candidates/gdn32_first_model_execution_20261104/numeric/consumer_owned.py",
-      "bytes": 67923,
-      "sha256": "ba7ae2f86bc1ce0ad644e40abec8fdddd2936d95060e937e07d6a2aec6c42f88"
+      "bytes": 68828,
+      "sha256": "2c5ea2b909644b05e5c38560da16ce0ae35287563b41d19fdc29cfc9ec1a7afd"
     },
     {
       "path": "candidates/gdn32_first_model_execution_20261104/numeric/consumption_proof.py",
@@ -1978,8 +1978,8 @@
     },
     {
       "path": "candidates/gdn32_first_model_execution_20261104/numeric/locked_phase.py",
-      "bytes": 2783,
-      "sha256": "40c1b2b83f61bb9bd123ded080178d29328ece078aa1873d39a0780d23c769a0"
+      "bytes": 4712,
+      "sha256": "34864b03fe92162ec57ca2f1356b319ad5422e579346bd4b6541ee0729669d4a"
     },
     {
       "path": "candidates/gdn32_first_model_execution_20261104/numeric/moe_score_compare.py",
@@ -2038,13 +2038,13 @@
     },
     {
       "path": "candidates/gdn32_first_model_execution_20261104/numeric/runtime_abi_owned.py",
-      "bytes": 23219,
-      "sha256": "961eba84a34b9c3ba0f529b904ccbd27ad2994a81b2753fd4b698c8776cc57ef"
+      "bytes": 25218,
+      "sha256": "11dae378bdf32feb82153cd1ae48aa166a65c7e959d6cecbed42b9ab0a85d3f6"
     },
     {
       "path": "candidates/gdn32_first_model_execution_20261104/numeric/samejob_gdn32_full.py",
       "bytes": 32550,
-      "sha256": "bd5e6537ce3c14c8f388935fc0db90a24abf7bf2f21a375f5a37cd44dbad8e34"
+      "sha256": "14cdca7efc32c632ed5aae333ebf654573ffa78b2798ff31b12f4157157c1a31"
     },
     {
       "path": "candidates/gdn32_first_model_execution_20261104/numeric/samejob_host_diagnostic.py",

@@ -1,5 +1,5 @@
 {
-  "schema": "MODEL162_GENERATION_CONTRACT_V3",
+  "schema": "MODEL162_GENERATION_CONTRACT_V4",
   "scope": "SOURCE_STRUCTURAL_PRECONDITIONS_ONLY_NOT_NUMERICAL_ACCEPTANCE",
   "source_overlay_sha256": "589e1e0f522aae929d25283b180ec566683254862f9537494aec26e2bd27efe1",
   "source_count": 162,
@@ -28,6 +28,10 @@
   "old_artifact_reuse_permitted": false,
   "host_resource_policy": "ORIGINAL_SERIAL_FRONTEND_STAGE_TUPLES_V1",
   "resource_adapter_sha256": "97454e9a114370d0f6282ad5da693b9b3386003f3d5180f60798a9c9a3c25865",
-  "pack_binding_policy": "ACTUAL162_CATALOG_AND_WRITER_CANONICAL_PATH_V1",
-  "pack_source_sha256": "047434165a66c20bd2d9a0b64db7acbde26fbd9c06fd206e7a890dab8a2e6609"
+  "pack_binding_policy": "ACTUAL162_CATALOG_WRITER_OWNER_EXECUTABLE_V1",
+  "pack_source_sha256": "c17309bbe7c8ad481a682fe59f3eee93737c5b57953eb7409e6370cbe10e6ae4",
+  "payload_mode_policy": "MODEL162_OWNER_EXECUTABLE_BINARY_V1",
+  "binary_mode_octal": "0700",
+  "nonbinary_mode_octal": "0600",
+  "binary_owner_policy": "CURRENT_EFFECTIVE_UID"
 }

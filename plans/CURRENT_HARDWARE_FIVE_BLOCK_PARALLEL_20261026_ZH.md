@@ -1190,3 +1190,24 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 此前实验的手造manifest目录和内存替换pack只用于定位，不作最终源码闭包证明。本次以真正候选pack文件及重封身份再次走实际collector→pack writer→严格七文件reader→FIRST freeze→bridge→consumer→numeric_tail至首startup_abi监督前截停。源码/路径/clock/typed输入检查真实执行；材料、生成物、native receipts仍明确synthetic，不能冒真实结构/运行证据。五profile CONDITIONAL测试仅选路及类型，不冒FIRST五块执行；FIRST实际纯链仅P1。P0 sidecar完整正例仍输出INCOMPLETE_REQUIRED_INTERNAL_GATES_UNOBSERVED，不跳过gate/up。旧catalog、旧generation、错目录、错commit/hash等负例继续拒绝。
 
 本批只修执行闭包，不改162硬件/4096MAC/共享32、driver或算术语义；新model身份显式绑定pack及catalog/path策略，原source/run保留。原12/13GiB frontend、DUT8GiB、21k总clock、7200构建cap、3000–7200单次DUT窗口、10470尾/census30/control60均不削减。source-only发布和独审/远端闭包/普通CI后，才能独立唯一retry2 nonce开展一次受控P1；旧once/retry1不可重触发或rerun。五块完整数值仍0/5，80%/90%完整block有效MAC目标无新实测结果。
+
+
+## 2026-11-04 startup ABI 与执行位修复：TEMP / SOURCE_ONLY / 五块数值 INCOMPLETE
+
+原身份 source 54eed42、run 41820209134 / job 126541196780 保留，禁止重跑或修改旧 nonce。
+
+实际日志证明 28 个构建 native 阶段均 exit 0、EOF、cleanup；pack 与七文件 reader 已越过，FIRST_RUNTIME_FREEZE 冻结 W=6670 秒。随后 startup_abi 的受监督 Python worker exit 1，wall 1.342475 秒、RSS 20,115,456 字节。此 worker 先执行 locked_phase，再 exec ABI 检查器。现有安全摘要没有两者内部阶段，不能判定首个内部拒绝，也不能声称 DUT 已执行。完整数值仍为 0/5。
+
+独立源码复现两个缺陷：
+1. ordinary prepare 未把已检查 ELF 的 PT_INTERP 传给现有绝对 loader-alias 解析器，因此合法绝对 alias 形式会被拒绝。修复仅传入该 ELF-derived 值，错误 alias、重复 basename、未知行继续拒绝。该形式在一次受控本机系统 loader --list 中出现，但本机不是此次 GitHub runner，不能据此断言原 run 唯一根因。
+2. writer 将 binary 与其他 payload 一同写为 0600，而 ordinary consumer 后续直接执行 binary。该模式会阻止未来直接执行，独立于当前 loader --list 失败。候选仅将新模型 binary 设为 owner-only 0700，其他 copy payload 保持 0600；原 source_manifest、build_receipt、frozen_artifact 三个后写 JSON 曾依 umask，现在新模型分支显式设为 0600，并增加 writer/reader/consumer 的精确模式资格检查；哈希不变不等于运行资格。
+
+诊断闭环须覆盖真实 locked_phase 与 ABI Python 入口，输出固定 phase/reason/exception 枚举，不输出环境、路径、argv 或原始错误。通用 locked_phase 事件只声称 UNVERIFIED 上下文，不声称全 job 未运行 DUT。固定 startup_abi 的压缩日志须经 receipt、bytes、SHA、EOF 与 cleanup 绑定后，才向最终日志投影有限事件。没有事件必须报告 NO_DIAGNOSTIC，不能猜测根因。
+
+当前回放使用真实 Python 控制逻辑和合法形状的 synthetic ELF，外部 loader 返回/exec 受控模拟，不是实际 DUT、GitHub 原产物或数值验证。仅一个本机 trusted system loader-list 探测已单独标记范围。不会为诊断立即重复完整构建；先审窄修复和真实子链回放，再决定是否需要同环境小 ABI probe。
+
+下一受控运行必须使用新 listener namespace、明确 source 绑定与唯一新 nonce，由唯一发布方执行。4096 Matrix MAC、共享 32-lane Vector/Element 通路、162 选源、122 ports、五块队列及全部资源/生命周期门保持。原 10470 秒尾、control 60、一次 W 冻结、不续时不重启规则不变。安全诊断不上传 DUT、SV、ELF、cache、权重或原始日志。
+
+小 ABI CI 仅是可选诊断手段，不是新增的常规资格循环：若窄修复的 source-only 审查和子链回放闭合，仍可按唯一发布方决定直接进入新身份完整受控流程；小 ELF probe 无法恢复旧 job 已丢失的子日志，也不能替代真实模型的 ABI/数值资格。尚未创建任何 probe job 或 nonce。
+
+源修复测试与实际运行严格分层：新候选仍未执行完整五块数值；此前28个native构建阶段通过不代表完整block数值或最终RTL通过。新source普通CI和唯一nonce激活以随后远端核验为准。

@@ -1,0 +1,70 @@
+{
+  "schema": "GDN32_FULL_MODEL_SOURCE_PLAN_V1",
+  "scope": "FULL_M128_MODEL_EVALUATION_NOT_FINAL_RTL",
+  "approval": "FIRST_MEANINGFUL_FULL_ATTEMPT",
+  "registered_profiles": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "tokens": 128,
+  "hardware_generation_sha256": "2b2f02d698f16a57ba696c52c4669a1226a68c5378efdc8ebe392cc1b9098f52",
+  "model_generation_sha256": "df43bc8f2f68dd993a0e50b9365e68533c5ab404f2787959b27e58460b7d19eb",
+  "source_catalog_sha256": "0e060ff219d5873a57550f0b542a161df04023c96cb4a6e5c90f07d595e399de",
+  "job_budget_seconds": 21000,
+  "bootstrap_seconds": 1800,
+  "first_profile": 1,
+  "lifecycle_policy": "FIRST_MEANINGFUL_FULL_ATTEMPT",
+  "missing_requirements": [],
+  "profile_windows": {
+    "0": {
+      "approved": false,
+      "watchdog": null,
+      "basis": null
+    },
+    "1": {
+      "approved": true,
+      "watchdog": {
+        "wall_seconds": 7200,
+        "cpu_seconds": 7200,
+        "max_active_cycles": 1000000000,
+        "log_raw_bytes": 17179869184,
+        "rss_telemetry_raw_bytes": 17179869184,
+        "log_compressed_bytes": 67108864,
+        "rss_telemetry_compressed_bytes": 67108864,
+        "postprocess_wall_seconds": 1800,
+        "postprocess_cpu_seconds": 1800,
+        "evidence_verification_wall_seconds": 1800,
+        "evidence_verification_cpu_seconds": 1800,
+        "summary_verification_wall_seconds": 3600,
+        "summary_verification_cpu_seconds": 3600,
+        "rss_telemetry_verification_wall_seconds": 1800,
+        "rss_telemetry_verification_cpu_seconds": 1800
+      },
+      "basis": {
+        "source_path": "candidates/gdn32_first_model_execution_20261104/FIRST_REVIEWED_WINDOW_PLAN.json",
+        "sha256": "323ebf74bce5c35ba3eb956aa6efd7ba48a69ccbf9e843a6184a57684a60e47a"
+      }
+    },
+    "2": {
+      "approved": false,
+      "watchdog": null,
+      "basis": null
+    },
+    "3": {
+      "approved": false,
+      "watchdog": null,
+      "basis": null
+    },
+    "4": {
+      "approved": false,
+      "watchdog": null,
+      "basis": null
+    }
+  },
+  "completion_guaranteed": false,
+  "payload_uploads": false,
+  "final_rtl_acceptance": false
+}

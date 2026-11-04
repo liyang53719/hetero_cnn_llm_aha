@@ -2,7 +2,7 @@
 The observation is integrity-bound, NOT an accepted canonical/RTL baseline.
 No subprocess, network, ELF execution, weight/reference or raw-log collection.
 """
-import hashlib,json,pathlib,re,shutil,importlib.util
+import hashlib,json,pathlib,re,shutil,importlib.util,os,stat
 P=pathlib.Path
 DRIVER_SHA='343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61'
 CPP_POLICY='CPP_O1_STRICT_V1'
@@ -95,6 +95,19 @@ def source_generation(c):
  name,(generation,overlay,directory)=matches[0]
  need(c.get('generation_contract_sha256')==generation and c.get('source_overlay',{}).get('sha256')==overlay and type(c.get('source_count'))is int and c['source_count']==159,'new hardware generation/overlay exact pair')
  return name,generation,overlay,directory
+
+def model162_mode_policy(source):
+ from candidate_generation_gate import MODEL162_SOURCE
+ selected=source_generation(source['model_candidate_observation']['source_closure'])
+ return selected is not None and selected[0]==MODEL162_SOURCE
+
+def require_model162_payload_modes(root,source):
+ if not model162_mode_policy(source):return
+ root=P(root)
+ for name in set(NAMES.values())|{'frozen_artifact.json'}:
+  p=regular(root/name);s=p.stat();wanted=0o700 if name==NAMES['binary']else 0o600
+  need(stat.S_IMODE(s.st_mode)==wanted,'actual162 exact owner-only payload mode')
+  if name==NAMES['binary']:need(s.st_uid==os.geteuid(),'actual162 binary current effective owner')
 
 def address_generation_observation(c):
  """Known new source pairs only; never learn from emitted IR/SV."""
@@ -264,24 +277,28 @@ def _pack_impl(original,b,built,host,overlay,out,budget_check,observation_pin,_m
  if profile is not None:source['host_profile_driver']=retained_relation(original)
  source['model_candidate_observation']=obs;address_source_identity(source,obs,readonly is not None);enriched=(json.dumps(source,indent=2,allow_nan=False)+'\n').encode();need(len(enriched)<=16<<20,'source metadata16MiB')
  _mark('COPY')
+ mode162=model162_mode_policy(source)
  copies={'binary':binary,'sv':host,'driver':driver,'tool_manifest':regular(b['tool_manifest'],32<<20)}
  before={k:pin(p)for k,p in copies.items()};source_before=pin(source_path)
  root=out/'model_candidate_artifact';need(not root.exists(),'fresh export directory')
  budget_check(sum(p.stat().st_size for p in copies.values())+len(enriched)+131072);root.mkdir();files={}
  for k,p in copies.items():
-  target=root/NAMES[k];shutil.copyfile(p,target);target.chmod(0o600);need(sha(target)==before[k]['sha256']and pin(p)==before[k],'copy drift');files[k]=target
+  target=root/NAMES[k];shutil.copyfile(p,target);target.chmod(0o700 if mode162 and k=='binary'else 0o600);need(sha(target)==before[k]['sha256']and pin(p)==before[k],'copy drift');files[k]=target
  files['source_manifest']=root/NAMES['source_manifest'];files['source_manifest'].write_bytes(enriched)
+ if mode162:files['source_manifest'].chmod(0o600)
  need(pin(source_path)==source_before,'collector source drift')
  receipt=dict(schema='MODEL_CANDIDATE_BUILD_RECEIPT_V1',status=STATUS,cpp_build_policy=CPP_POLICY,cpp_build_overrides=list(CPP_OVERRIDES),source_commit=original['repo_sha'],launch_commit=original['artifact_identity']['launch_commit'],**{k+'_sha256':sha(files[k])for k in files},model_candidate_observation_sha256=obs_hash,phases=summaries,stages=stage_summary,scope='CHISEL_TEST_BACKEND_NOT_FINAL_RTL_REPLAY',config_only=False,software_arithmetic_substitution=False,numerical_pass=False,final_rtl_executed=False)
  if readonly is not None:
   receipt['readonly_probe_contract_sha256']=source['readonly_probe']['contract']['sha256'];receipt['scope']=FIRST_FAULT_SCOPE
  raw=(json.dumps(receipt,indent=2,allow_nan=False)+'\n').encode();need(len(raw)<=65536,'receipt64KiB');files['build_receipt']=root/NAMES['build_receipt'];files['build_receipt'].write_bytes(raw)
+ if mode162:files['build_receipt'].chmod(0o600)
  entries={k:dict(path=NAMES[k],bytes=p.stat().st_size,sha256=sha(p))for k,p in files.items()}
  manifest=dict(schema=MANIFEST_SCHEMA,status=STATUS,cpp_build_policy=CPP_POLICY,cpp_build_overrides=list(CPP_OVERRIDES),profiles=list(range(5)),layer='CHISEL_EMITTED_SV_NUMERICAL_BACKEND',matrix_macs=4096,vector_lanes=32,moe_reference_contract=ROUTE,artifact_identity=original['artifact_identity'],common={k:entries[k]for k in ('binary','sv','source_manifest','driver','build_receipt')},tool_manifest=entries['tool_manifest'],model_candidate_observation_sha256=obs_hash,numerical_pass=False,final_rtl_executed=False,model_numerical_evaluation_authorized=False,external_review_required=True)
  if readonly is not None:
   manifest['schema']=FIRST_FAULT_MANIFEST_SCHEMA;manifest['scope']=FIRST_FAULT_SCOPE
   manifest['readonly_probe_contract']={k:source['readonly_probe']['contract'][k]for k in ('bytes','sha256')}
  mf=root/'frozen_artifact.json';mf.write_text(json.dumps(manifest,sort_keys=True,indent=2)+'\n');need(mf.stat().st_size<=65536,'manifest64KiB')
+ if mode162:mf.chmod(0o600)
  _mark('FINAL')
  result=validate_export(root)
  check_pins(b['pins']);check_pins(b['admission']['make_closure_pins']);need(sha(regular(observation_pin['path']))==observation_pin['sha256'],'observation changed during pack');budget_check(0)
@@ -332,7 +349,7 @@ def validate_export(root):
  model162_driver=model162_driver_artifact(source,actual['driver']['sha256'])
  need(sum(x is not None for x in (readonly,finite,profile))<=1,'exclusive driver policy')
  need(actual['driver']['sha256']==(profile['driver_sha256']if profile is not None else finite['finite_driver_sha256']if finite is not None else model162_driver['driver_sha256']if model162_driver is not None else DRIVER_SHA if readonly is None else readonly['diagnostic_driver']['sha256']),'fixed policy driver');need(source.get('sv_sha256')==actual['sv']['sha256']and source.get('driver_sha256')==actual['driver']['sha256'],'source ledger exact actual SV/driver');obs=source.get('model_candidate_observation')
- validate_observation(obs);address_source_identity(source,obs,readonly is not None);need(hashlib.sha256(canonical(obs)).hexdigest()==m['model_candidate_observation_sha256'],'observation canonical integrity')
+ validate_observation(obs);address_source_identity(source,obs,readonly is not None);require_model162_payload_modes(root,source);need(hashlib.sha256(canonical(obs)).hexdigest()==m['model_candidate_observation_sha256'],'observation canonical integrity')
  r=json_file(root/NAMES['build_receipt'],65536);need(r.get('status')==STATUS and r.get('schema')=='MODEL_CANDIDATE_BUILD_RECEIPT_V1','candidate receipt')
  need(r.get('source_commit')==source.get('source_commit')==m['artifact_identity']['source_commit']and r.get('launch_commit')==m['artifact_identity']['launch_commit'],'receipt git chain')
  need(r.get('model_candidate_observation_sha256')==m['model_candidate_observation_sha256']and r.get('cpp_build_policy')==CPP_POLICY and r.get('cpp_build_overrides')==CPP_OVERRIDES,'receipt observation/policy')

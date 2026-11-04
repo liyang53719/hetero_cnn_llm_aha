@@ -6,7 +6,7 @@ Binding paths are explicit; all hardware artifacts and inputs must remain immuta
 NEW lifecycle-only adapter: requires caller-owned strict outer supervision.
 Calibration changes only the wall deadline, never stimulus, cycles or acceptance.
 """
-import argparse, hashlib, json, os, pathlib, resource, signal, subprocess, time, struct
+import argparse, hashlib, json, os, pathlib, resource, signal, subprocess, time, struct, stat
 import required_acceptance
 
 
@@ -175,7 +175,13 @@ def full_log_module():
     spec=importlib.util.spec_from_file_location('reviewed_full_log',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
     return module
 
-def execute_streaming(binary, runtime, output, log, limits):
+def require_model162_binary_mode(binary):
+    p=pathlib.Path(binary);s=p.lstat()
+    need(p.is_absolute() and p==p.resolve(strict=True) and stat.S_ISREG(s.st_mode),'actual162 regular canonical executable')
+    need(stat.S_IMODE(s.st_mode)==0o700 and s.st_uid==os.geteuid(),'actual162 direct executable exact owner/mode')
+
+def execute_streaming(binary, runtime, output, log, limits, *, model162_binary=False):
+    need(type(model162_binary)is bool,'explicit binary mode policy')
     need('diagnostic_deadline_monotonic'not in limits,'same-job diagnostic uses existing closed raw-log execution, no unbound streaming deadline')
     helper=full_log_module();archive,capture_path=helper.paths(log)
     need(not log.exists() and not archive.exists() and not capture_path.exists(),'fresh full streaming log')
@@ -191,6 +197,9 @@ def execute_streaming(binary, runtime, output, log, limits):
         with log.with_suffix('.started.json').open('x') as evidence:
             json.dump(dict(schema='ACTUAL_DUT_POPEN_V1',pid=p.pid,consumer_pid=os.getpid(),consumer_start_tick=int(pathlib.Path('/proc/self/stat').read_text().rsplit(')',1)[1].split()[19]),inherited_group=os.getpgrp(),inherited_session=os.getsid(0),binary_sha256=binary_sha,runtime_sha256=runtime_sha),evidence)
     try:
+        if model162_binary:
+            need(WORKSPACE_LOADER is None,'actual162 ordinary direct execution only')
+            require_model162_binary_mode(binary)
         p=subprocess.Popen(runtime_abi_module().execution_argv(binary,runtime,output,limits['max_active_cycles']) if WORKSPACE_LOADER is not None else [str(binary),str(runtime),str(output),str(limits['max_active_cycles'])],stdout=subprocess.PIPE,stderr=subprocess.STDOUT,preexec_fn=bounded,env=runtime_abi_module().clean_env(),bufsize=0)
     except BaseException:
         try:
@@ -206,7 +215,8 @@ def execute_streaming(binary, runtime, output, log, limits):
     return result['native_exit']
 
 
-def execute(binary, runtime, output, log, limits):
+def execute(binary, runtime, output, log, limits, *, model162_binary=False):
+    need(type(model162_binary)is bool,'explicit binary mode policy')
     def bounded():
         resource.setrlimit(resource.RLIMIT_AS,(limits['address_space_bytes'],)*2)
         resource.setrlimit(resource.RLIMIT_CPU,(limits['cpu_seconds'],)*2)
@@ -216,6 +226,9 @@ def execute(binary, runtime, output, log, limits):
     with open(log,'xb') as f:
         diagnostic_launch=host_diagnostic_module().cap_before_popen(limits,time.monotonic()) if 'diagnostic_deadline_monotonic'in limits else None
         try:
+            if model162_binary:
+                need(WORKSPACE_LOADER is None,'actual162 ordinary direct execution only')
+                require_model162_binary_mode(binary)
             p=subprocess.Popen(runtime_abi_module().execution_argv(binary,runtime,output,limits['max_active_cycles']) if WORKSPACE_LOADER is not None else [str(binary),str(runtime),str(output),str(limits['max_active_cycles'])],stdout=f,stderr=subprocess.STDOUT,preexec_fn=bounded,env=runtime_abi_module().clean_env())
         except BaseException:
             if CLOUD_MEMORY is not None:CLOUD_MEMORY.after_popen()
@@ -532,7 +545,7 @@ def approved_source_relocation(args,frozen):
 def runtime_abi_module():
     import importlib.util
     path=pathlib.Path(__file__).resolve().with_name('runtime_abi_owned.py')
-    need(sha(path)=='961eba84a34b9c3ba0f529b904ccbd27ad2994a81b2753fd4b698c8776cc57ef','reviewed startup ABI module')
+    need(sha(path)=='11dae378bdf32feb82153cd1ae48aa166a65c7e959d6cecbed42b9ab0a85d3f6','reviewed startup ABI module')
     spec=importlib.util.spec_from_file_location('pinned_startup_abi',path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);need(OWNED_ENVIRONMENT is not None,'explicit owned environment admission');m.configure_owned_environment(*OWNED_ENVIRONMENT)
     if WORKSPACE_LOADER is not None:m.configure_workspace_loader(*WORKSPACE_LOADER)
     return m
@@ -766,7 +779,7 @@ def main():
             if admission['mode']==HOST_DIAGNOSTIC_MODE:
                 execution_limits=mode.remaining_limits(execution_limits,admission,time.monotonic());summary['execution_admission']['effective_limits']=dict(execution_limits)
             if getattr(args,'samejob_full_binding',None)is not None:mode.require_consumer_window(args,time.monotonic())
-            rc=(execute_streaming if FULL_LOG_POLICY is not None else execute)(files['binary'],runtime,target,log,execution_limits);r['exit_code']=rc
+            rc=(execute_streaming if FULL_LOG_POLICY is not None else execute)(files['binary'],runtime,target,log,execution_limits,model162_binary=gdn32_context(source_relocation));r['exit_code']=rc
             if FULL_LOG_POLICY is not None:postprocess=full_log_module().PostprocessBudget(postprocess_limits).start()
             load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile,source_relocation,admission)
             verify_local_build(args,frozen)

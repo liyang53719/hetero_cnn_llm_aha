@@ -8,6 +8,8 @@ import java.io.{OutputStream,PrintStream}
 import java.nio.charset.StandardCharsets.UTF_8
 import java.nio.file.{Files,Paths}
 import java.security.MessageDigest
+import java.lang.management.ManagementFactory
+import scala.jdk.CollectionConverters._
 import org.json4s.{JArray,JObject,JString}
 import org.json4s.native.JsonMethods
 import treadle2.TreadleCircuitStateAnnotation
@@ -70,61 +72,113 @@ object OriginalHostStructuralGraph {
   private final class DiagnosticSink extends OutputStream {
     var bytes:Long=0L
     var unsupported:Boolean=false
+    @volatile var cycleSeen:Boolean=false
+    @volatile var onCycle:()=>Unit=()=>()
     private var tail=""
     private def inspect(text:String):Unit={
       val joined=tail+text
+      if(!cycleSeen && joined.contains("Combinational loop detected at ")){cycleSeen=true;onCycle()}
       if(Seq("WARNING:","Warning:","SymbolTable:TODO:").exists(joined.contains))unsupported=true
       tail=joined.takeRight(64)
     }
     override def write(b:Int):Unit={bytes+=1;require(bytes<=8L*1024*1024,"diagnostic byte cap");inspect((b&255).toChar.toString)}
     override def write(b:Array[Byte],off:Int,len:Int):Unit={bytes+=len;require(bytes<=8L*1024*1024,"diagnostic byte cap");inspect(new String(b,off,len,UTF_8))}
   }
+  private final class PhaseTelemetry(out:PrintStream,sink:DiagnosticSink) {
+    private val start=System.nanoTime()
+    private val os=ManagementFactory.getOperatingSystemMXBean.asInstanceOf[com.sun.management.OperatingSystemMXBean]
+    private val collectors=ManagementFactory.getGarbageCollectorMXBeans.asScala.toVector
+    private val memory=ManagementFactory.getMemoryMXBean
+    private var phase="admission";private var records=0;private var active=false
+    @volatile private var stopped=false
+    @volatile var failed=false
+    private def emit(kind:String):Unit={
+      require(records<96,"bounded phase records")
+      val heap=memory.getHeapMemoryUsage
+      val cpu=os.getProcessCpuTime
+      require(cpu>=0,"CPU metric available")
+      val gcMillis=collectors.map(_.getCollectionTime).filter(_>=0).sum
+      val gcCount=collectors.map(_.getCollectionCount).filter(_>=0).sum
+      records+=1
+      out.println("GRAPH_PHASE_V1 seq="+records+" kind="+kind+" phase="+phase+
+        " wallMs="+((System.nanoTime()-start)/1000000L)+" cpuMs="+(cpu/1000000L)+
+        " heapUsed="+heap.getUsed+" heapMax="+heap.getMax+
+        " gcMillis="+gcMillis+" gcCount="+gcCount+" cycleSeen="+(if(sink.cycleSeen)1 else 0))
+      out.flush()
+      require(!out.checkError(),"phase output failed")
+    }
+    def begin(name:String):Unit=synchronized {require(!stopped && !active);phase=name;active=true;emit("BEGIN")}
+    def end():Unit=synchronized {require(active && !stopped);emit("END");active=false}
+    private val sampler=new Thread(new Runnable {def run():Unit={
+      try {while(!stopped){Thread.sleep(30000L);PhaseTelemetry.this.synchronized {
+        if(!stopped && active)emit("SAMPLE")
+      }}}catch{case _:InterruptedException=>();case _:Throwable=>failed=true}
+    }},"structural-phase-metrics")
+    sampler.setDaemon(true)
+    def startSampling():Unit=sampler.start()
+    def cycleDetected():Unit={try {synchronized {if(!stopped && active)emit("CYCLE_SEEN")}}catch{case _:Throwable=>failed=true}}
+    def stop():Unit={synchronized {stopped=true};sampler.interrupt();sampler.join(1000L);require(!sampler.isAlive,"sampler stopped")}
+  }
   def main(args:Array[String]):Unit={
     val savedOut=System.out;val savedErr=System.err
     val sink=new DiagnosticSink;val muted=new PrintStream(sink,true,"UTF-8")
     var stage="admission";var result="FAIL_STRUCTURAL_GRAPH_ONLY stage=admission";var failed=true
+    var telemetry:PhaseTelemetry=null
+    def timed[T](name:String)(body: => T):T={
+      stage=name;telemetry.begin(name);val value=body;telemetry.end();value
+    }
     try {
       System.setOut(muted);System.setErr(muted)
       Console.withOut(muted){Console.withErr(muted){
-        require(args.length==5,"high path,high SHA,annotations path,annotations SHA,original iDMA extmodule SHA")
-        require(Files.getFileStore(Paths.get(args(0)).toAbsolutePath).getUsableSpace>=8L*1024*1024*1024,"unchanged8GiB reserve")
-        stage="read"
-        val highText=readPinned(args(0),args(1),512L*1024*1024)
-        val annotationText=readPinned(args(2),args(3),16L*1024*1024)
-        checkInputAnnotations(annotationText)
-        stage="parse"
-        val circuit=Parser.parse(highText)
-        val annotations=JsonProtocol.deserialize(annotationText)
-        require(circuit.serialize==highText,"exact original high parse/serialize roundtrip")
-        require(JsonProtocol.serialize(annotations)==annotationText,"exact original annotation roundtrip")
-        require(circuit.main=="HostBlockTopV4","actual original Host top")
-        val high=CircuitState(circuit,annotations)
-        check(high)
-        stage="split"
-        val split=IdmaFieldSplitTransform(high.circuit,args(4))
-        val selected=high.copy(circuit=split)
-        require(selected.annotations eq high.annotations,"preserved initialization annotations")
-        val originalBindings=new StructuralMetadataFactory(split,seed=true).bindings
-        stage="official_lower"
-        val low=Compiler.toLowFirrtl(selected)
-        check(low)
-        require(new StructuralMetadataFactory(low.circuit,seed=true).bindings==originalBindings,"same lowered leaf inventory")
-        require(TopmoduleInfo(low.circuit).clocks==Seq("clock"),"original clock")
-        stage="official_prepare"
+        telemetry=new PhaseTelemetry(savedOut,sink);sink.onCycle=()=>telemetry.cycleDetected();telemetry.startSampling()
+        timed("admission") {
+          require(args.length==5,"high path,high SHA,annotations path,annotations SHA,original iDMA extmodule SHA")
+          require(Files.getFileStore(Paths.get(args(0)).toAbsolutePath).getUsableSpace>=8L*1024*1024*1024,"unchanged8GiB reserve")
+        }
+        val (highText,annotationText)=timed("read") {
+          val h=readPinned(args(0),args(1),512L*1024*1024)
+          val a=readPinned(args(2),args(3),16L*1024*1024)
+          checkInputAnnotations(a);(h,a)
+        }
+        val (circuit,annotations)=timed("parse") {(Parser.parse(highText),JsonProtocol.deserialize(annotationText))}
+        val high=timed("roundtrip") {
+          require(circuit.serialize==highText,"exact original high parse/serialize roundtrip")
+          require(JsonProtocol.serialize(annotations)==annotationText,"exact original annotation roundtrip")
+          require(circuit.main=="HostBlockTopV4","actual original Host top")
+          val h=CircuitState(circuit,annotations);check(h);h
+        }
+        val (selected,originalBindings)=timed("split") {
+          val split=IdmaFieldSplitTransform(high.circuit,args(4))
+          val selected=high.copy(circuit=split)
+          require(selected.annotations eq high.annotations,"preserved initialization annotations")
+          (selected,new StructuralMetadataFactory(split,seed=true).bindings)
+        }
+        val low=timed("official_lower") {Compiler.toLowFirrtl(selected)}
+        timed("lower_checks") {
+          check(low)
+          require(new StructuralMetadataFactory(low.circuit,seed=true).bindings==originalBindings,"same lowered leaf inventory")
+          require(TopmoduleInfo(low.circuit).clocks==Seq("clock"),"original clock")
+        }
         val ann=FirrtlCircuitAnnotation(low.circuit)+:low.annotations
-        val prepared=(new PrepareAst).transform(SetImplicitOutputInfo.transform(GetFirrtlAst.transform(ann)))
-        val states=prepared.collect{case TreadleCircuitStateAnnotation(s)=>s}
-        require(states.size==1,"one actual prepared AST")
-        require(!states.head.annotations.exists(_.isInstanceOf[UnsupportedAnnotation]),"unsupported prepared annotation")
-        val factory=new StructuralMetadataFactory(states.head.circuit,seed=true)
-        require(factory.bindings==originalBindings,"same prepared leaf inventory")
-        stage="symbol_table"
-        val table=SymbolTable(states.head.circuit,Seq(factory),allowCycles=false)
-        factory.requireComplete()
-        require(!sink.unsupported,"unhandled/warning library diagnostic")
-        stage="summary"
+        val obtained=timed("get_firrtl_ast") {GetFirrtlAst.transform(ann)}
+        val withInfo=timed("set_implicit_output_info") {SetImplicitOutputInfo.transform(obtained)}
+        val prepared=timed("prepare_ast") {(new PrepareAst).transform(withInfo)}
+        val (state,factory)=timed("prepared_checks") {
+          val states=prepared.collect{case TreadleCircuitStateAnnotation(s)=>s}
+          require(states.size==1,"one actual prepared AST")
+          require(!states.head.annotations.exists(_.isInstanceOf[UnsupportedAnnotation]),"unsupported prepared annotation")
+          val f=new StructuralMetadataFactory(states.head.circuit,seed=true)
+          require(f.bindings==originalBindings,"same prepared leaf inventory")
+          (states.head,f)
+        }
+        val table=timed("symbol_table") {
+          val t=SymbolTable(state.circuit,Seq(factory),allowCycles=false)
+          factory.requireComplete();require(!sink.unsupported,"unhandled/warning library diagnostic");t
+        }
+        val preparedSha=timed("summary_hash") {hash(state.circuit.serialize)}
+        require(!telemetry.failed && !sink.cycleSeen,"telemetry failure or detected cycle")
         result="PASS_DECLARED_CONE_TOPOLOGY_ONLY highSha="+args(1)+" annotationsSha="+args(3)+
-          " preparedSha="+hash(states.head.circuit.serialize)+" symbols="+table.size+
+          " preparedSha="+preparedSha+" symbols="+table.size+
           " leafBindings=17 nativeInstances=0 evaluatedEdges=0 schedulingQualified=false fullHostAccepted=false"
         failed=false
       }}
@@ -132,9 +186,13 @@ object OriginalHostStructuralGraph {
       result="FAIL_STRUCTURAL_GRAPH_ONLY stage="+stage+" exceptionClassSha="+hash(error.getClass.getName)+
         " nativeInstances=0 evaluatedEdges=0 schedulingQualified=false fullHostAccepted=false"
     }finally{
+      try {if(telemetry!=null){telemetry.stop();require(!telemetry.failed,"sampler metrics failed")}}catch{case error:Throwable=>
+        failed=true;result="FAIL_STRUCTURAL_GRAPH_ONLY stage="+stage+" exceptionClassSha="+hash(error.getClass.getName)+
+          " nativeInstances=0 evaluatedEdges=0 schedulingQualified=false fullHostAccepted=false"
+      }
       System.setOut(savedOut);System.setErr(savedErr)
     }
-    savedOut.println(result+" suppressedDiagnosticBytes="+sink.bytes)
+    savedOut.println(result+" suppressedDiagnosticBytes="+sink.bytes+" cycleSeen="+(if(sink.cycleSeen)1 else 0))
     savedOut.flush()
     if(failed)System.exit(2)
   }

@@ -2,7 +2,7 @@ name: chisel-original-host-structural-graph-only
 on:
   push:
     branches: [main]
-    paths: [ci_launch/chisel_structural_graph_20261104_jdkfix_once.json]
+    paths: [ci_launch/chisel_structural_graph_20261104_phase_once.json]
 permissions:
   contents: read
   actions: read

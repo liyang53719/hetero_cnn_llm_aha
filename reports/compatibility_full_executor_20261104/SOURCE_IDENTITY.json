@@ -1,0 +1,73 @@
+{
+  "schema": "HETERO_COMPATIBILITY_EXECUTOR_SOURCE_RECORD_V1",
+  "status": "TEMP_SOURCE_ONLY_NOT_READY",
+  "compatibility_source_commit": "8eb141f0cb3d9fab16f74c2b1e2704e3b2f966ab",
+  "compatibility_tree": "36717053e39ade70b7b42ef56a5e486ba91d10c3",
+  "original_full_tree_base_commit": "acee98254a7c6adba0bd5f00dd4db8f045072021",
+  "original_full_tree_base": "9c8b237f1e20514ef773bb9799688e991d4e1970",
+  "host_source_donor_commit": "dc5ac5ee72e049ba788219914fa53f7e397c6b49",
+  "catalog_entries": 942,
+  "catalog_sha256": "5a7adad5d27db498b930078acd9d66229e4caf4e2e696cb23b8e2cb1a2b7a2d6",
+  "catalog_git_blob": "2ac5b6944b2ee8c08e70a809dee1ea1e92aa630c",
+  "catalog_delta": {
+    "modified": 38,
+    "added": 24,
+    "deleted": 0
+  },
+  "git_delta_files_including_catalog": 63,
+  "protected_changes_not_overlaid": {
+    "old_paths_byte_preserved": 18,
+    "new_paths_absent": 55
+  },
+  "executor_adaptation_v1_unchanged": true,
+  "connection_roles": {
+    "all_original_roles_retained": 33,
+    "total_actual_pins": 36
+  },
+  "artifact_provenance_only": {
+    "run_id": 41576990692,
+    "manifest_sha256": "ff4d6188ac91e84c8a9ad1b0e0a5d423d83c69f723dbc5d19e9def8e029e8200",
+    "full_payload_rehash_performed": false,
+    "full_handoff_performed": false,
+    "new_artifact_acceptance": false
+  },
+  "targeted_host_tests": {
+    "normal": 218,
+    "optimized": 218,
+    "default_stack_cases_per_mode": 217,
+    "harness_only_512KiB_stack_cases_per_mode": 1,
+    "initial_resource_failures_retained": true,
+    "default_environment_entire_suite_pass": false,
+    "max_address_space_bytes": 67108864,
+    "max_process_cpu_seconds": 60
+  },
+  "metadata_evidence_only": {
+    "source_gate_pins": 944,
+    "generation_stages": 20,
+    "compiler_phases": 5,
+    "ports": 122,
+    "original_producer_files": 76,
+    "original_hardware_inputs": 159
+  },
+  "ordinary_p2_proposal": {
+    "tokens": 128,
+    "cycle_limit": 140000000,
+    "wall_days": 17,
+    "driver_cycle_cap": 1000000000,
+    "ordinary_wall_cap_days": 31,
+    "completion_guaranteed": false
+  },
+  "shared_hardware": {
+    "matrix_macs": 4096,
+    "vector_lanes": 32,
+    "numeric_semantics_changed": false,
+    "five_block_acceptance_changed": false
+  },
+  "ready": false,
+  "execution_authorized": false,
+  "hardware_executed": false,
+  "numerical_pass": false,
+  "final_rtl_pass": false,
+  "new_nonce_activated": false,
+  "main_tree_policy": "Preserve latest main functionality; compatibility source is a separate truthful commit, never presented as dc5 or an executable checkout."
+}

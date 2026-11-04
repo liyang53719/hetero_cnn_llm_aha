@@ -1081,3 +1081,12 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 00:33 AVX512与00:56 AVX2同host软件实验适配器只计入1,207,959,552B，不能再称已验证旧整轮生命周期的磁盘准入。相关资源准入结论标TEMP／范围不足。1,629,642,216B来自02:58及03:16当前18root census，不是00:33/00:56同步快照；当时完整旧root余量未核，不能据后来的snapshot追认通过或断言当时实际耗尽。实际固定字节结果、exit、EOF、清理与测得资源不改：AVX512可见25/25软件参考PASS；AVX2第16项概率FAIL，15PASS/1MISMATCH/9未到达。原JSON、旧门值及报告作为实际历史保留，不回写为按完整余量通过。
 - 新P2精确ready审计仍BLOCKED_NOT_RUN。03:16:23 UTC独立census口径下，保护旧完整余量与新128MiB DUT gzip、1GiB RSS gzip、至少1GiB输出及8GiB底线，disk缺2,494,213,608B；18root及当前审计源/元信息共98,757 entries，距100,000门只余1,243，尚未计新执行checkout/产物。此snapshot不是launch准入。RAM仍须保留旧UNKNOWN DUT/consumer未来峰值，不能只看单阶段MemAvailable。
 - 不改变任何既有数值黄金、硬件、日志保留或资源下限；无新的重执行、清理或迁移。下一次运行必须以fresh全生命周期union-root ledger和完整旧reservation独审，不沿用本次偏窄口径。
+
+## 2026-11-04 03:45 UTC：TEMP，独立 ordinary FULL 兼容执行源身份
+
+- 建立独立真实兼容源码提交8eb141f0cb3d9fab16f74c2b1e2704e3b2f966ab，parent为旧builder acee98254a7c6adba0bd5f00dd4db8f045072021，完整旧Git tree为base，仅叠加审定63路径；远端compare逐path/blob核对一致。不是把952文件本地审计快照伪装全repo/实际checkout，也不是把dc5声称为旧builder。main保留当前功能树，以附加parent和本记录保持该独立source commit可达，不回退已有候选。
+- 原executor_adaptation V1门逐字节保持，没有V2或73项通配白名单。兼容catalog942，62差异＝38修改＋24新增、无旧项删除；18旧保护文件原字节、55新保护路径未带入。old pack/proof/corrector及原数学、driver、159硬件、overlay/contract保持；旧33个connection角色全部保留，实际36项。仅ordinary selected FULL，新的finite/hostdiagnostic/supply模式显式拒绝。
+- 源catalog SHA5a7adad5d27db498b930078acd9d66229e4caf4e2e696cb23b8e2cb1a2b7a2d6；实际source gate944pins和guard36pins、合成V1正负例通过。原元数据20stages/5compiler phases/122ports/76生产者文件/159硬件输入核验通过；大DUT/SV未重hash、完整artifact handoff未执行，因此不宣称旧产物已在新源下准入。
+- normal/-O各218项目标host测试通过，但每组217项默认线程栈、1项模拟transport用仅测试harness的512KiB栈；原64MiB AS下的MemoryError/线程启动失败记录保留，不声称默认环境整个套件全绿。所有测试≤64MiB AS/60s CPU，无真实framework/reference/DUT/EDA。
+- P2普通FULL的140Mcycles/17天提案可容纳原1Bcycle/31天上限，仅容量关系，不是完成保证；其他四块继续并行准备，不把该边界当全五READY。完整runtime/产物/材料及真实checkout、独立review、fresh全生命周期资源账仍未闭合，P2磁盘/RAM/entry阻塞没有解除。原FULL session97358终态UNKNOWN不重启、不释放保留。五块完整模型/最终RTL仍0/5，无新有效MAC利用率结果。
+- 公开记录reports/compatibility_full_executor_20261104/SOURCE_IDENTITY.json仅保存源码与范围摘要。无新nonce、无运行、无二进制/权重/张量外传；真实执行时必须准确使用该独立compat SHA及其新准入，不借旧批准或运行结果。

@@ -1,0 +1,225 @@
+{
+  "evidence_kind": "independent_python_model_plus_textual_source_anchors_not_dut_or_chisel_simulation",
+  "python_optimization_level": 1,
+  "candidate_source": {
+    "relative_path": "source/GdnRuntimeChunkExecuteOwner32V1.scala",
+    "sha256": "0fe8672a3e8673f795a3452b8bbd1c9b49ccdeb1a3d4eb4d43f1686349ecae6d",
+    "bytes": 17057,
+    "check_kind": "textual_anchors_only_not_dynamic_execution"
+  },
+  "baseline_sha256": {
+    "GdnRuntimeChunkExecuteOwnerV8.scala": "b4bc9397b88bc4542b72213fa14aad5b4df5e428881e96e2fd3893a49af3c15e",
+    "GdnChunkAddressPlan.scala": "f8534849bad082b77de88cf2cef43558a91f045122694640e9f33391f101b943",
+    "GdnRuntimeChunkLayout.scala": "54451d4cf504ca76ed387c23790875828eb966ce1603aa08a2200406023ad346"
+  },
+  "test_sha256": {
+    "gdn32_model.py": "33b7d7f28fc4a23e9e35aac2eedd1cd9fa91bd2f83e4e3255338d5e368df61d8",
+    "test_gdn32_model.py": "0bb569e82c0eb5b1a23b5a1658f5c78a2de7b50f17a3805d6d44dbfd7475bcea"
+  },
+  "tests_run": 17,
+  "failures": 0,
+  "errors": 0,
+  "wall_seconds": 3.537718,
+  "address_space_limit_bytes": 134217728,
+  "max_rss_kib": 20276,
+  "phase_counts": {
+    "5": {
+      "candidate32": {
+        "reads": 34048,
+        "vectors": 32896,
+        "writes": 256
+      },
+      "baseline16": {
+        "reads": 35072,
+        "vectors": 65792,
+        "writes": 256
+      }
+    },
+    "6": {
+      "candidate32": {
+        "reads": 34048,
+        "vectors": 32896,
+        "writes": 256
+      },
+      "baseline16": {
+        "reads": 35072,
+        "vectors": 65792,
+        "writes": 256
+      }
+    },
+    "7": {
+      "candidate32": {
+        "reads": 17264,
+        "vectors": 16384,
+        "writes": 512
+      },
+      "baseline16": {
+        "reads": 17888,
+        "vectors": 32768,
+        "writes": 512
+      }
+    },
+    "8": {
+      "candidate32": {
+        "reads": 17264,
+        "vectors": 16384,
+        "writes": 512
+      },
+      "baseline16": {
+        "reads": 17888,
+        "vectors": 32768,
+        "writes": 512
+      }
+    },
+    "9": {
+      "candidate32": {
+        "reads": 67584,
+        "vectors": 65536,
+        "writes": 512
+      },
+      "baseline16": {
+        "reads": 69632,
+        "vectors": 131072,
+        "writes": 512
+      }
+    },
+    "10": {
+      "candidate32": {
+        "reads": 1024,
+        "vectors": 256,
+        "writes": 512
+      },
+      "baseline16": {
+        "reads": 1024,
+        "vectors": 512,
+        "writes": 512
+      }
+    },
+    "11": {
+      "candidate32": {
+        "reads": 67584,
+        "vectors": 65536,
+        "writes": 512
+      },
+      "baseline16": {
+        "reads": 69632,
+        "vectors": 131072,
+        "writes": 512
+      }
+    },
+    "12": {
+      "candidate32": {
+        "reads": 33792,
+        "vectors": 32768,
+        "writes": 512
+      },
+      "baseline16": {
+        "reads": 34816,
+        "vectors": 65536,
+        "writes": 512
+      }
+    },
+    "13": {
+      "candidate32": {
+        "reads": 1024,
+        "vectors": 256,
+        "writes": 512
+      },
+      "baseline16": {
+        "reads": 1024,
+        "vectors": 512,
+        "writes": 512
+      }
+    },
+    "14": {
+      "candidate32": {
+        "reads": 67584,
+        "vectors": 65536,
+        "writes": 1024
+      },
+      "baseline16": {
+        "reads": 69632,
+        "vectors": 131072,
+        "writes": 1024
+      }
+    },
+    "15": {
+      "candidate32": {
+        "reads": 1024,
+        "vectors": 512,
+        "writes": 1024
+      },
+      "baseline16": {
+        "reads": 1024,
+        "vectors": 1024,
+        "writes": 1024
+      }
+    },
+    "16": {
+      "candidate32": {
+        "reads": 2048,
+        "vectors": 512,
+        "writes": 1024
+      },
+      "baseline16": {
+        "reads": 2048,
+        "vectors": 1024,
+        "writes": 1024
+      }
+    },
+    "17": {
+      "candidate32": {
+        "reads": 512,
+        "vectors": 256,
+        "writes": 256
+      },
+      "baseline16": {
+        "reads": 512,
+        "vectors": 512,
+        "writes": 256
+      }
+    }
+  },
+  "phase17_m16": {
+    "reads": 128,
+    "vectors": 64,
+    "writes": 64
+  },
+  "totals_per_head_per_chunk_phases_5_through_17": {
+    "16": {
+      "16": {
+        "reads": 354880,
+        "vectors": 659072,
+        "writes": 7232
+      },
+      "32": {
+        "reads": 344416,
+        "vectors": 329536,
+        "writes": 7232
+      }
+    },
+    "128": {
+      "16": {
+        "reads": 355264,
+        "vectors": 659456,
+        "writes": 7424
+      },
+      "32": {
+        "reads": 344800,
+        "vectors": 329728,
+        "writes": 7424
+      }
+    }
+  },
+  "coverage": {
+    "schedule_mutations_rejected": 64,
+    "backpressure_seed_phase_cases": 39,
+    "max_numeric_tile_elements": 4096
+  },
+  "limitations": [
+    "Does not import, instantiate, elaborate, simulate, build, or dynamically verify candidate RTL; source binding is textual only.",
+    "No physical resources, synthesis, timing, hardware flags, end-to-end model, or installed artifact acceptance evidence.",
+    "Abstract backpressure assumes finite eventual ready/result and serial response-before-next-request behavior.",
+    "Coefficient beat may contain unused diagonal words; only k < row coefficients are selected."
+  ]
+}

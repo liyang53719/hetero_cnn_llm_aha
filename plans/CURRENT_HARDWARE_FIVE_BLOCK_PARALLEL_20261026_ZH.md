@@ -1090,3 +1090,11 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - normal/-O各218项目标host测试通过，但每组217项默认线程栈、1项模拟transport用仅测试harness的512KiB栈；原64MiB AS下的MemoryError/线程启动失败记录保留，不声称默认环境整个套件全绿。所有测试≤64MiB AS/60s CPU，无真实framework/reference/DUT/EDA。
 - P2普通FULL的140Mcycles/17天提案可容纳原1Bcycle/31天上限，仅容量关系，不是完成保证；其他四块继续并行准备，不把该边界当全五READY。完整runtime/产物/材料及真实checkout、独立review、fresh全生命周期资源账仍未闭合，P2磁盘/RAM/entry阻塞没有解除。原FULL session97358终态UNKNOWN不重启、不释放保留。五块完整模型/最终RTL仍0/5，无新有效MAC利用率结果。
 - 公开记录reports/compatibility_full_executor_20261104/SOURCE_IDENTITY.json仅保存源码与范围摘要。无新nonce、无运行、无二进制/权重/张量外传；真实执行时必须准确使用该独立compat SHA及其新准入，不借旧批准或运行结果。
+
+## 2026-11-04 04:25 UTC：TEMP，GDN Execute32 隔离源候选，未选入 Top
+
+- 实际新增原 phases5–17 的32lane叶候选及独立模型测试，固定4096 Matrix MAC/共享唯一Vector32方向不变；原Top、159选源、兼容8eb与旧artifact没有改动。本批仅10条add-only候选文件及本计划追加。
+- 已验真实叶Scala编译与CHIRRTL（357918B，SHA256 c2e9e8fd15edc1f6688037bfa828713be153f81fc3412b3ad96637d91c6aef6e）；IR为32lane request/result、512bit memory、3个1024bit payload寄存器，无子模块或memory。不是完整Top、SV/RTL仿真或面积结果。两次emitter失败和随后成功日志保留，不继承失败为通过。
+- 独立Python模型正常/-O各17项通过，只覆盖模型及文本锚点，不执行Chisel FSM。逐lane升序K保持FP32先Mul后Add、无FMA；双64B读写及ACK保留，phase17用原bank policy4 BF16物化。M128每head/chunk向量请求659456→329728，内存事务只减少约2.89%；静态弱周期下界变化非实测加速、非80–90%整块有效MAC。
+- ongoing：实际Chunk32新authority/route、held-offer/返还owner/精确退休数接入原Collection、真实Kernel/Top和原唯一bank。Derived16保留，不借RMS slot11，不把旧slot10直接扩宽；新全Chunk向量计数 H*C*334176+4*M*H 必须由真实事务闭合。另行候选实现与协议验证，不替换运行中硬件。
+- 五块M128完整模型/最终RTL仍0/5；新硬件须五块重测。原session97358终态UNKNOWN，最后保留6685568 active/pc12/completions10，不重启或释放完整生命周期保护。P2兼容源执行仍缺真实checkout、完整artifact/native准入与资源。未发nonce、未新DUT、未清理或迁移。

@@ -1113,3 +1113,14 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 已复现具体错误：CI取原155源manifest的五项过时源码pin，实际合法model159已覆盖RmsNorm、PrefixLease、Qwen2Block、Adapter、Protocol；source9068远端五处Git blob已核对。旧restore入口自身也重复验证旧155目录，因此不能仅覆盖预期hash或删除保护。
 - 修复保留原model159完整source gate并独立核新162，172唯一Scala路径固定digest贯穿fetch/compile；实际编译仍162，官方107 JAR不变，原155manifest不修改。移除观察hash覆盖固定pin，增加有限pin角色/相对标签/expected-actual与JAR原因摘要，含null HTTP诊断回归。纯测试27CI+14依赖normal/-O通过，尚无修复后native结果。
 - 另设retry1路径/nonce，源码先休眠发布，核CI后仅新增一份launch JSON；旧once文件保留不改删。仅全162 fresh Scala compile，无Top展开/DUT/产物上传，硬件generation2b2f02d698f16a57ba696c52c4669a1226a68c5378efdc8ebe392cc1b9098f52不变。五块M128完整模型/最终RTL仍0/5，原97358 UNKNOWN与完整生命周期资源保留。
+
+
+## 2026-11-04 05:31 UTC：TEMP，retry1 真实入口失败与固定远端闭包修复
+
+- 实际 run 41778903739 / job 126405659780，源 046a1096ab7deb60bea6d8c2b274c0cf3326bafb，激活 ee7f7b9a93fea191593a8baf519662a44513cd36：nonce 与两次 checkout 成功，compile 入口约 0.05 秒 ValueError；未执行 JDK/依赖/native 编译，不是 Scala 或数值失败。普通 guard 41778903829 SUCCESS 仅为仓库载荷检查。保留原 run，不 rerun。
+- 固定 source 046a 的 198 个目标以未截断 Git tree/blob/mode 逐一核验：196 一致，仅已存在的 restore_model_inputs.py 与 candidate_generation_gate.py 为更新版本，R5 却加入旧版本 pin。原始 main 在真实远端 fixture 第 22 行精确重现 repository tool source drift；此前兼容 checkout 局部回放不代表当前 main。
+- 已审共享工具的新增 supply/finite/profile 分支，当前 legacy159 语义保持；仅候选工具 pin 与 wrapper 更新，不改共享工具本体、不改 172 路径源码闭包与 actual162 硬件。generation 仍 2b2f02d698f16a57ba696c52c4669a1226a68c5378efdc8ebe392cc1b9098f52。入口新增有限阶段/原因/pin 哈希摘要，避免只吞异常；不输出秘密或生成二进制。
+- 拟发布文件叠加后的独立 fixture，三个隔离 Python 进程的软件纯回归共 53 项 normal / -O，通过范围仅入口/闭包/监督契约；真实 Python fetch --verify-only 完成 model159 与 selected162 检查，无下载/native。main 被 stub 截停于首个 JDK supervisor 调用前，不冒真实 JDK/Scala 通过。
+- 本提交仅 dormant retry2 源码；独立 source CI 后才能新增唯一 retry2 nonce 激活 fresh162 compile-only，保留 attempt1、直接父提交及唯一新增文件门禁。此前 once/retry1 历史不修改；无 cache/artifact/生成 DUT/SV 上传。
+- 五块仍需同新硬件完整 M128 数值回归，0/5 完整通过；先模型完整通过再最终同刺激 RTL，不继承旧 PASS。原 FULL97358 仍 UNKNOWN；05:24 既定 /usr/bin/python3 32MiB 有界重读仅确认保存前缀 6,685,568 active cycles / pc12 / completions10，非 EOF，无 RESULT/TRANSPORT_EXIT。保留早前 PATH Python 观测 MemoryError 记录，不将观测失败当 DUT 失败。
+- 本轮无清理/迁移。本地资源门不放宽；05:23 workspace free 9,980,706,816B、tmpfs 284,372,992B，仅快照，旧完整生命周期余量和未知 owner 储备继续保留，不能作为本地重作业 GO。

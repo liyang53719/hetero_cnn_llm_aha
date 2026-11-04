@@ -3,7 +3,7 @@ name: gdn32-fresh162-compile-only
 on:
   push:
     branches: [main]
-    paths: [ci_launch/gdn32_compile_only_20261104_retry1.json]
+    paths: [ci_launch/gdn32_compile_only_20261104_retry2.json]
 permissions:
   contents: read
 concurrency:

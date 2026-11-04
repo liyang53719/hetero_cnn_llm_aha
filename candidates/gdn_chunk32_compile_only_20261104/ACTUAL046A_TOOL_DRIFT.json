@@ -1,0 +1,20 @@
+{
+  "source_commit": "046a1096ab7deb60bea6d8c2b274c0cf3326bafb",
+  "run_id": 41778903739,
+  "mismatches": [
+    {
+      "path": "candidates/model_candidate_build_20261101/restore_model_inputs.py",
+      "old_sha256": "7f6aae9fba45130be3fc90c44917cccc7ddb297db45fdbbcc997a9b34790360d",
+      "actual_sha256": "52cf08821a982a4e0cadc8661d0d7e6c9877a4541b5389a79231410b2e10f15d",
+      "bytes": 5922,
+      "git_blob": "2003eebfd182155fafe188dd91f979412a98961a"
+    },
+    {
+      "path": "candidates/model_candidate_build_20261101/candidate_generation_gate.py",
+      "old_sha256": "ced35f0d6b669b7e7619e787aa4411bcdbccc626f95400799eae4acc8fa23112",
+      "actual_sha256": "9131e8c6e2e0a3e357990b795ee808837d04ae8bc181862be7a143037166fac2",
+      "bytes": 10552,
+      "git_blob": "8506a39c36f1bccfe1f9e8f5c95448309cc8b880"
+    }
+  ]
+}

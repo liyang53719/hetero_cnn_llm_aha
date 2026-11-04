@@ -10,7 +10,7 @@ def audit(event,args):
 sys.addaudithook(audit)
 class Tests(unittest.TestCase):
  def test_actual_five_legacy_conflicts(self):
-  m=json.loads((B/r.TOOLCHAIN).read_text());fresh=B/'candidates/fresh_original_top_recovery_20261028';bad=[]
+  legacy=Path(os.environ.get('GDN32_LEGACY_BASE',str(B)));m=json.loads((legacy/r.TOOLCHAIN).read_text());fresh=legacy/'candidates/fresh_original_top_recovery_20261028';bad=[]
   for row in m['sources']:
    p=fresh/row['path']
    if r.sha(p)!=row['sha256']:bad.append(dict(name=p.name,expected=row['sha256'],actual=r.sha(p)))

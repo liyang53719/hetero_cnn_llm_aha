@@ -3,13 +3,13 @@
     "supervisor/lossless_log.py": "9dde4fd34639b79bd1bcbc0f76522770ba287a762fb0b08e41d7c8d92e627938",
     "supervisor/strict_cleanup.py": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
     "supervisor/supervise_multiroot.py": "cb93227605249375d12e056ef1cef3ae7e4401ca4eb9d55852c930dfee37dd7f",
-    "compile_only.py": "e3c35b6e3dc626adb3afedaf801bacb8ab3136ea7cafebf8d6666f843f1ebd2e",
-    "validate_launch.py": "47cff52bbc2d742c2469e1bd51fec5714216e052cc60b6284c5ed9beca0217a5",
-    "compile_only_workflow.yml": "bfc54aa518cb5fdaf2555e0348ebfdac9c4304a11758f4507ddb4658d4544b09",
+    "compile_only.py": "3aa00752177cb25dbf78a01d8541c751ad4ce685321f77659f175734753361d5",
+    "validate_launch.py": "f0e1ca173c621f59247caf4c699770a8145e6622094ae8aaee814dc538f51ec7",
+    "compile_only_workflow.yml": "f9a84e6a6fd77290817752a6a3f06b78d2caa504564c9e645b1fa4b8144fca86",
     "fresh_compile_host.py": "423bddee87e249844711fb297d12a703fcc72cd165276f584eecc5e690c9093c",
     "safe_compile_summary.py": "9b4fc6500e1c27626e274248a19c256ec287d07faab0a7c45247695e9f2b19c6",
     "FRESH_HOST_BASE.json": "9bdf4a94533b0fc8e1dd985c495d688f9c52d4861ebaebab174d2c12611af19f",
-    "restore_compile_inputs.py": "07976fce4f364db79597fa3e986c931b04ed849366a699b8e254fa77f9ada5c4",
+    "restore_compile_inputs.py": "5b7a45af0b71d0e3ca82fa1ffd76f960d7b3e353979f8c86233c7c32e4c4151f",
     "safe_pin_diagnostics.py": "7002ee738e370434fc512637272b7dc69591e61f47d2241662523d05e6d5c25f"
   },
   "repo": {
@@ -21,8 +21,8 @@
     "candidates/gdn_chunk32_actual_v2_20261104/PUBLICATION_MANIFEST.json": "573ec9d641da45913454abbb8393fea7e670705d1292ae6f90fa1bec22255ac2",
     "candidates/gdn_chunk32_actual_v2_20261104/MODEL_SOURCE_OVERLAY.json": "1bd1db80190d2d611cfeb15f50c2bbadec76f2aaad74280671b22e843240a945",
     "candidates/gdn_chunk32_actual_v2_20261104/GENERATION_CONTRACT.json": "2b2f02d698f16a57ba696c52c4669a1226a68c5378efdc8ebe392cc1b9098f52",
-    "candidates/model_candidate_build_20261101/restore_model_inputs.py": "7f6aae9fba45130be3fc90c44917cccc7ddb297db45fdbbcc997a9b34790360d",
-    "candidates/model_candidate_build_20261101/candidate_generation_gate.py": "ced35f0d6b669b7e7619e787aa4411bcdbccc626f95400799eae4acc8fa23112",
+    "candidates/model_candidate_build_20261101/restore_model_inputs.py": "52cf08821a982a4e0cadc8661d0d7e6c9877a4541b5389a79231410b2e10f15d",
+    "candidates/model_candidate_build_20261101/candidate_generation_gate.py": "9131e8c6e2e0a3e357990b795ee808837d04ae8bc181862be7a143037166fac2",
     "candidates/model_candidate_build_20261101/GENERATION_CONTRACT.json": "3354827c1c9d2ac167b3b325dc07acbd50ea663ddd384dddfea1b1d037ae3851",
     "candidates/model_candidate_build_20261101/MODEL_SOURCE_OVERLAY.json": "51621bbffc5ab0dfc97e88d66fee93722e66b6b1ed2a8c2ba7d0f588d9345472",
     "candidates/ci_frontend_materialization_r2_20261029/FIXED_SOURCE_OVERLAY_R2.json": "9be7810a372572e87b40d86d0b30245140c31cd40cdd6cf2f9cacead459beda2"

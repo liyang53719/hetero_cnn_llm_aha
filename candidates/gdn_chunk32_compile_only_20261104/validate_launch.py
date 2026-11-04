@@ -1,8 +1,8 @@
 """Dormant source publication, then exactly one new nonce file in second push."""
 import hashlib,json,os,pathlib,re,subprocess
 P=pathlib.Path
-LAUNCH='ci_launch/gdn32_compile_only_20261104_retry1.json'
-NONCE='gdn32_compile_only_20261104_retry1'
+LAUNCH='ci_launch/gdn32_compile_only_20261104_retry2.json'
+NONCE='gdn32_compile_only_20261104_retry2'
 WORKFLOW='.github/workflows/gdn32-compile-only.yml'
 GENERATION='2b2f02d698f16a57ba696c52c4669a1226a68c5378efdc8ebe392cc1b9098f52'
 SCHEMA='GDN32_FRESH162_COMPILE_ONLY_LAUNCH_V1'

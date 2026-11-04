@@ -5,7 +5,7 @@ import argparse,hashlib,importlib.util,json,pathlib,urllib.error,socket,ssl
 P=pathlib.Path
 HERE=P(__file__).resolve().parent
 MODEL_RESTORE='candidates/model_candidate_build_20261101/restore_model_inputs.py'
-MODEL_RESTORE_SHA256='7f6aae9fba45130be3fc90c44917cccc7ddb297db45fdbbcc997a9b34790360d'
+MODEL_RESTORE_SHA256='52cf08821a982a4e0cadc8661d0d7e6c9877a4541b5389a79231410b2e10f15d'
 TOOLCHAIN='candidates/fresh_original_top_recovery_20261028/SOURCE_AND_TOOLCHAIN_PINS.json'
 TOOLCHAIN_SHA256='7c8d4bd1f7a0a080f06161e70361a3c3676ede483703a90986fe9dfcf091d85b'
 CANDIDATE_REL='candidates/gdn_chunk32_actual_v2_20261104'

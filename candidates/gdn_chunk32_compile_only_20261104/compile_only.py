@@ -5,21 +5,42 @@ import argparse,hashlib,json,os,pathlib,sys,re,subprocess,stat
 P=pathlib.Path;HERE=P(__file__).resolve().parent
 def sha(p):
  with P(p).open('rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
+PHASE='ENTRY'
+class GateFailure(ValueError):
+ def __init__(self,reason,pin=None):
+  super().__init__(reason);self.reason=reason;self.pin=pin
+GATE_CODES={'JDK alias drift': 'JDK_ALIAS_DRIFT', 'JDK tree drift': 'JDK_TREE_DRIFT', 'actual first owning job': 'ACTUAL_FIRST_OWNING_JOB', 'actual host inventory failed': 'ACTUAL_HOST_INVENTORY_FAILED', 'canonical host alias': 'CANONICAL_HOST_ALIAS', 'conflicting immutable pin': 'CONFLICTING_IMMUTABLE_PIN', 'consistent alias segment': 'CONSISTENT_ALIAS_SEGMENT', 'cross-phase source pin drift': 'CROSS_PHASE_SOURCE_PIN_DRIFT', 'dependency stage failed': 'DEPENDENCY_STAGE_FAILED', 'exact launch identity': 'EXACT_LAUNCH_IDENTITY', 'exact reviewed source checkout': 'EXACT_REVIEWED_SOURCE_CHECKOUT', 'fresh compile failed': 'FRESH_COMPILE_FAILED', 'fresh compile output required': 'FRESH_COMPILE_OUTPUT_REQUIRED', 'fresh host file drift': 'FRESH_HOST_FILE_DRIFT', 'fresh unique162 including actual enabled helper': 'FRESH_UNIQUE162_INCLUDING_ACTUAL_ENABLED_HELPER', 'host alias drift': 'HOST_ALIAS_DRIFT', 'jar integrity': 'JAR_INTEGRITY', 'local tool source drift': 'LOCAL_TOOL_SOURCE_DRIFT', 'new JDK provenance only': 'NEW_JDK_PROVENANCE_ONLY', 'new exact compile-only generation': 'NEW_EXACT_COMPILE_ONLY_GENERATION', 'new host identity only': 'NEW_HOST_IDENTITY_ONLY', 'no project classes on compiler classpath': 'NO_PROJECT_CLASSES_ON_COMPILER_CLASSPATH', 'official plugin required': 'OFFICIAL_PLUGIN_REQUIRED', 'one official plugin': 'ONE_OFFICIAL_PLUGIN', 'only bounded public JDK truststore external': 'ONLY_BOUNDED_PUBLIC_JDK_TRUSTSTORE_EXTERNAL', 'repository tool source drift': 'REPOSITORY_TOOL_SOURCE_DRIFT', 'runner JDK inventory failed': 'RUNNER_JDK_INVENTORY_FAILED', 'same exact selected162 before fetch': 'SAME_EXACT_SELECTED162_BEFORE_FETCH', 'workflow identity preserved in source checkout': 'WORKFLOW_IDENTITY_PRESERVED_IN_SOURCE_CHECKOUT'}
+def failure_summary(e):
+ result=dict(schema='GDN32_COMPILE_ENTRY_FAILURE_V1',status='FAIL_COMPILE_ONLY',phase=PHASE,reason=e.reason if isinstance(e,GateFailure) else 'UNCLASSIFIED_EXCEPTION',error_class=type(e).__name__ if type(e).__name__ in {'GateFailure','ValueError','KeyError','TypeError','FileNotFoundError','PermissionError','OSError','ImportError','ModuleNotFoundError','JSONDecodeError','CalledProcessError'} else 'OTHER_EXCEPTION',numerical_pass=False)
+ if isinstance(e,GateFailure) and e.pin is not None:result['pin_failure']=e.pin
+ return result
+def check_tool_pin(path,expected,role,label):
+ # label comes only from reviewed TOOL_PINS relative keys. No raw exception text.
+ need(isinstance(label,str) and len(label)<=240 and re.fullmatch(r'[A-Za-z0-9_.\-/]+',label) and not P(label).is_absolute() and '..' not in P(label).parts,'safe tool label')
+ actual=sha(path)
+ if actual!=expected:raise GateFailure('TOOL_PIN_DRIFT',dict(role=role,label=label,expected_sha256=expected,actual_sha256=actual))
 def need(v,s):
- if not v:raise ValueError(s)
+ if not v:raise GateFailure(GATE_CODES.get(s,'GATE_REJECTED'))
 def main():
+ global PHASE
+ PHASE='ARGUMENTS'
  p=argparse.ArgumentParser();p.add_argument('--repo',required=True,type=P);p.add_argument('--candidate',required=True,type=P);p.add_argument('--output',required=True,type=P);p.add_argument('--java',required=True,type=P);p.add_argument('--identity',required=True,type=P);a=p.parse_args()
  repo=a.repo.resolve();candidate=a.candidate.resolve();output=a.output.resolve();java=a.java.resolve()
+ PHASE='IDENTITY'
  identity=json.loads(a.identity.read_text())
- need(identity['schema']=='GDN32_COMPILE_JOB_IDENTITY_V1' and identity['nonce']=='gdn32_compile_only_20261104_retry1','exact launch identity')
+ need(identity['schema']=='GDN32_COMPILE_JOB_IDENTITY_V1' and identity['nonce']=='gdn32_compile_only_20261104_retry2','exact launch identity')
  need(str(identity['run_id'])==os.environ.get('GITHUB_RUN_ID') and identity['launch_commit']==os.environ.get('GITHUB_SHA') and os.environ.get('GITHUB_RUN_ATTEMPT')=='1','actual first owning job')
+ PHASE='SOURCE_CHECKOUT'
  need(subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()==identity['source_commit'],'exact reviewed source checkout')
  need(sha(repo/'.github/workflows/gdn32-compile-only.yml')==identity['workflow_sha256'],'workflow identity preserved in source checkout')
+ PHASE='OUTPUT_FRESHNESS'
  need(not output.exists(),'fresh compile output required');output.mkdir(parents=True)
  # Fixed reviewed tooling hashes, not newly observed values as authority.
+ PHASE='TOOL_PINS'
  pinfile=HERE/'TOOL_PINS.json';toolpins=json.loads(pinfile.read_text())
- for rel,h in toolpins['local'].items():need(sha(HERE/rel)==h,'local tool source drift')
- for rel,h in toolpins['repo'].items():need(sha(repo/rel)==h,'repository tool source drift')
+ for rel,h in toolpins['local'].items():check_tool_pin(HERE/rel,h,'LOCAL_TOOL',rel)
+ for rel,h in toolpins['repo'].items():check_tool_pin(repo/rel,h,'REPOSITORY_TOOL',rel)
+ PHASE='SOURCE_SELECTION'
  sys.path.insert(0,str(candidate));import select_sources
  selection=select_sources.select(repo,'gdn-chunk32-abort-v2');sources=selection['source_paths']
  need(len(sources)==162 and sources.count(selection['helper'])==1,'fresh unique162 including actual enabled helper')
@@ -43,6 +64,7 @@ def main():
  # existing fresh-host contract permits a newly inventoried runner image.
  # This trusts GitHub's official hosted image supply chain, not a preapproved
  # archive hash and not an inherited toolchain/numerical qualification.
+ PHASE='ENVIRONMENT_POLICY'
  production=repo/'candidates/ci_frontend_materialization_r2_20261029'
  sys.path.insert(0,str(production));from fresh_host import reject_injection
  reject_injection(os.environ)
@@ -51,6 +73,7 @@ def main():
  inventory_path=output/'JDK_INVENTORY.json';inventory_script=production/'inventory_runner_jdk.py'
  jdkpins=dict(commonpins);jdkpins[str(inventory_script)]=sha(inventory_script);jdkpins[str(production/'fresh_host.py')]=sha(production/'fresh_host.py');jdkpins[str(contract_path)]=sha(contract_path)
  jdkcaps=dict(caps,wall_seconds=120,per_process_cpu_seconds=60,cpu_seconds=60,combined_cpu_seconds=90,rss_bytes=512<<20)
+ PHASE='JDK_INVENTORY'
  jdk=supervise_multiroot.execute([sys.executable,'-B',str(inventory_script),'--java-home',str(java.parent.parent),'--output',str(inventory_path),'--fresh-host-contract',str(contract_path),'--fresh-host-contract-sha256',sha(contract_path)],str(output/'jdk'),str(output/'owner.lock'),pins=jdkpins,caps=jdkcaps,env=env,resource_gate=resource_gate)
  (output/'JDK_RECEIPT.json').write_text(json.dumps(jdk,indent=2)+'\n');
  from safe_compile_summary import summarize_stage
@@ -74,6 +97,7 @@ def main():
  host_path=output/'HOST_INVENTORY.json';host_script=HERE/'fresh_compile_host.py'
  hostpins=dict(commonpins);hostpins[str(host_script)]=sha(host_script);hostpins[str(contract_path)]=sha(contract_path)
  hostcaps=dict(caps,wall_seconds=300,per_process_cpu_seconds=240,cpu_seconds=240,combined_cpu_seconds=270,rss_bytes=512<<20)
+ PHASE='HOST_INVENTORY'
  host_receipt=supervise_multiroot.execute([sys.executable,'-B',str(host_script),'--contract',str(contract_path),'--contract-sha256',sha(contract_path),'--java-home',str(home),'--output',str(host_path)],str(output/'host'),str(output/'owner.lock'),pins=hostpins,caps=hostcaps,env=env,resource_gate=resource_gate)
  (output/'HOST_RECEIPT.json').write_text(json.dumps(host_receipt,indent=2)+'\n')
  from safe_compile_summary import summarize_stage
@@ -99,6 +123,7 @@ def main():
   finally:check_host_aliases()
  # Reuse unchanged pinned model-aware JAR inventory/acquire implementation,
  # gated by the exact selected162 source closure, not obsolete original155.
+ PHASE='SOURCE_CLOSURE'
  from restore_compile_inputs import source_closure
  source_pins,checked_selection,_=source_closure(repo,candidate)
  need(checked_selection==selection,'same exact selected162 before fetch')
@@ -109,10 +134,12 @@ def main():
   return result
  fetchpins=merge_pins(commonpins,source_pins)
  fetchcaps=dict(caps,wall_seconds=600,per_process_cpu_seconds=60,cpu_seconds=60,combined_cpu_seconds=90,rss_bytes=256<<20,per_process_as_bytes=2<<30)
+ PHASE='DEPENDENCIES'
  fetch=execute_qualified([sys.executable,'-B',str(restore),'--repo',str(repo),'--candidate',str(candidate),'--download-jars'],str(output/'fetch'),str(output/'owner.lock'),pins=fetchpins,caps=fetchcaps,env=env,resource_gate=resource_gate)
  (output/'FETCH_RECEIPT.json').write_text(json.dumps(fetch,indent=2)+'\n')
  if fetch['status']!='PASS_PROCESS_ONLY':print(json.dumps(stage_summary('DEPENDENCIES',fetch,output/'fetch/frontend.log.gz',{},fetchpins),sort_keys=True))
  need(fetch['status']=='PASS_PROCESS_ONLY','dependency stage failed')
+ PHASE='JAR_VERIFICATION'
  jars=[];plugin=None;pins=merge_pins(commonpins,source_pins)
  for row in m['jars']:
   q=original/'cache'/row['maven_path'];need(q.stat().st_size==row['bytes'] and sha(q)==row['sha256'],'jar integrity');pins[str(q)]=row['sha256']
@@ -128,6 +155,7 @@ def main():
  need(all(x.endswith('.jar') for x in cp.split(':')),'no project classes on compiler classpath')
  plan=dict(scope='FRESH_SCALA_COMPILE_ONLY_NOT_ELABORATION',generation_identity=selection['generation_identity'],source_count=162,argv=argv,pins=pins,caps=caps,old_class_reuse=False,numeric_execution_authorized=False)
  (output/'PLAN.json').write_text(json.dumps(plan,indent=2)+'\n')
+ PHASE='SCALA_COMPILE'
  result=execute_qualified(argv,str(run),str(output/'owner.lock'),pins=pins,caps=caps,env=env,resource_gate=resource_gate)
  (output/'COMPILE_RECEIPT.json').write_text(json.dumps(result,indent=2)+'\n')
  classes=list(run.rglob('*.class'))
@@ -140,4 +168,4 @@ def main():
 if __name__=='__main__':
  try:main()
  except Exception as e:
-  print(json.dumps({'status':'FAIL_COMPILE_ONLY','error_class':type(e).__name__,'numerical_pass':False}));sys.exit(1)
+  print(json.dumps(failure_summary(e),sort_keys=True));sys.exit(1)

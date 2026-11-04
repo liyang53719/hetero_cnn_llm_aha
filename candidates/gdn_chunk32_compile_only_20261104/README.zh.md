@@ -39,3 +39,8 @@
 ## retry1独立激活契约（未激活）
 
 源修复与新workflow先提交，默认不运行；监听路径改为ci_launch/gdn32_compile_only_20261104_retry1.json，nonce同名retry1。只有父级后续另一个单父提交仅新增该文件，且source_sha等于直接父source commit、event before/after精确匹配、attempt1、固定hardware generation和新workflow hash一致，才运行。历史once launch文件保留不改不删；不重跑旧run、不修改旧nonce以触发。此revision不包含新launch JSON，父级仍唯一发布/激活者。
+
+
+## R6：固定 retry1 失败身份后的入口修复
+
+当前执行方案以 ENTRY_FAILURE_DIAGNOSIS.zh.md 为准：使用远端实际已审共享工具 pins，不修改共享源；新 retry2 nonce，旧 retry1 不可重跑。MERGE_FILES.json 是相对 source046a 的最小 delta，不含 launch JSON。53 项纯测试不是编译或数值通过。

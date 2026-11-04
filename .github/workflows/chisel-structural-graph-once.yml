@@ -1,0 +1,43 @@
+name: chisel-original-host-structural-graph-only
+on:
+  push:
+    branches: [main]
+    paths: [ci_launch/chisel_structural_graph_20261104_once.json]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: hetero-exclusive-numeric-bootstrap
+  cancel-in-progress: false
+jobs:
+  structural_graph:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Admit fresh owned source job before checkout
+        timeout-minutes: 1
+        run: |
+          /usr/bin/python3 -B - <<'PYCODE'
+          import os,pathlib,shutil,sys
+          m=int(next(x.split()[1] for x in pathlib.Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:')))*1024
+          ok=m>=13*1024**3 and shutil.disk_usage(os.environ['RUNNER_TEMP']).free>=12081306272+8*1024**3
+          print('SOURCE_JOB_RESOURCE_ADMISSION='+('PASS' if ok else 'BLOCKED'))
+          sys.exit(0 if ok else 2)
+          PYCODE
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        timeout-minutes: 2
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 3
+      - name: One source-only structural graph; no DUT or artifact transfer
+        timeout-minutes: 42
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          ulimit -c 0
+          /usr/bin/python3 -B candidates/chisel_structural_graph_20261104/run.py
+# No upload action, no runtime/reference/weight acquisition, no native/DUT run.
+# Only one nonce may trigger this job; first attempt and exact ancestry enforced.

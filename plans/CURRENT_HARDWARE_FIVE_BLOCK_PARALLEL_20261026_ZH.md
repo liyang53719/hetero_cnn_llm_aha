@@ -1211,3 +1211,20 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 小 ABI CI 仅是可选诊断手段，不是新增的常规资格循环：若窄修复的 source-only 审查和子链回放闭合，仍可按唯一发布方决定直接进入新身份完整受控流程；小 ELF probe 无法恢复旧 job 已丢失的子日志，也不能替代真实模型的 ABI/数值资格。尚未创建任何 probe job 或 nonce。
 
 源修复测试与实际运行严格分层：新候选仍未执行完整五块数值；此前28个native构建阶段通过不代表完整block数值或最终RTL通过。新source普通CI和唯一nonce激活以随后远端核验为准。
+
+
+## 2026-11-04 retry3 连接入口失败与 retry4 窄修复：TEMP / SOURCE_ONLY / 数值 INCOMPLETE
+
+保留 run41836351658/job126596144918、source cdf40a1ea6c500c88294e60454f2a8436f811792、launch ddea27ab08d992ab859e24978ac10f1dca02f37e 与原日志。实际 startup_abi、p1_initialize、p1_p12_provider 均 exit0；W5981 已冻结。首失败 p1_connect exit1，wall 1.267751293 秒、峰 RSS 25,509,888B，cleanup/EOF 完成，无 DUT 执行。缺失该子阶段内部原始诊断，原 run 唯一根因仍未证。
+
+确定源码不兼容已用真实 owned_environment、清空继承环境后的 connect.main 复现：原 Python phase 环境遗漏 GITHUB_RUN_ID/GITHUB_SHA/GITHUB_RUN_ATTEMPT，而后续 source relocation 严格要求这三项。新分支仅从已验证 controller/owner 链导出准确三个非敏感值，先核外层实际 run/launch/attempt；通用环境白名单与原生 DUT clean_env 不变，不继承 token 或任意父环境。
+
+新增固定 selected-phase 安全诊断与七文件 reader 身份检查点。诊断继续绑定固定 RESULT/gzip 的 hash/bytes、完整 EOF 与 cleanup，只投影枚举；身份检查点在真实 reader 返回后，仅给 generation/catalog/source、SV/ELF/source-manifest 的 SHA256 与 bytes，不上传内容、路径、权重或产物，不代表结构验收、DUT执行、最终 RTL 或数值通过。
+
+新 V5 generation 为 77abf81507c4f2dec004284823e9b98a19208421e59f4f308659ebbbc72000a6；1211项 catalog 为 4010bda70105aaf6a0d7179ca4355837a8b5723829417b12abfb62bab9f2f696。11项必要模型变化，加6项独立 dormant retry4 listener，旧 listener/nonce 不改，本包不含激活 nonce。
+
+真实 Python 入口组合已 normal/-O 回放：实际 writer/reader、双 locked 派发、connect.main、V3 binding/CONSUMER_ARGV、execution_command 与 consumer.main，截停在具体 DUT Popen。原 Builder 的17 commands/219 descriptors 元数据已核；张量、参考、ELF/loader 输出、资源与时钟观测仍为模拟，未运行完整 owner/provider 初始化或 C++ 输入校验，不是硬件或数值通过。新增60项、模型8项身份与33项producer等回归、listener151项各 normal/-O 通过。五profile条件路由和P0强制sidecar检查单独保留其模拟边界。
+
+固定4096 Matrix MAC、共享32-lane Vector/Element通路、162Scala、122ports、driver/O1、五块队列以及全部资源/生命周期门不变。control60只约束冻结后首 numeric native 准入；后续 consumer 独立30秒预检和完整剩余tail门仍保留。最终 consumer 对真实大产物的完整重复读取预检耗时尚未实测，不以小fixture声称足够，也不延长或重冻W。当前完整数值0/5。
+
+后续仅在源发布、普通CI及远端精确闭包核验后，按授权激活一次新身份受控运行；本节源码测试范围不包括新的 native 执行，实际激活与运行以独立远端证据为准，不重跑旧作业。

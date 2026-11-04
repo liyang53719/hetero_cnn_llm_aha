@@ -317,7 +317,7 @@ def host_profile_tooling_policy(source,readonly):
   need(matches==[repo+rel]and pins[matches[0]]==want,'complete exact host-profile tooling implementation '+rel)
  return dict(selected)
 
-MODEL162_IMPLEMENTATION_PINS_SHA='4d7a26067eec28697617703c695ce99fdfe849d8aa0e7f398e975805be19101f'
+MODEL162_IMPLEMENTATION_PINS_SHA='4babe0a8bab12346669a604559c488d1568389e0649c582d199a1b290499303f'
 def model162_implementation_pins():
  path=P(__file__).resolve().with_name('MODEL162_IMPLEMENTATION_PINS.json')
  need(path.is_file() and not path.is_symlink() and 0<path.stat().st_size<=1<<20 and sha(path)==MODEL162_IMPLEMENTATION_PINS_SHA,'independent model162 implementation contract')

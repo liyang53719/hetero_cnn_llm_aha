@@ -155,6 +155,22 @@ def owned_environment(base,root):
   p=root/name.lower();p.mkdir();e[name]=str(p)
  return e
 
+def gdn32_stage_environment(b,owner_doc,environment):
+ """Add only three non-secret CI identity values after controller/owner verification."""
+ helper=module('full_phase_identity',D/'samejob_gdn32_full.py',b['pins'])
+ controller=helper.load(b['controller_binding']);helper.admit_controller(controller)
+ need(b['gdn32_full']==controller['gdn32_full']and b['job_started_monotonic']==controller['job_started_monotonic'],'same phase controller and original clock')
+ identity={k:controller['artifact_identity'][k]for k in ('run_id','source_commit','launch_commit')}
+ need(identity=={k:b[k]for k in identity}and owner_doc['identity']==identity,'phase identity equals verified controller and runtime owner')
+ owner_path=material.checked(b['owner_manifest']);need(json.loads(owner_path.read_text())==owner_doc,'verified runtime owner bytes remain unchanged')
+ need(type(identity['run_id'])is int and identity['run_id']>0,'positive actual phase run identity')
+ import re
+ need(all(type(identity[k])is str and re.fullmatch('[0-9a-f]{40}',identity[k])for k in ('source_commit','launch_commit')),'actual source and launch commits')
+ expected={'GITHUB_RUN_ID':str(identity['run_id']),'GITHUB_SHA':identity['launch_commit'],'GITHUB_RUN_ATTEMPT':'1'}
+ need(all(os.environ.get(k)==v for k,v in expected.items()),'outer first same-job identity before phase forwarding')
+ need(not any(k.startswith('GITHUB_')or k in ('GH_TOKEN','LD_PRELOAD','LD_LIBRARY_PATH','PYTHONPATH','PYTHONHOME')for k in environment),'no inherited identity credentials or loader overrides')
+ return dict(environment,**expected)
+
 def execution_profiles(b,admission):
  selected=profile_policy.eligible(b)
  if admission.get('budget_version')==3:
@@ -206,6 +222,32 @@ def report_effective_limits(original,b,admission,profile):
   expected=budget_module.consumer_resource_limits(expected,budget_module.admit(b))
  return expected
 
+def emit_verified_artifact_identity(b,manifest,frozen,proof):
+ # Called only immediately after the real full seven-file reader has returned.
+ # Reuse its verified common payload pins, never rehash SV/ELF or execute them.
+ def hexpin(v,n=64):return type(v)is str and len(v)==n and all(c in '0123456789abcdef'for c in v)
+ def count(v,limit):return type(v)is int and 0<v<=limit
+ need(type(proof)is dict and set(proof)=={'manifest_sha256','expanded_bytes','files','numerical_pass','final_rtl_replay'},'identity checkpoint reader fields')
+ need(type(proof['files'])is int and proof['files']==7 and count(proof['expanded_bytes'],4<<30)and proof['numerical_pass']is False and proof['final_rtl_replay']is False,'identity checkpoint actual seven-file proof')
+ manifest=P(manifest)
+ need(manifest.is_file()and not any(p.is_symlink()for p in(manifest,*manifest.parents))and 0<manifest.stat().st_size<=65536 and hexpin(proof['manifest_sha256']),'identity checkpoint bounded verified manifest')
+ with manifest.open('rb')as stream:raw=stream.read(65537)
+ need(len(raw)<=65536 and hashlib.sha256(raw).hexdigest()==proof['manifest_sha256']and json.loads(raw)==frozen,'identity checkpoint same verified manifest')
+ identity=frozen['artifact_identity'];source=b['source_commit']
+ need(hexpin(source,40)and hexpin(b['launch_commit'],40)and source!=b['launch_commit']and identity['source_commit']==source and identity['launch_commit']==b['launch_commit']and type(identity['run_id'])is int and type(b['run_id'])is int and b['run_id']>0 and identity['run_id']==b['run_id'],'identity checkpoint owning source launch run')
+ full=b['gdn32_full'];catalog=full['source_catalog']
+ need(type(catalog)is dict and set(catalog)=={'path','bytes','sha256'}and catalog==b['source_pins']and count(catalog['bytes'],4<<20)and hexpin(catalog['sha256']),'identity checkpoint source catalog binding')
+ for key in ('hardware_generation_sha256','model_generation_sha256'):need(hexpin(full[key]),'identity checkpoint source generation')
+ common=frozen['common'];need(type(common)is dict and set(common)=={'binary','sv','source_manifest','driver','build_receipt'},'identity checkpoint common inventory')
+ selected={}
+ for key,name,limit in (('source_manifest','source_manifest.json',16<<20),('sv','hardware.sv',4<<30),('binary','dut.bin',4<<30)):
+  row=common[key];need(type(row)is dict and set(row)=={'path','bytes','sha256'}and row['path']==name and count(row['bytes'],limit)and hexpin(row['sha256']),'identity checkpoint verified payload pin')
+  selected[key]={'bytes':row['bytes'],'sha256':row['sha256']}
+ need(sum(r['bytes']for r in selected.values())<=proof['expanded_bytes'],'identity checkpoint seven-file byte bound')
+ row=dict(schema='GDN32_VERIFIED_ARTIFACT_IDENTITY_V1',status='VERIFIED_IDENTITY_ONLY',scope='READ_ONLY_SOURCE_BUILD_IDENTITY_NOT_DUT_EXECUTION',source_commit=source,hardware_generation_sha256=full['hardware_generation_sha256'],model_generation_sha256=full['model_generation_sha256'],source_catalog_sha256=catalog['sha256'],artifact_manifest_sha256=proof['manifest_sha256'],verified_files=7,**selected,structural_acceptance=False,numerical_pass=False,final_rtl_acceptance=False)
+ print(json.dumps(row,sort_keys=True,allow_nan=False),flush=True)
+ return row
+
 def run(b,binding_path,binding_sha):
  validate(b);cloud=cloud_context(b);retained=retained_context(b);admission=execution_mode.admit(b);profile_policy.require_source_pin(b['pins']);pins=dict(b['pins']);pins[str(binding_path)]=binding_sha
  need(pins.get(str(D.parent/'execution_mode.py'))==sha(D.parent/'execution_mode.py'),'execution mode source pin')
@@ -224,7 +266,9 @@ def run(b,binding_path,binding_sha):
  if cloud is None:
   build=material.checked(b['build_result']);br=json.loads(build.read_text());manifest=material.checked(br['artifact']['manifest']);frozen=json.loads(manifest.read_text())
   proof=module('same_job_proof',D/'local_build_proof.py',pins)
-  if b.get('gdn32_full')is not None:module('full_tail_build',D/'samejob_gdn32_full.py',pins).verify_tail_payload(b,manifest,frozen)
+  if b.get('gdn32_full')is not None:
+   verified_payload=module('full_tail_build',D/'samejob_gdn32_full.py',pins).verify_tail_payload(b,manifest,frozen)
+   emit_verified_artifact_identity(b,manifest,frozen,verified_payload)
   else:proof.verify(build,b['build_result']['sha256'],manifest,sha(manifest),frozen,b['run_id'],b['launch_commit'],b['source_commit'])
  else:
   build=None;manifest=material.checked(b['artifact_manifest']);frozen=json.loads(manifest.read_text())
@@ -255,6 +299,7 @@ def run(b,binding_path,binding_sha):
  def stage(name,argv,seconds=None,accepted=(0,),lease_out=None):
   seconds=seconds or b['provider_wall_seconds'];phase=out/'phases'/(name+'.json');run_dir=out/'runs'/name
   cache_root=out/'cache_roots'/name;e=owned_environment(b['environment'],cache_root)
+  if b.get('gdn32_full')is not None:e=gdn32_stage_environment(b,owner_doc,e)
   dut_profile=int(name[1:-4])if name.endswith('_dut')else None
   telemetry_policy=execution_mode.expected_rss_telemetry_policy(admission,dut_profile)if dut_profile is not None else None
   telemetry_seconds=telemetry_policy['verification_wall_seconds']if telemetry_policy is not None else 0

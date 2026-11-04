@@ -10,6 +10,23 @@ import argparse, hashlib, json, os, pathlib, resource, signal, subprocess, time,
 import required_acceptance
 
 
+
+# Finite diagnostic projection only; no raw path, argv, environment or exception text.
+_EXECUTION_COMPONENT='CONSUMER_OWNED'
+_EXECUTION_PHASES=('CLI', 'OWNED_ENVIRONMENT', 'ADMISSION', 'ARTIFACT', 'CONTEXT', 'BINDING', 'BUILD', 'ABI', 'RUNTIME_INPUTS', 'REFERENCE', 'OUTPUT', 'PRE_EXECUTION', 'DUT_POPEN', 'OUT_OF_SCOPE', 'FINISH')
+_EXECUTION_CLASSES=('ValueError', 'TypeError', 'KeyError', 'IndexError', 'OSError', 'FileNotFoundError', 'PermissionError', 'JSONDecodeError', 'UnicodeDecodeError', 'UnicodeEncodeError', 'TimeoutExpired', 'SystemExit', 'OverflowError', 'MemoryError', 'RuntimeError', 'IsADirectoryError', 'NotADirectoryError', 'FileExistsError', 'error', 'OTHER')
+_execution_phase_state=['CLI']
+_execution_emitted=[False]
+def execution_phase(value):
+ if value not in _EXECUTION_PHASES:raise ValueError('unknown internal execution diagnostic phase')
+ _execution_phase_state[0]=value
+def execution_failure(exc):
+ phase=_execution_phase_state[0];name=type(exc).__name__
+ return dict(schema='GDN32_EXECUTION_DIAGNOSTIC_V1',component=_EXECUTION_COMPONENT,stage='UNVERIFIED',phase=phase,status='FAILED',code=phase+'_REJECTED',exception_class=name if name in _EXECUTION_CLASSES else 'OTHER',native_started=None,dut_started=None,numerical_pass=False)
+def emit_execution_failure(exc):
+ if not _execution_emitted[0]:
+  _execution_emitted[0]=True;print(json.dumps(execution_failure(exc),sort_keys=True),flush=True)
+
 def need(ok, why):
     if not ok:
         raise ValueError(why)
@@ -181,7 +198,7 @@ def require_model162_binary_mode(binary):
     need(stat.S_IMODE(s.st_mode)==0o700 and s.st_uid==os.geteuid(),'actual162 direct executable exact owner/mode')
 
 def execute_streaming(binary, runtime, output, log, limits, *, model162_binary=False):
-    need(type(model162_binary)is bool,'explicit binary mode policy')
+    execution_phase('PRE_EXECUTION');need(type(model162_binary)is bool,'explicit binary mode policy')
     need('diagnostic_deadline_monotonic'not in limits,'same-job diagnostic uses existing closed raw-log execution, no unbound streaming deadline')
     helper=full_log_module();archive,capture_path=helper.paths(log)
     need(not log.exists() and not archive.exists() and not capture_path.exists(),'fresh full streaming log')
@@ -200,6 +217,7 @@ def execute_streaming(binary, runtime, output, log, limits, *, model162_binary=F
         if model162_binary:
             need(WORKSPACE_LOADER is None,'actual162 ordinary direct execution only')
             require_model162_binary_mode(binary)
+        execution_phase('DUT_POPEN')
         p=subprocess.Popen(runtime_abi_module().execution_argv(binary,runtime,output,limits['max_active_cycles']) if WORKSPACE_LOADER is not None else [str(binary),str(runtime),str(output),str(limits['max_active_cycles'])],stdout=subprocess.PIPE,stderr=subprocess.STDOUT,preexec_fn=bounded,env=runtime_abi_module().clean_env(),bufsize=0)
     except BaseException:
         try:
@@ -209,6 +227,7 @@ def execute_streaming(binary, runtime, output, log, limits, *, model162_binary=F
             finally:
                 if CLOUD_MEMORY is not None:CLOUD_MEMORY.after_popen()
         raise
+    execution_phase('OUT_OF_SCOPE')
     result=helper.capture(p,log,FULL_LOG_POLICY,limits['wall_seconds'],started,writer=writer)
     if result['termination_reason']=='WALL_TIMEOUT':raise TimeoutError('DUT wall deadline')
     need(result['complete'],'DUT streaming log incomplete: '+result['termination_reason'])
@@ -216,7 +235,7 @@ def execute_streaming(binary, runtime, output, log, limits, *, model162_binary=F
 
 
 def execute(binary, runtime, output, log, limits, *, model162_binary=False):
-    need(type(model162_binary)is bool,'explicit binary mode policy')
+    execution_phase('PRE_EXECUTION');need(type(model162_binary)is bool,'explicit binary mode policy')
     def bounded():
         resource.setrlimit(resource.RLIMIT_AS,(limits['address_space_bytes'],)*2)
         resource.setrlimit(resource.RLIMIT_CPU,(limits['cpu_seconds'],)*2)
@@ -229,10 +248,12 @@ def execute(binary, runtime, output, log, limits, *, model162_binary=False):
             if model162_binary:
                 need(WORKSPACE_LOADER is None,'actual162 ordinary direct execution only')
                 require_model162_binary_mode(binary)
+            execution_phase('DUT_POPEN')
             p=subprocess.Popen(runtime_abi_module().execution_argv(binary,runtime,output,limits['max_active_cycles']) if WORKSPACE_LOADER is not None else [str(binary),str(runtime),str(output),str(limits['max_active_cycles'])],stdout=f,stderr=subprocess.STDOUT,preexec_fn=bounded,env=runtime_abi_module().clean_env())
         except BaseException:
             if CLOUD_MEMORY is not None:CLOUD_MEMORY.after_popen()
             raise
+        execution_phase('OUT_OF_SCOPE')
         observed_exit_monotonic=None;diagnostic_wall_timeout=False
         try:
             if CLOUD_MEMORY is not None:CLOUD_MEMORY.after_popen()
@@ -648,7 +669,7 @@ def require_outer_context(declared):
     need(os.getpid()==os.getpgrp()==os.getsid(0),'consumer must be the owned outer session/group leader')
 
 
-def main():
+def _main_impl():
     global FULL_LOG_POLICY
     FULL_LOG_POLICY=None
     consumer_started=time.monotonic();consumer_cpu_started=time.process_time()
@@ -687,16 +708,16 @@ def main():
     a.add_argument('--owned-environment-sha256',required=True)
     args=a.parse_args()
     global OWNED_ENVIRONMENT
-    OWNED_ENVIRONMENT=(args.owned_environment,args.owned_environment_sha256,owning_environment_identity(args))
-    mode,admission=explicit_execution_admission(args)
+    execution_phase('OWNED_ENVIRONMENT');OWNED_ENVIRONMENT=(args.owned_environment,args.owned_environment_sha256,owning_environment_identity(args))
+    execution_phase('ADMISSION');mode,admission=explicit_execution_admission(args)
     cloud_resources,resource_receipt=prepare_cloud_memory(args)
     require_outer_context(args.strict_outer_supervised)
-    verify_frozen(args.artifact_manifest,args.artifact_manifest_sha256)
-    source_relocation=approved_source_relocation(args,json.loads(args.artifact_manifest.read_text()))
-    b, frozen=load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile,source_relocation,admission)
-    download=verify_local_build(args,frozen)
-    abi=verify_runtime_abi(args,frozen)
-    runtime_bundle_sha=sha(args.runtime_bundle)
+    execution_phase('ARTIFACT');verify_frozen(args.artifact_manifest,args.artifact_manifest_sha256)
+    execution_phase('CONTEXT');source_relocation=approved_source_relocation(args,json.loads(args.artifact_manifest.read_text()))
+    execution_phase('BINDING');b, frozen=load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile,source_relocation,admission)
+    execution_phase('BUILD');download=verify_local_build(args,frozen)
+    execution_phase('ABI');abi=verify_runtime_abi(args,frozen)
+    execution_phase('RUNTIME_INPUTS');runtime_bundle_sha=sha(args.runtime_bundle)
     need(b['layer']=='CHISEL_EMITTED_SV_NUMERICAL_BACKEND','not final RTL replay')
     need(b['matrix_macs']==4096 and b['vector_lanes']==32,'fixed hardware resources')
     need(b['moe_reference_contract']=='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE','unapproved MoE contract')
@@ -725,7 +746,7 @@ def main():
         need([r[1] for r in rows if r[0]=='views']==[str(views)],'views binding')
         result=json.loads(ref.read_text());need(result['profile']['profile']==p['id'] and result['complete_block_tokens']==128 and result['exact_baseline_observer_output_equal'] is True,'complete official reference identity')
         need(result['hardware_executed'] is False,'independent reference only')
-        want=expected(ref.parent,result,p['id'])
+        execution_phase('REFERENCE');want=expected(ref.parent,result,p['id'])
         for name,data in want.items(): need(name in obs and obs[name][2]==len(data),'full final span '+name)
         # Pinned loader itself verifies every mapped source SHA on open. Reject
         # reference-only mappings here as an additional anti-oracle guard.
@@ -738,7 +759,7 @@ def main():
         prepared.append((p,runtime,obs,want,route_ref))
     if args.validate_only:
         print('VALIDATED_BINDING_ONLY_NO_DUT_NO_NUMERICAL_PASS');return
-    need(not args.output.exists(),'fresh output directory');args.output.mkdir(parents=True)
+    execution_phase('OUTPUT');need(not args.output.exists(),'fresh output directory');args.output.mkdir(parents=True)
     summary=dict(status='INCOMPLETE',numerical_pass=False,matrix_macs=b['matrix_macs'],vector_lanes=b['vector_lanes'],layer=b['layer'],artifact_manifest_sha256=args.artifact_manifest_sha256,artifact_identity=frozen['artifact_identity'],local_build_provenance=download,local_build_result_sha256=args.local_build_result_sha256,runtime_bundle_sha256=runtime_bundle_sha,startup_abi=abi,common=common,profiles=[],numeric_acceptance='NO_NEW_TOLERANCE_STRICT_BITWISE_DIAGNOSTICS_ONLY',final_rtl_executed=False)
     if executor_context(args) is not None:
         summary['executor_identity']=executor_context(args)
@@ -768,9 +789,9 @@ def main():
         postprocess=None
         try:
             # Reverify common frozen identity before AND after every process.
-            load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile,source_relocation,admission)
-            verify_local_build(args,frozen)
-            verify_runtime_abi(args,frozen)
+            execution_phase('BINDING');load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile,source_relocation,admission)
+            execution_phase('BUILD');verify_local_build(args,frozen)
+            execution_phase('ABI');verify_runtime_abi(args,frozen)
             need(sha(args.runtime_bundle)==runtime_bundle_sha,'runtime bundle changed')
             for v in list(common.values())+[p[k] for k in ('runtime','views','reference_result','provider_receipt')]: pin(v)
             target=args.output/('profile'+str(p['id']));log=args.output/('profile'+str(p['id'])+'.log')
@@ -778,8 +799,9 @@ def main():
             if FULL_LOG_POLICY is not None:need(time.monotonic()-consumer_started<=30 and time.process_time()-consumer_cpu_started<=30,'full V2 preflight within reserved 30 seconds')
             if admission['mode']==HOST_DIAGNOSTIC_MODE:
                 execution_limits=mode.remaining_limits(execution_limits,admission,time.monotonic());summary['execution_admission']['effective_limits']=dict(execution_limits)
+            execution_phase('PRE_EXECUTION')
             if getattr(args,'samejob_full_binding',None)is not None:mode.require_consumer_window(args,time.monotonic())
-            rc=(execute_streaming if FULL_LOG_POLICY is not None else execute)(files['binary'],runtime,target,log,execution_limits,model162_binary=gdn32_context(source_relocation));r['exit_code']=rc
+            rc=(execute_streaming if FULL_LOG_POLICY is not None else execute)(files['binary'],runtime,target,log,execution_limits,model162_binary=gdn32_context(source_relocation));r['exit_code']=rc;execution_phase('OUT_OF_SCOPE')
             if FULL_LOG_POLICY is not None:postprocess=full_log_module().PostprocessBudget(postprocess_limits).start()
             load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile,source_relocation,admission)
             verify_local_build(args,frozen)
@@ -839,7 +861,7 @@ def main():
             r['execution_evidence']={key:True for key in required_acceptance.EXECUTION}
             classify_observed_profile(r, route_ref is not None)
         except HostDiagnosticBoundary:r['diagnostic_process_complete']=True
-        except Exception as e: r['error']=str(e);r['error_class']=type(e).__name__
+        except Exception as e: emit_execution_failure(e);r['error']=str(e);r['error_class']=type(e).__name__
         finally:
             if admission['mode']==HOST_DIAGNOSTIC_MODE:summary['execution_admission']['effective_limits']=dict(execution_limits)
             if postprocess is not None:
@@ -858,6 +880,16 @@ def main():
     # Never assert Chisel/RTL numerical PASS from unapproved diagnostic policy.
     if admission['mode']==HOST_DIAGNOSTIC_MODE:print('SAME_JOB_P0_HOST_DIAGNOSTIC_LOCAL_RESULT_RECORDED_NOT_ACCEPTANCE')
     else:print(json.dumps(summary,indent=2))
-    raise SystemExit(1 if summary['status']=='FAIL_EXACT_REFERENCE' else 2)
+    execution_phase('FINISH');raise SystemExit(1 if summary['status']=='FAIL_EXACT_REFERENCE' else 2)
+
+
+def main():
+ execution_phase('CLI');_execution_emitted[0]=False
+ try:return _main_impl()
+ except SystemExit as exc:
+  if exc.code not in (0,None) and _execution_phase_state[0]=='CLI':emit_execution_failure(exc)
+  raise
+ except Exception as exc:
+  emit_execution_failure(exc);raise
 
 if __name__=='__main__': main()

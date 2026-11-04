@@ -6,9 +6,27 @@ sys.path.insert(0,str(HERE))
 import consumer_owned as consumer
 import attach_bundle
 
+
+# Finite diagnostic projection only; no raw path, argv, environment or exception text.
+_EXECUTION_COMPONENT='CONNECT_OWNED'
+_EXECUTION_PHASES=('CLI', 'OWNED_ENVIRONMENT', 'SOURCE_GUARD', 'ARTIFACT', 'CONTEXT', 'BUILD', 'ABI', 'BUNDLE_INPUT', 'P0_HYDRATION', 'P0_POLICY', 'BUNDLE_OUTPUT', 'BINDING', 'ARGUMENT_RECEIPT')
+_EXECUTION_CLASSES=('ValueError', 'TypeError', 'KeyError', 'IndexError', 'OSError', 'FileNotFoundError', 'PermissionError', 'JSONDecodeError', 'UnicodeDecodeError', 'UnicodeEncodeError', 'TimeoutExpired', 'SystemExit', 'OverflowError', 'MemoryError', 'RuntimeError', 'IsADirectoryError', 'NotADirectoryError', 'FileExistsError', 'error', 'OTHER')
+_execution_phase_state=['CLI']
+_execution_emitted=[False]
+def execution_phase(value):
+ if value not in _EXECUTION_PHASES:raise ValueError('unknown internal execution diagnostic phase')
+ _execution_phase_state[0]=value
+def execution_failure(exc):
+ phase=_execution_phase_state[0];name=type(exc).__name__
+ return dict(schema='GDN32_EXECUTION_DIAGNOSTIC_V1',component=_EXECUTION_COMPONENT,stage='UNVERIFIED',phase=phase,status='FAILED',code=phase+'_REJECTED',exception_class=name if name in _EXECUTION_CLASSES else 'OTHER',native_started=None,dut_started=None,numerical_pass=False)
+def emit_execution_failure(exc):
+ if not _execution_emitted[0]:
+  _execution_emitted[0]=True;print(json.dumps(execution_failure(exc),sort_keys=True),flush=True)
+
 def pin(p):
  p=P(p).resolve();return dict(path=str(p),bytes=p.stat().st_size,sha256=consumer.sha(p))
 def source_guard():
+ execution_phase('SOURCE_GUARD')
  rows=json.loads((HERE/'CONNECTION_OWNED_SOURCE_PINS.json').read_text())
  for rel,h in rows.items():consumer.need(consumer.sha(HERE/rel)==h,'connection source drift '+rel)
 def base(old,profile):
@@ -74,23 +92,24 @@ def hydrate_p0(args,out,frozen,source_relocation=None):
  args.p0_bindings=bp;args.p0_bindings_sha256=consumer.sha(bp);args.consumption_evidence=ep;args.consumption_evidence_sha256=consumer.sha(ep)
 
 def connect(args,out):
- source_guard();out=P(out).resolve();original=out/'runtime_bundle.json';old_pin=pin(original)
+ source_guard();execution_phase('BUNDLE_INPUT');out=P(out).resolve();original=out/'runtime_bundle.json';old_pin=pin(original)
  consumer.need(original.is_file() and not original.is_symlink(),'original fresh bundle required')
- old=json.loads(original.read_text());result=base(old,args.profile)
+ execution_phase('BUNDLE_INPUT');old=json.loads(original.read_text());result=base(old,args.profile)
  long_admission=consumer.finite_long_connection_admission(args)
- consumer.verify_frozen(args.artifact_manifest,args.artifact_manifest_sha256)
+ execution_phase('ARTIFACT');consumer.verify_frozen(args.artifact_manifest,args.artifact_manifest_sha256)
  frozen=json.loads(args.artifact_manifest.read_text())
  if frozen.get('schema')in('MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1',consumer.FIRST_FAULT_SCHEMA):
-  source_relocation=consumer.approved_source_relocation(args,frozen)
+  execution_phase('CONTEXT');source_relocation=consumer.approved_source_relocation(args,frozen)
   consumer.artifact_identity(frozen,source_relocation)
-  provenance=consumer.verify_local_build(args,frozen)
+  execution_phase('BUILD');provenance=consumer.verify_local_build(args,frozen)
  else:
   consumer.artifact_identity(frozen)
-  provenance=consumer.verify_local_build(args,frozen)
-  source_relocation=consumer.approved_source_relocation(args,frozen)
- consumer.verify_runtime_abi(args,frozen)
+  execution_phase('BUILD');provenance=consumer.verify_local_build(args,frozen)
+  execution_phase('CONTEXT');source_relocation=consumer.approved_source_relocation(args,frozen)
+ execution_phase('ABI');consumer.verify_runtime_abi(args,frozen)
  p0_fields=('p0_bindings','p0_bindings_sha256','consumption_evidence','consumption_evidence_sha256')
  if args.profile==0:
+  execution_phase('P0_HYDRATION')
   if all(getattr(args,k,None) is None for k in p0_fields):hydrate_p0(args,out,frozen,source_relocation)
   consumer.need(all(getattr(args,k,None) is not None for k in p0_fields),'P0 requires independently pinned bindings and retained consumption evidence')
   consumer.verify_frozen(args.p0_bindings,args.p0_bindings_sha256)
@@ -102,7 +121,7 @@ def connect(args,out):
    import correct_observation_policy as correction
   else:correction=candidate.corrector(source_relocation)
   p=old['profiles'][0]
-  correction.apply(p['runtime']['path'],p['runtime']['sha256'],p['views']['path'],p['views']['sha256'],bindings,out/'p0_observation_correction')
+  execution_phase('P0_POLICY');correction.apply(p['runtime']['path'],p['runtime']['sha256'],p['views']['path'],p['views']['sha256'],bindings,out/'p0_observation_correction')
   policy=out/'p0_observation_correction/OBSERVATION_POLICY.json'
   retained=out/'P0_CONSUMPTION_EVIDENCE.json'
   with retained.open('xb') as f:f.write(args.consumption_evidence.read_bytes())
@@ -113,7 +132,7 @@ def connect(args,out):
  if long_admission is not None:
   import provider_from_frozen
   result=provider_from_frozen.finite_long_runtime_metadata(result,long_admission,args.profile,consumer.finite_long_mode())
- abi_copy=out/'STARTUP_ABI.json'
+ execution_phase('BUNDLE_OUTPUT');abi_copy=out/'STARTUP_ABI.json'
  with abi_copy.open('xb') as f:f.write(args.local_runtime_abi.read_bytes())
  consumer.need(consumer.sha(abi_copy)==args.local_runtime_abi_sha256,'startup ABI retained exact bytes')
  result['local_runtime_abi']=pin(abi_copy)
@@ -121,10 +140,10 @@ def connect(args,out):
  consumer.need(not final.exists() and not staged.exists(),'fresh V3 metadata only')
  with staged.open('x') as f:json.dump(result,f,indent=2);f.write('\n')
  # Fail closed on missing real source mapping/retained receipts/header evidence.
- consumer.load_binding(args.artifact_manifest,args.artifact_manifest_sha256,staged,args.profile,source_relocation,long_admission)
+ execution_phase('BINDING');consumer.load_binding(args.artifact_manifest,args.artifact_manifest_sha256,staged,args.profile,source_relocation,long_admission)
  consumer.verify_local_build(args,frozen);consumer.pin(old_pin)
  os.link(staged,final);staged.unlink()
- argv=[sys.executable,str(HERE/'consumer_owned.py'),'--artifact-manifest',str(args.artifact_manifest),'--artifact-manifest-sha256',args.artifact_manifest_sha256,'--expected-run-id',str(args.expected_run_id),'--expected-launch-commit',args.expected_launch_commit,'--expected-source-commit',args.expected_source_commit,'--local-runtime-abi',str(abi_copy),'--local-runtime-abi-sha256',args.local_runtime_abi_sha256,'--owned-environment',str(args.owned_environment),'--owned-environment-sha256',args.owned_environment_sha256,'--runtime-bundle',str(final),'--profile',str(args.profile),'--output',str(out/'dut_result')]
+ execution_phase('ARGUMENT_RECEIPT');argv=[sys.executable,str(HERE/'consumer_owned.py'),'--artifact-manifest',str(args.artifact_manifest),'--artifact-manifest-sha256',args.artifact_manifest_sha256,'--expected-run-id',str(args.expected_run_id),'--expected-launch-commit',args.expected_launch_commit,'--expected-source-commit',args.expected_source_commit,'--local-runtime-abi',str(abi_copy),'--local-runtime-abi-sha256',args.local_runtime_abi_sha256,'--owned-environment',str(args.owned_environment),'--owned-environment-sha256',args.owned_environment_sha256,'--runtime-bundle',str(final),'--profile',str(args.profile),'--output',str(out/'dut_result')]
  if consumer.executor_context(args) is None:
   argv+=['--local-build-result',str(args.local_build_result),'--local-build-result-sha256',args.local_build_result_sha256]
  else:
@@ -177,16 +196,16 @@ def preflight_artifact(args,frozen,source_relocation=None):
  consumer.need(frozen['layer']=='CHISEL_EMITTED_SV_NUMERICAL_BACKEND' and frozen['moe_reference_contract']=='ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE','unchanged layer/MoE contract')
 
 def preflight(args):
- consumer.OWNED_ENVIRONMENT=(args.owned_environment,args.owned_environment_sha256,consumer.owning_environment_identity(args))
+ execution_phase('OWNED_ENVIRONMENT');consumer.OWNED_ENVIRONMENT=(args.owned_environment,args.owned_environment_sha256,consumer.owning_environment_identity(args))
  source_guard()
  for k in ('artifact_manifest','artifact_manifest_sha256','expected_run_id','expected_launch_commit','expected_source_commit','local_runtime_abi','local_runtime_abi_sha256'):consumer.need(getattr(args,k,None) is not None,'required same-job identity '+k)
- consumer.verify_frozen(args.artifact_manifest,args.artifact_manifest_sha256)
+ execution_phase('ARTIFACT');consumer.verify_frozen(args.artifact_manifest,args.artifact_manifest_sha256)
  frozen=json.loads(args.artifact_manifest.read_text());source_relocation=None
  if frozen.get('schema')in('MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1',consumer.FIRST_FAULT_SCHEMA):
-  source_relocation=consumer.approved_source_relocation(args,frozen)
+  execution_phase('CONTEXT');source_relocation=consumer.approved_source_relocation(args,frozen)
   preflight_artifact(args,frozen,source_relocation)
  else:preflight_artifact(args,frozen)
- consumer.verify_local_build(args,frozen);consumer.verify_runtime_abi(args,frozen)
+ execution_phase('BUILD');consumer.verify_local_build(args,frozen);execution_phase('ABI');consumer.verify_runtime_abi(args,frozen)
  consumer.need(frozen['profiles']==list(range(5)) and frozen['matrix_macs']==4096 and frozen['vector_lanes']==32,'same complete five-profile hardware')
  if args.profile!=0:consumer.need(all(getattr(args,k,None) is None for k in ('p0_bindings','p0_bindings_sha256','consumption_evidence','consumption_evidence_sha256')),'P1-P4 cannot request P0 exception BEFORE materialization')
  if args.profile==0:
@@ -199,8 +218,18 @@ def preflight(args):
   consumer.need('files' in m and 'P0' in m.get('observation_policy_bindings',{}) and 'p0_retained_evidence' in m,'P0 actual producer mapping absent or retained evidence missing; no expensive prep')
   if source_relocation is None:consumer.approved_source_relocation(args,frozen)
 
-def main():
+def _main_impl():
  import argparse
  ap=argparse.ArgumentParser();ap.add_argument('--existing-output',type=P,required=True);ap.add_argument('--profile',type=int,choices=range(5),required=True);add_arguments(ap);args=ap.parse_args()
  preflight(args);connect(args,args.existing_output)
+
+def main():
+ execution_phase('CLI');_execution_emitted[0]=False
+ try:return _main_impl()
+ except SystemExit as exc:
+  if exc.code not in (0,None) and _execution_phase_state[0]=='CLI':emit_execution_failure(exc)
+  raise
+ except Exception as exc:
+  emit_execution_failure(exc);raise
+
 if __name__=='__main__':main()

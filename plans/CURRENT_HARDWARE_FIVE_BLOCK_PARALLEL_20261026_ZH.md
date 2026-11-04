@@ -1124,3 +1124,12 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 本提交仅 dormant retry2 源码；独立 source CI 后才能新增唯一 retry2 nonce 激活 fresh162 compile-only，保留 attempt1、直接父提交及唯一新增文件门禁。此前 once/retry1 历史不修改；无 cache/artifact/生成 DUT/SV 上传。
 - 五块仍需同新硬件完整 M128 数值回归，0/5 完整通过；先模型完整通过再最终同刺激 RTL，不继承旧 PASS。原 FULL97358 仍 UNKNOWN；05:24 既定 /usr/bin/python3 32MiB 有界重读仅确认保存前缀 6,685,568 active cycles / pc12 / completions10，非 EOF，无 RESULT/TRANSPORT_EXIT。保留早前 PATH Python 观测 MemoryError 记录，不将观测失败当 DUT 失败。
 - 本轮无清理/迁移。本地资源门不放宽；05:23 workspace free 9,980,706,816B、tmpfs 284,372,992B，仅快照，旧完整生命周期余量和未知 owner 储备继续保留，不能作为本地重作业 GO。
+
+
+## 2026-11-04 05:43 UTC：PASS_PROCESS_ONLY，全162源 fresh Scala 编译；完整数值仍 INCOMPLETE
+
+- 修复源 b35e50c3cfb8ab31ddf8cd669adf030f7ec0464e 的普通 CI 41780307327 SUCCESS 后，唯一 retry2 激活提交 27ee0c908b956782d8d6eb6ec98fd624a2b125a1，仅新增345B launch JSON；普通 guard 41780474572 SUCCESS。
+- 真实 run https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/41780474563 / job126410615572 completed SUCCESS，push attempt1。nonce门、固定source checkout及完整编译步骤成功；不是继承早期叶子 classes。
+- 编译器实际 PASS_PROCESS_ONLY / native_exit0：162源，896个新class，共18,528,735B；编译阶段108.45947287秒，采样峰RSS1,524,342,784B。cleanup_proven=true；编译日志完整且为空，compiler_errors/pin_failures/supervisor_codes均为空。采样峰值不代表连续硬隔离证明。
+- generation 仍2b2f02d698f16a57ba696c52c4669a1226a68c5378efdc8ebe392cc1b9098f52。此处只证明全源fresh Scala编译；elaboration_run=false、dut_run=false、numerical_pass=false。class仅job内临时产物，不上传、不缓存；原失败once/retry1证据保留。
+- 下一步接回原 one-job 模型构建/执行：旧producer的159选择与Host/unchanged-module契约需为162新路由重新审计，实际生成的仿真RTL及新硬件必须五块全部重测，不能复用旧SV或PASS。完整M128五块数值仍0/5，最终冻结后同刺激RTL验收仍未开始；不将本编译当Top/RTL/利用率通过。

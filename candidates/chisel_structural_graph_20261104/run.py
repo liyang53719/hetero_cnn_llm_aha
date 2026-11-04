@@ -1,11 +1,12 @@
 """One source-only structural job. No engine/native, weights, references or IR export."""
-import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request
+import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request,zipfile
 P=pathlib.Path;D=P(__file__).resolve().parent;REPO=D.parent.parent
-REL='candidates/chisel_structural_graph_20261104';NONCE='ci_launch/chisel_structural_graph_20261104_continuation_once.json'
+REL='candidates/chisel_structural_graph_20261104';NONCE='ci_launch/chisel_structural_graph_20261104_modulecache_once.json'
 CAT='candidates/gdn32_first_model_execution_20261104/GDN32_FULL_SOURCE_PINS.json'
 CAT_SHA='ad2d4dcaddb213c85fd15adc65f7da5bd74a0d7c3e6c5922c725aa41bdc967cb'
-BASE='befc8ce1a0c20cd668fb9a786419a214c6aba430';TREE=12_081_306_272;RESERVE=8<<30
+BASE='099d95d62c44d55a77f5040cd37df9544bd5b2eb';TREE=12_081_306_272;RESERVE=8<<30
 graph_identity={}
+differential_identity={}
 class Stop(Exception):
  def __init__(self,code='GUARD_REJECTED'):self.code=code;super().__init__(code)
 def need(x,code='GUARD_REJECTED'):
@@ -98,7 +99,7 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha):
  elif final:out.update(status='FAILED_STRUCTURAL_GRAPH_ONLY',phase=final['phase'],exception_class_sha256=final['exception_class_sha256'],cycle_seen=final['cycle_seen'])
  return out
 
-def read_graph_diagnostics(path,receipt,high_sha,annotations_sha):
+def read_closed_log(path,receipt):
  need((receipt.get('cleanup_proof')or{}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP','GRAPH_CLEANUP_UNPROVEN')
  barrier=receipt.get('reader_join_barrier')or{};cap=receipt.get('log_capture')or{}
  need(barrier.get('complete')is True and barrier.get('alive')is False and barrier.get('reader_finally_done')is True,'GRAPH_READER_UNCLOSED')
@@ -109,7 +110,10 @@ def read_graph_diagnostics(path,receipt,high_sha,annotations_sha):
  need(len(raw)<=32768 and cap.get('raw_bytes')==len(raw) and cap.get('raw_sha256')==hashlib.sha256(raw).hexdigest(),'GRAPH_RAW_LOG_IDENTITY')
  try:text=raw.decode('ascii')
  except UnicodeError:raise Stop('GRAPH_LOG_ENCODING')
- return parse_graph_text(text,receipt,high_sha,annotations_sha)
+ return text
+
+def read_graph_diagnostics(path,receipt,high_sha,annotations_sha):
+ return parse_graph_text(read_closed_log(path,receipt),receipt,high_sha,annotations_sha)
 
 def stage_cpu_budget(name,seconds):
  # One explicit graph continuation, not a general stage cap relaxation.
@@ -118,14 +122,14 @@ def stage_cpu_budget(name,seconds):
  return min(seconds,600)
 
 def main():
- global phase,graph_identity
- graph_identity={}
+ global phase,graph_identity,differential_identity
+ graph_identity={};differential_identity={}
  phase='identity';need(os.environ.get('GITHUB_REPOSITORY')=='liyang53719/hetero_cnn_llm_aha' and os.environ.get('GITHUB_REF')=='refs/heads/main' and os.environ.get('GITHUB_EVENT_NAME')=='push' and os.environ.get('GITHUB_RUN_ATTEMPT')=='1')
  launch=git('rev-parse','HEAD');need(launch==os.environ.get('GITHUB_SHA'));source=git('rev-parse','HEAD^');need(git('merge-base',BASE,source)==BASE)
  need(git('diff','--name-only','HEAD^','HEAD')==NONCE and not git('status','--porcelain'))
  nonce=load(REPO/NONCE,4096);need(nonce=={'schema':'ONE_STRUCTURAL_GRAPH_ONLY_V1','source_commit':source,'base_commit':BASE,'attempts':1,'numerical_execution':False,'native_execution':False,'artifact_upload':False})
  own=load(D/'SOURCE_PINS.json');pins=pins_for(own['files'],REPO);pins[str(D/'SOURCE_PINS.json')]=sha(D/'SOURCE_PINS.json')
- changed=set(git('diff','--name-only',BASE,source).splitlines());need(changed==set(own['publication_delta']) and changed=={REL+'/run.py',REL+'/SOURCE_PINS.json','.github/workflows/chisel-structural-graph-once.yml'})
+ changed=set(git('diff','--name-only',BASE,source).splitlines());need(changed==set(own['publication_delta']) and changed=={REL+'/run.py',REL+'/SOURCE_PINS.json','.github/workflows/chisel-structural-graph-once.yml',REL+'/compare_fixture_results.py',REL+'/modulecache/SymbolTable.scala',REL+'/modulecache/StructuralDifferential.scala'})
  catalog=regular(REPO/CAT);need(sha(catalog)==CAT_SHA);doc=load(catalog);need(doc['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1'and len(doc['files'])==1211);pins.update(pins_for(doc['files'],REPO));pins[str(catalog)]=CAT_SHA
  phase='admission';remote_exclusive(launch);admission();work=P(os.environ['RUNNER_TEMP'])/'chisel-structural-graph';need(work.is_absolute()and not work.exists()and all(not p.is_symlink()for p in(work,*work.parents)));work.mkdir()
  contract={'schema':'BOUNDED_FRESH_HOST_V1','run_id':int(os.environ['GITHUB_RUN_ID']),'source_commit':source,'launch_commit':launch};contractPath=work/'fresh-host.json';contractPath.write_text(json.dumps(contract));pins[str(contractPath)]=sha(contractPath)
@@ -146,7 +150,7 @@ def main():
   with open(os.devnull,'w')as muted,contextlib.redirect_stdout(muted),contextlib.redirect_stderr(muted):
    r=supervisor.execute(args,str(work/name),str(work/'owner.lock'),cap,stage_env,dict(pins),resource_gate={'min_available_memory':13<<30,'min_disk_free':TREE+RESERVE})
   reports.append(project(name,r));print(json.dumps({'schema':'STRUCTURAL_GRAPH_PROGRESS_V1',**reports[-1],'numerical_pass':False}),flush=True)
-  if name=='graph':return work/name,r # Parse only after independent cleanup/log-finalization gates.
+  if name in ('graph','diff_official','diff_cached'):return work/name,r # Parse only after independent cleanup/log-finalization gates.
   need(r.get('native_exit')in ((0,1)if name=='jdk_inventory'else(0,)) and not r.get('errors') and reports[-1]['cleanup_complete'])
   return work/name
  phase='jdk_location'
@@ -176,6 +180,34 @@ def main():
  gatepath=REPO/'candidates/gdn32_first_model162_producer_20261104/candidate_generation_gate.py';spec=importlib.util.spec_from_file_location('reviewed_graph_inputs',gatepath);gate=importlib.util.module_from_spec(spec);spec.loader.exec_module(gate)
  selection=gate.selected_inputs(REPO,gate.MODEL162_SOURCE);sources=gate.checked_paths(REPO,selection['overlay'],m,selection['contract']);need(len(sources)==162)
  def jvm(heap,classpath,main,args=()):return [java,'-XX:-UsePerfData','-XX:ActiveProcessorCount=1','-XX:ReservedCodeCacheSize=128m','-Xss4m','-Xmx'+heap,'-XX:-HeapDumpOnOutOfMemoryError','-XX:ErrorFile=/dev/null','-cp',classpath,main,*args]
+ # Compile a narrowly patched official SymbolTable and one common fixture.
+ # No JVM simulation engine or native library is constructed by either.
+ patch_source=regular(D/'modulecache/SymbolTable.scala');fixture_source=regular(D/'modulecache/StructuralDifferential.scala')
+ need(sha(patch_source)=='201c5fc5097822cc92c5fb879ca56f234d9bde3f44783af0f7a3a7ff9d253664')
+ official_jars=[p for p in jars if P(p).name=='chiseltest_2.13-6.0.0.jar'];need(len(official_jars)==1)
+ official_jar=official_jars[0]
+ with zipfile.ZipFile(official_jar)as z:
+  official_pins={'source_sha256':'9d8cf72aa1efb8c7ebd3e174da99e509bd7d44aec60a1c391b0dfc6f7b453bab','class_sha256':hashlib.sha256(z.read('treadle2/executable/SymbolTable.class')).hexdigest(),'companion_sha256':hashlib.sha256(z.read('treadle2/executable/SymbolTable$.class')).hexdigest()}
+ patchclasses=stage('compile_modulecache',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',cp,'-d','.',str(patch_source)]),90,3)
+ for p in patchclasses.rglob('*.class'):pins[str(p)]=sha(p)
+ cached_pins={'source_sha256':sha(patch_source),'class_sha256':sha(regular(patchclasses/'treadle2/executable/SymbolTable.class')),'companion_sha256':sha(regular(patchclasses/'treadle2/executable/SymbolTable$.class'))}
+ need(cached_pins['companion_sha256']!=official_pins['companion_sha256'])
+ fixtureclasses=stage('compile_fixture',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',cp,'-d','.',str(fixture_source)]),90,3)
+ for p in fixtureclasses.rglob('*.class'):pins[str(p)]=sha(p)
+ need(not (fixtureclasses/'treadle2/executable/SymbolTable.class').exists() and not (fixtureclasses/'treadle2/executable/SymbolTable$.class').exists())
+ compare_spec=importlib.util.spec_from_file_location('strict_fixture_compare',D/'compare_fixture_results.py');comparator=importlib.util.module_from_spec(compare_spec);compare_spec.loader.exec_module(comparator)
+ differential_identity={'differential_status':'PENDING','official_symbol_table':official_pins,'patched_symbol_table':cached_pins,'fixture_source_sha256':sha(fixture_source),'interpreter_bookkeeping_modified':True}
+ results=[]
+ for label,expected,location,classpath in [('official',official_pins,official_jar,str(fixtureclasses)+':'+cp),('cached',cached_pins,str(patchclasses),str(patchclasses)+':'+str(fixtureclasses)+':'+cp)]:
+  folder,receipt=stage('diff_'+label,jvm('1g',classpath,'treadle2.executable.StructuralDifferential',[label,expected['source_sha256'],expected['class_sha256'],expected['companion_sha256'],location]),45,2)
+  text=read_closed_log(folder/'frontend.log.gz',receipt)
+  need(receipt.get('status')=='PASS_PROCESS_ONLY' and receipt.get('worker_started')is True,'DIFFERENTIAL_PROCESS_FAILED')
+  # These booleans are derived from the actual closed-log checks above, not a synthetic receipt.
+  process={'exit':receipt.get('native_exit'),'errors':receipt.get('errors'),'cleanup_complete':(receipt.get('cleanup_proof')or{}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP','log_finalized':(receipt.get('log_capture')or{}).get('gzip_finalized')is True}
+  results.append((text,process))
+ differential=comparator.compare(results[0][0],results[1][0],official_pins,cached_pins,results[0][1],results[1][1])
+ differential_identity.update(differential_status=differential['status'],differential_cases=differential['cases'])
+ # The live 2400-second gate remains authoritative before every later stage.
  classes=stage('compile_original',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',cp,'-Xplugin:'+plugin,'-language:reflectiveCalls','-d','.',*sources]),300,3)
  for p in classes.rglob('*.class'):pins[str(p)]=sha(p)
  basecp=str(classes)+':'+cp
@@ -193,7 +225,7 @@ def main():
  highsha=sha(high);annsha=sha(ann)
  identity={'high_sha256':highsha,'high_bytes':high.stat().st_size,'annotations_sha256':annsha,'annotations_bytes':ann.stat().st_size}
  graph_identity=dict(identity)
- graphdir,graphreceipt=stage('graph',jvm('4g',str(hclasses)+':'+basecp,'chiseltest.simulator.OriginalHostStructuralGraph',[str(high),highsha,str(ann),annsha,extsha]),1500,6)
+ graphdir,graphreceipt=stage('graph',jvm('4g',str(patchclasses)+':'+str(hclasses)+':'+basecp,'chiseltest.simulator.OriginalHostStructuralGraph',[str(high),highsha,str(ann),annsha,extsha]),1500,6)
  # Budget failures may yield useful diagnostics ONLY after closed/finalized log
  # and complete process cleanup. Never promote markers to numerical/graph PASS.
  try:diagnostics=read_graph_diagnostics(graphdir/'frontend.log.gz',graphreceipt,highsha,annsha)
@@ -202,10 +234,10 @@ def main():
  need(shutil.disk_usage(work).free>=RESERVE)
  if diagnostics['status']=='STRUCTURAL_GRAPH_ONLY_DECLARED_DEPENDENCIES':
   for path,digest in pins.items():need(sha(path)==digest)
- return {'schema':'STRUCTURAL_GRAPH_ONLY_V1',**diagnostics,**identity,'final_reserve_preserved':True,'owned_process_cleanup_complete':all(r['cleanup_complete']for r in reports),'private_job_files_exported':False,'source_commit':source,'launch_commit':launch,'catalog_sha256':CAT_SHA,'jdk_inventory_sha256':sha(work/'jdk_inventory.json'),'helper_manifest_sha256':sha(D/'SOURCE_PINS.json'),'expected_leaf_bindings':17,'dut_provider_native_loaded':False,'dut_evaluated':False,'weights_read':False,'numerical_pass':False,'stages':reports}
+ return {'schema':'STRUCTURAL_GRAPH_ONLY_V1',**diagnostics,**identity,**differential_identity,'final_reserve_preserved':True,'owned_process_cleanup_complete':all(r['cleanup_complete']for r in reports),'private_job_files_exported':False,'source_commit':source,'launch_commit':launch,'catalog_sha256':CAT_SHA,'jdk_inventory_sha256':sha(work/'jdk_inventory.json'),'helper_manifest_sha256':sha(D/'SOURCE_PINS.json'),'expected_leaf_bindings':17,'dut_provider_native_loaded':False,'dut_evaluated':False,'weights_read':False,'numerical_pass':False,'stages':reports}
 if __name__=='__main__':
  phase='startup';ok=False
  try:result=main();ok=result['status']=='STRUCTURAL_GRAPH_ONLY_DECLARED_DEPENDENCIES'
- except BaseException as error:result={'schema':'STRUCTURAL_GRAPH_ONLY_V1',**graph_identity,'status':'FAIL_OR_INCOMPLETE','stage':phase,'reason':error.code if isinstance(error,Stop)else'UNCLASSIFIED_FAILURE','dut_provider_native_loaded':False,'dut_evaluated':False,'weights_read':False,'numerical_pass':False}
+ except BaseException as error:result={'schema':'STRUCTURAL_GRAPH_ONLY_V1',**graph_identity,**differential_identity,'status':'FAIL_OR_INCOMPLETE','stage':phase,'reason':error.code if isinstance(error,Stop)else'UNCLASSIFIED_FAILURE','dut_provider_native_loaded':False,'dut_evaluated':False,'weights_read':False,'numerical_pass':False}
  encoded=json.dumps(result,separators=(',',':'));need(len(encoded)<=16384);print(encoded,flush=True)
  sys.exit(0 if ok else 2)

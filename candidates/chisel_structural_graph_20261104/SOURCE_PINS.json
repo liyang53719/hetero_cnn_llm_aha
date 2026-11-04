@@ -3,8 +3,8 @@
   "files": [
     {
       "path": ".github/workflows/chisel-structural-graph-once.yml",
-      "bytes": 1652,
-      "sha256": "0b479bbddc6534c4f1b69dfbe3be8a5f7389bbc0f77999b618bd63b84b153dac"
+      "bytes": 1651,
+      "sha256": "476978b091652e37d566e49ed4f9a9d6c46570027e03ffa386fc204c106fe31b"
     },
     {
       "path": "candidates/chisel_structural_graph_20261104/prepare_jars.py",
@@ -13,8 +13,8 @@
     },
     {
       "path": "candidates/chisel_structural_graph_20261104/run.py",
-      "bytes": 18874,
-      "sha256": "3d9465e0accafe5519d197aeb0749a5380b92c0d95e0224083c0f7ff2384e338"
+      "bytes": 22638,
+      "sha256": "354f5245b626605baf00f04d14129e5f1f5a25fde55ef679f52feddd7e2e00eb"
     },
     {
       "path": "candidates/chisel_structural_graph_20261104/scala/IdmaFieldSplitTransform.scala",
@@ -35,11 +35,29 @@
       "path": "candidates/chisel_structural_graph_20261104/scala/StructuralMetadataFactory.scala",
       "bytes": 6851,
       "sha256": "ab1ea07061f9a319c22008ea3b0f5ccabceccea9879b832958821fa56eb0b2ff"
+    },
+    {
+      "path": "candidates/chisel_structural_graph_20261104/compare_fixture_results.py",
+      "bytes": 2132,
+      "sha256": "baaa19022e365b9b0597ae92ad0c6c22e65492abbd4c06e5c5ec4d54b6ebb44b"
+    },
+    {
+      "path": "candidates/chisel_structural_graph_20261104/modulecache/SymbolTable.scala",
+      "bytes": 28580,
+      "sha256": "201c5fc5097822cc92c5fb879ca56f234d9bde3f44783af0f7a3a7ff9d253664"
+    },
+    {
+      "path": "candidates/chisel_structural_graph_20261104/modulecache/StructuralDifferential.scala",
+      "bytes": 9906,
+      "sha256": "79dbb19ad1896a6f9f15305c2ae033b777b7318d2624a8f46793e3b78c06caf4"
     }
   ],
   "publication_delta": [
     ".github/workflows/chisel-structural-graph-once.yml",
     "candidates/chisel_structural_graph_20261104/run.py",
-    "candidates/chisel_structural_graph_20261104/SOURCE_PINS.json"
+    "candidates/chisel_structural_graph_20261104/SOURCE_PINS.json",
+    "candidates/chisel_structural_graph_20261104/compare_fixture_results.py",
+    "candidates/chisel_structural_graph_20261104/modulecache/SymbolTable.scala",
+    "candidates/chisel_structural_graph_20261104/modulecache/StructuralDifferential.scala"
   ]
 }

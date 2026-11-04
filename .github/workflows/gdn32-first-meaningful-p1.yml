@@ -1,0 +1,78 @@
+# Dormant source publication: the launch nonce file MUST NOT exist in this commit.
+# An approved actual FULL plan requires its own reviewed immutable source commit.
+name: gdn32-first-meaningful-p1
+on:
+  push:
+    branches: [main]
+    paths: [ci_launch/gdn32_first_meaningful_p1_20261104_once.json]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: hetero-exclusive-numeric-bootstrap
+  cancel-in-progress: false
+jobs:
+  full_model:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 350
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      NUMEXPR_NUM_THREADS: '1'
+    steps:
+      - name: Record original full job clock before checkout
+        timeout-minutes: 1
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -B - <<'PY'
+          import json, os, pathlib, re, time
+          started = time.monotonic()
+          wall_ns = time.time_ns()
+          run_id = os.environ['GITHUB_RUN_ID']
+          launch = os.environ['GITHUB_SHA']
+          if os.environ.get('GITHUB_RUN_ATTEMPT') != '1' or re.fullmatch('[1-9][0-9]{0,19}', run_id) is None or re.fullmatch('[0-9a-f]{40}', launch) is None:
+              raise SystemExit('FAIL_ORIGINAL_JOB_IDENTITY')
+          record = dict(schema='SAME_JOB_START_V1', run_id=int(run_id),
+                        launch_commit=launch, run_attempt=1,
+                        started_monotonic=started, job_started_wall_ns=wall_ns,
+                        job_budget_seconds=21000)
+          with (pathlib.Path(os.environ['RUNNER_TEMP']) / 'gdn32-full-job-start.json').open('x') as stream:
+              json.dump(record, stream, sort_keys=True)
+              stream.write('\n')
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        timeout-minutes: 4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 2
+      - name: Require exact second-commit full model launch
+        id: launch
+        timeout-minutes: 1
+        run: python3 -B candidates/gdn32_first_job_launch_20261104/validate_launch.py
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        timeout-minutes: 4
+        with:
+          ref: ${{ steps.launch.outputs.source_sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Run source-pinned selected complete model plan
+        timeout-minutes: 350
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 -B candidates/gdn32_first_job_launch_20261104/launch_entry.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --identity "$RUNNER_TEMP/gdn32-full-identity.json" \
+            --job-start "$RUNNER_TEMP/gdn32-full-job-start.json" \
+            --work "$RUNNER_TEMP/gdn32-full-model"
+# No artifact/cache upload, dependency install, user secrets or publication step.
+# No credential persistence. Only the entry step receives the scoped job token.
+# Original bootstrap forwards it only to artifact acquisition; other native stages
+# keep the original filtered environment. No dispatch or approval is inferred.
+# launch_entry alone emits a bounded safety summary; FULL approval is not inferred.

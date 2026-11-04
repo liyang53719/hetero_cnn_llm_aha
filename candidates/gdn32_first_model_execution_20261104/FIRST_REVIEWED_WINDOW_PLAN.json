@@ -1,0 +1,21 @@
+{
+  "schema": "GDN32_FIRST_REVIEWED_WINDOW_PLAN_V1",
+  "selected_profiles": [
+    1
+  ],
+  "min_dut_wall_seconds": 3000,
+  "max_dut_wall_seconds": 7200,
+  "min_build_window_seconds": 5537,
+  "basis": "Parent confirmed 3000/7200 as finite experimental-value policy and 5537 as prior 92m17s build-cost reference. Neither is a duration, progress, or completion prediction.",
+  "maximum_material_elapsed_seconds_at_build_admission": 1903,
+  "census_reserved_seconds": 30,
+  "meaningful_goal": {
+    "pc_at_least": 7,
+    "completions_at_least": 7,
+    "reset_after_start_allowed": false,
+    "necessary_active_cycles": 21516288,
+    "completion_guaranteed": false
+  },
+  "numerical_or_final_rtl_acceptance": false,
+  "post_freeze_control_seconds": 60
+}

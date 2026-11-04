@@ -1,0 +1,19 @@
+{
+  "entries": {
+    "qwen2": {
+      "revision": "4.40.1",
+      "expected_sidecar_sha256": "17d159b19e98d6f104bbaba1bd62ea2de96b5bcde8185230135c6a96d445628f"
+    },
+    "qwen35_08b": {
+      "revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+      "expected_sidecar_sha256": "8a6ba34b3e85bac5427d25a44e97659f6eeaa341392e1bc6d35906434422aada"
+    },
+    "qwen35_35b": {
+      "revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c",
+      "expected_sidecar_sha256": "79078825f230ffecf33fff9b838d40b155217b025accf26e961927a25a475743"
+    }
+  },
+  "python": "3.12",
+  "qwen2_requires_avx512f": true,
+  "note": "fresh runtime receipt is install+archive binding only, no transferred reference PASS"
+}

@@ -1,0 +1,54 @@
+{
+  "schema": "P0_RESIDENT_OBSERVATION_CONTRACT_V1",
+  "sources": {
+    "helper": {
+      "bytes": 7436,
+      "sha256": "8807829a0d018da029b7920dd99045fb28db8ec091a4f9599a65695848e49b57"
+    },
+    "host_top": {
+      "bytes": 27328,
+      "sha256": "da22759883a9749c1706ff77ff78afcdabb7fe869aed19df90f817017ef89583"
+    },
+    "host_commands": {
+      "bytes": 190813,
+      "sha256": "79a721ddb498a5d5863085535c2aaedea14e5503e0f3a41abe2af29995fb813b"
+    },
+    "owner_kernel": {
+      "bytes": 91421,
+      "sha256": "78dfd535faefb30b70a60d3ef4f83fbe923f0e35a10c995a2830cdb772fa0af4"
+    },
+    "qkv_router": {
+      "bytes": 9110,
+      "sha256": "bb0f829330f3ce824ffdb73180a09bb90e43826c1aa15f0d10a2187e65b72ae3"
+    },
+    "resident": {
+      "bytes": 8452,
+      "sha256": "65d786a0a0f92a8aea2c8db945b3448162d8b3c814356218fc98f588f201d8ee"
+    },
+    "bridge": {
+      "bytes": 6164,
+      "sha256": "27ee34a131aa508bb246b7e2e9196eaed3e8c4d9127ea9ca835ac5333fb4e868"
+    },
+    "driver": {
+      "bytes": 27317,
+      "sha256": "343e99786a82fd5e738d3e48667fde204e21c077e397f8d20a4cddd59629bb61"
+    },
+    "sparse_memory": {
+      "bytes": 1979,
+      "sha256": "63206761274600c98352aea72281cee305d33a96e406a74bc51f665484845368"
+    },
+    "program_manifest": {
+      "bytes": 15000,
+      "sha256": "4f201e1744b8aa2c604a478ca837076abaf41a7235b62d8aa7ef14fcdc830163"
+    },
+    "commands": {
+      "bytes": 384,
+      "sha256": "618cd4db94fbc5f0e3829182a72d5e298b5a42d2a3840ec2b9f9be639cd884c4"
+    },
+    "descriptors": {
+      "bytes": 3456,
+      "sha256": "1e4d35da18b21a4d9de05d2f3129e5bd9717cd923837c83c8d5eb320bfcddb02"
+    }
+  },
+  "proof": "../precision_observability_mapping_20261029T0948/P0_OBSERVABILITY.md"
+}

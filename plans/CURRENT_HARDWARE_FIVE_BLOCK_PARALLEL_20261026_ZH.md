@@ -1144,3 +1144,20 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 保留原clock、7200秒build上限与每块9000秒host尾；consumer实际execute前重新核完整本块预留。五块同job非DUT预算63000秒，不能准入21000秒job；分profile独立job仍须真实阶段余量/完整tail/DUT窗口和fresh资源门，不默认GO。全部五块必须同源码/Chisel参数/实际生成SV哈希；不同job或二进制路径不能冒称同binary，单块不能汇总成五块PASS。
 - native前有限摘要明确phase、内存/磁盘/剩余wall及尾预留；13GiB MemAvailable、20,671,240,864B初始disk门和原各阶段门不削。8GiB是相关启动储备，不能冒称原运行连续8GiB门。P0原AVX512/ABI要求前置，不能因AVX2可启动而继承参考exact资格；P1–P4按各自selected原门。
 - 本次只有源码与计划，不含CI激活、生成DUT/SV或缓存上传；未来仿真展开SV属于模型执行路径，不是模型通过后的最终冻结RTL验收。完整五块M128数值与最终RTL仍0/5，利用率无新测量。原97358仍UNKNOWN，06:26保存前缀仍6,685,568 active cycles / pc12 / completions10，终态文件仍缺，无重启或清理。
+
+
+## 2026-11-04 FIRST P1 单次完整模型尝试入口（TEMP / SOURCE_ONLY）
+
+本批仅新增独立 FIRST 命名空间和云端入口，不改旧31ce版本153项冻结路径。硬件定义仍为固定4096 Matrix MAC、共享32-lane，五块共用硬件 generation 2b2f02d698f16a57ba696c52c4669a1226a68c5378efdc8ebe392cc1b9098f52；编译通过不等于完整Top发射、模型数值或最终RTL验收。
+
+先选P1（Qwen3.5-0.8B L0）运行原完整128-token、17命令程序，真实材料/权重/独立参考先完成，再唯一完整Top构建与同一ELF的一次连续执行。P0、P2、P3、P4保留同硬件队列和已有材料；本批不继承任何旧硬件数值PASS，仍为新硬件0/5完整数值通过。旧FULL session97358终态UNKNOWN，保留其未封口日志及全部生命周期预算，不重启、不清理、不回收其资源。
+
+有限窗口政策：原云端21000秒总clock，完整数值执行尾为DUT窗口W+10470秒，含9000秒host后处理、540秒四个非DUT阶段、240秒其监督余量、90秒DUT监督余量及600秒parent余量；另保留census30和冻结后的control60，二者不重复取代尾预算。材料完成后 build cap=min(7200, floor(21000-elapsed-10470-3000-30-60))，不足5537秒不进入构建；这使材料价值门为elapsed≤1903秒。5537仅来自既有较长完整构建92分17秒的成本事实，不是新硬件完成保证或继承通过。
+
+构建后按实际原clock一次冻结W=min(7200, floor(21000-elapsed-10470-60))，不足3000秒不启动DUT；3000秒是实验价值门，不保证达到pc6。冻结后不扩时、不再次缩W、不重启，不重新获得7200秒。准入链传递最初已pinned root/admission/build身份，实际consumer在资源与尾门后、execute前原子领取one-shot；重复领取拒绝。继续保留原完整RAM/disk生命周期门、未知owner及后处理保护，不用瞬时空闲冒准入，不上传生成ELF/SV/cache。
+
+首测强观测目标为pc6 GDN命令完整完成（pc≥7、completions≥7、无reset）；源级必要下界21,516,288 cycles仅为下界，不是host墙时或RTL性能预测。进入pc6或有内存流量不算目标完成。仅达到目标标TARGET_REACHED_NOT_FULL；未触达标TARGET_NOT_REACHED。到期未完成完整17命令及数值比较为INCOMPLETE/TIMEOUT；自然退出也必须原完整数值证据才能判完整模型通过。最终RTL仍须五块模型完成后同源码/刺激冻结验收。
+
+当前验证范围：model155项与catalog1211逐项审计；独立49项pure tests normal/-O通过；实际调用链的合成回放验证材料先行、原clock、一次派生W及consumer拒二次claim，外部材料/build/numeric_tail.run使用stub，不能冒真实运行。源码批不带nonce激活；源发布、普通CI、远端闭包独审后另行唯一nonce启动。构建产物仅在同一job复用；job结束后后续完整运行需重建，不承诺持久复用或完整块完成。
+
+首测入口复核补修：原control60在seven-file/source准备前核验，不能覆盖准备耗时后的首次startup_abi启动边界。本次在首次numeric-native资源门之后、supervisor.execute之前再次核原controller完整尾与control60；后续已计费阶段不重复套60秒，冻结W和10470尾均不变。真实stage AST与真实bridge纯边界回放验证1/59/60秒准入、60.001秒拒绝，无native执行。旧暂定159源码尚未更新main/激活，发布改用重封后的revision。

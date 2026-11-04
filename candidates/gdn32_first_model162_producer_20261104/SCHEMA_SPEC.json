@@ -1,0 +1,103 @@
+{
+  "schema": "MODEL_CANDIDATE_FIVE_PROFILE_BUILD_ARTIFACT_V1",
+  "exact_fields": [
+    "schema",
+    "status",
+    "cpp_build_policy",
+    "cpp_build_overrides",
+    "profiles",
+    "layer",
+    "matrix_macs",
+    "vector_lanes",
+    "moe_reference_contract",
+    "artifact_identity",
+    "common",
+    "tool_manifest",
+    "model_candidate_observation_sha256",
+    "numerical_pass",
+    "final_rtl_executed",
+    "model_numerical_evaluation_authorized",
+    "external_review_required"
+  ],
+  "fixed": {
+    "status": "UNREVIEWED_MODEL_BUILD",
+    "cpp_build_policy": "CPP_O1_STRICT_V1",
+    "cpp_build_overrides": [
+      "OPT_FAST=-O1",
+      "OPT_SLOW=-O1",
+      "OPT_GLOBAL=-O1",
+      "CXXFLAGS=-O1 -fno-fast-math -ffp-contract=off"
+    ],
+    "profiles": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "layer": "CHISEL_EMITTED_SV_NUMERICAL_BACKEND",
+    "matrix_macs": 4096,
+    "vector_lanes": 32,
+    "moe_reference_contract": "ORIGINAL_TORCH_TOPK_PENDING_SMALL_ID_ACCEPTANCE",
+    "numerical_pass": false,
+    "final_rtl_executed": false,
+    "model_numerical_evaluation_authorized": false,
+    "external_review_required": true
+  },
+  "common_exact_fields": [
+    "binary",
+    "sv",
+    "driver",
+    "source_manifest",
+    "build_receipt"
+  ],
+  "pin_fields": [
+    "path",
+    "bytes",
+    "sha256"
+  ],
+  "payload_names": [
+    "dut.bin",
+    "hardware.sv",
+    "driver.cpp",
+    "source_manifest.json",
+    "tool_manifest.json",
+    "build_receipt.json",
+    "frozen_artifact.json"
+  ],
+  "observation_sections": [
+    "schema",
+    "status",
+    "annotations",
+    "high",
+    "low_ports",
+    "source_closure",
+    "stage_receipts",
+    "structure",
+    "sv"
+  ],
+  "external_review_parameter": "model_candidate_review",
+  "external_review_scope": "MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL",
+  "build_stages": [
+    "compile_model_sources",
+    "helper_compile",
+    "original_high",
+    "canonical_micro",
+    "canonical_full",
+    "transform_new_toolchain",
+    "emit_host",
+    "sv_identity",
+    "emit_fma",
+    "subset",
+    "frontend",
+    "frontend_native_Vbf16_context_lane_cluster16_rev8b_b_candidate_d",
+    "frontend_native_Vqwen2_matrix_command_endpoint_0",
+    "frontend_native_VTransposedDenseDownOwner",
+    "frontend_native_VHostBlockTopV4",
+    "archive_bf16_context_lane_cluster16_rev8b_b_candidate_d",
+    "archive_qwen2_matrix_command_endpoint_0",
+    "archive_TransposedDenseDownOwner",
+    "host_archive",
+    "host_link"
+  ]
+}

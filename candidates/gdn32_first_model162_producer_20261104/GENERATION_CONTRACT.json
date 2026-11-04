@@ -1,0 +1,29 @@
+{
+  "schema": "MODEL162_GENERATION_CONTRACT_V1",
+  "scope": "SOURCE_STRUCTURAL_PRECONDITIONS_ONLY_NOT_NUMERICAL_ACCEPTANCE",
+  "source_overlay_sha256": "589e1e0f522aae929d25283b180ec566683254862f9537494aec26e2bd27efe1",
+  "source_count": 162,
+  "unchanged_module_contract_sha256": "80c1426efa4a8f2740dadc1757a35d01913233e86c5fc5c2a35f9d3a8d044f0e",
+  "host_ports_sha256": "289f230ec8fc85e7aee0396ab34424f505855074a762707e874fbf8a2f45ca08",
+  "driver_sha256": "e8aeaac48a407e27bcbf54db0d85867a904c67a2dce7e1d270999a8482453261",
+  "cpp_build_policy": "CPP_O1_STRICT_V1",
+  "matrix_macs": 4096,
+  "vector_lanes": 32,
+  "tokens": 128,
+  "profiles": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "numeric_execution_authorized": false,
+  "final_rtl_accepted": false,
+  "hardware_source": "gdn-chunk32-abort-v2",
+  "upstream_generation_contract_repo_path": "candidates/gdn_chunk32_actual_v2_20261104/GENERATION_CONTRACT.json",
+  "upstream_generation_contract_sha256": "2b2f02d698f16a57ba696c52c4669a1226a68c5378efdc8ebe392cc1b9098f52",
+  "upstream_overlay_sha256": "1bd1db80190d2d611cfeb15f50c2bbadec76f2aaad74280671b22e843240a945",
+  "model_source_contract_repo_path": "candidates/gdn32_first_model_execution_20261104/numeric/MODEL_P0_GDN32_SOURCE_CONTRACT.json",
+  "model_source_contract_sha256": "8ac291f2d129de351a19c95c643437a3600a01d8b40a8e55b5eafabb32975cbc",
+  "old_artifact_reuse_permitted": false
+}

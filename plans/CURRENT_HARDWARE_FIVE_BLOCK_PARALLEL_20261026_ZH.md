@@ -1038,3 +1038,12 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 有限本地证据：host-only GCC fake-clock37断言；R4真实连接18组、partial R3共22组；入口normal/-O各30组；最终合并预算/CLI17组、catalog/API10组、entry7组均normal/-O通过；四种实际源binding（legacy/address/supply/profiled-supply）检查通过。只验证源码/纯API/合成输入，不是实际fullTop编译、ABI、性能或数值验收。测试fixture曾把baseline元数据计为第8生产文件及保留旧catalog pin，两次原失败均保留，修正fixture后通过，未据此改硬件。
 - 最终独审发现并修复实际bootstrap→restore的旧generation gate硬pin；三种restore verify-only原调用均通过，无下载或编译。test-only精确inverse重建为14个最终源→原finite基线文件，保持原历史断言而非放宽门；原restore13组、address13组、finite修订回归及最终合并纯测均normal/-O通过。旧未发布包及失败记录保留。
 - 后续须同一冻结包独审、source-only dormant发布和单独唯一nonce准入；本条不表示已启动。原FULL租约释放后本机分阶段构建/长跑另需最新总RAM、各角色预留及future disk门，不能把unknownowner/consumer预算自动转给compiler。当前不宣称80%/90%整块利用率。
+
+
+## 2026-11-04 00:03 UTC：实际独立参考结果与当前阻塞（INCOMPLETE）
+
+- source39fe2f8、activation5e3dc9，普通CI41734206925/41734412259成功。实际DEFAULT reference run41734412224：runtime与12原权重PASS；首遍无observer完整128输出/KV原hash一致；第二遍在第16项stage.self_attn.0.1（BF16 attention probabilities，[1,12,128,128]）严格hash不一致而停止。共15项PASS、1 MISMATCH、9 NOT_REACHED；不能称两次完整forward通过，后续MLP/final cache/output及完整1024 RoPE未到达。未修改golden/容差，未执行DUT/EDA。具体内部算子因果尚未证实。
+- 隔离恢复原AVX512 dispatch：source5f3798f81ca770ade8c2396cae6d3743184eacdc、activation066e346b6fd9be874c587ec27e6f39da8085366b；两次普通CI41743051220/41743222002成功，旧DEFAULT源码/失败证据保留。实际run41743221988在实时CPU门FAIL/CPU_AVX512（该runner avx512f=false），下载runtime之前即停止，0权重/0tensor，无DUT/EDA。没有随机重试、自动fallback或借旧PASS。
+- 两次真实回执均仅三个安全JSON，未输出weights、tensor、SV/ELF或编码载荷。DEFAULT artifact13276783840：3228B、SHA256 3e8538f03d3570c1422c0289df2056438b991ab562112a18c7df69e63c0644b6；AVX512 artifact13281154664：2743B、SHA256 24a897e5d083d2bab4d770dfa5c4afad744947080ab132ee33a04e4840709899。
+- 原FULL session97358终态仍未知，最后已保存active_cycles6685568/pc12/completions10，不因消息/文件无更新推断停止。保留全部资源预留与未封口证据，不重启/清理。新硬件五块M128完整模型0/5、最终同刺激RTL0/5；尚无整块80%或90%利用率实测。
+- 下一步只读核当前云端已验证AVX512 runtime/权重复用和受限nonDUT参考执行预算，不重新安装大runtime，不削减原FULL/consumer/unknown-owner保留。非P0并行依赖审查确认selected_profiles只缩最终DUT loop，现有FULL前置仍要求全部runtime/reference；P2不能因selector可用而宣称端到端ready。任何局部新执行都需新实际资源门及精确身份，不能继承失去终态的PASS。

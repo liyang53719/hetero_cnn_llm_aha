@@ -1074,3 +1074,10 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 精确测试范围：root目标154 normal/-O各PASS，材料104 normal/-O各PASS，runtime专项24 normal/-O各PASS，host inverse7 normal/-O各PASS，budget25 normal/-O各PASS；独审25项及其root141/runtime-material152项PASS。writer额外13项selected authority/controller测试PASS。独审历史P1数据只读复验不触未选payload，不能当当前参考或硬件通过。
 - 不声称整个套件全绿：其余root546项有6个baseline同样错误；历史host44项baseline/candidate同2fail+3errors；完整runtime160项同baseline1fail+6errors。失败来自既有历史fixture/retention路径，原始日志与逐项对照保留，不改写为PASS。
 - 五块仍并行准备，资源只限制同时执行，不等P0完成才筹备其它块。当前五块完整模型/最终RTL仍0/5；原FULL97358终态UNKNOWN及保留资源不回收。新selected源不会自动激活旧任务、继承旧PASS或解除完整块时长/RAM门。
+
+## 2026-11-04 03:20 UTC：TEMP，纠正 UNKNOWN 原任务的磁盘保护范围
+
+- 资源对账发现此前将1,207,959,552B称作原FULL完整future过宽：它只是原P0 DUT阶段增量（512MiB numeric、128MiB DUT gzip、512MiB RSS gzip）。原aggregate cap9,549,552,324B减18root当前实占7,919,910,108B，完整生命周期未使用额度为1,629,642,216B。后续UNKNOWN旧任务保护采用完整余量；两数不是独立义务，不相加，也不因当前进程不可见释放。
+- 00:33 AVX512与00:56 AVX2同host软件实验适配器只计入1,207,959,552B，不能再称已验证旧整轮生命周期的磁盘准入。相关资源准入结论标TEMP／范围不足。1,629,642,216B来自02:58及03:16当前18root census，不是00:33/00:56同步快照；当时完整旧root余量未核，不能据后来的snapshot追认通过或断言当时实际耗尽。实际固定字节结果、exit、EOF、清理与测得资源不改：AVX512可见25/25软件参考PASS；AVX2第16项概率FAIL，15PASS/1MISMATCH/9未到达。原JSON、旧门值及报告作为实际历史保留，不回写为按完整余量通过。
+- 新P2精确ready审计仍BLOCKED_NOT_RUN。03:16:23 UTC独立census口径下，保护旧完整余量与新128MiB DUT gzip、1GiB RSS gzip、至少1GiB输出及8GiB底线，disk缺2,494,213,608B；18root及当前审计源/元信息共98,757 entries，距100,000门只余1,243，尚未计新执行checkout/产物。此snapshot不是launch准入。RAM仍须保留旧UNKNOWN DUT/consumer未来峰值，不能只看单阶段MemAvailable。
+- 不改变任何既有数值黄金、硬件、日志保留或资源下限；无新的重执行、清理或迁移。下一次运行必须以fresh全生命周期union-root ledger和完整旧reservation独审，不沿用本次偏窄口径。

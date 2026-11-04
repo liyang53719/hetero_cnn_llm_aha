@@ -1133,3 +1133,14 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 编译器实际 PASS_PROCESS_ONLY / native_exit0：162源，896个新class，共18,528,735B；编译阶段108.45947287秒，采样峰RSS1,524,342,784B。cleanup_proven=true；编译日志完整且为空，compiler_errors/pin_failures/supervisor_codes均为空。采样峰值不代表连续硬隔离证明。
 - generation 仍2b2f02d698f16a57ba696c52c4669a1226a68c5378efdc8ebe392cc1b9098f52。此处只证明全源fresh Scala编译；elaboration_run=false、dut_run=false、numerical_pass=false。class仅job内临时产物，不上传、不缓存；原失败once/retry1证据保留。
 - 下一步接回原 one-job 模型构建/执行：旧producer的159选择与Host/unchanged-module契约需为162新路由重新审计，实际生成的仿真RTL及新硬件必须五块全部重测，不能复用旧SV或PASS。完整M128五块数值仍0/5，最终冻结后同刺激RTL验收仍未开始；不将本编译当Top/RTL/利用率通过。
+
+
+## 2026-11-04 06:28 UTC：TEMP / SOURCE_ONLY，新162完整模型原链独立版本接入
+
+- 实作两个独立版本目录 gdn32_full_model_execution_20261104 与 gdn32_model162_producer_20261104；旧 same_job_execution 路径与旧 SOURCE_PINS 不修改，避免仅保留旧catalog却改其覆盖文件造成默认入口失败。153个新路径/2,880,819B，其中110个Git blob与远端已有源码完全相同，43个新源码blob。固定acab远端树核1057 catalog：906旧目标全部匹配，151新版本目标；4个本地构造/报告污染不入发布。
+- 实际接线为 checked_paths 162源 → fresh scalac → 新classes HIGH展开 → 原两个存储表示变换和provider → 原Verilator/C++后端 → selected真实runtime/weights/reference → 原FULL numeric_tail/consumer。原15 unchanged modules、1056行VectorBank canonical、122 typed ports等结构检查保留，不通过修改旧hash放行；旧159选择与旧运行证据保留。
+- 硬件generation仍2b2f02d698f16a57ba696c52c4669a1226a68c5378efdc8ebe392cc1b9098f52；新producer/model generation为72f6c1f6a53517e50170b8bc6de40b2c25b1a65fc02ad0f535a63e896b9e886a。新ordinary五块driver独立路径仅将need的const std::string&参数换const char*，79个字面量reason、条件/异常文案/时钟/数值检查不改；新driver SHA e8aeaac48a407e27bcbf54db0d85867a904c67a2dce7e1d270999a8482453261。不宣称实测提速，OOM分配失败时机不承诺等价。O1与单CPU/线程策略不变。
+- 完成修复并回放旧catalog误读、默认委派sys局部变量、直接consumer近deadline绕过和conditional census预算死门。producer33与bridge12分别normal/-O通过；五profile真实consumer reader链normal/-O通过；prepare→flow至首archives supervisor边界五块纯回放通过，native明确截停。AST边界60 census（40通过/20应拒）及40完整tail迟到拒绝绑定当前源码。纯连接/模拟资源证据不是native或数值PASS。
+- 保留原clock、7200秒build上限与每块9000秒host尾；consumer实际execute前重新核完整本块预留。五块同job非DUT预算63000秒，不能准入21000秒job；分profile独立job仍须真实阶段余量/完整tail/DUT窗口和fresh资源门，不默认GO。全部五块必须同源码/Chisel参数/实际生成SV哈希；不同job或二进制路径不能冒称同binary，单块不能汇总成五块PASS。
+- native前有限摘要明确phase、内存/磁盘/剩余wall及尾预留；13GiB MemAvailable、20,671,240,864B初始disk门和原各阶段门不削。8GiB是相关启动储备，不能冒称原运行连续8GiB门。P0原AVX512/ABI要求前置，不能因AVX2可启动而继承参考exact资格；P1–P4按各自selected原门。
+- 本次只有源码与计划，不含CI激活、生成DUT/SV或缓存上传；未来仿真展开SV属于模型执行路径，不是模型通过后的最终冻结RTL验收。完整五块M128数值与最终RTL仍0/5，利用率无新测量。原97358仍UNKNOWN，06:26保存前缀仍6,685,568 active cycles / pc12 / completions10，终态文件仍缺，无重启或清理。

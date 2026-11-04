@@ -1,0 +1,103 @@
+{
+  "scope": "ORIGINAL_P0_PC1_FP32_QRAW_M128_N1536_K1536_TERMINAL_CLASSIFICATION_NOT_NUMERICAL_ACCEPTANCE",
+  "old_scalar_schema_sha256": "75088081cf6c3425eba9af3b44c78244f8c62697b4390f992ad63e21f16c7de4",
+  "scan_predicate": "launched && !reset_required && top.io_pc==1 && completions==1 && captured114[107]==0 && captured114[108]!=0 && captured114[109]!=0",
+  "scalar_reuse_indices": {
+    "ng": 103,
+    "owner_status": 107,
+    "result_ready": 108,
+    "result_valid": 109,
+    "context": 110,
+    "result_last": 111,
+    "result_error": 112
+  },
+  "scan_words_per_accepted_result": 4096,
+  "scan_word_width": 32,
+  "physical_layout": {
+    "r": "index/256",
+    "c": "index%256",
+    "leaf_index": "c/32",
+    "leaf_column": "c%32",
+    "slice_lane": "r*32+c%32",
+    "retained_cluster": "2*r+(c%32)/16",
+    "retained_cluster_lane": "c%16",
+    "separate_physical_mac_index": "(c/32)*512+r*32+c%32"
+  },
+  "fixed_stimulus_dimensions": {
+    "M": 128,
+    "N": 1536,
+    "K": 1536,
+    "N_window": 160
+  },
+  "supported_mapping_condition": "ng<1536 && ng%160==0 && context < ceil(min(160,1536-ng)/32)",
+  "mapping": {
+    "logical_m": "c%128",
+    "logical_n": "ng+32*context+16*(c/128)+r",
+    "effective": "logical_m<128 && logical_n<1536 && logical_n<ng+min(160,1536-ng)"
+  },
+  "on_unsupported_mapping": "Classify IEEE words but mark all word-region classifications UNKNOWN. Do not throw, mask, substitute or alter the original DUT reset gate.",
+  "classification": {
+    "nonfinite": "(bits & 0x7f800000)==0x7f800000",
+    "nan": "nonfinite && (bits & 0x007fffff)!=0",
+    "positive_infinity": "bits==0x7f800000",
+    "negative_infinity": "bits==0xff800000",
+    "finite": "!nonfinite"
+  },
+  "record_proposed_prefix": "HOST_TERMINAL_FINITE_SUMMARY_V1",
+  "record_proposed_fields": [
+    "schema_sha256",
+    "sample_valid",
+    "accepted_samples",
+    "cycle",
+    "active_cycle",
+    "pc",
+    "completions",
+    "ng",
+    "context",
+    "result_last",
+    "result_error",
+    "mapping",
+    "words",
+    "finite",
+    "nan",
+    "positive_infinity",
+    "negative_infinity",
+    "effective_words",
+    "padding_words",
+    "unknown_region_words",
+    "nonfinite_effective",
+    "nonfinite_padding",
+    "nonfinite_unknown_region",
+    "first_nonfinite_index",
+    "first_nonfinite_kind",
+    "first_nonfinite_region",
+    "fault_pc",
+    "fault_at_target_pc"
+  ],
+  "empty_first_index": 4096,
+  "kind_enum": [
+    "NONE",
+    "NAN",
+    "POS_INF",
+    "NEG_INF"
+  ],
+  "region_enum": [
+    "NONE",
+    "EFFECTIVE",
+    "PADDING",
+    "UNKNOWN"
+  ],
+  "mapping_enum": [
+    "NONE",
+    "SUPPORTED",
+    "UNSUPPORTED_MAPPING"
+  ],
+  "emission": "Only once on the first fault, after the original three control lines. Emit stored last healthy pre-edge accepted terminal summary, never re-read current-fault or next context payload.",
+  "accepted_word_semantics": "Pre-edge transport acceptance only, not successful finite-gated finalValue capture; a rejected nonfinite word can be logically effective without being captured or written.",
+  "schema": "P0_PC1_TERMINAL_FINITE_SUMMARY_SCHEMA_V1",
+  "physical_flattening": "r*256+c",
+  "hardware_data_exported": false,
+  "fault_association": "fault_pc reads current original top.io_pc; fault_at_target_pc equals (fault_pc==1), not a causal assertion. Stored sample pc1 can precede a fault at another command.",
+  "canonical_empty_sample": "sample_valid=false; accepted_samples=0; all sample numeric fields=0 except first_nonfinite_index=4096; mapping/kind/region=NONE. Fault fields remain actual current PC and derived bool.",
+  "accepted_samples_domain": "uint64; no predicted96 schedule cap imposed"
+}

@@ -29,7 +29,7 @@ jobs:
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
-          fetch-depth: 3
+          fetch-depth: 4
       - name: One source-only structural graph; no DUT or artifact transfer
         timeout-minutes: 42
         env:

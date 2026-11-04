@@ -24,23 +24,29 @@ def pins_for(rows,root):
 def admission():
  mem=int(next(x.split()[1]for x in P('/proc/meminfo').read_text().splitlines()if x.startswith('MemAvailable:')))*1024
  need(mem>=13<<30 and shutil.disk_usage(REPO).free>=TREE+RESERVE)
-def remote_exclusive(launch):
+def remote_exclusive(launch,wait_seconds=90):
  token=os.environ.get('GITHUB_TOKEN');need(bool(token))
  base='https://api.github.com/repos/liyang53719/hetero_cnn_llm_aha'
  def get(path):
   req=urllib.request.Request(base+path,headers={'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'})
   with urllib.request.urlopen(req,timeout=20)as f:data=f.read(1_048_577)
   need(len(data)<=1_048_576);return json.loads(data)
- need(get('/git/ref/heads/main')['object']['sha']==launch)
- for status in ('in_progress','queued','waiting','pending','requested'):
-  x=get('/actions/runs?status='+status+'&per_page=100');need(x['total_count']<=100)
-  need(all(str(r['id'])==os.environ['GITHUB_RUN_ID'] for r in x['workflow_runs']))
+ deadline=time.monotonic()+wait_seconds
+ while True:
+  need(get('/git/ref/heads/main')['object']['sha']==launch)
+  busy=False
+  for status in ('in_progress','queued','waiting','pending','requested'):
+   x=get('/actions/runs?status='+status+'&per_page=100');need(x['total_count']<=100)
+   busy=busy or any(str(r['id'])!=os.environ['GITHUB_RUN_ID'] for r in x['workflow_runs'])
+  if not busy:return
+  need(time.monotonic()<deadline);time.sleep(3)
+
 def project(stage,r):
  return {'stage':stage,'status':'COMPLETE' if r.get('status')=='PASS_PROCESS_ONLY' else 'INCOMPLETE','elapsed_seconds':r.get('elapsed_seconds'),'peak_rss':r.get('observed_peak_rss'),'cpu_seconds':r.get('observed_cpu_seconds'),'cleanup_complete':r.get('cleanup_proof',{}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP'}
 def main():
  global phase
  phase='identity';need(os.environ.get('GITHUB_REPOSITORY')=='liyang53719/hetero_cnn_llm_aha' and os.environ.get('GITHUB_REF')=='refs/heads/main' and os.environ.get('GITHUB_EVENT_NAME')=='push' and os.environ.get('GITHUB_RUN_ATTEMPT')=='1')
- launch=git('rev-parse','HEAD');need(launch==os.environ.get('GITHUB_SHA'));source=git('rev-parse','HEAD^');need(git('rev-parse','HEAD^^')==BASE)
+ launch=git('rev-parse','HEAD');need(launch==os.environ.get('GITHUB_SHA'));source=git('rev-parse','HEAD^');need(git('merge-base',BASE,source)==BASE)
  need(git('diff','--name-only','HEAD^','HEAD')==NONCE and not git('status','--porcelain'))
  nonce=load(REPO/NONCE,4096);need(nonce=={'schema':'ONE_STRUCTURAL_GRAPH_ONLY_V1','source_commit':source,'base_commit':BASE,'attempts':1,'numerical_execution':False,'native_execution':False,'artifact_upload':False})
  own=load(D/'SOURCE_PINS.json');pins=pins_for(own['files'],REPO);pins[str(D/'SOURCE_PINS.json')]=sha(D/'SOURCE_PINS.json')

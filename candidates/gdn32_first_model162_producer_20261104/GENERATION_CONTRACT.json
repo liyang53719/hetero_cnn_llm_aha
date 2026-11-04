@@ -1,5 +1,5 @@
 {
-  "schema": "MODEL162_GENERATION_CONTRACT_V5",
+  "schema": "MODEL162_GENERATION_CONTRACT_V6",
   "scope": "SOURCE_STRUCTURAL_PRECONDITIONS_ONLY_NOT_NUMERICAL_ACCEPTANCE",
   "source_overlay_sha256": "589e1e0f522aae929d25283b180ec566683254862f9537494aec26e2bd27efe1",
   "source_count": 162,
@@ -35,5 +35,8 @@
   "nonbinary_mode_octal": "0600",
   "binary_owner_policy": "CURRENT_EFFECTIVE_UID",
   "numeric_phase_identity_policy": "VERIFIED_CONTROLLER_OWNER_EXPLICIT_CI_IDENTITY_V1",
-  "numeric_tail_source_sha256": "8d241357961d8b78ae2e79f4535696f83aae61c260a28f7193a53168639d58a3"
+  "numeric_tail_source_sha256": "8d241357961d8b78ae2e79f4535696f83aae61c260a28f7193a53168639d58a3",
+  "materializer_binding_policy": "EXACT_MODEL162_REQUIRED_SOURCE_PINS_V1",
+  "materializer_source_repo_path": "candidates/gdn32_first_model162_producer_20261104/materialize_model_binding.py",
+  "materializer_source_sha256": "b00bb3bd4237c5774a588b49b9ef7898d5ef5ece293043b268402be2e0c7f64a"
 }

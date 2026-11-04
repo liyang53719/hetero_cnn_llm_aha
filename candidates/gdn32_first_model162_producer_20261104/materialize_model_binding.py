@@ -129,8 +129,10 @@ def main():
   need(all(str(p.relative_to(R))in tracked for p in profile_paths),'tracked profiled host source closure')
   paths+=list(map(str,profile_paths))
  if selection['name']=='gdn-chunk32-abort-v2':
-  from candidate_generation_gate import UPSTREAM_DIR,LEGACY_DIR,MODEL162_CATALOG_REL
+  from candidate_generation_gate import UPSTREAM_DIR,LEGACY_DIR,MODEL162_CATALOG_REL,MODEL162_NUMERIC_REL
   paths.append(str(R/MODEL162_CATALOG_REL))
+  paths.append(str(R/MODEL162_NUMERIC_REL))
+  need(MODEL162_NUMERIC_REL in tracked,'tracked actual162 numeric runner source')
   paths += [str(R/UPSTREAM_DIR/n)for n in ('GENERATION_CONTRACT.json','MODEL_SOURCE_OVERLAY.json')]
   paths.append(str(R/'candidates/moe_router_score_observation_20261030/driver/host_axi_driver_non_dpi.cpp'))
   paths += [str(R/LEGACY_DIR/n)for n in ('candidate_generation_gate.py','MODEL_SOURCE_OVERLAY.json','GENERATION_CONTRACT.json','MODEL_CANDIDATE_PRECONDITIONS.json')]

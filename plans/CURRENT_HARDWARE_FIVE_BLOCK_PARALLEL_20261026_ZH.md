@@ -1228,3 +1228,17 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 固定4096 Matrix MAC、共享32-lane Vector/Element通路、162Scala、122ports、driver/O1、五块队列以及全部资源/生命周期门不变。control60只约束冻结后首 numeric native 准入；后续 consumer 独立30秒预检和完整剩余tail门仍保留。最终 consumer 对真实大产物的完整重复读取预检耗时尚未实测，不以小fixture声称足够，也不延长或重冻W。当前完整数值0/5。
 
 后续仅在源发布、普通CI及远端精确闭包核验后，按授权激活一次新身份受控运行；本节源码测试范围不包括新的 native 执行，实际激活与运行以独立远端证据为准，不重跑旧作业。
+
+## TEMP retry4 bootstrap-only 失败与 retry5 binding 枚举窄修复（SOURCE_ONLY，待发布）
+
+原 run41854597851/job126659675145 于15:11:28失败，source267967d62e8d2f08c2c165bcab7a96b94e2d5b68、launch/current main2c7a30bdaed48dc09bf3d18310181d3819162ee9保留。8个bootstrap阶段包括binding均native_exit0；随后generic ValueError，未进入frontend原模型构建阶段、numeric tail或DUT。原日志没有该拒绝内部原因，唯一实际首因未观测。
+
+已独立复现确定源码不兼容：V5 gate要求numeric_tail跨目录源pin，实际materializer仅枚举原顶层/roles，170项required只覆盖169。此前synthetic回放用全repo/catalog灌pins，掩盖真实binding生产者漏项；其通过只能支持当时声明的模拟下游连接范围，不能证明实际materializer闭包。
+
+本次直接调用实际materialize_model_binding.main，保留真实paths/pins构造与JSON写盘，再送未替代的actual generation gate。旧source写出后精确拒绝，窄修复追加受检numeric_tail路径并要求tracked后完整required覆盖。外部Git/JDK/JAR/Verilator/iDMA/matrix观察使用小模拟，不是工具资格或真实native。最终V6重封source实际writer写出841 pins，完整171项required（新增绑定materializer自身）全部覆盖；按原bootstrap第286–295行AST包装后845 pins。实际one_job.main已在normal/-O均到compile_model_sources首监督调用截停，未运行编译；bootstrap包装并非执行其下载/native阶段，工具材料、外部Git与资源观察模拟。不用手工补source pin作正例。
+
+V6绑定实际materializer源码role/hash，重封相关generation/implementation/consumer/catalog身份；硬件162源、4096 Matrix MAC、共享32-lane Vector/Element通路、122ports、driver与全部五块队列定义不变。现有内存/磁盘门、21000秒原clock、10470尾、census30/control60、build5537最低分配与DUT3000连续窗口不变，无延长W或重启。
+
+新retry5 listener仅dormant源码与独立精确nonce身份，不改旧listener/nonce，不包含激活文件。本地只作KB级回放和约MB级源overlay，未复制大材料fixture、未native、未发布。完整数值仍0/5。后续经源发布、普通CI、远端精确闭包及独立授权核验后决定单次激活。
+
+最终小测试另含实际writer文档副本删除/改坏numeric_tail与materializer pin的四负例，均由actual gate拒绝。retry5 listener123项normal/-O通过，仅namespace/nonce与GEN/CAT身份更新，两个安全parser字节不变；未复建大fixture。所有通过均限SOURCE_ONLY与明确模拟的Python准入边界，不是当前GitHub native或数值验收。

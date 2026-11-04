@@ -1,0 +1,49 @@
+{
+  "status": "DETERMINISTIC_SOURCE_PIN_CONFLICT",
+  "manifest_sha256": "7c8d4bd1f7a0a080f06161e70361a3c3676ede483703a90986fe9dfcf091d85b",
+  "legacy_source_count": 155,
+  "mismatches": [
+    {
+      "role": "LEGACY155_SOURCE",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeRmsNormOwnerV3.scala",
+      "expected_sha256": "d366a4d3165ab189366f1c9ff8c3f9c596940e15e46c68a0b7c9000931b43df8",
+      "actual_sha256": "e8ad079d7145efaa5adc9647ce5208cce2cb5073137f4b9d7bba7ed208d73c77",
+      "expected_bytes": 17137,
+      "actual_bytes": 18685
+    },
+    {
+      "role": "LEGACY155_SOURCE",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/HostRuntimePrefixLeaseWiringV8.scala",
+      "expected_sha256": "2062059293c4928e1983c3790e4a817d2d12705d19826f5ae05d60e9c22f20d3",
+      "actual_sha256": "b5589d803df8944c1d5d5cf108ef8ff4f3a4cc5a07f8e138a38bfb38508ff37b",
+      "expected_bytes": 79145,
+      "actual_bytes": 81242
+    },
+    {
+      "role": "LEGACY155_SOURCE",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/Qwen2Block.scala",
+      "expected_sha256": "05248639be78683df68230ad1c4da3fe0449775d70e2fc7c3ff4aef0088567f9",
+      "actual_sha256": "5372bcf0efcd7f5a78c848c5de859e41d914dc9b0ac95e3a0b13314391ae4465",
+      "expected_bytes": 63652,
+      "actual_bytes": 66724
+    },
+    {
+      "role": "LEGACY155_SOURCE",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeSharedArithmeticAdapterV5.scala",
+      "expected_sha256": "58d9fa77f6e29d0ad941573ede551537789626421e12425de30ac10609dc97d6",
+      "actual_sha256": "d2c24dc46c4f16dd0645dc52d416c3541f9582e4a18443dd9cfd14a969b18635",
+      "expected_bytes": 23674,
+      "actual_bytes": 25784
+    },
+    {
+      "role": "LEGACY155_SOURCE",
+      "repo_path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "expected_sha256": "7ec87dc6e9e8520da7dbb0e4f07143497231c06de9970ced0915a5444c0c0cdc",
+      "actual_sha256": "34352a90a3f90b704eae69b3f556acace47f91de067ddd8c8a57af4894349a76",
+      "expected_bytes": 6876,
+      "actual_bytes": 8015
+    }
+  ],
+  "native_process_started": false,
+  "remote_run_observed_detail": "Not available from this local audit"
+}

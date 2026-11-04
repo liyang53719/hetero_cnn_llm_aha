@@ -20,6 +20,14 @@ class Tests(unittest.TestCase):
  def test_reject_nonce(self):
   a=self.good();a[1]['nonce']='different'
   with self.assertRaises(ValueError):v.validate(*a)
+ def test_retry1_rejects_historical_once_nonce(self):
+  a=self.good();a[1]['nonce']='gdn32_compile_only_20261104_once'
+  with self.assertRaises(ValueError):v.validate(*a)
+ def test_retry1_rejects_historical_once_path(self):
+  a=self.good();a[5]='A\tci_launch/gdn32_compile_only_20261104_once.json\n'
+  with self.assertRaises(ValueError):v.validate(*a)
+ def test_workflow_only_new_nonce_path(self):
+  self.assertIn('paths: [ci_launch/gdn32_compile_only_20261104_retry1.json]',W);self.assertNotIn('paths: [ci_launch/gdn32_compile_only_20261104_once.json]',W);self.assertIn("identity['nonce']=='gdn32_compile_only_20261104_retry1'",S)
  def test_reject_extra_change(self):
   a=self.good();a[5]+='M\t'+v.WORKFLOW+'\n'
   with self.assertRaises(ValueError):v.validate(*a)

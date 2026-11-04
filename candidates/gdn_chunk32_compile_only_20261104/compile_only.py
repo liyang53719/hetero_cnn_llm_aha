@@ -11,7 +11,7 @@ def main():
  p=argparse.ArgumentParser();p.add_argument('--repo',required=True,type=P);p.add_argument('--candidate',required=True,type=P);p.add_argument('--output',required=True,type=P);p.add_argument('--java',required=True,type=P);p.add_argument('--identity',required=True,type=P);a=p.parse_args()
  repo=a.repo.resolve();candidate=a.candidate.resolve();output=a.output.resolve();java=a.java.resolve()
  identity=json.loads(a.identity.read_text())
- need(identity['schema']=='GDN32_COMPILE_JOB_IDENTITY_V1' and identity['nonce']=='gdn32_compile_only_20261104_once','exact launch identity')
+ need(identity['schema']=='GDN32_COMPILE_JOB_IDENTITY_V1' and identity['nonce']=='gdn32_compile_only_20261104_retry1','exact launch identity')
  need(str(identity['run_id'])==os.environ.get('GITHUB_RUN_ID') and identity['launch_commit']==os.environ.get('GITHUB_SHA') and os.environ.get('GITHUB_RUN_ATTEMPT')=='1','actual first owning job')
  need(subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()==identity['source_commit'],'exact reviewed source checkout')
  need(sha(repo/'.github/workflows/gdn32-compile-only.yml')==identity['workflow_sha256'],'workflow identity preserved in source checkout')
@@ -25,13 +25,20 @@ def main():
  need(len(sources)==162 and sources.count(selection['helper'])==1,'fresh unique162 including actual enabled helper')
  need(not selection['numeric_execution_authorized'] and selection['generation_identity']==identity['generation_sha256'],'new exact compile-only generation')
  sys.path.insert(0,str(HERE/'supervisor'));import supervise_multiroot
- original=repo/'candidates/fresh_original_top_recovery_20261028';restore=original/'restore_inputs.py';manifest=original/'SOURCE_AND_TOOLCHAIN_PINS.json';m=json.loads(manifest.read_text())
+ original=repo/'candidates/fresh_original_top_recovery_20261028';restore=HERE/'restore_compile_inputs.py';manifest=original/'SOURCE_AND_TOOLCHAIN_PINS.json';m=json.loads(manifest.read_text())
  env={k:os.environ[k] for k in ('GITHUB_RUN_ID','GITHUB_SHA','GITHUB_RUN_ATTEMPT','ImageVersion','ImageOS') if k in os.environ}
  env.update({'PATH':'/usr/bin:/bin','LANG':'C.UTF-8','LC_ALL':'C.UTF-8','PYTHONDONTWRITEBYTECODE':'1'})
  caps=dict(wall_seconds=1200,cleanup_seconds=30,per_process_cpu_seconds=900,cpu_seconds=900,rss_bytes=2304<<20,per_process_as_bytes=8<<30,file_bytes=32<<20,log_bytes=8<<20,raw_log_bytes=8<<20,tree_bytes=160<<20,watch_tree_bytes=512<<20,extra_watch_roots=[str(original/'cache')],max_entries=20000,min_free_disk_bytes=2<<30,min_available_memory_bytes=3<<30,jdk_aliases=[],supervisor_rss_bytes=96<<20,combined_cpu_seconds=960)
  resource_gate={'min_available_memory':3<<30,'min_disk_free':2<<30}
  commonpins={str(a.identity.resolve()):sha(a.identity),str(manifest):sha(manifest),str(restore):sha(restore),str(pinfile):sha(pinfile)}
  for rel in toolpins['local']:commonpins[str(HERE/rel)]=sha(HERE/rel)
+ from safe_compile_summary import summarize_stage
+ from safe_pin_diagnostics import pin_failures,roles as pin_roles
+ known_host_pins=set()
+ def stage_summary(phase,receipt,log,source_map,stage_pins):
+  result=summarize_stage(phase,receipt,log,source_map)
+  result['pin_failures']=pin_failures(receipt,stage_pins,pin_roles(stage_pins,repo,java.parent.parent,known_host_pins))
+  return result
  # Same production provenance path: exact Eclipse Adoptium21.0.13+9,
  # existing fresh-host contract permits a newly inventoried runner image.
  # This trusts GitHub's official hosted image supply chain, not a preapproved
@@ -47,7 +54,7 @@ def main():
  jdk=supervise_multiroot.execute([sys.executable,'-B',str(inventory_script),'--java-home',str(java.parent.parent),'--output',str(inventory_path),'--fresh-host-contract',str(contract_path),'--fresh-host-contract-sha256',sha(contract_path)],str(output/'jdk'),str(output/'owner.lock'),pins=jdkpins,caps=jdkcaps,env=env,resource_gate=resource_gate)
  (output/'JDK_RECEIPT.json').write_text(json.dumps(jdk,indent=2)+'\n');
  from safe_compile_summary import summarize_stage
- if jdk['status']!='PASS_PROCESS_ONLY':print(json.dumps(summarize_stage('JDK_INVENTORY',jdk,output/'jdk/frontend.log.gz',{}),sort_keys=True))
+ if jdk['status']!='PASS_PROCESS_ONLY':print(json.dumps(stage_summary('JDK_INVENTORY',jdk,output/'jdk/frontend.log.gz',{},jdkpins),sort_keys=True))
  need(jdk['status']=='PASS_PROCESS_ONLY','runner JDK inventory failed')
  inventory=json.loads(inventory_path.read_text());need(inventory['status']=='NEW_TOOLCHAIN_INVENTORY_ONLY_PENDING_FRESH_QUALIFICATION' and inventory['old_pass_transfer'] is False,'new JDK provenance only')
  aliases=[];home=java.parent.parent
@@ -70,11 +77,11 @@ def main():
  host_receipt=supervise_multiroot.execute([sys.executable,'-B',str(host_script),'--contract',str(contract_path),'--contract-sha256',sha(contract_path),'--java-home',str(home),'--output',str(host_path)],str(output/'host'),str(output/'owner.lock'),pins=hostpins,caps=hostcaps,env=env,resource_gate=resource_gate)
  (output/'HOST_RECEIPT.json').write_text(json.dumps(host_receipt,indent=2)+'\n')
  from safe_compile_summary import summarize_stage
- if host_receipt['status']!='PASS_PROCESS_ONLY':print(json.dumps(summarize_stage('HOST_INVENTORY',host_receipt,output/'host/frontend.log.gz',{}),sort_keys=True))
+ if host_receipt['status']!='PASS_PROCESS_ONLY':print(json.dumps(stage_summary('HOST_INVENTORY',host_receipt,output/'host/frontend.log.gz',{},hostpins),sort_keys=True))
  need(host_receipt['status']=='PASS_PROCESS_ONLY','actual host inventory failed')
  host=json.loads(host_path.read_text());need(host['schema']=='BOUNDED_FRESH_HOST_IDENTITY_V1' and host['contract']==contract and host['old_pass_transfer'] is False,'new host identity only')
  for path,h in host['pins'].items():need(sha(path)==h,'fresh host file drift')
- commonpins.update(host['pins']);commonpins[str(host_path)]=sha(host_path)
+ known_host_pins.update(host['pins']);commonpins.update(host['pins']);commonpins[str(host_path)]=sha(host_path)
  host_aliases=host['aliases'];segments={r['path']:r for r in aliases}
  for raw,target in host_aliases.items():
   need(str(P(raw).resolve(strict=True))==target and target in host['pins'],'canonical host alias')
@@ -90,23 +97,31 @@ def main():
   check_host_aliases()
   try:return supervise_multiroot.execute(*args,**kwargs)
   finally:check_host_aliases()
- # Reuse repository's exact official Maven downloader; do NOT run the compiler
- # command it prints. All download bytes are hash/size checked there and below.
- fetchpins=dict(commonpins)
- for row in m['sources']:fetchpins[str(original/row['path'])]=row['sha256']
+ # Reuse unchanged pinned model-aware JAR inventory/acquire implementation,
+ # gated by the exact selected162 source closure, not obsolete original155.
+ from restore_compile_inputs import source_closure
+ source_pins,checked_selection,_=source_closure(repo,candidate)
+ need(checked_selection==selection,'same exact selected162 before fetch')
+ def merge_pins(left,right):
+  result=dict(left)
+  for path,digest in right.items():
+   need(path not in result or result[path]==digest,'conflicting immutable pin');result[path]=digest
+  return result
+ fetchpins=merge_pins(commonpins,source_pins)
  fetchcaps=dict(caps,wall_seconds=600,per_process_cpu_seconds=60,cpu_seconds=60,combined_cpu_seconds=90,rss_bytes=256<<20,per_process_as_bytes=2<<30)
- fetch=execute_qualified([sys.executable,'-B',str(restore),'--download-jars','--java',str(java)],str(output/'fetch'),str(output/'owner.lock'),pins=fetchpins,caps=fetchcaps,env=env,resource_gate=resource_gate)
+ fetch=execute_qualified([sys.executable,'-B',str(restore),'--repo',str(repo),'--candidate',str(candidate),'--download-jars'],str(output/'fetch'),str(output/'owner.lock'),pins=fetchpins,caps=fetchcaps,env=env,resource_gate=resource_gate)
  (output/'FETCH_RECEIPT.json').write_text(json.dumps(fetch,indent=2)+'\n')
- if fetch['status']!='PASS_PROCESS_ONLY':print(json.dumps(summarize_stage('DEPENDENCIES',fetch,output/'fetch/frontend.log.gz',{}),sort_keys=True))
+ if fetch['status']!='PASS_PROCESS_ONLY':print(json.dumps(stage_summary('DEPENDENCIES',fetch,output/'fetch/frontend.log.gz',{},fetchpins),sort_keys=True))
  need(fetch['status']=='PASS_PROCESS_ONLY','dependency stage failed')
- jars=[];plugin=None;pins=dict(commonpins)
+ jars=[];plugin=None;pins=merge_pins(commonpins,source_pins)
  for row in m['jars']:
   q=original/'cache'/row['maven_path'];need(q.stat().st_size==row['bytes'] and sha(q)==row['sha256'],'jar integrity');pins[str(q)]=row['sha256']
   if row['role']=='plugin':need(plugin is None,'one official plugin');plugin=str(q)
   else:jars.append(str(q))
  need(plugin is not None,'official plugin required');cp=':'.join(jars)
- for s in sources:pins[s]=sha(s)
- for name in ('select_sources.py','GENERATION_CONTRACT.json','MODEL_SOURCE_OVERLAY.json','PUBLICATION_MANIFEST.json'):pins[str(candidate/name)]=sha(candidate/name)
+ # Preserve the reviewed source/metadata digests from source_closure. Never
+ # overwrite them with observations between fetch and compile.
+ for path,digest in source_pins.items():need(sha(path)==digest,'cross-phase source pin drift')
  run=output/'compile';argv=[str(java),'-XX:-UsePerfData','-XX:ActiveProcessorCount=1','-XX:+UseSerialGC','-Xms32m','-Xmx1536m','-XX:ReservedCodeCacheSize=64m','-XX:InitialCodeCacheSize=2m','-XX:CompressedClassSpaceSize=64m','-XX:MaxMetaspaceSize=192m','-Xss2m',f'-Djava.io.tmpdir={run}/tmp','-cp',cp,'scala.tools.nsc.Main','-classpath',cp,'-Xplugin:'+plugin,'-language:reflectiveCalls','-d','.',*sources]
  # Both classpaths contain ONLY official pinned JARs. No old project classes,
  # no earlier candidate leaf classes, no '.', no source-generated class cache.
@@ -119,7 +134,7 @@ def main():
  # Safe stdout contains typed bounded numbers/hashes only, never raw logs,
  # compiler input text, environment, credentials, paths, FIRRTL or binaries.
  summary=dict(schema='GDN32_COMPILE_ONLY_SUMMARY_V1',status=result['status'],native_exit=result['native_exit'],generation_identity=selection['generation_identity'],source_count=162,fresh_class_count=len(classes),fresh_class_bytes=sum(p.stat().st_size for p in classes),elapsed_seconds=result['elapsed_seconds'],observed_peak_rss=result['observed_peak_rss'],elaboration_run=False,dut_run=False,numerical_pass=False)
- summary['diagnostics']=summarize_stage('SCALA_COMPILE',result,run/'frontend.log.gz',{p:str(P(p).relative_to(repo)) for p in sources})
+ summary['diagnostics']=stage_summary('SCALA_COMPILE',result,run/'frontend.log.gz',{p:str(P(p).relative_to(repo)) for p in sources},pins)
  print(json.dumps(summary,sort_keys=True))
  need(result['status']=='PASS_PROCESS_ONLY' and classes,'fresh compile failed')
 if __name__=='__main__':

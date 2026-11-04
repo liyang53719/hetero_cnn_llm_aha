@@ -1106,3 +1106,10 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 协议范围：Execute32在取消ACK或真实匹配返回闭合后可error terminal；其他leaf、缺失返回、wrong-tag与Guard身份隔离仍不保证有限终态。不是任意外设故障下bounded完成，更不是未经批准global-reset豁免。整合纯测试23项、abort19项正常/-O通过，独审仅源级；当前未Scala编译/Top展开/动态FSM/SV/RTL/fullprefill数值验证。
 - 新独立CI只做全162源fresh Scala编译，classpath仅固定官方107 JAR，无旧项目classes；真实host/JDK/Python/ELF依赖inventory与别名pins、流式hash、有限诊断摘要。源码提交休眠，核验后另行唯一nonce激活；不上传生成binary、缓存或artifact，不运行Top展开/DUT。生产FULL准入不因compile-only放宽。
 - 本地新compile fresh完整生命周期预算仍缺267420500B（32MiB输出；零输出亦缺233866068B），故未运行。原session97358 UNKNOWN与完整reserve保留，未清理迁移。五块M128完整模型/最终RTL仍0/5；旧参考数值结果不变，原fullprefill/利用率未添新PASS。
+
+## 2026-11-04 05:13 UTC：FAIL/临时待验证，原compile-only依赖门定位与修复
+
+- 实际source9068cd9/activation2eb5c47，run41776506114、job126398020850已failure。nonce与source checkout通过；DEPENDENCIES报告PIN_DRIFT、native_exit=null、log unavailable，未启动fetch child或Scala compiler。普通guard41776506092 success不能冒编译通过。原job日志与失败归因保留，不重复旧nonce/旧run。
+- 已复现具体错误：CI取原155源manifest的五项过时源码pin，实际合法model159已覆盖RmsNorm、PrefixLease、Qwen2Block、Adapter、Protocol；source9068远端五处Git blob已核对。旧restore入口自身也重复验证旧155目录，因此不能仅覆盖预期hash或删除保护。
+- 修复保留原model159完整source gate并独立核新162，172唯一Scala路径固定digest贯穿fetch/compile；实际编译仍162，官方107 JAR不变，原155manifest不修改。移除观察hash覆盖固定pin，增加有限pin角色/相对标签/expected-actual与JAR原因摘要，含null HTTP诊断回归。纯测试27CI+14依赖normal/-O通过，尚无修复后native结果。
+- 另设retry1路径/nonce，源码先休眠发布，核CI后仅新增一份launch JSON；旧once文件保留不改删。仅全162 fresh Scala compile，无Top展开/DUT/产物上传，硬件generation2b2f02d698f16a57ba696c52c4669a1226a68c5378efdc8ebe392cc1b9098f52不变。五块M128完整模型/最终RTL仍0/5，原97358 UNKNOWN与完整生命周期资源保留。

@@ -1,0 +1,29 @@
+# run41776506114依赖阶段PIN_DRIFT：只读诊断与源码修复候选
+
+## 原运行事实
+
+run41776506114/job126398020850，source9068cd9a54026fc44176a66d22219f60c39488b8，activation2eb5c47956d694574ed4b21444767d2082cbc5f8。nonce/source checkout已通过，DEPENDENCIES阶段native_exit=null、log UNAVAILABLE、PIN_DRIFT，scalac未启动。没有重新CI、native编译、下载依赖、改旧manifest或发布。
+
+## 已复现并远端核验的确定冲突
+
+旧compile脚本把最初155-source SOURCE_AND_TOOLCHAIN_PINS.sources放进fetchpins。实际兼容/model159已经合法覆盖同目录5项：GdnRuntimeRmsNormOwnerV3、HostRuntimePrefixLeaseWiringV8、Qwen2Block、UnifiedMoeSharedArithmeticAdapterV5、UnifiedMoeSharedArithmeticProtocolV5。旧hash与当前实际字节不同，监督器在创建run目录/启动child之前必然拒绝，因此与log UNAVAILABLE/native_exit null一致。原restore_inputs.py本身也会再次校验过时155-source数组，即使只修外层pins也仍失败。
+
+对source9068上述五文件各GET一次，Git blob SHA与本地实际字节完全匹配，详细expected/actual SHA256与bytes见LEGACY155_CONFLICT_REGRESSION.json，远端核验见REMOTE_FIVE_FILES_VERIFIED.json。不能从旧摘要证明运行中首个被拒绝的精确path或排除更早host drift；但这五个冲突是实际现存、必然阻止原入口的确定缺陷。host/JDK pin没有因此放宽，初始化/alias流程仍保留。
+
+## 修复而不是绕过
+
+原155 manifest逐字节不动。新增小wrapper restore_compile_inputs.py首先使用独立获审162 selector/generation验证实际候选，再调用固定hash的原restore_model_inputs.source_inputs('legacy')与run(...,'legacy')完整model159门禁/官方107JAR下载路径。没有修改旧generation白名单，没有伪造source_count，也不以新的观察hash替换旧pin。
+
+fetch和compile两阶段共享完整不可变closure：原manifest、model-aware恢复脚本、原generation gate、model159 GENERATION_CONTRACT与MODEL_SOURCE_OVERLAY、fixed original overlay、实际162 selector/contract/overlay/publication manifest，以及两份source列表的union。159与162的union有172个唯一repo源码路径，无同路径hash冲突；重复pin只可相等，不同即拒绝。编译argv依旧只有真实162，不编旧helper或旧覆盖文件。selector读取的legacy base overlay也入pins，防止阶段间遗漏。
+
+## 安全诊断
+
+监督器pin gate不变。发生其确切input-pin mismatch/missing等错误时，新增摘要最多8项：固定role、已知repo/JDK相对label、expected/actual SHA256、bytes、固定error kind。任意错误文本、未知path、宿主绝对路径、内容及secret不输出；host路径仅hash ID。摘要记录本次失败后的观察，不把它冒充发生瞬间证据，也不允许自动接受新hash。
+
+wrapper自身输出的有限source/JAR status、固定reason、jar_index、计数与HTTP状态现在可从有界gzip扫描中提取到安全摘要。compiler位置/typed类别与无二进制/raw log上传规则不变。
+
+## 验证和下一步
+
+新增纯测试覆盖实际五冲突、原manifest不变、model159+162完整closure与172 union、helper和cancel唯一、原model完整门禁、verify-only无下载、跨fetch/compile pin闭包、安全hash摘要与JAR failure reason。所有本地工作仅小文件/metadata测试，不执行依赖获取或native。
+
+这是源码候选，不重跑原nonce，不声称故障已在CI修复。原硬件generation不变；只有父级可独审、发布，并为下一次运行安排新的唯一激活契约。当前旧once nonce已使用，不能当作重试授权。

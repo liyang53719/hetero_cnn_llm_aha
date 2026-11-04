@@ -59,7 +59,11 @@ def require_cleanup(r,marker,run_dir=None,supervisor_path=None):
 def weights(b,i):
  model=('qwen2_1p5b','qwen3_5_0p8b','qwen3_5_0p8b','qwen3_5_35b_a3b','qwen3_5_35b_a3b')[i]
  layer=3 if i in (2,4) else 0
- need(len(b['weights'])==70,'one complete shared70 inventory')
+ if not profile_policy.is_selected(b):need(len(b['weights'])==70,'one complete shared70 inventory')
+ else:
+  profile_policy.require_profile(b,i)
+  helper=module('selected_tail_weights',D.parent/'runtime/selected_acquisition.py',b['pins'])
+  helper.validate_inventory(b,b['weights'])
  rows=[r for r in b['weights']if r['model']==model and f'.layers.{layer}.'in r['name']]
  need(len(rows)==(12,14,11,18,15)[i],'full block/all experts')
  for r in rows:
@@ -71,6 +75,7 @@ def retained_context(b):
  row=b['controller_binding'];path=material.checked(row)
  need(path==path.resolve()and all(not p.is_symlink()for p in(path,*path.parents))and path.stat().st_size<=1<<20,'bounded canonical original invocation binding')
  controller=json.loads(path.read_text())
+ profile_policy.require_same(b,controller)
  need(b['pins']==dict(controller['pins'],**{str(path):row['sha256']}),'tail pins are exact controller closure plus its binding')
  for key in ('identity','executor_identity','repo','artifact_manifest','builder_handoff','cloud_budget','execution_approval','retained_materials'):
   need(controller[key]==b[key],'retained tail/controller exact '+key)
@@ -148,8 +153,9 @@ def owned_environment(base,root):
 def execution_profiles(b,admission):
  selected=profile_policy.eligible(b)
  if admission.get('budget_version')==3:
-  need(selected==list(range(5)),'V3 retains all five registered hardware profiles')
-  return execution_mode.ready_queue_profiles(admission)
+  ready=execution_mode.ready_queue_profiles(admission)
+  need(selected==ready if profile_policy.is_selected(b)else selected==list(range(5)),'V3 exact preparation selection; registered hardware remains all five')
+  return ready
  if admission['mode']==execution_mode.FIRST_FAULT:
   need(selected==list(range(5))and admission.get('diagnostic_profiles')==[0]and type(admission['diagnostic_profiles'][0])is int,'registered hardware unchanged; only integer P0 selected')
   return [0]
@@ -224,7 +230,8 @@ def run(b,binding_path,binding_sha):
  sys.path.insert(0,b['supervisor_dir']);import supervise_multiroot as supervisor
  owner=module('admitted_runtime_owner',P(b['owner_module']),pins)
  owner_doc,_=owner.verify(b['owner_manifest']['path'],b['owner_manifest']['sha256'],b['owner_root'])
- need(owner_doc['schema']in(('SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3','IMPORTED_THREE_RUNTIME_OWNER_CLOUD_V1')if cloud is not None else('SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3',))and owner_doc['identity']==(cloud if cloud is not None else dict(run_id=b['run_id'],source_commit=b['source_commit'],launch_commit=b['launch_commit'])),'fresh CI owner exact same run/source/launch, never historical V2 receipt')
+ owner_schemas=(('SHARED_SELECTED_RUNTIME_OWNER_FRESH_JOB_V1','IMPORTED_SELECTED_RUNTIME_OWNER_CLOUD_V1')if profile_policy.is_selected(b)and cloud is not None else(('SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3','IMPORTED_THREE_RUNTIME_OWNER_CLOUD_V1')if cloud is not None else('SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3',)))
+ need(owner_doc['schema']in owner_schemas and owner_doc['identity']==(cloud if cloud is not None else dict(run_id=b['run_id'],source_commit=b['source_commit'],launch_commit=b['launch_commit'])),'fresh CI owner exact same run/source/launch, never historical V2 receipt')
  profile_policy.require_same(b,owner_doc)
  reference_reuse=None;reference_reuse_context=None;reference_reuse_source_pin=None
  if b.get('reference_data_reuse')is not None:

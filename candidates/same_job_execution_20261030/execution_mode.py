@@ -167,6 +167,9 @@ def first_fault_admission(binding):
 def admit(binding):
  mode=binding.get('execution_mode',CALIBRATION)
  need(mode in (CALIBRATION,FULL,STAGE,FIRST_FAULT),'unknown execution mode')
+ # Selected dependency preparation is not the older DEFER/calibration mode.
+ if type(binding.get('execution_policy'))is dict and binding['execution_policy'].get('mode')=='FULL_READY_SELECTED_DEPENDENCIES_V1':
+  need(mode==FULL and binding.get('execution_context')=='CLOUD_EXECUTOR_V1','selected dependencies require ordinary cloud FULL only')
  request=binding.get('full_block_budget')
  if mode==FIRST_FAULT:
   path=D/'cloud_budget.py';need(binding['pins'].get(str(path))==sha(path),'first fault cloud verifier source pin')
@@ -185,7 +188,9 @@ def admit(binding):
   need(type(windows)is dict and set(windows)==set(IDS)and all(type(v)is int and 0<v<=20000 for v in windows.values()),'five explicit calibration windows')
   return dict(mode=mode,profile_seconds=dict(windows),profile_max_active_cycles=None,reviewed_budget_sha256=None)
  policy_spec=importlib.util.spec_from_file_location('full_mode_profile_policy',D/'profile_policy.py');policy=importlib.util.module_from_spec(policy_spec);policy_spec.loader.exec_module(policy)
- need(policy.checked(binding)['mode']==FULL_POLICY,'full mode requires all five original-host profiles')
+ selected_preparation=policy.is_selected(binding)
+ need(policy.checked(binding)['mode']==FULL_POLICY or (selected_preparation and binding.get('execution_context')=='CLOUD_EXECUTOR_V1'),'full mode requires all five original-host profiles or explicit cloud selected dependencies')
+ if selected_preparation:policy.require_source_pin(binding['pins'])
  expected_full=ACCEPTED_FULL_ADMISSION_SHA256
  if binding.get('execution_context')=='CLOUD_EXECUTOR_V1':
   cloud_path=D/'cloud_budget.py'
@@ -197,6 +202,7 @@ def admit(binding):
  path=pin(request,65536)
  need(request['sha256']==expected_full,'full budget must equal independently reviewed admission')
  doc=json.loads(path.read_text())
+ if selected_preparation:policy.require_selected_queue(binding,doc)
  candidate=False
  if binding.get('artifact_manifest') is not None:
   artifact=json.loads(pin(binding['artifact_manifest'],65536).read_text())
@@ -268,6 +274,10 @@ def full_v3_selection(doc):
  return selected
 
 def full_v3_document(binding,doc,request,cloud):
+ policy_path=D/'profile_policy.py';spec=importlib.util.spec_from_file_location('full_v3_dependency_policy',policy_path);policy=importlib.util.module_from_spec(spec);spec.loader.exec_module(policy)
+ if policy.is_selected(binding):
+  policy.require_source_pin(binding['pins']);policy.require_selected_queue(binding,doc)
+  need(cloud.get('execution_policy')==policy.checked(binding),'V3 dependencies independently approved in cloud budget')
  selected=full_v3_selection(doc);rows={};blocked={}
  for i in IDS:
   row=doc['profiles'][i]

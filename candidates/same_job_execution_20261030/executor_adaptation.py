@@ -124,6 +124,28 @@ ALLOWED_PATHS = frozenset(PREFIX + x for x in (
        'plans/CURRENT_HARDWARE_FIVE_BLOCK_PARALLEL_20261026_ZH.md',
        'candidates/same_job_materialization_20261029/REPO_DEPENDENCIES.json',
        'candidates/same_job_materialization_20261029/CONNECTION_SOURCE_PINS.json'}
+# Explicit selected-FULL preparation host paths. The external adaptation still
+# has to enumerate and hash every actual change; this is not blanket runtime
+# source permission. Original installers, reference math and stimulus are absent.
+SELECTED_PREPARATION_PATHS = frozenset(PREFIX + x for x in (
+    'profile_policy.py', 'test_selected_full_preparation.py',
+    'selected_host_preservation.py', 'test_selected_host_preservation.py',
+    'acceptance_tests/fixtures/selected_host/controller_cloud_flow.py.txt',
+    'acceptance_tests/fixtures/selected_host/numeric_numeric_tail.py.txt',
+    'acceptance_tests/fixtures/selected_host/reviewed_delta.json',
+    'SELECTED_FULL_PREPARATION.md',
+    'runtime/acquire_archives.py', 'runtime/reuse_archives.py',
+    'runtime/runtime_dependencies.py', 'runtime/owner_fresh.py',
+    'runtime/runtime_phase.py', 'runtime/runtime_reuse_phase.py',
+    'runtime/bind_phase.py', 'runtime/selected_acquisition.py',
+    'runtime/selected_reference_job.py', 'runtime/selected_retained_materials.py',
+    'runtime/selected_runtime_preservation.py',
+    'runtime/fixtures/install_job_pre_selection.py.txt',
+    'runtime/fixtures/runtime_reuse_pre_selection.py.txt',
+    'runtime/test_reuse_join_mock.py', 'runtime/test_selected_runtime_dependencies.py',
+    'runtime/test_selected_materials.py', 'runtime/SELECTED_DEPENDENCY_CONTRACT.md',
+))
+ALLOWED_PATHS = ALLOWED_PATHS | SELECTED_PREPARATION_PATHS
 BUILDER_FIELDS = {'run_id', 'artifact_name', 'source_commit', 'launch_commit',
                   'launch_manifest_path', 'launch_manifest_blob_sha'}
 

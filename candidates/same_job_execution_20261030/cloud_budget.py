@@ -95,6 +95,23 @@ def fullprefill_disk_snapshot(plan,snapshot,tree_cap,now=None):
  need(type(snapshot.get('free_bytes'))is int and snapshot['free_bytes']-(tree_cap-snapshot['bytes'])>=8<<30,'finite disk full future growth plus original8GiB floor')
  return dict(protected_existing_bytes=plan['protected_existing_bytes'],selected_log_bytes=plan['selected_log_bytes'],remaining_output_bytes=remaining,aggregate_tree_cap_bytes=tree_cap,initial_census_sha256=plan['initial_census']['sha256'])
 
+def preparation_policy(b,d):
+ """Selection is data inside the externally approved budget, never CPU inference.
+ Called only after approval -> budget hash binding. The policy does not itself
+ authorize any invocation; all ordinary candidate/full-budget gates still run.
+ """
+ path=D/'profile_policy.py'
+ spec=importlib.util.spec_from_file_location('cloud_preparation_policy',path);policy=importlib.util.module_from_spec(spec);spec.loader.exec_module(policy)
+ if 'execution_policy'not in d:
+  need(not policy.is_selected(b),'selected preparation requires externally approved policy')
+  return policy.policy()
+ policy.require_source_pin(b['pins'])
+ need(d['execution_policy']==b.get('execution_policy')and policy.is_selected(b),'exact approved selected preparation policy')
+ need(d.get('execution_mode')=='FULL_BLOCK_ACCEPTANCE'and b.get('execution_mode',d['execution_mode'])==d['execution_mode'],'selected preparation ordinary FULL only')
+ queue=json.loads(pin(d.get('full_block_budget'),65536).read_text())
+ policy.require_selected_queue(dict(b,execution_mode=d['execution_mode']),queue)
+ return policy.checked(b)
+
 def admit(b):
  need(b.get('execution_context')=='CLOUD_EXECUTOR_V1','explicit cloud executor context')
  need(b.get('execution_approval') is not None,'OPERATOR_APPROVED_EXECUTION_INPUT_REQUIRED')
@@ -124,11 +141,12 @@ def admit(b):
    pin(b[k],2<<20);need(approval[k+'_sha256']==b[k]['sha256'],'approved exact '+k)
  p=pin(b['cloud_budget'],65536);need(b['cloud_budget']['sha256']==approval['budget_sha256'],'externally approved exact cloud budget')
  d=json.loads(p.read_text())
+ preparation=preparation_policy(b,d)
  finite_tree=False
  if candidate and d.get('execution_mode')=='FULL_BLOCK_ACCEPTANCE'and 'aggregate_tree_cap_bytes'in d:
   finite_tree=json.loads(pin(d.get('full_block_budget'),65536).read_text()).get('schema')=='MODEL_CANDIDATE_FIVE_M128_FULL_READY_QUEUE_V3'
  need(reference_reuse or finite_tree or 'aggregate_tree_cap_bytes'not in b,'tree cap requires reference data reuse or explicit V3 finite disk plan')
- need(set(d)=={'schema','ready','source_commit','host_identity','artifact_manifest_sha256','basis','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','execution_mode','full_block_budget','reserved_other_owner_bytes','consumer_address_space_bytes','resource_scope','stage_resources','runtime_mode','archive_mode','runtime_reuse_manifest'}|extra_fields|({'aggregate_tree_cap_bytes'}if reference_reuse or finite_tree else set()),'exact cloud lifecycle admission')
+ need(set(d)=={'schema','ready','source_commit','host_identity','artifact_manifest_sha256','basis','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','execution_mode','full_block_budget','reserved_other_owner_bytes','consumer_address_space_bytes','resource_scope','stage_resources','runtime_mode','archive_mode','runtime_reuse_manifest'}|extra_fields|({'aggregate_tree_cap_bytes'}if reference_reuse or finite_tree else set())|({'execution_policy'}if 'execution_policy'in d else set()),'exact cloud lifecycle admission')
  if extra_fields:
   for k in extra_fields:need(d[k]==b[k],'reviewed adaptation input '+k)
  if reference_reuse:
@@ -136,7 +154,7 @@ def admit(b):
   need('aggregate_tree_cap_bytes'not in b or (type(b['aggregate_tree_cap_bytes'])is int and b['aggregate_tree_cap_bytes']==d['aggregate_tree_cap_bytes']),'binding exact reduced aggregate tree cap')
  need(d['schema']=='FIVE_M128_CLOUD_LIFECYCLE_BUDGET_V1'and d['ready']is True,'cloud admission ready')
  need(d['source_commit']==b['identity']['source_commit'],'same frozen cloud source')
- host=pin(d['host_identity'],65536);host_observation(json.loads(host.read_text()),b['identity']);need(d['host_identity']['sha256']==b['identity']['host_identity_sha256'],'exact independently reviewed actual host identity')
+ host=pin(d['host_identity'],65536);host_observation(json.loads(host.read_text()),b['identity'],preparation);need(d['host_identity']['sha256']==b['identity']['host_identity_sha256'],'exact independently reviewed actual host identity')
  need(d['artifact_manifest_sha256']==b['artifact_manifest']['sha256'],'actual received binary manifest admission')
  need(set(d['basis'])=={'resource_audit','independent_review'},'actual resource audit and independent review')
  for v in d['basis'].values():pin(v,2<<20)
@@ -175,6 +193,7 @@ def admit(b):
   need(values['rss_bytes']<=rss_cap and values['as_bytes']<=as_cap,'no expanded role resource ceiling')
  need(type(d['reserved_other_owner_bytes'])is int and d['reserved_other_owner_bytes']==5<<30,'preserve unknown owner5GiB reservation')
  result={k:d[k]for k in('runtime_mode','archive_mode','runtime_reuse_manifest','stage_resources','consumer_address_space_bytes','reserved_other_owner_bytes','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','execution_mode','full_block_budget')}
+ if 'execution_policy'in d:result['execution_policy']=preparation
  if extra_fields:result.update({k:d[k]for k in extra_fields})
  if reference_reuse:result['aggregate_tree_cap_bytes']=d['aggregate_tree_cap_bytes']
  if finite_tree:
@@ -197,19 +216,28 @@ def admit(b):
  return result
 
 
-def host_observation(d,identity):
+def host_observation(d,identity,execution_policy=None):
  need(type(d)is dict and set(d)=={'schema','boot_id','architecture','python_version','avx512f','physical_memtotal_bytes','observed_memavailable_bytes','observed_monotonic'},'exact host observation schema')
  need(d['schema']=='CLOUD_EXECUTOR_HOST_OBSERVATION_V1'and d['boot_id']==identity['boot_id'],'actual executor boot identity')
- need(d['architecture']=='x86_64'and d['python_version']==[3,12]and all(type(v)is int for v in d['python_version'])and d['avx512f']is True,'original runtime host capability, not numerical qualification')
+ need(d['architecture']=='x86_64'and d['python_version']==[3,12]and all(type(v)is int for v in d['python_version'])and type(d['avx512f'])is bool,'original runtime host capability, not numerical qualification')
+ if execution_policy is None:need(d['avx512f']is True,'original runtime host capability, not numerical qualification')
+ else:
+  path=D/'profile_policy.py';spec=importlib.util.spec_from_file_location('cloud_host_profile_policy',path);policy=importlib.util.module_from_spec(spec);spec.loader.exec_module(policy)
+  policy.require_cpu({'execution_policy':execution_policy},['avx512f']if d['avx512f']else[])
  need(all(type(d[k])is int and d[k]>0 for k in('physical_memtotal_bytes','observed_memavailable_bytes'))and d['observed_memavailable_bytes']<=d['physical_memtotal_bytes'],'memory observation bounded')
  need(type(d['observed_monotonic'])in(int,float)and math.isfinite(d['observed_monotonic'])and 0<=d['observed_monotonic']<=identity['started_monotonic'],'host observation on same boot before admission')
  return d
 
-def verify_host(host_pin,identity):
- d=host_observation(json.loads(pin(host_pin,65536).read_text()),identity)
+def verify_host(host_pin,identity,execution_policy=None):
+ d=host_observation(json.loads(pin(host_pin,65536).read_text()),identity,execution_policy)
  need(P('/proc/sys/kernel/random/boot_id').read_text().strip()==d['boot_id'],'current host boot not prior runner')
  need(platform.machine()==d['architecture']and list(sys.version_info[:2])==d['python_version'],'current host interpreter ABI')
- need('avx512f'in P('/proc/cpuinfo').read_text().split(),'actual original P0 AVX512 gate')
+ flags=P('/proc/cpuinfo').read_text().split()
+ need(('avx512f'in flags)is d['avx512f'],'actual host CPU observation must not be relabeled')
+ if execution_policy is None:need('avx512f'in flags,'actual original P0 AVX512 gate')
+ else:
+  path=D/'profile_policy.py';spec=importlib.util.spec_from_file_location('cloud_live_profile_policy',path);policy=importlib.util.module_from_spec(spec);spec.loader.exec_module(policy)
+  policy.require_cpu({'execution_policy':execution_policy},flags)
  fields={x.split(':')[0]:int(x.split()[1])*1024 for x in P('/proc/meminfo').read_text().splitlines()if x.startswith('MemTotal:')}
  need(fields['MemTotal']==d['physical_memtotal_bytes'],'same observed host physical memory')
  return d # No old MemAvailable is used as live admission; stage lock samples again.

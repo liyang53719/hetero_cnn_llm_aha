@@ -18,6 +18,9 @@ class Pipeline(RealJoin):
    target=self.e/name;target.parent.mkdir(exist_ok=True,parents=True);shutil.copyfile(self.control/name,target)
   self.identity_source=pathlib.Path(os.environ.get('FIRST_FAULT_IDENTITY_SOURCE',str(D/'executor_identity.py')))
   shutil.copyfile(self.identity_source,self.e/'executor_identity.py');(self.e/'runtime').mkdir();shutil.copyfile(self.runtime_source,self.e/'runtime/runtime_reuse.py')
+  # Copy the selected source's transitive helper before sealing the fixture catalog.
+  dependency=self.runtime_source.with_name('runtime_dependencies.py')
+  if dependency.is_file():shutil.copyfile(dependency,self.e/'runtime/runtime_dependencies.py')
   rows=[dict(self.n.pin(p),path=str(p.relative_to(self.f['repo'])))for p in sorted(self.f['repo'].rglob('*'))if p.is_file()]
   self.b['source_pins']=self.n.put(self.f['control']/'catalog.json',dict(schema='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1',files=rows));self.b['pins']={str(self.f['repo']/r['path']):r['sha256']for r in rows}
   boot='12345678-1234-1234-1234-123456789abc';host=json.loads(pathlib.Path(self.h.host['path']).read_text());host['boot_id']=boot;hp=self.h.put('host',host)
@@ -72,9 +75,16 @@ class Pipeline(RealJoin):
   roles={k:self.b[k]for k in ('builder_handoff','artifact_manifest','cloud_budget','execution_approval','retained_materials','model_candidate_review','execution_mode')}
   tree=ast.parse((self.e/'prepare_cloud_execution.py').read_text());fun=next(x for x in tree.body if isinstance(x,ast.FunctionDef)and x.name=='prepare_identity')
   positions=[i for i,x in enumerate(fun.body)if isinstance(x,ast.Assign)and any(isinstance(t,ast.Name)and t.id=='stub'for t in x.targets)]
-  self.assertEqual(len(positions),1);i=positions[0];self.assertIsInstance(fun.body[i+1],ast.If)
+  self.assertEqual(len(positions),1);i=positions[0];end=i+1
   ns=dict(identity=self.b['identity'],policy=policy,pins=self.b['pins'],roles=roles,repo=self.f['repo'],manifest=manifest,sha=self.n.sha)
-  exec(compile(ast.Module(body=fun.body[i:i+2],type_ignores=[]),'actual_prepare_identity_stub','exec'),ns)
+  if isinstance(fun.body[end],ast.Assign):
+   expected=ast.parse("stub['execution_policy']=preparation_policy(roles,pins,policy)").body[0]
+   self.assertEqual(ast.dump(fun.body[end]),ast.dump(expected),'only reviewed policy assignment between stub and source-catalog guard')
+   actual=functions(self.e/'prepare_cloud_execution.py',{'need','sha','input_pin','preparation_policy'},{'P':pathlib.Path,'hashlib':__import__('hashlib')})
+   ns['preparation_policy']=actual['preparation_policy'];end+=1
+  self.assertIsInstance(fun.body[end],ast.If)
+  self.assertEqual(ast.dump(fun.body[end].test),ast.dump(ast.parse("roles.get('execution_mode')=='P0_FIRST_FAULT_DIAGNOSTIC'",mode='eval').body))
+  exec(compile(ast.Module(body=fun.body[i:end+1],type_ignores=[]),'actual_prepare_identity_stub','exec'),ns)
   stub=ns['stub'];self.assertEqual(stub['source_pins'],self.b['source_pins']);self.assertEqual(self.cloud.admit(stub)['diagnostic_profiles'],[0])
   for k in ('source_pins','repo'):
    bad=dict(stub);bad.pop(k)

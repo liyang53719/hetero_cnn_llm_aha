@@ -32,6 +32,16 @@ def undo_fullprefill_host_paths(test,tree):
  tuples[0].elts=[n for n in tuples[0].elts if not(isinstance(n,ast.Constant)and n.value in FULL_PREFILL_HOST_PATHS)]
  return tree
 
+# Frozen AST identities of the independently reviewed, exact selected-host
+# allowlist addition. Original adaptation hashes below remain untouched.
+SELECTED_ADAPTER_AST=('2d9163f149274ce7672f6a738b9fe5450b4c66f953835b139969c4be4f1233f0', '2575a9447463299bb67411f4c4a16d6d9bf2003155a1cffedd8f3279eeed4afa')
+def undo_selected_host_paths(test,tree):
+ for digest in SELECTED_ADAPTER_AST:
+  matches=[n for n in tree.body if hashlib.sha256(ast.dump(n,include_attributes=False).encode()).hexdigest()==digest]
+  test.assertEqual(len(matches),1,'one exact selected host allowlist fragment')
+  tree.body.remove(matches[0])
+ return tree
+
 class CandidateBudgetTests(unittest.TestCase):
  def setUp(self):
   self.fixture=ReviewFixture();self.fixture.setUp();self.addCleanup(self.fixture.doCleanups)
@@ -51,7 +61,7 @@ class CandidateBudgetTests(unittest.TestCase):
     module.admit=lambda binding:dict(execution_mode=mode.FULL,full_block_budget=binding['full_block_budget'])
   with patch.object(importlib.machinery.SourceFileLoader,'exec_module',load):return mode.admit(self.b)
  def test_adapter_only_reviewed_exact_host_allowlist_additions(self):
-  tree=undo_terminal_host_paths(self,undo_fullprefill_host_paths(self,ast.parse((E/'executor_adaptation.py').read_text())))
+  tree=undo_terminal_host_paths(self,undo_fullprefill_host_paths(self,undo_selected_host_paths(self,ast.parse((E/'executor_adaptation.py').read_text()))))
   # Only the reviewed exact two/three-key catalog predicate is reversed.
   catalog_fn=[n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='catalog']
   self.assertEqual(len(catalog_fn),1)
@@ -131,5 +141,16 @@ class TerminalHostPathsNegativeTests(unittest.TestCase):
   tree=ast.parse((E/'executor_adaptation.py').read_text())
   targets=[n for n in ast.walk(tree)if isinstance(n,ast.Constant)and n.value=='numeric/terminal_finite_records.py'];self.assertEqual(len(targets),1);targets[0].value='numeric/unreviewed_terminal.py'
   with self.assertRaises(AssertionError):undo_terminal_host_paths(self,tree)
+
+class SelectedAdapterInverseTests(unittest.TestCase):
+ def test_missing_mutated_or_duplicate_addition_rejected(self):
+  source=ast.parse((E/'executor_adaptation.py').read_text())
+  for digest in SELECTED_ADAPTER_AST:
+   for action in ('missing','mutated','duplicate'):
+    tree=copy.deepcopy(source);node=next(n for n in tree.body if hashlib.sha256(ast.dump(n,include_attributes=False).encode()).hexdigest()==digest)
+    if action=='missing':tree.body.remove(node)
+    elif action=='duplicate':tree.body.append(copy.deepcopy(node))
+    else:node.targets[0].id+='UNREVIEWED'
+    with self.subTest(action=action,digest=digest),self.assertRaises(AssertionError):undo_selected_host_paths(self,tree)
 
 if __name__=='__main__':unittest.main()

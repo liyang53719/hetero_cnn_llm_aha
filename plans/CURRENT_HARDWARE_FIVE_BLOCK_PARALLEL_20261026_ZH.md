@@ -1064,3 +1064,13 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - HOST_RESOURCES中的observed capability/threads/interop为null，因为完整数值RESULT未生成；仅已核源码执行次序表明API/4/1断言在到达哈希前通过，不能称有成功的持久化API回执。ATen AVX2不是全库ISA上限，本实验仍在AVX512物理主机进行；既不证明无AVX512可移植，也不证明具体内部算术差异的全部因果。
 - 安全摘要位于reports/p0_same_host_avx2_reference_actual_20261104T0057/，无权重、张量、DUT二进制或编码数据。严格保留失败，不改golden/容差/舍入，不能忽略概率来宣称完整参考成功。
 - 原FULL97358终态仍UNKNOWN，最新有界证据仍6,685,568 active cycles/pc12/completions10，未有RESULT或transport终态。五块M128完整Chisel/最终RTL仍0/5。新增完整DUT保留旧资源后RAM至少短1,359,720,448B；仅释放可恢复缓存不能解除。继续五块共享执行闭包与已验证独立云host路线，不重启旧FULL、不叠加第二完整DUT、不随机重排失败nonce。无新整块有效MAC利用率结论。
+
+## 2026-11-04 02:30 UTC：TEMP，五块 FULL 按选择准备依赖，未作新数值验收
+
+- 修复原 FULL preparation 对未选 profile 的强制依赖。外部 source/预算批准显式绑定 FULL_READY_SELECTED_DEPENDENCIES_V1，controller/tail/policy/V3 ready queue 必须同一选择；旧批准或仅重pin、布尔profile、qualification混用均拒绝。未改变五块完整验收集合，proper subset数值记录仍INCOMPLETE。
+- fresh/reuse仅取得选定runtime原归档并集，未选同runtime sibling也不得获得lease。权重仍从原70计划独立重建选定完整层，MoE256专家保留；原HTTP/hash/config归属不变。参考调用原reference_job/reference_phase/producer原字节，保留完整tensor/cache、seed、sidecar、native/cleanup/EOF验证；旧全五或新selected来源严格区分schema/mode/policy，不借历史数据冒新计算。
+- 单独P1准备14权重43,111,008B，P2为11权重36,705,280B，P3为18权重1,685,402,304B，P4为15权重1,672,492,032B；P1–P4共58权重3,437,710,624B及40归档287,899,273B。全五旧值70权重3,531,306,272B及53归档305,867,713B不变。P0被选仍要求原AVX512。这是准备依赖缩减，不是DUT周期/利用率提速。
+- 最终997项source catalog、999实际prepare pins验证，0非法host路径/受保护源变化/语法错误。原Chisel/driver/4096MAC/Vector32/128token/算术及完整数值门均未改变。未安装/下载、未运行真实框架或参考、DUT、EDA、RTL replay；需新源身份/预算/host/材料契约才可实际执行。
+- 精确测试范围：root目标154 normal/-O各PASS，材料104 normal/-O各PASS，runtime专项24 normal/-O各PASS，host inverse7 normal/-O各PASS，budget25 normal/-O各PASS；独审25项及其root141/runtime-material152项PASS。writer额外13项selected authority/controller测试PASS。独审历史P1数据只读复验不触未选payload，不能当当前参考或硬件通过。
+- 不声称整个套件全绿：其余root546项有6个baseline同样错误；历史host44项baseline/candidate同2fail+3errors；完整runtime160项同baseline1fail+6errors。失败来自既有历史fixture/retention路径，原始日志与逐项对照保留，不改写为PASS。
+- 五块仍并行准备，资源只限制同时执行，不等P0完成才筹备其它块。当前五块完整模型/最终RTL仍0/5；原FULL97358终态UNKNOWN及保留资源不回收。新selected源不会自动激活旧任务、继承旧PASS或解除完整块时长/RAM门。

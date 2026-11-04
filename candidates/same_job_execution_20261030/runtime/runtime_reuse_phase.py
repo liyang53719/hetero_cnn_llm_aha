@@ -5,6 +5,7 @@ P=pathlib.Path
 
 def run(binding,digest,key):
  b=r.read(dict(path=str(binding),bytes=P(binding).stat().st_size,sha256=digest));r.admit(b)
+ r.deps.require_runtime(b,key)
  for p,h in b['pins'].items():r.need(r.sha(p)==h,'pre-import original source pin')
  r.need(str(P(sys.executable).resolve())==b['python'],'current pinned original interpreter')
  if key=='qwen2':r.need('avx512f'in P('/proc/cpuinfo').read_text().split(),'original P0 AVX512')
@@ -16,6 +17,6 @@ def run(binding,digest,key):
  r.verify_entry(b,key,m,helper)
  for p,h in b['pins'].items():r.need(r.sha(p)==h,'post-import original source pin')
  target=P(b['result_root'])/(key+'_IMPORT_VALIDATED.json');r.need(target.parent.is_relative_to(P(b['owner_root'])),'new job-only validation result')
- r.save(target,dict(schema='FRESH_RUNTIME_IMPORT_VALIDATION_V1',scope=r.SCOPE,identity=b['identity'],runtime=key,runtime_reuse_manifest=b['runtime_reuse_manifest'],whole_tree=e['whole_tree'],smoke_import_exit=0,reference_qualified=False,numerical_qualified=False))
+ r.save(target,r.import_result(b,key,e))
 if __name__=='__main__':
  p=argparse.ArgumentParser();p.add_argument('--binding',type=P,required=True);p.add_argument('--binding-sha256',required=True);p.add_argument('--runtime',choices=r.KEYS,required=True);a=p.parse_args();run(a.binding,a.binding_sha256,a.runtime)

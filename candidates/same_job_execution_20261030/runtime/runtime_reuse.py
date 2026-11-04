@@ -4,6 +4,7 @@ No library/wrapper writes, copying, linking, package install, download or cleanu
 """
 import contextlib,fcntl,hashlib,importlib.util,json,os,pathlib,platform,sys,time
 P=pathlib.Path;D=P(__file__).resolve().parent
+_dep_spec=importlib.util.spec_from_file_location('runtime_dependencies',P(__file__).resolve().parent/'runtime_dependencies.py');deps=importlib.util.module_from_spec(_dep_spec);_dep_spec.loader.exec_module(deps)
 KEYS=('qwen2','qwen35_08b','qwen35_35b');VALIDATION_ORDER=('qwen35_35b','qwen2','qwen35_08b');MAP=('qwen2','qwen35_08b','qwen35_08b','qwen35_35b','qwen35_35b')
 SCHEMA='IMPORTED_THREE_RUNTIME_OWNER_CLOUD_V1'
 SCOPE='IMPORT_VALIDATION_ONLY_NOT_INSTALL_OR_REFERENCE_PASS'
@@ -30,6 +31,7 @@ def complete(r):
 
 def admit(b,current=False):
  need(b.get('execution_context')=='CLOUD_EXECUTOR_V1','cloud-only runtime import')
+ if deps.selected(b):deps.require_pins(b)
  need(b['pins'].get(str(D/'runtime_reuse.py'))==sha(D/'runtime_reuse.py'),'actual runtime reuse source pin')
  identity=module('reuse_executor_identity',D.parent/'executor_identity.py',b['pins'])
  (identity.verify_current if current else identity.verify_owner)(b['identity'])
@@ -46,10 +48,13 @@ def admit(b,current=False):
 
 def manifest(b):
  m=read(b['runtime_reuse_manifest'])
- need(type(m)is dict and set(m)=={'schema','scope','source_commit','python','entries','archives','reference_qualified','numerical_qualified'},'exact runtime reuse manifest')
- need(m['schema']=='PINNED_EXISTING_THREE_RUNTIME_BYTES_V1'and m['scope']=='EXISTING_BYTES_ONLY_REVALIDATE_EVERY_EXECUTOR','runtime byte inventory only')
+ fields={'schema','scope','source_commit','python','entries','archives','reference_qualified','numerical_qualified'}
+ if deps.selected(b):fields.add('execution_policy')
+ need(type(m)is dict and set(m)==fields,'exact runtime reuse manifest')
+ if deps.selected(b):deps.require_pins(b);deps.policy.require_same(b,m)
+ need(m['schema']==deps.schema(b,'PINNED_EXISTING_THREE_RUNTIME_BYTES_V1',deps.SELECTED_INVENTORY)and m['scope']=='EXISTING_BYTES_ONLY_REVALIDATE_EVERY_EXECUTOR','runtime byte inventory only')
  need(m['source_commit']==b['identity']['source_commit']and m['reference_qualified']is False and m['numerical_qualified']is False,'no historical qualification transfer')
- need(type(m['entries'])is dict and set(m['entries'])==set(KEYS),'exact three original runtimes')
+ need(type(m['entries'])is dict and set(m['entries'])==set(deps.policy.runtimes(b)if deps.selected(b)else KEYS),'exact three original runtimes')
  need(str(checked(m['python']))==str(P(b['python']).resolve()),'original exact current Python bytes')
  need(sha(b['helper'])==HELPER_SHA,'original helper unchanged');helper=module('reuse_original_helpers',b['helper'],b['pins'])
  for key,e in m['entries'].items():
@@ -60,12 +65,15 @@ def manifest(b):
   need(e['runtime']==key and e['revision']==helper.CONTRACT[key][0],'original official runtime revision')
   for name,expected in (('wrapper',home/'python.sh'),('installation',home/'runtime_install.json'),('sidecar',home/'SOURCE_SIDECAR.json')):need(P(e[name]['path'])==expected,'original runtime role path')
   need(e['sidecar']['sha256']==helper.CONTRACT[key][1],'original independent sidecar contract')
- need(type(m['archives'])is list and len(m['archives'])==53,'original53 approved archive pins')
+ if deps.selected(b):
+  locked=module('reuse_original_archive_inventory',P(b['source_dir'])/'prepare_runtimes.py',b['pins'])
+  deps.archive_rows(b,m['archives'],locked,lambda row:P(row['path']),check_metadata=False)
+ else:need(type(m['archives'])is list and len(m['archives'])==53,'original53 approved archive pins')
  return m,helper
 
 def verify_entry(b,key,m=None,helper=None):
  if m is None:m,helper=manifest(b)
- need(key in KEYS,'original runtime key');e=m['entries'][key]
+ deps.require_runtime(b,key);need(key in m['entries'],'selected runtime inventory');e=m['entries'][key]
  for role in ('wrapper','installation','sidecar'):checked(e[role])
  expected=read(e['whole_tree'],64<<20)
  actual=helper.tree(e['import_root'],m['python']['path']);need(actual==expected,'fresh entire runtime byte/alias inventory')
@@ -75,16 +83,8 @@ def verify_entry(b,key,m=None,helper=None):
  return e
 
 def original_archives(b,m):
- source=P(b['source_dir']);locked=module('reuse_original_archives',source/'prepare_runtimes.py',b['pins']);items,specs,_=locked.artifacts();union={}
- for x in [*items,*[x for s in specs.values()for x in [*s['artifacts'],s['transformers']]]]:
-  k=x['filename'];need(k not in union or (union[k]['sha256'],union[k]['bytes'])==(x['sha256'],x['bytes']),'consistent original archive union');union[k]=x
- need(len(union)==53 and sum(x['bytes']for x in union.values())==305867713,'original53 exact archive union')
- seen=set()
- for row in m['archives']:
-  p=checked(row,512<<20);need(p.name in union and p.name not in seen,'unique original archive');x=union[p.name]
-  need(row['bytes']==x['bytes']and row['sha256']==x['sha256'],'original official archive exact bytes');locked.check_wheel_metadata(x,p);seen.add(p.name)
- need(seen==set(union),'all original archives present')
- return m['archives']
+ source=P(b['source_dir']);locked=module('reuse_original_archives',source/'prepare_runtimes.py',b['pins'])
+ return deps.archive_rows(b,m['archives'],locked,lambda row:checked(row,512<<20))
 
 def archive_evidence(b,m):
  archive=read(b['archive_validation_receipt']);need(complete(archive),'fresh archive validation cleanup/EOF')
@@ -92,19 +92,22 @@ def archive_evidence(b,m):
  expected=[b['python'],'-B',str(D/'reuse_archives.py'),'--binding',b['archive_binding']['path'],'--binding-sha256',b['archive_binding']['sha256']]
  need(archive['argv']==expected,'actual original53 validation invocation')
  need(ab['identity']==b['identity']and ab['runtime_reuse_manifest']==b['runtime_reuse_manifest'],'archive binding same executor and approved bytes')
+ if deps.selected(b):deps.policy.require_same(b,ab)
  need(P(b['archive_output_manifest']['path'])==P(ab['output'])/'ARCHIVES.json','archive result exact invocation output')
  result=read(b['archive_output_manifest'])
- need(result['scope']=='READ_EXISTING_PINNED_ARCHIVES_NO_INSTALL'and result['archives']==m['archives']and result['runtime_reuse_manifest']==b['runtime_reuse_manifest']and result['identity']==b['identity'],'current original53 validation output')
+ deps.check_archive_fields(b,result,reuse=True)
+ need(result['archives']==m['archives']and result['runtime_reuse_manifest']==b['runtime_reuse_manifest']and result['identity']==b['identity'],'current original53 validation output')
  return result
 
 def verify(manifest_path,expected_sha,job):
  job=P(job).resolve();path=regular(manifest_path);need(path.is_relative_to(job)and sha(path)==expected_sha,'fresh owned reuse manifest pin')
- owner=json.loads(path.read_text());need(owner['schema']==SCHEMA and owner['scope']==SCOPE and owner['reference_qualified']is False and owner['numerical_qualified']is False,'import validation only')
+ owner=json.loads(path.read_text());need(owner['schema']==deps.schema(owner,SCHEMA,deps.SELECTED_REUSE_OWNER) and owner['scope']==SCOPE and owner['reference_qualified']is False and owner['numerical_qualified']is False,'import validation only')
  b=read(owner['binding']);admit(b)
  policy=module('reuse_execution_policy',D.parent/'profile_policy.py',b['pins'])
  need('execution_policy'in b and 'execution_policy'in owner,'explicit runtime owner execution policy');policy.require_same(b,owner)
  need(owner['identity']==b['identity']and owner['owner_root']==str(job)==b['owner_root'],'actual current executor owner')
- m,helper=manifest(b);need(owner['runtime_reuse_manifest']==b['runtime_reuse_manifest']and set(owner['entries'])==set(KEYS),'same independently approved three roots')
+ m,helper=manifest(b);need(owner['runtime_reuse_manifest']==b['runtime_reuse_manifest']and set(owner['entries'])==set(deps.policy.runtimes(b)if deps.selected(b)else KEYS),'same independently approved three roots')
+ need(owner['profile_mapping']==list(MAP),'registered five runtime mapping')
  archive_evidence(b,m)
  for key,e in owner['entries'].items():
   need(e['entry']==m['entries'][key],'exact approved entry, no aliases or relocated wrapper')
@@ -112,13 +115,13 @@ def verify(manifest_path,expected_sha,job):
   native=read(e['validation_receipt']);result=read(e['validation_result']);need(complete(native),'fresh runtime import supervisor cleanup/EOF')
   expected_argv=[b['python'],'-S','-B',str(D/'runtime_reuse_phase.py'),'--binding',owner['phase_binding']['path'],'--binding-sha256',owner['phase_binding']['sha256'],'--runtime',key]
   need(owner['phase_binding']==owner['binding']and e['argv']==expected_argv and native['argv']==expected_argv and e['caps']==phase_caps(b)and native['caps']==e['caps'],'fresh exact supervised import role')
-  need(result==dict(schema='FRESH_RUNTIME_IMPORT_VALIDATION_V1',scope=SCOPE,identity=b['identity'],runtime=key,runtime_reuse_manifest=b['runtime_reuse_manifest'],whole_tree=m['entries'][key]['whole_tree'],smoke_import_exit=0,reference_qualified=False,numerical_qualified=False),'fresh import result exact identity and byte inventory')
+  need(result==import_result(b,key,m['entries'][key]),'fresh import result exact identity and byte inventory')
  return owner,helper
 
 @contextlib.contextmanager
 def lease(manifest_path,expected_sha,job,profile,out):
  need(type(profile)is int and profile in range(5),'original five profiles');job=P(job).resolve();out=P(out).resolve();need(out.is_dir()and out.is_relative_to(job),'fresh owned consumer output')
- owner,helper=verify(manifest_path,expected_sha,job);b=read(owner['binding']);m,_=manifest(b)
+ owner,helper=verify(manifest_path,expected_sha,job);b=read(owner['binding']);deps.policy.require_profile(b,profile);m,_=manifest(b)
  need(all(not out.is_relative_to(P(e['import_root']))and not P(e['import_root']).is_relative_to(out)for e in m['entries'].values()),'output never inside read-only runtime')
  lock=regular(P(manifest_path).parent/'OWNER.lock')
  with lock.open('rb')as f:
@@ -132,6 +135,11 @@ def lease(manifest_path,expected_sha,job,profile,out):
   try:yield {key:dict(wrapper=e['wrapper']['path'],site=e['site'],receipt=e['installation'],sidecar=e['sidecar'],validation_receipt=owner['entries'][key]['validation_receipt'])}
   finally:verify(manifest_path,expected_sha,job);verify_entry(b,key,m,helper);fcntl.flock(f,fcntl.LOCK_UN)
 
+def import_result(b,key,entry):
+ result=dict(schema=deps.schema(b,'FRESH_RUNTIME_IMPORT_VALIDATION_V1',deps.SELECTED_IMPORT),scope=SCOPE,identity=b['identity'],runtime=key,runtime_reuse_manifest=b['runtime_reuse_manifest'],whole_tree=entry['whole_tree'],smoke_import_exit=0,reference_qualified=False,numerical_qualified=False)
+ if deps.selected(b):result['execution_policy']=deps.policy.checked(b)
+ return result
+
 def phase_caps(b):
  role=b['stage_resources']['install'];wall=b['install_wall_seconds']
  tree_cap=12_081_306_272;disk_floor=1610612736
@@ -143,8 +151,11 @@ def phase_caps(b):
 
 def run(b,binding_path,binding_sha):
  need(pin(binding_path)['sha256']==binding_sha,'independently pinned reuse controller binding');admit(b,current=True);m,helper=manifest(b)
- policy=module('reuse_execution_policy',D.parent/'profile_policy.py',b['pins']);need('execution_policy'in b and policy.checked(b)['mode']==policy.FULL,'explicit original full-five runtime policy')
- need(sys.version_info[:2]==(3,12)and platform.machine()=='x86_64','original runtime ABI');need('avx512f'in P('/proc/cpuinfo').read_text().split(),'original P0 AVX512')
+ policy=module('reuse_execution_policy',D.parent/'profile_policy.py',b['pins']);need('execution_policy'in b and (policy.checked(b)['mode']==policy.FULL or deps.selected(b)),'explicit original full-five or selected runtime policy')
+ keys=tuple(key for key in VALIDATION_ORDER if key in deps.policy.runtimes(b))
+ need(set(m['entries'])==set(keys),'exact permitted validation runtimes')
+ need(sys.version_info[:2]==(3,12)and platform.machine()=='x86_64','original runtime ABI')
+ if 0 in deps.policy.eligible(b):deps.policy.require_cpu(b,P('/proc/cpuinfo').read_text().split())
  for p,h in b['pins'].items():need(sha(p)==h,'reuse admitted source/tool drift')
  for name in ('runtime_reuse.py','runtime_reuse_phase.py'):
   path=D/name;need(b['pins'].get(str(path))==sha(path),'explicit reuse producer source')
@@ -159,7 +170,7 @@ def run(b,binding_path,binding_sha):
  archive_evidence(b,m)
  limit=b['job_budget_seconds'];started=b['job_started_monotonic'];caps=phase_caps(b)
  need(type(b['remaining_job_reservation_seconds'])is int and b['remaining_job_reservation_seconds']>=0,'finite nonnegative remaining cloud reservation')
- need(time.monotonic()-started+3*(caps['wall_seconds']+30)+b['remaining_job_reservation_seconds']<=limit,'reserve all three validations plus remaining cloud work')
+ need(time.monotonic()-started+len(keys)*(caps['wall_seconds']+30)+b['remaining_job_reservation_seconds']<=limit,'reserve all three validations plus remaining cloud work')
  root.mkdir();(root/'runs').mkdir();(root/'results').mkdir();(root/'environment').mkdir()
  phase=dict(b,result_root=str(root/'results'));phasepath=root/'REUSE_BINDING.json';save(phasepath,phase);phasepin=pin(phasepath)
  pins=dict(b['pins']);pins[str(phasepath)]=phasepin['sha256']
@@ -167,8 +178,9 @@ def run(b,binding_path,binding_sha):
   path=P(b['supervisor_dir'])/name;need(pins.get(str(path))==sha(path),'original strict supervisor source pin')
  sys.path.insert(0,b['supervisor_dir']);import supervise_multiroot as supervisor
  entries={}
- for key in VALIDATION_ORDER:
-  pending=len(VALIDATION_ORDER)-VALIDATION_ORDER.index(key)
+ for key in keys:
+  deps.require_runtime(b,key)
+  pending=len(keys)-keys.index(key)
   need(time.monotonic()-started+pending*(caps['wall_seconds']+30)+b['remaining_job_reservation_seconds']<=limit,'same cloud lifecycle deadline not reset')
   home=root/'environment'/key;home.mkdir();env=dict(PATH='/usr/bin:/bin',LANG='C.UTF-8',LC_ALL='C.UTF-8',PYTHONNOUSERSITE='1',PYTHONDONTWRITEBYTECODE='1',HF_HUB_OFFLINE='1',TRANSFORMERS_OFFLINE='1')
   for name in ('HOME','TMPDIR','XDG_CACHE_HOME','HF_HOME','HF_HUB_CACHE','TRANSFORMERS_CACHE','TORCH_HOME','MPLCONFIGDIR','NUMBA_CACHE_DIR'):
@@ -181,6 +193,6 @@ def run(b,binding_path,binding_sha):
   need(complete(receipt),'fresh import validation failed or incomplete, no reuse of old PASS')
   entries[key]=dict(entry=m['entries'][key],argv=argv,caps=caps,validation_receipt=pin(output/'RESULT.json'),validation_result=pin(root/'results'/(key+'_IMPORT_VALIDATED.json')))
  out=root/'owner';out.mkdir();(out/'OWNER.lock').touch()
- result=dict(schema=SCHEMA,scope=SCOPE,execution_policy=b['execution_policy'],identity=b['identity'],owner_root=str(root),binding=pin(phasepath),phase_binding=phasepin,runtime_reuse_manifest=b['runtime_reuse_manifest'],entries=entries,profile_mapping=list(MAP),reference_qualified=False,numerical_qualified=False)
+ result=dict(schema=deps.schema(b,SCHEMA,deps.SELECTED_REUSE_OWNER),scope=SCOPE,execution_policy=b['execution_policy'],identity=b['identity'],owner_root=str(root),binding=pin(phasepath),phase_binding=phasepin,runtime_reuse_manifest=b['runtime_reuse_manifest'],entries=entries,profile_mapping=list(MAP),reference_qualified=False,numerical_qualified=False)
  path=out/'IMPORTED_RUNTIMES_OWNER.json';save(path,result);verify(path,sha(path),root)
  return root,phasepath,path

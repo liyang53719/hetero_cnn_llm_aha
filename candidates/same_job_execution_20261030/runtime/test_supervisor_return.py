@@ -8,6 +8,7 @@ from pathlib import Path
 import tempfile
 import types
 import unittest
+from selected_runtime_preservation import undo_selected_runtime
 
 D=Path(__file__).resolve().parent
 SOURCE=D/'runtime_reuse.py'
@@ -35,13 +36,13 @@ def undo_approved_aggregate_runtime(test,tree):
 
 def selected(tree):
  run=next(x for x in tree.body if isinstance(x,ast.FunctionDef)and x.name=='run')
- loop=next(x for x in run.body if isinstance(x,ast.For)and isinstance(x.iter,ast.Name)and x.iter.id=='VALIDATION_ORDER')
+ loop=next(x for x in run.body if isinstance(x,ast.For)and isinstance(x.iter,ast.Name)and x.iter.id in ('VALIDATION_ORDER','keys'))
  start=next(i for i,x in enumerate(loop.body)if isinstance(x,ast.Assign)and any(isinstance(t,ast.Name)and t.id=='receipt'for t in x.targets))
  return loop,start
 
 class Preservation(unittest.TestCase):
  def test_only_one_diagnostic_save_added(self):
-  tree=undo_approved_aggregate_runtime(self,ast.parse(SOURCE.read_text()));loop,start=selected(tree)
+  tree=undo_approved_aggregate_runtime(self,undo_selected_runtime(self,ast.parse(SOURCE.read_text())));loop,start=selected(tree)
   expected=ast.parse("save(root/'results'/(key+'_SUPERVISOR_RETURN.json'),receipt)").body[0]
   self.assertEqual(ast.dump(loop.body[start+1]),ast.dump(expected))
   del loop.body[start+1]

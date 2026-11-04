@@ -1,6 +1,7 @@
 """Light file-only diagnostics; no census, job, supervisor or DUT execution."""
 import ast,hashlib,importlib.util,json,pathlib,tempfile,unittest
 import os
+from selected_host_preservation import undo_selected_host, selected_host_tree
 D=pathlib.Path(os.environ.get('FIRST_FAULT_LEGACY_TEST_SOURCE',str(pathlib.Path(__file__).resolve().parent))).resolve()
 s=importlib.util.spec_from_file_location('disk_flow',D/'controller/cloud_flow.py');f=importlib.util.module_from_spec(s);s.loader.exec_module(f)
 EXPECTED_BASE_AST='6007e2b7aa04308f9b4c51287ce7ce027da9f53348c4ac0a83f97b10e71c96e2'
@@ -1189,7 +1190,7 @@ class Tests(unittest.TestCase):
  def test_actual_call_is_binding_sibling_before_job_creation(self):
   text=(D/'controller/cloud_flow.py').read_text();self.assertIn("P(binding_path).with_name(P(binding_path).name+'.UPFRONT_DISK.json'),binding_sha",text);self.assertLess(text.index(' disk_admission=upfront_disk_admission('),text.index(' job.mkdir()'))
  def test_only_diagnostic_delta_ast(self):
-  self.check_original_ast(undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,ast.parse((D/'controller/cloud_flow.py').read_text()),'controller/cloud_flow.py'),'controller/cloud_flow.py'))
+  self.check_original_ast(undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,selected_host_tree(self,D/'controller/cloud_flow.py','controller/cloud_flow.py'),'controller/cloud_flow.py'),'controller/cloud_flow.py'))
  def check_original_ast(self,tree):
   tree=undo_reviewed_v2_delta(self,tree,'controller/cloud_flow.py')
   tree=undo_reviewed_stage_delta(self,tree,'controller/cloud_flow.py')
@@ -1208,9 +1209,9 @@ class InverseNegativeTests(unittest.TestCase):
  def test_reviewed_delta_mutation_and_duplicate_rejected(self):
   for relative,rows in REVIEWED_STAGE_INVERSE.items():
    root=D.parent if D.name=='numeric'else D
-   original=undo_reviewed_v2_delta(self,undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,ast.parse((root/relative).read_text()),relative),relative),relative)
+   original=undo_reviewed_v2_delta(self,undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,selected_host_tree(self,root/relative,relative),relative),relative),relative)
    # An additional copy cannot silently disappear: unique match count must fail.
-   duplicate=undo_reviewed_v2_delta(self,undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,ast.parse((root/relative).read_text()),relative),relative),relative);duplicate.body.extend(ast.parse(rows[0][1]).body)
+   duplicate=undo_reviewed_v2_delta(self,undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,selected_host_tree(self,root/relative,relative),relative),relative),relative);duplicate.body.extend(ast.parse(rows[0][1]).body)
    with self.subTest(relative=relative,case='duplicate'),self.assertRaises(AssertionError):undo_reviewed_stage_delta(self,duplicate,relative)
    # Mutating the stage discriminator anywhere is not accepted as the reviewed delta.
    hit=False
@@ -1226,8 +1227,8 @@ class ReferenceInverseNegativeTests(unittest.TestCase):
  def test_reference_gate_mutation_and_duplicate_rejected(self):
   for relative,rows in REVIEWED_REFERENCE_INVERSE.items():
    root=D.parent if D.name=='numeric'else D
-   original=undo_reviewed_v2_delta(self,undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,ast.parse((root/relative).read_text()),relative),relative),relative)
-   duplicate=undo_reviewed_v2_delta(self,undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,ast.parse((root/relative).read_text()),relative),relative),relative);duplicate.body.extend(ast.parse(rows[0][1]).body)
+   original=undo_reviewed_v2_delta(self,undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,selected_host_tree(self,root/relative,relative),relative),relative),relative)
+   duplicate=undo_reviewed_v2_delta(self,undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,selected_host_tree(self,root/relative,relative),relative),relative),relative);duplicate.body.extend(ast.parse(rows[0][1]).body)
    with self.subTest(relative=relative,case='duplicate'),self.assertRaises(AssertionError):undo_reviewed_reference_delta(self,duplicate,relative)
    hit=False
    for n in ast.walk(original):
@@ -1240,7 +1241,7 @@ class FirstFaultInverseNegativeTests(unittest.TestCase):
  def test_exact_first_fault_snippets_changed_or_duplicate_fail(self):
   import copy
   for relative,rows in REVIEWED_FIRST_FAULT_INVERSE.items():
-   raw=(D/relative).read_text();normalized=undo_reviewed_v2_delta(self,undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,ast.parse(raw),relative),relative),relative)
+   raw=(D/relative).read_text();normalized=undo_reviewed_v2_delta(self,undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,undo_selected_host(self,ast.parse(raw),relative),relative),relative),relative)
    for digest,new_text,old_text in rows:
     duplicate=copy.deepcopy(normalized);duplicate.body.extend(ast.parse(new_text).body)
     with self.subTest(relative=relative,digest=digest,case='duplicate'),self.assertRaises(AssertionError):undo_reviewed_first_fault_delta(self,duplicate,relative)
@@ -1263,7 +1264,7 @@ class FlowScopeInverseNegativeTests(unittest.TestCase):
 class V2InverseNegativeTests(unittest.TestCase):
  def test_v2_restores_exact_pre_v2_source_ast(self):
   for relative,wanted in PRE_V2_AST_SHA256.items():
-   tree=undo_reviewed_v2_delta(self,undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,ast.parse((D/relative).read_text()),relative),relative),relative)
+   tree=undo_reviewed_v2_delta(self,undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,selected_host_tree(self,D/relative,relative),relative),relative),relative)
    with self.subTest(relative=relative):self.assertEqual(hashlib.sha256(ast.dump(tree,include_attributes=False).encode()).hexdigest(),wanted)
  def test_each_v2_fragment_missing_mutated_or_duplicated_is_rejected(self):
   import copy
@@ -1271,7 +1272,7 @@ class V2InverseNegativeTests(unittest.TestCase):
    for digest,new_text,old_digest,old_text in rows:
     want=ast.parse(new_text).body;want_dump=[ast.dump(n,include_attributes=False)for n in want]
     for case in ('missing','mutated','duplicate'):
-     tree=undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,ast.parse((D/relative).read_text()),relative),relative);hits=[]
+     tree=undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,selected_host_tree(self,D/relative,relative),relative),relative);hits=[]
      for parent in ast.walk(tree):
       for field,value in ast.iter_fields(parent):
        if isinstance(value,list):
@@ -1286,7 +1287,7 @@ class V2InverseNegativeTests(unittest.TestCase):
      with self.subTest(relative=relative,digest=digest,case=case),self.assertRaises(AssertionError):undo_reviewed_v2_delta(self,tree,relative)
  def test_unrelated_caller_delta_survives_inverse_and_fails_old_baseline(self):
   for relative in PRE_V2_AST_SHA256:
-   tree=undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,ast.parse((D/relative).read_text()),relative),relative);tree.body.extend(ast.parse('UNREVIEWED_CALLER_DELTA = 1').body)
+   tree=undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,selected_host_tree(self,D/relative,relative),relative),relative);tree.body.extend(ast.parse('UNREVIEWED_CALLER_DELTA = 1').body)
    before=ast.dump(tree,include_attributes=False)
    restored=undo_reviewed_v2_delta(self,tree,relative)
    self.assertEqual(ast.dump(tree,include_attributes=False),before,'V2 inverse preserves its caller input')
@@ -1299,7 +1300,7 @@ class V2InverseNegativeTests(unittest.TestCase):
 class V3InverseNegativeTests(unittest.TestCase):
  def test_v3_restores_exact_frozen_v2_source_ast(self):
   for relative,wanted in PRE_V3_AST_SHA256.items():
-   tree=undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,ast.parse((D/relative).read_text()),relative),relative)
+   tree=undo_reviewed_v3_delta(self,undo_reviewed_aggregate_cap_delta(self,selected_host_tree(self,D/relative,relative),relative),relative)
    with self.subTest(relative=relative):self.assertEqual(hashlib.sha256(ast.dump(tree,include_attributes=False).encode()).hexdigest(),wanted)
  def test_each_v3_fragment_missing_mutated_or_duplicated_is_rejected(self):
   import copy
@@ -1308,7 +1309,7 @@ class V3InverseNegativeTests(unittest.TestCase):
    for digest,new_text,old_digest,old_text,author_index in rows:
     want=ast.parse(new_text).body;want_dump=[ast.dump(n,include_attributes=False)for n in want]
     for case in ('missing','mutated','duplicate'):
-     tree=undo_reviewed_aggregate_cap_delta(self,ast.parse((D/relative).read_text()),relative);hits=[]
+     tree=undo_reviewed_aggregate_cap_delta(self,selected_host_tree(self,D/relative,relative),relative);hits=[]
      for parent in ast.walk(tree):
       for field,value in ast.iter_fields(parent):
        if isinstance(value,list):
@@ -1323,7 +1324,7 @@ class V3InverseNegativeTests(unittest.TestCase):
      with self.subTest(relative=relative,author_index=author_index,case=case),self.assertRaisesRegex(AssertionError,'one exact reviewed V3 fragment: '+digest):undo_reviewed_v3_delta(self,tree,relative)
  def test_unrelated_caller_delta_reaches_unchanged_historical_baseline(self):
   for relative in PRE_V3_AST_SHA256:
-   tree=undo_reviewed_aggregate_cap_delta(self,ast.parse((D/relative).read_text()),relative);tree.body.extend(ast.parse('UNREVIEWED_V3_CALLER_DELTA = 1').body)
+   tree=undo_reviewed_aggregate_cap_delta(self,selected_host_tree(self,D/relative,relative),relative);tree.body.extend(ast.parse('UNREVIEWED_V3_CALLER_DELTA = 1').body)
    before=ast.dump(tree,include_attributes=False);restored=undo_reviewed_v3_delta(self,tree,relative)
    self.assertEqual(ast.dump(tree,include_attributes=False),before,'V3 inverse preserves its caller input')
    self.assertIn('UNREVIEWED_V3_CALLER_DELTA',ast.unparse(restored))
@@ -1336,7 +1337,7 @@ class V3InverseNegativeTests(unittest.TestCase):
 class AggregateCapInverseTests(unittest.TestCase):
  def test_aggregate_restores_exact_prior_source_ast(self):
   for relative,wanted in PRE_AGGREGATE_AST_SHA256.items():
-   restored=undo_reviewed_aggregate_cap_delta(self,ast.parse((D/relative).read_text()),relative)
+   restored=undo_reviewed_aggregate_cap_delta(self,selected_host_tree(self,D/relative,relative),relative)
    with self.subTest(relative=relative):self.assertEqual(hashlib.sha256(ast.dump(restored,include_attributes=False).encode()).hexdigest(),wanted)
  def test_each_aggregate_fragment_missing_mutated_or_duplicated_rejected(self):
   import copy
@@ -1344,7 +1345,7 @@ class AggregateCapInverseTests(unittest.TestCase):
    for digest,new_text,old_digest,old_text in rows:
     want=ast.parse(new_text).body;want_dump=[ast.dump(n,include_attributes=False)for n in want]
     for case in ('missing','mutated','duplicate'):
-     tree=copy.deepcopy(ast.parse((D/relative).read_text()));hits=[]
+     tree=copy.deepcopy(selected_host_tree(self,D/relative,relative));hits=[]
      for parent in ast.walk(tree):
       for field,value in ast.iter_fields(parent):
        if isinstance(value,list):
@@ -1360,7 +1361,7 @@ class AggregateCapInverseTests(unittest.TestCase):
  def test_unrelated_delta_reaches_original_historical_hash(self):
   import copy
   for relative in PRE_AGGREGATE_AST_SHA256:
-   tree=copy.deepcopy(ast.parse((D/relative).read_text()));tree.body.extend(ast.parse('UNREVIEWED_AGGREGATE_CALLER_DELTA = 1').body)
+   tree=copy.deepcopy(selected_host_tree(self,D/relative,relative));tree.body.extend(ast.parse('UNREVIEWED_AGGREGATE_CALLER_DELTA = 1').body)
    before=ast.dump(tree,include_attributes=False);restored=undo_reviewed_aggregate_cap_delta(self,tree,relative)
    self.assertEqual(ast.dump(tree,include_attributes=False),before,'aggregate inverse preserves input')
    self.assertIn('UNREVIEWED_AGGREGATE_CALLER_DELTA',ast.unparse(restored))

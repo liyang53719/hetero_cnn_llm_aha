@@ -114,7 +114,9 @@ def admitted_inputs(b):
   path=D.parent/name;need(b['pins'].get(str(path))==sha(path),'cloud admission helper source pin')
  budget_module=mod('actual_cloud_budget',D.parent/'cloud_budget.py');budget=budget_module.admit(b)
  budget_document=json.loads(P(b['cloud_budget']['path']).read_text())
- budget_module.verify_host(budget_document['host_identity'],b['identity'])
+ budget_module.verify_host(budget_document['host_identity'],b['identity'],budget.get('execution_policy'))
+ if profile_policy.is_selected(b):need(budget.get('execution_policy')==profile_policy.checked(b),'same approved preparation selection')
+ else:need('execution_policy'not in budget,'no implicit selected preparation')
  for k in ('runtime_mode','archive_mode','runtime_reuse_manifest','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','reserved_other_owner_bytes','consumer_address_space_bytes','stage_resources','execution_mode','full_block_budget'):
   need(b.get(k)==budget[k],'binding must exactly preserve reviewed cloud budget '+k)
  if budget['execution_mode']=='STAGE_COVERAGE_DIAGNOSTIC':
@@ -204,7 +206,7 @@ def run(b,binding_path,binding_sha):
  tree_cap=budget.get('aggregate_tree_cap_bytes',TREE)
  need(b.get('aggregate_tree_cap_bytes',TREE)==tree_cap,'same approved aggregate cap')
  profile_policy.require_source_pin(b['pins']);execution_policy=profile_policy.checked(b)
- need(execution_policy['mode']==profile_policy.FULL,'all five original profiles on cloud executor')
+ need(execution_policy['mode']==profile_policy.FULL or (profile_policy.is_selected(b)and budget.get('execution_policy')==execution_policy),'all five registered hardware profiles; selected dependencies explicitly approved')
  admission=execution_admission(b)
  limit=b['job_budget_seconds'];need(type(limit)is int and 0<limit<=2**31-1,'finite admitted cloud deadline')
  started=b['job_started_monotonic'];need(type(started)in(int,float)and math.isfinite(started)and 0<=time.monotonic()-started<limit,'original cloud executor monotonic clock');materials_reserved,tail_reserved,total=reservations(b,admission)
@@ -288,7 +290,7 @@ def run(b,binding_path,binding_sha):
   archive_binding=dict(b,helper=b['shared_runtime_helper'],source_dir=str(runtime/'source'),output=str(archives))
   save(ab,archive_binding);archive_tool=runtime/'reuse_archives.py';archive_network=False
  else:
-  save(ab,dict(source_dir=str(runtime/'source'),pins=pins,output=str(archives)));archive_tool=runtime/'acquire_archives.py';archive_network=True
+  save(ab,dict(source_dir=str(runtime/'source'),pins=pins,output=str(archives),**({'execution_policy':execution_policy}if profile_policy.is_selected(b)else{})));archive_tool=runtime/'acquire_archives.py';archive_network=True
  ok(stage('archives',[py,'-B',archive_tool,'--binding',ab,'--binding-sha256',sha(ab)],q['archives'],.25,{str(ab):sha(ab)},archive_network))
  owner_root=job/'materials';ib=job/'bindings/INSTALL.json';archives_rows=json.loads((archives/'ARCHIVES.json').read_text())['archives'];ipins=dict(pins);ipins.update({r['path']:r['sha256']for r in archives_rows})
  install_binding=dict(execution_context='CLOUD_EXECUTOR_V1',reserved_other_owner_bytes=b['reserved_other_owner_bytes'],stage_resources=b['stage_resources'],job_budget_seconds=limit,execution_policy=execution_policy,schema='FRESH_JOB_RUNTIME_CONTROLLER_V1',identity=identity,repo=str(repo),owner_root=str(owner_root),python=py,helper=b['shared_runtime_helper'],supervisor_dir=supervisor_dir,lock=lock,owned_roots=roots,pins=ipins,archives=archives_rows,job_started_monotonic=started,install_wall_seconds=q['install'],metadata_wall_seconds=q['owner_bind'],early_build_seconds=0,remaining_job_reservation_seconds=q['weights']+30+5*(q['reference']+30)+tail_reserved)
@@ -302,15 +304,25 @@ def run(b,binding_path,binding_sha):
  if 'retained_materials'in b:
   retained=imported['retained_materials_verified'];payload=P(retained['payload']);weights=retained['weights'];references=retained['references']
  else:
-  payload=job/'runs/weights/output';acq=repo/'candidates/five_profile_acquisition_resume_20261028/acquire_resumable.py'
-  ok(stage('weights',[py,'-B',acq,'--output',payload,'--execute'],q['weights'],.5,network=True))
-  summary=json.loads((payload/'SUMMARY.json').read_text());need(summary['tensors']==70 and summary['tensor_bytes']==3_531_306_272,'one full70 tensor acquisition')
+  payload=job/'runs/weights/output'
+  if profile_policy.is_selected(b):
+   acq=runtime/'selected_acquisition.py';wb=job/'bindings/SELECTED_WEIGHTS.json'
+   save(wb,dict(b,output=str(payload)))
+   ok(stage('weights',[py,'-B',acq,'--binding',wb,'--sha256',sha(wb),'--execute'],q['weights'],.5,extra_pins={str(wb):sha(wb)},network=True))
+  else:
+   acq=repo/'candidates/five_profile_acquisition_resume_20261028/acquire_resumable.py'
+   ok(stage('weights',[py,'-B',acq,'--output',payload,'--execute'],q['weights'],.5,network=True))
+  summary=json.loads((payload/'SUMMARY.json').read_text())
+  if not profile_policy.is_selected(b):need(summary['tensors']==70 and summary['tensor_bytes']==3_531_306_272,'one full70 tensor acquisition')
   weights=[]
   for receipt in sorted(payload.glob('*/*.receipt.json')):
    r=json.loads(receipt.read_text());p=receipt.with_name(receipt.name.removesuffix('.receipt.json')+'.bin');need(p.stat().st_size==r['actual_bytes']and sha(p)==r['actual_sha256'],'actual acquired tensor bytes');weights.append(dict(model=receipt.parent.name,name=receipt.name.removesuffix('.receipt.json'),pin=pin(p)))
-  need(len(weights)==70 and sum(x['pin']['bytes']for x in weights)==3_531_306_272,'all original five block tensors and bytes')
+  if profile_policy.is_selected(b):
+   helper=mod('actual_selected_weights',runtime/'selected_acquisition.py')
+   weights=helper.verify_weights(b,weights,payload,summary)
+  else:need(len(weights)==70 and sum(x['pin']['bytes']for x in weights)==3_531_306_272,'all original five block tensors and bytes')
  
-  reference=mod('actual_original_references',runtime/'reference_job.py')
+  reference=mod('actual_original_references',runtime/('selected_reference_job.py'if profile_policy.is_selected(b)else'reference_job.py'))
   rb=dict(execution_context='CLOUD_EXECUTOR_V1',reserved_other_owner_bytes=b['reserved_other_owner_bytes'],stage_resources=b['stage_resources'],job_budget_seconds=limit,execution_policy=execution_policy,profiles=list(range(5)),tokens=128,identity=identity,repo=str(repo),output=str(owner_root/'references'),owner_root=str(owner_root),owner_module=str(owner_module),owner_manifest=owner_pin,pins=pins,payload=str(payload),wall_seconds=q['reference'])
   references=reference.run(rb,stage)
  tail=numeric_module('actual_five_diagnostics',numeric/'numeric_tail.py',pins);tb=job/'bindings/NUMERIC.json'

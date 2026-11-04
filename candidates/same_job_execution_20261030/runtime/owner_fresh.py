@@ -3,6 +3,7 @@ Caller must supply separately reviewed binding and actual owning-controller rece
 index pins; these do not authenticate arbitrary self-authored JSON. Never imports a framework."""
 import argparse,contextlib,fcntl,hashlib,importlib.util,json,math,pathlib,platform,shutil,sys
 P=pathlib.Path
+_dep_spec=importlib.util.spec_from_file_location('runtime_dependencies',P(__file__).resolve().parent/'runtime_dependencies.py');deps=importlib.util.module_from_spec(_dep_spec);_dep_spec.loader.exec_module(deps)
 _policy_spec=importlib.util.spec_from_file_location('samejob_profile_policy', P(__file__).resolve().parent.parent/'profile_policy.py');profile_policy=importlib.util.module_from_spec(_policy_spec);_policy_spec.loader.exec_module(profile_policy)
 HELPER_SHA='e853a724acefd26e7b3ef1f6883003376eaf968b808db505793e731ca0b1d302'
 KEYS=('qwen2','qwen35_08b','qwen35_35b');MAP=('qwen2','qwen35_08b','qwen35_08b','qwen35_35b','qwen35_35b')
@@ -60,7 +61,8 @@ def native_contract(r,key,b,job):
 
 def binding(path,expected_sha):
  path=exact(path,expected_sha);b=read(path)
- need(b['schema']=='FRESH_JOB_THREE_RUNTIME_INSTALL_BINDING_V1','new installation binding')
+ need(b['schema']==deps.schema(b,'FRESH_JOB_THREE_RUNTIME_INSTALL_BINDING_V1',deps.SELECTED_BINDING),'new installation binding')
+ if deps.selected(b):deps.require_pins(b)
  profile_policy.require_source_pin(b['pins'])
  job=P(b['owner_root']);need(job.is_absolute() and job==job.resolve() and job.is_dir(),'owning root')
  owned(path,job);context_fields(b);identity(b['identity'],b)
@@ -70,12 +72,21 @@ def binding(path,expected_sha):
  for role in ('python','admitted_runner','phase_script'):
   need(b[role]in b['pins'],'reviewed role source/tool pin '+role)
  for path,h in b['pins'].items():exact(path,h)
- need(type(b['archives'])is list and len(b['archives'])==53,'all53 unique original runtime archives')
+ if deps.selected(b):
+  source=P(b['source_dir'])/'prepare_runtimes.py';exact(source,b['pins'].get(str(source)))
+  spec=importlib.util.spec_from_file_location('owner_original_archive_metadata',source);locked=importlib.util.module_from_spec(spec);spec.loader.exec_module(locked)
+  def archive_checked(row):
+   p=exact(row['path'],row['sha256']);need(p.stat().st_size==row['bytes'],'archive exact size');return p
+  deps.archive_rows(b,b['archives'],locked,archive_checked)
+ else:need(type(b['archives'])is list and len(b['archives'])==53,'all53 unique original runtime archives')
  seen=set()
  for row in b['archives']:
   ap=exact(row['path'],row['sha256']);need(ap.stat().st_size==row['bytes'] and row['sha256']not in seen,'archive exact size/unique digest');seen.add(row['sha256'])
   need(b['pins'].get(str(ap))==row['sha256'],'archive independently prebound')
  phase_binding=exact(b['phase_binding']['path'],b['phase_binding']['sha256']);need(phase_binding.stat().st_size==b['phase_binding']['bytes'] and b['pins'].get(str(phase_binding))==b['phase_binding']['sha256'],'prebound phase configuration')
+ phase=read(phase_binding)
+ if deps.selected(b):need('execution_policy'in phase,'explicit selected install phase policy')
+ if 'execution_policy'in phase:profile_policy.require_same(b,phase)
  for key,r in b['runtimes'].items():
   root=owned(r['root'],job);home=owned(r['home'],job);site=owned(r['site'],job)
   need(home==(root if key=='qwen2'else root/'work/runtime') and site==home/'site-packages','original installed layout')
@@ -88,7 +99,7 @@ def binding(path,expected_sha):
 def evidence(binding_path,binding_sha,index_path,index_sha,verify_all_inputs=True):
  b,job=binding(binding_path,binding_sha);s=helper(b['helper'])
  index_path=exact(index_path,index_sha);owned(index_path,job);index=read(index_path)
- need(index['schema']=='FRESH_JOB_THREE_RUNTIME_RECEIPTS_V1' and identity(index['identity'],b)==b['identity']and context_fields(index)==context_fields(b),'actual controller receipt identity')
+ need(index['schema']==deps.schema(b,'FRESH_JOB_THREE_RUNTIME_RECEIPTS_V1',deps.SELECTED_RECEIPTS) and identity(index['identity'],b)==b['identity']and context_fields(index)==context_fields(b),'actual controller receipt identity')
  need(index['binding']==s.pin(binding_path) and set(index['entries'])==set(profile_policy.runtimes(b)),'actual controller binds original admission')
  profile_policy.require_same(b,index)
  entries={}
@@ -98,6 +109,8 @@ def evidence(binding_path,binding_sha,index_path,index_sha,verify_all_inputs=Tru
   native=s.checked(rows['native']);need(native==P(layout['native_path']),'native receipt role path');r=read(native);native_contract(r,key,b,job)
   phase_path=s.checked(rows['phase_result']);need(phase_path==P(layout['phase_result_path']),'phase receipt role path');result=s.read(phase_path)
   need(result['scope']=='FRESH_INSTALL_ARCHIVE_SOURCE_BOUND_NOT_REFERENCE_TESTED' and result['runtime']==key,'current install-only result')
+  if deps.selected(b):
+   need(result.get('schema')==deps.SELECTED_PHASE and 'execution_policy'in result,'explicit selected install result');profile_policy.require_same(b,result)
   installation=s.checked(rows['installation']);need(installation==home/'runtime_install.json','original install receipt role')
   need(s.checked(rows['sidecar'])==home/'SOURCE_SIDECAR.json','original sidecar role')
   for name,p in [('installation',installation),('wrapper',home/'python.sh'),('sidecar',home/'SOURCE_SIDECAR.json'),('python',P(b['python']))]:
@@ -132,15 +145,15 @@ def bind(binding_path,binding_sha,index_path,index_sha,out):
  for key,e in entries.items():
   p=out/(key+'_TREE.json');p.write_text(json.dumps(s.tree(e['import_root'],e['python']['path']),sort_keys=True,separators=(',',':'))+'\n');e['tree_manifest']=s.pin(p);validate_tree(s,e)
  evidence(binding_path,binding_sha,index_path,index_sha)
- m={'execution_policy':profile_policy.checked(b),'schema':SCHEMA,'identity':b['identity'],'owner_root':str(job),'binding':s.pin(binding_path),'receipt_index':s.pin(index_path),'admitted_runner':s.pin(b['admitted_runner']),'helper':s.pin(b['helper']),'entries':entries,'profile_mapping':list(MAP),'reference_qualified':False,'numerical_qualified':False,'memory_peak_qualification':'INCOMPLETE_SYNCHRONOUS_CENSUS_GAPS','lifecycle':'RETAIN_UNTIL_ALL_FIVE_CONSUMERS_RELEASED_NO_AUTODELETE'}
+ m={'execution_policy':profile_policy.checked(b),'schema':deps.schema(b,SCHEMA,deps.SELECTED_OWNER),'identity':b['identity'],'owner_root':str(job),'binding':s.pin(binding_path),'receipt_index':s.pin(index_path),'admitted_runner':s.pin(b['admitted_runner']),'helper':s.pin(b['helper']),'entries':entries,'profile_mapping':list(MAP),'reference_qualified':False,'numerical_qualified':False,'memory_peak_qualification':'INCOMPLETE_SYNCHRONOUS_CENSUS_GAPS','lifecycle':deps.schema(b,'RETAIN_UNTIL_ALL_FIVE_CONSUMERS_RELEASED_NO_AUTODELETE','RETAIN_UNTIL_SELECTED_CONSUMERS_RELEASED_NO_AUTODELETE_V1')}
  m.update(context_fields(b))
  p=out/'SHARED_RUNTIMES_FRESH_JOB_V3.json';p.write_text(json.dumps(m,indent=2)+'\n');return s.pin(p)
 
 def verify(manifest,expected_sha,job):
  job=P(job).resolve();p=exact(manifest,expected_sha);owned(p,job);m=read(p)
- need(m['schema']==SCHEMA and m['owner_root']==str(job),'fresh job owner identity')
+ need(m['schema']==deps.schema(m,SCHEMA,deps.SELECTED_OWNER) and m['owner_root']==str(job),'fresh job owner identity')
  need(m['profile_mapping']==list(MAP) and set(m['entries'])==set(profile_policy.runtimes(m)),'five to three exact mapping')
- need(m['reference_qualified'] is False and m['numerical_qualified'] is False and m['memory_peak_qualification']=='INCOMPLETE_SYNCHRONOUS_CENSUS_GAPS' and m['lifecycle']=='RETAIN_UNTIL_ALL_FIVE_CONSUMERS_RELEASED_NO_AUTODELETE','no qualification escalation')
+ need(m['reference_qualified'] is False and m['numerical_qualified'] is False and m['memory_peak_qualification']=='INCOMPLETE_SYNCHRONOUS_CENSUS_GAPS' and m['lifecycle']==deps.schema(m,'RETAIN_UNTIL_ALL_FIVE_CONSUMERS_RELEASED_NO_AUTODELETE','RETAIN_UNTIL_SELECTED_CONSUMERS_RELEASED_NO_AUTODELETE_V1'),'no qualification escalation')
  b,s,actual=evidence(m['binding']['path'],m['binding']['sha256'],m['receipt_index']['path'],m['receipt_index']['sha256'])
  profile_policy.require_same(b,m)
  need(b['owner_root']==str(job) and identity(m['identity'],b)==b['identity']and context_fields(m)==context_fields(b),'same owning-job identity')

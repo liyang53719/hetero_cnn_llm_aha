@@ -1,0 +1,76 @@
+{
+  "controller/cloud_flow.py": [
+    {
+      "scope": "module.admitted_inputs.body",
+      "new_source": "budget_module.verify_host(budget_document['host_identity'], b['identity'], budget.get('execution_policy'))\nif profile_policy.is_selected(b):\n    need(budget.get('execution_policy') == profile_policy.checked(b), 'same approved preparation selection')\nelse:\n    need('execution_policy' not in budget, 'no implicit selected preparation')",
+      "old_source": "budget_module.verify_host(budget_document['host_identity'], b['identity'])",
+      "new_sha256": "4a7c4ece11ed4843edf6e88b5db95051c64ff09b3da9347ed5cad7e34b627839",
+      "old_sha256": "55c8522e051d619ea9fb85196604817bf9a0b8cf8d2386f9254b5b78c97f549d"
+    },
+    {
+      "scope": "module.run.body",
+      "new_source": "need(execution_policy['mode'] == profile_policy.FULL or (profile_policy.is_selected(b) and budget.get('execution_policy') == execution_policy), 'all five registered hardware profiles; selected dependencies explicitly approved')",
+      "old_source": "need(execution_policy['mode'] == profile_policy.FULL, 'all five original profiles on cloud executor')",
+      "new_sha256": "0a42043bbccad1bc0fbd62237c7d9d53c32bd53eb190404e9d18cea403db8421",
+      "old_sha256": "268ad323a2d71ef8a987d4ba184f34bd9587c550ddb23bb8b83b0c3fee66d74a"
+    },
+    {
+      "scope": "module.run.body.If.orelse",
+      "new_source": "save(ab, dict(source_dir=str(runtime / 'source'), pins=pins, output=str(archives), **{'execution_policy': execution_policy} if profile_policy.is_selected(b) else {}))",
+      "old_source": "save(ab, dict(source_dir=str(runtime / 'source'), pins=pins, output=str(archives)))",
+      "new_sha256": "50f7d43e36230222631c1e4f8c1777d7410cc9aa13ddefbc80b070a0b59fa46a",
+      "old_sha256": "a9b3937f2f66a001b37eaec1c9a1322de343065fe4c1109f5124f0b537e5afa7"
+    },
+    {
+      "scope": "module.run.body.If.orelse",
+      "new_source": "if profile_policy.is_selected(b):\n    acq = runtime / 'selected_acquisition.py'\n    wb = job / 'bindings/SELECTED_WEIGHTS.json'\n    save(wb, dict(b, output=str(payload)))\n    ok(stage('weights', [py, '-B', acq, '--binding', wb, '--sha256', sha(wb), '--execute'], q['weights'], 0.5, extra_pins={str(wb): sha(wb)}, network=True))\nelse:\n    acq = repo / 'candidates/five_profile_acquisition_resume_20261028/acquire_resumable.py'\n    ok(stage('weights', [py, '-B', acq, '--output', payload, '--execute'], q['weights'], 0.5, network=True))",
+      "old_source": "acq = repo / 'candidates/five_profile_acquisition_resume_20261028/acquire_resumable.py'\nok(stage('weights', [py, '-B', acq, '--output', payload, '--execute'], q['weights'], 0.5, network=True))",
+      "new_sha256": "fbb16fe35779ff31420bcf664ff02362b83439026e9a0405052df6263747f601",
+      "old_sha256": "6da9a90dd747290f7564578424f676e880860bf881ed1cdaabf35a977bb9669a"
+    },
+    {
+      "scope": "module.run.body.If.orelse",
+      "new_source": "if not profile_policy.is_selected(b):\n    need(summary['tensors'] == 70 and summary['tensor_bytes'] == 3531306272, 'one full70 tensor acquisition')",
+      "old_source": "need(summary['tensors'] == 70 and summary['tensor_bytes'] == 3531306272, 'one full70 tensor acquisition')",
+      "new_sha256": "91239d7c272b28a5bc101bae0d057faf8c0a3babec6dbd338681a90f659e4644",
+      "old_sha256": "33b65c9c0c72731473fae728f69dce146df0c8c48587713357014b91671a6ad4"
+    },
+    {
+      "scope": "module.run.body.If.orelse",
+      "new_source": "if profile_policy.is_selected(b):\n    helper = mod('actual_selected_weights', runtime / 'selected_acquisition.py')\n    weights = helper.verify_weights(b, weights, payload, summary)\nelse:\n    need(len(weights) == 70 and sum((x['pin']['bytes'] for x in weights)) == 3531306272, 'all original five block tensors and bytes')\nreference = mod('actual_original_references', runtime / ('selected_reference_job.py' if profile_policy.is_selected(b) else 'reference_job.py'))",
+      "old_source": "need(len(weights) == 70 and sum((x['pin']['bytes'] for x in weights)) == 3531306272, 'all original five block tensors and bytes')\nreference = mod('actual_original_references', runtime / 'reference_job.py')",
+      "new_sha256": "7ddedb7d05f5bdc06f3a38eaeb35827a0ffab20da83f0f7ba76e691bcf6c302e",
+      "old_sha256": "06688c4d614e8e48b6a0145542b71f471d18d0134226adac0bcb5db0d54e77f9"
+    }
+  ],
+  "numeric/numeric_tail.py": [
+    {
+      "scope": "module.weights.body",
+      "new_source": "if not profile_policy.is_selected(b):\n    need(len(b['weights']) == 70, 'one complete shared70 inventory')\nelse:\n    profile_policy.require_profile(b, i)\n    helper = module('selected_tail_weights', D.parent / 'runtime/selected_acquisition.py', b['pins'])\n    helper.validate_inventory(b, b['weights'])",
+      "old_source": "need(len(b['weights']) == 70, 'one complete shared70 inventory')",
+      "new_sha256": "37c82db48e6894c0d1230cb4bda66b5ff020f7274cc15e6585e415dc7e326bbb",
+      "old_sha256": "cde20bfd97d6a54579b1ca6b5fd3d30a312687a6ceed6823caf74c0a1c575154"
+    },
+    {
+      "scope": "module.retained_context.body",
+      "new_source": "profile_policy.require_same(b, controller)",
+      "old_source": "",
+      "new_sha256": "342cadea91256e297fe7e50a739bfe1ebf83128f95f564cea29c85d8ec9626d9",
+      "old_sha256": "3543b4693a36a1098850b8bc928887694ed59a6deb7d3dfd0339de01f55a77b6"
+    },
+    {
+      "scope": "module.execution_profiles.body.If.body",
+      "new_source": "ready = execution_mode.ready_queue_profiles(admission)\nneed(selected == ready if profile_policy.is_selected(b) else selected == list(range(5)), 'V3 exact preparation selection; registered hardware remains all five')\nreturn ready",
+      "old_source": "need(selected == list(range(5)), 'V3 retains all five registered hardware profiles')\nreturn execution_mode.ready_queue_profiles(admission)",
+      "new_sha256": "871e0999ed68536a883a32d9220db354c9fbba7cba4368d4da1801a937a8c396",
+      "old_sha256": "21293e56dd14fde909ec948e22a4e647bbcef837a8bf2449030c1c83b0bfaba4"
+    },
+    {
+      "scope": "module.run.body",
+      "new_source": "owner_schemas = ('SHARED_SELECTED_RUNTIME_OWNER_FRESH_JOB_V1', 'IMPORTED_SELECTED_RUNTIME_OWNER_CLOUD_V1') if profile_policy.is_selected(b) and cloud is not None else ('SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3', 'IMPORTED_THREE_RUNTIME_OWNER_CLOUD_V1') if cloud is not None else ('SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3',)\nneed(owner_doc['schema'] in owner_schemas and owner_doc['identity'] == (cloud if cloud is not None else dict(run_id=b['run_id'], source_commit=b['source_commit'], launch_commit=b['launch_commit'])), 'fresh CI owner exact same run/source/launch, never historical V2 receipt')",
+      "old_source": "need(owner_doc['schema'] in (('SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3', 'IMPORTED_THREE_RUNTIME_OWNER_CLOUD_V1') if cloud is not None else ('SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3',)) and owner_doc['identity'] == (cloud if cloud is not None else dict(run_id=b['run_id'], source_commit=b['source_commit'], launch_commit=b['launch_commit'])), 'fresh CI owner exact same run/source/launch, never historical V2 receipt')",
+      "new_sha256": "8032078a117d85d2bd955edda5bee4153bae41f52d04a992f54b8c2db79f571a",
+      "old_sha256": "1c2ba66c4909ef4500e127ad117f42fc06823dd4ac32c807f43ef4761b386b05"
+    }
+  ]
+}

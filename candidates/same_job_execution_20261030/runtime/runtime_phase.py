@@ -4,6 +4,7 @@ remain exactly those of the admitted source; not numerical qualification.
 """
 import argparse,hashlib,importlib.util,json,pathlib,platform,sys
 P=pathlib.Path
+_dep_spec=importlib.util.spec_from_file_location('runtime_dependencies',P(__file__).resolve().parent/'runtime_dependencies.py');deps=importlib.util.module_from_spec(_dep_spec);_dep_spec.loader.exec_module(deps)
 
 def sha(p):
  with P(p).open('rb')as f:return hashlib.file_digest(f,'sha256').hexdigest()
@@ -13,7 +14,7 @@ def module(name,path):
  s=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
 
 def install(b,key):
- need(key in ('qwen2','qwen35_08b','qwen35_35b'),'selected runtime')
+ deps.require_runtime(b,key)
  need(sys.version_info[:2]==(3,12)and platform.machine()=='x86_64','original installation ABI')
  # P0 alone requires AVX512; known Qwen35 installers retain their original
  # default-CPU, single-thread wrapper policy. This is not host qualification.
@@ -28,6 +29,7 @@ def install(b,key):
  derive.derive(contract['entries'][key]['revision'],cache/framework['filename'],framework['sha256'],cache/torch['filename'],side)
  need(m.digest(side)==contract['entries'][key]['expected_sidecar_sha256'],'independent original sidecar');m.verify_sidecar(site,side)
  result=dict(scope='FRESH_INSTALL_ARCHIVE_SOURCE_BOUND_NOT_REFERENCE_TESTED',runtime=key,wrapper=m.record(wrapper),installation=m.record(receipt),sidecar=m.record(side),site=str(site),python=m.record(P(sys.executable).resolve()))
+ if deps.selected(b):result.update(schema=deps.SELECTED_PHASE,execution_policy=deps.policy.checked(b))
  with (P(b['result_root'])/(key+'_RESULT.json')).open('x')as f:json.dump(result,f,indent=2);f.write('\n')
  for p,h in b['pins'].items():need(sha(p)==h,'post-install source/archive/tool drift')
  return result

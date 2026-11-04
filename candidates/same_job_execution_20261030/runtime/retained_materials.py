@@ -109,6 +109,10 @@ def candidate_material_contract(manifest_pin,d,old,b):
 
 def verify(manifest_pin,b):
  d=read(manifest_pin,1<<20)
+ if d.get('schema')=='RETAINED_SELECTED_M128_MATERIALS_V1':
+  helper=D/'selected_retained_materials.py';need(b['pins'].get(str(helper))==sha(helper),'explicit selected retained verifier source pin')
+  spec=importlib.util.spec_from_file_location('selected_retained_materials',helper);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+  return module.verify(manifest_pin,b)
  need(set(d)=={'schema','scope','old_controller_binding','old_executor_identity','weights_summary','weights_outer','references_manifest','weights','references','numerical_pass'}and d['schema']=='RETAINED_M128_MATERIALS_V1'and d['scope']==SCOPE and d['numerical_pass']is False,'retained material scope only')
  old=read(d['old_controller_binding']);ident=read(d['old_executor_identity'],65536)
  identity_path=D.parent/'executor_identity.py';need(b['pins'].get(str(identity_path))==sha(identity_path),'current identity validator source pin')

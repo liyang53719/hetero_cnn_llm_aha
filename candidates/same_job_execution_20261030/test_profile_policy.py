@@ -29,8 +29,8 @@ class Tests(unittest.TestCase):
   self.assertEqual(len(key_loops),2)
   self.assertTrue(all(isinstance(x.iter,ast.Name)and x.iter.id=='keys'for x in key_loops))
   self.assertIn('keys=profile_policy.runtimes(b)',source)
-  # Conservative three-install/full-five time reservations intentionally unchanged.
-  self.assertIn("3*(b['install_wall_seconds']+30)",source)
+  # Legacy reservations remain three; selected dependency scope reserves its exact runtime count.
+  self.assertIn("(len(keys)if deps.selected(b)else 3)*(b['install_wall_seconds']+30)",source)
 
  def test_policy_source_pin_required(self):
   with self.assertRaises(ValueError):p.require_source_pin({})

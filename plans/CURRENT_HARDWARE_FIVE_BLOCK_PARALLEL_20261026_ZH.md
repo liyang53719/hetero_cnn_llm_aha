@@ -1047,3 +1047,11 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 两次真实回执均仅三个安全JSON，未输出weights、tensor、SV/ELF或编码载荷。DEFAULT artifact13276783840：3228B、SHA256 3e8538f03d3570c1422c0289df2056438b991ab562112a18c7df69e63c0644b6；AVX512 artifact13281154664：2743B、SHA256 24a897e5d083d2bab4d770dfa5c4afad744947080ab132ee33a04e4840709899。
 - 原FULL session97358终态仍未知，最后已保存active_cycles6685568/pc12/completions10，不因消息/文件无更新推断停止。保留全部资源预留与未封口证据，不重启/清理。新硬件五块M128完整模型0/5、最终同刺激RTL0/5；尚无整块80%或90%利用率实测。
 - 下一步只读核当前云端已验证AVX512 runtime/权重复用和受限nonDUT参考执行预算，不重新安装大runtime，不削减原FULL/consumer/unknown-owner保留。非P0并行依赖审查确认selected_profiles只缩最终DUT loop，现有FULL前置仍要求全部runtime/reference；P2不能因selector可用而宣称端到端ready。任何局部新执行都需新实际资源门及精确身份，不能继承失去终态的PASS。
+
+
+## 2026-11-04 00:34 UTC：原AVX512软件参考真实复现（仅参考层PASS）
+
+- 同原boot复用已保留runtime/权重，以独立、受限、串行入口实际完成一次。真实退出码0；完整runtime树18,335文件/877,701,593B、原12权重93,595,648B前后重hash一致。原两次完整M128 forward及24张量+完整1024 RoPE共25项形状/类型/字节/SHA全部一致，终态seal与实际退出码联合核验通过。此前DEFAULT attention概率FAIL保留，不用本次结果替其改判。
+- 数值源为5f3798f81ca770ade8c2396cae6d3743184eacdc / manifest6bc0216344e731c2a7a9715fdaa0ad6f6879a7c661723e2add58f8a31ee14a4d；受限本机适配manifest28d30efb860545198606be37c7531ac454ca4f3d285ae4277b533b822b4af803，明确cgroup UNKNOWN与原有限保留，不冒GitHub环境准入成功。公开仅reports/p0_same_host_reference_actual_20261104T0034/下三个安全摘要，无私有绑定、weights、tensor、二进制或编码载荷。
+- 总wall20.956s/CPU23.373s；reference实际wall8.443s，采样RSS峰544,755,712B≤576MiB；监督峰17,428,480B。前核/reference/RoPE/后核四阶段native0、cleanup/EOF/gzip均完整，所有者阻断标记正常解除。原FULL的DUT2GiB、consumer512MiB、unknown5GiB及未来磁盘保留不动。
+- 这是独立Python参考的25项可见字节一致，不是Chisel完整块、实际DUT/RTL或内部全部算术顺序证明。五块M128模型/最终RTL仍0/5，尚无新整块有效MAC利用率。下一步继续原fullprefill执行衔接；原FULL终态未知和云端通用runner的AVX512不保证仍须真实处理，不能叠加第二完整DUT或随机重复昂贵作业。

@@ -13,8 +13,8 @@ import required_acceptance
 
 # Finite diagnostic projection only; no raw path, argv, environment or exception text.
 _EXECUTION_COMPONENT='CONSUMER_OWNED'
-_EXECUTION_PHASES=('CLI', 'OWNED_ENVIRONMENT', 'ADMISSION', 'ARTIFACT', 'CONTEXT', 'BINDING', 'BUILD', 'ABI', 'RUNTIME_INPUTS', 'REFERENCE', 'OUTPUT', 'PRE_EXECUTION', 'DUT_POPEN', 'OUT_OF_SCOPE', 'FINISH')
-_EXECUTION_CLASSES=('ValueError', 'TypeError', 'KeyError', 'IndexError', 'OSError', 'FileNotFoundError', 'PermissionError', 'JSONDecodeError', 'UnicodeDecodeError', 'UnicodeEncodeError', 'TimeoutExpired', 'SystemExit', 'OverflowError', 'MemoryError', 'RuntimeError', 'IsADirectoryError', 'NotADirectoryError', 'FileExistsError', 'error', 'OTHER')
+_EXECUTION_PHASES=('CLI', 'OWNED_ENVIRONMENT', 'ADMISSION', 'ARTIFACT', 'CONTEXT', 'BINDING', 'BUILD', 'ABI', 'RUNTIME_INPUTS', 'REFERENCE', 'OUTPUT', 'PRE_EXECUTION', 'DUT_POPEN', 'DUT_CAPTURE', 'OUT_OF_SCOPE', 'FINISH')
+_EXECUTION_CLASSES=('ValueError', 'TypeError', 'KeyError', 'IndexError', 'OSError', 'FileNotFoundError', 'PermissionError', 'JSONDecodeError', 'UnicodeDecodeError', 'UnicodeEncodeError', 'TimeoutExpired', 'TimeoutError', 'SystemExit', 'OverflowError', 'MemoryError', 'RuntimeError', 'IsADirectoryError', 'NotADirectoryError', 'FileExistsError', 'error', 'OTHER')
 _execution_phase_state=['CLI']
 _execution_emitted=[False]
 def execution_phase(value):
@@ -227,7 +227,7 @@ def execute_streaming(binary, runtime, output, log, limits, *, model162_binary=F
             finally:
                 if CLOUD_MEMORY is not None:CLOUD_MEMORY.after_popen()
         raise
-    execution_phase('OUT_OF_SCOPE')
+    execution_phase('DUT_CAPTURE')
     result=helper.capture(p,log,FULL_LOG_POLICY,limits['wall_seconds'],started,writer=writer)
     if result['termination_reason']=='WALL_TIMEOUT':raise TimeoutError('DUT wall deadline')
     need(result['complete'],'DUT streaming log incomplete: '+result['termination_reason'])

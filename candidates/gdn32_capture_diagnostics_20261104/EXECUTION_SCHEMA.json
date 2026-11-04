@@ -1,0 +1,83 @@
+{
+  "schema": "GDN32_EXECUTION_DIAGNOSTIC_V1",
+  "fields": [
+    "schema",
+    "component",
+    "stage",
+    "phase",
+    "status",
+    "code",
+    "exception_class",
+    "native_started",
+    "dut_started",
+    "numerical_pass"
+  ],
+  "components": {
+    "CONNECT_OWNED": [
+      "CLI",
+      "OWNED_ENVIRONMENT",
+      "SOURCE_GUARD",
+      "ARTIFACT",
+      "CONTEXT",
+      "BUILD",
+      "ABI",
+      "BUNDLE_INPUT",
+      "P0_HYDRATION",
+      "P0_POLICY",
+      "BUNDLE_OUTPUT",
+      "BINDING",
+      "ARGUMENT_RECEIPT"
+    ],
+    "CONSUMER_OWNED": [
+      "CLI",
+      "OWNED_ENVIRONMENT",
+      "ADMISSION",
+      "ARTIFACT",
+      "CONTEXT",
+      "BINDING",
+      "BUILD",
+      "ABI",
+      "RUNTIME_INPUTS",
+      "REFERENCE",
+      "OUTPUT",
+      "PRE_EXECUTION",
+      "DUT_POPEN",
+      "DUT_CAPTURE",
+      "OUT_OF_SCOPE",
+      "FINISH"
+    ]
+  },
+  "classes": [
+    "ValueError",
+    "TypeError",
+    "KeyError",
+    "IndexError",
+    "OSError",
+    "FileNotFoundError",
+    "PermissionError",
+    "JSONDecodeError",
+    "UnicodeDecodeError",
+    "UnicodeEncodeError",
+    "TimeoutExpired",
+    "TimeoutError",
+    "SystemExit",
+    "OverflowError",
+    "MemoryError",
+    "RuntimeError",
+    "IsADirectoryError",
+    "NotADirectoryError",
+    "FileExistsError",
+    "error",
+    "OTHER"
+  ],
+  "fixed": {
+    "stage": "UNVERIFIED",
+    "status": "FAILED",
+    "native_started": null,
+    "dut_started": null,
+    "numerical_pass": false
+  },
+  "code_rule": "phase + _REJECTED",
+  "max_events_per_process": 1,
+  "format": "BARE_SINGLE_LINE_JSON"
+}

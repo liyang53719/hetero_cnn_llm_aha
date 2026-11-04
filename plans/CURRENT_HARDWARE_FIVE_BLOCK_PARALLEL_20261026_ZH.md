@@ -1055,3 +1055,12 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 数值源为5f3798f81ca770ade8c2396cae6d3743184eacdc / manifest6bc0216344e731c2a7a9715fdaa0ad6f6879a7c661723e2add58f8a31ee14a4d；受限本机适配manifest28d30efb860545198606be37c7531ac454ca4f3d285ae4277b533b822b4af803，明确cgroup UNKNOWN与原有限保留，不冒GitHub环境准入成功。公开仅reports/p0_same_host_reference_actual_20261104T0034/下三个安全摘要，无私有绑定、weights、tensor、二进制或编码载荷。
 - 总wall20.956s/CPU23.373s；reference实际wall8.443s，采样RSS峰544,755,712B≤576MiB；监督峰17,428,480B。前核/reference/RoPE/后核四阶段native0、cleanup/EOF/gzip均完整，所有者阻断标记正常解除。原FULL的DUT2GiB、consumer512MiB、unknown5GiB及未来磁盘保留不动。
 - 这是独立Python参考的25项可见字节一致，不是Chisel完整块、实际DUT/RTL或内部全部算术顺序证明。五块M128模型/最终RTL仍0/5，尚无新整块有效MAC利用率。下一步继续原fullprefill执行衔接；原FULL终态未知和云端通用runner的AVX512不保证仍须真实处理，不能叠加第二完整DUT或随机重复昂贵作业。
+
+## 2026-11-04 01:13 UTC：FAIL，独立 AVX2 软件参考实验未复现冻结概率
+
+- 原同 host AVX512 软件参考 25/25 PASS 保持，不迁移到新候选。独立 AVX2 候选保留原数学源码、24 张量及完整 RoPE 的 shape/dtype/bytes/SHA 门；66 项纯/mock normal/-O 通过后，经资源与语义独审，在原有限预算内只执行一次软件实验，未启动 DUT/EDA。
+- 实际 session96530、nonce5b2bedb97da45b79ea00f46d8f87c141，controller exit1，闭合 FAIL/REFERENCE_HASH。15 项 PASS，第16项 stage.self_attn.0.1（BF16 [1,12,128,128]、393216B）expected375523468652eec0a4765d67c08506ab1d441bdfe3dd69ef55d7ec0d0323335d，actual3d41c4fa2751977f12e6a088c71d21d97f46f23fe5a0880d143bb602ccd4ed1b，与 DEFAULT 的实际失配相同；其后9项未到达，RoPE阶段未执行。第一完整 baseline forward及KV已返回并exact，第二次在attention返回hook中止，不能称两次完整forward通过。
+- 12权重与完整保留runtime前后核验相等。reference实际7.416s，采样RSS峰545222656B≤576MiB；job12.050s/CPU13.602s。pre/reference/post三阶段cleanup、EOF及gzip封口均完整，持久所有者标记正常解除。此前一次控制器命令误用解释器并漏-S，在创建root/ownership及任何worker前被INPUT_PIN拒绝；使用原固定解释器-S-B纠正，无源码或门限变化。
+- HOST_RESOURCES中的observed capability/threads/interop为null，因为完整数值RESULT未生成；仅已核源码执行次序表明API/4/1断言在到达哈希前通过，不能称有成功的持久化API回执。ATen AVX2不是全库ISA上限，本实验仍在AVX512物理主机进行；既不证明无AVX512可移植，也不证明具体内部算术差异的全部因果。
+- 安全摘要位于reports/p0_same_host_avx2_reference_actual_20261104T0057/，无权重、张量、DUT二进制或编码数据。严格保留失败，不改golden/容差/舍入，不能忽略概率来宣称完整参考成功。
+- 原FULL97358终态仍UNKNOWN，最新有界证据仍6,685,568 active cycles/pc12/completions10，未有RESULT或transport终态。五块M128完整Chisel/最终RTL仍0/5。新增完整DUT保留旧资源后RAM至少短1,359,720,448B；仅释放可恢复缓存不能解除。继续五块共享执行闭包与已验证独立云host路线，不重启旧FULL、不叠加第二完整DUT、不随机重排失败nonce。无新整块有效MAC利用率结论。

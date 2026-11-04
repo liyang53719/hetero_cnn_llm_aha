@@ -13,3 +13,9 @@
 一个连续DUT进程执行完整17commands/M128，保持原1e9cycle上限。pc6及进展仅表示进入chunk；pc>=7、completions>=7且未观察到reset才标 TARGET_REACHED_NOT_FULL。必要下界21,516,288cycles不是墙时预测。未命中目标为TARGET_NOT_REACHED；wall到期且未完整数值验收为INCOMPLETE/TIMEOUT。正常exit和目标命中均不代表FULL PASS。FULL仍须原所有输出/reference比较与cleanup/证据验证。跨五profile最终结论仍须全部真实结果和同实际SV hash。
 
 本源码和纯回放不证明 native 编译、Top展开、DUT、数值、性能或最终RTL验收。生成仿真SV仅为模型测试后端；无DUT/SV/cache/artifact上传。唯一launch需父级发布、独审通过及真实资源门满足后执行。
+
+## 首次运行后的确定阻塞修复
+
+原 run41795538007/source a6bf560a/launch29bbc7d 已失败且不重跑。材料/reference与compile/HIGH/host SV准备成功返回，但最后仅证明frontend scanner资源门获准，scanner/native exit/plan审计回执未外露，唯一根因仍未确定。静态纯回放确定新adapter错误地把原四个frontend_native阶段12GiB RSS拒于8GiB域；V2模型身份仅恢复四个原1800秒/12GiB阶段和13GiB fresh入场，15GiB AS及原监督caps不变，不扩大DUT或普通阶段。
+
+新诊断使用固定stage/phase/code投影，不输出argv、路径、环境、原始异常或生成SV/DUT。旧runner的native产物未上传且不可在新job复用；首次build段约13分10秒只到scanner边界，不是完整构建耗时或未来预测。修复源码发布和普通CI不授权第二次重build；独立retry1 nonce只在父级单独审定执行边界后创建。

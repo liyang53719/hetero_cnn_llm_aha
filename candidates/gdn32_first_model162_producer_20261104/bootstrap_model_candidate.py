@@ -236,20 +236,24 @@ def main():
   except Exception:
    parent_failure('BOOTSTRAP_ALIAS','RUNTIME_ALIAS_REJECTED');raise
  def stage(name,argv,wall=300,rss=1,token=False):
-  if getattr(v,'samejob_gdn32_binding',None)is not None:
-   from model162_resources import before_stage
-   before_stage({'path':str(v.samejob_gdn32_binding),'sha256':v.samejob_gdn32_binding_sha256},wall,rss)
-  check_fresh_aliases()
-  need(time.monotonic()-started+wall+30<bootstrap_seconds,'bounded bootstrap shared30min budget')
-  need(time.monotonic()-started+wall+30<=v.maximum_build_seconds,'each setup stays inside reviewed build budget including cleanup')
-  need(time.monotonic()-v.job_started_monotonic+wall+30+v.remaining_tail_reserve_seconds<whole_job_seconds,'whole build-only deadline reserves export')
-  need(shutil.disk_usage(W).free>=1_500_000_000,'disk reserve')
-  e=dict(env)
-  if token:
-   need(bool(os.environ.get('GH_TOKEN')),'existing job actions-read token required');e['GH_TOKEN']=os.environ['GH_TOKEN']
+  from model162_resources import before_stage,safe_failure
+  phase='RESOURCE_REQUEST'
+  try:
+   if getattr(v,'samejob_gdn32_binding',None)is not None:before_stage({'path':str(v.samejob_gdn32_binding),'sha256':v.samejob_gdn32_binding_sha256},wall,rss,stage=name)
+   phase='RUNTIME_ALIAS';check_fresh_aliases()
+   phase='DEADLINE'
+   need(time.monotonic()-started+wall+30<bootstrap_seconds,'bounded bootstrap shared30min budget')
+   need(time.monotonic()-started+wall+30<=v.maximum_build_seconds,'each setup stays inside reviewed build budget including cleanup')
+   need(time.monotonic()-v.job_started_monotonic+wall+30+v.remaining_tail_reserve_seconds<whole_job_seconds,'whole build-only deadline reserves export')
+   phase='DISK';need(shutil.disk_usage(W).free>=1_500_000_000,'disk reserve')
+   phase='NATIVE_ENVIRONMENT';e=dict(env)
+   if token:
+    need(bool(os.environ.get('GH_TOKEN')),'existing job actions-read token required');e['GH_TOKEN']=os.environ['GH_TOKEN']
+  except Exception as exc:safe_failure(name,phase,exc,wall,rss);raise
   caps=dict(wall_seconds=wall,cleanup_seconds=30,file_bytes=536870912,tree_bytes=12_081_306_272,log_bytes=16_777_216,raw_log_bytes=33_554_432,max_entries=100000,per_process_as_bytes=4*1024**3,per_process_cpu_seconds=wall,rss_bytes=rss*1024**3,cpu_seconds=wall,extra_watch_roots=[str(W),str(R),str(v.shared_owned_root.resolve())],min_free_disk_bytes=1_500_000_000,watch_tree_bytes=12_081_306_272)
   try:
-   r=supervise.execute(argv,str(W/('stage_'+name)),str(W/'bootstrap.lock'),caps,e,pins,resource_gate={'min_available_memory':(rss+1)*1024**3,'min_disk_free':1_500_000_000})
+   try:r=supervise.execute(argv,str(W/('stage_'+name)),str(W/'bootstrap.lock'),caps,e,pins,resource_gate={'min_available_memory':(rss+1)*1024**3,'min_disk_free':1_500_000_000})
+   except Exception as exc:safe_failure(name,'SUPERVISOR',exc,wall,rss,kind='SUPERVISOR');raise
    record_bootstrap_diagnostic(name,r,W)
   finally:
    check_fresh_aliases()

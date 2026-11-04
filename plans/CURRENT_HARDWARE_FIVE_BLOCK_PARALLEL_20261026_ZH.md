@@ -1161,3 +1161,16 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 当前验证范围：model155项与catalog1211逐项审计；独立49项pure tests normal/-O通过；实际调用链的合成回放验证材料先行、原clock、一次派生W及consumer拒二次claim，外部材料/build/numeric_tail.run使用stub，不能冒真实运行。源码批不带nonce激活；源发布、普通CI、远端闭包独审后另行唯一nonce启动。构建产物仅在同一job复用；job结束后后续完整运行需重建，不承诺持久复用或完整块完成。
 
 首测入口复核补修：原control60在seven-file/source准备前核验，不能覆盖准备耗时后的首次startup_abi启动边界。本次在首次numeric-native资源门之后、supervisor.execute之前再次核原controller完整尾与control60；后续已计费阶段不重复套60秒，冻结W和10470尾均不变。真实stage AST与真实bridge纯边界回放验证1/59/60秒准入、60.001秒拒绝，无native执行。旧暂定159源码尚未更新main/激活，发布改用重封后的revision。
+
+
+## 2026-11-04 首次P1真实构建失败后修复（TEMP / INCOMPLETE）
+
+固定原source a6bf560aa6690455c4d9e279920a720b172a9fac、launch29bbc7d556a2a8498e2b88ca7b0d3a5a69cb6770、run41795538007/job126458632954，原job于08:09:41 UTC失败。原日志44213B，SHA256 1897a3dc1b31e6d37d5804642afe58237880af6fee9c75b33c747d2d83b6cb05。初始实际MemAvailable15346974720B、disk91084066816B，通过既定13GiB/20671240864B入场；约98秒内selected archive、weights、install、bind、reference1均exit0/EOF/cleanup完整。reference1 wall11.387686733秒、peakRSS491425792B，只是参考阶段，不是硬件数值通过。
+
+真实构建已按固定顺序越过Scala编译、HIGH/canonical/transform、host发射、SV身份/FMA/subset；最后19号MODEL_BUILD门对应Verilator hierarchical frontend plan/scanner的180秒/7GiB阶段。门本身不证明该进程启动或成功退出。构建段约13分10秒，最终仅公开STAGE_FAILED/ValueError；尚无C++编译、DUT、冻结运行W或完整数值比较证据。19条门在退出时延迟转发，不表示同时执行。
+
+确定缺陷一：新adapter硬限RSS≤8GiB，而原串行四个frontend_native阶段要求12GiB，故即使scanner/audit_plan成功，首child仍会在下一门输出前拒绝。已用真实before_stage和真实serial调用链纯回放复现，不能据此断言原run唯一根因。修复只接受28个精确原stage tuple，其中仅四个1800秒frontend_native允许12GiB树RSS，保留原15GiB AS、每次锁内fresh13GiB入场、串行native成功+cleanup再下一项。DUT8GiB、磁盘union、21k总clock、7200构建cap及10470尾不变。运行中低MemAvailable仅warning，1.5GB持续门是disk，不宣称硬内存containment。
+
+确定缺陷二：原producer已有BUILD_STAGE_DIAGNOSTIC有限诊断，entry仅对整行json.loads导致带前缀记录未转发。本批新增严格schema的有限诊断投影和固定pre/supervisor/serial-plan标签，保留失败重抛，无fallback；不输出原始异常、路径、环境或payload，启动不确定使用null。缺失的旧runner本地日志/产物不可凭空恢复，原精确rootcause仍NOT_ESTABLISHED；没有证据断言OOM、timeout或额外hier分区。
+
+本批为12条model必要修改加5条独立retry1 listener源码及本计划；31ce旧153、旧once/旧listener均保留，旧commit/run不改、不rerun。新model generation 31dc0fabfd5d06d40eccf7194902bee245b8c98e25488b8993b676cae1fd90d3显式绑定资源策略；硬件generation/162源码/4096MAC/共享32/122接口保持不变。纯测试及联合stub回放只证控制/资源/诊断软件范围，不能冒新的真实frontend或FULL PASS。source批无新nonce；发布后须实际远端闭包和普通CI，再单独审定唯一retry激活。若再次运行，旧runner产物无法复用，已做构建前半段需重建；禁止为日志无限重复EDA，五块完整数值仍0/5，最终RTL验收未到。

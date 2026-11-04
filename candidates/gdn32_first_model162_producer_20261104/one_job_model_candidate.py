@@ -191,16 +191,20 @@ def main():
   import shutil
   need(shutil.disk_usage(out).free>=1_500_000_000+additional_bytes,'preserve disk reserve; no automatic deletion')
  def stage(name,argv,seconds=600,rss=5,tree=2_000_000_000,accepted_exit_codes=(0,),env_override=None,extra_watch_roots=None,extra_pins=None):
-  if 'model162_controller_binding'in b:
-   from model162_resources import before_stage
-   before_stage(b['model162_controller_binding'],seconds,rss)
-  for path,target in b.get('fresh_host_aliases',{}).items():need(str(pathlib.Path(path).resolve(strict=True))==target,'fresh runtime alias drift')
-  disk_gate()
-  left=job_budget-(time.monotonic()-start);need(left>seconds+60,'remaining build-only deadline reserve')
+  from model162_resources import before_stage,safe_failure
+  phase='RESOURCE_REQUEST'
+  try:
+   if 'model162_controller_binding'in b:before_stage(b['model162_controller_binding'],seconds,rss,stage=name)
+   phase='RUNTIME_ALIAS'
+   for path,target in b.get('fresh_host_aliases',{}).items():need(str(pathlib.Path(path).resolve(strict=True))==target,'fresh runtime alias drift')
+   phase='DISK';disk_gate()
+   phase='DEADLINE';left=job_budget-(time.monotonic()-start);need(left>seconds+60,'remaining build-only deadline reserve')
+  except Exception as exc:safe_failure(name,phase,exc,seconds,rss);raise
   caps=dict(jdk_aliases=b['jdk_aliases'],wall_seconds=seconds,cleanup_seconds=30,file_bytes=536870912,tree_bytes=tree,log_bytes=150_000_000,raw_log_bytes=1073741824,max_entries=100000,per_process_as_bytes=15*1024**3,per_process_cpu_seconds=seconds,rss_bytes=rss*1024**3,cpu_seconds=seconds,extra_watch_roots=[str(repo),str(out)]+b['materialized_roots']+(extra_watch_roots or []),min_free_disk_bytes=1_500_000_000,watch_tree_bytes=12_081_306_272)
   stage_env=dict(env);stage_env.update(env_override or {});stage_pins=dict(b['pins']);stage_pins.update(extra_pins or {})
   try:
-   r=supervise.execute(argv,str(out/name),str(lock),caps,stage_env,stage_pins,resource_gate={'min_available_memory':(rss+1)*1024**3,'min_disk_free':1_500_000_000})
+   try:r=supervise.execute(argv,str(out/name),str(lock),caps,stage_env,stage_pins,resource_gate={'min_available_memory':(rss+1)*1024**3,'min_disk_free':1_500_000_000})
+   except Exception as exc:safe_failure(name,'SUPERVISOR',exc,seconds,rss,kind='SUPERVISOR');raise
    print('BUILD_STAGE_DIAGNOSTIC '+build_stage_diagnostic(name,r,out/name/'RESULT.json'),flush=True)
    if name=='original_high':
     from original_ir_diagnostic import project as project_original_ir_diagnostic
@@ -238,7 +242,10 @@ def main():
   stage('subset',[b['python'],'-B',str(extractor),'--host',str(host),'--host-sha256',sha(host),'--fma',str(fma),'--fma-sha256',sha(fma),'--out',str(subset)],120,2)
   obj=out/'frontend/obj'
   argv=[b['verilator'],*['+incdir+'+x for x in b['idma_include_dirs']],*['+define+'+x for x in b['idma_defines']],'--cc','--exe','--no-std','--relative-includes','--hierarchical','--build-jobs','1','--verilate-jobs','1','--threads','1','--top-module','HostBlockTopV4','--prefix','VHostBlockTopV4','--Mdir',str(obj),'-Wno-fatal',b['hierarchy'],*([str(repo/diagnostic['probe_config']['repo_path'])]+([str(repo/diagnostic['terminal_probe_config']['repo_path'])] if diagnostic.get('schema')=='FIRST_FAULT_DRIVER_CONTRACT_V2' else []) if diagnostic is not None else []),*b['provider_sources'],str(host),str(subset),b['driver'],'-CFLAGS','-std=c++17 -I'+b['driver_include'],'-LDFLAGS','-lcrypto']
-  run_frontend_serial(stage,argv,b['python'],b['verilator'],out)
+  try:run_frontend_serial(stage,argv,b['python'],b['verilator'],out)
+  except Exception as exc:
+   from model162_resources import safe_failure
+   safe_failure('frontend','SERIAL_PLAN',exc,180,7,kind='SERIAL');raise
   if diagnostic is not None:
    # Pure bounded declaration/provenance work inside original whole-job envelope.
    # Never modifies SV or generated C++; all actual products enter prebuild pins.

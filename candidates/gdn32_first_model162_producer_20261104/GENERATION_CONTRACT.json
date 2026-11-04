@@ -1,5 +1,5 @@
 {
-  "schema": "MODEL162_GENERATION_CONTRACT_V1",
+  "schema": "MODEL162_GENERATION_CONTRACT_V2",
   "scope": "SOURCE_STRUCTURAL_PRECONDITIONS_ONLY_NOT_NUMERICAL_ACCEPTANCE",
   "source_overlay_sha256": "589e1e0f522aae929d25283b180ec566683254862f9537494aec26e2bd27efe1",
   "source_count": 162,
@@ -25,5 +25,7 @@
   "upstream_overlay_sha256": "1bd1db80190d2d611cfeb15f50c2bbadec76f2aaad74280671b22e843240a945",
   "model_source_contract_repo_path": "candidates/gdn32_first_model_execution_20261104/numeric/MODEL_P0_GDN32_SOURCE_CONTRACT.json",
   "model_source_contract_sha256": "8ac291f2d129de351a19c95c643437a3600a01d8b40a8e55b5eafabb32975cbc",
-  "old_artifact_reuse_permitted": false
+  "old_artifact_reuse_permitted": false,
+  "host_resource_policy": "ORIGINAL_SERIAL_FRONTEND_STAGE_TUPLES_V1",
+  "resource_adapter_sha256": "97454e9a114370d0f6282ad5da693b9b3386003f3d5180f60798a9c9a3c25865"
 }

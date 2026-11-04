@@ -317,7 +317,7 @@ def host_profile_tooling_policy(source,readonly):
   need(matches==[repo+rel]and pins[matches[0]]==want,'complete exact host-profile tooling implementation '+rel)
  return dict(selected)
 
-MODEL162_IMPLEMENTATION_PINS_SHA='dc62217e81e0b70340967e44c1f46ebf307f1ff201bd20edff0b9c8d8dce4cf0'
+MODEL162_IMPLEMENTATION_PINS_SHA='3e2b3d1bef14bde51fab68699b15fa2266c9518b24d88bb0f43be14fca367d12'
 def model162_implementation_pins():
  path=P(__file__).resolve().with_name('MODEL162_IMPLEMENTATION_PINS.json')
  need(path.is_file() and not path.is_symlink() and 0<path.stat().st_size<=1<<20 and sha(path)==MODEL162_IMPLEMENTATION_PINS_SHA,'independent model162 implementation contract')
@@ -326,7 +326,7 @@ def model162_implementation_pins():
  return pins
 
 def model162_tooling_policy(source,readonly):
- from candidate_generation_gate import MODEL162_GENERATION_SHA,MODEL162_OVERLAY_SHA,MODEL162_DIR,MODEL162_SOURCE_CONTRACT_REL,MODEL162_SOURCE_CONTRACT_SHA,UPSTREAM_DIR,UPSTREAM_GENERATION_SHA,UPSTREAM_OVERLAY_SHA,DRIVER_SHA
+ from candidate_generation_gate import MODEL162_GENERATION_SHA,MODEL162_OVERLAY_SHA,MODEL162_DIR,MODEL162_SOURCE_CONTRACT_REL,MODEL162_SOURCE_CONTRACT_SHA,UPSTREAM_DIR,UPSTREAM_GENERATION_SHA,UPSTREAM_OVERLAY_SHA,DRIVER_SHA,MODEL162_RESOURCE_ADAPTER_REL,MODEL162_RESOURCE_ADAPTER_SHA
  closure=source.get('model_candidate_observation',{}).get('source_closure',{});pins=source.get('generation_input_pins',{})
  active=closure.get('generation_contract_sha256')==MODEL162_GENERATION_SHA or closure.get('source_overlay',{}).get('sha256')==MODEL162_OVERLAY_SHA or str(source.get('fixed_source_overlay','')).endswith('/'+MODEL162_DIR+'/MODEL_SOURCE_OVERLAY.json')
  if not active:return None
@@ -334,7 +334,7 @@ def model162_tooling_policy(source,readonly):
  need(type(closure.get('source_count'))is int and closure['source_count']==162 and closure.get('generation_contract_sha256')==MODEL162_GENERATION_SHA and closure.get('source_overlay',{}).get('sha256')==MODEL162_OVERLAY_SHA,'exact actual162 generation pair')
  suffix='/'+MODEL162_DIR+'/candidate_generation_gate.py';paths=[p for p in pins if p.endswith(suffix)];need(len(paths)==1,'one independent actual162 producer root');repo=paths[0][:-len(suffix)]
  need(repo.startswith('/')and posixpath.normpath(repo)==repo and '..'not in P(repo).parts,'canonical actual162 producer root')
- for rel,want in [(MODEL162_DIR+'/GENERATION_CONTRACT.json',MODEL162_GENERATION_SHA),(MODEL162_DIR+'/MODEL_SOURCE_OVERLAY.json',MODEL162_OVERLAY_SHA),(UPSTREAM_DIR+'/GENERATION_CONTRACT.json',UPSTREAM_GENERATION_SHA),(UPSTREAM_DIR+'/MODEL_SOURCE_OVERLAY.json',UPSTREAM_OVERLAY_SHA),(MODEL162_SOURCE_CONTRACT_REL,MODEL162_SOURCE_CONTRACT_SHA),(MODEL162_DIR+'/MODEL162_IMPLEMENTATION_PINS.json',MODEL162_IMPLEMENTATION_PINS_SHA)]:need(pins.get(repo+'/'+rel)==want,'exact actual162 closure role '+rel)
+ for rel,want in [(MODEL162_DIR+'/GENERATION_CONTRACT.json',MODEL162_GENERATION_SHA),(MODEL162_DIR+'/MODEL_SOURCE_OVERLAY.json',MODEL162_OVERLAY_SHA),(UPSTREAM_DIR+'/GENERATION_CONTRACT.json',UPSTREAM_GENERATION_SHA),(UPSTREAM_DIR+'/MODEL_SOURCE_OVERLAY.json',UPSTREAM_OVERLAY_SHA),(MODEL162_SOURCE_CONTRACT_REL,MODEL162_SOURCE_CONTRACT_SHA),(MODEL162_DIR+'/MODEL162_IMPLEMENTATION_PINS.json',MODEL162_IMPLEMENTATION_PINS_SHA),(MODEL162_RESOURCE_ADAPTER_REL,MODEL162_RESOURCE_ADAPTER_SHA)]:need(pins.get(repo+'/'+rel)==want,'exact actual162 closure role '+rel)
  need(source.get('fixed_source_overlay')==repo+'/'+MODEL162_DIR+'/MODEL_SOURCE_OVERLAY.json'and source.get('driver_sha256')==DRIVER_SHA,'actual162 source overlay and original driver')
  contract=source.get('model_source_evidence',{}).get('contract',{});need(contract.get('path')==repo+'/'+MODEL162_SOURCE_CONTRACT_REL and contract.get('sha256')==MODEL162_SOURCE_CONTRACT_SHA,'actual162 source evidence contract')
  selected=model162_implementation_pins();need(all(pins.get(repo+'/'+rel)==h for rel,h in selected.items()),'complete exact actual162 producer family')

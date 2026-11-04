@@ -1,10 +1,10 @@
 """One source-only structural job. No engine/native, weights, references or IR export."""
 import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request
 P=pathlib.Path;D=P(__file__).resolve().parent;REPO=D.parent.parent
-REL='candidates/chisel_structural_graph_20261104';NONCE='ci_launch/chisel_structural_graph_20261104_phase_once.json'
+REL='candidates/chisel_structural_graph_20261104';NONCE='ci_launch/chisel_structural_graph_20261104_continuation_once.json'
 CAT='candidates/gdn32_first_model_execution_20261104/GDN32_FULL_SOURCE_PINS.json'
 CAT_SHA='ad2d4dcaddb213c85fd15adc65f7da5bd74a0d7c3e6c5922c725aa41bdc967cb'
-BASE='e79318f3255b57fb02eb18222a7fd29d6fa380c3';TREE=12_081_306_272;RESERVE=8<<30
+BASE='befc8ce1a0c20cd668fb9a786419a214c6aba430';TREE=12_081_306_272;RESERVE=8<<30
 graph_identity={}
 class Stop(Exception):
  def __init__(self,code='GUARD_REJECTED'):self.code=code;super().__init__(code)
@@ -111,6 +111,12 @@ def read_graph_diagnostics(path,receipt,high_sha,annotations_sha):
  except UnicodeError:raise Stop('GRAPH_LOG_ENCODING')
  return parse_graph_text(text,receipt,high_sha,annotations_sha)
 
+def stage_cpu_budget(name,seconds):
+ # One explicit graph continuation, not a general stage cap relaxation.
+ if name=='graph':
+  need(seconds==1500,'GRAPH_WALL_CONTRACT');return 1200
+ return min(seconds,600)
+
 def main():
  global phase,graph_identity
  graph_identity={}
@@ -119,7 +125,7 @@ def main():
  need(git('diff','--name-only','HEAD^','HEAD')==NONCE and not git('status','--porcelain'))
  nonce=load(REPO/NONCE,4096);need(nonce=={'schema':'ONE_STRUCTURAL_GRAPH_ONLY_V1','source_commit':source,'base_commit':BASE,'attempts':1,'numerical_execution':False,'native_execution':False,'artifact_upload':False})
  own=load(D/'SOURCE_PINS.json');pins=pins_for(own['files'],REPO);pins[str(D/'SOURCE_PINS.json')]=sha(D/'SOURCE_PINS.json')
- changed=set(git('diff','--name-only',BASE,source).splitlines());need(changed==set(own['publication_delta']) and changed=={REL+'/run.py',REL+'/scala/OriginalHostStructuralGraph.scala',REL+'/SOURCE_PINS.json','.github/workflows/chisel-structural-graph-once.yml'})
+ changed=set(git('diff','--name-only',BASE,source).splitlines());need(changed==set(own['publication_delta']) and changed=={REL+'/run.py',REL+'/SOURCE_PINS.json','.github/workflows/chisel-structural-graph-once.yml'})
  catalog=regular(REPO/CAT);need(sha(catalog)==CAT_SHA);doc=load(catalog);need(doc['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1'and len(doc['files'])==1211);pins.update(pins_for(doc['files'],REPO));pins[str(catalog)]=CAT_SHA
  phase='admission';remote_exclusive(launch);admission();work=P(os.environ['RUNNER_TEMP'])/'chisel-structural-graph';need(work.is_absolute()and not work.exists()and all(not p.is_symlink()for p in(work,*work.parents)));work.mkdir()
  contract={'schema':'BOUNDED_FRESH_HOST_V1','run_id':int(os.environ['GITHUB_RUN_ID']),'source_commit':source,'launch_commit':launch};contractPath=work/'fresh-host.json';contractPath.write_text(json.dumps(contract));pins[str(contractPath)]=sha(contractPath)
@@ -134,7 +140,7 @@ def main():
   phase=name
   if args and args[0].endswith('/bin/java'):args=[args[0],'-Djava.io.tmpdir='+str(work/name/'tmp'),*args[1:]]
   remote_exclusive(launch);need(time.monotonic()-started+seconds+90<2400)
-  cap=dict(wall_seconds=seconds,cleanup_seconds=30,cpu_seconds=min(seconds,600),per_process_cpu_seconds=min(seconds,600),rss_bytes=rss<<30,per_process_as_bytes=15<<30,file_bytes=536870912,tree_bytes=3<<30,watch_tree_bytes=TREE,max_entries=150000,log_bytes=16<<20,raw_log_bytes=32<<20,min_free_disk_bytes=RESERVE,extra_watch_roots=[str(REPO),str(work)],jdk_aliases=aliases)
+  cap=dict(wall_seconds=seconds,cleanup_seconds=30,cpu_seconds=stage_cpu_budget(name,seconds),per_process_cpu_seconds=stage_cpu_budget(name,seconds),rss_bytes=rss<<30,per_process_as_bytes=15<<30,file_bytes=536870912,tree_bytes=3<<30,watch_tree_bytes=TREE,max_entries=150000,log_bytes=16<<20,raw_log_bytes=32<<20,min_free_disk_bytes=RESERVE,extra_watch_roots=[str(REPO),str(work)],jdk_aliases=aliases)
   stage_env=dict(env)
   if name=='jdk_inventory':stage_env['JAVA_TOOL_OPTIONS']='-Djava.io.tmpdir='+str(work/name/'tmp')+' -XX:-UsePerfData -XX:-HeapDumpOnOutOfMemoryError -XX:ErrorFile=/dev/null'
   with open(os.devnull,'w')as muted,contextlib.redirect_stdout(muted),contextlib.redirect_stderr(muted):
@@ -187,7 +193,7 @@ def main():
  highsha=sha(high);annsha=sha(ann)
  identity={'high_sha256':highsha,'high_bytes':high.stat().st_size,'annotations_sha256':annsha,'annotations_bytes':ann.stat().st_size}
  graph_identity=dict(identity)
- graphdir,graphreceipt=stage('graph',jvm('4g',str(hclasses)+':'+basecp,'chiseltest.simulator.OriginalHostStructuralGraph',[str(high),highsha,str(ann),annsha,extsha]),900,6)
+ graphdir,graphreceipt=stage('graph',jvm('4g',str(hclasses)+':'+basecp,'chiseltest.simulator.OriginalHostStructuralGraph',[str(high),highsha,str(ann),annsha,extsha]),1500,6)
  # Budget failures may yield useful diagnostics ONLY after closed/finalized log
  # and complete process cleanup. Never promote markers to numerical/graph PASS.
  try:diagnostics=read_graph_diagnostics(graphdir/'frontend.log.gz',graphreceipt,highsha,annsha)

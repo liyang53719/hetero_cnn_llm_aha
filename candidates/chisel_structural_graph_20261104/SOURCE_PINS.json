@@ -3,8 +3,8 @@
   "files": [
     {
       "path": ".github/workflows/chisel-structural-graph-once.yml",
-      "bytes": 1645,
-      "sha256": "7cca7dd5be727c205dc2e9f2002bd39ff74acbf48cc62541e0ebc70a66e0c8b6"
+      "bytes": 1652,
+      "sha256": "0b479bbddc6534c4f1b69dfbe3be8a5f7389bbc0f77999b618bd63b84b153dac"
     },
     {
       "path": "candidates/chisel_structural_graph_20261104/prepare_jars.py",
@@ -13,8 +13,8 @@
     },
     {
       "path": "candidates/chisel_structural_graph_20261104/run.py",
-      "bytes": 18676,
-      "sha256": "b073102f93033fbe43e64fb038738691e71a50d2c7d389b95a3c5bf7ddb9d8b4"
+      "bytes": 18874,
+      "sha256": "3d9465e0accafe5519d197aeb0749a5380b92c0d95e0224083c0f7ff2384e338"
     },
     {
       "path": "candidates/chisel_structural_graph_20261104/scala/IdmaFieldSplitTransform.scala",
@@ -40,7 +40,6 @@
   "publication_delta": [
     ".github/workflows/chisel-structural-graph-once.yml",
     "candidates/chisel_structural_graph_20261104/run.py",
-    "candidates/chisel_structural_graph_20261104/scala/OriginalHostStructuralGraph.scala",
     "candidates/chisel_structural_graph_20261104/SOURCE_PINS.json"
   ]
 }

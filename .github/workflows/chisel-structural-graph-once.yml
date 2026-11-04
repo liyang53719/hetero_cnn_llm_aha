@@ -2,7 +2,7 @@ name: chisel-original-host-structural-graph-only
 on:
   push:
     branches: [main]
-    paths: [ci_launch/chisel_structural_graph_20261104_modulecache_once.json]
+    paths: [ci_launch/chisel_structural_graph_20261104_modulecache_admission_once.json]
 permissions:
   contents: read
   actions: read
@@ -18,10 +18,13 @@ jobs:
         timeout-minutes: 1
         run: |
           /usr/bin/python3 -B - <<'PYCODE'
-          import os,pathlib,shutil,sys
+          import json,os,pathlib,shutil,sys
           m=int(next(x.split()[1] for x in pathlib.Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:')))*1024
-          ok=m>=13*1024**3 and shutil.disk_usage(os.environ['RUNNER_TEMP']).free>=12081306272+8*1024**3
-          print('SOURCE_JOB_RESOURCE_ADMISSION='+('PASS' if ok else 'BLOCKED'))
+          disk=shutil.disk_usage(os.environ['RUNNER_TEMP']).free
+          memory_required=13*1024**3;disk_required=12081306272+8*1024**3
+          memory_pass=m>=memory_required;disk_pass=disk>=disk_required
+          ok=memory_pass and disk_pass
+          print(json.dumps({'schema':'SOURCE_JOB_RESOURCE_ADMISSION_V1','memory_available_bytes':m,'memory_required_bytes':memory_required,'memory_pass':memory_pass,'disk_free_bytes':disk,'disk_required_bytes':disk_required,'disk_pass':disk_pass,'pass':ok},separators=(',',':')),flush=True)
           sys.exit(0 if ok else 2)
           PYCODE
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683

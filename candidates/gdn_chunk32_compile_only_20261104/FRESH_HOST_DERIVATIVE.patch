@@ -1,0 +1,47 @@
+--- a/candidates/ci_frontend_materialization_r2_20261029/fresh_host.py
++++ b/candidates/gdn_chunk32_compile_only_20261104/fresh_compile_host.py
+@@ -89,7 +89,7 @@
+  home=P(home).resolve(strict=True);roots=[(home/'lib/server').resolve(strict=True),(home/'lib').resolve(strict=True)]
+  need(all(p.is_dir() and p.is_relative_to(home) for p in roots),'JDK query roots must stay in inventoried home')
+  return {'LD_LIBRARY_PATH':':'.join(map(str,roots))}
+-def inventory(contract,java_home,verilator_root):
++def inventory(contract,java_home,verilator_root=None):
+  validate_contract(contract);reject_injection(os.environ)
+  need(sys.version_info[:2]==(3,12) and platform.machine()=='x86_64','original Python/architecture contract')
+  need(platform.system()=='Linux','Linux runtime required')
+@@ -124,14 +124,14 @@
+    p=add(p)
+    if p.suffix=='.so':native.append(p)
+  tools=[P(sys.executable),P('/bin/sh'),P('/bin/bash'),P('/usr/bin/perl'),P('/usr/bin/readelf'),P('/usr/bin/dirname'),P('/usr/bin/git'),P('/usr/bin/gh'),P('/usr/bin/dpkg-deb'),P('/usr/bin/ldd'),P('/usr/bin/dpkg-query')]
+- jh=P(java_home).resolve(strict=True);vr=P(verilator_root).resolve(strict=True);jdk_context=jdk_query_context(jh)
+- targets=tools+[jh/'bin/java',vr/'verilator-package/usr/bin/verilator_bin']+list(jh.rglob('*.so'))+native
++ jh=P(java_home).resolve(strict=True);vr=P(verilator_root).resolve(strict=True) if verilator_root is not None else None;jdk_context=jdk_query_context(jh)
++ targets=tools+[jh/'bin/java']+([vr/'verilator-package/usr/bin/verilator_bin'] if vr is not None else [])+list(jh.rglob('*.so'))+native
+  dependencies={};query_contexts={};dependency_classes={}
+  for p in targets:
+   p=add(p)
+   with p.open('rb') as f:elf=f.read(4)==b'\x7fELF'
+   if not elf:continue # trusted distro scripts are pinned, not sent to ldd
+-  role='JDK_LIBRARY' if p.is_relative_to(jh) and p.suffix=='.so' else 'JDK_EXECUTABLE' if p==jh/'bin/java' else 'VERILATOR_BINARY' if p==vr/'verilator-package/usr/bin/verilator_bin' else 'PYTHON_EXTENSION' if p in native else 'SYSTEM_TOOL'
++  role='JDK_LIBRARY' if p.is_relative_to(jh) and p.suffix=='.so' else 'JDK_EXECUTABLE' if p==jh/'bin/java' else 'VERILATOR_BINARY' if vr is not None and p==vr/'verilator-package/usr/bin/verilator_bin' else 'PYTHON_EXTENSION' if p in native else 'SYSTEM_TOOL'
+   try:
+    dynamic=query(['/usr/bin/readelf','-d',p],strict_stderr=role=='PYTHON_EXTENSION' and p in native)
+    if 'There is no dynamic section in this file.' in dynamic:
+@@ -148,7 +148,7 @@
+   except Exception as exc:
+    exc.query_role=role;raise
+  for p in (P('/etc/os-release'),P('/usr/bin/perl')):add(p)
+- return dict(schema='BOUNDED_FRESH_HOST_IDENTITY_V1',contract=contract,qualification='IDENTITY_ONLY_PENDING_ORIGINAL_BUILD_AND_NUMERICAL_GATES',old_pass_transfer=False,image_version=os.environ.get('ImageVersion'),image_os=os.environ.get('ImageOS'),kernel=platform.release(),python=sys.version,pins=pins,aliases=aliases,elf_dependencies=dependencies,elf_query_contexts=query_contexts,elf_dependency_classes_by_sha256=dependency_classes,hashed_bytes=total,scope='explicit Python/bootstrap shell tools and JDK/Verilator ELF dependencies; not full OS or numerical qualification',not_qualified=['P0 CPU policy','compiler execution','canonical AST and generated SV','block numerics','final RTL replay'])
++ return dict(schema='BOUNDED_FRESH_HOST_IDENTITY_V1',contract=contract,qualification='IDENTITY_ONLY_PENDING_ORIGINAL_BUILD_AND_NUMERICAL_GATES',old_pass_transfer=False,image_version=os.environ.get('ImageVersion'),image_os=os.environ.get('ImageOS'),kernel=platform.release(),python=sys.version,pins=pins,aliases=aliases,elf_dependencies=dependencies,elf_query_contexts=query_contexts,elf_dependency_classes_by_sha256=dependency_classes,hashed_bytes=total,scope='explicit Python/bootstrap shell tools and JDK ELF dependencies; Verilator omitted for compile-only; not full OS or numerical qualification',not_qualified=['P0 CPU policy','compiler execution','canonical AST and generated SV','block numerics','final RTL replay'])
+ def failure_metadata(exc):
+  # Fixed codes only; traceback stays local. Unknown exceptions do not invent cause.
+  text=str(exc)
+@@ -166,7 +166,7 @@
+  if isinstance(exc,DependencyRejected):result.update(rejection_kind=exc.rejection_kind,had_parent_component=exc.parent_component)
+  return result
+ if __name__=='__main__':
+- a=argparse.ArgumentParser();a.add_argument('--contract',type=P,required=True);a.add_argument('--contract-sha256',required=True);a.add_argument('--java-home',type=P,required=True);a.add_argument('--verilator-root',type=P,required=True);a.add_argument('--output',type=P,required=True);v=a.parse_args()
++ a=argparse.ArgumentParser();a.add_argument('--contract',type=P,required=True);a.add_argument('--contract-sha256',required=True);a.add_argument('--java-home',type=P,required=True);a.add_argument('--verilator-root',type=P);a.add_argument('--output',type=P,required=True);v=a.parse_args()
+  try:
+   c=load_contract(v.contract,v.contract_sha256);need(not v.output.exists(),'fresh receipt only');result=inventory(c,v.java_home,v.verilator_root)
+   with v.output.open('x') as f:json.dump(result,f,indent=2);f.write('\n')

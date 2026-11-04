@@ -1,0 +1,48 @@
+# Source-only dormant publication: do not publish the launch file in this commit.
+name: gdn32-fresh162-compile-only
+on:
+  push:
+    branches: [main]
+    paths: [ci_launch/gdn32_compile_only_20261104_once.json]
+permissions:
+  contents: read
+concurrency:
+  group: hetero-exclusive-numeric-bootstrap
+  cancel-in-progress: false
+jobs:
+  compile_only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 52
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        timeout-minutes: 4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 2
+      - name: Require exact second-commit nonce launch
+        id: launch
+        timeout-minutes: 1
+        run: python3 -B candidates/gdn_chunk32_compile_only_20261104/validate_launch.py
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        timeout-minutes: 4
+        with:
+          ref: ${{ steps.launch.outputs.source_sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Fresh full162 Scala compilation only
+        timeout-minutes: 42
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -B candidates/gdn_chunk32_compile_only_20261104/compile_only.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --candidate "$GITHUB_WORKSPACE/candidates/gdn_chunk32_actual_v2_20261104" \
+            --output "$RUNNER_TEMP/gdn32-fresh-compile" \
+            --java "$JAVA_HOME_21_X64/bin/java" \
+            --identity "$RUNNER_TEMP/gdn32-compile-identity.json"
+# No artifact/cache upload, runtime, DUT, elaboration, install or publication step.

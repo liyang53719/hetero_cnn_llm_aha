@@ -1,0 +1,121 @@
+{
+  "schema": "GDN32_ABORT_SOURCE_ONLY_PUBLICATION_V2",
+  "base_commit": "8eb141f0cb3d9fab16f74c2b1e2704e3b2f966ab",
+  "files": [
+    {
+      "path": "select_sources.py",
+      "bytes": 3120,
+      "sha256": "05d88d023c0ffff6fe704f81b1ac8321865575dc003b07975e53500b6cd6a3b9"
+    },
+    {
+      "path": "MODEL_SOURCE_OVERLAY.json",
+      "bytes": 52295,
+      "sha256": "1bd1db80190d2d611cfeb15f50c2bbadec76f2aaad74280671b22e843240a945"
+    },
+    {
+      "path": "GENERATION_CONTRACT.json",
+      "bytes": 864,
+      "sha256": "2b2f02d698f16a57ba696c52c4669a1226a68c5378efdc8ebe392cc1b9098f52"
+    },
+    {
+      "path": "REPORT.zh.md",
+      "bytes": 2867,
+      "sha256": "50c6b4b018f92388608e196412301f2135da9a2e994f2164b7d5e90141025dd4"
+    },
+    {
+      "path": "ABORT_REPORT.md",
+      "bytes": 6154,
+      "sha256": "5b1f3492f92f7e4d8055b7feed412d9c5f9631b4c03cef6450d8a1c516438160"
+    },
+    {
+      "path": "run_bounded_tests.py",
+      "bytes": 284,
+      "sha256": "2bff1054690e8568c621eaf1b7898a08e734fc5247e0dde9806e467972a4dfea"
+    },
+    {
+      "path": "tests/test_integration.py",
+      "bytes": 7917,
+      "sha256": "99de8347731ac3fd629275c77453baf9e4201e9f8214e234070bf4e278837bb5"
+    },
+    {
+      "path": "test_abort_contract.py",
+      "bytes": 9935,
+      "sha256": "1e70b0f9a3f8aca10f1bbceca8fd78245a5754b91453f471ae13761f4c1be71f"
+    },
+    {
+      "path": "source/CancellableHeldDecoupledOfferV1.scala",
+      "bytes": 741,
+      "sha256": "e93a7e8d29dc2ed59b9a4efa370070a496a40aa7be343fa029771a98ddbb8031"
+    },
+    {
+      "path": "source/DiagnoseOriginalHostMoePhaseV5.scala",
+      "bytes": 7455,
+      "sha256": "dfbd578537881dcd815c7c8530a083e0e9e89d3f99e2b6f0ff45a1a4bd017d9e"
+    },
+    {
+      "path": "source/GdnRuntimeChunkCoordinator.scala",
+      "bytes": 19266,
+      "sha256": "c2a30ddcac128f34ab373b12303d2b6229ec8705071d7ede12dcc103c72e6929"
+    },
+    {
+      "path": "source/GdnRuntimeChunkExecuteOwner32V1.scala",
+      "bytes": 18829,
+      "sha256": "1a8c82194c349379aac78c5675e75b7d3327575e11c872c6f79428bff53e0ebf"
+    },
+    {
+      "path": "source/GdnRuntimeChunkLeafCollection.scala",
+      "bytes": 9932,
+      "sha256": "dd136138178ead6e794067342c740d5b097ded4812dca6744675d0bbcfbac923"
+    },
+    {
+      "path": "source/GdnRuntimeChunkSelectedExecuteV1.scala",
+      "bytes": 2037,
+      "sha256": "c784f828d7a74de02baf45a129fb4969a47883bb44d8f8d3ffd167323ecafbcf"
+    },
+    {
+      "path": "source/HostBlockTopV4.scala",
+      "bytes": 27986,
+      "sha256": "885924901cb253077dc76022904ac37b90900dafac9b2a7d0fef8b50a344dc80"
+    },
+    {
+      "path": "source/HostRuntimeChunkProtocolV9.scala",
+      "bytes": 3086,
+      "sha256": "d6bafa9f26e00ebb928742265a54b808d54d7ad5031af57ebb1a2fb4dc87d032"
+    },
+    {
+      "path": "source/HostRuntimeChunkWiringV9.scala",
+      "bytes": 21809,
+      "sha256": "3945492278920fdc065f32f4e68e5426ff89da4017f9efee13142214de327542"
+    },
+    {
+      "path": "source/QwenOwnerProtocol.scala",
+      "bytes": 93533,
+      "sha256": "b21a6aa7f88d8c95d1c43dffe0346446b2c081501a6affea7089d0b414315999"
+    },
+    {
+      "path": "source/SharedMemoryArbiter.scala",
+      "bytes": 4993,
+      "sha256": "140e0e5515a4920b0d00599a94306b633abe324b54a0ee39df84a027427e3adb"
+    },
+    {
+      "path": "source/UnifiedMoeSharedArithmeticAdapterV5.scala",
+      "bytes": 28044,
+      "sha256": "70881c56af8fd87ef6e0fc0012e755926d1ce55f6cc046cae1717012a7550f8f"
+    },
+    {
+      "path": "source/UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "bytes": 8221,
+      "sha256": "7a95f2c53f06d53acf44acf6ce1ec72351e862e2d1cf791534fe2d81f45df0a4"
+    }
+  ],
+  "source_count": 162,
+  "native_compile": false,
+  "numerical_pass": false,
+  "fault_terminal": "CONDITIONAL_EXECUTE32_ONLY_UNMATCHED_DEBT_QUARANTINED",
+  "tests": {
+    "integration_normal": 23,
+    "integration_optimized": 23,
+    "abort_normal": 19,
+    "abort_optimized": 19
+  }
+}

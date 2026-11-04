@@ -1098,3 +1098,11 @@ norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 D
 - 独立Python模型正常/-O各17项通过，只覆盖模型及文本锚点，不执行Chisel FSM。逐lane升序K保持FP32先Mul后Add、无FMA；双64B读写及ACK保留，phase17用原bank policy4 BF16物化。M128每head/chunk向量请求659456→329728，内存事务只减少约2.89%；静态弱周期下界变化非实测加速、非80–90%整块有效MAC。
 - ongoing：实际Chunk32新authority/route、held-offer/返还owner/精确退休数接入原Collection、真实Kernel/Top和原唯一bank。Derived16保留，不借RMS slot11，不把旧slot10直接扩宽；新全Chunk向量计数 H*C*334176+4*M*H 必须由真实事务闭合。另行候选实现与协议验证，不替换运行中硬件。
 - 五块M128完整模型/最终RTL仍0/5；新硬件须五块重测。原session97358终态UNKNOWN，最后保留6685568 active/pc12/completions10，不重启或释放完整生命周期保护。P2兼容源执行仍缺真实checkout、完整artifact/native准入与资源。未发nonce、未新DUT、未清理或迁移。
+
+## 2026-11-04 04:49 UTC：TEMP，新162源GDN32实际路径及条件性abort，原执行不替换
+
+- 完成源代码层实际Collection→p0 Kernel→协议/Wiring→moe Top→原唯一BankV4接入，专用slot12/authority11/stage79，Derived16与RMS原路保留。新默认关闭选择器显式启用全五profile相同硬件；原159加Execute32 leaf、选择wrapper、取消offer共162源，新generation为2b2f02d698f16a57ba696c52c4669a1226a68c5378efdc8ebe392cc1b9098f52。未把新硬件冒旧artifact。
+- 修正初版helper仅旁路字段更新、实际编译列表仍旧的确定缺陷；现在唯一helper真实在162列表中。新增receiver-ACK取消仅限未accepted请求，cancel/accept互斥、payload保持至ACK，真实accepted debt只能由匹配返回偿还。abort组合反馈改寄存，partial ACK计账仅opt-in；新opt-in hub wrong-tag保留债务并隔离，不以改tag伪造返回。后者覆盖该hub全部客户，五块需重测。
+- 协议范围：Execute32在取消ACK或真实匹配返回闭合后可error terminal；其他leaf、缺失返回、wrong-tag与Guard身份隔离仍不保证有限终态。不是任意外设故障下bounded完成，更不是未经批准global-reset豁免。整合纯测试23项、abort19项正常/-O通过，独审仅源级；当前未Scala编译/Top展开/动态FSM/SV/RTL/fullprefill数值验证。
+- 新独立CI只做全162源fresh Scala编译，classpath仅固定官方107 JAR，无旧项目classes；真实host/JDK/Python/ELF依赖inventory与别名pins、流式hash、有限诊断摘要。源码提交休眠，核验后另行唯一nonce激活；不上传生成binary、缓存或artifact，不运行Top展开/DUT。生产FULL准入不因compile-only放宽。
+- 本地新compile fresh完整生命周期预算仍缺267420500B（32MiB输出；零输出亦缺233866068B），故未运行。原session97358 UNKNOWN与完整reserve保留，未清理迁移。五块M128完整模型/最终RTL仍0/5；旧参考数值结果不变，原fullprefill/利用率未添新PASS。

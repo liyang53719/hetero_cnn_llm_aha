@@ -1,0 +1,26 @@
+{
+  "schema": "GDN32_ABORT_SOURCE_ONLY_GENERATION_CONTRACT_V2",
+  "hardware_source": "gdn-chunk32-abort-v2",
+  "default_hardware_source": "legacy",
+  "source_overlay_sha256": "1bd1db80190d2d611cfeb15f50c2bbadec76f2aaad74280671b22e843240a945",
+  "matrix_macs": 4096,
+  "vector_lanes": 32,
+  "external_host_ports": 122,
+  "profiles": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "tokens": 128,
+  "numeric_execution_authorized": false,
+  "final_rtl_accepted": false,
+  "old_artifact_reuse_permitted": false,
+  "source_count": 162,
+  "native_build_status": "NOT_RUN_RESOURCE_BLOCKED",
+  "original97358": "UNKNOWN_RESERVED",
+  "abort_scope": "EXECUTE32_COOPERATIVE_CANCEL_AND_MATCHED_ACCEPTED_DEBT_DRAIN_ONLY",
+  "terminal_bound": "CONDITIONAL_ON_MATCHED_RESPONSES_TERMINAL_READY_GUARD_STABILITY_OTHER_CLIENT_DRAIN",
+  "unmatched_response": "QUARANTINE_NO_DEBT_REFUND"
+}

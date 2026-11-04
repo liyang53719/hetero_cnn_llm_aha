@@ -145,7 +145,7 @@ def fresh_host_projection(work,identity):
       if not isinstance(kind,str)or kind not in {'UNRESOLVED_LIBRARY','EMPTY_DEPENDENCY_LIST','MISSING_TARGET','NONREGULAR_TARGET','CANONICAL_ROOT_REJECTED'}or type(parent_component)is not bool:continue
       details.update(rejection_kind=kind,had_parent_component=parent_component)
     row.update(state='OBSERVED_FAILURE_NOT_QUALIFIED',receipt_sha256=digest,status='FAILED',phase=r['phase'],reason=r['reason'],**details)
-  except (OSError,ValueError,TypeError,KeyError,AttributeError,ImportError):
+  except (OSError,ValueError,TypeError,KeyError,AttributeError,ImportError,RuntimeError):
    # Partial projection must not accidentally advertise a validated receipt.
    out[role]=dict(state='INVALID_NOT_QUALIFIED')
  return out
@@ -183,6 +183,7 @@ def full_execution_admission(work,flow,identity,evidence):
  exec(compile(raw,str(path),'exec'),mode.__dict__)
  admission=mode.admit(binding)
  if admission.get('mode')!='FULL_BLOCK_ACCEPTANCE' or flow.get('execution_admission')!=admission:raise ValueError('reviewed full admission binding')
+ mode._summary_execution_binding=binding
  return mode,admission,source_sha
 
 def numeric_qualification_projection(work,identity):
@@ -211,7 +212,7 @@ def numeric_qualification_projection(work,identity):
   else:return result
   if flow.get('numeric_result')!=evidence.pin(numeric_path):return result
   if flow.get('hardware_definitions')!=1 or flow.get('profiles')!=list(range(5)) or flow.get('uploaded_payloads') is not False:return result
-  verified=[];projected=[]
+  verified=[];projected=[];full_progress=[];progress_envelope=None
   for i in range(5):
    path=root/f'PROFILE_{i}_DIAGNOSTIC.json';record=read(path)
    if record is None:continue
@@ -226,9 +227,22 @@ def numeric_qualification_projection(work,identity):
     if not isinstance(admitted,dict) or admitted.get('execution_mode')!=execution_mode or admitted.get('reviewed_budget_sha256')!=full_admission['reviewed_budget_sha256']:return result
     if admitted.get('scope')!='FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE' or admitted.get('outer_cleanup_proof_required') is not True:return result
     if not isinstance(admitted.get('original_limits'),dict) or admitted.get('effective_limits')!=mode_module.consumer_limits(admitted['original_limits'],full_admission,i):return result
+    if full_admission.get('budget_version')in(2,3):mode_module.verify_consumer_admission(full_admission,admitted,i)
+    elif any(k in admitted for k in ('budget_version','log_policy','postprocess_limits')):return result
    artifact=consumer.get('artifact_identity',{})
    if any(artifact.get(k)!=identity.get(k)for k in ('run_id','source_commit','launch_commit')):return result
-   actual=evidence.verify(out,i,consumer['artifact_manifest_sha256'],consumer['runtime_bundle_sha256'],started['binary_sha256'],started['runtime_sha256'],record['outer'])
+   expected_log_policy=mode_module.expected_log_policy(full_admission,i) if full_admission is not None and full_admission.get('budget_version')in(2,3) else None
+   if expected_log_policy is not None:
+    with mode_module.host_verification_budget(full_admission['profile_summary_verification_wall_seconds'][str(i)],full_admission['profile_summary_verification_cpu_seconds'][str(i)]):
+     actual=evidence.verify(out,i,consumer['artifact_manifest_sha256'],consumer['runtime_bundle_sha256'],started['binary_sha256'],started['runtime_sha256'],record['outer'],expected_log_policy=expected_log_policy)
+     owning_binding=mode_module._summary_execution_binding
+     mode_module.verify_supervisor_telemetry(record['outer'],full_admission,i,owning_binding['supervisor_dir'],owning_binding['pins'])
+     progress_path=D/'summary_progress.py'
+     if owning_binding['pins'].get(str(progress_path))!=sha(progress_path):raise ValueError('reviewed full progress helper pin')
+     progress_spec=importlib.util.spec_from_file_location('full_summary_progress',progress_path);progress=importlib.util.module_from_spec(progress_spec);progress_spec.loader.exec_module(progress)
+     progress_envelope=progress.project(work,identity,D/'numeric',expected_log_policies={str(i):expected_log_policy},expected_outer_seconds={str(i):mode_module.consumer_phase_seconds(full_admission,i)+30},profile_ids=[i])
+     full_progress.append(progress_envelope['profiles'][i])
+   else:actual=evidence.verify(out,i,consumer['artifact_manifest_sha256'],consumer['runtime_bundle_sha256'],started['binary_sha256'],started['runtime_sha256'],record['outer'])
    if actual!=record:return result
    verified.append(actual)
    q=actual['qualification']
@@ -243,14 +257,19 @@ def numeric_qualification_projection(work,identity):
    transport=mode_module.transport_exit(execution_mode,qualification)
    if type(flow.get('transport_exit_code'))is not int or flow['transport_exit_code']!=transport:return result
   projected_result=dict(status='VERIFIED_REAGGREGATED',numerical_pass=qualification['numerical_pass'],final_rtl_executed=False,execution_mode=execution_mode,transport_exit_code=transport,qualification=qualification,profiles=projected,flow_receipt_sha256=sha(flow_path),numeric_receipt_sha256=sha(numeric_path))
+  if progress_envelope is not None:
+   progress_envelope['profiles']=[next((r for r in full_progress if r['profile']==i),dict(profile=i,status='UNAVAILABLE',numerical_pass=False)) for i in range(5)]
+   projected_result['full_execution_progress']=progress_envelope
   if full_admission is not None:
    projected_result['full_execution_admission']=dict(reviewed_budget_sha256=full_admission['reviewed_budget_sha256'],execution_mode_source_sha256=mode_source_sha,execution_binding_sha256=flow['execution_binding']['sha256'])
   return projected_result
- except (OSError,ValueError,TypeError,KeyError,AttributeError,ImportError):
+ except (OSError,ValueError,TypeError,KeyError,AttributeError,ImportError,RuntimeError):
   return dict(status='INVALID_OR_UNBOUND',numerical_pass=False,final_rtl_executed=False)
 
-def progress_projection(work,identity):
- # Optional telemetry must never suppress the existing failure/build summary.
+def progress_projection(work,identity,verified_qualification=None):
+ # V2 reuses the result computed inside the same per-profile summary budget.
+ if isinstance(verified_qualification,dict) and 'full_execution_progress' in verified_qualification:return verified_qualification['full_execution_progress']
+ # Optional legacy telemetry must never suppress the existing failure/build summary.
  try:
   spec=importlib.util.spec_from_file_location('samejob_summary_progress',D/'summary_progress.py');progress=importlib.util.module_from_spec(spec);spec.loader.exec_module(progress)
   return progress.project(work,identity)
@@ -265,7 +284,6 @@ def summarize(work,identity):
  out['execution_selection']=execution_policy_summary(work)
  out['installation_resource_snapshots']=install_snapshots(work)
  out['pack_deduplication']=pack_deduplication(work)
- out['execution_progress']=progress_projection(work,identity)
  for k in ('source_commit','launch_commit'):
   h=identity.get(k);out[k]=h if isinstance(h,str)and re.fullmatch('[0-9a-f]{40}',h)else None
  out['run_id']=identity.get('run_id')if type(identity.get('run_id'))is int else None
@@ -290,6 +308,8 @@ def summarize(work,identity):
   selected={k:hp(r.get(k))for k in('report','startup','outer')}
   if all(selected.values()):out['actual_dut_reports'].append(dict(profile=i,state=r['state'],receipt_sha256=sha(p),**selected))
  qualification=numeric_qualification_projection(work,identity)
+ out['execution_progress']=progress_projection(work,identity,qualification)
+ qualification.pop('full_execution_progress',None)
  out['numeric_qualification']=qualification
  if qualification['status']=='VERIFIED_REAGGREGATED':
   out['status']=qualification['qualification']['status'];out['numeric_pass']=qualification['numerical_pass']

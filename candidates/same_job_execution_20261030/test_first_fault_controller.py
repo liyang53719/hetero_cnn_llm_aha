@@ -9,6 +9,17 @@ def need(x,m):
 def selected(path,names,extra):
  tree=ast.parse(path.read_text());parts=[x for x in tree.body if isinstance(x,(ast.FunctionDef,ast.AsyncFunctionDef))and x.name in names]
  need(len(parts)==len(names),'exact function set');ns={'need':need,**extra};exec(compile(ast.Module(body=parts,type_ignores=[]),str(path),'exec'),ns);return ns
+REVIEWED_FLOW_FINALIZATION_AST='e3aa1f8d83294c141307ae458d8b6f4891364b5429b5a7393a7bed767841c619'
+def actual_flow_finalization(test,run):
+ import copy
+ assignments=[i for i,n in enumerate(run.body)if isinstance(n,ast.Assign)and any(isinstance(t,ast.Name)and t.id=='flow_result'for t in n.targets)]
+ guards=[i for i,n in enumerate(run.body)if isinstance(n,ast.If)and ast.unparse(n.test)=="'fullprefill_disk_budget' in budget"]
+ saves=[i for i,n in enumerate(run.body)if isinstance(n,ast.Expr)and isinstance(n.value,ast.Call)and isinstance(n.value.func,ast.Name)and n.value.func.id=='save'and any(isinstance(x,ast.Constant)and x.value=='FLOW_RESULT.json'for x in ast.walk(n.value.args[0]))]
+ test.assertEqual(tuple(map(len,(assignments,guards,saves))),(1,1,1),'one exact flow assignment/guard/save')
+ start=assignments[0];test.assertEqual((guards[0],saves[0]),(start+1,start+2),'contiguous production finalization')
+ result=copy.deepcopy(run.body[start:start+3])
+ test.assertEqual(hashlib.sha256(ast.dump(ast.Module(body=result,type_ignores=[]),include_attributes=False).encode()).hexdigest(),REVIEWED_FLOW_FINALIZATION_AST,'exact reviewed finalization statements')
+ return result
 class Test(unittest.TestCase):
  def setUp(self):self.a={'mode':mode.FIRST_FAULT,'profile_seconds':{'0':10800},'profile_max_active_cycles':{'0':1500000},'reviewed_budget_sha256':'a'*64,'diagnostic_profiles':[0]}
  def test_exact_selection_and_legacy(self):
@@ -49,8 +60,7 @@ class Test(unittest.TestCase):
   with self.assertRaises(ValueError):f(dict(execution_mode=mode.FIRST_FAULT),dict(execution_mode=mode.STAGE))
  def test_actual_flow_save_to_original_summary_scope_gate(self):
   source=ast.parse((D/'controller/cloud_flow.py').read_text());run=next(n for n in source.body if isinstance(n,ast.FunctionDef)and n.name=='run')
-  calls=[n for n in ast.walk(run)if isinstance(n,ast.Expr)and isinstance(n.value,ast.Call)and isinstance(n.value.func,ast.Name)and n.value.func.id=='save'and any(isinstance(x,ast.Constant)and x.value=='FLOW_RESULT.json'for x in ast.walk(n.value.args[0]))]
-  self.assertEqual(len(calls),1)
+  calls=actual_flow_finalization(self,run)
   summary=ast.parse((D/'summarize_cloud_execution.py').read_text());gates=[n for n in ast.walk(summary)if isinstance(n,ast.If)and isinstance(n.test,ast.Name)and n.test.id=='candidate'and any(isinstance(x,ast.Constant)and x.value=='actual flow candidate scope'for x in ast.walk(n))]
   self.assertEqual(len(gates),1)
   actual=selected(D/'controller/cloud_flow.py',{'save','pin','sha'},{'P':pathlib.Path,'json':json,'hashlib':hashlib})
@@ -60,7 +70,7 @@ class Test(unittest.TestCase):
     job=pathlib.Path(tmp);bp=job/'binding.json';bp.write_text('{}');np=job/'numeric.json';np.write_text('{}');p=actual['pin'](bp)
     b={key:p for key in ('source_pins','executor_identity_pin','builder_handoff','artifact_manifest','cloud_budget','execution_approval','stage_coverage_budget')}
     if candidate:b['model_candidate_review']=p
-    ns=dict(actual,job=job,b=b,identity={},builder={},limit=22200,binding_path=bp,admission=dict(self.a,mode=selected_mode),code=2,qualification={'status':'INCOMPLETE','numerical_pass':False},execution_policy={},history=[],imported={},disk_admission={},numeric_path=np)
+    ns=dict(actual,job=job,b=b,budget={},identity={},builder={},limit=22200,binding_path=bp,admission=dict(self.a,mode=selected_mode),code=2,qualification={'status':'INCOMPLETE','numerical_pass':False},execution_policy={},history=[],imported={},disk_admission={},numeric_path=np)
     exec(compile(ast.fix_missing_locations(ast.Module(body=calls,type_ignores=[])),'actual_controller_flow_save','exec'),ns)
     flow=json.loads((job/'FLOW_RESULT.json').read_text());self.assertEqual(flow['scope'],want)
     gate=dict(need=need,candidate=candidate,flow=flow,b=b,review={'scope':want})
@@ -68,4 +78,16 @@ class Test(unittest.TestCase):
     if selected_mode==mode.FIRST_FAULT:
      flow['scope']=old
      with self.assertRaisesRegex(ValueError,'actual flow candidate scope'):exec(compile(ast.fix_missing_locations(ast.Module(body=gates,type_ignores=[])),'actual_summary_scope_gate','exec'),gate)
+
+ def test_finalization_each_fragment_missing_mutated_duplicate_rejected(self):
+  import copy
+  tree=ast.parse((D/'controller/cloud_flow.py').read_text());run=next(n for n in tree.body if isinstance(n,ast.FunctionDef)and n.name=='run');nodes=actual_flow_finalization(self,run)
+  for offset in range(3):
+   for case in ('missing','mutated','duplicate'):
+    changed=copy.deepcopy(run);start=next(i for i,n in enumerate(changed.body)if isinstance(n,ast.Assign)and any(isinstance(t,ast.Name)and t.id=='flow_result'for t in n.targets));node=changed.body[start+offset]
+    if case=='missing':changed.body.remove(node)
+    elif case=='duplicate':changed.body.insert(start+offset,copy.deepcopy(node))
+    else:
+     names=[x for x in ast.walk(node)if isinstance(x,ast.Name)];self.assertTrue(names);names[-1].id='UNREVIEWED_FLOW_CHANGE'
+    with self.subTest(offset=offset,case=case),self.assertRaises(AssertionError):actual_flow_finalization(self,changed)
 if __name__=='__main__':unittest.main()

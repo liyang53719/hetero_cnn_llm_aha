@@ -118,15 +118,26 @@ def selected_diagnostics(actual, reference, route_bytes, official_ids):
                 selected_id_mismatches=sum(a != r for a, r in zip(hardware, official)),
                 tie_contract='PENDING_USER_SMALL_ID_ACCEPTANCE_UNMODIFIED_TORCH_TOPK')
 
+def unique_marker_line(log, prefix, message):
+    # LogView yields bounded lines; retain only the first and reject the second.
+    # Never build an unbounded list from a long full-prefill transcript.
+    if getattr(log,'indexed',False):return log.unique_marker_line(prefix,message)
+    matches=(line for line in log.splitlines() if line.startswith(prefix))
+    first=next(matches,None)
+    need(first is not None and next(matches,None) is None,message)
+    return first
+
+
 def observe(directory, log, profile, reference, route_bytes, official_ids):
     need(profile in (3, 4), 'MoE profile only')
-    lines = [line for line in log.splitlines() if line.startswith('HOST_ROUTER_RAW_SCORE_V1')]
-    need(len(lines) == 1, 'one raw probability coverage receipt')
-    match = re.fullmatch(r'HOST_ROUTER_RAW_SCORE_V1 profile=(\d+) transaction=(\d+) owner=(\d+) values=32768 bytes=131072 dtype=FP32 source=SELECTION_INPUT_FIRE terminal=CLEAN coverage=EXACT_ONCE', lines[0])
+    receipt = unique_marker_line(log,'HOST_ROUTER_RAW_SCORE_V1','one raw probability coverage receipt')
+    match = re.fullmatch(r'HOST_ROUTER_RAW_SCORE_V1 profile=(\d+) transaction=(\d+) owner=(\d+) values=32768 bytes=131072 dtype=FP32 source=SELECTION_INPUT_FIRE terminal=CLEAN coverage=EXACT_ONCE', receipt)
     need(match is not None, 'exact raw probability shape/dtype/coverage receipt')
     p, transaction, owner = map(int, match.groups())
     need(p == profile and transaction == 0 and 0 < owner < 0xffffffff, 'reset single-launch transaction/profile or owner bounds')
-    need(sum(line.startswith('COMPLETE_ORIGINAL_HOST_DDR_REPLAY profile='+str(profile)+' ') for line in log.splitlines()) == 1,
+    terminal='COMPLETE_ORIGINAL_HOST_DDR_REPLAY profile='+str(profile)+' '
+    terminal_count=log.count_prefix(terminal) if getattr(log,'indexed',False) else sum(line.startswith(terminal) for line in log.splitlines())
+    need(terminal_count == 1,
          'unique clean whole-block terminal')
     need(pathlib.Path(directory).is_dir() and not pathlib.Path(directory).is_symlink(),'regular fresh observation directory')
     actual = stable_bytes(pathlib.Path(directory)/'router_selection_scores.fp32.actual.bin', SIZE)
@@ -144,12 +155,11 @@ def observe(directory, log, profile, reference, route_bytes, official_ids):
 
 def selected_output(directory, log, profile, transaction, owner, actual_input, reference, route_bytes, official_ids):
     """Read actual selection.out.fire bytes; never synthesize output from input."""
-    lines=[line for line in log.splitlines() if line.startswith('HOST_ROUTER_SELECTED_SCORE_V2')]
-    need(len(lines)==1,'one actual selected output coverage receipt')
+    receipt=unique_marker_line(log,'HOST_ROUTER_SELECTED_SCORE_V2','one actual selected output coverage receipt')
     marker=(f'HOST_ROUTER_SELECTED_SCORE_V2 profile={profile} transaction={transaction} owner={owner} '
             'values=1024 score_bytes=4096 id_bytes=4096 dtype=FP32 index_dtype=UINT32 '
             'source=SELECTION_OUTPUT_FIRE terminal=CLEAN coverage=EXACT_ONCE')
-    need(lines[0]==marker,'same-round selected output shape/dtype/coverage/identity')
+    need(receipt==marker,'same-round selected output shape/dtype/coverage/identity')
     directory=pathlib.Path(directory)
     need(directory.is_dir() and not directory.is_symlink(),'regular fresh selected output directory')
     score_bytes=stable_bytes(directory/'router_selected_scores.fp32.actual.bin',4096)

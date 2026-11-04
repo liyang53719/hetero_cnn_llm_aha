@@ -143,7 +143,7 @@ def classify_observed_profile(result, has_router):
         result['moe_small_id_tie_contract']='PENDING_USER_APPROVAL'
 
 
-OBSERVATION_HELPER_PINS={'resident_compare': '0b0aebe70aa668847cf816b5aed86eae245bebea1a5f29ecdf66e99efb08ddfb', 'moe_score_compare': 'f2e54044e90f9f08e10f361730cbe0fc4ffc6f19412f7c78cc69be6b5661830e'}
+OBSERVATION_HELPER_PINS={'resident_compare': '0b0aebe70aa668847cf816b5aed86eae245bebea1a5f29ecdf66e99efb08ddfb', 'moe_score_compare': 'd541c55019d81d518375ec91aa9e696cec7839747c79b8b60786d67faf8f139e'}
 
 def observation_helpers():
     import importlib.util
@@ -165,6 +165,45 @@ def verify_current_observation_round(log, binary, runtime):
     need(proof['inherited_group']==os.getpgrp()==os.getpid() and proof['inherited_session']==os.getsid(0)==os.getpid(),'current owned outer group/session')
     need(proof['binary_sha256']==sha(binary) and proof['runtime_sha256']==sha(runtime),'current binary/runtime identity')
     return dict(proof,receipt_sha256=sha(started))
+
+FULL_LOG_POLICY=None
+FULL_LOG_HELPER_SHA256='8573562ad287b9849bbe2da2a8a604fece8dd5a447bbc91db1b66991828f80fc'
+def full_log_module():
+    import importlib.util
+    path=pathlib.Path(__file__).resolve().with_name('full_log.py')
+    need(path.is_file() and not path.is_symlink() and sha(path)==FULL_LOG_HELPER_SHA256,'reviewed full log helper')
+    spec=importlib.util.spec_from_file_location('reviewed_full_log',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+    return module
+
+def execute_streaming(binary, runtime, output, log, limits):
+    helper=full_log_module();archive,capture_path=helper.paths(log)
+    need(not log.exists() and not archive.exists() and not capture_path.exists(),'fresh full streaming log')
+    writer=helper.Writer(archive,FULL_LOG_POLICY)
+    def bounded():
+        resource.setrlimit(resource.RLIMIT_AS,(limits['address_space_bytes'],)*2)
+        resource.setrlimit(resource.RLIMIT_CPU,(limits['cpu_seconds'],)*2)
+        resource.setrlimit(resource.RLIMIT_FSIZE,(limits['file_bytes'],)*2)
+        resource.setrlimit(resource.RLIMIT_CORE,(0,0))
+    binary_sha=sha(binary);runtime_sha=sha(runtime)
+    def started(p):
+        if CLOUD_MEMORY is not None:CLOUD_MEMORY.after_popen()
+        with log.with_suffix('.started.json').open('x') as evidence:
+            json.dump(dict(schema='ACTUAL_DUT_POPEN_V1',pid=p.pid,consumer_pid=os.getpid(),consumer_start_tick=int(pathlib.Path('/proc/self/stat').read_text().rsplit(')',1)[1].split()[19]),inherited_group=os.getpgrp(),inherited_session=os.getsid(0),binary_sha256=binary_sha,runtime_sha256=runtime_sha),evidence)
+    try:
+        p=subprocess.Popen(runtime_abi_module().execution_argv(binary,runtime,output,limits['max_active_cycles']) if WORKSPACE_LOADER is not None else [str(binary),str(runtime),str(output),str(limits['max_active_cycles'])],stdout=subprocess.PIPE,stderr=subprocess.STDOUT,preexec_fn=bounded,env=runtime_abi_module().clean_env(),bufsize=0)
+    except BaseException:
+        try:
+            writer.finish()
+        finally:
+            try:writer.close()
+            finally:
+                if CLOUD_MEMORY is not None:CLOUD_MEMORY.after_popen()
+        raise
+    result=helper.capture(p,log,FULL_LOG_POLICY,limits['wall_seconds'],started,writer=writer)
+    if result['termination_reason']=='WALL_TIMEOUT':raise TimeoutError('DUT wall deadline')
+    need(result['complete'],'DUT streaming log incomplete: '+result['termination_reason'])
+    return result['native_exit']
+
 
 def execute(binary, runtime, output, log, limits):
     def bounded():
@@ -499,6 +538,9 @@ def require_outer_context(declared):
 
 
 def main():
+    global FULL_LOG_POLICY
+    FULL_LOG_POLICY=None
+    consumer_started=time.monotonic();consumer_cpu_started=time.process_time()
     a=argparse.ArgumentParser()
     a.add_argument('--artifact-manifest',type=pathlib.Path,required=True)
     a.add_argument('--artifact-manifest-sha256',required=True)
@@ -557,6 +599,8 @@ def main():
     need(0 < limits['address_space_bytes'] <= 16*1024**3, 'bounded process AS')
     execution_limits=dict(limits)if admission is None and args.validate_only else mode.consumer_limits(limits,admission,args.profile)
     if cloud_resources is not None:execution_limits=cloud_resources[0].consumer_resource_limits(execution_limits,cloud_resources[1])
+    if admission is not None and admission.get('budget_version')in(2,3):
+        FULL_LOG_POLICY=full_log_module().effective_policy(admission,args.profile,limits['file_bytes'])
     resident_helper,moe_helper=observation_helpers()
     prepared=[]
     for p in b['profiles']:
@@ -595,8 +639,14 @@ def main():
     summary['execution_admission']={'scope':'P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE' if admission['mode']==mode.FIRST_FAULT else 'CALIBRATION_SAME_FULL_M128_STIMULUS' if admission['mode']==mode.CALIBRATION else 'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE' if admission['mode']==mode.STAGE else 'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE', 'execution_mode':admission['mode'], 'reviewed_budget_sha256':admission['reviewed_budget_sha256'],'original_limits':dict(limits),'effective_limits':execution_limits,'outer_cleanup_proof_required':True,'peak_resource_qualification':'INCOMPLETE_SAMPLED','numerical_pass':False}
     if admission['mode']==mode.FIRST_FAULT:summary['execution_admission'].update(first_fault_document_sha256=admission['reviewed_budget_sha256'],diagnostic_profiles=[0],numerical_pass=False)
     if admission['mode']==mode.STAGE:summary['execution_admission']['stage_budget_sha256']=admission['reviewed_budget_sha256']
+    if FULL_LOG_POLICY is not None:summary['execution_admission'].update(budget_version=admission['budget_version'],log_policy=FULL_LOG_POLICY)
+    postprocess_limits=None
+    if FULL_LOG_POLICY is not None:
+        postprocess_limits=dict(wall_seconds=admission['profile_postprocess_wall_seconds'][str(args.profile)],cpu_seconds=admission['profile_postprocess_cpu_seconds'][str(args.profile)])
+        summary['execution_admission']['postprocess_limits']=postprocess_limits
     for p,runtime,obs,want,route_ref in prepared:
         r=dict(profile=p['id'],complete_block_tokens=128,status='INCOMPLETE',numerical_pass=False,coverage_policy=b['coverage_policy']);summary['profiles'].append(r)
+        postprocess=None
         try:
             # Reverify common frozen identity before AND after every process.
             load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile,source_relocation)
@@ -606,7 +656,9 @@ def main():
             for v in list(common.values())+[p[k] for k in ('runtime','views','reference_result','provider_receipt')]: pin(v)
             target=args.output/('profile'+str(p['id']));log=args.output/('profile'+str(p['id'])+'.log')
             need(not target.exists() and not log.exists() and not log.with_suffix('.started.json').exists(),'fresh per-round observations')
-            rc=execute(files['binary'],runtime,target,log,execution_limits);r['exit_code']=rc
+            if FULL_LOG_POLICY is not None:need(time.monotonic()-consumer_started<=30 and time.process_time()-consumer_cpu_started<=30,'full V2 preflight within reserved 30 seconds')
+            rc=(execute_streaming if FULL_LOG_POLICY is not None else execute)(files['binary'],runtime,target,log,execution_limits);r['exit_code']=rc
+            if FULL_LOG_POLICY is not None:postprocess=full_log_module().PostprocessBudget(postprocess_limits).start()
             load_binding(args.artifact_manifest,args.artifact_manifest_sha256,args.runtime_bundle,args.profile,source_relocation)
             verify_local_build(args,frozen)
             verify_runtime_abi(args,frozen)
@@ -614,7 +666,13 @@ def main():
             for v in list(common.values())+[p[k] for k in ('runtime','views','reference_result','provider_receipt')]: pin(v)
             need(rc==0,'DUT process failure')
             r['observation_round']=verify_current_observation_round(log,files['binary'],runtime)
-            text=log.read_text();terminal='COMPLETE_ORIGINAL_HOST_DDR_REPLAY profile='+str(p['id'])+' '
+            terminal='COMPLETE_ORIGINAL_HOST_DDR_REPLAY profile='+str(p['id'])+' '
+            if FULL_LOG_POLICY is not None:
+                markers=[terminal]+[f'HOST_FINAL_OUTPUT name={name} address={obs[name][1]} bytes={obs[name][2]} dtype={obs[name][3]} coverage=ACKNOWLEDGED_EVERY_BYTE' for name in want]
+                if p['id']==0:markers.append(resident_helper.MARKER)
+                if route_ref is not None:markers += ['HOST_FINAL_ROUTE_MAP bytes=8192 coverage=ACKNOWLEDGED_EVERY_BYTE','HOST_FINAL_ROUTER_LOGITS bytes=65536 dtype=BF16 coverage=ACKNOWLEDGED_EVERY_BYTE']
+                text=full_log_module().LogView(log,full_log_module().read_capture(log,FULL_LOG_POLICY),markers,[terminal,'HOST_ROUTER_RAW_SCORE_V1','HOST_ROUTER_SELECTED_SCORE_V2']).verify()
+            else:text=log.read_text()
             need(text.count(terminal)==1,'clean real DUT terminal receipt')
             # Every declared stage observation must exist with exact byte size.
             for name,(_,_,size,_) in obs.items():
@@ -658,6 +716,15 @@ def main():
             r['execution_evidence']={key:True for key in required_acceptance.EXECUTION}
             classify_observed_profile(r, route_ref is not None)
         except Exception as e: r['error']=str(e);r['error_class']=type(e).__name__
+        finally:
+            if postprocess is not None:
+                r['postprocess_observed']=postprocess.stop()
+                if r['postprocess_observed']['budget_exceeded']:
+                    r.setdefault('error','postprocess wall or CPU budget exhausted');r.setdefault('error_class','PostprocessBudgetExceeded')
+        if FULL_LOG_POLICY is not None:
+            try:r['log_capture']=full_log_module().read_capture(log,FULL_LOG_POLICY)
+            except Exception as e:
+                r.setdefault('error','full log capture unavailable');r.setdefault('error_class',type(e).__name__)
         r['qualification']=required_acceptance.evaluate(r)
         r['status']=r['qualification']['status']
         summary['status']='FAIL_EXACT_REFERENCE' if any(x['status']=='FAIL_EXACT_REFERENCE' for x in summary['profiles']) else 'INCOMPLETE'

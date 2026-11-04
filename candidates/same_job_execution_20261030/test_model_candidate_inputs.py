@@ -26,7 +26,8 @@ class CandidateBudget(Budget):
  def test_candidate_actual_source_guard_and_returned_pin(self):
   self.candidate();numeric=self.d/'numeric';numeric.mkdir();helper=numeric/'candidate_admission.py'
   helper.write_text("def verify(review_pin,b):\n return {'scope':'MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL','artifact_manifest_sha256':b['artifact_manifest']['sha256'],'roots':[]}\n")
-  self.b['pins']={str(helper):m.sha(helper)}
+  policy=self.d/'profile_policy.py';policy.write_bytes((D/'profile_policy.py').read_bytes())
+  self.b['pins']={str(helper):m.sha(helper),str(policy):m.sha(policy)}
   with patch.object(m,'D',self.d):
    result=m.admit(self.b);self.assertEqual(result['model_candidate_review'],self.b['model_candidate_review'])
    self.assertEqual(result['budgets'],self.doc['budgets']);self.assertEqual(result['stage_resources'],self.doc['stage_resources'])

@@ -22,8 +22,13 @@ def module(name,path,pins):
 def complete(r):
  return (r.get('cleanup_proof') or {}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP' and (r.get('log_capture') or {}).get('pipe_eof_observed')is True and (r.get('log_capture') or {}).get('gzip_finalized')is True
 
-PRELAUNCH_SUPERVISOR_SHA='54e7f539df5c7356cb2d10637cee3a8de896b739196e6066d8755c1b62c1d3ed'
-PRELAUNCH_ERRORS=('ValueError: locked memory gate','ValueError: locked disk gate','ValueError: prelaunch work deadline')
+PRELAUNCH_SUPERVISOR_SHA='8a7f08366b449f61ea1f18f87ced95f4b4cade4ec1e8359736e2def44c8da82a'
+PRELAUNCH_ERRORS=('ValueError: locked memory gate','ValueError: locked disk gate','ValueError: prelaunch work deadline',
+ 'ValueError: RSS telemetry source pin','ValueError: exact RSS telemetry policy',
+ 'ValueError: RSS telemetry V2 opt-in schema','ValueError: finite per-profile RSS raw cap',
+ 'ValueError: unchanged RSS telemetry 64MiB file cap','ValueError: bounded RSS observation size',
+ 'ValueError: finite RSS verification verification_wall_seconds','ValueError: finite RSS verification verification_cpu_seconds',
+ 'ValueError: RSS verification CPU within wall budget')
 def prelaunch_rejection(r,run_dir,supervisor_path):
  # This exact supervisor tests these gates before mkdir/Popen. False worker_started
  # alone is insufficient: Popen precedes the leader verification that sets it true.
@@ -54,7 +59,11 @@ def require_cleanup(r,marker,run_dir=None,supervisor_path=None):
 def weights(b,i):
  model=('qwen2_1p5b','qwen3_5_0p8b','qwen3_5_0p8b','qwen3_5_35b_a3b','qwen3_5_35b_a3b')[i]
  layer=3 if i in (2,4) else 0
- need(len(b['weights'])==70,'one complete shared70 inventory')
+ if not profile_policy.is_selected(b):need(len(b['weights'])==70,'one complete shared70 inventory')
+ else:
+  profile_policy.require_profile(b,i)
+  helper=module('selected_tail_weights',D.parent/'runtime/selected_acquisition.py',b['pins'])
+  helper.validate_inventory(b,b['weights'])
  rows=[r for r in b['weights']if r['model']==model and f'.layers.{layer}.'in r['name']]
  need(len(rows)==(12,14,11,18,15)[i],'full block/all experts')
  for r in rows:
@@ -66,6 +75,7 @@ def retained_context(b):
  row=b['controller_binding'];path=material.checked(row)
  need(path==path.resolve()and all(not p.is_symlink()for p in(path,*path.parents))and path.stat().st_size<=1<<20,'bounded canonical original invocation binding')
  controller=json.loads(path.read_text())
+ profile_policy.require_same(b,controller)
  need(b['pins']==dict(controller['pins'],**{str(path):row['sha256']}),'tail pins are exact controller closure plus its binding')
  for key in ('identity','executor_identity','repo','artifact_manifest','builder_handoff','cloud_budget','execution_approval','retained_materials'):
   need(controller[key]==b[key],'retained tail/controller exact '+key)
@@ -120,9 +130,11 @@ def validate(b):
  profile_policy.require_references(b,b['references'])
  cloud=cloud_context(b);admission=execution_mode.admit(b)
  need(b['job_started_monotonic']<=time.monotonic(),'owning job start clock, not reset after build')
- need(sum(admission['profile_seconds'].values())+b['reserved_material_seconds']+b['reserved_cleanup_seconds']+b['reserved_parent_seconds'] <= (b['job_budget_seconds']if cloud is not None else 21000)-(time.monotonic()-b['job_started_monotonic']),'whole five round exceeds remaining job')
+ need(sum(execution_mode.profile_reserved_seconds(admission).values())+b['reserved_material_seconds']+b['reserved_cleanup_seconds']+b['reserved_parent_seconds'] <= (b['job_budget_seconds']if cloud is not None else 21000)-(time.monotonic()-b['job_started_monotonic']),'whole five round exceeds remaining job')
  need(b['reserved_material_seconds']>=7*b['provider_wall_seconds']+11*120 and b['reserved_cleanup_seconds']>=23*60+5*30 and b['reserved_parent_seconds']>0,'all seven provider/five connect/ABI and twenty-three cleanup plus DUT/parent reservations')
- if b.get('reference_data_reuse')is None:need(b['tree_cap']==live_budget.TREE_CAP,'unchanged aggregate tree cap')
+ if admission.get('budget_version')==3 and 'aggregate_tree_cap_bytes'in b:
+  need(cloud is not None and type(b['tree_cap'])is int and 0<b['tree_cap']<=live_budget.TREE_CAP,'reviewed ordinary FULL finite aggregate cap')
+ elif b.get('reference_data_reuse')is None:need(b['tree_cap']==live_budget.TREE_CAP,'unchanged aggregate tree cap')
  else:need(cloud is not None and b['execution_mode']in(execution_mode.STAGE,execution_mode.FIRST_FAULT) and b['tree_cap']==12_037_043_872,'exact reference-data-only tree reduction')
  for k in ('rss_bytes','address_space_bytes','phase_extra_bytes','provider_wall_seconds'):
   need(type(b[k])is int and b[k]>0,'explicit reviewed resource bound '+k)
@@ -140,12 +152,17 @@ def owned_environment(base,root):
 
 def execution_profiles(b,admission):
  selected=profile_policy.eligible(b)
+ if admission.get('budget_version')==3:
+  ready=execution_mode.ready_queue_profiles(admission)
+  need(selected==ready if profile_policy.is_selected(b)else selected==list(range(5)),'V3 exact preparation selection; registered hardware remains all five')
+  return ready
  if admission['mode']==execution_mode.FIRST_FAULT:
   need(selected==list(range(5))and admission.get('diagnostic_profiles')==[0]and type(admission['diagnostic_profiles'][0])is int,'registered hardware unchanged; only integer P0 selected')
   return [0]
  return selected
 
 def execution_command(generated,b,admission,profile):
+ if admission.get('budget_version')==3:need(type(profile)is int and profile in execution_mode.ready_queue_profiles(admission),'no launch outside admitted ready set')
  need(generated[1]==str(D/'consumer_owned.py'),'explicit owned consumer handoff')
  need(not any(flag in generated for flag in ('--execution-mode','--calibration-wall-seconds','--full-block-budget','--full-block-budget-sha256','--stage-coverage-budget','--stage-coverage-budget-sha256')),'no stale or duplicate execution mode arguments')
  argv=list(generated)+['--execution-mode',admission['mode']]
@@ -166,10 +183,11 @@ def execution_command(generated,b,admission,profile):
    need(all(argv.index(flag)+1<len(argv)for flag in flags),'generated cloud invocation values')
    need(argv[argv.index(flags[0])+1]==invocation['path']and argv[argv.index(flags[1])+1]==invocation['sha256'],'generated cloud invocation unchanged')
   else:argv+=['--cloud-binding',invocation['path'],'--cloud-binding-sha256',invocation['sha256']]
- return argv,admission['profile_seconds'][str(profile)]+30
+ return argv,execution_mode.consumer_phase_seconds(admission,profile)
 
 
 def mode_budget_fields(admission):
+ if admission.get('budget_version')==3:return dict(full_budget_sha256=admission['reviewed_budget_sha256'],**execution_mode.queue_report_fields(admission))
  if admission['mode']==execution_mode.FIRST_FAULT:return dict(full_budget_sha256=None,stage_budget_sha256=None,first_fault_document_sha256=admission['reviewed_budget_sha256'],diagnostic_profiles=[0],not_selected_profiles=[1,2,3,4])
  if admission['mode']==execution_mode.STAGE:return dict(full_budget_sha256=None,stage_budget_sha256=admission['reviewed_budget_sha256'])
  need(admission['mode']in(execution_mode.CALIBRATION,execution_mode.FULL),'explicit numeric execution mode')
@@ -212,7 +230,8 @@ def run(b,binding_path,binding_sha):
  sys.path.insert(0,b['supervisor_dir']);import supervise_multiroot as supervisor
  owner=module('admitted_runtime_owner',P(b['owner_module']),pins)
  owner_doc,_=owner.verify(b['owner_manifest']['path'],b['owner_manifest']['sha256'],b['owner_root'])
- need(owner_doc['schema']in(('SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3','IMPORTED_THREE_RUNTIME_OWNER_CLOUD_V1')if cloud is not None else('SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3',))and owner_doc['identity']==(cloud if cloud is not None else dict(run_id=b['run_id'],source_commit=b['source_commit'],launch_commit=b['launch_commit'])),'fresh CI owner exact same run/source/launch, never historical V2 receipt')
+ owner_schemas=(('SHARED_SELECTED_RUNTIME_OWNER_FRESH_JOB_V1','IMPORTED_SELECTED_RUNTIME_OWNER_CLOUD_V1')if profile_policy.is_selected(b)and cloud is not None else(('SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3','IMPORTED_THREE_RUNTIME_OWNER_CLOUD_V1')if cloud is not None else('SHARED_THREE_RUNTIME_OWNER_FRESH_JOB_V3',)))
+ need(owner_doc['schema']in owner_schemas and owner_doc['identity']==(cloud if cloud is not None else dict(run_id=b['run_id'],source_commit=b['source_commit'],launch_commit=b['launch_commit'])),'fresh CI owner exact same run/source/launch, never historical V2 receipt')
  profile_policy.require_same(b,owner_doc)
  reference_reuse=None;reference_reuse_context=None;reference_reuse_source_pin=None
  if b.get('reference_data_reuse')is not None:
@@ -228,9 +247,22 @@ def run(b,binding_path,binding_sha):
  def stage(name,argv,seconds=None,accepted=(0,),lease_out=None):
   seconds=seconds or b['provider_wall_seconds'];phase=out/'phases'/(name+'.json');run_dir=out/'runs'/name
   cache_root=out/'cache_roots'/name;e=owned_environment(b['environment'],cache_root)
-  body=dict(argv=list(map(str,argv)),pins=pins,owned_roots=b['owned_roots'],extra_bytes=b['phase_extra_bytes'],seconds=seconds,job_started=b['job_started_monotonic'],job_budget_seconds=b['job_budget_seconds']if cloud is not None else 21000,write_file_bytes=128<<20,tree_cap=b['tree_cap'],environment=e,cache_root=str(cache_root),admission_output=str(run_dir/'LIVE_ADMISSION.json'))
+  dut_profile=int(name[1:-4])if name.endswith('_dut')else None
+  telemetry_policy=execution_mode.expected_rss_telemetry_policy(admission,dut_profile)if dut_profile is not None else None
+  telemetry_seconds=telemetry_policy['verification_wall_seconds']if telemetry_policy is not None else 0
+  admission_seconds=execution_mode.dut_admission_seconds(admission,dut_profile,b['reserved_parent_seconds'])if telemetry_policy is not None else seconds
+  body=dict(argv=list(map(str,argv)),pins=pins,owned_roots=b['owned_roots'],extra_bytes=b['phase_extra_bytes'],seconds=admission_seconds,job_started=b['job_started_monotonic'],job_budget_seconds=b['job_budget_seconds']if cloud is not None else 21000,write_file_bytes=128<<20,tree_cap=b['tree_cap'],environment=e,cache_root=str(cache_root),admission_output=str(run_dir/'LIVE_ADMISSION.json'))
+  log_disk_bytes=execution_mode.full_v3_log_disk_bytes(admission,dut_profile)if dut_profile is not None else 0
+  if log_disk_bytes:
+   body['extra_bytes']+=log_disk_bytes
+   body['write_file_bytes']=max(body['write_file_bytes'],execution_mode.expected_log_policy(admission,dut_profile)['compressed_bytes'])
+  finite_tree=admission.get('budget_version')==3 and 'aggregate_tree_cap_bytes'in b
+  if finite_tree:body['preserve_free_8gib']=True
   save(phase,body);localpins=dict(pins);localpins[str(phase)]=sha(phase)
-  caps=dict(wall_seconds=seconds+30,cleanup_seconds=30,file_bytes=2<<30,tree_bytes=512<<20,log_bytes=64<<20,raw_log_bytes=128<<20,max_entries=100000,per_process_as_bytes=b['address_space_bytes'],per_process_cpu_seconds=18000 if name.endswith('_dut') else seconds+30,rss_bytes=b['rss_bytes'],cpu_seconds=seconds+30,extra_watch_roots=b['owned_roots'],min_free_disk_bytes=1_500_000_000,watch_tree_bytes=b['tree_cap'])
+  caps=dict(wall_seconds=seconds+30,cleanup_seconds=30,file_bytes=2<<30,tree_bytes=512<<20,log_bytes=64<<20,raw_log_bytes=128<<20,max_entries=100000,per_process_as_bytes=b['address_space_bytes'],per_process_cpu_seconds=execution_mode.dut_parent_cpu_seconds(admission,int(name[1:-4])) if name.endswith('_dut') else seconds+30,rss_bytes=b['rss_bytes'],cpu_seconds=execution_mode.dut_aggregate_cpu_seconds(admission,dut_profile,seconds)if dut_profile is not None else seconds+30,extra_watch_roots=b['owned_roots'],min_free_disk_bytes=1_500_000_000,watch_tree_bytes=b['tree_cap'])
+  if telemetry_policy is not None:caps['rss_telemetry_policy']=telemetry_policy
+  if log_disk_bytes:caps['tree_bytes']+=log_disk_bytes
+  if log_disk_bytes or finite_tree:caps['min_free_disk_bytes']=8<<30
   r=supervisor.execute([b['python'],'-B',str(D/'locked_phase.py'),'--phase',str(phase),'--sha256',sha(phase)],str(run_dir),b['lock'],caps,e,localpins,resource_gate={'min_available_memory':b['rss_bytes']+(1<<30)+(b['reserved_other_owner_bytes']if cloud is not None else 0),'min_disk_free':8<<30})
   save(out/'phases'/(name+'_SUPERVISOR_RETURN.json'),r)
   require_cleanup(r,out/('OWNERSHIP_INCOMPLETE_'+name+'.json'),run_dir,P(supervisor.__file__))
@@ -275,7 +307,15 @@ def run(b,binding_path,binding_sha):
    dut_outer=stage(f'p{i}_dut',generated,outer_seconds,accepted=(1,2),lease_out=lease_root)
    if reference_reuse is not None:verify_reference_with_deadline(b,reference_reuse,profile,i,reference_reuse_context)
    bundle=profile/'runtime_bundle.v3.json';bundle_doc=json.loads(bundle.read_text());runtime_sha=bundle_doc['profiles'][0]['runtime']['sha256']
-   diagnostic=dut_evidence.verify(profile/'dut_result',i,sha(manifest),sha(bundle),binary['sha256'],runtime_sha,material.pin(out/'runs'/f'p{i}_dut'/'RESULT.json'))
+   report=json.loads((profile/'dut_result/RESULT.json').read_text())
+   expected_log=execution_mode.verify_consumer_admission(admission,report.get('execution_admission'),i)
+   evidence_args=(profile/'dut_result',i,sha(manifest),sha(bundle),binary['sha256'],runtime_sha,material.pin(out/'runs'/f'p{i}_dut'/'RESULT.json'))
+   if execution_mode.full_v2(admission):
+    limits=execution_mode.host_phase_limits(admission,i,'evidence_verification')
+    with execution_mode.host_verification_budget(**limits):
+     execution_mode.verify_supervisor_telemetry(evidence_args[-1],admission,i,b['supervisor_dir'],b['pins'])
+     diagnostic=dut_evidence.verify(*evidence_args,expected_log_policy=expected_log)
+   else:diagnostic=dut_evidence.verify(*evidence_args)
    if cloud is not None:
     report=json.loads((profile/'dut_result/RESULT.json').read_text());need(report.get('executor_identity')==cloud and report.get('builder_handoff_sha256')==b['builder_handoff']['sha256'],'actual executor report not builder identity')
     if b.get('executor_adaptation') is not None:need(report.get('executor_adaptation_sha256')==b['executor_adaptation']['sha256']and report.get('workspace_loader_sha256')==b['workspace_loader']['sha256'],'actual executor adapter/loader provenance')

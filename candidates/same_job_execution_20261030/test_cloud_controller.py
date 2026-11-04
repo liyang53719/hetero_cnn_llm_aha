@@ -266,7 +266,9 @@ class ActualRuntimeBudgetJoin(unittest.TestCase):
  def test_generated_install_mode_fields_real_budget_and_reuse_admit(self):
   import shutil,test_stage_coverage
   h=test_stage_coverage.Stage();h.setUp();self.addCleanup(h.tearDown)
-  r=h.e/'runtime';r.mkdir();shutil.copyfile(D/'runtime/runtime_reuse.py',r/'runtime_reuse.py')
+  r=h.e/'runtime';r.mkdir()
+  for name in ('runtime_reuse.py','runtime_dependencies.py'):shutil.copyfile(D/'runtime'/name,r/name)
+  shutil.copyfile(D/'profile_policy.py',h.e/'profile_policy.py')
   # Sole mocked authority is process liveness. Cloud/mode admission is actual.
   identity=h.e/'executor_identity.py';identity.write_text('def verify_owner(i):pass\ndef verify_current(i):pass\n')
   h.b['identity']['started_monotonic']=time.monotonic();h.b['job_started_monotonic']=h.b['identity']['started_monotonic']

@@ -50,11 +50,18 @@ def reservations(b,admission=None):
   admission={'profile_seconds':q['calibration_seconds']} if b.get('execution_mode','BOUNDED_CALIBRATION')=='BOUNDED_CALIBRATION' else execution_admission(b)
  cal=admission['profile_seconds'];expected_profiles={'0'}if b.get('execution_mode')=='P0_FIRST_FAULT_DIAGNOSTIC'else set(map(str,range(5)))
  if b.get('execution_mode')=='P0_FIRST_FAULT_DIAGNOSTIC':need(admission.get('diagnostic_profiles')==[0],'fixed first-fault profile only')
- need(set(cal)==expected_profiles and all(type(x)is int and 0<x<=20000 for x in cal.values()),'all five explicit unchanged-stimulus calibration windows')
+ ceiling=20000
+ if 'budget_version'in admission:
+  path=D.parent/'execution_mode.py'
+  need(b['pins'].get(str(path))==sha(path),'V2 reservation verifier source pin')
+  verifier=mod('cloud_full_watchdog_reservation',path);ceiling=verifier.profile_wall_ceiling(admission)
+  if admission.get('budget_version')==3:expected_profiles=set(map(str,verifier.ready_queue_profiles(admission)))
+ need(set(cal)==expected_profiles and all(type(x)is int and 0<x<=ceiling for x in cal.values()),'all five explicit unchanged-stimulus execution windows')
  for k in ('archives','weights','install','owner_bind','reference','provider','parent'):
   need(type(q[k])is int and q[k]>0,'reviewed finite phase budget '+k)
  need(q['archives']<=1800 and q['weights']<=7200 and q['install']<=1800 and q['owner_bind']<=1800 and q['reference']<=1800,'no unreviewed original resource expansion')
- tail=sum(cal.values())+7*q['provider']+11*120+1530+q['parent']
+ reserved=verifier.profile_reserved_seconds(admission)if 'budget_version'in admission else cal
+ tail=sum(reserved.values())+7*q['provider']+11*120+1530+q['parent']
  materials=q['archives']+q['weights']+3*q['install']+q['owner_bind']+5*q['reference']+11*30
  total=materials+tail
  need(total<=b['job_budget_seconds'],'whole declared cloud round exceeds reviewed deadline')
@@ -107,7 +114,9 @@ def admitted_inputs(b):
   path=D.parent/name;need(b['pins'].get(str(path))==sha(path),'cloud admission helper source pin')
  budget_module=mod('actual_cloud_budget',D.parent/'cloud_budget.py');budget=budget_module.admit(b)
  budget_document=json.loads(P(b['cloud_budget']['path']).read_text())
- budget_module.verify_host(budget_document['host_identity'],b['identity'])
+ budget_module.verify_host(budget_document['host_identity'],b['identity'],budget.get('execution_policy'))
+ if profile_policy.is_selected(b):need(budget.get('execution_policy')==profile_policy.checked(b),'same approved preparation selection')
+ else:need('execution_policy'not in budget,'no implicit selected preparation')
  for k in ('runtime_mode','archive_mode','runtime_reuse_manifest','job_budget_seconds','budgets','dut_rss_bytes','dut_address_space_bytes','numeric_reserved_increment_bytes','reserved_other_owner_bytes','consumer_address_space_bytes','stage_resources','execution_mode','full_block_budget'):
   need(b.get(k)==budget[k],'binding must exactly preserve reviewed cloud budget '+k)
  if budget['execution_mode']=='STAGE_COVERAGE_DIAGNOSTIC':
@@ -172,8 +181,9 @@ def runtime_admission_fields(b):
  if b.get('execution_mode')=='P0_FIRST_FAULT_DIAGNOSTIC':fields['source_pins']=b['source_pins']
  return fields
 
-def upfront_disk_admission(snapshot,evidence_path=None,binding_sha=None,tree_cap=TREE):
- need(type(tree_cap)is int and tree_cap in (TREE,12037043872),'explicit reviewed unchanged or tighter aggregate cap')
+def upfront_disk_admission(snapshot,evidence_path=None,binding_sha=None,tree_cap=TREE,disk_plan=None):
+ need(type(tree_cap)is int and (tree_cap in (TREE,12037043872)if disk_plan is None else 0<tree_cap<=TREE),'explicit reviewed unchanged or tighter aggregate cap')
+ if disk_plan is not None:mod('finite_disk_snapshot',D.parent/'cloud_budget.py').fullprefill_disk_snapshot(disk_plan,snapshot,tree_cap)
  # Existing read-only inputs already consume disk and TREE. Reserve only the
  # remaining possible aggregate growth, not TREE a second time. This is a
  # sampled planning gate; unchanged locked phase gates/watchers remain binding.
@@ -196,7 +206,7 @@ def run(b,binding_path,binding_sha):
  tree_cap=budget.get('aggregate_tree_cap_bytes',TREE)
  need(b.get('aggregate_tree_cap_bytes',TREE)==tree_cap,'same approved aggregate cap')
  profile_policy.require_source_pin(b['pins']);execution_policy=profile_policy.checked(b)
- need(execution_policy['mode']==profile_policy.FULL,'all five original profiles on cloud executor')
+ need(execution_policy['mode']==profile_policy.FULL or (profile_policy.is_selected(b)and budget.get('execution_policy')==execution_policy),'all five registered hardware profiles; selected dependencies explicitly approved')
  admission=execution_admission(b)
  limit=b['job_budget_seconds'];need(type(limit)is int and 0<limit<=2**31-1,'finite admitted cloud deadline')
  started=b['job_started_monotonic'];need(type(started)in(int,float)and math.isfinite(started)and 0<=time.monotonic()-started<limit,'original cloud executor monotonic clock');materials_reserved,tail_reserved,total=reservations(b,admission)
@@ -207,7 +217,7 @@ def run(b,binding_path,binding_sha):
  need(sys.version_info[:2]==(3,12)and platform.machine()=='x86_64','original Python ABI before downloads or build');profile_policy.require_cpu(b,P('/proc/cpuinfo').read_text().split())
  repo=P(b['repo']).resolve();need(subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()==identity['source_commit'],'actual checked-out source')
  job=P(b['job_root']);need(not job.exists()and job.is_absolute()and not any(p.is_symlink()for p in(job,*job.parents)),'fresh canonical job root')
- roots=list(dict.fromkeys([str(job),str(repo),*[str(P(b[k]['path']).parent)for k in ('artifact_manifest','builder_handoff','executor_identity_pin','cloud_budget','execution_approval','executor_adaptation','workspace_loader','retained_materials','model_candidate_review','stage_coverage_budget')if k in b]]));pins=dict(b['pins']);pins[str(binding_path)]=binding_sha
+ roots=list(dict.fromkeys([str(job),str(repo),*[str(P(b[k]['path']).parent)for k in ('artifact_manifest','builder_handoff','executor_identity_pin','cloud_budget','execution_approval','executor_adaptation','workspace_loader','retained_materials','model_candidate_review','stage_coverage_budget','full_block_budget')if b.get(k)is not None]]));pins=dict(b['pins']);pins[str(binding_path)]=binding_sha
  if 'model_candidate_review'in b:
   need('model_candidate_verified'in imported,'reviewed candidate before watch');roots.extend(imported['model_candidate_verified']['roots']);roots=list(dict.fromkeys(roots))
  if b.get('execution_mode')=='P0_FIRST_FAULT_DIAGNOSTIC':
@@ -236,12 +246,23 @@ def run(b,binding_path,binding_sha):
   for name in ('supervise_multiroot.py','strict_cleanup.py','lossless_log.py'):need(pins.get(str(base/name))==sha(base/name),'published unchanged supervisor')
  census_path=numeric/'live_budget.py';need(pins.get(str(census_path))==sha(census_path),'original bounded live census source pin')
  stage_budget_watch_coverage(b,roots)
+ if b.get('full_block_budget')is not None:
+  full_doc=json.loads(P(b['full_block_budget']['path']).read_text())
+  for evidence in full_doc['basis'].values():
+   parent=str(P(evidence['path']).parent)
+   if parent not in roots:roots.append(parent)
  existing_roots=[r for r in roots if P(r)!=job]
  snapshot=mod('cloud_upfront_live_budget',census_path).census(existing_roots,max_entries=150000,max_seconds=60)
  import shutil
  snapshot=dict(snapshot,free_bytes=min(snapshot['free_bytes'],shutil.disk_usage(job.parent).free))
- disk_admission=upfront_disk_admission(snapshot,P(binding_path).with_name(P(binding_path).name+'.UPFRONT_DISK.json'),binding_sha,tree_cap=tree_cap)
+ disk_admission=upfront_disk_admission(snapshot,P(binding_path).with_name(P(binding_path).name+'.UPFRONT_DISK.json'),binding_sha,tree_cap=tree_cap,disk_plan=budget.get('fullprefill_disk_budget'))
+ parent_cpu_policy=None
+ if admission.get('budget_version')in(2,3):
+  path=D.parent/'execution_mode.py'
+  need(pins.get(str(path))==sha(path),'V2 parent CPU verifier source pin')
+  parent_cpu_policy=mod('cloud_full_parent_cpu',path).install_full_v2_parent_cpu_limit(admission,limit)
  job.mkdir();(job/'runs').mkdir();(job/'env').mkdir();(job/'bindings').mkdir()
+ if parent_cpu_policy is not None:save(job/'bindings/FULL_V2_PARENT_CPU_LIMIT.json',parent_cpu_policy)
  sys.path.insert(0,supervisor_dir);import supervise_multiroot as supervisor
  history=[]
  def stage(name,argv,seconds,rss=3,extra_pins=None,network=False,output_root=None,resource_profile=None):
@@ -257,6 +278,7 @@ def run(b,binding_path,binding_sha):
     if key in os.environ:env[key]=os.environ[key]
   stagepins=dict(pins);stagepins.update(extra_pins or {})
   caps=dict(wall_seconds=seconds,cleanup_seconds=30,file_bytes=2<<30,tree_bytes=policy['output_bytes'],watch_tree_bytes=tree_cap,extra_watch_roots=roots,min_free_disk_bytes=1_500_000_000,log_bytes=64<<20,raw_log_bytes=128<<20,max_entries=150000,per_process_as_bytes=policy['as_bytes'],per_process_cpu_seconds=policy['cpu_seconds'],rss_bytes=policy['rss_bytes'],cpu_seconds=policy['cpu_seconds'])
+  if 'fullprefill_disk_budget'in budget:caps['min_free_disk_bytes']=8<<30
   r=supervisor.execute(list(map(str,argv)),str(run_root),lock,caps,env,stagepins,resource_gate={'min_available_memory':policy['rss_bytes']+(1<<30)+b['reserved_other_owner_bytes'],'min_disk_free':8<<30})
   save(job/'bindings'/(name+'_SUPERVISOR_RETURN.json'),r)
   history.append(dict(name=name,native_exit=r['native_exit'],receipt=pin(run_root/'RESULT.json')))
@@ -268,7 +290,7 @@ def run(b,binding_path,binding_sha):
   archive_binding=dict(b,helper=b['shared_runtime_helper'],source_dir=str(runtime/'source'),output=str(archives))
   save(ab,archive_binding);archive_tool=runtime/'reuse_archives.py';archive_network=False
  else:
-  save(ab,dict(source_dir=str(runtime/'source'),pins=pins,output=str(archives)));archive_tool=runtime/'acquire_archives.py';archive_network=True
+  save(ab,dict(source_dir=str(runtime/'source'),pins=pins,output=str(archives),**({'execution_policy':execution_policy}if profile_policy.is_selected(b)else{})));archive_tool=runtime/'acquire_archives.py';archive_network=True
  ok(stage('archives',[py,'-B',archive_tool,'--binding',ab,'--binding-sha256',sha(ab)],q['archives'],.25,{str(ab):sha(ab)},archive_network))
  owner_root=job/'materials';ib=job/'bindings/INSTALL.json';archives_rows=json.loads((archives/'ARCHIVES.json').read_text())['archives'];ipins=dict(pins);ipins.update({r['path']:r['sha256']for r in archives_rows})
  install_binding=dict(execution_context='CLOUD_EXECUTOR_V1',reserved_other_owner_bytes=b['reserved_other_owner_bytes'],stage_resources=b['stage_resources'],job_budget_seconds=limit,execution_policy=execution_policy,schema='FRESH_JOB_RUNTIME_CONTROLLER_V1',identity=identity,repo=str(repo),owner_root=str(owner_root),python=py,helper=b['shared_runtime_helper'],supervisor_dir=supervisor_dir,lock=lock,owned_roots=roots,pins=ipins,archives=archives_rows,job_started_monotonic=started,install_wall_seconds=q['install'],metadata_wall_seconds=q['owner_bind'],early_build_seconds=0,remaining_job_reservation_seconds=q['weights']+30+5*(q['reference']+30)+tail_reserved)
@@ -282,15 +304,25 @@ def run(b,binding_path,binding_sha):
  if 'retained_materials'in b:
   retained=imported['retained_materials_verified'];payload=P(retained['payload']);weights=retained['weights'];references=retained['references']
  else:
-  payload=job/'runs/weights/output';acq=repo/'candidates/five_profile_acquisition_resume_20261028/acquire_resumable.py'
-  ok(stage('weights',[py,'-B',acq,'--output',payload,'--execute'],q['weights'],.5,network=True))
-  summary=json.loads((payload/'SUMMARY.json').read_text());need(summary['tensors']==70 and summary['tensor_bytes']==3_531_306_272,'one full70 tensor acquisition')
+  payload=job/'runs/weights/output'
+  if profile_policy.is_selected(b):
+   acq=runtime/'selected_acquisition.py';wb=job/'bindings/SELECTED_WEIGHTS.json'
+   save(wb,dict(b,output=str(payload)))
+   ok(stage('weights',[py,'-B',acq,'--binding',wb,'--sha256',sha(wb),'--execute'],q['weights'],.5,extra_pins={str(wb):sha(wb)},network=True))
+  else:
+   acq=repo/'candidates/five_profile_acquisition_resume_20261028/acquire_resumable.py'
+   ok(stage('weights',[py,'-B',acq,'--output',payload,'--execute'],q['weights'],.5,network=True))
+  summary=json.loads((payload/'SUMMARY.json').read_text())
+  if not profile_policy.is_selected(b):need(summary['tensors']==70 and summary['tensor_bytes']==3_531_306_272,'one full70 tensor acquisition')
   weights=[]
   for receipt in sorted(payload.glob('*/*.receipt.json')):
    r=json.loads(receipt.read_text());p=receipt.with_name(receipt.name.removesuffix('.receipt.json')+'.bin');need(p.stat().st_size==r['actual_bytes']and sha(p)==r['actual_sha256'],'actual acquired tensor bytes');weights.append(dict(model=receipt.parent.name,name=receipt.name.removesuffix('.receipt.json'),pin=pin(p)))
-  need(len(weights)==70 and sum(x['pin']['bytes']for x in weights)==3_531_306_272,'all original five block tensors and bytes')
+  if profile_policy.is_selected(b):
+   helper=mod('actual_selected_weights',runtime/'selected_acquisition.py')
+   weights=helper.verify_weights(b,weights,payload,summary)
+  else:need(len(weights)==70 and sum(x['pin']['bytes']for x in weights)==3_531_306_272,'all original five block tensors and bytes')
  
-  reference=mod('actual_original_references',runtime/'reference_job.py')
+  reference=mod('actual_original_references',runtime/('selected_reference_job.py'if profile_policy.is_selected(b)else'reference_job.py'))
   rb=dict(execution_context='CLOUD_EXECUTOR_V1',reserved_other_owner_bytes=b['reserved_other_owner_bytes'],stage_resources=b['stage_resources'],job_budget_seconds=limit,execution_policy=execution_policy,profiles=list(range(5)),tokens=128,identity=identity,repo=str(repo),output=str(owner_root/'references'),owner_root=str(owner_root),owner_module=str(owner_module),owner_manifest=owner_pin,pins=pins,payload=str(payload),wall_seconds=q['reference'])
   references=reference.run(rb,stage)
  tail=numeric_module('actual_five_diagnostics',numeric/'numeric_tail.py',pins);tb=job/'bindings/NUMERIC.json'
@@ -305,7 +337,13 @@ def run(b,binding_path,binding_sha):
  qualification=acceptance.aggregate(numeric_result['actual_dut_reports'])
  need(numeric_result.get('qualification')==qualification and numeric_result.get('status')==qualification['status'] and numeric_result.get('numerical_pass')is qualification['numerical_pass'],'recomputed actual numeric finalization')
  code=transport_code(admission['mode'],qualification)
- save(job/'FLOW_RESULT.json',dict(execution_context='CLOUD_EXECUTOR_V1',identity=identity,executor_identity=identity,artifact_identity=builder,builder_identity=builder,source_pins=b['source_pins'],executor_identity_pin=b['executor_identity_pin'],builder_handoff=b['builder_handoff'],artifact_manifest=b['artifact_manifest'],cloud_budget=b['cloud_budget'],execution_approval=b['execution_approval'],job_budget_seconds=limit,execution_binding=pin(binding_path),execution_admission=admission,execution_mode=admission['mode'],transport_exit_code=code,qualification=qualification,execution_policy=execution_policy,status=qualification['status'],scope='P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE'if admission['mode']=='P0_FIRST_FAULT_DIAGNOSTIC'else('MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL'if 'model_candidate_review'in b else 'CHISEL_TEST_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL'),stages=history,retained_materials_scope=imported.get('retained_materials_verified',{}).get('scope'),upfront_disk_admission=disk_admission,numeric_result=pin(numeric_path),hardware_definitions=1,profiles=list(range(5)),uploaded_payloads=False,**{k:b[k]for k in ('executor_adaptation','workspace_loader','retained_materials','model_candidate_review','p0_provider_reuse','reference_data_reuse','aggregate_tree_cap_bytes')if k in b},**(dict(stage_coverage_budget=b['stage_coverage_budget'],stage_coverage_budget_sha256=b['stage_coverage_budget']['sha256'],execution_scope='STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE')if admission['mode']=='STAGE_COVERAGE_DIAGNOSTIC'else {})))
+ flow_result=dict(execution_context='CLOUD_EXECUTOR_V1',identity=identity,executor_identity=identity,artifact_identity=builder,builder_identity=builder,source_pins=b['source_pins'],executor_identity_pin=b['executor_identity_pin'],builder_handoff=b['builder_handoff'],artifact_manifest=b['artifact_manifest'],cloud_budget=b['cloud_budget'],execution_approval=b['execution_approval'],job_budget_seconds=limit,execution_binding=pin(binding_path),execution_admission=admission,execution_mode=admission['mode'],transport_exit_code=code,qualification=qualification,execution_policy=execution_policy,status=qualification['status'],scope='P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE'if admission['mode']=='P0_FIRST_FAULT_DIAGNOSTIC'else('MODEL_CANDIDATE_EVALUATION_NOT_PRODUCTION_OR_FINAL_RTL'if 'model_candidate_review'in b else 'CHISEL_TEST_GENERATED_SIMULATION_BACKEND_NOT_FINAL_RTL'),stages=history,retained_materials_scope=imported.get('retained_materials_verified',{}).get('scope'),upfront_disk_admission=disk_admission,numeric_result=pin(numeric_path),hardware_definitions=1,profiles=list(range(5)),uploaded_payloads=False,**{k:b[k]for k in ('executor_adaptation','workspace_loader','retained_materials','model_candidate_review','p0_provider_reuse','reference_data_reuse','aggregate_tree_cap_bytes')if k in b},**(dict(stage_coverage_budget=b['stage_coverage_budget'],stage_coverage_budget_sha256=b['stage_coverage_budget']['sha256'],execution_scope='STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE')if admission['mode']=='STAGE_COVERAGE_DIAGNOSTIC'else {}))
+ if 'fullprefill_disk_budget'in budget:
+  final_bytes=len((json.dumps(flow_result,indent=2)+'\n').encode('utf-8'))
+  need(final_bytes<=budget['fullprefill_disk_budget']['shared_output_reservations']['final_evidence_bytes'],'finite FULL final evidence fits reviewed reservation')
+  final_snapshot=mod('cloud_final_live_budget',census_path).census(roots,max_entries=150000,max_seconds=60)
+  need(final_snapshot['bytes']+final_bytes<=tree_cap and final_snapshot['free_bytes']-final_bytes>=8<<30,'finite FULL final lifetime bytes and8GiB floor')
+ save(job/'FLOW_RESULT.json',flow_result)
  return code
 if __name__=='__main__':
  a=argparse.ArgumentParser();a.add_argument('--binding',type=P,required=True);a.add_argument('--binding-sha256',required=True);v=a.parse_args();need(sha(v.binding)==v.binding_sha256,'independent top binding');code=run(json.loads(v.binding.read_text()),v.binding.resolve(),v.binding_sha256);raise SystemExit(code) # mode-specific transport follows recomputed qualification

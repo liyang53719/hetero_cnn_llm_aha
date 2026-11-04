@@ -1,6 +1,7 @@
 """Metadata-only owner bind with 64MiB write hard limit; existing inputs may be larger."""
 import argparse,hashlib,importlib.util,json,pathlib,resource
 P=pathlib.Path
+_dep_spec=importlib.util.spec_from_file_location('runtime_dependencies',P(__file__).resolve().parent/'runtime_dependencies.py');deps=importlib.util.module_from_spec(_dep_spec);_dep_spec.loader.exec_module(deps)
 def sha(p):
  with P(p).open('rb')as f:return hashlib.file_digest(f,'sha256').hexdigest()
 def main():
@@ -10,5 +11,9 @@ def main():
  if sha(p)!=b['owner_module_sha256']:raise ValueError('owner module drift')
  resource.setrlimit(resource.RLIMIT_FSIZE,(64<<20,64<<20))
  s=importlib.util.spec_from_file_location('fresh_owning_job',p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
+ owner=json.loads(P(b['owner_binding']).read_text())
+ if deps.selected(owner):
+  if 'execution_policy'not in b:raise ValueError('explicit selected metadata phase policy')
+ if 'execution_policy'in b:deps.policy.require_same(b,owner)
  m.bind(P(b['owner_binding']),b['owner_binding_sha256'],P(b['receipt_index']),b['receipt_index_sha256'],P(b['output']))
 if __name__=='__main__':main()

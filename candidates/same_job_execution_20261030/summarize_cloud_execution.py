@@ -2,7 +2,7 @@
 The caller supplies an independently trusted binding SHA, not one read from the
 binding itself. Builder authentication remains outside this local consistency gate.
 """
-import hashlib,json,pathlib,sys,types,math
+import hashlib,json,pathlib,sys,types,math,time,contextlib
 P=pathlib.Path
 D=P(__file__).resolve().parent
 
@@ -118,7 +118,7 @@ def first_fault_snapshot(path,b,terminal_contract_sha=None):
   result['terminal_finite_summary']=terminal
  return dict(result,terminal_reason=terminal_codes[0]if terminal_codes else'NOT_ESTABLISHED_FROM_FIXED_NATIVE_FAILURE_RECORD',log_sha256=digest.hexdigest(),log_bytes=total,log_binding='FIXED_POPEN_OUTPUT_PATH_AFTER_VERIFIED_OWNER_CLEANUP_HASHED_AT_PROJECTION_NOT_PREEXISTING_LOG_PIN')
 
-def project(job,binding_path,binding_sha):
+def _project(job,binding_path,binding_sha,*,bounded_mode=None):
  unavailable=dict(schema='CLOUD_EXECUTION_SAFE_SUMMARY_V1',status='UNAVAILABLE',numerical_pass=False,final_rtl_executed=False)
  try:
   job=P(job);bp=regular(binding_path,1<<20);need(sha(bp)==binding_sha,'trusted owning binding hash');b=read(bp)
@@ -156,9 +156,13 @@ def project(job,binding_path,binding_sha):
   if retained is not None:source_identity.update(retained_materials_sha256=retained['sha256'],retained_materials_scope=retained_scope)
   if reuse is not None:source_identity.update(p0_provider_reuse_sha256=reuse['sha256'])
   if candidate:source_identity.update(candidate_scope=review['scope'],model_candidate_review_sha256=b['model_candidate_review']['sha256'],production_acceptance=False)
-  mode=load('summary_cloud_mode',D/'execution_mode.py');admission=mode.admit(b)
+  mode=bounded_mode if bounded_mode is not None else load('summary_cloud_mode',D/'execution_mode.py');admission=mode.admit(b)
   need(cloud_admission['execution_mode']==admission['mode']and cloud_admission['full_block_budget']==b.get('full_block_budget'),'approved cloud mode and full budget')
   if admission['mode']==mode.STAGE:need(cloud_admission.get('stage_coverage_budget')==b.get('stage_coverage_budget')and b.get('stage_coverage_budget')is not None,'approved stage diagnostic budget')
+  queue=mode.queue_report_fields(admission)
+  if queue:
+   queue_root=job/'materials/numeric'
+   for i in queue['blocked_profiles']:need(not any(x.exists()or x.is_symlink()for x in(queue_root/f'profile{i}',queue_root/f'PROFILE_{i}_DIAGNOSTIC.json',queue_root/f'runs/p{i}_dut')),'blocked queue profile must not run')
   first_fault=admission['mode']==mode.FIRST_FAULT
   if first_fault:
    need(admission.get('diagnostic_profiles')==[0],'only P0 first-fault selection')
@@ -168,7 +172,7 @@ def project(job,binding_path,binding_sha):
   flow_path=job/'FLOW_RESULT.json'
   if not flow_path.exists()and not flow_path.is_symlink():
    result=dict(schema=unavailable['schema'],status='INCOMPLETE_EXECUTION',numerical_pass=False,final_rtl_executed=False,profile_qualification='UNKNOWN_NOT_INFERRED_FROM_PARTIAL_STAGES',profiles_registered=list(range(5)),stages=partial_stages(job),binding_sha256=binding_sha,source_pins_sha256=source_sha,builder_handoff_sha256=b['builder_handoff']['sha256'],execution_approval_sha256=b['execution_approval']['sha256'],cloud_budget_sha256=b['cloud_budget']['sha256'])
-   result.update(source_identity)
+   result.update(source_identity);result.update(queue)
    if first_fault:result.update(execution_mode=mode.FIRST_FAULT,diagnostic_profiles=[0],not_selected_profiles=[1,2,3,4],first_fault_document_sha256=admission['reviewed_budget_sha256'],full_block_acceptance=False,fault_observed=None,fault_cause_established=False)
    need(len(json.dumps(result).encode())<=65536,'bounded incomplete summary');return result
   flow=read(flow_path);root=job/'materials/numeric';numeric_path=root/'RESULT.json';numeric=read(numeric_path)
@@ -189,32 +193,43 @@ def project(job,binding_path,binding_sha):
   sys.path.insert(0,str(D/'numeric'))
   acceptance=load('required_acceptance',D/'numeric/required_acceptance.py');sys.modules['required_acceptance']=acceptance
   evidence=load('cloud_dut_evidence',D/'numeric/dut_evidence.py')
-  records=[];profiles=[]
-  for i in ([0]if first_fault else range(5)):
-   rp=root/f'PROFILE_{i}_DIAGNOSTIC.json'
-   if not rp.exists():continue
-   record=read(rp);out=root/f'profile{i}/material/dut_result';report_path=out/'RESULT.json';start_path=out/f'profile{i}.started.json';outer_path=root/f'runs/p{i}_dut/RESULT.json'
-   need(record.get('profile')==i and all(record.get(k)==pin(p)for k,p in [('report',report_path),('startup',start_path),('outer',outer_path)]),'fixed profile receipt paths')
-   consumer=read(report_path);started=read(start_path)
-   need(consumer.get('executor_identity')==executor and consumer.get('artifact_identity')==builder and consumer.get('builder_handoff_sha256')==b['builder_handoff']['sha256'],'actual consumer dual identity')
-   if adaptation is not None:need(consumer.get('executor_adaptation_sha256')==adaptation['sha256']and consumer.get('workspace_loader_sha256')==loader['sha256'],'actual consumer approved adapter/loader identities')
-   if candidate:need(consumer.get('model_candidate_review_sha256')==b['model_candidate_review']['sha256']and consumer.get('candidate_scope')==review['scope'],'actual consumer candidate scope')
-   need(consumer.get('artifact_manifest_sha256')==b['artifact_manifest']['sha256']and started['binary_sha256']==frozen['common']['binary']['sha256'],'same actual artifact')
-   ea=consumer.get('execution_admission',{})
-   need(ea.get('execution_mode')==admission['mode']and ea.get('reviewed_budget_sha256')==admission['reviewed_budget_sha256']and ea.get('outer_cleanup_proof_required')is True,'actual consumer mode')
-   if admission['mode']==mode.STAGE:need(ea.get('stage_budget_sha256')==admission['reviewed_budget_sha256'],'actual consumer stage budget domain')
-   else:need(ea.get('stage_budget_sha256')is None,'non-stage consumer cannot carry stage budget')
-   if first_fault:need(ea.get('first_fault_document_sha256')==admission['reviewed_budget_sha256']and ea.get('diagnostic_profiles')==[0],'actual first-fault consumer domain')
-   need(ea.get('effective_limits')==cloud_budget.consumer_resource_limits(mode.consumer_limits(ea['original_limits'],admission,i),cloud_admission),'actual effective limits')
-   parent_as=cloud_admission['consumer_address_space_bytes'];dut_as=cloud_admission['dut_address_space_bytes']
-   expected_resource=dict(consumer_pre_fork_soft_bytes=parent_as,consumer_pre_fork_hard_bytes=dut_as,consumer_after_popen_hard_bytes=parent_as,dut_hard_address_space_bytes=dut_as,group_rss_is_sampled=True)
-   need(consumer.get('resource_admission')==expected_resource and consumer['resource_admission'].get('group_rss_is_sampled') is True,'exact sampled group/resource admission')
-   scope={mode.FULL:'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE',mode.CALIBRATION:'CALIBRATION_SAME_FULL_M128_STIMULUS',mode.STAGE:'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE',mode.FIRST_FAULT:'P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE'}[admission['mode']]
-   need(ea.get('scope')==scope,'actual consumer scope')
-   actual=evidence.verify(out,i,consumer['artifact_manifest_sha256'],consumer['runtime_bundle_sha256'],started['binary_sha256'],started['runtime_sha256'],record['outer'])
-   need(actual==record,'recomputed actual record');records.append(actual)
-   q=actual['qualification'];need(all(type(q[k])is list and len(q[k])<=64 for k in ('missing','failed','checked')),'bounded qualification')
-   profiles.append(dict(profile=i,state=actual['state'],qualification=q,receipt_sha256=sha(rp)))
+  if queue:
+   need(all(numeric.get(k)==v for k,v in queue.items()),'actual numeric exact ready/blocked inventory')
+   need(flow.get('execution_admission')==admission,'actual flow exact independently admitted queue')
+  records=[];profiles=[];full_progress=[]
+  for i in (queue['selected_profiles']if queue else [0]if first_fault else range(5)):
+   limits=mode.host_phase_limits(admission,i,'summary_verification')
+   with mode.host_verification_budget(**limits)if limits is not None else contextlib.nullcontext():
+    rp=root/f'PROFILE_{i}_DIAGNOSTIC.json'
+    if not rp.exists():continue
+    record=read(rp);out=root/f'profile{i}/material/dut_result';report_path=out/'RESULT.json';start_path=out/f'profile{i}.started.json';outer_path=root/f'runs/p{i}_dut/RESULT.json'
+    need(record.get('profile')==i and all(record.get(k)==pin(p)for k,p in [('report',report_path),('startup',start_path),('outer',outer_path)]),'fixed profile receipt paths')
+    consumer=read(report_path);started=read(start_path)
+    need(consumer.get('executor_identity')==executor and consumer.get('artifact_identity')==builder and consumer.get('builder_handoff_sha256')==b['builder_handoff']['sha256'],'actual consumer dual identity')
+    if adaptation is not None:need(consumer.get('executor_adaptation_sha256')==adaptation['sha256']and consumer.get('workspace_loader_sha256')==loader['sha256'],'actual consumer approved adapter/loader identities')
+    if candidate:need(consumer.get('model_candidate_review_sha256')==b['model_candidate_review']['sha256']and consumer.get('candidate_scope')==review['scope'],'actual consumer candidate scope')
+    need(consumer.get('artifact_manifest_sha256')==b['artifact_manifest']['sha256']and started['binary_sha256']==frozen['common']['binary']['sha256'],'same actual artifact')
+    ea=consumer.get('execution_admission',{})
+    expected_log=mode.verify_consumer_admission(admission,ea,i)
+    need(ea.get('execution_mode')==admission['mode']and ea.get('reviewed_budget_sha256')==admission['reviewed_budget_sha256']and ea.get('outer_cleanup_proof_required')is True,'actual consumer mode')
+    if admission['mode']==mode.STAGE:need(ea.get('stage_budget_sha256')==admission['reviewed_budget_sha256'],'actual consumer stage budget domain')
+    else:need(ea.get('stage_budget_sha256')is None,'non-stage consumer cannot carry stage budget')
+    if first_fault:need(ea.get('first_fault_document_sha256')==admission['reviewed_budget_sha256']and ea.get('diagnostic_profiles')==[0],'actual first-fault consumer domain')
+    need(ea.get('effective_limits')==cloud_budget.consumer_resource_limits(mode.consumer_limits(ea['original_limits'],admission,i),cloud_admission),'actual effective limits')
+    parent_as=cloud_admission['consumer_address_space_bytes'];dut_as=cloud_admission['dut_address_space_bytes']
+    expected_resource=dict(consumer_pre_fork_soft_bytes=parent_as,consumer_pre_fork_hard_bytes=dut_as,consumer_after_popen_hard_bytes=parent_as,dut_hard_address_space_bytes=dut_as,group_rss_is_sampled=True)
+    need(consumer.get('resource_admission')==expected_resource and consumer['resource_admission'].get('group_rss_is_sampled') is True,'exact sampled group/resource admission')
+    scope={mode.FULL:'FULL_BLOCK_ACCEPTANCE_REQUIRED_TERMINAL_AND_REFERENCE',mode.CALIBRATION:'CALIBRATION_SAME_FULL_M128_STIMULUS',mode.STAGE:'STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE',mode.FIRST_FAULT:'P0_FIRST_FAULT_READONLY_SAME_FULL_M128_STIMULUS_NOT_NUMERICAL_ACCEPTANCE'}[admission['mode']]
+    need(ea.get('scope')==scope,'actual consumer scope')
+    if mode.full_v2(admission):mode.verify_supervisor_telemetry(record['outer'],admission,i,b['supervisor_dir'],b['pins'])
+    actual=evidence.verify(out,i,consumer['artifact_manifest_sha256'],consumer['runtime_bundle_sha256'],started['binary_sha256'],started['runtime_sha256'],record['outer'],**(dict(expected_log_policy=expected_log)if expected_log is not None else {}))
+    need(actual==record,'recomputed actual record');records.append(actual)
+    q=actual['qualification'];need(all(type(q[k])is list and len(q[k])<=64 for k in ('missing','failed','checked')),'bounded qualification')
+    profiles.append(dict(profile=i,state=actual['state'],qualification=q,receipt_sha256=sha(rp)))
+    if mode.full_v2(admission):
+     progress_path=D/'summary_progress.py';need(b['pins'].get(str(progress_path))==sha(progress_path),'full progress helper source pin')
+     progress=load('full_post_cleanup_progress',progress_path).project(job,builder,D/'numeric',expected_log_policies={str(i):expected_log},expected_outer_seconds={str(i):mode.consumer_phase_seconds(admission,i)+30},profile_ids=[i])
+     full_progress.append(progress['profiles'][i])
   if first_fault:need(len(records)==1 and records[0]['profile']==0,'one actual P0 closed diagnostic')
   q=acceptance.aggregate(records)
   need(numeric.get('actual_dut_reports')==records and numeric.get('qualification')==q and numeric.get('status')==q['status']and numeric.get('numerical_pass')is q['numerical_pass'],'actual numeric aggregate')
@@ -222,6 +237,8 @@ def project(job,binding_path,binding_sha):
   transport=mode.transport_exit(admission['mode'],q);need(type(flow.get('transport_exit_code'))is int and flow['transport_exit_code']==transport,'actual transport scope')
   result=dict(schema=unavailable['schema'],status='VERIFIED_REAGGREGATED',executor_identity=executor,builder_identity=builder,numerical_pass=q['numerical_pass'],final_rtl_executed=False,execution_mode=admission['mode'],transport_exit_code=transport,qualification=q,profiles=profiles,binding_sha256=binding_sha,execution_approval_sha256=b['execution_approval']['sha256'],cloud_budget_sha256=b['cloud_budget']['sha256'],source_pins_sha256=source_sha,builder_handoff_sha256=b['builder_handoff']['sha256'],artifact_manifest_sha256=b['artifact_manifest']['sha256'],flow_receipt_sha256=sha(flow_path),numeric_receipt_sha256=sha(numeric_path))
   result.update(source_identity)
+  result.update(queue)
+  if mode.full_v2(admission):result['full_prefill_progress']=dict(scope='POST_CLEANUP_SAME_JOB_LOCAL_LOG_OBSERVATIONS_ONLY',numerical_pass=False,total_cycle_prediction='UNKNOWN_NO_FULL_BLOCK_DENOMINATOR',profiles=full_progress)
   if first_fault:
    need(q['numerical_pass']is False,'single P0 cannot be five-block acceptance')
    terminal_contract=None
@@ -239,4 +256,35 @@ def project(job,binding_path,binding_sha):
     coverage.append(dict(profile=row['profile'],target_completed_commands=target,observed_completed_commands=observed,target_observed=observed>=target if type(observed)is int else None,scope='POST_CLEANUP_COMMAND_RETIREMENT_ONLY_NOT_NUMERICAL_PASS'))
    result.update(stage_budget_sha256=admission['reviewed_budget_sha256'],stage_coverage_scope='STAGE_COVERAGE_DIAGNOSTIC_NOT_FULL_ACCEPTANCE',full_acceptance_mode=False,stage_coverage_observations=coverage)
   need(len(json.dumps(result).encode())<=65536,'bounded safe summary');return result
- except (ValueError,TypeError,KeyError,AttributeError,OSError,ImportError):return unavailable
+ except (ValueError,TypeError,KeyError,AttributeError,OSError,ImportError,RuntimeError):return unavailable
+
+
+def project(job,binding_path,binding_sha):
+ """V2 summary is an explicitly reserved, finite verification operation.
+ No new DUT/runtime process or acceptance predicate is introduced.
+ """
+ unavailable=dict(schema='CLOUD_EXECUTION_SAFE_SUMMARY_V1',status='UNAVAILABLE',numerical_pass=False,final_rtl_executed=False)
+ try:
+  bp=regular(binding_path,1<<20);need(sha(bp)==binding_sha,'trusted owning binding hash');binding=read(bp)
+  full=binding.get('full_block_budget')
+  if full is None or read(checked(full)).get('schema')not in('MODEL_CANDIDATE_FIVE_M128_FULL_EXECUTION_BUDGET_V2','MODEL_CANDIDATE_FIVE_M128_FULL_READY_QUEUE_V3'):return _project(job,binding_path,binding_sha)
+  # Bind the timer helper before loading it, then start the explicit summary
+  # reserve before expensive source/admission revalidation. These preliminary
+  # integers are bounded but grant no acceptance; admit() must match them.
+  helper=regular(D/'execution_mode.py',1<<20);need(binding['pins'].get(str(helper))==sha(helper),'summary timer helper source pin')
+  mode=load('summary_reserved_full_mode',helper)
+  parent=binding['budgets']['parent'];need(type(parent)is int and 0<parent<=600,'bounded original summary parent reserve')
+  doc=read(checked(full));rows=doc['profiles'];need(type(rows)is dict and set(rows)==set(map(str,range(5))),'five summary reserves')
+  selected=mode.full_v3_selection(doc)if doc['schema']==mode.FULL_V3_SCHEMA else list(range(5))
+  if doc['schema']==mode.FULL_V3_SCHEMA:rows={str(i):rows[str(i)]['watchdog']for i in selected}
+  declared={kind:[rows[str(i)]['summary_verification_'+kind+'_seconds']for i in selected]for kind in ('wall','cpu')}
+  need(all(type(v)is int and 0<v<=3600 for values in declared.values()for v in values)and all(c<=w for c,w in zip(declared['cpu'],declared['wall'])),'finite declared summary CPU/wall')
+  wall=sum(declared['wall'])+parent;cpu=sum(declared['cpu'])+parent
+  with mode.host_verification_budget(wall,cpu):
+   source_guard(binding);admission=mode.admit(binding)
+   need(wall==sum(admission['profile_summary_verification_wall_seconds'].values())+parent and cpu==sum(admission['profile_summary_verification_cpu_seconds'].values())+parent,'summary watchdog equals independent admission')
+   need(P('/proc/sys/kernel/random/boot_id').read_text().strip()==binding['identity']['boot_id'],'V2 reserved summary same executor boot')
+   used=time.monotonic()-binding['identity']['started_monotonic']
+   need(0<=used and used+wall<=binding['job_budget_seconds'],'V2 summary reserve fits original lifecycle deadline')
+   return _project(job,binding_path,binding_sha,bounded_mode=mode)
+ except (ValueError,TypeError,KeyError,AttributeError,OSError,ImportError,RuntimeError):return unavailable

@@ -48,6 +48,9 @@ def stage_coverage_input(a):
  return roles
 
 def preserve_stage_coverage_input(binding,approved):
+ if 'fullprefill_disk_budget'in approved:
+  need(approved['execution_mode']=='FULL_BLOCK_ACCEPTANCE'and binding.get('execution_mode',approved['execution_mode'])==approved['execution_mode'],'explicit V3 finite FULL disk route')
+  binding['aggregate_tree_cap_bytes']=approved['aggregate_tree_cap_bytes']
  if approved['execution_mode']=='P0_FIRST_FAULT_DIAGNOSTIC' or binding.get('execution_mode')=='P0_FIRST_FAULT_DIAGNOSTIC':
   need(binding.get('execution_mode')==approved['execution_mode']=='P0_FIRST_FAULT_DIAGNOSTIC','explicit first-fault CLI equals reviewed mode')
  if 'reference_data_reuse'in binding or 'reference_data_reuse'in approved:
@@ -98,6 +101,16 @@ def reviewed_source(imported,identity,roles,manifest,repo):
   load('entry_executor_adaptation',D/'executor_adaptation.py').verify(roles['executor_adaptation'],imported['builder_identity'],identity,current_source_pins_pin=dict(path=str(manifest),bytes=manifest.stat().st_size,sha256=sha(manifest)),repo=repo)
  else:need(imported['source_pins_sha256']==sha(manifest),'reviewed imported source closure')
 
+def preparation_policy(roles,pins,policy):
+ # Read selection from the independently pinned budget only. It remains
+ # untrusted data until cloud_budget.admit verifies the approval -> budget join.
+ policy.require_source_pin(pins)
+ budget=roles['cloud_budget'];doc=json.loads(P(input_pin(budget['path'],budget['sha256'])['path']).read_text())
+ if 'execution_policy'not in doc:return policy.policy(policy.FULL)
+ candidate={'execution_policy':doc['execution_policy']}
+ need(policy.is_selected(candidate),'explicit selected dependency policy; no legacy cloud override')
+ return policy.checked(candidate)
+
 def run(a):
  repo,manifest,pins=verify_source(a.repo)
  roles={name:input_pin(getattr(a,name),getattr(a,name+'_sha256'))for name in ('executor_identity','builder_handoff','artifact_manifest','cloud_budget','execution_approval')}
@@ -106,6 +119,7 @@ def run(a):
  frozen=json.loads(P(roles['artifact_manifest']['path']).read_text())
  policy=load('cloud_profile_policy',D/'profile_policy.py');policy.require_source_pin(pins)
  b=dict(schema='CLOUD_FIVE_M128_EXECUTION_BINDING_V1',execution_context='CLOUD_EXECUTOR_V1',identity=identity,executor_identity=identity,source_pins=dict(path=str(manifest),bytes=manifest.stat().st_size,sha256=sha(manifest)),executor_identity_pin=roles['executor_identity'],builder_handoff=roles['builder_handoff'],artifact_manifest=roles['artifact_manifest'],cloud_budget=roles['cloud_budget'],execution_approval=roles['execution_approval'],artifact_identity=frozen['artifact_identity'],execution_policy=policy.policy(policy.FULL),profiles=list(range(5)),tokens=128,matrix_macs=4096,vector_lanes=32,payload_uploads=False,final_rtl_replay=False,job_started_monotonic=identity['started_monotonic'],repo=str(repo),job_root=str(a.work),pins=pins,runtime_package=str(D/'runtime'),numeric_package=str(D/'numeric'),python=str(P(sys.executable).resolve()),supervisor_dir=str(repo/'candidates/ci_frontend_pipeline_r2_20261029'),shared_runtime_helper=str(repo/'candidates/same_job_materialization_20261029/shared_runtime.py'),materializer=str(repo/'candidates/same_job_materialization_20261029'))
+ b['execution_policy']=preparation_policy(roles,pins,policy)
  b.update({k:roles[k]for k in ('executor_adaptation','workspace_loader','retained_materials','model_candidate_review','stage_coverage_budget','execution_mode','p0_provider_reuse','reference_data_reuse')if k in roles})
  budget=load('cloud_reviewed_budget',D/'cloud_budget.py').admit(b)
  preserve_stage_coverage_input(b,budget)
@@ -133,12 +147,23 @@ def prepare_identity(a):
  # This externally supplied approval SHA, not a generated JSON flag, is authority.
  policy=load('cloud_identity_policy',D/'profile_policy.py');policy.require_source_pin(pins)
  stub=dict(execution_context='CLOUD_EXECUTOR_V1',identity=identity,execution_policy=policy.policy(policy.FULL),pins=pins,**roles)
+ stub['execution_policy']=preparation_policy(roles,pins,policy)
  if roles.get('execution_mode')=='P0_FIRST_FAULT_DIAGNOSTIC':stub.update(repo=str(repo),source_pins=dict(path=str(manifest),bytes=manifest.stat().st_size,sha256=sha(manifest)))
  budget_module=load('cloud_identity_budget',D/'cloud_budget.py');admitted=budget_module.admit(stub)
  preserve_stage_coverage_input(stub,admitted)
  budget_document=json.loads(P(roles['cloud_budget']['path']).read_text())
- budget_module.verify_host(budget_document['host_identity'],identity)
+ if 'execution_policy'in admitted:budget_module.verify_host(budget_document['host_identity'],identity,admitted['execution_policy'])
+ else:budget_module.verify_host(budget_document['host_identity'],identity)
  stub.update(admitted)
+ # Only the separately versioned ordinary full-prefill budget needs the exact
+ # executor catalog in the pre-publication identity admission. Legacy modes
+ # retain their original stub shape and diagnostic authority paths.
+ if admitted['execution_mode']=='FULL_BLOCK_ACCEPTANCE':
+  full=admitted['full_block_budget']
+  checked=input_pin(full['path'],full['sha256'])
+  need(checked==full,'actual full identity budget pin')
+  if json.loads(P(full['path']).read_text()).get('schema')in('MODEL_CANDIDATE_FIVE_M128_FULL_EXECUTION_BUDGET_V2','MODEL_CANDIDATE_FIVE_M128_FULL_READY_QUEUE_V3'):
+   stub.update(repo=str(repo),source_pins=dict(path=str(manifest),bytes=manifest.stat().st_size,sha256=sha(manifest)))
  load('cloud_identity_live',D/'executor_identity.py').verify_current(identity)
  need(subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()==identity['source_commit'],'actual immutable executor source commit')
  mode=load('cloud_identity_mode',D/'execution_mode.py').admit(stub)

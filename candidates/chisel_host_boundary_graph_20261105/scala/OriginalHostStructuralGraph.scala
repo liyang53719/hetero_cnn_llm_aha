@@ -75,7 +75,11 @@ object OriginalHostStructuralGraph {
     "requirement failed: unique modules" -> "MODULE_UNIQUENESS",
     "requirement failed: unresolved packed boundary" -> "UNRESOLVED_PACKED_BOUNDARY",
     "requirement failed: wrapper unique drivers" -> "WRAPPER_UNIQUE_DRIVERS",
-    "unsupported projected expression" -> "PROJECTED_EXPRESSION_KIND"
+    "unsupported projected expression: VALID_IF" -> "PROJECTED_VALID_IF",
+"unsupported projected expression: SUB_ACCESS" -> "PROJECTED_SUB_ACCESS",
+"unsupported projected expression: INFO_EXPR" -> "PROJECTED_INFO_EXPR",
+"unsupported projected expression: V_RANDOM" -> "PROJECTED_V_RANDOM",
+"unsupported projected expression: OTHER" -> "PROJECTED_OTHER"
   )
   private def boundaryGuardCode(step:String,error:Throwable):String={
     if(error==null || error.getClass!=classOf[IllegalArgumentException])return "UNKNOWN"

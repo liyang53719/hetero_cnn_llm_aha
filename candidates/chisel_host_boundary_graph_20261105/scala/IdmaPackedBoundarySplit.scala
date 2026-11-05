@@ -134,7 +134,16 @@ object IdmaPackedBoundarySplit {
                 val q=p.copy(args=p.args.map(x=>apply(x,width(x)-1,0)))
                 bits(q,h,l)
               case _:Reference | _:SubField | _:SubIndex=>bits(e,h,l)
-              case _=>throw new IllegalArgumentException("unsupported projected expression")
+              case _=>
+                // Failure-only finite classification. Never serialize the expression.
+                val kind=e match {
+                  case _:ValidIf=>"VALID_IF"
+                  case _:SubAccess=>"SUB_ACCESS"
+                  case x if x.getClass.getName=="firrtl2.InfoExpr"=>"INFO_EXPR"
+                  case x if x.getClass.getName=="firrtl2.VRandom"=>"V_RANDOM"
+                  case _=>"OTHER"
+                }
+                throw new IllegalArgumentException("unsupported projected expression: "+kind)
             }
           }
         }finally{active-=key}

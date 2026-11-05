@@ -651,8 +651,8 @@ object ObservedPrepareAst {
         val reg=records.get(i);val c=clock(reg,b);val rhs=exactReference(driver.expr)
         need(b.equal(rhs.name,c.name)&&(rhs.tpe eq c.tpe)&&(rhs.kind eq c.kind)&&(rhs.flow eq c.flow),"DRIVER")
         need(checked.same(reg.info,driver.info),"INFO")
-        consumer match{case p:Print=>printText(p,b);need(checked.same(reg.info,p.info),"INFO")
-          case p:Stop=>need(checked.same(reg.info,p.info),"INFO")
+        consumer match{case p:Print=>if(!finalStage)b.name(p.name);printText(p,b);need(checked.same(reg.info,p.info),"INFO")
+          case p:Stop=>if(!finalStage)b.name(p.name);need(checked.same(reg.info,p.info),"INFO")
           case v:Verification if !finalStage=>need(v.info eq reg.info,"INFO");records.formals.add(i,v)
           case _=>consumerFailure("FINAL_KIND",i)}
         if(finalStage&&records.formals.contains(i))need(records.formals.sameFinal(i,consumer),"RELATION")
@@ -676,8 +676,8 @@ object ObservedPrepareAst {
       if(c!=null){var id=records.firstClock(moduleId,c.name)
         while(id>=0){b.charge(C.Probe);val consumer=consumers(id);var same=false
           consumer match{
-            case p:Print if print=>same=b.equal(format,printText(p,b))&&checked.same(info,p.info)
-            case p:Stop if !print&&p.ret==ret=>same=checked.same(info,p.info)
+            case p:Print if print&&(s.asInstanceOf[Print].name eq p.name)=>same=b.equal(format,printText(p,b))&&checked.same(info,p.info)
+            case p:Stop if !print&&(s.asInstanceOf[Stop].name eq p.name)&&p.ret==ret=>same=checked.same(info,p.info)
             case _=>()
           }
           if(same){if(anchors(id)!=0)throw anchorAbort("ORDINARY_DUPLICATE",s,consumer,null,null,anchors(id));anchors(id)=1};id=records.clockNext(id)
@@ -1117,7 +1117,7 @@ object ObservedPrepareAst {
     check(initialFailure(original,state(Block(List(r,driver.copy(loc=Reference(r.name,ClockType,NodeKind,SinkFlow)),terminal))),"DRIVER"))
     check(initialFailure(original,state(Block(body.stmts :+ DefNode(info,"extra",Reference(r.name,ClockType,NodeKind,SourceFlow)))),"REFERENCES"))
     check(initialFailure(state(originalPrint.copy(string=StringLit("different"))),first,"ANCHOR"))
-    check(initialFailure(state(Block(List(originalPrint,originalPrint.copy(name="another")))),first,"ANCHOR"))
+    check(initialFailure(state(Block(List(originalPrint,originalPrint.copy()))),first,"DUPLICATE"))
     check(initialFailure(original,state(Block(List(r,driver,terminal.copy(clk=Reference(r.name,ClockType,NodeKind,SinkFlow))))),"CONSUMER"))
     check(initialFailure(original,state(Block(List(r.copy(init=UIntLiteral(0,IntWidth(2))),driver,terminal))),"SHAPE"))
     // An inadmissible old-root family must fail census and never grant retention.
@@ -1558,6 +1558,79 @@ object ObservedPrepareAst {
       val observed=new Observation(1);observed.before(51,before);observed.afterAugment(before,after)
       check(observed.evidence.startsWith("UNAVAILABLE:ORIGINAL:ANCHOR:")&&
         observed.anchorEvidence=="AVAILABLE:FINAL_MISSING:PRINT:NA:NA:NA:ZERO"&&observed.cleaned)}
+    checks
+  }
+
+  /** Ordinary identity selection and its bounded admission, using production Uses. */
+  def selectionSelfChecks():Int={
+    var checks=0
+    def check(ok:Boolean):Unit={require(ok,"SELECTION_SELFCHECK");checks+=1}
+    def reason(body: =>Unit):String=try{body;"NONE"}catch{case e:Abort=>e.reason}
+    val info=FileInfo("selection:1");val clk=Reference("clock",ClockType,PortKind,SourceFlow)
+    val nameA=new String("terminal-a");val nameB=new String("terminal-b")
+    val a=Print(info,StringLit("same"),Nil,clk,UIntLiteral(1),nameA)
+    val z=a.copy(name=nameB);val sa=Stop(info,65,clk,UIntLiteral(1),nameA);val sz=sa.copy(name=nameB)
+    def reg(n:String):DefRegister=DefRegister(info,n,ClockType,clk,UIntLiteral(0),UIntLiteral(0))
+    def pair(x:Statement,y:Statement):Uses={val b=new Budget;val records=new Records(b)
+      records.add(0,"Top",reg("sample-a"),clk);records.add(0,"Top",reg("sample-b"),clk)
+      val u=new Uses(b,records,new Checked(b),false);u.consumers(0)=x;u.consumers(1)=y;u}
+    // The isolated legacy predicate model demonstrates the old cross-name claim;
+    // only the production Uses.anchor supplies the corrected outcomes below.
+    def oldClaims(s:Statement,x:Statement,y:Statement):Int={val b=new Budget;val c=new Checked(b)
+      def matches(t:Statement):Boolean=(s,t) match{
+        case (p:Print,q:Print)=>b.equal(printText(p,b),printText(q,b))&&c.same(p.info,q.info)
+        case (p:Stop,q:Stop)=>p.ret==q.ret&&c.same(p.info,q.info)
+        case _=>false}
+      (if(matches(x))1 else 0)+(if(matches(y))1 else 0)}
+    check(oldClaims(a,z,a)==2);check(oldClaims(z,z,a)==2)
+    check(oldClaims(sa,sz,sa)==2);check(oldClaims(sz,sz,sa)==2)
+    locally {val u=pair(z,a);u.anchor(a,0);check(u.anchors(0)==0&&u.anchors(1)==1)
+      u.anchor(z,0);check(u.anchors(0)==1&&u.anchors(1)==1)}
+    locally {val u=pair(z,a);u.anchor(z,0);u.anchor(a,0);check(u.anchors(0)==1&&u.anchors(1)==1)}
+    locally {val u=pair(sz,sa);u.anchor(sa,0);check(u.anchors(0)==0&&u.anchors(1)==1)
+      u.anchor(sz,0);check(u.anchors(0)==1&&u.anchors(1)==1)}
+    locally {val u=pair(sz,sa);u.anchor(sz,0);u.anchor(sa,0);check(u.anchors(0)==1&&u.anchors(1)==1)}
+    locally {val u=pair(z,a);u.anchor(a,0);check(reason{u.anchor(a,0)}=="ANCHOR")}
+    locally {val u=pair(sz,sa);u.anchor(sa,0);check(reason{u.anchor(sa.copy(),0)}=="ANCHOR")}
+    locally {val u=pair(z,a);u.anchor(a.copy(name=new String(nameA)),0);check(u.anchors(0)==0&&u.anchors(1)==0)}
+    locally {val u=pair(sz,sa);u.anchor(sa.copy(name=new String(nameA)),0);check(u.anchors(0)==0&&u.anchors(1)==0)}
+    locally {val u=pair(z,a);u.anchor(a.copy(string=StringLit("different")),0);check(u.anchors(1)==0)}
+    locally {val u=pair(sz,sa);u.anchor(sa.copy(ret=66),0);check(u.anchors(1)==0)}
+    locally {val u=pair(z,a);u.anchor(a.copy(info=FileInfo("different")),0);check(u.anchors(1)==0)}
+    locally {val u=pair(sz,sa);u.anchor(sa.copy(info=FileInfo("different")),0);check(u.anchors(1)==0)}
+    locally {val u=pair(z,a);u.anchor(a.copy(clk=clk.copy(name="different")),0);check(u.anchors(1)==0)}
+    locally {val u=pair(sz,sa);u.anchor(sa.copy(clk=clk.copy(name="different")),0);check(u.anchors(1)==0)}
+    def admission(name:String,isPrint:Boolean):String={val b=new Budget;val records=new Records(b);val r=reg("sample")
+      records.add(0,"Top",r,clk);val u=new Uses(b,records,new Checked(b),false)
+      u.port(0,Port(info,clk.name,Input,ClockType))
+      val delayed=Reference(r.name,ClockType,NodeKind,SourceFlow)
+      u.scan(Connect(info,delayed,clk),0)
+      u.scan(if(isPrint)a.copy(name=name,clk=delayed)else sa.copy(name=name,clk=delayed),0)
+      val result=reason{u.finish()};java.lang.ref.Reference.reachabilityFence(r);result}
+    check(admission("",true)=="BOUND");check(admission("",false)=="BOUND")
+    check(admission(null,true)=="BOUND");check(admission(null,false)=="BOUND")
+    check(admission("n"*4097,true)=="BOUND");check(admission("n"*4097,false)=="BOUND")
+    check(admission("n"*4096,true)=="NONE");check(admission("n"*4096,false)=="NONE")
+    // Global validation remains before selection, including nonmatching originals.
+    locally {val u=pair(z,a);check(reason{u.anchor(a.copy(name="unrelated",string=StringLit("x"*4097)),0)}=="BOUND")}
+    locally {val u=pair(z,a);check(reason{u.anchor(a.copy(name="unrelated",info=FileInfo("x"*4097)),0)}=="BOUND")}
+    locally {val u=pair(sz,sa);check(reason{u.anchor(sa.copy(name="unrelated",info=FileInfo("x"*4097)),0)}=="BOUND")}
+    def state(body:Statement):CircuitState=CircuitState(Circuit(NoInfo,Module(NoInfo,"Top",
+      Port(NoInfo,clk.name,Input,ClockType)::Nil,body)::Nil,"Top"),Seq.empty)
+    def observedFailure(original:Statement,selected:Statement):String={val r=reg("sample")
+      val delayed=Reference(r.name,ClockType,NodeKind,SourceFlow)
+      val terminal=selected match{case p:Print=>p.copy(clk=delayed);case p:Stop=>p.copy(clk=delayed)}
+      val before=state(original);val after=state(Block(List(r,Connect(info,delayed,clk),terminal)))
+      val o=new Observation(1);o.before(51,before);if(o.retainsInput)o.afterAugment(before,after)
+      val result=o.evidence;require(o.cleaned,"SELECTION_CLEANUP");result}
+    check(observedFailure(Block(List(a,a.copy())),a).contains(":DUPLICATE:"))
+    check(observedFailure(Block(List(sa,sa.copy())),sa).contains(":DUPLICATE:"))
+    check(observedFailure(Block(List(a,DefWire(info,a.name,ClockType))),a).contains(":DUPLICATE:"))
+    check(observedFailure(Block(List(sa,DefWire(info,sa.name,ClockType))),sa).contains(":DUPLICATE:"))
+    check(observedFailure(a.copy(name=new String(nameA)),a).contains(":ANCHOR:"))
+    check(observedFailure(sa.copy(name=new String(nameA)),sa).contains(":ANCHOR:"))
+    check(observedFailure(Block(List(a,a.copy(name="unrelated",string=StringLit("x"*4097)))),a).contains(":BOUND:"))
+    check(observedFailure(Block(List(sa,a.copy(name="unrelated",info=FileInfo("x"*4097)))),sa).contains(":BOUND:"))
     checks
   }
 

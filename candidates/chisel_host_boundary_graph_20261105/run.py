@@ -1,10 +1,10 @@
 """One source-only structural job. No engine/native, weights, references or IR export."""
 import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request,urllib.error,zipfile
 P=pathlib.Path;D=P(__file__).resolve().parent;REPO=D.parent.parent
-REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_observed_prepare_anchor_diagnostic_once.json'
+REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_observed_prepare_ordinary_anchor_selection_once.json'
 CAT='candidates/gdn32_first_model_execution_20261104/GDN32_FULL_SOURCE_PINS.json'
 CAT_SHA='ad2d4dcaddb213c85fd15adc65f7da5bd74a0d7c3e6c5922c725aa41bdc967cb'
-BASE='abf7c73e97e102df38676684f6354b0cb2c40553';BASE_TREE='451507298903aaf45af0e003e2e363c5d34bdb9b';TREE=12_081_306_272;RESERVE=8<<30
+BASE='f0d0ae1e77a434d36e237a58bfe01713f1276426';BASE_TREE='9816e44dff0fc7402c3c35dbffb8c31c3b035ff6';TREE=12_081_306_272;RESERVE=8<<30
 from witness_record import parse_record as parse_witness_record
 from compare_observed_prepare import evidence as parse_observed_evidence, budget_for_provenance as parse_observed_budget, sizing_pair as parse_observed_sizing_pair, consumer_for_provenance as parse_observed_consumer, formal_for_provenance as parse_observed_formal, anchor_for_provenance as parse_observed_anchor
 from compare_clock_init_results import auxiliary_evidence as parse_auxiliary_evidence, preexisting_evidence as parse_preexisting_evidence
@@ -547,7 +547,7 @@ def main():
  need(len(own['files'])==len(expected_files) and {row['path']for row in own['files']}==expected_files)
  pins=pins_for(own['files'],REPO);pins[str(D/'SOURCE_PINS.json')]=sha(D/'SOURCE_PINS.json')
  changed=set(git('diff','--name-only',BASE,source).splitlines())
- expected_delta={'.github/workflows/chisel-host-boundary-graph-once.yml', 'candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json', 'candidates/chisel_host_boundary_graph_20261105/compare_observed_prepare.py', 'candidates/chisel_host_boundary_graph_20261105/run.py', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedPrepareAst.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedPrepareStructuralFixture.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/OriginalHostStructuralGraph.scala'}
+ expected_delta={'.github/workflows/chisel-host-boundary-graph-once.yml', 'candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json', 'candidates/chisel_host_boundary_graph_20261105/compare_observed_prepare.py', 'candidates/chisel_host_boundary_graph_20261105/run.py', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedPrepareAst.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedPrepareStructuralFixture.scala'}
  need(len(own['publication_delta'])==len(expected_delta) and changed==set(own['publication_delta'])==expected_delta)
  catalog=regular(REPO/CAT);need(sha(catalog)==CAT_SHA);doc=load(catalog);need(doc['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1'and len(doc['files'])==1211);pins.update(pins_for(doc['files'],REPO));pins[str(catalog)]=CAT_SHA
  phase='admission';remote_exclusive(launch);admission();work=P(os.environ['RUNNER_TEMP'])/'chisel-host-boundary-graph';need(work.is_absolute()and not work.exists()and all(not p.is_symlink()for p in(work,*work.parents)));work.mkdir()
@@ -718,7 +718,7 @@ def main():
   observed_results.append((text,process))
  try:observed_result=observed_comparator.compare(observed_results[0][0],observed_results[1][0],observed_results[0][1],observed_results[1][1])
  except (ValueError,TypeError,KeyError):raise Stop('OBSERVER_COMPARATOR_REJECTED')
- need(observed_result=={'status':'PASS_OBSERVED_PREPARE_FIXTURE_ONLY','cases':9,'parity_cases':9,'suffix_checks':12,'graph_checks':12,'observer_checks':69,'parity_checks':11,'failure_parity_cases':3,'sizing_checks':56,'quota_checks':6,'consumer_checks':24,'consumer_parity_checks':1,'formal_checks':58,'formal_parity_checks':2,'anchor_checks':31,'state_fields':3,'form_absent_in_pinned_api':True,'renames_none':True,'diagnostic_only':True,'interpreter_executed':False,'full_host_accepted':False},'OBSERVER_COVERAGE_REQUIRED')
+ need(observed_result=={'status':'PASS_OBSERVED_PREPARE_FIXTURE_ONLY','cases':9,'parity_cases':9,'suffix_checks':12,'graph_checks':12,'observer_checks':69,'parity_checks':11,'failure_parity_cases':3,'sizing_checks':56,'quota_checks':6,'consumer_checks':24,'consumer_parity_checks':1,'formal_checks':58,'formal_parity_checks':2,'anchor_checks':31,'selection_checks':39,'selection_parity_checks':4,'state_fields':3,'form_absent_in_pinned_api':True,'renames_none':True,'diagnostic_only':True,'interpreter_executed':False,'full_host_accepted':False},'OBSERVER_COVERAGE_REQUIRED')
  boundary_identity['observed_prepare_qualification']=observed_result
  gatepath=REPO/'candidates/gdn32_first_model162_producer_20261104/candidate_generation_gate.py';spec=importlib.util.spec_from_file_location('reviewed_graph_inputs',gatepath);gate=importlib.util.module_from_spec(spec);spec.loader.exec_module(gate)
  selection=gate.selected_inputs(REPO,gate.MODEL162_SOURCE);sources=gate.checked_paths(REPO,selection['overlay'],m,selection['contract']);need(len(sources)==162)

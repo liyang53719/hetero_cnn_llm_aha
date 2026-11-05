@@ -239,6 +239,67 @@ object ObservedPrepareStructuralFixture {
     }
     require(count==2);count
   }
+  // Four actual producer/parity witnesses: ordinary kind x original order.
+  // Each also runs four retained graph controls; no interpreter is constructed.
+  private def selectionParityChecks(targetName:String):Int={
+    var checks=0
+    Vector(false,true).foreach{stopping=>Vector(false,true).foreach{reverse=>
+      val text=source("print").linesIterator.filterNot(_.trim.startsWith("printf(")).mkString("\n")+"\n"
+      val low=Compiler.toLowFirrtl(CircuitState(Parser.parse(text),Seq(TargetDirAnnotation(targetName)))).circuit
+      val info=FileInfo("selection_witness 1:1");val format=StringLit("same format")
+      val clock=Reference("clock",ClockType,firrtl2.PortKind,firrtl2.SourceFlow)
+      val enabled=Reference("en",UIntType(IntWidth(1)),firrtl2.PortKind,firrtl2.SourceFlow)
+      val nameA=new String("selection_a".toCharArray);val nameB=new String("selection_b".toCharArray)
+      require(!(nameA eq nameB) && nameA!=nameB && nameA.nonEmpty && nameB.nonEmpty)
+      def terminal(name:String):Statement=if(stopping)Stop(info,0,clock,enabled,name)
+        else Print(info,format,Seq.empty,clock,enabled,name)
+      val a=terminal(nameA);val b=terminal(nameB)
+      val originals=if(reverse)Vector(b,a)else Vector(a,b)
+      val input=body(low,s=>Block(Seq(s,originals(0),originals(1))))
+      val first=(new AugmentPrintf).runTransform(CircuitState(input,Seq.empty))
+      val regs=registers(first.circuit);require(regs.size==2)
+      val consumers=Vector.newBuilder[Statement];var consumerCount=0
+      visit(first.circuit){case x:Print if !stopping=>consumerCount+=1;require(consumerCount<=2);consumers+=x
+        case x:Stop if stopping=>consumerCount+=1;require(consumerCount<=2);consumers+=x;case _=>()}
+      val produced=consumers.result();require(produced.size==2)
+      def name(x:Statement):String=x match{case p:Print=>p.name;case p:Stop=>p.name;case _=>throw new IllegalArgumentException("TINY_TERMINAL")}
+      def originalClock(x:Statement):Expression=x match{case p:Print=>p.clk;case p:Stop=>p.clk;case _=>throw new IllegalArgumentException("TINY_TERMINAL")}
+      def sameAttributes(original:Statement,consumer:Statement):Boolean=(original,consumer)match{
+        case (p:Print,q:Print)=>(p.info eq q.info) && (p.string eq q.string) && (p.clk eq clock)
+        case (p:Stop,q:Stop)=>(p.info eq q.info) && p.ret==q.ret && (p.clk eq clock)
+        case _=>false
+      }
+      val oldClaims=Array(0,0);val selectedClaims=Array(0,0);var oldCollision=false
+      originals.foreach{original=>var index=0;while(index<2){val consumer=produced(index)
+        if(sameAttributes(original,consumer)){
+          if(oldClaims(index)!=0)oldCollision=true;oldClaims(index)+=1
+          if(name(original) eq name(consumer))selectedClaims(index)+=1
+        };index+=1}}
+      require(oldCollision && oldClaims.toVector==Vector(2,2) && selectedClaims.toVector==Vector(1,1))
+      produced.foreach{consumer=>
+        val matching=originals.filter(x=>name(x) eq name(consumer));require(matching.size==1)
+        val original=matching.head;require(sameAttributes(original,consumer))
+        val clk=originalClock(consumer);require(clk.getClass==classOf[Reference]);val delayed=clk.asInstanceOf[Reference]
+        require((delayed.tpe eq ClockType) && (delayed.kind eq firrtl2.NodeKind) && (delayed.flow eq firrtl2.SourceFlow))
+        val matchingRegs=regs.filter(_.name==delayed.name);require(matchingRegs.size==1)
+        require((matchingRegs.head.info eq info) && (matchingRegs.head.clock eq originalClock(original)))
+        var drivers=0
+        visit(first.circuit){case c:Connect=>c.loc match{case r:Reference if r.name==delayed.name=>
+          drivers+=1;require(c.expr eq originalClock(original));case _=>()};case _=>()}
+        require(drivers==1)
+      }
+      val annotations=Seq(FirrtlCircuitAnnotation(input),TargetDirAnnotation(targetName))
+      val official=(new PrepareAst).transform(annotations)
+      val observer=new ObservedPrepareAst(2);val observed=observer.transform(annotations)
+      new Parity().apply(official,observed)
+      require(observer.evidence.startsWith("COMPLETE:DONE:NONE:2:2:2:2:2:2:2:"))
+      require(observer.formalEvidence=="COMPLETE:0:0:0:0" && observer.anchorEvidence=="NONE" && observer.consumerEvidence=="NONE")
+      require(observer.budgetEvidence=="NONE" && observer.sizingEvidence=="NONE")
+      require(graphChecks(state(observed).circuit)==4)
+      checks+=1
+    }}
+    require(checks==4);checks
+  }
   private def suffix(c:Circuit,n:Int):Int={
     val original=CircuitState(c,Seq.empty)
     val first=(new AugmentPrintf).runTransform(original)
@@ -312,8 +373,10 @@ object ObservedPrepareStructuralFixture {
         val consumerChecks=ObservedPrepareAst.consumerSelfChecks();require(consumerChecks==24)
         val formalChecks=ObservedPrepareAst.formalSelfChecks();require(formalChecks==58)
         val anchorChecks=ObservedPrepareAst.anchorSelfChecks();require(anchorChecks==31)
+        val selectionChecks=ObservedPrepareAst.selectionSelfChecks();require(selectionChecks==39)
         phase="OBSERVED_FAILURE";val consumerParityChecks=consumerParityCheck(targetName);require(consumerParityChecks==1)
         val formalParity= formalParityChecks(targetName);require(formalParity==2)
+        val selectionParity=selectionParityChecks(targetName);require(selectionParity==4)
         rows=Vector("print","stop","both").flatMap{mode=>
           phase="LOWER"
           val low=Compiler.toLowFirrtl(CircuitState(Parser.parse(source(mode)),Seq(TargetDirAnnotation(targetName)))).circuit
@@ -347,7 +410,7 @@ object ObservedPrepareStructuralFixture {
             }else 0
             phase="SUFFIX";val relations=if(kind=="base")suffix(low,n)else 0
             phase="GRAPH";val graphs=if(kind=="base")graphChecks(state(observed).circuit)else 0
-            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" sizingChecks="+sizingChecks+" quotaChecks="+quotaChecks+" consumerChecks="+consumerChecks+" consumerParityChecks="+consumerParityChecks+" formalChecks="+formalChecks+" formalParityChecks="+formalParity+" anchorChecks="+anchorChecks+" stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
+            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" sizingChecks="+sizingChecks+" quotaChecks="+quotaChecks+" consumerChecks="+consumerChecks+" consumerParityChecks="+consumerParityChecks+" formalChecks="+formalChecks+" formalParityChecks="+formalParity+" anchorChecks="+anchorChecks+" selectionChecks="+selectionChecks+" selectionParityChecks="+selectionParity+" stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
           }
         }
         ok=true

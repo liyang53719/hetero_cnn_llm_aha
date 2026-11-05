@@ -32,7 +32,9 @@ CONSUMER_PARITY_CHECKS=1
 FORMAL_CHECKS=58
 FORMAL_PARITY_CHECKS=2
 ANCHOR_CHECKS=31
-CASE=re.compile(r'OBSERVED_PREPARE_CASE_V1 mode=(print|stop|both) kind=(base|nested|recycled) parity=true records=([12]) suffixChecks=([036]) graphChecks=([04]) observerChecks=([0-9]+) parityChecks=11 failureParityChecks=([01]) sizingChecks=56 quotaChecks=6 consumerChecks=24 consumerParityChecks=1 formalChecks=58 formalParityChecks=2 anchorChecks=31 stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence=([^ ]+)')
+SELECTION_CHECKS=39
+SELECTION_PARITY_CHECKS=4
+CASE=re.compile(r'OBSERVED_PREPARE_CASE_V1 mode=(print|stop|both) kind=(base|nested|recycled) parity=true records=([12]) suffixChecks=([036]) graphChecks=([04]) observerChecks=([0-9]+) parityChecks=11 failureParityChecks=([01]) sizingChecks=56 quotaChecks=6 consumerChecks=24 consumerParityChecks=1 formalChecks=58 formalParityChecks=2 anchorChecks=31 selectionChecks=39 selectionParityChecks=4 stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence=([^ ]+)')
 FINAL=re.compile(r'OBSERVED_PREPARE_RUN_V1 label=(official|cached) pass=true cases=9 diagnosticOnly=true interpreterExecuted=false fullHostAccepted=false')
 FAILURE=re.compile(r'OBSERVED_PREPARE_FAILURE_V1 phase=(IDENTITY|SELFTEST|LOWER|OFFICIAL|OBSERVED|OBSERVED_FAILURE|PARITY|SUFFIX|GRAPH|CLEANUP) code=REJECTED')
 def process_ok(value):
@@ -59,7 +61,7 @@ def compare(official,cached,official_process,cached_process):
  # Counters and exact prepared-state observations must also match across key implementations.
  need(a==b)
  return dict(status='PASS_OBSERVED_PREPARE_FIXTURE_ONLY',cases=9,parity_cases=9,suffix_checks=12,graph_checks=12,
-  observer_checks=OBSERVER_CHECKS,parity_checks=11,failure_parity_cases=3,sizing_checks=SIZING_CHECKS,quota_checks=QUOTA_CHECKS,consumer_checks=CONSUMER_CHECKS,consumer_parity_checks=CONSUMER_PARITY_CHECKS,formal_checks=FORMAL_CHECKS,formal_parity_checks=FORMAL_PARITY_CHECKS,anchor_checks=ANCHOR_CHECKS,state_fields=3,form_absent_in_pinned_api=True,
+  observer_checks=OBSERVER_CHECKS,parity_checks=11,failure_parity_cases=3,sizing_checks=SIZING_CHECKS,quota_checks=QUOTA_CHECKS,consumer_checks=CONSUMER_CHECKS,consumer_parity_checks=CONSUMER_PARITY_CHECKS,formal_checks=FORMAL_CHECKS,formal_parity_checks=FORMAL_PARITY_CHECKS,anchor_checks=ANCHOR_CHECKS,selection_checks=SELECTION_CHECKS,selection_parity_checks=SELECTION_PARITY_CHECKS,state_fields=3,form_absent_in_pinned_api=True,
   renames_none=True,diagnostic_only=True,interpreter_executed=False,full_host_accepted=False)
 def failure(text,label):
  need(type(label)is str and label in ('official','cached'))

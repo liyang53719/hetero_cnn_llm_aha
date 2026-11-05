@@ -425,7 +425,7 @@ object ClockInitRepresentationRepair {
     def transient(n:Long=1L):Unit=charge(AX.Iterator,n)
     // New, explicit resource domain. These pinned families have verified bounded
     // iterator/builder layouts; arbitrary Seq callbacks are not admitted.
-    def family[A](s:Seq[A]):Unit=s match {
+    def family[A](s:scala.collection.Seq[A]):Unit=s match {
       case _:scala.collection.immutable.List[_] | _:scala.collection.immutable.Vector[_] |
            _:scala.collection.immutable.ArraySeq.ofRef[_]=>()
       case _=>charge(AX.Family) // Pinned zero: always fails before iterator/zip.
@@ -1196,6 +1196,20 @@ object ClockInitRepresentationRepair {
       val a=new Aux
       a.iter(List(EmptyStmt));a.iter(Vector(EmptyStmt))
       a.iter(scala.collection.immutable.ArraySeq.unsafeWrapArray(Array[Statement](EmptyStmt)))
+      // BEGIN WIR COLLECTION SEQUENCE SIGNATURE REGRESSION
+      val sequenceUnits=a.value(AX.Iterator)
+      val generalExpressions:scala.collection.Seq[Expression]=List(zero)
+      val generalConnections:scala.collection.Seq[(Expression,Expression)]=List((clk,clk))
+      rootSequenceFamilies(firrtl2.WDefInstanceConnector(NoInfo,"fixture_instance","M",UnknownType,generalConnections),a)
+      rootSequenceFamilies(firrtl2.CDefMPort(NoInfo,"fixture_port",ClockType,"memory",generalExpressions,firrtl2.MRead),a)
+      val mutableExpressions=scala.collection.mutable.ArrayBuffer[Expression](zero)
+      val mutableConnections=scala.collection.mutable.ArrayBuffer[(Expression,Expression)]((clk,clk))
+      val rejectedConnection=error(rootSequenceFamilies(firrtl2.WDefInstanceConnector(NoInfo,"fixture_instance","M",UnknownType,mutableConnections),a))
+      val rejectedPort=error(rootSequenceFamilies(firrtl2.CDefMPort(NoInfo,"fixture_port",ClockType,"memory",mutableExpressions,firrtl2.MRead),a))
+      require(auxiliaryEvidence(rejectedConnection)=="SEQUENCE_FAMILY:INDEX_PREPARED:0:1:0" &&
+        auxiliaryEvidence(rejectedPort)=="SEQUENCE_FAMILY:INDEX_PREPARED:0:1:0" &&
+        mutableExpressions.length==1 && (mutableExpressions.head eq zero) && mutableConnections.length==1 && a.value(AX.Iterator)==sequenceUnits)
+      // END WIR COLLECTION SEQUENCE SIGNATURE REGRESSION
       val units=a.value(AX.Iterator)
       val e=error(a.iter(scala.collection.immutable.Queue(EmptyStmt)))
       val c=new Checked(a,new Budget)

@@ -1,10 +1,10 @@
 """One source-only structural job. No engine/native, weights, references or IR export."""
 import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request,urllib.error,zipfile
 P=pathlib.Path;D=P(__file__).resolve().parent;REPO=D.parent.parent
-REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_observed_prepare_provenance_once.json'
+REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_observed_prepare_timeout_once.json'
 CAT='candidates/gdn32_first_model_execution_20261104/GDN32_FULL_SOURCE_PINS.json'
 CAT_SHA='ad2d4dcaddb213c85fd15adc65f7da5bd74a0d7c3e6c5922c725aa41bdc967cb'
-BASE='5fc18f522811d844938a9a2f57e9e7dcf03c58d9';BASE_TREE='100cb0d76fe916c75b77a8996acff66b1f35a45d';TREE=12_081_306_272;RESERVE=8<<30
+BASE='b1c0479174775837e8f866b5635336dca501a8ad';BASE_TREE='0067e281c53e2d932d412c801843507d75ee4376';TREE=12_081_306_272;RESERVE=8<<30
 from witness_record import parse_record as parse_witness_record
 from compare_observed_prepare import evidence as parse_observed_evidence
 from compare_clock_init_results import auxiliary_evidence as parse_auxiliary_evidence, preexisting_evidence as parse_preexisting_evidence
@@ -37,13 +37,25 @@ def remote_exclusive(launch,wait_seconds=90):
  global exclusivity_endpoint
  token=os.environ.get('GITHUB_TOKEN');need(bool(token))
  base='https://api.github.com/repos/liyang53719/hetero_cnn_llm_aha'
+ deadline=time.monotonic()+wait_seconds
+ retry_available=True # One extra GET total, never a worker-launch retry.
  def get(path,label):
+  nonlocal retry_available
   global exclusivity_endpoint
   exclusivity_endpoint=label
   req=urllib.request.Request(base+path,headers={'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'})
-  with urllib.request.urlopen(req,timeout=20)as f:data=f.read(1_048_577)
-  need(len(data)<=1_048_576);return json.loads(data)
- deadline=time.monotonic()+wait_seconds
+  while True:
+   remaining=deadline-time.monotonic();need(remaining>0)
+   try:
+    response=urllib.request.urlopen(req,timeout=min(20,remaining))
+   except BaseException as error:
+    if type(error)is not TimeoutError or not retry_available:raise
+    retry_available=False
+    need(time.monotonic()<deadline)
+    continue
+   with response as f:data=f.read(1_048_577)
+   need(time.monotonic()<deadline)
+   need(len(data)<=1_048_576);return json.loads(data)
  while True:
   need(get('/git/ref/heads/main','HEAD')['object']['sha']==launch)
   busy=False
@@ -51,6 +63,7 @@ def remote_exclusive(launch,wait_seconds=90):
    x=get('/actions/runs?status='+status+'&per_page=100','RUNS_'+status.upper());need(x['total_count']<=100)
    busy=busy or any(str(r['id'])!=os.environ['GITHUB_RUN_ID'] for r in x['workflow_runs'])
   if not busy:
+   need(time.monotonic()<deadline)
    exclusivity_endpoint="NONE";return
   need(time.monotonic()<deadline);time.sleep(3)
 
@@ -483,7 +496,7 @@ def main():
  need(len(own['files'])==len(expected_files) and {row['path']for row in own['files']}==expected_files)
  pins=pins_for(own['files'],REPO);pins[str(D/'SOURCE_PINS.json')]=sha(D/'SOURCE_PINS.json')
  changed=set(git('diff','--name-only',BASE,source).splitlines())
- expected_delta={'.github/workflows/chisel-host-boundary-graph-once.yml', 'candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json', 'candidates/chisel_host_boundary_graph_20261105/compare_observed_prepare.py', 'candidates/chisel_host_boundary_graph_20261105/run.py', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedPrepareAst.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedPrepareStructuralFixture.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedScheduleIdentity.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/OriginalHostStructuralGraph.scala'}
+ expected_delta={'.github/workflows/chisel-host-boundary-graph-once.yml', 'candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json', 'candidates/chisel_host_boundary_graph_20261105/run.py'}
  need(len(own['publication_delta'])==len(expected_delta) and changed==set(own['publication_delta'])==expected_delta)
  catalog=regular(REPO/CAT);need(sha(catalog)==CAT_SHA);doc=load(catalog);need(doc['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1'and len(doc['files'])==1211);pins.update(pins_for(doc['files'],REPO));pins[str(catalog)]=CAT_SHA
  phase='admission';remote_exclusive(launch);admission();work=P(os.environ['RUNNER_TEMP'])/'chisel-host-boundary-graph';need(work.is_absolute()and not work.exists()and all(not p.is_symlink()for p in(work,*work.parents)));work.mkdir()

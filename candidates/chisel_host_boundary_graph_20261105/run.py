@@ -1,10 +1,10 @@
 """One source-only structural job. No engine/native, weights, references or IR export."""
 import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request,zipfile
 P=pathlib.Path;D=P(__file__).resolve().parent;REPO=D.parent.parent
-REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_clock_init_bound_diagnostic_once.json'
+REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_clock_init_index_census_once.json'
 CAT='candidates/gdn32_first_model_execution_20261104/GDN32_FULL_SOURCE_PINS.json'
 CAT_SHA='ad2d4dcaddb213c85fd15adc65f7da5bd74a0d7c3e6c5922c725aa41bdc967cb'
-BASE='50ab1b504d58e0f545d0a91762e75eb1dd4434b1';BASE_TREE='8ac838df080c1bc56ec5837d38a688c9a69faf0a';TREE=12_081_306_272;RESERVE=8<<30
+BASE='c67bf598cf59ae5d16baaf719e893f9db02e3ffe';BASE_TREE='ee2bd5964e7e060203d81b3d01a9e2f4004a2e40';TREE=12_081_306_272;RESERVE=8<<30
 from witness_record import parse_record as parse_witness_record
 graph_identity={}
 differential_identity={};boundary_identity={}
@@ -56,7 +56,7 @@ METRIC_RE=re.compile(r'GRAPH_PHASE_V1 seq=([0-9]+) kind=(BEGIN|END|SAMPLE|CYCLE_
 PASS_RE=re.compile(r'PASS_DECLARED_CONE_TOPOLOGY_ONLY highSha=([0-9a-f]{64}) annotationsSha=([0-9a-f]{64}) preparedSha=([0-9a-f]{64}) symbols=([0-9]+) leafBindings=17 boundaryInstances=1 boundaryInputFields=26 boundaryAddedPorts=90 nativeInstances=0 evaluatedEdges=0 schedulingQualified=false fullHostAccepted=false suppressedDiagnosticBytes=([0-9]+) cycleSeen=([01])')
 BOUNDARY_GUARD_CODES={'TOPOLOGY': frozenset({'TOPOLOGY_LEAF_ABI', 'TOPOLOGY_MODEL_BINDING', 'TOPOLOGY_IDMA_PATH_COUNT', 'TOPOLOGY_STATEMENT_BOUND', 'TOPOLOGY_WRAPPER_IDENTITY', 'TOPOLOGY_INSTANCE_SEGMENT', 'TOPOLOGY_PATH_BOUNDS', 'TOPOLOGY_BINDING_COUNT'}), 'TRANSFORM': frozenset({'MUX_WIDTHS', 'CYCLIC_EXPRESSION_OBJECT', 'ALIAS_CYCLE', 'PRIVATE_FIELD_NAMESPACE', 'CALLER_EXPANSION_BOUND', 'CALLER_STATEMENT_BOUND', 'ALIAS_SINGLE_DRIVER', 'UNCONDITIONAL_LOW_REQUIRED', 'PROJECTION_RANGE', 'SPLIT_LEAF_ABI', 'TRANSPARENT_WRAPPER', 'MODULE_UNIQUENESS', 'WRAPPER_OUTPUT_PACKING', 'ALIAS_PROJECTION_BOUND', 'LAYOUT_BIT_COVERAGE', 'CALLER_POSTORDER', 'WRAPPER_UNIQUE_DRIVERS', 'CALLER_DEPTH_BOUND', 'ALIAS_IMPLICIT_COERCION', 'PACKED_INPUT_SINGLE_DRIVER', 'CALLER_IDENTITY_BOUND', 'WRAPPER_INPUT_SLICE', 'WRAPPER_MODEL_BINDING', 'CALLER_INSTANCE_NAMES', 'PROJECTED_VALID_IF', 'VALIDIF_WIDTHS', 'PROJECTED_SUB_ACCESS', 'PROJECTED_INFO_EXPR', 'PROJECTED_OTHER', 'PROJECTED_V_RANDOM', 'EXPRESSION_RECURSION_BOUND', 'PACKED_INPUT_WIDTH', 'CALLER_OCCURRENCE_BOUND', 'CALLER_CHILDREN_BOUND', 'EXPRESSION_IDENTITY_BOUND', 'PACKED_WRAPPER_ABI', 'UNSIGNED_WIDTH_REQUIRED', 'BOUNDARY_INSTANCE_FIELD_COUNT', 'CONTROL_PASSTHROUGH', 'EXPANDED_EXPRESSION_BOUND', 'UNRESOLVED_PACKED_BOUNDARY', 'WRAPPER_DRIVER_MISSING', 'TOTAL_FIELD_EXPANSION_BOUND'}), 'NONE': frozenset()}
 BOUNDARY_GUARD_RE='(?:'+'|'.join(sorted({'UNKNOWN'}|set().union(*BOUNDARY_GUARD_CODES.values())))+')'
-FAIL_RE=re.compile(r'FAIL_STRUCTURAL_GRAPH_ONLY stage=('+PHASE_RE+r') exceptionClassSha=([0-9a-f]{64})(?: boundaryStep=(NONE|TOPOLOGY|TRANSFORM) boundaryGuard=('+BOUNDARY_GUARD_RE+r'))?(?: preparedStep=(?P<prepared_step>NONE|STATE|ANNOTATIONS|INIT_REPAIR|TYPES|FLOWS|CLOCK|BINDINGS) clockInitGuard=(?P<clock_init_guard>NONE|UNKNOWN|BOUND|TYPE|INFO|STRUCTURE|DUPLICATE|COUNT|SHAPE|ORIGINAL_MODULE|PREEXISTING|CLOCK|ANNOTATION_TARGET|ANNOTATION_SHAPE|ANNOTATION_PRESET|ANNOTATION_EXTENSION|REFERENCES|DRIVER|CONSUMER|ANCHOR|NONINTERFERENCE) clockInitBound=(?P<clock_init_bound>[A-Z0-9_:]+) passAggregate=(?P<pass_aggregate>true|false) passErrorsScanned=(?P<pass_scanned>[0-9]+) passErrorsTruncated=(?P<pass_truncated>true|false) passErrorClasses=(?P<pass_hist>[A-Z0-9_:,]+))? nativeInstances=0 evaluatedEdges=0 schedulingQualified=false fullHostAccepted=false suppressedDiagnosticBytes=(?P<suppressed>[0-9]+) cycleSeen=(?P<cycle>[01])')
+FAIL_RE=re.compile(r'FAIL_STRUCTURAL_GRAPH_ONLY stage=('+PHASE_RE+r') exceptionClassSha=([0-9a-f]{64})(?: boundaryStep=(NONE|TOPOLOGY|TRANSFORM) boundaryGuard=('+BOUNDARY_GUARD_RE+r'))?(?: preparedStep=(?P<prepared_step>NONE|STATE|ANNOTATIONS|INIT_REPAIR|TYPES|FLOWS|CLOCK|BINDINGS) clockInitGuard=(?P<clock_init_guard>NONE|UNKNOWN|BOUND|TYPE|INFO|STRUCTURE|DUPLICATE|COUNT|SHAPE|ORIGINAL_MODULE|PREEXISTING|CLOCK|ANNOTATION_TARGET|ANNOTATION_SHAPE|ANNOTATION_PRESET|ANNOTATION_EXTENSION|REFERENCES|DRIVER|CONSUMER|ANCHOR|NONINTERFERENCE) clockInitBound=(?P<clock_init_bound>[A-Z0-9_:]+) clockInitSizing=(?P<clock_init_sizing>[A-Z0-9_:,]+) passAggregate=(?P<pass_aggregate>true|false) passErrorsScanned=(?P<pass_scanned>[0-9]+) passErrorsTruncated=(?P<pass_truncated>true|false) passErrorClasses=(?P<pass_hist>[A-Z0-9_:,]+))? nativeInstances=0 evaluatedEdges=0 schedulingQualified=false fullHostAccepted=false suppressedDiagnosticBytes=(?P<suppressed>[0-9]+) cycleSeen=(?P<cycle>[01])')
 PASS_CLASS_HASHES={'T01': '55798a44db78c6aab80261a6a885857f14cfc1ce0073b2b53a9c50f484239751', 'T02': '15f6403ab5b64e42939421b7d3e5d647382eb774981aa4ea920cce93a092561a', 'T03': '61d66402120511aa0eb6ac9b33914e64227ef4c7b937745e747010c5e1e2dfd1', 'T04': '0899f63f4b40d5954568c2db8486c5d252b9d39e3a0f16dabb113957de582411', 'T05': '2748016f6c2552ee805ca4ade2390ec7f05ea28002cf708262dbcba1aed7d564', 'T06': '51fb68974012ffee11a320ac5a9a5de2a01c4efb13951c4e71b5a2047d8f8247', 'T07': '29fc2ca21b85d1225a140f8a003e24d7bda21052691bd7ccc64506f7eabfced1', 'T08': '685fdad6d916225e74101edd084b55ff182ff96b7460a4f46824d82906882b5f', 'T09': 'fa0c112d1da506e0adb11888aca4523d65109b2c277903b4ee6d5e9101e3b8fe', 'T10': '42eb85d8a8723e4f12762f7d092d1a8d8067fa0ae862c56b72d49f64da477e41', 'T11': 'bbc3305f91e129d639b3f2f3e3667e5eca7c41b0c7816fbb27736f2cf475cbac', 'T12': 'ce0827d944715c55300f78749ad55fc536fea76a3f9896b7af4030da5d040318', 'T13': '07368567288e40b02a197c590b238890667ab44e1d813855643b4e4394ff00c2', 'T14': 'b5e1a4edf0b5ea250dfb2ba00d7de9ad84559c1759bc393bc53cb39482f6693f', 'T15': 'f47d7a4f20ff9e197a4c8e44c846c7131b087c924515958218d8be8d12b30a74', 'T16': 'a1892eba49bc551e116f902030c086fcecc2741dec7b5322f443675c7eb19c5b', 'T17': 'e4734c4ebaeb93b393e15948e4a7ea8f69d0c5a68f5b34c2f6e2fbfbdca65893', 'T18': '65e3c1be23f19c99b634667adad7c0da5f00b52b0845c36ad1db4a71212387e4', 'T19': '39195152365eac58862e3a2a390f3be21da5cfc413ec66cc7a2a8fc42458c3a2', 'T20': 'f4f1ec9064e3c1a2b5eed16b171a33f47775377f4f1290426aafc3696e655190', 'T21': '114a5475039b5aa8a979e51aa92939892510436837a279c3514881381fa278be', 'T22': '8a9763a3d26172107b89a6d18d9d1374d3666cdabdeb7df31761fa7604a9b454', 'T23': 'b68761016d4b4546442ede6190810ef493132e6dbbee8402a65bb847b0d808e4', 'T24': 'a8273bf2151fe993f8d53ccd6b8fbd4ffd341d676f6b9ab92feb2825dd6bb379', 'T25': '4e00d9b0cbeb1c10e0d8f086c00cab32c137f8926094df4ff4a0463aa9fbce2f', 'T26': '7a862431e6e9e3087c6a6637c308d82aa090f1f7fbfec68ebafa8f70a6269004', 'T27': '52c60070de0ff1c935357e010e05d1cae4dc8c9e2786c570e00db6560d0254d1', 'T28': 'c9821f372d269ee65250bc54e68ea688e77d494f55562bc8df8cd929bc340264', 'T29': 'f0e83d70271e196ca1197b721f5010d73ab8fda7351c4c2afee5033d5041c641', 'T30': '075594a22ac08cf8449767b50bdc0b460a554813e1b87e5d5dd629de69722bee', 'T31': '1dcd43a78721eb97e90196a26b601e9ddf0ac7e7b6acb5854e751a731e8c041f', 'T32': 'bbb30c18243be20c3f8ab8f172ef70070d33d2a48fa83f837cbfea44a8727f2f', 'F01': '99914bc48af9a0e2d34462f18f8216a168b17a9a1581c5a780ec921fadf0764f', 'BASE_PASS': '892667cf8140b49c85712f16499c40a82f3a47111c56b40c55cfb0f3c0763d7d'}
 PASS_AGGREGATE_HASH='f212da272dce0cd568b09ab66e94cd2954cb40108e3641df8f9cea821cf8dccc'
 CLOCK_INIT_GUARDS={'ANCHOR','ANNOTATION_EXTENSION','ANNOTATION_PRESET','ANNOTATION_SHAPE','ANNOTATION_TARGET','BOUND','CLOCK','CONSUMER','COUNT','DRIVER','DUPLICATE','INFO','NONINTERFERENCE','ORIGINAL_MODULE','PREEXISTING','REFERENCES','SHAPE','STRUCTURE','TYPE'}
@@ -74,6 +74,40 @@ def parse_clock_init_bound(step,guard,record):
  work=int(work)
  need(work==5000001 if reason=='GLOBAL_WORK' else work<=5000000,'CLOCK_INIT_BOUND_WORK')
  return dict(status='AVAILABLE',reason=reason,phase=phase,work=work)
+# Counts are raw traversal occurrences, never distinct names or object identities.
+INDEX_CENSUS_FIELDS=('modules','roots','ports','statements','named_declarations','namespace_occurrences','max_ports_per_module','max_statements_per_module','max_namespace_per_module','total_name_chars','max_name_length','registers')
+def parse_clock_init_sizing(step,guard,bound,record):
+ need(type(record)is str and len(record)<=512,'CLOCK_INIT_SIZING_SCHEMA')
+ trigger=step=='INIT_REPAIR' and guard=='BOUND' and bound.get('status')=='AVAILABLE' and bound.get('reason')=='DECLARATIONS' and bound.get('phase')=='INDEX_BEFORE'
+ if not trigger:
+  need(record=='NONE','CLOCK_INIT_SIZING_WRONG_GUARD');return {'status':'NONE'}
+ if record=='UNAVAILABLE':return {'status':'UNAVAILABLE'}
+ parts=record.split(':')
+ need(len(parts)==5,'CLOCK_INIT_SIZING_SCHEMA')
+ status,phase,visits,before,prepared=parts
+ need((status=='COMPLETE' and phase=='DONE') or (status=='TRUNCATED' and phase in ('BEFORE','PREPARED')),'CLOCK_INIT_SIZING_PHASE')
+ def number(raw,cap):
+  need(re.fullmatch(r'0|[1-9][0-9]{0,10}',raw)is not None,'CLOCK_INIT_SIZING_COUNT')
+  value=int(raw);need(value<=cap,'CLOCK_INIT_SIZING_COUNT');return value
+ visits=number(visits,5000000)
+ def circuit(raw,complete):
+  values=raw.split(',');need(len(values)==12,'CLOCK_INIT_SIZING_SCHEMA')
+  values=[number(value,20480000000 if i==9 else 5000000)for i,value in enumerate(values)]
+  modules,roots,ports,statements,declarations,namespace,max_ports,max_statements,max_namespace,chars,max_length,registers=values
+  need(modules<=4096 and roots<=modules and roots<=statements and declarations<=statements and registers<=declarations,'CLOCK_INIT_SIZING_COHERENCE')
+  need(namespace==ports+declarations and max_ports<=250000 and max_length<=4096 and chars<=namespace*4096,'CLOCK_INIT_SIZING_COHERENCE')
+  for total,maximum in ((ports,max_ports),(statements,max_statements),(namespace,max_namespace)):
+   need(maximum<=total<=modules*maximum and (total==0)==(maximum==0),'CLOCK_INIT_SIZING_COHERENCE')
+  need(max_namespace>=max_ports and chars>=namespace and max_length<=chars<=namespace*max_length and (namespace==0)==(max_length==0),'CLOCK_INIT_SIZING_COHERENCE')
+  out=dict(zip(INDEX_CENSUS_FIELDS,values))
+  if complete:out['estimated_index_ticks']=modules+ports+2*statements-roots
+  return out
+ before=circuit(before,status=='COMPLETE' or phase=='PREPARED');prepared=circuit(prepared,status=='COMPLETE')
+ need(visits==sum(c[k]for c in (before,prepared)for k in ('modules','ports','statements')),'CLOCK_INIT_SIZING_VISITS')
+ if status=='TRUNCATED':
+  need(visits==5000000,'CLOCK_INIT_SIZING_VISITS')
+  if phase=='BEFORE':need(not any(prepared.values()),'CLOCK_INIT_SIZING_PHASE')
+ return dict(status=status,phase=phase,visits=visits,before_complete=status=='COMPLETE' or phase=='PREPARED',prepared_complete=status=='COMPLETE',before=before,prepared=prepared)
 def parse_prepared_evidence(step,aggregate,scanned,truncated,histogram,exception_sha):
  need(step in ('NONE','STATE','ANNOTATIONS','INIT_REPAIR','TYPES','FLOWS','CLOCK','BINDINGS'),'PREPARED_STEP_SCHEMA')
  need(aggregate in ('true','false') and truncated in ('true','false'),'PREPARED_PASS_SCHEMA')
@@ -190,6 +224,7 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha):
      final['clock_init_guard']=b['clock_init_guard']
     else:need(b['clock_init_guard']=='NONE','CLOCK_INIT_GUARD_WRONG_STEP')
     final['clock_init_bound']=parse_clock_init_bound(b['prepared_step'],b['clock_init_guard'],b['clock_init_bound'])
+    final['clock_init_sizing']=parse_clock_init_sizing(b['prepared_step'],b['clock_init_guard'],final['clock_init_bound'],b['clock_init_sizing'])
     final.update(parse_prepared_evidence(b['prepared_step'],b['pass_aggregate'],b['pass_scanned'],b['pass_truncated'],b['pass_hist'],b[2]))
     if b['prepared_step']=='TYPES':
      need(census is not None,'REGISTER_CENSUS_MISSING')
@@ -197,7 +232,7 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha):
      if census['status']=='OK' and not final['pass_errors_truncated'] and 'OTHER'not in final['pass_error_classes']:
       need(census['mismatches']==final['pass_error_classes'].get('T09',0),'REGISTER_CENSUS_T09_COUNT')
     else:need(census is None,'REGISTER_CENSUS_WRONG_STEP')
-   else:need(census is None and all(b[k]is None for k in ('prepared_step','clock_init_guard','clock_init_bound','pass_aggregate','pass_scanned','pass_truncated','pass_hist')),'PREPARED_DIAGNOSTIC_WRONG_PHASE')
+   else:need(census is None and all(b[k]is None for k in ('prepared_step','clock_init_guard','clock_init_bound','clock_init_sizing','pass_aggregate','pass_scanned','pass_truncated','pass_hist')),'PREPARED_DIAGNOSTIC_WRONG_PHASE')
  need(census is None or (final is not None and final['kind']=='failure'),'REGISTER_CENSUS_INCOMPLETE')
  clean=receipt.get('status')=='PASS_PROCESS_ONLY' and receipt.get('native_exit')==0 and receipt.get('errors')==[] and receipt.get('worker_started')is True
  if final and final['kind']=='success':need(clean,'GRAPH_FALSE_SUCCESS_RECEIPT')
@@ -208,6 +243,7 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha):
  elif final:out.update(status='FAILED_STRUCTURAL_GRAPH_ONLY',phase=final['phase'],exception_class_sha256=final['exception_class_sha256'],cycle_seen=final['cycle_seen'])
  if final and final['kind']=='failure' and final['phase']=='boundary_split':out.update(boundary_step=final['boundary_step'],boundary_guard=final['boundary_guard'])
  if final and final['kind']=='failure' and final['phase']=='prepared_checks':out.update({k:final[k]for k in ('prepared_step','pass_aggregate','pass_errors_scanned','pass_errors_truncated','pass_error_classes')})
+ if final and 'clock_init_sizing'in final:out['clock_init_sizing']=final['clock_init_sizing']
  if final and 'clock_init_bound'in final:out['clock_init_bound']=final['clock_init_bound']
  if final and 'clock_init_guard'in final:out['clock_init_guard']=final['clock_init_guard']
  if final and 'register_init_census'in final:out['register_init_census']=final['register_init_census']
@@ -392,7 +428,7 @@ def main():
   clock_results.append((text,process))
  try:clock_result=clock_comparator.compare(clock_results[0][0],clock_results[1][0],clock_results[0][1],clock_results[1][1])
  except (ValueError,TypeError,KeyError):raise Stop('CLOCK_INIT_COMPARATOR_REJECTED')
- need(clock_result=={'status':'PASS_CLOCK_INIT_STRUCTURAL_EQUATIONS_ONLY','cases':3,'block_shape_cases':3,'driver_diagnostic_cases':9,'bound_diagnostic_cases':27,'negative_guards':27,'equation_vectors_per_case':512,'interpreter_executed':False},'CLOCK_INIT_COVERAGE_REQUIRED')
+ need(clock_result=={'status':'PASS_CLOCK_INIT_STRUCTURAL_EQUATIONS_ONLY','cases':3,'block_shape_cases':3,'driver_diagnostic_cases':9,'bound_diagnostic_cases':27,'index_sizing_cases':39,'negative_guards':27,'equation_vectors_per_case':512,'interpreter_executed':False},'CLOCK_INIT_COVERAGE_REQUIRED')
  boundary_identity['clock_init_qualification']=clock_result
  gatepath=REPO/'candidates/gdn32_first_model162_producer_20261104/candidate_generation_gate.py';spec=importlib.util.spec_from_file_location('reviewed_graph_inputs',gatepath);gate=importlib.util.module_from_spec(spec);spec.loader.exec_module(gate)
  selection=gate.selected_inputs(REPO,gate.MODEL162_SOURCE);sources=gate.checked_paths(REPO,selection['overlay'],m,selection['contract']);need(len(sources)==162)

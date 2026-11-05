@@ -247,10 +247,11 @@ object OriginalHostStructuralGraph {
     val sink=new DiagnosticSink;val muted=new PrintStream(sink,true,"UTF-8")
     var stage="admission";var result="FAIL_STRUCTURAL_GRAPH_ONLY stage=admission";var failed=true
     var boundaryStep="NONE";var preparedStep="NONE"
+    var sizingRecord="NONE";var sizingPrepared:firrtl2.ir.Circuit=null
     def boundaryFailure(error:Throwable):String=
       if(stage=="boundary_split")" boundaryStep="+boundaryStep+" boundaryGuard="+boundaryGuardCode(boundaryStep,error)else ""
     def preparedFailure(error:Throwable):String=
-      if(stage=="prepared_checks")" preparedStep="+preparedStep+" clockInitGuard="+(if(preparedStep=="INIT_REPAIR")ClockInitRepresentationRepair.guardCode(error)else "NONE")+" clockInitBound="+(if(preparedStep=="INIT_REPAIR")ClockInitRepresentationRepair.boundEvidence(error)else "NONE")+preparedPassEvidence(error)else ""
+      if(stage=="prepared_checks")" preparedStep="+preparedStep+" clockInitGuard="+(if(preparedStep=="INIT_REPAIR")ClockInitRepresentationRepair.guardCode(error)else "NONE")+" clockInitBound="+(if(preparedStep=="INIT_REPAIR")ClockInitRepresentationRepair.boundEvidence(error)else "NONE")+" clockInitSizing="+sizingRecord+preparedPassEvidence(error)else ""
     var censusBefore:firrtl2.ir.Circuit=null;var censusAfter:firrtl2.ir.Circuit=null
     var censusRecord:Option[String]=None
     var telemetry:PhaseTelemetry=null
@@ -325,6 +326,7 @@ object OriginalHostStructuralGraph {
           preparedStep="ANNOTATIONS"
           require(!states.head.annotations.exists(_.isInstanceOf[UnsupportedAnnotation]),"unsupported prepared annotation")
           preparedStep="INIT_REPAIR"
+          sizingPrepared=states.head.circuit
           val initRepair=ClockInitRepresentationRepair(boundaryLow.circuit,states.head.circuit,states.head.annotations,394)
           require(initRepair.corrected==394,"exact full Host instrumentation clock count")
           val checkedState=states.head.copy(circuit=initRepair.circuit)
@@ -360,6 +362,8 @@ object OriginalHostStructuralGraph {
         failed=false
       }}
     }catch{case error:Throwable=>
+      if(stage=="prepared_checks" && preparedStep=="INIT_REPAIR")
+        sizingRecord=try ClockInitRepresentationRepair.sizingEvidence(censusBefore,sizingPrepared,error) catch{case _:Throwable=>"UNAVAILABLE"}
       if(stage=="prepared_checks" && preparedStep=="TYPES")
         censusRecord=Some(try RegisterInitCensus.record(censusAfter,censusBefore) catch{case _:Throwable=>"REG_INIT_CENSUS_V1 regCensus=UNAVAILABLE"})
       result="FAIL_STRUCTURAL_GRAPH_ONLY stage="+stage+" exceptionClassSha="+hash(error.getClass.getName)+boundaryFailure(error)+preparedFailure(error)+

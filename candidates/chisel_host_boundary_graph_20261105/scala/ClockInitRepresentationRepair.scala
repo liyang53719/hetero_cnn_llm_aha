@@ -257,6 +257,153 @@ object ClockInitRepresentationRepair {
     checks
   }
 
+  // BEGIN INDEX SIZING DIAGNOSTIC
+  // Failure-only diagnostic. It never supplies authority to the matcher below.
+  private final class SizingCounts {
+    var modules=0L;var roots=0L;var ports=0L;var statements=0L
+    var namedDeclarations=0L;var namespaceOccurrences=0L
+    var maxPortsPerModule=0L;var maxStatementsPerModule=0L;var maxNamespacePerModule=0L
+    var totalNameChars=0L;var maxNameLength=0L;var registers=0L
+    def csv:String=Seq(modules,roots,ports,statements,namedDeclarations,namespaceOccurrences,
+      maxPortsPerModule,maxStatementsPerModule,maxNamespacePerModule,totalNameChars,maxNameLength,registers).mkString(",")
+    def name(s:String):Unit={
+      sizingName(s)
+      require(totalNameChars<=20480000000L-s.length.toLong)
+      totalNameChars+=s.length.toLong;maxNameLength=math.max(maxNameLength,s.length.toLong)
+      namespaceOccurrences+=1
+    }
+  }
+  private def sizingName(s:String):Unit=require(s!=null && s.nonEmpty && s.length<=4096)
+  private final class SizingBudget(val limit:Int) {
+    var visits=0
+    def visit():Boolean=if(visits==limit)false else {visits+=1;true}
+  }
+  private def sizingTrigger(error:Throwable):Boolean={
+    if(guardCode(error)!="BOUND")false
+    else {
+      val code=boundEvidence(error);val prefix="DECLARATIONS:INDEX_BEFORE:"
+      if(!code.startsWith(prefix))false
+      else {
+        val n=code.substring(prefix.length)
+        n.nonEmpty && n.length<=7 && (n.length==1 || n.charAt(0)!='0') &&
+          n.forall(c=>c>='0' && c<='9') && n.toInt<=5000000
+      }
+    }
+  }
+  // One iterator per ancestor, not one entry per child. No expression or Info
+  // traversal, name collection, deduplication, AST export or exception messages.
+  private def sizingScan(c:Circuit,out:SizingCounts,b:SizingBudget):Boolean={
+    sizingName(c.main)
+    val modules=c.modules.iterator
+    while(modules.hasNext){
+      if(!b.visit())return false
+      val m=modules.next();out.modules+=1;require(out.modules<=4096);sizingName(m.name)
+      var modulePorts=0L;var moduleStatements=0L;var moduleNamespace=0L
+      val ports=m.ports.iterator
+      while(ports.hasNext){
+        if(!b.visit())return false
+        val p=ports.next();modulePorts+=1;require(modulePorts<=250000)
+        out.name(p.name);out.ports+=1;moduleNamespace+=1
+        out.maxPortsPerModule=math.max(out.maxPortsPerModule,modulePorts)
+        out.maxNamespacePerModule=math.max(out.maxNamespacePerModule,moduleNamespace)
+      }
+      m match {
+        case mm:Module=>
+          val stack=new Array[Iterator[Statement]](258)
+          stack(0)=Iterator.single(mm.body)
+          var depth=0
+          while(depth>=0){
+            val current=stack(depth)
+            if(!current.hasNext){stack(depth)=null;depth-=1}
+            else {
+              if(!b.visit())return false
+              require(depth<=256)
+              val s=current.next();out.statements+=1;moduleStatements+=1
+              if(depth==0)out.roots+=1
+              out.maxStatementsPerModule=math.max(out.maxStatementsPerModule,moduleStatements)
+              s match {
+                case p:Print if p.name.isEmpty=>()
+                case p:Stop if p.name.isEmpty=>()
+                case p:Verification if p.name.isEmpty=>()
+                case d:IsDeclaration=>out.name(d.name);out.namedDeclarations+=1;moduleNamespace+=1
+                case _=>()
+              }
+              out.maxNamespacePerModule=math.max(out.maxNamespacePerModule,moduleNamespace)
+              s match {case _:DefRegister=>out.registers+=1;case _=>()}
+              val children:Iterator[Statement]=s match {
+                case block:Block=>block.stmts.iterator
+                case cond:Conditionally=>Iterator(cond.conseq,cond.alt)
+                case _=>
+                  // Fail closed if a future statement form introduces children.
+                  s.foreachStmt{_=>throw new IllegalArgumentException()}
+                  Iterator.empty
+              }
+              if(children.hasNext){depth+=1;stack(depth)=children}
+            }
+          }
+        case _:ExtModule=>()
+        case _=>throw new IllegalArgumentException()
+      }
+    }
+    true
+  }
+  private def sizingCollect(before:Circuit,prepared:Circuit,limit:Int):String={
+    require(limit>=0 && limit<=5000000)
+    val b=new SizingBudget(limit);val old=new SizingCounts;val fresh=new SizingCounts
+    val status=if(!sizingScan(before,old,b))"TRUNCATED:BEFORE"
+      else if(!sizingScan(prepared,fresh,b))"TRUNCATED:PREPARED" else "COMPLETE:DONE"
+    status+":"+b.visits+":"+old.csv+":"+fresh.csv
+  }
+  def sizingEvidence(before:Circuit,prepared:Circuit,error:Throwable):String=try{
+    if(!sizingTrigger(error))"NONE" else sizingCollect(before,prepared,5000000)
+  }catch{case _:Throwable=>"UNAVAILABLE"}
+
+  /** Small synthetic cases invoke the production private scanner, never repair. */
+  def sizingSelfChecks():Int={
+    var checks=0
+    def check(p:Boolean):Unit={require(p);checks+=1}
+    val error=new IllegalArgumentException("BOUND")
+    error.addSuppressed(new BoundEvidence("DECLARATIONS:INDEX_BEFORE:1"))
+    val zero=UIntLiteral(0,IntWidth(1));val clk=Reference("clk",ClockType)
+    def circuit(body:Statement,ports:Seq[Port]=Seq.empty):Circuit=
+      Circuit(NoInfo,Seq(Module(NoInfo,"Sizing",ports,body)),"Sizing")
+    val tiny=circuit(Block(Seq(DefWire(NoInfo,"a",ClockType),
+      DefRegister(NoInfo,"rr",ClockType,clk,zero,zero),
+      Print(NoInfo,StringLit(""),Seq.empty,clk,zero),Stop(NoInfo,0,clk,zero))),
+      Seq(Port(NoInfo,"a",Input,ClockType),Port(NoInfo,"a",Input,ClockType)))
+    val full="1,1,2,5,2,4,2,5,4,5,2,1"
+    val partial="1,1,2,4,2,4,2,4,4,5,2,1"
+    val empty="0,0,0,0,0,0,0,0,0,0,0,0"
+    check(sizingEvidence(tiny,tiny,error)=="COMPLETE:DONE:16:"+full+":"+full)
+    check(sizingCollect(tiny,tiny,16)=="COMPLETE:DONE:16:"+full+":"+full)
+    check(sizingCollect(tiny,tiny,15)=="TRUNCATED:PREPARED:15:"+full+":"+partial)
+    check(sizingCollect(tiny,tiny,7)=="TRUNCATED:BEFORE:7:"+partial+":"+empty)
+    check(sizingCollect(tiny,tiny,8)=="TRUNCATED:PREPARED:8:"+full+":"+empty)
+    val broad=circuit(Block(Vector.fill(4096)(EmptyStmt)))
+    val broadCsv="1,1,0,4097,0,0,0,4097,0,0,0,0"
+    check(sizingEvidence(broad,broad,error)=="COMPLETE:DONE:8196:"+broadCsv+":"+broadCsv)
+    def deep(n:Int):Circuit=circuit((0 until n).foldLeft[Statement](EmptyStmt)((s,_)=>Block(Seq(s))))
+    val deepCsv="1,1,0,257,0,0,0,257,0,0,0,0"
+    check(sizingEvidence(deep(256),deep(256),error)=="COMPLETE:DONE:516:"+deepCsv+":"+deepCsv)
+    check(sizingEvidence(deep(257),tiny,error)=="UNAVAILABLE")
+    val longName=circuit(EmptyStmt,Seq(Port(NoInfo,"x"*4096,Input,ClockType)))
+    val longCsv="1,1,1,1,0,1,1,1,1,4096,4096,0"
+    check(sizingEvidence(longName,longName,error)=="COMPLETE:DONE:6:"+longCsv+":"+longCsv)
+    check(sizingEvidence(circuit(DefWire(NoInfo,"x"*4097,ClockType)),tiny,error)=="UNAVAILABLE")
+    check(sizingEvidence(tiny.copy(main=""),tiny,error)=="UNAVAILABLE" &&
+      sizingEvidence(tiny.copy(modules=Seq(Module(NoInfo,"x"*4097,Seq.empty,EmptyStmt))),tiny,error)=="UNAVAILABLE")
+    val wrong=new IllegalArgumentException("BOUND")
+    wrong.addSuppressed(new BoundEvidence("DECLARATIONS:INDEX_PREPARED:1"))
+    check(sizingEvidence(null,null,null)=="NONE" && sizingEvidence(null,null,wrong)=="NONE" &&
+      sizingEvidence(null,null,new IllegalArgumentException("DRIVER"))=="NONE" &&
+      sizingEvidence(null,null,new IllegalArgumentException("BOUND"))=="NONE")
+    val conditional=circuit(Conditionally(NoInfo,zero,EmptyStmt,EmptyStmt))
+    val conditionalCsv="1,1,0,3,0,0,0,3,0,0,0,0"
+    check(sizingEvidence(conditional,conditional,error)=="COMPLETE:DONE:8:"+conditionalCsv+":"+conditionalCsv)
+    require(checks==13);checks
+  }
+
+  // END INDEX SIZING DIAGNOSTIC
   def apply(before:Circuit,prepared:Circuit,annotations:AnnotationSeq,expected:Int):Result={
     need(expected>0 && expected<=1024,"COUNT")
     val b=new Budget

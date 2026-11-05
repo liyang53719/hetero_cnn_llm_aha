@@ -866,17 +866,61 @@ object ClockInitRepresentationRepair {
     val consumers=new Array[Statement](1024);val anchors=new Array[Int](1024)
     val originalSeen=new Array[Boolean](1024)
     var count=0
-    def find(mid:Int,name:String):Int={var p=(a.hash(name)^mid*0x9e3779b9)&2047
-      while(true){a.charge(AX.Probe);val k=keyNames(p)
-        if(k==null)return -1
-        if(keyModules(p)==mid && a.equal(k,name))return keyIds(p)
-        p=(p+1)&2047
-      }; -1
+    // Scalar range cache belongs only to this private index, never to an AST.
+    // A separate valid bit permits every Int module ID; every add invalidates it.
+    private var rangeValid=false;private var rangeMid=0
+    private var rangeLo=0;private var rangeHi=0
+    private def moduleBound(mid:Int,upper:Boolean):Int={
+      var lo=0;var hi=count
+      while(lo<hi){val p=lo+(hi-lo)/2;a.charge(AX.Probe);val m=keyModules(p)
+        if(m<mid || (upper && m==mid))lo=p+1 else hi=p
+      };lo
     }
+    private def selectRange(mid:Int):Unit={
+      if(!rangeValid || rangeMid!=mid){
+        // Publish only a fully admitted range. No partial cache survives failure.
+        rangeValid=false
+        val lo=moduleBound(mid,false);val hi=moduleBound(mid,true)
+        rangeLo=lo;rangeHi=hi;rangeMid=mid;rangeValid=true
+      }
+    }
+    // Sorted (module ID, unsigned UTF-16 code-unit name) index in the same
+    // three fixed arrays. Candidate metadata remains in original insertion order.
+    // Every indexed comparison is precharged; only inspected characters are read.
+    private def compare(p:Int,mid:Int,name:String):Int={
+      a.charge(AX.Probe)
+      val m=keyModules(p)
+      if(m<mid)return -1
+      if(m>mid)return 1
+      val key=keyNames(p);val n=math.min(key.length,name.length);var i=0
+      while(i<n){a.charge(AX.Equal);val x=key.charAt(i);val y=name.charAt(i)
+        if(x<y)return -1
+        if(x>y)return 1
+        i+=1
+      }
+      if(key.length<name.length)-1 else if(key.length>name.length)1 else 0
+    }
+    // Lower-bound lookup retains the earliest ID for duplicate keys, matching
+    // the old hash table. Upper-bound insertion preserves their insertion order.
+    private def search(mid:Int,name:String,insertion:Boolean):Int={
+      var lo=if(insertion)0 else rangeLo;var hi=if(insertion)count else rangeHi;var found= -1
+      while(lo<hi){val p=lo+(hi-lo)/2;val c=compare(p,mid,name)
+        if(c<0 || (insertion && c==0))lo=p+1
+        else {if(c==0)found=keyIds(p);hi=p}
+      }
+      if(insertion)lo else found
+    }
+    def find(mid:Int,name:String):Int={selectRange(mid);search(mid,name,false)}
     def add(mid:Int,module:String,r:DefRegister,c:Reference):Unit={
-      a.charge(AX.Candidate);val id=count;var p=(a.hash(r.name)^mid*0x9e3779b9)&2047
-      var found=false
-      while(!found){a.charge(AX.Probe);if(keyNames(p)==null)found=true else p=(p+1)&2047}
+      rangeValid=false
+      a.charge(AX.Candidate);val id=count;val p=search(mid,r.name,true)
+      val shifts=(count-p).toLong
+      // Admission for ALL shifts precedes any write. Each moved triple is three
+      // copies and each shift iteration one probe. No extra backing is allocated.
+      a.check(AX.Copy,3L*shifts,a.value(AX.Copy));a.check(AX.Probe,shifts,a.value(AX.Probe))
+      a.charge(AX.Copy,3L*shifts);a.charge(AX.Probe,shifts)
+      var j=count
+      while(j>p){keyNames(j)=keyNames(j-1);keyModules(j)=keyModules(j-1);keyIds(j)=keyIds(j-1);j-=1}
       keyNames(p)=r.name;keyModules(p)=mid;keyIds(p)=id
       regs(id)=r;clocks(id)=c;moduleNames(id)=module;moduleIds(id)=mid;count+=1
     }
@@ -1378,6 +1422,110 @@ object ClockInitRepresentationRepair {
     a.phase="NONINTERFERENCE";b.phase="NONINTERFERENCE"
     val ticks=prove(prepared,result,selected,expected,a,b)
     Result(result,expected,ticks,b.workV2)
+  }
+
+  /** Mandatory qualification only: the oracle retains the former hash algorithm. */
+  def selectedLookupSelfChecks():Int={
+    var checks=0
+    def check(p:Boolean):Unit={require(p,"SELECTED_LOOKUP_SELFCHECK");checks+=1}
+    def caught(op: =>Unit):Throwable={var e:Throwable=null;try{op}catch{case x:IllegalArgumentException=>e=x};e}
+    val clock=Reference("clk",ClockType,PortKind,SourceFlow)
+    def reg(n:String):DefRegister=DefRegister(NoInfo,n,ClockType,clock,UIntLiteral(0),UIntLiteral(0))
+    // Frozen old open-addressing rule, bounded to tiny qualification inputs.
+    final class Oracle {
+      private val a=new Aux
+      private val names=new Array[String](2048);private val mids=new Array[Int](2048);private val ids=new Array[Int](2048)
+      private var count=0
+      def add(mid:Int,name:String):Unit={require(count<16);var p=(a.hash(name)^mid*0x9e3779b9)&2047;var steps=0
+        while(names(p)!=null){require(steps<2048);a.charge(AX.Probe);p=(p+1)&2047;steps+=1}
+        a.charge(AX.Probe);names(p)=name;mids(p)=mid;ids(p)=count;count+=1
+      }
+      def find(mid:Int,name:String):Int={var p=(a.hash(name)^mid*0x9e3779b9)&2047;var steps=0
+        while(steps<2048){a.charge(AX.Probe);val k=names(p);if(k==null)return -1
+          if(mids(p)==mid && a.equal(k,name))return ids(p);p=(p+1)&2047;steps+=1};throw new IllegalArgumentException("ORACLE_BOUND")
+      }
+    }
+    val shared=new String("prefix")
+    val keys=Vector((2,shared),(0,"prefixA"),(2,new String("prefix")),(0,"Prefix"))
+    keys.indices.toVector.permutations.foreach{order=>
+      val a=new Aux;val selected=new Selected(a);val oracle=new Oracle
+      check(selected.find(0,"absent")== -1 && a.value(AX.Hash)==0)
+      order.foreach{i=>val (mid,name)=keys(i);val r=reg(name);val id=selected.count
+        selected.add(mid,"M"+mid,r,clock);oracle.add(mid,name)
+        check((selected.regs(id) eq r) && (selected.clocks(id) eq clock) && selected.moduleIds(id)==mid)
+        keys.foreach{case(m,n)=>check(selected.find(m,new String(n))==oracle.find(m,n))}
+      }
+      Vector(-1,0,1,2,Int.MaxValue).foreach{m=>Vector("pre","prefix","prefixA","prefixAA","Prefix","absent").foreach{n=>
+        check(selected.find(m,n)==oracle.find(m,n))}}
+      check(a.value(AX.Hash)==0 && selected.count==4)
+    }
+    val names=Vector("a","aa","A","\u0000","\u00e9","e\u0301","\ud800","\ud83d\ude00","\uffff","x"*4096)
+    val a=new Aux;val s=new Selected(a);val oracle=new Oracle
+    names.reverse.foreach{n=>s.add(Int.MinValue,"M",reg(n),clock);oracle.add(Int.MinValue,n)}
+    names.foreach{n=>check(s.find(Int.MinValue,new String(n))==oracle.find(Int.MinValue,n))
+      check(s.find(Int.MaxValue,n)==oracle.find(Int.MaxValue,n))}
+    val collisionA="collision_129";val collisionB="collision_226"
+    val collisionHash=new Aux;val collisionIndex=new Selected(new Aux);val collisionOracle=new Oracle
+    Vector(collisionB,collisionA,collisionB).foreach{n=>collisionIndex.add(0,"M",reg(n),clock);collisionOracle.add(0,n)}
+    check(a.value(AX.Hash)==0 && (collisionHash.hash(collisionA)&2047)==(collisionHash.hash(collisionB)&2047) &&
+      collisionIndex.find(0,collisionA)==collisionOracle.find(0,collisionA) &&
+      collisionIndex.find(0,collisionB)==collisionOracle.find(0,collisionB) && collisionIndex.find(0,collisionB)==0)
+    // Exhaustion is precharged before character reads, shifts, mutation or caller callbacks.
+    val cp=new Aux(AX.Copy,2);val cs=new Selected(cp);cs.add(0,"M",reg("z"),clock)
+    var callbacks=0
+    val copyFailure=caught{cs.add(0,"M",reg("a"),clock);callbacks+=1}
+    check(auxiliaryEvidence(copyFailure)=="COPY_TOTAL:INDEX_PREPARED:0:3:2" && callbacks==0)
+    check(cs.count==1 && cs.regs(0).name=="z" && cs.find(0,"z")==0 && cs.find(0,"a")== -1 && cp.value(AX.Copy)==0)
+    val exact=new Aux(AX.Copy,3);val es=new Selected(exact);es.add(0,"M",reg("z"),clock);es.add(0,"M",reg("a"),clock)
+    check(exact.value(AX.Copy)==3 && es.find(0,"a")==1 && es.find(0,"z")==0)
+    val prior=es.count;check(guardCode(caught(es.add(0,"M",reg("0"),clock)))=="BOUND" && es.count==prior)
+    val probe=new Aux(AX.Probe,0);val ps=new Selected(probe);ps.add(0,"M",reg("a"),clock)
+    check(guardCode(caught{ps.find(0,"a");callbacks+=1})=="BOUND" && callbacks==0 && probe.value(AX.Probe)==0)
+    val eq=new Aux(AX.Equal,0);val qs=new Selected(eq);qs.add(0,"M",reg("a"),clock)
+    check(guardCode(caught{qs.find(0,"a");callbacks+=1})=="BOUND" && callbacks==0 && eq.value(AX.Equal)==0)
+    val candidate=new Aux(AX.Candidate,1);val limited=new Selected(candidate);limited.add(0,"M",reg("a"),clock)
+    check(guardCode(caught(limited.add(0,"M",reg("b"),clock)))=="BOUND" && limited.count==1 && limited.find(0,"b")== -1)
+    val fullAux=new Aux;val full=new Selected(fullAux);var i=0
+    while(i<1024){full.add(1023-i,"M",reg("n"),clock);i+=1}
+    check(full.count==1024 && fullAux.value(AX.Copy)==1571328 && fullAux.value(AX.Hash)==0)
+    check(full.find(0,"n")==1023 && full.find(1023,"n")==0)
+    check(guardCode(caught(full.add(0,"M",reg("overflow"),clock)))=="BOUND" && full.count==1024)
+    // Empty and populated ranges must be invalidated even for duplicate inserts.
+    val ca=new Aux;val cached=new Selected(ca)
+    check(cached.find(7,"n")== -1)
+    cached.add(7,"M",reg("n"),clock);check(cached.find(7,"n")==0)
+    cached.add(7,"M",reg("n"),clock);check(cached.find(7,"n")==0)
+    check(cached.find(Int.MinValue,"n")== -1)
+    cached.add(Int.MinValue,"L",reg("n"),clock);check(cached.find(Int.MinValue,"n")==2)
+    check(cached.find(Int.MaxValue,"n")== -1)
+    cached.add(Int.MaxValue,"H",reg("n"),clock);check(cached.find(Int.MaxValue,"n")==3)
+    check(cached.find(7,"n")==0)
+    val beforeProbe=ca.value(AX.Probe);cached.find(7,"n")
+    check(ca.value(AX.Probe)-beforeProbe==2) // cached range, two duplicate comparisons only
+    val cacheCap=new Aux(AX.Probe,1);val cacheStopped=new Selected(cacheCap)
+    cacheStopped.add(0,"M",reg("n"),clock)
+    check(guardCode(caught(cacheStopped.find(0,"n")))=="BOUND" && cacheCap.value(AX.Probe)==1)
+    check(guardCode(caught(cacheStopped.find(0,"n")))=="BOUND" && cacheCap.value(AX.Probe)==1)
+    val shiftCap=new Aux(AX.Probe,1);val shiftStopped=new Selected(shiftCap)
+    shiftStopped.add(0,"M",reg("z"),clock)
+    check(guardCode(caught(shiftStopped.add(0,"M",reg("a"),clock)))=="BOUND" &&
+      shiftStopped.count==1 && shiftStopped.regs(0).name=="z" && shiftCap.value(AX.Copy)==0)
+    val equalCap=new Aux(AX.Equal,1);val equalStopped=new Selected(equalCap)
+    equalStopped.add(0,"M",reg("n"),clock)
+    check(equalStopped.find(0,"n")==0 && equalCap.value(AX.Equal)==1)
+    check(guardCode(caught(equalStopped.find(0,"n")))=="BOUND" && equalCap.value(AX.Equal)==1)
+    val moves=new Selected(new Aux)
+    moves.add(1,"M",reg("m"),clock);check(moves.find(1,"m")==0)
+    moves.add(1,"M",reg("a"),clock);check(moves.find(1,"a")==1 && moves.find(1,"m")==0)
+    moves.add(1,"M",reg("z"),clock);check(moves.find(1,"z")==2)
+    moves.add(0,"L",reg("x"),clock);check(moves.find(1,"m")==0 && moves.find(1,"z")==2)
+    moves.add(2,"H",reg("x"),clock);check(moves.find(1,"a")==1 && moves.find(1,"z")==2)
+    // Name validation still precedes lookup, including fresh nonselected references.
+    Vector(null,"","x"*4097).foreach{n=>
+      val budget=new Budget(mode=V2Work);budget.phase="USES"
+      check(guardCode(caught{budget.name(n);s.find(0,n);callbacks+=1})=="BOUND" && callbacks==0)
+    }
+    checks
   }
 
   /** V2 qualification uses private seeds only; callers cannot change limits. */

@@ -65,9 +65,11 @@ object BoundarySplitStructuralFixture {
       }
       s"    b.$bus <= ${cat(parts)}"
     }.mkString("\n")
+    // Packed input expressions may read this register, so declare it first.
+    val declarations=if(control=="boundary_registered")"    reg q_boundary : UInt<1>, clock\n"else ""
     val extra=control match {
       case "base" | "arithmetic" | "whole_bus" | "boundary_cycle"=>"    fixture_sentinel <= bits(b.axi_read_req_o, 0, 0)\n"
-      case "boundary_registered"=>"    reg q_boundary : UInt<1>, clock\n    q_boundary <= bits(b.axi_read_req_o, 0, 0)\n    fixture_sentinel <= q_boundary\n"
+      case "boundary_registered"=>"    q_boundary <= bits(b.axi_read_req_o, 0, 0)\n    fixture_sentinel <= q_boundary\n"
       // Normal lowering/preparation must never receive intentional local cycles.
       case "true_cycle" | "self_loop"=>"    fixture_sentinel <= UInt<1>(0)\n"
       case "registered"=>"    reg q : UInt<1>, clock\n    q <= not(q)\n    fixture_sentinel <= q\n"
@@ -76,7 +78,7 @@ object BoundarySplitStructuralFixture {
     val extPorts=(IdmaSplitLayout.controlPorts++IdmaSplitLayout.busWidths.toVector.sortBy(_._1).map{case(n,w)=>
       Port(NoInfo,n,if(n.endsWith("_i"))Input else Output,UIntType(IntWidth(w)))
     }).map(p=>s"    ${if(p.direction==Input)"input" else "output"} ${p.name} : ${typ(p.tpe)}").mkString("\n")
-    s"circuit Top :\n  module Top :\n    input clock : Clock\n    output fixture_sentinel : UInt<1>\n$inputPorts\n    inst b of $original\n$controls\n$packed\n$extra  extmodule $original :\n$extPorts\n    defname = $original\n"
+    s"circuit Top :\n  module Top :\n    input clock : Clock\n    output fixture_sentinel : UInt<1>\n$inputPorts\n    inst b of $original\n$controls\n$declarations$packed\n$extra  extmodule $original :\n$extPorts\n    defname = $original\n"
   }
   private final class Factory extends ScalaBlackBoxFactory {
     var n=0
@@ -191,9 +193,13 @@ object BoundarySplitStructuralFixture {
         require(!names(x) && !names(y),"fresh local-cycle fixture names")
         require(ss.count{case Connect(_,l,_)=>l.serialize=="fixture_sentinel";case _=>false}==1,"unique scaffold sentinel")
         val body=ss.map{case a@Connect(_,l,_) if l.serialize=="fixture_sentinel"=>a.copy(expr=r(x));case a=>a}
-        val loop=if(mode=="self_loop")Vector(DefWire(NoInfo,x,t),Connect(NoInfo,r(x,true),r(x)))else
-          Vector(DefWire(NoInfo,x,t),DefWire(NoInfo,y,t),Connect(NoInfo,r(x,true),r(y)),Connect(NoInfo,r(y,true),r(x)))
-        m.copy(body=Block(body++loop))
+        // CheckFlows builds its declaration environment in statement order.
+        // Declare every injected wire before the sentinel or any cycle edge uses it.
+        val declarations=if(mode=="self_loop")Vector(DefWire(NoInfo,x,t))else
+          Vector(DefWire(NoInfo,x,t),DefWire(NoInfo,y,t))
+        val loop=if(mode=="self_loop")Vector(Connect(NoInfo,r(x,true),r(x)))else
+          Vector(Connect(NoInfo,r(x,true),r(y)),Connect(NoInfo,r(y,true),r(x)))
+        m.copy(body=Block(declarations++body++loop))
       case m=>m
     })
   }

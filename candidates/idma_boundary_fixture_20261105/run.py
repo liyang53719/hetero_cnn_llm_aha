@@ -1,10 +1,10 @@
 """Isolated boundary fixture qualification only. No Host, engine/native or IR export."""
 import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request,zipfile
 P=pathlib.Path;D=P(__file__).resolve().parent;REPO=D.parent.parent
-REL='candidates/idma_boundary_fixture_20261105';NONCE='ci_launch/idma_boundary_fixture_20261105_relative_target_once.json'
+REL='candidates/idma_boundary_fixture_20261105';NONCE='ci_launch/idma_boundary_fixture_20261105_declaration_order_once.json'
 CAT='candidates/gdn32_first_model_execution_20261104/GDN32_FULL_SOURCE_PINS.json'
 CAT_SHA='ad2d4dcaddb213c85fd15adc65f7da5bd74a0d7c3e6c5922c725aa41bdc967cb'
-BASE='28fb6150e04bb2f738c854509008e6264dfa9ed6';BASE_TREE='4cea7d5fd06fe873c4503fee180c0f0d04999fe5';TREE=12_081_306_272;RESERVE=8<<30
+BASE='469715ac776339d6042228de75d1bb8223e23335';BASE_TREE='e68d5c3fa3434ebcf0859cf1884cc92fc34f52a5';TREE=12_081_306_272;RESERVE=8<<30
 boundary_identity={}
 class Stop(Exception):
  def __init__(self,code='GUARD_REJECTED'):self.code=code;super().__init__(code)

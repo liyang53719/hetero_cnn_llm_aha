@@ -34,6 +34,8 @@ final class ObservedPrepareAst(expected:Int=394) extends Phase {
   def anchorEvidence:String=anchorResult
   private var formalResult="UNAVAILABLE:0:0:0:0"
   def formalEvidence:String=formalResult
+  private var p54WorkResult="UNAVAILABLE"
+  def p54WorkEvidence:String=grantGate.synchronized {p54WorkResult}
   private val grantGate=newGate()
   private var publishedGrant:Grant=null
   def takeGrant():Grant=grantGate.synchronized {
@@ -41,12 +43,14 @@ final class ObservedPrepareAst(expected:Int=394) extends Phase {
     if(grantGate.mode!=0||grantGate.current==null||grantGate.current.revoked)null else result
   }
   override def transform(annotationSeq:AnnotationSeq):AnnotationSeq=grantGate.synchronized {
+    p54WorkResult="UNAVAILABLE"
     publishedGrant=null;val session=beginSession(grantGate)
     try {
     result="UNAVAILABLE:CENSUS:NOT_RUN:0:0:0:0:0:0:0:0:0"
     budgetResult="NONE";sizingResult="NONE";consumerResult="NONE";anchorResult="NONE";formalResult="UNAVAILABLE:0:0:0:0"
     var circuits=0
     var pending:GrantData=null
+    var pendingP54Work="UNAVAILABLE"
     val output=annotationSeq.flatMap {
       case FirrtlCircuitAnnotation(circuit)=>
         circuits=if(circuits==0)1 else 2
@@ -68,6 +72,7 @@ final class ObservedPrepareAst(expected:Int=394) extends Phase {
             nextState
           }
           if(observation!=null){observation.afterSuffix(54,newState)
+            pendingP54Work=observation.p54WorkEvidence
             val candidate=observation.takePendingHandoff()
             if(circuits==1)pending=candidate else if(candidate!=null)candidate.clearOnce()}
           result=if(circuits>1)"UNAVAILABLE:DONE:MULTIPLE_CIRCUITS:0:0:0:0:0:0:0:0:0" else if(observation==null)"UNAVAILABLE:CENSUS:UNEXPECTED:0:0:0:0:0:0:0:0:0" else observation.evidence
@@ -81,8 +86,9 @@ final class ObservedPrepareAst(expected:Int=394) extends Phase {
       pending.publish(output);publishedGrant=new Grant(session,pending)
     }catch{case _:Throwable=>session.revoke();publishedGrant=null}
     else session.revoke()
+    p54WorkResult=publishP54Work(circuits,publishedGrant!=null,pendingP54Work)
     output
-    }catch{case error:Throwable=>session.revoke();publishedGrant=null;throw error}
+    }catch{case error:Throwable=>p54WorkResult="UNAVAILABLE";session.revoke();publishedGrant=null;throw error}
     finally {grantGate.mode=0}
   }
 }
@@ -447,6 +453,46 @@ object ObservedPrepareAst {
     def size[A](s:scala.collection.Seq[A],cap:Int):Int={val it=iter(s);var n=0
       while(it.hasNext){bound(n<cap);charge(C.Probe);it.next();n+=1};n}
   }
+  // Optional P54-only telemetry: twelve Long scalars and two Boolean flags,
+  // no arrays, iterators or AST references. This small object, <=128-byte ASCII
+  // result, headers, two short-lived strings and formatting/by-name scratch
+  // reserve <=8KiB within the existing 2MiB fixed metadata/temporary allowance
+  // (not a new Temp charge or an RSS/reclamation claim).
+  // Counts are occurrences; visits includes modules and ports, not just statements.
+  private final class P54Work {
+    private var t0=0L;private var i0=0L;private var n0=0L;private var e0=0L;private var o0=0L
+    private var visits=0L;private var expr=0L
+    private var typ=0L;private var info=0L;private var nodes=0L;private var edges=0L;private var other=0L
+    private var started=false;private var ready=false
+    def reset():Unit={started=false;ready=false;t0=0;i0=0;n0=0;e0=0;o0=0
+      visits=0;expr=0;typ=0;info=0;nodes=0;edges=0;other=0}
+    private def global(x:Long):Boolean=x>=0&&x<=C.limits(C.Expr)
+    private def local(x:Long):Boolean=x>=0&&x<=C.ScanExpr
+    def begin(b:Budget):Unit={reset();try{
+      t0=b.prefix(0);i0=b.prefix(1);n0=b.prefix(2);e0=b.prefix(3);o0=b.prefix(4)
+      started=global(t0)&&global(i0)&&global(n0)&&global(e0)&&global(o0)
+    }catch{case _:Throwable=>reset()}}
+    def finish(b:Budget):Unit={ready=false;try{
+      if(started&&global(b.prefix(0))&&global(b.prefix(1))&&global(b.prefix(2))&&
+        global(b.prefix(3))&&global(b.prefix(4))){
+        visits=b.scanVisit;expr=b.scanExpr
+        typ=b.prefix(0)-t0;info=b.prefix(1)-i0;nodes=b.prefix(2)-n0
+        edges=b.prefix(3)-e0;other=b.prefix(4)-o0
+        ready=visits>=0&&visits<=(1L<<22)&&local(expr)&&local(typ)&&local(info)&&
+          local(nodes)&&local(edges)&&local(other)&&nodes>=edges&&
+          expr==typ+info+nodes+edges+other
+      }
+    }catch{case _:Throwable=>ready=false}finally{started=false}}
+    def evidence(complete:Boolean):String=try{
+      if(!complete || !ready)"UNAVAILABLE"
+      else s"AVAILABLE:P54:$visits:$expr:$typ:$info:$nodes:$edges:$other:${nodes-edges}"
+    }catch{case _:Throwable=>"UNAVAILABLE"}
+  }
+  // Delayed until the outer flatMap and existing publication both succeed.
+  // The by-name formatting boundary cannot change the grant or primary error.
+  private def publishP54Work(circuits:Int,published:Boolean,candidate: =>String):String=try{
+    if(circuits==1&&published)candidate else "UNAVAILABLE"
+  }catch{case _:Throwable=>"UNAVAILABLE"}
   private final class Names(b:Budget,slots:Int=1<<21,capacity:Int=1<<20) {
     private val keys=new Array[String](slots);private val occupied=new Array[Int](capacity)
     private var count=0
@@ -886,6 +932,8 @@ object ObservedPrepareAst {
     // +8MiB official comparison scratch +2MiB weak/temporary admission =100.5MiB.
     need(105381888L+14L*1024*1024<=128L*1024*1024,"BOUND")
     private val b=new Budget
+    private val p54Work=new P54Work
+    def p54WorkEvidence:String=p54Work.evidence(complete)
     private var step="CENSUS";private var status="UNAVAILABLE";private var reason="NOT_RUN"
     private var active=true;private var complete=false;private var records:Records=null
     private var walk:Walk=null;private var checked:Checked=null
@@ -920,7 +968,7 @@ object ObservedPrepareAst {
         val eligible=step=="INITIAL_USES" && (e.reason=="BUDGET" || e.reason=="SCAN_BUDGET") && b.failedDimension>=0
         // Preserve the primary failure and release AST-owning pools before any
         // failure-only string formatting. A catch-body failure needs its own catch.
-        status=if(e.bounded)"TRUNCATED"else"UNAVAILABLE";reason=e.reason;active=false;release()
+        status=if(e.bounded)"TRUNCATED"else"UNAVAILABLE";reason=e.reason;active=false;p54Work.reset();release()
         if(step=="INITIAL_USES" && e.reason=="CONSUMER")consumerResult=consumerCode(e)
         if(step=="ORIGINAL" && e.reason=="ANCHOR")anchorResult=anchorCode(e)
         if(eligible)try{
@@ -928,7 +976,7 @@ object ObservedPrepareAst {
           if(record!="NONE" && record.length<=512){budgetResult=record;pendingSizing=true}
           else {budgetResult="UNAVAILABLE";sizingResult="ERROR:UNEXPECTED:0:0:0:0:0:0:0:0:0:0:0";pendingSizing=false}
         }catch{case _:Throwable=>budgetResult="UNAVAILABLE";sizingResult="ERROR:UNEXPECTED:0:0:0:0:0:0:0:0:0:0:0";pendingSizing=false}
-      case _:Throwable=>status="UNAVAILABLE";reason="UNEXPECTED";active=false;release()
+      case _:Throwable=>status="UNAVAILABLE";reason="UNEXPECTED";active=false;p54Work.reset();release()
     }}
     // Shared module/port/statement traversal. f never escapes this callback.
     private def scan(c:Circuit,port:(Int,DefModule,Port)=>Unit,node:(Int,DefModule,Statement)=>Unit,
@@ -1006,6 +1054,7 @@ object ObservedPrepareAst {
     private def suffix(index:Int,c:Circuit):Unit={
       val finalStage=index==54
       b.charge(C.Temp,256);val uses=if(finalStage)new Uses(b,records,checked,true,handoff)else null
+      if(finalStage)p54Work.begin(b)
       scan(c,(mid,_,p)=>if(finalStage)uses.port(mid,p),(mid,m,s)=>{
         s match{case r:DefRegister=>
           val id=records.find(mid,r.name)
@@ -1027,7 +1076,7 @@ object ObservedPrepareAst {
       },noModule,noModule)
       var i=0;while(i<records.count){need(records.seen(i),"COUNT");i+=1}
       records.formals.finish(index)
-      if(finalStage)uses.finish()
+      if(finalStage){uses.finish();p54Work.finish(b)}
       if(index==52)p52=records.count else if(index==53)p53=records.count else p54=records.count
     }
     def retainsInput:Boolean=active && records!=null && step=="CENSUS"
@@ -1211,6 +1260,114 @@ object ObservedPrepareAst {
     }
   }
   // END INDEPENDENT INITIAL USES SIZING
+
+  /** Tiny same-code census checks. No full fixture, compiler or external output. */
+  def p54WorkSelfChecks():Int={
+    var checks=0
+    def check(ok:Boolean):Unit={require(ok,"P54_WORK_SELFCHECK");checks+=1}
+    def fields(s:String):List[Long]=s.split(":",-1).drop(2).map(_.toLong).toList
+    val info=FileInfo("p54:1");val clk=Reference("clock",ClockType,PortKind,SourceFlow)
+    val leaf=UIntLiteral(0);val bit=UIntType(IntWidth(1))
+    val shared=DoPrim(firrtl2.PrimOps.And,List(leaf,leaf),Nil,bit)
+    def measure(body:Statement,metadata:Boolean=false):String={
+      val b=new Budget;val r=new Records(b);val checked=new Checked(b)
+      val uses=new Uses(b,r,checked,true);val walk=new Walk(b);val w=new P54Work
+      // Earlier work is deliberately nonzero and excluded by the real baseline.
+      b.charge(C.Expr,19,0);b.charge(C.Expr,23,1);b.charge(C.Visit,11)
+      w.begin(b);b.start()
+      walk.start(body);var s=walk.next()
+      while(s!=null){uses.scan(s,0);walk.descend(s);s=walk.next()}
+      if(metadata){checked.mismatch(DefRegister(info,"r",ClockType,clk,leaf,leaf))
+        checked.infoPresent(info);checked.same(info,info);formalRef(clk.copy(kind=NodeKind),true,b)}
+      uses.finish();w.finish(b);w.evidence(true)
+    }
+    check(fields(measure(DefNode(info,"n",leaf)))==List(1L,1L,0L,0L,1L,0L,0L,1L))
+    check(fields(measure(DefNode(info,"n",shared)))==List(1L,5L,0L,0L,3L,2L,0L,1L))
+    check(fields(measure(DefNode(info,"n",Mux(leaf,shared,shared,bit))))==List(1L,15L,0L,0L,8L,7L,0L,1L))
+    val same=DefNode(info,"n",shared)
+    check(fields(measure(Block(List(same,same))))==List(3L,10L,0L,0L,6L,4L,0L,2L))
+    check(fields(measure(Connect(info,Reference("out",bit),shared)))==List(1L,6L,0L,0L,4L,2L,0L,2L))
+    check(fields(measure(DefNode(info,"n",leaf),true))==List(1L,8L,2L,4L,1L,0L,1L,1L))
+    locally {val b=new Budget;val w=new P54Work
+      check(w.evidence(true)=="UNAVAILABLE");w.begin(b)
+      check(w.evidence(true)=="UNAVAILABLE");b.start();b.charge(C.Expr,1,2)
+      check(w.evidence(true)=="UNAVAILABLE");w.finish(b)
+      check(w.evidence(false)=="UNAVAILABLE")
+      check(w.evidence(true)=="AVAILABLE:P54:0:1:0:0:1:0:0:1")
+      w.reset();check(w.evidence(true)=="UNAVAILABLE")
+      w.begin(b);b.start();w.finish(b)
+      check(w.evidence(true)=="AVAILABLE:P54:0:0:0:0:0:0:0:0")
+      w.begin(null);w.finish(b);check(w.evidence(true)=="UNAVAILABLE")}
+    // Exact limits and malformed/inconsistent counters use the production validator.
+    var category=0
+    while(category<5){val b=new Budget;val w=new P54Work;w.begin(b)
+      b.scanVisit=1L<<22;b.scanExpr=C.ScanExpr;b.prefix(category)=C.ScanExpr;w.finish(b)
+      check(if(category==3)w.evidence(true)=="UNAVAILABLE" else
+        w.evidence(true).startsWith("AVAILABLE:P54:4194304:16777216:"));category+=1}
+    locally {val b=new Budget;val w=new P54Work;w.begin(b);b.scanExpr=C.ScanExpr
+      b.prefix(2)=C.ScanExpr/2;b.prefix(3)=C.ScanExpr/2;w.finish(b)
+      check(fields(w.evidence(true)).takeRight(4)==List(C.ScanExpr/2,C.ScanExpr/2,0L,0L))}
+    var bad=0
+    while(bad<10){val b=new Budget;val w=new P54Work
+      if(bad==0)b.prefix(0)= -1L
+      if(bad==1)b.prefix(0)=Long.MaxValue
+      if(bad==2)b.prefix(0)=1
+      w.begin(b)
+      bad match{
+        case 0|1=>()
+        case 2=>b.prefix(0)=0
+        case 3=>b.scanVisit= -1L
+        case 4=>b.scanVisit=(1L<<22)+1
+        case 5=>b.scanExpr= -1L
+        case 6=>b.scanExpr=C.ScanExpr+1
+        case 7=>b.prefix(0)=Long.MaxValue
+        case 8=>b.prefix(0)=1 // sum differs from scanExpr
+        case 9=>b.prefix(3)=1;b.scanExpr=1 // negative derived roots
+      }
+      w.finish(b);check(w.evidence(true)=="UNAVAILABLE");bad+=1}
+    locally {val b=new Budget;val w=new P54Work;w.begin(b);w.finish(null)
+      check(w.evidence(true)=="UNAVAILABLE")}
+    check(publishP54Work(1,true,"AVAILABLE:P54:0:0:0:0:0:0:0:0").startsWith("AVAILABLE:P54:"))
+    check(publishP54Work(0,true,throw new AssertionError("not evaluated"))=="UNAVAILABLE")
+    check(publishP54Work(2,true,throw new AssertionError("not evaluated"))=="UNAVAILABLE")
+    check(publishP54Work(1,false,throw new AssertionError("not evaluated"))=="UNAVAILABLE")
+    check(publishP54Work(1,true,throw new AssertionError("optional formatting"))=="UNAVAILABLE")
+    // Full Observation path: genuine suffix, finish, completion and publication.
+    def state(body:Statement):CircuitState=CircuitState(Circuit(NoInfo,
+      List(Module(NoInfo,"Top",List(Port(NoInfo,clk.name,Input,ClockType)),body)),"Top"),Seq.empty)
+    val original=Print(info,StringLit("out"),Nil,clk,UIntLiteral(1),"terminal")
+    val reg=DefRegister(info,"sample",ClockType,clk,leaf,leaf)
+    val delayed=Reference(reg.name,ClockType,NodeKind,SourceFlow)
+    val terminal=original.copy(clk=delayed)
+    def post(r:DefRegister,finalStage:Boolean,mode:Int=0):CircuitState={
+      val loc=delayed.copy(flow=if(finalStage)SinkFlow else SourceFlow)
+      val t=if(mode==1)terminal.copy(args=scala.collection.immutable.LazyList(leaf))else terminal
+      state(Block(if(mode==2)List(r,Connect(info,loc,clk))else List(r,Connect(info,loc,clk),t)))
+    }
+    var mode=0
+    while(mode<4){val o=new Observation(1);val before=state(original)
+      val gate=newGate();val session=beginSession(gate);o.beginHandoff(session,before.circuit)
+      val s51=post(reg,false);o.before(51,before);o.afterAugment(before,s51)
+      o.before(52,s51);val s52=post(reg,false);o.afterSuffix(52,s52)
+      val r53=reg.copy();o.before(53,s52);val s53=post(r53,false);o.afterSuffix(53,s53)
+      check(o.p54WorkEvidence=="UNAVAILABLE")
+      o.before(54,s53);val raw=post(r53.copy(clock=clk.copy()),true,mode)
+      val s54=if(mode==3)raw.copy(renames=Some(null))else raw
+      o.afterSuffix(54,s54)
+      if(mode==0){
+        check(o.evidence.startsWith("COMPLETE:DONE:NONE:1:1:1:1:1:1:1:"))
+        check(o.p54WorkEvidence=="AVAILABLE:P54:6:16:2:7:7:0:0:7")
+        val data=o.takePendingHandoff();val outer:AnnotationSeq=List(TreadleCircuitStateAnnotation(s54))
+        check(publishP54Work(1,false,o.p54WorkEvidence)=="UNAVAILABLE")
+        data.publish(outer);val grant=new Grant(session,data)
+        check(publishP54Work(1,grant!=null,o.p54WorkEvidence)==o.p54WorkEvidence)
+      }else{check(!o.evidence.startsWith("COMPLETE:"));check(o.p54WorkEvidence=="UNAVAILABLE")}
+      session.revoke();gate.mode=0;check(o.cleaned);mode+=1
+    }
+    locally {val o=new Observation(0);o.before(51,state(original))
+      check(o.p54WorkEvidence=="UNAVAILABLE"&&o.evidence.contains(":COUNT:")&&o.cleaned)}
+    checks
+  }
 
   /** Bounded production-helper tests; no transformations or external output. */
   def selfChecks():Int={

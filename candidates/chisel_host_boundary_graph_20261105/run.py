@@ -1,10 +1,10 @@
 """One source-only structural job. No engine/native, weights, references or IR export."""
 import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request,urllib.error,zipfile
 P=pathlib.Path;D=P(__file__).resolve().parent;REPO=D.parent.parent
-REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_repair_uses_work_diagnostic_once.json'
+REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_observer_p54_work_diagnostic_once.json'
 CAT='candidates/gdn32_first_model_execution_20261104/GDN32_FULL_SOURCE_PINS.json'
 CAT_SHA='ad2d4dcaddb213c85fd15adc65f7da5bd74a0d7c3e6c5922c725aa41bdc967cb'
-BASE='e59bda0f5d979538d82a547b8284a04ae5ee9ff9';BASE_TREE='14c9fbf3fb8cc4d9517d8a69aa31aa5014d12742';TREE=12_081_306_272;RESERVE=8<<30
+BASE='de5a729735eb381d14bcbe5dafc2c36571edad59';BASE_TREE='0b915194252e11460284cc86bbd49d92507f0984';TREE=12_081_306_272;RESERVE=8<<30
 from witness_record import parse_record as parse_witness_record
 from compare_observed_prepare import evidence as parse_observed_evidence, budget_for_provenance as parse_observed_budget, sizing_pair as parse_observed_sizing_pair, consumer_for_provenance as parse_observed_consumer, formal_for_provenance as parse_observed_formal, anchor_for_provenance as parse_observed_anchor
 from compare_clock_init_results import auxiliary_evidence as parse_auxiliary_evidence, preexisting_evidence as parse_preexisting_evidence
@@ -248,7 +248,23 @@ def parse_uses_work(step,guard,bound,text):
  if f[13]=='EDGE':need(ds==do==0,'USES_WORK_EDGE')
  return dict(status='PREFIX',**dict(zip(USES_WORK_KEYS,v)),current_selected=current,failed_tick=f[13],work=5000001,limit=5000000,completed_scan=False)
 
-def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=False,sizing_diagnostics=False,consumer_diagnostics=False,formal_diagnostics=False,anchor_diagnostics=False,proof_repair_diagnostics=False,annotation_shape_diagnostics=False,instance_owner_diagnostics=False,annotation_other_owner_diagnostics=False,uses_work_diagnostics=False):
+P54_WORK_KEYS=('visits','expressions','types','infos','nodes','edges','other','roots')
+def parse_p54_work(provenance,text):
+ need(type(text)is str and 0<len(text)<=160 and text.isascii(),'P54_WORK_SCHEMA')
+ if text=='UNAVAILABLE':return {'status':'UNAVAILABLE'}
+ need(provenance is not None and provenance.get('status')=='COMPLETE' and provenance.get('step')=='DONE' and provenance.get('reason')=='NONE','P54_WORK_SCOPE')
+ f=text.split(':');need(len(f)==10 and f[:2]==['AVAILABLE','P54'],'P54_WORK_SCHEMA')
+ values=[]
+ for i,x in enumerate(f[2:]):
+  need(re.fullmatch(r'0|[1-9][0-9]{0,7}',x)is not None,'P54_WORK_NUMBER')
+  n=int(x);need(n<=(1<<22 if i==0 else 1<<24),'P54_WORK_NUMBER');values.append(n)
+ visits,expr,typ,info,nodes,edges,other,roots=values
+ need(expr==typ+info+nodes+edges+other and nodes>=edges and roots==nodes-edges,'P54_WORK_ACCOUNTING')
+ need(visits<=provenance['visits'] and expr<=provenance['expressions'],'P54_WORK_AGGREGATE')
+ return dict(status='AVAILABLE',phase='P54',**dict(zip(P54_WORK_KEYS,values)),completed_scan=True)
+
+def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=False,sizing_diagnostics=False,consumer_diagnostics=False,formal_diagnostics=False,anchor_diagnostics=False,proof_repair_diagnostics=False,annotation_shape_diagnostics=False,instance_owner_diagnostics=False,annotation_other_owner_diagnostics=False,uses_work_diagnostics=False,p54_work_diagnostics=False):
+ need(type(p54_work_diagnostics)is bool and (not p54_work_diagnostics or anchor_diagnostics),'P54_WORK_MODE')
  need(type(anchor_diagnostics)is bool and (not anchor_diagnostics or formal_diagnostics),'GRAPH_ANCHOR_MODE')
  need(type(formal_diagnostics)is bool and (not formal_diagnostics or consumer_diagnostics),'GRAPH_FORMAL_MODE')
  need(type(instance_owner_diagnostics)is bool and (not instance_owner_diagnostics or annotation_shape_diagnostics),'INSTANCE_OWNER_MODE')
@@ -262,7 +278,7 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=Fals
  need(type(text)is str and len(text.encode('ascii'))<=32768,'GRAPH_LOG_LIMIT')
  need('\r'not in text and (not text or text.endswith('\n')),'GRAPH_LOG_TRUNCATED_LINE')
  lines=text.splitlines();need(len(lines)<=98,'GRAPH_RECORD_LIMIT')
- rows=[];final=None;active=None;next_phase=0;last=None;last_phase=None;cycle_event_seen=False;witness=None;census=None;provenance=None;observer_budget_raw=None;observer_sizing_raw=None;observer_budget=None;observer_sizing=None;observer_consumer_raw=None;observer_consumer=None;observer_formal_raw=None;observer_formal=None;observer_anchor_raw=None;observer_anchor=None;proof_repair=None
+ rows=[];final=None;active=None;next_phase=0;last=None;last_phase=None;cycle_event_seen=False;witness=None;census=None;provenance=None;observer_budget_raw=None;observer_sizing_raw=None;observer_budget=None;observer_sizing=None;observer_consumer_raw=None;observer_consumer=None;observer_formal_raw=None;observer_formal=None;observer_anchor_raw=None;observer_anchor=None;observer_p54_raw=None;observer_p54=None;proof_repair=None
  for line in lines:
   need(final is None,'GRAPH_LOG_TRAILING_OR_LONG')
   if line.startswith('PREPARE_PROVENANCE_V1 '):
@@ -308,6 +324,12 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=Fals
    try:observer_anchor=parse_observed_anchor(provenance,observer_anchor_raw)
    except (ValueError,TypeError):raise Stop('OBSERVER_ANCHOR_SCHEMA')
    continue
+  if line.startswith('PREPARE_P54_WORK_V1 '):
+   need(p54_work_diagnostics and provenance is not None and observer_anchor_raw is not None and observer_p54_raw is None and active is None and last_phase=='prepare_ast','P54_WORK_PHASE')
+   need(len(line)<=256,'P54_WORK_LIMIT')
+   observer_p54_raw=line[len('PREPARE_P54_WORK_V1 '):]
+   observer_p54=parse_p54_work(provenance,observer_p54_raw)
+   continue
   if line.startswith('PREPARE_REPAIR_V1 '):
    need(proof_repair_diagnostics and proof_repair is None and active=='prepared_checks' and provenance is not None and provenance['status']=='COMPLETE','PROOF_REPAIR_PHASE')
    need(line=='PREPARE_REPAIR_V1 status=COMPLETE corrected=394 types=PASS flows=PASS clock=PASS bindings=PASS symbolTableStarted=false','PROOF_REPAIR_SCHEMA')
@@ -338,6 +360,7 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=Fals
     if consumer_diagnostics and phase=='prepared_checks':need(observer_consumer_raw is not None,'OBSERVER_CONSUMER_MISSING')
     if formal_diagnostics and phase=='prepared_checks':need(observer_formal_raw is not None,'OBSERVER_FORMAL_MISSING')
     if anchor_diagnostics and phase=='prepared_checks':need(observer_anchor_raw is not None,'OBSERVER_ANCHOR_MISSING')
+    if p54_work_diagnostics and phase=='prepared_checks':need(observer_p54_raw is not None,'P54_WORK_MISSING')
     need(active is None and next_phase<len(PHASES) and phase==PHASES[next_phase],'GRAPH_PHASE_ORDER');active=phase
    else:
     need(active==phase,'GRAPH_PHASE_ORDER')
@@ -454,6 +477,7 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=Fals
  if observer_consumer_raw is not None:out['prepare_consumer']=observer_consumer
  if observer_formal_raw is not None:out['prepare_empty_assert']=observer_formal
  if observer_anchor_raw is not None:out['prepare_anchor']=observer_anchor
+ if observer_p54_raw is not None:out['prepare_p54_work']=observer_p54
  if witness is not None:
   need(final is not None and final['kind']=='failure' and final['cycle_seen'],'GRAPH_WITNESS_WITHOUT_CYCLE_FAILURE')
   out['cycle_witness']=witness
@@ -640,7 +664,7 @@ def api_probe_result(kind,path,source_lines,text,receipt):
 # End fixed compiler access probes.
 
 def read_graph_diagnostics(path,receipt,high_sha,annotations_sha):
- return parse_graph_text(read_closed_log(path,receipt),receipt,high_sha,annotations_sha,observation_only=True,sizing_diagnostics=True,consumer_diagnostics=True,formal_diagnostics=True,anchor_diagnostics=True,proof_repair_diagnostics=True,annotation_shape_diagnostics=True,instance_owner_diagnostics=True,annotation_other_owner_diagnostics=True,uses_work_diagnostics=True)
+ return parse_graph_text(read_closed_log(path,receipt),receipt,high_sha,annotations_sha,observation_only=True,sizing_diagnostics=True,consumer_diagnostics=True,formal_diagnostics=True,anchor_diagnostics=True,proof_repair_diagnostics=True,annotation_shape_diagnostics=True,instance_owner_diagnostics=True,annotation_other_owner_diagnostics=True,uses_work_diagnostics=True,p54_work_diagnostics=True)
 
 def reject_fixture_failure(text,label,comparator):
  # Caller must first obtain text through read_closed_log. This path always
@@ -671,7 +695,7 @@ def main():
  need(len(own['files'])==len(expected_files) and {row['path']for row in own['files']}==expected_files)
  pins=pins_for(own['files'],REPO);pins[str(D/'SOURCE_PINS.json')]=sha(D/'SOURCE_PINS.json')
  changed=set(git('diff','--name-only',BASE,source).splitlines())
- expected_delta={'candidates/chisel_host_boundary_graph_20261105/scala/ClockInitRepresentationRepair.scala', 'candidates/chisel_host_boundary_graph_20261105/compare_observed_prepare.py', '.github/workflows/chisel-host-boundary-graph-once.yml', 'candidates/chisel_host_boundary_graph_20261105/scala/OriginalHostStructuralGraph.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedPrepareStructuralFixture.scala', 'candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json', 'candidates/chisel_host_boundary_graph_20261105/run.py'}
+ expected_delta={'candidates/chisel_host_boundary_graph_20261105/run.py', '.github/workflows/chisel-host-boundary-graph-once.yml', 'candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json', 'candidates/chisel_host_boundary_graph_20261105/scala/OriginalHostStructuralGraph.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedPrepareAst.scala', 'candidates/chisel_host_boundary_graph_20261105/compare_observed_prepare.py', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedPrepareStructuralFixture.scala'}
  need(len(own['publication_delta'])==len(expected_delta) and changed==set(own['publication_delta'])==expected_delta)
  catalog=regular(REPO/CAT);need(sha(catalog)==CAT_SHA);doc=load(catalog);need(doc['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1'and len(doc['files'])==1211);pins.update(pins_for(doc['files'],REPO));pins[str(catalog)]=CAT_SHA
  phase='admission';remote_exclusive(launch);admission();work=P(os.environ['RUNNER_TEMP'])/'chisel-host-boundary-graph';need(work.is_absolute()and not work.exists()and all(not p.is_symlink()for p in(work,*work.parents)));work.mkdir()
@@ -850,7 +874,7 @@ def main():
   observed_results.append((text,process))
  try:observed_result=observed_comparator.compare(observed_results[0][0],observed_results[1][0],observed_results[0][1],observed_results[1][1])
  except (ValueError,TypeError,KeyError):raise Stop('OBSERVER_COMPARATOR_REJECTED')
- need(observed_result=={'status':'PASS_OBSERVED_PREPARE_FIXTURE_ONLY','cases':9,'parity_cases':9,'suffix_checks':12,'graph_checks':12,'observer_checks':69,'parity_checks':11,'failure_parity_cases':3,'sizing_checks':56,'quota_checks':6,'consumer_checks':24,'consumer_parity_checks':1,'formal_checks':58,'formal_parity_checks':2,'anchor_checks':31,'selection_checks':39,'selection_parity_checks':4,'input_chain_checks':6,'grant_checks':72,'grant_parity_checks':15,'grant_lifecycle_checks':8,'annotation_shape_checks':25,'annotation_owner_checks':22,'annotation_other_owner_checks':23,'combinational_path_checks':99,'combinational_path_parity_selfchecks':7,'combinational_path_parity_checks':3,'uses_work_checks':67,'dedup_metadata_checks':82,'dedup_metadata_parity_checks':3,'state_fields':3,'form_absent_in_pinned_api':True,'renames_none':True,'diagnostic_only':True,'interpreter_executed':False,'full_host_accepted':False},'OBSERVER_COVERAGE_REQUIRED')
+ need(observed_result=={'status':'PASS_OBSERVED_PREPARE_FIXTURE_ONLY','cases':9,'parity_cases':9,'suffix_checks':12,'graph_checks':12,'observer_checks':69,'parity_checks':11,'failure_parity_cases':3,'sizing_checks':56,'quota_checks':6,'consumer_checks':24,'consumer_parity_checks':1,'formal_checks':58,'formal_parity_checks':2,'anchor_checks':31,'selection_checks':39,'selection_parity_checks':4,'input_chain_checks':6,'grant_checks':72,'grant_parity_checks':15,'grant_lifecycle_checks':8,'annotation_shape_checks':25,'annotation_owner_checks':22,'annotation_other_owner_checks':23,'combinational_path_checks':99,'combinational_path_parity_selfchecks':7,'combinational_path_parity_checks':3,'uses_work_checks':67,'p54_work_checks':55,'p54_work_parity_checks':20,'dedup_metadata_checks':82,'dedup_metadata_parity_checks':3,'state_fields':3,'form_absent_in_pinned_api':True,'renames_none':True,'diagnostic_only':True,'interpreter_executed':False,'full_host_accepted':False},'OBSERVER_COVERAGE_REQUIRED')
  boundary_identity['observed_prepare_qualification']=observed_result
  gatepath=REPO/'candidates/gdn32_first_model162_producer_20261104/candidate_generation_gate.py';spec=importlib.util.spec_from_file_location('reviewed_graph_inputs',gatepath);gate=importlib.util.module_from_spec(spec);spec.loader.exec_module(gate)
  selection=gate.selected_inputs(REPO,gate.MODEL162_SOURCE);sources=gate.checked_paths(REPO,selection['overlay'],m,selection['contract']);need(len(sources)==162)

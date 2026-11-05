@@ -405,6 +405,80 @@ object ObservedPrepareStructuralFixture {
       rejected("REPLAY"){ClockInitRepresentationRepair.applyWithProvenance(before,prepared,outer,1,grant)};checks+=1}
     require(checks==8);checks
   }
+  // Bounded, fixture-only oracle: explicit constructor fields, no production
+  // Uses callbacks, Budget counters, identity deduplication or observer walkers.
+  // Every occurrence in the complete official prepared circuit is counted.
+  private var p54WorkParityChecks=0
+  private def p54WorkUnavailable(observer:ObservedPrepareAst):Unit={
+    require(observer.p54WorkEvidence=="UNAVAILABLE");p54WorkParityChecks+=1
+  }
+  private def p54WorkParity(official:AnnotationSeq,observer:ObservedPrepareAst):Unit={
+    var visits=0L;var expressionNodes=0L;var expressionEdges=0L;var roots=0L
+    def expression(e:Expression,depth:Int):Unit={
+      require(e!=null && nodes(e.getClass) && depth<=64 && expressionNodes<16384);expressionNodes+=1
+      def child(x:Expression):Unit={expressionEdges+=1;expression(x,depth+1)}
+      e match{
+        case _:Reference|_:UIntLiteral|_:SIntLiteral=>()
+        case x:SubField=>child(x.expr)
+        case x:SubIndex=>child(x.expr)
+        case x:SubAccess=>child(x.expr);child(x.index)
+        case x:Mux=>child(x.cond);child(x.tval);child(x.fval)
+        case x:ValidIf=>child(x.cond);child(x.value)
+        case x:DoPrim=>family(x.args);require(x.args.size<=64);x.args.foreach(child)
+        case _=>throw new IllegalArgumentException("TINY_P54_EXPRESSION")
+      }
+    }
+    def root(e:Expression):Unit={roots+=1;expression(e,0)}
+    def statement(s:Statement,depth:Int):Unit={
+      require(s!=null && (nodes(s.getClass) || (s eq EmptyStmt)) && depth<=64 && visits<4096);visits+=1
+      s match{
+        case x:Block=>family(x.stmts);require(x.stmts.size<=4096);x.stmts.foreach(statement(_,depth+1))
+        case x:Conditionally=>root(x.pred);statement(x.conseq,depth+1);statement(x.alt,depth+1)
+        case x:DefRegister=>root(x.clock);root(x.reset);root(x.init)
+        case x:DefNode=>root(x.value)
+        case x:Connect=>root(x.loc);root(x.expr)
+        case x:IsInvalid=>root(x.expr)
+        case x:Print=>root(x.clk);root(x.en);family(x.args);require(x.args.size<=64);x.args.foreach(root)
+        case x:Stop=>root(x.clk);root(x.en)
+        case _:DefWire=>()
+        case EmptyStmt=>()
+        case _=>throw new IllegalArgumentException("TINY_P54_STATEMENT")
+      }
+    }
+    val circuit=state(official).circuit;family(circuit.modules);require(circuit.modules.size<=8)
+    circuit.modules.foreach{
+      case m:Module=>require(m.getClass==classOf[Module]);visits+=1;family(m.ports);require(m.ports.size<=64)
+        m.ports.foreach(p=>require(p.getClass==classOf[Port]));visits+=m.ports.size;statement(m.body,0)
+      case _=>throw new IllegalArgumentException("TINY_P54_MODULE")
+    }
+    val fields=observer.p54WorkEvidence.split(":",-1)
+    require(fields.length==10 && fields(0)=="AVAILABLE" && fields(1)=="P54")
+    val values=fields.drop(2).map{x=>require(x.nonEmpty && x.length<=18 && x.forall(c=>c>='0' && c<='9'));x.toLong}
+    require(values(0)==visits && values(4)==expressionNodes && values(5)==expressionEdges && values(7)==roots)
+    require(expressionNodes==expressionEdges+roots && roots>0)
+    require(values(1)==values(2)+values(3)+values(4)+values(5)+values(6))
+    p54WorkParityChecks+=1
+  }
+  private def p54WorkLifecycleChecks(targetName:String):Unit={
+    val before=p54WorkParityChecks
+    def low(mode:String):Circuit=Compiler.toLowFirrtl(CircuitState(Parser.parse(source(mode)),Seq(TargetDirAnnotation(targetName)))).circuit
+    val print=low("print");val both=low("both")
+    def chain(c:Circuit):AnnotationSeq=checkedInputChain(c,Seq(FirrtlCircuitAnnotation(c),TargetDirAnnotation(targetName)))
+    val input=chain(print);val official=(new PrepareAst).transform(input)
+    val observer=new ObservedPrepareAst(1);p54WorkUnavailable(observer)
+    def success():Unit={val observed=observer.transform(input);new Parity().apply(official,observed);p54WorkParity(official,observer)}
+    success();val firstEvidence=observer.p54WorkEvidence;success()
+    require(observer.p54WorkEvidence==firstEvidence)
+    val rejectedInput=chain(both);val rejectedOfficial=(new PrepareAst).transform(rejectedInput)
+    val rejectedOutput=observer.transform(rejectedInput);new Parity().apply(rejectedOfficial,rejectedOutput)
+    require(observer.evidence.startsWith("UNAVAILABLE:DISCOVERY:COUNT:"));p54WorkUnavailable(observer)
+    success()
+    observer.transform(Seq(FirrtlCircuitAnnotation(print),FirrtlCircuitAnnotation(print),TargetDirAnnotation(targetName)))
+    p54WorkUnavailable(observer)
+    observer.transform(Seq(TargetDirAnnotation(targetName)));p54WorkUnavailable(observer)
+    success();require(observer.p54WorkEvidence==firstEvidence)
+    require(p54WorkParityChecks-before==8)
+  }
   private def originalInitErrors(c:Circuit,n:Int):Unit={
     val errors=try{firrtl2.passes.CheckTypes.run(c);Vector.empty[Throwable]}catch{
       case e:firrtl2.passes.PassExceptions=>e.exceptions.toVector
@@ -706,7 +780,7 @@ object ObservedPrepareStructuralFixture {
       Console.withOut(muted){Console.withErr(muted){
         // Shared prerequisites execute once per process; repeated row counts
         // identify that same result, not nine separate executions.
-        grantParityChecks=0
+        grantParityChecks=0;p54WorkParityChecks=0
         phase="SELFTEST";val selfChecks=ObservedPrepareAst.selfChecks();require(selfChecks==69)
         val parityChecks=paritySelfChecks();require(parityChecks==11)
         val combinationalPathParityChecksCount=combinationalPathParitySelfChecks();require(combinationalPathParityChecksCount==7)
@@ -719,6 +793,7 @@ object ObservedPrepareStructuralFixture {
         val otherOwnerChecks=ClockInitRepresentationRepair.annotationOtherOwnerDiagnosticSelfChecks();require(otherOwnerChecks==23)
         val combinationalPathChecks=ClockInitRepresentationRepair.combinationalPathSelfChecks();require(combinationalPathChecks==99)
         val usesWorkChecks=ClockInitRepresentationRepair.usesWorkDiagnosticSelfChecks();require(usesWorkChecks==67)
+        val p54WorkChecks=ObservedPrepareAst.p54WorkSelfChecks();require(p54WorkChecks==55)
         val sizingChecks=ObservedPrepareAst.sizingSelfChecks();require(sizingChecks==56)
         val quotaChecks=ObservedPrepareAst.quotaSelfChecks();require(quotaChecks==6)
         val consumerChecks=ObservedPrepareAst.consumerSelfChecks();require(consumerChecks==24)
@@ -730,6 +805,7 @@ object ObservedPrepareStructuralFixture {
         val selectionParity=selectionParityChecks(targetName);require(selectionParity==4)
         val dedupMetadataParity=dedupMetadataParityChecks(targetName);require(dedupMetadataParity==3)
         val combinationalPathParity=combinationalPathParityChecks(targetName);require(combinationalPathParity==3)
+        p54WorkLifecycleChecks(targetName)
         rows=Vector("print","stop","both").flatMap{mode=>
           phase="LOWER"
           val low=Compiler.toLowFirrtl(CircuitState(Parser.parse(source(mode)),Seq(TargetDirAnnotation(targetName)))).circuit
@@ -744,6 +820,7 @@ object ObservedPrepareStructuralFixture {
             val official=if(kind=="base")officialBase else (new PrepareAst).transform(as)
             phase="OBSERVED";val observer=new ObservedPrepareAst(n);val observed=observer.transform(checkedInputChain(input,as))
             phase="PARITY";new Parity().apply(official,observed)
+            p54WorkParity(official,observer)
             val expected="COMPLETE:DONE:NONE:"+Vector.fill(7)(n.toString).mkString(":")+":"
             require(observer.evidence.startsWith(expected))
             require(observer.anchorEvidence=="NONE")
@@ -756,6 +833,7 @@ object ObservedPrepareStructuralFixture {
               val unchangedOutput=rejected.transform(as)
               phase="PARITY";new Parity().apply(official,unchangedOutput)
               require(rejected.evidence.startsWith("UNAVAILABLE:DISCOVERY:COUNT:0:0:0:0:0:0:0:"))
+              p54WorkUnavailable(rejected)
               require(rejected.anchorEvidence=="NONE")
               require(rejected.formalEvidence=="UNAVAILABLE:0:0:0:0")
               require(rejected.consumerEvidence=="NONE")
@@ -764,10 +842,11 @@ object ObservedPrepareStructuralFixture {
             qualifyGrantRepair(input,observed,observer,n)
             phase="SUFFIX";val relations=if(kind=="base")suffix(low,n)else 0
             phase="GRAPH";val graphs=if(kind=="base")graphChecks(state(observed).circuit)else 0
-            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" sizingChecks="+sizingChecks+" quotaChecks="+quotaChecks+" consumerChecks="+consumerChecks+" consumerParityChecks="+consumerParityChecks+" formalChecks="+formalChecks+" formalParityChecks="+formalParity+" anchorChecks="+anchorChecks+" selectionChecks="+selectionChecks+" selectionParityChecks="+selectionParity+" inputChainChecks="+inputChainChecks+" grantChecks="+grantChecks+" grantParityChecks=15 grantLifecycleChecks="+grantLifecycleChecks+" annotationShapeChecks="+annotationShapeChecks+" ownerChecks="+ownerChecks+" dedupMetadataChecks="+dedupMetadataChecks+" dedupMetadataParityChecks="+dedupMetadataParity+" otherOwnerChecks="+otherOwnerChecks+" combinationalPathChecks="+combinationalPathChecks+" combinationalPathParitySelfChecks="+combinationalPathParityChecksCount+" combinationalPathParityChecks="+combinationalPathParity+" usesWorkChecks="+usesWorkChecks+" stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
+            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" sizingChecks="+sizingChecks+" quotaChecks="+quotaChecks+" consumerChecks="+consumerChecks+" consumerParityChecks="+consumerParityChecks+" formalChecks="+formalChecks+" formalParityChecks="+formalParity+" anchorChecks="+anchorChecks+" selectionChecks="+selectionChecks+" selectionParityChecks="+selectionParity+" inputChainChecks="+inputChainChecks+" grantChecks="+grantChecks+" grantParityChecks=15 grantLifecycleChecks="+grantLifecycleChecks+" annotationShapeChecks="+annotationShapeChecks+" ownerChecks="+ownerChecks+" dedupMetadataChecks="+dedupMetadataChecks+" dedupMetadataParityChecks="+dedupMetadataParity+" otherOwnerChecks="+otherOwnerChecks+" combinationalPathChecks="+combinationalPathChecks+" combinationalPathParitySelfChecks="+combinationalPathParityChecksCount+" combinationalPathParityChecks="+combinationalPathParity+" usesWorkChecks="+usesWorkChecks+" p54WorkChecks="+p54WorkChecks+" p54WorkParityChecks=20 stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
           }
         }
         require(grantParityChecks==15)
+        require(p54WorkParityChecks==20)
         ok=true
       }}
     }catch{case _:Throwable=>rows=Vector("OBSERVED_PREPARE_FAILURE_V1 phase="+phase+" code=REJECTED")}

@@ -321,19 +321,20 @@ object OriginalHostStructuralGraph {
         val ann=FirrtlCircuitAnnotation(boundaryLow.circuit)+:boundaryLow.annotations
         val obtained=timed("get_firrtl_ast") {GetFirrtlAst.transform(ann)}
         val withInfo=timed("set_implicit_output_info") {SetImplicitOutputInfo.transform(obtained)}
-        val (prepared,provenance,observerBudget,observerSizing,observerConsumer,observerFormal,observerAnchor,provenanceGrant)=timed("prepare_ast") {
+        val (prepared,provenance,observerBudget,observerSizing,observerConsumer,observerFormal,observerAnchor,observerP54Work,provenanceGrant)=timed("prepare_ast") {
           val observed=new ObservedPrepareAst(394)
           val value=observed.transform(withInfo)
-          (value,observed.evidence,observed.budgetEvidence,observed.sizingEvidence,observed.consumerEvidence,observed.formalEvidence,observed.anchorEvidence,observed.takeGrant())
+          (value,observed.evidence,observed.budgetEvidence,observed.sizingEvidence,observed.consumerEvidence,observed.formalEvidence,observed.anchorEvidence,observed.p54WorkEvidence,observed.takeGrant())
         }
         require(provenance.length<=256,"bounded observer evidence")
-        require(observerBudget.length<=512 && observerSizing.length<=512 && observerConsumer.length<=512 && observerFormal.length<=256 && observerAnchor.length<=160,"bounded observer sizing evidence")
+        require(observerBudget.length<=512 && observerSizing.length<=512 && observerConsumer.length<=512 && observerFormal.length<=256 && observerAnchor.length<=160 && observerP54Work.length<=160,"bounded observer sizing evidence")
         savedOut.println("PREPARE_PROVENANCE_V1 "+provenance)
         savedOut.println("PREPARE_BUDGET_V1 "+observerBudget)
         savedOut.println("PREPARE_USES_SIZING_V1 "+observerSizing)
         savedOut.println("PREPARE_CONSUMER_V1 "+observerConsumer)
         savedOut.println("PREPARE_EMPTY_ASSERT_V1 "+observerFormal)
-        savedOut.println("PREPARE_ANCHOR_V1 "+observerAnchor);savedOut.flush()
+        savedOut.println("PREPARE_ANCHOR_V1 "+observerAnchor)
+        savedOut.println("PREPARE_P54_WORK_V1 "+observerP54Work);savedOut.flush()
         require(!savedOut.checkError(),"observer evidence output failed")
         val (state,factory)=timed("prepared_checks") {
           preparedStep="STATE"

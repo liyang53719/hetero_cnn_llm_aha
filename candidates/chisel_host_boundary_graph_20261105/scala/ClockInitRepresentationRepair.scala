@@ -136,17 +136,28 @@ object ClockInitRepresentationRepair {
     while(it.hasNext){b.bound(n<cap,reason);a.charge(AX.Probe);it.next();n+=1};n
   }
   // BEGIN ANNOTATION SHAPE FIRST SITE DIAGNOSTIC
-  private final class AnnotationShapeEvidence(val site:String) extends RuntimeException(null,null,false,false)
+  private final class AnnotationShapeEvidence(val site:String,val owner:String) extends RuntimeException(null,null,false,false){
+    def this(site:String)=this(site,"NONE")
+  }
   private def annotationShapeSite(site:String):Boolean=site match{
     case "INDEX_NEGATIVE"|"COMPONENT_OTHER"|"CIRCUIT_CURRENT"|"MODULE_SELECTED"|
          "INSTANCE_TARGET"|"TARGET_OTHER"|"NAMED_OTHER"|"ANNOTATION_OTHER"=>true
     case _=>false
   }
-  private def annotationShapeFail(site:String):Nothing={
+  private def annotationShapeFail(site:String,current:Annotation=null):Nothing={
     // Preserve the original exact primary before optional bounded evidence.
     // One evidence object and the suppressed-array storage fit fixed scratch.
     val primary=new IllegalArgumentException("ANNOTATION_SHAPE")
-    try{if(annotationShapeSite(site))primary.addSuppressed(new AnnotationShapeEvidence(site))}
+    try{if(annotationShapeSite(site)){
+      var owner="NONE"
+      if(site=="INSTANCE_TARGET"){
+        owner="UNAVAILABLE"
+        // Trusted entries pin this exact class before any annotation checks.
+        try{if(current!=null)owner=if(current.getClass eq classOf[firrtl2.transforms.DedupedResult])"DEDUPED_RESULT"else"OTHER"}
+        catch{case _:Throwable=>()}
+      }
+      primary.addSuppressed(new AnnotationShapeEvidence(site,owner))
+    }}
     catch{case _:Throwable=>()}
     throw primary
   }
@@ -157,11 +168,24 @@ object ClockInitRepresentationRepair {
       else evidence(0) match{case e:AnnotationShapeEvidence if annotationShapeSite(e.site)=>e.site;case _=>"UNAVAILABLE"}
     }catch{case _:Throwable=>"UNAVAILABLE"}
   }
+  // BEGIN INSTANCE TARGET OWNER DIAGNOSTIC
+  def annotationInstanceOwnerEvidence(error:Throwable):String={
+    if(annotationShapeEvidence(error)!="INSTANCE_TARGET")return "NONE"
+    try{val evidence=error.getSuppressed
+      if(evidence.length!=1)"UNAVAILABLE"
+      else evidence(0) match{
+        case e:AnnotationShapeEvidence if e.site=="INSTANCE_TARGET"=>e.owner match{
+          case "DEDUPED_RESULT"|"OTHER"|"UNAVAILABLE"=>e.owner
+          case _=>"UNAVAILABLE"}
+        case _=>"UNAVAILABLE"}
+    }catch{case _:Throwable=>"UNAVAILABLE"}
+  }
+  // END INSTANCE TARGET OWNER DIAGNOSTIC
   // END ANNOTATION SHAPE FIRST SITE DIAGNOSTIC
 
   private def checkStreamingAnnotations(as:AnnotationSeq,selected:Selected,modules:Modules,circuit:String,b:Budget,a:Aux):Unit={
     boundedSize(as,100000,"ANNOTATIONS",a,b)
-    def target(t:Target):Unit={
+    def target(t:Target,current:Annotation):Unit={
       b.tick()
       t match {
         case r:ReferenceTarget=>
@@ -180,16 +204,16 @@ object ClockInitRepresentationRepair {
         case c:CircuitTarget=>b.name(c.circuit);if(!(!a.equal(c.circuit,circuit)))annotationShapeFail("CIRCUIT_CURRENT")
         case m:ModuleTarget=>b.name(m.circuit);b.name(m.module)
           if(!(!(a.equal(m.circuit,circuit) && selected.moduleSelected(modules.id(m.module)))))annotationShapeFail("MODULE_SELECTED")
-        case _:InstanceTarget=>annotationShapeFail("INSTANCE_TARGET")
+        case _:InstanceTarget=>annotationShapeFail("INSTANCE_TARGET",current)
         case _=>annotationShapeFail("TARGET_OTHER")
       }
     }
-    def named(n:Named):Unit=n match {
-      case t:Target=>target(t)
+    def named(n:Named,current:Annotation):Unit=n match {
+      case t:Target=>target(t,current)
       case c:ComponentName=>b.name(c.name);b.name(c.module.name);b.name(c.module.circuit.name)
-        target(checkedNamed(c,a))
-      case m:ModuleName=>b.name(m.name);b.name(m.circuit.name);a.transient(16);target(m.toTarget)
-      case c:CircuitName=>b.name(c.name);a.transient(16);target(c.toTarget)
+        target(checkedNamed(c,a),current)
+      case m:ModuleName=>b.name(m.name);b.name(m.circuit.name);a.transient(16);target(m.toTarget,current)
+      case c:CircuitName=>b.name(c.name);a.transient(16);target(c.toTarget,current)
       case _=>annotationShapeFail("NAMED_OTHER")
     }
     val annotations=a.iter(as)
@@ -199,11 +223,11 @@ object ClockInitRepresentationRepair {
            _:treadle2.TreadleTesterAnnotation=>fail("ANNOTATION_EXTENSION")
       case x if x.getClass.getName=="firrtl2.stage.RunFirrtlTransformAnnotation" ||
         x.getClass.getName=="firrtl2.stage.RunFirrtlTransformAnnotation$" || x.getClass.getName=="firrtl2.options.RunFirrtlTransformAnnotation"=>fail("ANNOTATION_EXTENSION")
-      case x:SingleTargetAnnotation[_]=>named(x.target)
+      case x:SingleTargetAnnotation[_]=>named(x.target,annotation)
       case x:MultiTargetAnnotation=>
         boundedSize(x.targets,1024,"TARGET_GROUPS",a,b);val groups=a.iter(x.targets)
         while(groups.hasNext){a.charge(AX.Probe);val xs=groups.next();boundedSize(xs,1024,"TARGET_MEMBERS",a,b)
-          val members=a.iter(xs);while(members.hasNext)target(members.next())}
+          val members=a.iter(xs);while(members.hasNext)target(members.next(),annotation)}
       case _:NoTargetAnnotation=>()
       case _=>annotationShapeFail("ANNOTATION_OTHER")
     }}
@@ -1689,6 +1713,71 @@ object ClockInitRepresentationRepair {
     check(run(TestNamed(ModuleTarget("Other","Top"))::Nil)==null)
     check(run(List(TestNamed(ref.copy(component=List(TargetToken.Field("field"),TargetToken.Index(0),TargetToken.Clock,TargetToken.Reset,TargetToken.Init))),
       TestNamed(ref.copy(component=TargetToken.Index(Int.MaxValue)::Nil))))==null)
+    checks
+  }
+
+  /** Requires the pinned DedupedResult identity gate before invocation. */
+  def annotationInstanceOwnerDiagnosticSelfChecks():Int={
+    var checks=0
+    def check(ok:Boolean):Unit={require(ok,"ANNOTATION_OWNER_SELFCHECK");checks+=1}
+    final case class TestNamed(target:Named) extends SingleTargetAnnotation[Named]{
+      def duplicate(n:Named):Annotation=copy(target=n)
+    }
+    final case class UnreadTarget() extends SingleTargetAnnotation[Named]{
+      lazy val target:Named=throw new AssertionError("OWNER_LATE_READ")
+      def duplicate(n:Named):Annotation=TestNamed(n)
+    }
+    def run(as:AnnotationSeq):Throwable={
+      val a=new Aux;val b=new Budget;val modules=new Modules(a);val selected=new Selected(a)
+      val clock=Reference("clock",ClockType,PortKind,SourceFlow)
+      val reg=DefRegister(FileInfo("owner:1"),"sample",ClockType,clock,UIntLiteral(0),UIntLiteral(0))
+      modules.add(Module(NoInfo,"Top",Nil,EmptyStmt),0);selected.add(0,"Top",reg,clock)
+      try{checkStreamingAnnotations(as,selected,modules,"Top",b,a);null}
+      catch{case e:IllegalArgumentException=>e}
+    }
+    def owned(annotation:Annotation,expected:String):Unit={val error=run(annotation::Nil)
+      check(error!=null&&error.getClass==classOf[IllegalArgumentException]&&guardCode(error)=="ANNOTATION_SHAPE"&&
+        annotationShapeEvidence(error)=="INSTANCE_TARGET"&&annotationInstanceOwnerEvidence(error)==expected&&error.getSuppressed.length==1)}
+    val original=ModuleTarget("Other","private-original")
+    val instance=InstanceTarget("Other","private-module",Nil,"private-instance","private-child")
+    val exact=firrtl2.transforms.DedupedResult(original,Some(instance),0.0)
+    owned(exact,"DEDUPED_RESULT")
+    owned(new firrtl2.transforms.DedupedResult(original,Some(instance),0.0){},"OTHER")
+    owned(TestNamed(instance),"OTHER")
+    owned(firrtl2.transforms.DedupedResult(original,Some(instance),Double.NaN),"DEDUPED_RESULT")
+    val absent=run(firrtl2.transforms.DedupedResult(original,None,0.0)::Nil)
+    check(absent==null&&annotationInstanceOwnerEvidence(absent)=="NONE")
+    val moduleOnly=run(firrtl2.transforms.DedupedResult(original,Some(ModuleTarget("Other","private-child")),0.0)::Nil)
+    check(moduleOnly==null&&annotationInstanceOwnerEvidence(moduleOnly)=="NONE")
+    val prior=run(firrtl2.transforms.DedupedResult(ModuleTarget("Top","Top"),Some(instance),0.0)::Nil)
+    check(annotationShapeEvidence(prior)=="MODULE_SELECTED"&&annotationInstanceOwnerEvidence(prior)=="NONE")
+    val circuit=run(TestNamed(CircuitTarget("Top"))::Nil)
+    check(annotationShapeEvidence(circuit)=="CIRCUIT_CURRENT"&&annotationInstanceOwnerEvidence(circuit)=="NONE")
+    val firstOther=run(List(TestNamed(instance),exact))
+    check(annotationShapeEvidence(firstOther)=="INSTANCE_TARGET"&&annotationInstanceOwnerEvidence(firstOther)=="OTHER")
+    val firstExact=run(List(exact,UnreadTarget()))
+    check(annotationShapeEvidence(firstExact)=="INSTANCE_TARGET"&&annotationInstanceOwnerEvidence(firstExact)=="DEDUPED_RESULT")
+    def evidence(site:String,owner:String):Throwable={val e=new IllegalArgumentException("ANNOTATION_SHAPE")
+      e.addSuppressed(new AnnotationShapeEvidence(site,owner));e}
+    check(annotationInstanceOwnerEvidence(evidence("INSTANCE_TARGET","not-exported"))=="UNAVAILABLE")
+    check(annotationInstanceOwnerEvidence(evidence("INSTANCE_TARGET",null))=="UNAVAILABLE")
+    check(annotationInstanceOwnerEvidence(evidence("INSTANCE_TARGET","NONE"))=="UNAVAILABLE")
+    check(annotationInstanceOwnerEvidence(evidence("CIRCUIT_CURRENT","DEDUPED_RESULT"))=="NONE")
+    check(annotationInstanceOwnerEvidence(evidence("not-exported","DEDUPED_RESULT"))=="NONE")
+    val duplicate=evidence("INSTANCE_TARGET","DEDUPED_RESULT")
+    duplicate.addSuppressed(new AnnotationShapeEvidence("INSTANCE_TARGET","OTHER"))
+    check(annotationShapeEvidence(duplicate)=="UNAVAILABLE"&&annotationInstanceOwnerEvidence(duplicate)=="NONE")
+    val missing=new IllegalArgumentException("ANNOTATION_SHAPE")
+    check(annotationInstanceOwnerEvidence(missing)=="NONE")
+    missing.addSuppressed(new RuntimeException("not-exported"))
+    check(annotationInstanceOwnerEvidence(missing)=="NONE")
+    check(annotationInstanceOwnerEvidence(new IllegalArgumentException("BOUND"))=="NONE")
+    check(annotationInstanceOwnerEvidence(new IllegalArgumentException("ANNOTATION_SHAPE"){})=="NONE")
+    var fallback:Throwable=null
+    try{annotationShapeFail("INSTANCE_TARGET",null)}catch{case e:IllegalArgumentException=>fallback=e}
+    check(fallback!=null&&guardCode(fallback)=="ANNOTATION_SHAPE"&&annotationShapeEvidence(fallback)=="INSTANCE_TARGET"&&
+      annotationInstanceOwnerEvidence(fallback)=="UNAVAILABLE"&&fallback.getSuppressed.length==1)
+    check(!annotationInstanceOwnerEvidence(run(exact::Nil)).contains("private"))
     checks
   }
 

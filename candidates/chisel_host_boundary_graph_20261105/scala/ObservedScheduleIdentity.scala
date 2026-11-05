@@ -110,11 +110,18 @@ object ObservedScheduleIdentity {
   val augmentIndex=51
   val orderSha="de03a5c28363ea8bef354d1ecc34dfaed65dbe0481618c75925b773a55f2130c"
   val catalogSha="cdfb68914d7c421df167a2dd26103c426164dc13dbc85ffbd279c81d130ea31c"
+  // Fixed annotation identity prerequisite, no annotation values or transform execution.
+  def verifyAnnotationOwner():Unit={
+    val firrtl=codeSource(classOf[firrtl2.stage.transforms.Compiler])
+    need(fileSha(firrtl,256L*1024*1024)=="80fae7cd4516e6fe33469c2e135479f2c94bf9e5be4d00437de2df68ba40b47b","HASH")
+    need(loadedJarSha(classOf[firrtl2.transforms.DedupedResult],firrtl)=="0e322fb86c30ab41e20deb486303a3168f9d29d0ba0a258ea742c94673d0fd8d","HASH")
+  }
   def verify(transforms:Seq[Transform]):Unit={
     val firrtl=codeSource(classOf[firrtl2.stage.transforms.Compiler])
     val treadle=codeSource(classOf[PrepareAst])
     need(firrtl!=treadle,"LOCATION")
     need(fileSha(firrtl,256L*1024*1024)=="80fae7cd4516e6fe33469c2e135479f2c94bf9e5be4d00437de2df68ba40b47b","HASH")
+    need(loadedJarSha(classOf[firrtl2.transforms.DedupedResult],firrtl)=="0e322fb86c30ab41e20deb486303a3168f9d29d0ba0a258ea742c94673d0fd8d","HASH")
     need(fileSha(treadle,256L*1024*1024)=="3d442dab6f28e74980f598dd4bd28c886f4e081d0e5433102dfc02aab1c57dc5","HASH")
     need(loadedJarSha(classOf[PrepareAst],treadle)=="8296f250758abb66c154106fa7b02eb59b2bae7087539b9de18a38ba47d95fbb","HASH")
     need(loadedJarSha(classOf[firrtl2.stage.transforms.Compiler],firrtl)=="99e096dca012ccd18ec4f5881761fd3fac0b1b55a04eeb9e88a8609620f1f782","HASH")

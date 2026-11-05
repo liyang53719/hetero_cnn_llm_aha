@@ -1927,7 +1927,7 @@ object ClockInitRepresentationRepair {
     check(caught(dedupGroups(valid,original,instance,new Aux))==null)
     bad(dedupGroups(Nil,original,instance,new Aux))
     bad(dedupGroups(List(List(original)),original,instance,new Aux))
-    bad(dedupGroups(valid:::List(Nil),original,instance,new Aux))
+    bad(dedupGroups(valid ++ List(Seq.empty[Target]),original,instance,new Aux))
     bad(dedupGroups(List(Nil,List(instance)),original,instance,new Aux))
     bad(dedupGroups(List(List(original,original),List(instance)),original,instance,new Aux))
     bad(dedupGroups(List(List(original),Nil),original,instance,new Aux))

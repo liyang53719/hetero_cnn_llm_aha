@@ -39,9 +39,20 @@ object StructuralDifferential {
     val bad=Module(NoInfo,"Bad",ports,Block(Vector(Stop(NoInfo,0,clock,enabled,"duplicate"),Stop(NoInfo,0,clock,enabled,"duplicate"))))
     val reg=DefRegister(NoInfo,"q",u,clock,UIntLiteral(0,IntWidth(1)),UIntLiteral(0,IntWidth(1)))
     val withReg=Module(NoInfo,"Registered",ports,Block(Vector(reg,Connect(NoInfo,Reference("q",u),one))++statements("")))
+    // Exact Bits/Cat overapproximation fixture: x is the low input bit of
+    // cat(x,en), but whole-symbol dependency extraction reports a cycle.
+    val two=UIntType(IntWidth(2))
+    val packed=Module(NoInfo,"Packed",ports,Block(statements("")++Vector(
+      DefWire(NoInfo,"p",two),DefWire(NoInfo,"x",u),
+      Connect(NoInfo,Reference("p",two),DoPrim(firrtl2.PrimOps.Cat,Seq(Reference("x",u),enabled),Seq.empty,two)),
+      Connect(NoInfo,Reference("x",u),DoPrim(firrtl2.PrimOps.Bits,Seq(Reference("p",two)),Seq(BigInt(0),BigInt(0)),u)))))
+    val unpacked=Module(NoInfo,"Unpacked",ports,Block(statements("")++Vector(
+      DefWire(NoInfo,"p",two),DefWire(NoInfo,"x",u),
+      Connect(NoInfo,Reference("p",two),DoPrim(firrtl2.PrimOps.Cat,Seq(Reference("x",u),enabled),Seq.empty,two)),
+      Connect(NoInfo,Reference("x",u),enabled))))
     Vector(("flat",circuit(module("Flat")),false),("repeated",Circuit(NoInfo,Seq(top,leaf),"Top"),false),
       ("hash_collision",Circuit(NoInfo,Seq(collidingTop,aa,bb),"Top"),false),
-      ("registered",circuit(withReg),false),("cycle",circuit(cyc),true),("invalid_duplicate",circuit(bad),true))
+      ("registered",circuit(withReg),false),("cycle",circuit(cyc),true),("invalid_duplicate",circuit(bad),true),("packed_alias_cycle",circuit(packed),true),("unpacked_alias",circuit(unpacked),false))
   }
   // This exact block is injected from prepare_candidate.KEY_CODE; tests check
   // byte identity with the production candidate helper, not a hand-made variant.
@@ -147,12 +158,12 @@ object StructuralDifferential {
           try{digest=digestTable(SymbolTable(c,Seq.empty,allowCycles=false))}catch{case NonFatal(e)=>failure=Some(e)}
           require(c.serialize==before && c.hashCode()==beforeHash,"fixture AST unchanged")
           require(failure.nonEmpty==mustFail,"expected fixture outcome")
-          val expectedError=Map("cycle"->"firrtl2.graph.CyclicException","invalid_duplicate"->"treadle2.executable.TreadleException")
+          val expectedError=Map("cycle"->"firrtl2.graph.CyclicException","invalid_duplicate"->"treadle2.executable.TreadleException","packed_alias_cycle"->"firrtl2.graph.CyclicException")
           failure.foreach(e=>require(expectedError.get(id).contains(e.getClass.getName),"exact expected exception"))
           val outcome=failure.map(e=>"ERROR classSha="+hash(e.getClass.getName)).getOrElse("GRAPH digest="+digest)
           "STRUCTURAL_DIFF_CASE_V1 id="+id+" "+outcome
         }
-        result :+= "STRUCTURAL_DIFF_RUN_V1 label="+args(0)+" sourceSha="+args(1)+" classSha="+classSha+" companionSha="+companionSha+" cases=6 keyLaws=PASS numericalPass=false"
+        result :+= "STRUCTURAL_DIFF_RUN_V1 label="+args(0)+" sourceSha="+args(1)+" classSha="+classSha+" companionSha="+companionSha+" cases=8 keyLaws=PASS numericalPass=false"
         ok=true
       }}
     }catch{case NonFatal(_)=>result=Vector("STRUCTURAL_DIFF_RUN_V1 status=FAIL_FIXTURE_OR_LINKAGE numericalPass=false")}

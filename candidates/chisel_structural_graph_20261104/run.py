@@ -1,10 +1,11 @@
 """One source-only structural job. No engine/native, weights, references or IR export."""
 import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request,zipfile
 P=pathlib.Path;D=P(__file__).resolve().parent;REPO=D.parent.parent
-REL='candidates/chisel_structural_graph_20261104';NONCE='ci_launch/chisel_structural_graph_20261104_modulecache_admission_once.json'
+REL='candidates/chisel_structural_graph_20261104';NONCE='ci_launch/chisel_structural_graph_20261105_cycle_witness_once.json'
 CAT='candidates/gdn32_first_model_execution_20261104/GDN32_FULL_SOURCE_PINS.json'
 CAT_SHA='ad2d4dcaddb213c85fd15adc65f7da5bd74a0d7c3e6c5922c725aa41bdc967cb'
-BASE='8cddaab5077b694e6e8000363156b6f6fefb41f7';TREE=12_081_306_272;RESERVE=8<<30
+BASE='442aaad98eaf39e2bbdf1dd6b5bae0972766497f';TREE=12_081_306_272;RESERVE=8<<30
+from witness_record import parse_record as parse_witness_record
 graph_identity={}
 differential_identity={}
 class Stop(Exception):
@@ -57,10 +58,16 @@ FAIL_RE=re.compile(r'FAIL_STRUCTURAL_GRAPH_ONLY stage=('+PHASE_RE+r') exceptionC
 def parse_graph_text(text,receipt,high_sha,annotations_sha):
  need(type(text)is str and len(text.encode('ascii'))<=32768,'GRAPH_LOG_LIMIT')
  need(not text or text.endswith('\n'),'GRAPH_LOG_TRUNCATED_LINE')
- lines=text.splitlines();need(len(lines)<=97,'GRAPH_RECORD_LIMIT')
- rows=[];final=None;active=None;next_phase=0;last=None;last_phase=None;cycle_event_seen=False
+ lines=text.splitlines();need(len(lines)<=98,'GRAPH_RECORD_LIMIT')
+ rows=[];final=None;active=None;next_phase=0;last=None;last_phase=None;cycle_event_seen=False;witness=None
  for line in lines:
-  need(len(line)<=1024 and final is None,'GRAPH_LOG_TRAILING_OR_LONG')
+  need(final is None,'GRAPH_LOG_TRAILING_OR_LONG')
+  if line.startswith('GRAPH_CYCLE_WITNESS '):
+   need(witness is None and active=='symbol_table' and not cycle_event_seen,'GRAPH_WITNESS_ORDER')
+   try:witness=parse_witness_record(line[len('GRAPH_CYCLE_WITNESS '):])
+   except (ValueError,TypeError,KeyError):raise Stop('GRAPH_WITNESS_SCHEMA')
+   continue
+  need(len(line)<=1024,'GRAPH_LOG_TRAILING_OR_LONG')
   m=METRIC_RE.fullmatch(line)
   if m:
    seq=int(m[1]);kind=m[2];phase=m[3];values=list(map(int,m.groups()[3:]))
@@ -82,7 +89,7 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha):
   a=PASS_RE.fullmatch(line);b=FAIL_RE.fullmatch(line)
   need(a is not None or b is not None,'GRAPH_LOG_NOT_WHITELISTED')
   if a:
-   need(active is None and next_phase==len(PHASES),'GRAPH_SUCCESS_INCOMPLETE_PHASES')
+   need(active is None and next_phase==len(PHASES) and witness is None,'GRAPH_SUCCESS_INCOMPLETE_PHASES')
    need(a[1]==high_sha and a[2]==annotations_sha and a[6]=='0' and (not last or last[6]==0),'GRAPH_SUCCESS_IDENTITY_OR_CYCLE')
    need(int(a[4])>0 and int(a[4])<1<<63 and int(a[5])<=8<<20,'GRAPH_FINAL_RANGE')
    final=dict(kind='success',prepared_sha256=a[3],symbol_count=int(a[4]))
@@ -97,6 +104,9 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha):
  out=dict(status='INCOMPLETE_STRUCTURAL_GRAPH_ONLY',last_phase=last_phase,metric_records=len(rows),phase_metrics=list(latest.values()),cycle_seen=bool(last and last[6]))
  if final and final['kind']=='success':out.update(status='STRUCTURAL_GRAPH_ONLY_DECLARED_DEPENDENCIES',prepared_sha256=final['prepared_sha256'],symbol_count=final['symbol_count'],leaf_bindings=17)
  elif final:out.update(status='FAILED_STRUCTURAL_GRAPH_ONLY',phase=final['phase'],exception_class_sha256=final['exception_class_sha256'],cycle_seen=final['cycle_seen'])
+ if witness is not None:
+  need(final is not None and final['kind']=='failure' and final['cycle_seen'],'GRAPH_WITNESS_WITHOUT_CYCLE_FAILURE')
+  out['cycle_witness']=witness
  return out
 
 def read_closed_log(path,receipt):
@@ -129,7 +139,7 @@ def main():
  need(git('diff','--name-only','HEAD^','HEAD')==NONCE and not git('status','--porcelain'))
  nonce=load(REPO/NONCE,4096);need(nonce=={'schema':'ONE_STRUCTURAL_GRAPH_ONLY_V1','source_commit':source,'base_commit':BASE,'attempts':1,'numerical_execution':False,'native_execution':False,'artifact_upload':False})
  own=load(D/'SOURCE_PINS.json');pins=pins_for(own['files'],REPO);pins[str(D/'SOURCE_PINS.json')]=sha(D/'SOURCE_PINS.json')
- changed=set(git('diff','--name-only',BASE,source).splitlines());need(changed==set(own['publication_delta']) and changed=={REL+'/run.py',REL+'/SOURCE_PINS.json','.github/workflows/chisel-structural-graph-once.yml'})
+ changed=set(git('diff','--name-only',BASE,source).splitlines());need(changed==set(own['publication_delta']) and changed=={'candidates/chisel_structural_graph_20261104/modulecache/BoundedCycleWitness.scala', 'candidates/chisel_structural_graph_20261104/compare_fixture_results.py', 'candidates/chisel_structural_graph_20261104/scala/CycleWitnessRoles.scala', 'candidates/chisel_structural_graph_20261104/modulecache/SymbolTable.scala', 'candidates/chisel_structural_graph_20261104/scala/OriginalHostStructuralGraph.scala', 'candidates/chisel_structural_graph_20261104/SOURCE_PINS.json', '.github/workflows/chisel-structural-graph-once.yml', 'candidates/chisel_structural_graph_20261104/modulecache/StructuralDifferential.scala', 'candidates/chisel_structural_graph_20261104/run.py', 'candidates/chisel_structural_graph_20261104/witness_record.py', 'candidates/chisel_structural_graph_20261104/modulecache/CycleWitnessFixture.scala'})
  catalog=regular(REPO/CAT);need(sha(catalog)==CAT_SHA);doc=load(catalog);need(doc['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1'and len(doc['files'])==1211);pins.update(pins_for(doc['files'],REPO));pins[str(catalog)]=CAT_SHA
  phase='admission';remote_exclusive(launch);admission();work=P(os.environ['RUNNER_TEMP'])/'chisel-structural-graph';need(work.is_absolute()and not work.exists()and all(not p.is_symlink()for p in(work,*work.parents)));work.mkdir()
  contract={'schema':'BOUNDED_FRESH_HOST_V1','run_id':int(os.environ['GITHUB_RUN_ID']),'source_commit':source,'launch_commit':launch};contractPath=work/'fresh-host.json';contractPath.write_text(json.dumps(contract));pins[str(contractPath)]=sha(contractPath)
@@ -150,7 +160,7 @@ def main():
   with open(os.devnull,'w')as muted,contextlib.redirect_stdout(muted),contextlib.redirect_stderr(muted):
    r=supervisor.execute(args,str(work/name),str(work/'owner.lock'),cap,stage_env,dict(pins),resource_gate={'min_available_memory':13<<30,'min_disk_free':TREE+RESERVE})
   reports.append(project(name,r));print(json.dumps({'schema':'STRUCTURAL_GRAPH_PROGRESS_V1',**reports[-1],'numerical_pass':False}),flush=True)
-  if name in ('graph','diff_official','diff_cached'):return work/name,r # Parse only after independent cleanup/log-finalization gates.
+  if name in ('graph','diff_official','diff_cached','witness_fixture'):return work/name,r # Parse only after independent cleanup/log-finalization gates.
   need(r.get('native_exit')in ((0,1)if name=='jdk_inventory'else(0,)) and not r.get('errors') and reports[-1]['cleanup_complete'])
   return work/name
  phase='jdk_location'
@@ -183,12 +193,13 @@ def main():
  # Compile a narrowly patched official SymbolTable and one common fixture.
  # No JVM simulation engine or native library is constructed by either.
  patch_source=regular(D/'modulecache/SymbolTable.scala');fixture_source=regular(D/'modulecache/StructuralDifferential.scala')
- need(sha(patch_source)=='201c5fc5097822cc92c5fb879ca56f234d9bde3f44783af0f7a3a7ff9d253664')
+ need(sha(patch_source)=='363cfcbc9df17d340580b2308551a83877ab91637c42bda3a6351e2b9fd22fc3')
+ witness_source=regular(D/'modulecache/BoundedCycleWitness.scala')
  official_jars=[p for p in jars if P(p).name=='chiseltest_2.13-6.0.0.jar'];need(len(official_jars)==1)
  official_jar=official_jars[0]
  with zipfile.ZipFile(official_jar)as z:
   official_pins={'source_sha256':'9d8cf72aa1efb8c7ebd3e174da99e509bd7d44aec60a1c391b0dfc6f7b453bab','class_sha256':hashlib.sha256(z.read('treadle2/executable/SymbolTable.class')).hexdigest(),'companion_sha256':hashlib.sha256(z.read('treadle2/executable/SymbolTable$.class')).hexdigest()}
- patchclasses=stage('compile_modulecache',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',cp,'-d','.',str(patch_source)]),90,3)
+ patchclasses=stage('compile_modulecache',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',cp,'-d','.',str(patch_source),str(witness_source)]),90,3)
  for p in patchclasses.rglob('*.class'):pins[str(p)]=sha(p)
  cached_pins={'source_sha256':sha(patch_source),'class_sha256':sha(regular(patchclasses/'treadle2/executable/SymbolTable.class')),'companion_sha256':sha(regular(patchclasses/'treadle2/executable/SymbolTable$.class'))}
  need(cached_pins['companion_sha256']!=official_pins['companion_sha256'])
@@ -207,12 +218,22 @@ def main():
   results.append((text,process))
  differential=comparator.compare(results[0][0],results[1][0],official_pins,cached_pins,results[0][1],results[1][1])
  differential_identity.update(differential_status=differential['status'],differential_cases=differential['cases'])
+ # Qualify the exact witness implementation before any large original graph.
+ witness_fixture=regular(D/'modulecache/CycleWitnessFixture.scala')
+ witnessclasses=stage('compile_witness_fixture',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',str(patchclasses)+':'+cp,'-d','.',str(witness_fixture)]),90,3)
+ for p in witnessclasses.rglob('*.class'):pins[str(p)]=sha(p)
+ wf,wr=stage('witness_fixture',jvm('1g',str(patchclasses)+':'+str(witnessclasses)+':'+cp,'treadle2.executable.CycleWitnessFixture'),45,2)
+ wt=read_closed_log(wf/'frontend.log.gz',wr)
+ cases=('self_loop','multi_loop','acyclic','reachable_other_cycle','node_cap','edge_cap','output_cap','time_cap','reverse_edge','invalid_role','name_cap','lazy_edges','callback_error','malformed_record','record_disclosure','exception_noninterference')
+ expected=''.join('CYCLE_FIXTURE_V1 case='+c+' outcome=PASS\n'for c in cases)+'CYCLE_FIXTURE_FINAL_V1 cases=16 status=PASS\n'
+ need(wt==expected and wr.get('status')=='PASS_PROCESS_ONLY' and wr.get('native_exit')==0 and not wr.get('errors'),'WITNESS_FIXTURE_FAILED')
+ differential_identity.update(witness_fixture_status='PASS_16_SMALL_CASES_ONLY',witness_source_sha256=sha(witness_source),witness_fixture_source_sha256=sha(witness_fixture))
  # The live 2400-second gate remains authoritative before every later stage.
  classes=stage('compile_original',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',cp,'-Xplugin:'+plugin,'-language:reflectiveCalls','-d','.',*sources]),300,3)
  for p in classes.rglob('*.class'):pins[str(p)]=sha(p)
  basecp=str(classes)+':'+cp
- helpers=sorted(str(p)for p in (D/'scala').glob('*.scala'));need(len(helpers)==4)
- hclasses=stage('compile_graph',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',basecp,'-d','.',*helpers]),300,3)
+ helpers=sorted(str(p)for p in (D/'scala').glob('*.scala'));need(len(helpers)==5)
+ hclasses=stage('compile_graph',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',str(patchclasses)+':'+basecp,'-d','.',*helpers]),300,3)
  for p in hclasses.rglob('*.class'):pins[str(p)]=sha(p)
  highdir=stage('original_high',jvm('4g',basecp,'chiseltest.simulator.DiagnoseOriginalHostMoePhaseV5'),600,6)/'host-diagnostic'
  high=regular(highdir/'original-high.fir');ann=regular(highdir/'high-annotations.json');ext=regular(highdir/'high-extmodules.fir')

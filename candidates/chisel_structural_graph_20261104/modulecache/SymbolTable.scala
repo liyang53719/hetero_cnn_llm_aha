@@ -657,6 +657,7 @@ object SymbolTable extends LazyLogging {
       } catch {
         case e: firrtl2.graph.CyclicException =>
           val badNode = e.node.asInstanceOf[Symbol]
+          BoundedCycleWitness.observe(symbolTable, badNode)
           println(s"Combinational loop detected at $badNode")
           if (allowCycles) {
             symbolTable.symbols.toSeq

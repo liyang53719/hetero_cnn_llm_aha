@@ -3,8 +3,33 @@
   "files": [
     {
       "path": ".github/workflows/chisel-structural-graph-once.yml",
-      "bytes": 2021,
-      "sha256": "f513d303c3e127a71f1b54b57fd6240ea7733736cffce92d16f9c0a90ef768cf"
+      "bytes": 2013,
+      "sha256": "6958379cae89d3c6d2054f402308e6c42caff3bb0396ca0fcd30e3ce03e7215a"
+    },
+    {
+      "path": "candidates/chisel_structural_graph_20261104/compare_fixture_results.py",
+      "bytes": 2253,
+      "sha256": "96ab243e13df82590e9087aeb514f53e24496403b56ffca8330fd66d3d911ce9"
+    },
+    {
+      "path": "candidates/chisel_structural_graph_20261104/modulecache/BoundedCycleWitness.scala",
+      "bytes": 5374,
+      "sha256": "0ef356f82ccd357819071d62a73449d2e5eee226e1f95e9dce1bbc5fd47488c0"
+    },
+    {
+      "path": "candidates/chisel_structural_graph_20261104/modulecache/CycleWitnessFixture.scala",
+      "bytes": 4377,
+      "sha256": "391776b6d769c3a3f623b09da8c4ce3897b668674b231822b86cfe3ad310f00f"
+    },
+    {
+      "path": "candidates/chisel_structural_graph_20261104/modulecache/StructuralDifferential.scala",
+      "bytes": 10888,
+      "sha256": "857768f97022db573ca2a6e5c5ce68412b6ad8b091731b88f54bb42de3527c33"
+    },
+    {
+      "path": "candidates/chisel_structural_graph_20261104/modulecache/SymbolTable.scala",
+      "bytes": 28640,
+      "sha256": "363cfcbc9df17d340580b2308551a83877ab91637c42bda3a6351e2b9fd22fc3"
     },
     {
       "path": "candidates/chisel_structural_graph_20261104/prepare_jars.py",
@@ -13,8 +38,13 @@
     },
     {
       "path": "candidates/chisel_structural_graph_20261104/run.py",
-      "bytes": 22529,
-      "sha256": "82d88f42cbb807fb0b91906ede0202af874bb1e7af4d33639af00fec3f910f06"
+      "bytes": 25218,
+      "sha256": "1fa15708a4ed1180f8735e509cf31f18870b71c8e7180e09d2c4a628870cdcdb"
+    },
+    {
+      "path": "candidates/chisel_structural_graph_20261104/scala/CycleWitnessRoles.scala",
+      "bytes": 2023,
+      "sha256": "39e68805f2c748cd79b707d83583b70db77a43e46c273045bc0dfc0a32f78e7a"
     },
     {
       "path": "candidates/chisel_structural_graph_20261104/scala/IdmaFieldSplitTransform.scala",
@@ -28,8 +58,8 @@
     },
     {
       "path": "candidates/chisel_structural_graph_20261104/scala/OriginalHostStructuralGraph.scala",
-      "bytes": 11468,
-      "sha256": "0c9ae6d362f0f670bfca0df68f3e371ec5d1670d4e65d7863f5e0b00237c4930"
+      "bytes": 11888,
+      "sha256": "1efcb32b26465d65c7f7896f9ceb94cac54788d87863b43b16a0072d0579d361"
     },
     {
       "path": "candidates/chisel_structural_graph_20261104/scala/StructuralMetadataFactory.scala",
@@ -37,24 +67,22 @@
       "sha256": "ab1ea07061f9a319c22008ea3b0f5ccabceccea9879b832958821fa56eb0b2ff"
     },
     {
-      "path": "candidates/chisel_structural_graph_20261104/compare_fixture_results.py",
-      "bytes": 2132,
-      "sha256": "baaa19022e365b9b0597ae92ad0c6c22e65492abbd4c06e5c5ec4d54b6ebb44b"
-    },
-    {
-      "path": "candidates/chisel_structural_graph_20261104/modulecache/SymbolTable.scala",
-      "bytes": 28580,
-      "sha256": "201c5fc5097822cc92c5fb879ca56f234d9bde3f44783af0f7a3a7ff9d253664"
-    },
-    {
-      "path": "candidates/chisel_structural_graph_20261104/modulecache/StructuralDifferential.scala",
-      "bytes": 9906,
-      "sha256": "79dbb19ad1896a6f9f15305c2ae033b777b7318d2624a8f46793e3b78c06caf4"
+      "path": "candidates/chisel_structural_graph_20261104/witness_record.py",
+      "bytes": 1793,
+      "sha256": "01fb0741a08f04b0ed8e3e85ee107845991b646ec850ff8180f2726c67a96558"
     }
   ],
   "publication_delta": [
     ".github/workflows/chisel-structural-graph-once.yml",
+    "candidates/chisel_structural_graph_20261104/SOURCE_PINS.json",
+    "candidates/chisel_structural_graph_20261104/compare_fixture_results.py",
+    "candidates/chisel_structural_graph_20261104/modulecache/BoundedCycleWitness.scala",
+    "candidates/chisel_structural_graph_20261104/modulecache/CycleWitnessFixture.scala",
+    "candidates/chisel_structural_graph_20261104/modulecache/StructuralDifferential.scala",
+    "candidates/chisel_structural_graph_20261104/modulecache/SymbolTable.scala",
     "candidates/chisel_structural_graph_20261104/run.py",
-    "candidates/chisel_structural_graph_20261104/SOURCE_PINS.json"
+    "candidates/chisel_structural_graph_20261104/scala/CycleWitnessRoles.scala",
+    "candidates/chisel_structural_graph_20261104/scala/OriginalHostStructuralGraph.scala",
+    "candidates/chisel_structural_graph_20261104/witness_record.py"
   ]
 }

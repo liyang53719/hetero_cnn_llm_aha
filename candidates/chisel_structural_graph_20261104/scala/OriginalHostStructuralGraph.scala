@@ -3,7 +3,7 @@ package chiseltest.simulator
 import firrtl2.{CircuitState,Parser}
 import firrtl2.annotations.JsonProtocol
 import firrtl2.stage.FirrtlCircuitAnnotation
-import heteronpu.continuous.model.{IdmaFieldSplitTransform,StructuralMetadataFactory}
+import heteronpu.continuous.model.{IdmaFieldSplitTransform,StructuralMetadataFactory,CycleWitnessRoles}
 import java.io.{OutputStream,PrintStream}
 import java.nio.charset.StandardCharsets.UTF_8
 import java.nio.file.{Files,Paths}
@@ -13,7 +13,7 @@ import scala.jdk.CollectionConverters._
 import org.json4s.{JArray,JObject,JString}
 import org.json4s.native.JsonMethods
 import treadle2.TreadleCircuitStateAnnotation
-import treadle2.executable.SymbolTable
+import treadle2.executable.{SymbolTable,BoundedCycleWitness}
 import treadle2.stage.phases.{GetFirrtlAst,PrepareAst,SetImplicitOutputInfo}
 
 /** Source-only structural diagnostic. No simulator, native library, memory
@@ -172,7 +172,13 @@ object OriginalHostStructuralGraph {
           (states.head,f)
         }
         val table=timed("symbol_table") {
-          val t=SymbolTable(state.circuit,Seq(factory),allowCycles=false)
+          val roles=CycleWitnessRoles(state.circuit,factory.bindings)
+          var witnessCount=0
+          val t=BoundedCycleWitness.withDiagnostic(roles,r=>{
+            require(witnessCount==0,"one witness only");witnessCount+=1
+            savedOut.println("GRAPH_CYCLE_WITNESS "+r.json);savedOut.flush()
+            require(!savedOut.checkError(),"witness output failed")
+          }) { SymbolTable(state.circuit,Seq(factory),allowCycles=false) }
           factory.requireComplete();require(!sink.unsupported,"unhandled/warning library diagnostic");t
         }
         val preparedSha=timed("summary_hash") {hash(state.circuit.serialize)}
@@ -197,3 +203,4 @@ object OriginalHostStructuralGraph {
     if(failed)System.exit(2)
   }
 }
+

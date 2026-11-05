@@ -31,7 +31,8 @@ CONSUMER_CHECKS=24
 CONSUMER_PARITY_CHECKS=1
 FORMAL_CHECKS=58
 FORMAL_PARITY_CHECKS=2
-CASE=re.compile(r'OBSERVED_PREPARE_CASE_V1 mode=(print|stop|both) kind=(base|nested|recycled) parity=true records=([12]) suffixChecks=([036]) graphChecks=([04]) observerChecks=([0-9]+) parityChecks=11 failureParityChecks=([01]) sizingChecks=56 quotaChecks=6 consumerChecks=24 consumerParityChecks=1 formalChecks=58 formalParityChecks=2 stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence=([^ ]+)')
+ANCHOR_CHECKS=31
+CASE=re.compile(r'OBSERVED_PREPARE_CASE_V1 mode=(print|stop|both) kind=(base|nested|recycled) parity=true records=([12]) suffixChecks=([036]) graphChecks=([04]) observerChecks=([0-9]+) parityChecks=11 failureParityChecks=([01]) sizingChecks=56 quotaChecks=6 consumerChecks=24 consumerParityChecks=1 formalChecks=58 formalParityChecks=2 anchorChecks=31 stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence=([^ ]+)')
 FINAL=re.compile(r'OBSERVED_PREPARE_RUN_V1 label=(official|cached) pass=true cases=9 diagnosticOnly=true interpreterExecuted=false fullHostAccepted=false')
 FAILURE=re.compile(r'OBSERVED_PREPARE_FAILURE_V1 phase=(IDENTITY|SELFTEST|LOWER|OFFICIAL|OBSERVED|OBSERVED_FAILURE|PARITY|SUFFIX|GRAPH|CLEANUP) code=REJECTED')
 def process_ok(value):
@@ -58,7 +59,7 @@ def compare(official,cached,official_process,cached_process):
  # Counters and exact prepared-state observations must also match across key implementations.
  need(a==b)
  return dict(status='PASS_OBSERVED_PREPARE_FIXTURE_ONLY',cases=9,parity_cases=9,suffix_checks=12,graph_checks=12,
-  observer_checks=OBSERVER_CHECKS,parity_checks=11,failure_parity_cases=3,sizing_checks=SIZING_CHECKS,quota_checks=QUOTA_CHECKS,consumer_checks=CONSUMER_CHECKS,consumer_parity_checks=CONSUMER_PARITY_CHECKS,formal_checks=FORMAL_CHECKS,formal_parity_checks=FORMAL_PARITY_CHECKS,state_fields=3,form_absent_in_pinned_api=True,
+  observer_checks=OBSERVER_CHECKS,parity_checks=11,failure_parity_cases=3,sizing_checks=SIZING_CHECKS,quota_checks=QUOTA_CHECKS,consumer_checks=CONSUMER_CHECKS,consumer_parity_checks=CONSUMER_PARITY_CHECKS,formal_checks=FORMAL_CHECKS,formal_parity_checks=FORMAL_PARITY_CHECKS,anchor_checks=ANCHOR_CHECKS,state_fields=3,form_absent_in_pinned_api=True,
   renames_none=True,diagnostic_only=True,interpreter_executed=False,full_host_accepted=False)
 def failure(text,label):
  need(type(label)is str and label in ('official','cached'))
@@ -179,4 +180,27 @@ def formal_for_provenance(provenance,text):
  value=formal_evidence(text)
  need((value['status']=='COMPLETE')==(provenance['status']=='COMPLETE'))
  if value['status']=='COMPLETE':need(value['formal_count']<=provenance['records'])
+ return value
+
+# First anchor failure only. Identity flags never authorize relinking or repair.
+def anchor_evidence(text):
+ need(type(text)is str and 0<len(text)<=160 and text.isascii())
+ if text in ('NONE','UNAVAILABLE'):return dict(status=text)
+ fields=text.split(':');need(len(fields)==7 and fields[0]=='AVAILABLE')
+ _,site,role,name,info,clock,prior=fields
+ need(site in ('FORMAL_NAME_INFO','FORMAL_CLOCK','FORMAL_DUPLICATE','ORDINARY_DUPLICATE','FINAL_MISSING'))
+ need(role in ('PRINT','STOP','EMPTY_ASSERT','OTHER'))
+ need(all(x in ('TRUE','FALSE','NA')for x in (name,info,clock))and prior in ('ZERO','ONE'))
+ if site.startswith('FORMAL_'):
+  need(role=='EMPTY_ASSERT'and name in ('TRUE','FALSE')and info in ('TRUE','FALSE')and clock in ('TRUE','FALSE'))
+  if site=='FORMAL_NAME_INFO':need(name=='FALSE'or info=='FALSE')
+  elif site=='FORMAL_CLOCK':need(name==info=='TRUE'and clock=='FALSE')
+  else:need(name==info==clock=='TRUE'and prior=='ONE')
+ elif site=='ORDINARY_DUPLICATE':need(role in ('PRINT','STOP')and prior=='ONE'and clock=='NA'and name in ('TRUE','FALSE')and info in ('TRUE','FALSE'))
+ else:need(role in ('PRINT','STOP','EMPTY_ASSERT')and name==info==clock=='NA'and prior=='ZERO')
+ return dict(status='AVAILABLE',site=site,role=role,name_identity=name,info_identity=info,clock_identity=clock,prior=prior)
+def anchor_for_provenance(provenance,text):
+ value=anchor_evidence(text)
+ active=provenance['status']=='UNAVAILABLE'and provenance['step']=='ORIGINAL'and provenance['reason']=='ANCHOR'
+ need((value['status']!='NONE')==active)
  return value

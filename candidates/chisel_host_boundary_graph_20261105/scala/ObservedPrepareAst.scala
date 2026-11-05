@@ -30,11 +30,13 @@ final class ObservedPrepareAst(expected:Int=394) extends Phase {
   def sizingEvidence:String=sizingResult
   private var consumerResult="NONE"
   def consumerEvidence:String=consumerResult
+  private var anchorResult="NONE"
+  def anchorEvidence:String=anchorResult
   private var formalResult="UNAVAILABLE:0:0:0:0"
   def formalEvidence:String=formalResult
   override def transform(annotationSeq:AnnotationSeq):AnnotationSeq={
     result="UNAVAILABLE:CENSUS:NOT_RUN:0:0:0:0:0:0:0:0:0"
-    budgetResult="NONE";sizingResult="NONE";consumerResult="NONE";formalResult="UNAVAILABLE:0:0:0:0"
+    budgetResult="NONE";sizingResult="NONE";consumerResult="NONE";anchorResult="NONE";formalResult="UNAVAILABLE:0:0:0:0"
     var circuits=0
     annotationSeq.flatMap {
       case FirrtlCircuitAnnotation(circuit)=>
@@ -57,8 +59,8 @@ final class ObservedPrepareAst(expected:Int=394) extends Phase {
           }
           if(observation!=null)observation.afterSuffix(54,newState)
           result=if(circuits>1)"UNAVAILABLE:DONE:MULTIPLE_CIRCUITS:0:0:0:0:0:0:0:0:0" else if(observation==null)"UNAVAILABLE:CENSUS:UNEXPECTED:0:0:0:0:0:0:0:0:0" else observation.evidence
-          if(circuits==1 && observation!=null){budgetResult=observation.budgetEvidence;sizingResult=observation.sizingEvidence;consumerResult=observation.consumerEvidence;formalResult=observation.formalEvidence}
-          else {budgetResult="NONE";sizingResult="NONE";consumerResult="NONE";formalResult="UNAVAILABLE:0:0:0:0"}
+          if(circuits==1 && observation!=null){budgetResult=observation.budgetEvidence;sizingResult=observation.sizingEvidence;consumerResult=observation.consumerEvidence;anchorResult=observation.anchorEvidence;formalResult=observation.formalEvidence}
+          else {budgetResult="NONE";sizingResult="NONE";consumerResult="NONE";anchorResult="NONE";formalResult="UNAVAILABLE:0:0:0:0"}
           Some(TreadleCircuitStateAnnotation(newState))
         } finally if(observation!=null)observation.release()
       case other=>Some(other)
@@ -69,6 +71,7 @@ final class ObservedPrepareAst(expected:Int=394) extends Phase {
 object ObservedPrepareAst {
   private final class Abort(val reason:String,val bounded:Boolean=false) extends RuntimeException(null,null,false,false) {
     var consumerCode:String="NONE"
+    var anchorCode:String="NONE"
   }
   // BEGIN FIRST CONSUMER FAILURE DIAGNOSTIC
   private def consumerSlot(out:java.lang.StringBuilder,s:Statement,root:Expression,direct:Boolean):Unit={
@@ -148,6 +151,64 @@ object ObservedPrepareAst {
     primary
   }
   // END FIRST CONSUMER FAILURE DIAGNOSTIC
+
+  // BEGIN FIRST ANCHOR FAILURE DIAGNOSTIC
+  private def anchorRole(s:Statement):String={
+    if(s==null)"OTHER"
+    else if(s.getClass==classOf[Print])"PRINT"
+    else if(s.getClass==classOf[Stop])"STOP"
+    else if(s.getClass==classOf[Verification]){val v=s.asInstanceOf[Verification]
+      if((v.op eq Formal.Assert)&&v.msg!=null&&v.msg.getClass==classOf[StringLit]&&v.msg.string.length==0)"EMPTY_ASSERT"else"OTHER"}
+    else "OTHER"
+  }
+  private def validAnchorCode(s:String):Boolean={
+    if(s==null||s.length>160)return false
+    var field=0;var start=0;var i=0
+    while(i<=s.length){
+      if(i==s.length||s.charAt(i)==':'){
+        def is(v:String):Boolean=s.regionMatches(start,v,0,i-start)&&v.length==i-start
+        val ok=field match{
+          case 0=>is("AVAILABLE")
+          case 1=>is("FORMAL_NAME_INFO")||is("FORMAL_CLOCK")||is("FORMAL_DUPLICATE")||is("ORDINARY_DUPLICATE")||is("FINAL_MISSING")
+          case 2=>is("PRINT")||is("STOP")||is("EMPTY_ASSERT")||is("OTHER")
+          case 3|4|5=>is("TRUE")||is("FALSE")||is("NA")
+          case 6=>is("ZERO")||is("ONE")||is("OTHER")
+          case _=>false}
+        if(!ok)return false
+        field+=1;start=i+1
+      }else {val c=s.charAt(i);if(!((c>='A'&&c<='Z')||c=='_'))return false}
+      i+=1
+    };field==7
+  }
+  private def anchorCode(error:Abort):String=try{
+    if(validAnchorCode(error.anchorCode))error.anchorCode else "UNAVAILABLE"
+  }catch{case _:Throwable=>"UNAVAILABLE"}
+  private def anchorAbort(site:String,s:Statement,other:Statement,reg:DefRegister,name:String,prior:Int):Abort={
+    // No object escapes except the primary rejection and its bounded scalar code.
+    // Existing fixed2KiB failure scratch covers builder/result and local scalars.
+    val primary=new Abort("ANCHOR");primary.anchorCode="UNAVAILABLE"
+    try{
+      val role=anchorRole(s);var ni="NA";var ii="NA";var ci="NA"
+      def flag(v:Boolean):String=if(v)"TRUE"else"FALSE"
+      if(site=="FORMAL_NAME_INFO"||site=="FORMAL_CLOCK"||site=="FORMAL_DUPLICATE"){
+        if(role!="EMPTY_ASSERT"||reg==null||reg.getClass!=classOf[DefRegister])return primary
+        val v=s.asInstanceOf[Verification]
+        ni=flag(v.name eq name);ii=flag(v.info eq reg.info);ci=flag(v.clk eq reg.clock)
+      }else if(site=="ORDINARY_DUPLICATE"){
+        if(role=="PRINT"&&other!=null&&other.getClass==classOf[Print]){
+          val a=s.asInstanceOf[Print];val z=other.asInstanceOf[Print];ni=flag(a.name eq z.name);ii=flag(a.info eq z.info)
+        }else if(role=="STOP"&&other!=null&&other.getClass==classOf[Stop]){
+          val a=s.asInstanceOf[Stop];val z=other.asInstanceOf[Stop];ni=flag(a.name eq z.name);ii=flag(a.info eq z.info)
+        }else return primary
+      }else if(site!="FINAL_MISSING")return primary
+      val p=if(prior==0)"ZERO"else if(prior==1)"ONE"else"OTHER"
+      val out=new java.lang.StringBuilder(160)
+      out.append("AVAILABLE:").append(site).append(':').append(role).append(':').append(ni).append(':').append(ii).append(':').append(ci).append(':').append(p)
+      val code=out.toString;if(validAnchorCode(code))primary.anchorCode=code
+    }catch{case _:Throwable=>()}
+    primary
+  }
+  // END FIRST ANCHOR FAILURE DIAGNOSTIC
 
   private def fail(code:String):Nothing=throw new Abort(code)
   private def need(value:Boolean,code:String):Unit=if(!value)fail(code)
@@ -421,9 +482,9 @@ object ObservedPrepareAst {
       if(!emptyAssert(v,b))return
       val id=keys(slot(mid,v.name))
       if(id>=0){b.charge(C.Probe,6);val reg=owner.get(id)
-        need((v.name eq names(id))&&(v.info eq reg.info),"ANCHOR")
-        need(v.clk eq reg.clock,"ANCHOR")
-        need(anchors(id)==0,"ANCHOR");anchors(id)=1
+        if(!((v.name eq names(id))&&(v.info eq reg.info)))throw anchorAbort("FORMAL_NAME_INFO",v,null,reg,names(id),anchors(id))
+        if(!(v.clk eq reg.clock))throw anchorAbort("FORMAL_CLOCK",v,null,reg,names(id),anchors(id))
+        if(anchors(id)!=0)throw anchorAbort("FORMAL_DUPLICATE",v,null,reg,names(id),anchors(id));anchors(id)=1
       }
     }
     def capture():Unit={var chars=persistentChars;var id=0
@@ -619,7 +680,7 @@ object ObservedPrepareAst {
             case p:Stop if !print&&p.ret==ret=>same=checked.same(info,p.info)
             case _=>()
           }
-          if(same){need(anchors(id)==0,"ANCHOR");anchors(id)=1};id=records.clockNext(id)
+          if(same){if(anchors(id)!=0)throw anchorAbort("ORDINARY_DUPLICATE",s,consumer,null,null,anchors(id));anchors(id)=1};id=records.clockNext(id)
         }
       }
     }
@@ -645,6 +706,8 @@ object ObservedPrepareAst {
     def sizingEvidence:String=sizingResult
     private var consumerResult="NONE"
     def consumerEvidence:String=consumerResult
+    private var anchorResult="NONE"
+    def anchorEvidence:String=anchorResult
     private var formalResult="UNAVAILABLE:0:0:0:0"
     def formalEvidence:String=if(complete)formalResult else "UNAVAILABLE:0:0:0:0"
     // Only invoked from this object's bounded sizingSelfChecks; not a public hook.
@@ -668,6 +731,7 @@ object ObservedPrepareAst {
         // failure-only string formatting. A catch-body failure needs its own catch.
         status=if(e.bounded)"TRUNCATED"else"UNAVAILABLE";reason=e.reason;active=false;release()
         if(step=="INITIAL_USES" && e.reason=="CONSUMER")consumerResult=consumerCode(e)
+        if(step=="ORIGINAL" && e.reason=="ANCHOR")anchorResult=anchorCode(e)
         if(eligible)try{
           val record=b.failureEvidence
           if(record!="NONE" && record.length<=512){budgetResult=record;pendingSizing=true}
@@ -745,7 +809,7 @@ object ObservedPrepareAst {
         names.clear()
       })
       var i=0;while(i<records.count){need(originalSeen(i),"ORIGINAL_MODULE");need(uses.portSeen(i),"CLOCK")
-        need(uses.anchors(i)==1,"ANCHOR");i+=1}
+        if(uses.anchors(i)!=1)throw anchorAbort("FINAL_MISSING",uses.consumers(i),null,null,null,uses.anchors(i));i+=1}
       created=records.count
     }
     private def suffix(index:Int,c:Circuit):Unit={
@@ -1429,6 +1493,71 @@ object ObservedPrepareAst {
     }
     val deceptiveWidth=new scala.math.BigInt(deceptiveBacking)
     check(!admitted(v.copy(pred=pred.copy(tpe=UIntType(new IntWidth(deceptiveWidth))))))
+    checks
+  }
+
+  /** Same-code first-anchor diagnostics; no new production traversal. */
+  def anchorSelfChecks():Int={
+    var checks=0
+    def check(ok:Boolean):Unit={require(ok,"ANCHOR_SELFCHECK");checks+=1}
+    val info=FileInfo("private-anchor:1");val clk=Reference("clock",ClockType,PortKind,SourceFlow)
+    val reg=DefRegister(info,"sample",ClockType,clk,UIntLiteral(0),UIntLiteral(0))
+    val v=Verification(Formal.Assert,info,clk,UIntLiteral(1),UIntLiteral(1),StringLit(""),"private-terminal")
+    def code(site:String,s:Statement=v,z:Statement=null,r:DefRegister=reg,n:String=v.name,p:Int=0):String=
+      anchorCode(anchorAbort(site,s,z,r,n,p))
+    check(code("FORMAL_NAME_INFO",n=new String(v.name))=="AVAILABLE:FORMAL_NAME_INFO:EMPTY_ASSERT:FALSE:TRUE:TRUE:ZERO")
+    check(code("FORMAL_NAME_INFO",s=v.copy(info=FileInfo("private-anchor:1")))=="AVAILABLE:FORMAL_NAME_INFO:EMPTY_ASSERT:TRUE:FALSE:TRUE:ZERO")
+    check(code("FORMAL_NAME_INFO",s=v.copy(info=NoInfo),n="different").contains(":FALSE:FALSE:TRUE:"))
+    check(code("FORMAL_CLOCK",s=v.copy(clk=clk.copy()))=="AVAILABLE:FORMAL_CLOCK:EMPTY_ASSERT:TRUE:TRUE:FALSE:ZERO")
+    check(code("FORMAL_DUPLICATE",p=1)=="AVAILABLE:FORMAL_DUPLICATE:EMPTY_ASSERT:TRUE:TRUE:TRUE:ONE")
+    val print=Print(info,StringLit("private-format"),Nil,clk,UIntLiteral(1),v.name)
+    val stop=Stop(info,65,clk,UIntLiteral(1),v.name)
+    check(code("ORDINARY_DUPLICATE",print,print,p=1)=="AVAILABLE:ORDINARY_DUPLICATE:PRINT:TRUE:TRUE:NA:ONE")
+    check(code("ORDINARY_DUPLICATE",stop,stop.copy(name=new String(stop.name),info=FileInfo("private-anchor:1")),p=1)=="AVAILABLE:ORDINARY_DUPLICATE:STOP:FALSE:FALSE:NA:ONE")
+    check(code("FINAL_MISSING")=="AVAILABLE:FINAL_MISSING:EMPTY_ASSERT:NA:NA:NA:ZERO")
+    check(code("FINAL_MISSING",print)=="AVAILABLE:FINAL_MISSING:PRINT:NA:NA:NA:ZERO")
+    check(code("FINAL_MISSING",stop)=="AVAILABLE:FINAL_MISSING:STOP:NA:NA:NA:ZERO")
+    check(code("FINAL_MISSING",EmptyStmt)=="AVAILABLE:FINAL_MISSING:OTHER:NA:NA:NA:ZERO")
+    check(code("FORMAL_DUPLICATE",p=2).endsWith(":OTHER"))
+    check(code("BAD_SITE")=="UNAVAILABLE")
+    check(code("FORMAL_CLOCK",s=null)=="UNAVAILABLE")
+    check(code("FORMAL_CLOCK",s=new Verification(v.op,v.info,v.clk,v.pred,v.en,v.msg,v.name){})=="UNAVAILABLE")
+    check(code("ORDINARY_DUPLICATE",print,stop,p=1)=="UNAVAILABLE")
+    val invalid=new Abort("ANCHOR");invalid.anchorCode="AVAILABLE:"+"PRIVATE"*100
+    check(anchorCode(invalid)=="UNAVAILABLE")
+    invalid.anchorCode=code("FINAL_MISSING")+":EXTRA";check(anchorCode(invalid)=="UNAVAILABLE")
+    invalid.anchorCode=code("FINAL_MISSING").replace("EMPTY_ASSERT","secret");check(anchorCode(invalid)=="UNAVAILABLE")
+    val failure=anchorAbort("FORMAL_CLOCK",null,null,null,null,0)
+    check(failure.reason=="ANCHOR"&& !failure.bounded&&anchorCode(failure)=="UNAVAILABLE")
+    val o=new Observation(1);o.consumerFixtureFailure("ORIGINAL",failure)
+    check(o.evidence.startsWith("UNAVAILABLE:ORIGINAL:ANCHOR:")&&o.anchorEvidence=="UNAVAILABLE"&&o.cleaned)
+    val outside=new Observation(1);outside.consumerFixtureFailure("INITIAL_USES",failure)
+    check(outside.anchorEvidence=="NONE")
+    val unrelated=new Observation(1);unrelated.consumerFixtureFailure("ORIGINAL",new Abort("INFO"))
+    check(unrelated.anchorEvidence=="NONE")
+    check(new Observation(1).anchorEvidence=="NONE")
+    def thrown(body: =>Unit):String=try{body;"NONE"}catch{case e:Abort=>anchorCode(e)}
+    locally {val b=new Budget;val records=new Records(b);records.add(0,"Top",reg,clk)
+      val delayed=Reference(reg.name,ClockType,NodeKind,SourceFlow)
+      val one=Reference("one",UIntType(IntWidth(1)),NodeKind,SourceFlow)
+      records.formals.add(0,v.copy(clk=delayed,pred=one,en=one));val anchors=new Array[Int](1024)
+      check(thrown{records.formals.anchor(v.copy(name=new String(v.name)),0,anchors)}.startsWith("AVAILABLE:FORMAL_NAME_INFO:"))
+      check(thrown{records.formals.anchor(v.copy(clk=clk.copy()),0,anchors)}.startsWith("AVAILABLE:FORMAL_CLOCK:"))
+      records.formals.anchor(v,0,anchors)
+      check(thrown{records.formals.anchor(v,0,anchors)}.startsWith("AVAILABLE:FORMAL_DUPLICATE:"))}
+    locally {val b=new Budget;val records=new Records(b);records.add(0,"Top",reg,clk)
+      val uses=new Uses(b,records,new Checked(b),false);uses.consumers(0)=print;uses.anchors(0)=1
+      check(thrown{uses.anchor(print,0)}.startsWith("AVAILABLE:ORDINARY_DUPLICATE:PRINT:"))
+      uses.consumers(0)=stop
+      check(thrown{uses.anchor(stop,0)}.startsWith("AVAILABLE:ORDINARY_DUPLICATE:STOP:"))}
+    check(!code("FORMAL_CLOCK",s=v.copy(clk=clk.copy())).contains("private"))
+    locally {def state(body:Statement):CircuitState=CircuitState(Circuit(NoInfo,Module(NoInfo,"Top",
+        Port(NoInfo,clk.name,Input,ClockType)::Nil,body)::Nil,"Top"),Seq.empty)
+      val delayed=Reference(reg.name,ClockType,NodeKind,SourceFlow)
+      val before=state(EmptyStmt);val after=state(Block(List(reg,Connect(info,delayed,clk),print.copy(clk=delayed))))
+      val observed=new Observation(1);observed.before(51,before);observed.afterAugment(before,after)
+      check(observed.evidence.startsWith("UNAVAILABLE:ORIGINAL:ANCHOR:")&&
+        observed.anchorEvidence=="AVAILABLE:FINAL_MISSING:PRINT:NA:NA:NA:ZERO"&&observed.cleaned)}
     checks
   }
 

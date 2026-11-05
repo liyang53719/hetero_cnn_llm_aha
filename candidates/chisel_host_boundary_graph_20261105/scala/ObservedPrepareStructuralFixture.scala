@@ -174,6 +174,7 @@ object ObservedPrepareStructuralFixture {
     val observer=new ObservedPrepareAst(2);val observed=observer.transform(annotations)
     new Parity().apply(official,observed)
     require(observer.evidence.startsWith("UNAVAILABLE:INITIAL_USES:CONSUMER:0:0:0:0:0:0:0:"))
+    require(observer.anchorEvidence=="NONE")
     require(observer.formalEvidence=="UNAVAILABLE:0:0:0:0")
     require(observer.consumerEvidence=="MISSING:CONNECT:1:TRUE:CLOCK:NODE:SOURCE:NA:NA:VERIFICATION:1:TRUE:CLOCK:NODE:SOURCE:ASSERT:NONEMPTY")
     require(observer.budgetEvidence=="NONE" && observer.sizingEvidence=="NONE")
@@ -230,6 +231,7 @@ object ObservedPrepareStructuralFixture {
       val observer=new ObservedPrepareAst(n);val observed=observer.transform(annotations)
       new Parity().apply(official,observed)
       require(observer.evidence.startsWith("COMPLETE:DONE:NONE:"+Vector.fill(7)(n.toString).mkString(":")+":"))
+      require(observer.anchorEvidence=="NONE")
       require(observer.formalEvidence=="COMPLETE:1:1:1:1")
       require(observer.budgetEvidence=="NONE" && observer.sizingEvidence=="NONE" && observer.consumerEvidence=="NONE")
       require(graphChecks(state(observed).circuit)==4)
@@ -309,6 +311,7 @@ object ObservedPrepareStructuralFixture {
         val quotaChecks=ObservedPrepareAst.quotaSelfChecks();require(quotaChecks==6)
         val consumerChecks=ObservedPrepareAst.consumerSelfChecks();require(consumerChecks==24)
         val formalChecks=ObservedPrepareAst.formalSelfChecks();require(formalChecks==58)
+        val anchorChecks=ObservedPrepareAst.anchorSelfChecks();require(anchorChecks==31)
         phase="OBSERVED_FAILURE";val consumerParityChecks=consumerParityCheck(targetName);require(consumerParityChecks==1)
         val formalParity= formalParityChecks(targetName);require(formalParity==2)
         rows=Vector("print","stop","both").flatMap{mode=>
@@ -327,6 +330,7 @@ object ObservedPrepareStructuralFixture {
             phase="PARITY";new Parity().apply(official,observed)
             val expected="COMPLETE:DONE:NONE:"+Vector.fill(7)(n.toString).mkString(":")+":"
             require(observer.evidence.startsWith(expected))
+            require(observer.anchorEvidence=="NONE")
             require(observer.formalEvidence=="COMPLETE:0:0:0:0")
             require(observer.consumerEvidence=="NONE")
             require(observer.budgetEvidence=="NONE" && observer.sizingEvidence=="NONE")
@@ -336,13 +340,14 @@ object ObservedPrepareStructuralFixture {
               val unchangedOutput=rejected.transform(as)
               phase="PARITY";new Parity().apply(official,unchangedOutput)
               require(rejected.evidence.startsWith("UNAVAILABLE:DISCOVERY:COUNT:0:0:0:0:0:0:0:"))
+              require(rejected.anchorEvidence=="NONE")
               require(rejected.formalEvidence=="UNAVAILABLE:0:0:0:0")
               require(rejected.consumerEvidence=="NONE")
               require(rejected.budgetEvidence=="NONE" && rejected.sizingEvidence=="NONE");1
             }else 0
             phase="SUFFIX";val relations=if(kind=="base")suffix(low,n)else 0
             phase="GRAPH";val graphs=if(kind=="base")graphChecks(state(observed).circuit)else 0
-            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" sizingChecks="+sizingChecks+" quotaChecks="+quotaChecks+" consumerChecks="+consumerChecks+" consumerParityChecks="+consumerParityChecks+" formalChecks="+formalChecks+" formalParityChecks="+formalParity+" stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
+            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" sizingChecks="+sizingChecks+" quotaChecks="+quotaChecks+" consumerChecks="+consumerChecks+" consumerParityChecks="+consumerParityChecks+" formalChecks="+formalChecks+" formalParityChecks="+formalParity+" anchorChecks="+anchorChecks+" stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
           }
         }
         ok=true

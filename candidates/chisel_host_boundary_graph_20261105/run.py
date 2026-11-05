@@ -1,10 +1,10 @@
 """One source-only structural job. No engine/native, weights, references or IR export."""
 import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request,urllib.error,zipfile
 P=pathlib.Path;D=P(__file__).resolve().parent;REPO=D.parent.parent
-REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_clock_init_streaming_index_once.json'
+REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_boundary_compiler_diagnostic_once.json'
 CAT='candidates/gdn32_first_model_execution_20261104/GDN32_FULL_SOURCE_PINS.json'
 CAT_SHA='ad2d4dcaddb213c85fd15adc65f7da5bd74a0d7c3e6c5922c725aa41bdc967cb'
-BASE='7abdb256ae8fd4844110c3532d5f9a0c2fba2257';BASE_TREE='5d1f84f756fae97ee688bed0ff748596a6f13fd9';TREE=12_081_306_272;RESERVE=8<<30
+BASE='d79fb1427e98d4409197edc4a832b96f1b48747b';BASE_TREE='ef723689dc00e4badae43a6268824b482f1c82af';TREE=12_081_306_272;RESERVE=8<<30
 from witness_record import parse_record as parse_witness_record
 from compare_clock_init_results import auxiliary_evidence as parse_auxiliary_evidence
 graph_identity={}
@@ -300,6 +300,98 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha):
   out['cycle_witness']=witness
  return out
 
+# BEGIN BOUNDARY COMPILER PARSER
+COMPILER_SOURCE_ROLES={
+ 'IdmaSplitLayout.scala':'LAYOUT',
+ 'IdmaFieldSplitTransform.scala':'FIELD_SPLIT',
+ 'IdmaPackedBoundarySplit.scala':'PACKED_SPLIT',
+ 'BoundarySplitStructuralFixture.scala':'BOUNDARY_FIXTURE',
+ 'RegisterInitCensus.scala':'REGISTER_CENSUS',
+ 'ClockInitRepresentationRepair.scala':'CLOCK_REPAIR',
+ 'ClockInitStructuralFixture.scala':'CLOCK_FIXTURE',
+}
+COMPILER_CATEGORY_PREFIXES=(
+ ('type mismatch','TYPE_MISMATCH'),
+ ('not found: value ','NOT_FOUND_VALUE'),
+ ('not found: type ','NOT_FOUND_TYPE'),
+ ('not found: object ','NOT_FOUND_OBJECT'),
+ ('not found: ','NOT_FOUND'),
+ ('value ','VALUE_OR_MEMBER'),
+ ('overloaded method ','OVERLOAD'),
+ ('ambiguous reference','AMBIGUOUS'),
+ ('reference to ','REFERENCE'),
+ ('too many arguments','ARGUMENT_ARITY'),
+ ('not enough arguments','ARGUMENT_ARITY'),
+ ('wrong number of arguments','ARGUMENT_ARITY'),
+ ('type arguments ','TYPE_ARGUMENTS'),
+ ('illegal start','SYNTAX'),
+ ('Unmatched closing brace','SYNTAX'),
+ ("';' expected",'SYNTAX'),
+ ("')' expected",'SYNTAX'),
+ ("'}' expected",'SYNTAX'),
+ ("']' expected",'SYNTAX'),
+ ('identifier expected','SYNTAX'),
+)
+def compiler_failure_summary(text,sources,input_truncated=False):
+ """Pure lossy compiler-failure metadata; never source text or success evidence."""
+ out=dict(schema='COMPILER_DIAGNOSTIC_V1',status='FAILED_COMPILER_DIAGNOSTIC_ONLY',
+  parse_status='COMPLETE',rejection='NONE',header_count=0,row_count=0,
+  suppressed_count=0,malformed=False,truncated=False,rows=[])
+ def reject(reason,truncated=False):
+  out.update(parse_status='REJECTED',rejection=reason,truncated=truncated)
+  return out
+ if type(input_truncated)is not bool:return reject('INPUT_TYPE')
+ out['truncated']=input_truncated
+ if type(text)is not str:return reject('INPUT_TYPE',input_truncated)
+ if len(text)>32768:return reject('INPUT_BYTES',True)
+ if not text.isascii() or any(ord(c)<32 and c not in '\n\t\r' for c in text) or '\x7f'in text:
+  return reject('INPUT_ASCII',input_truncated)
+ if '\r'in text or (text and not text.endswith('\n')):return reject('INPUT_LINE_ENDINGS',input_truncated)
+ lines=text.split('\n')
+ if any(len(line)>4096 for line in lines):return reject('INPUT_LINE_LENGTH',input_truncated)
+ if type(sources)is not dict or len(sources)!=7:return reject('SOURCE_MAP',input_truncated)
+ seen=set()
+ for path,entry in sources.items():
+  if type(path)is not str or not 1<=len(path)<=4096 or not path.isascii() or any(ord(c)<32 or ord(c)==127 for c in path):
+   return reject('SOURCE_MAP',input_truncated)
+  basename=path.rsplit('/',1)[-1]
+  if basename not in COMPILER_SOURCE_ROLES or basename in seen:return reject('SOURCE_MAP',input_truncated)
+  if type(entry)is not dict or set(entry)!={'role','line_count'} or type(entry['role'])is not str or entry['role']!=COMPILER_SOURCE_ROLES[basename]:
+   return reject('SOURCE_MAP',input_truncated)
+  if type(entry['line_count'])is not int or not 1<=entry['line_count']<=1000000:return reject('SOURCE_MAP',input_truncated)
+  seen.add(basename)
+ pending=None;after=0
+ for line in lines[:-1]:
+  header=re.fullmatch(r'(.+):([0-9]+): error: (.*)',line)
+  if header is not None or 'error:'in line:
+   pending=None;after=0;out['header_count']+=1
+   if header is None:
+    out['suppressed_count']+=1;out['malformed']=True;continue
+   path,number,message=header.groups()
+   if path not in sources or len(number)>7 or number.startswith('0'):
+    out['suppressed_count']+=1;out['malformed']=True;continue
+   number=int(number)
+   if not 1<=number<=sources[path]['line_count']:
+    out['suppressed_count']+=1;out['malformed']=True;continue
+   if len(out['rows'])==32:
+    out['suppressed_count']+=1;out['truncated']=True;continue
+   category='OTHER'
+   for prefix,value in COMPILER_CATEGORY_PREFIXES:
+    if message.startswith(prefix):category=value;break
+   out['rows'].append(dict(role=sources[path]['role'],line=number,column=None,category=category))
+   pending=len(out['rows'])-1
+  elif pending is not None:
+   after+=1
+   # Scala emits the optional caret immediately or after one source excerpt.
+   # Only a single ASCII-space-indented caret is recognized; no excerpt is kept.
+   caret=re.fullmatch(r'( *)\^ *',line)
+   if caret is not None and after<=2:
+    out['rows'][pending]['column']=len(caret[1])+1;pending=None
+   elif after>=2:pending=None
+ out['row_count']=len(out['rows'])
+ return out
+# END BOUNDARY COMPILER PARSER
+
 def read_closed_log(path,receipt):
  need((receipt.get('cleanup_proof')or{}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP','GRAPH_CLEANUP_UNPROVEN')
  barrier=receipt.get('reader_join_barrier')or{};cap=receipt.get('log_capture')or{}
@@ -312,6 +404,25 @@ def read_closed_log(path,receipt):
  try:text=raw.decode('ascii')
  except UnicodeError:raise Stop('GRAPH_LOG_ENCODING')
  return text
+
+# BEGIN BOUNDARY COMPILER CLOSED-LOG PROJECTION
+BOUNDARY_COMPILER_SOURCES=('IdmaSplitLayout.scala','IdmaFieldSplitTransform.scala','IdmaPackedBoundarySplit.scala','BoundarySplitStructuralFixture.scala','RegisterInitCensus.scala','ClockInitRepresentationRepair.scala','ClockInitStructuralFixture.scala')
+def boundary_compiler_failure(path,receipt,pins):
+ # This is evidence attached to a failed source-only compiler stage, never a gate.
+ try:
+  need(phase=='compile_boundary_fixture' and type(receipt)is dict and type(receipt.get('native_exit'))is int and receipt['native_exit']!=0,'COMPILER_DIAGNOSTIC_SCOPE')
+  sources={}
+  for name in BOUNDARY_COMPILER_SOURCES:
+   source=regular(D/'scala'/name);need(source.is_absolute() and str(source)in pins,'COMPILER_SOURCE_IDENTITY')
+   need(source.stat().st_size<=262144,'COMPILER_SOURCE_BOUND');need(sha(source)==pins[str(source)],'COMPILER_SOURCE_IDENTITY')
+   raw=source.read_bytes();need(b'\r'not in raw and raw.endswith(b'\n'),'COMPILER_SOURCE_LINES')
+   count=raw.count(b'\n');need(0<count<=10000,'COMPILER_SOURCE_LINES')
+   sources[str(source)]={'role':dict(zip(BOUNDARY_COMPILER_SOURCES,('LAYOUT','FIELD_SPLIT','PACKED_SPLIT','BOUNDARY_FIXTURE','REGISTER_CENSUS','CLOCK_REPAIR','CLOCK_FIXTURE')))[name],'line_count':count}
+  text=read_closed_log(path,receipt)
+  return compiler_failure_summary(text,sources)
+ except BaseException:
+  return {'schema':'COMPILER_DIAGNOSTIC_V1','status':'UNAVAILABLE','reason':'CLOSED_LOG_OR_SOURCE_IDENTITY_OR_SCHEMA'}
+# END BOUNDARY COMPILER CLOSED-LOG PROJECTION
 
 def read_graph_diagnostics(path,receipt,high_sha,annotations_sha):
  return parse_graph_text(read_closed_log(path,receipt),receipt,high_sha,annotations_sha)
@@ -345,7 +456,7 @@ def main():
  need(len(own['files'])==len(expected_files) and {row['path']for row in own['files']}==expected_files)
  pins=pins_for(own['files'],REPO);pins[str(D/'SOURCE_PINS.json')]=sha(D/'SOURCE_PINS.json')
  changed=set(git('diff','--name-only',BASE,source).splitlines())
- expected_delta={'.github/workflows/chisel-host-boundary-graph-once.yml', 'candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json', 'candidates/chisel_host_boundary_graph_20261105/compare_clock_init_results.py', 'candidates/chisel_host_boundary_graph_20261105/run.py', 'candidates/chisel_host_boundary_graph_20261105/scala/ClockInitRepresentationRepair.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/ClockInitStructuralFixture.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/OriginalHostStructuralGraph.scala'}
+ expected_delta={'.github/workflows/chisel-host-boundary-graph-once.yml', 'candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json', 'candidates/chisel_host_boundary_graph_20261105/run.py'}
  need(len(own['publication_delta'])==len(expected_delta) and changed==set(own['publication_delta'])==expected_delta)
  catalog=regular(REPO/CAT);need(sha(catalog)==CAT_SHA);doc=load(catalog);need(doc['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1'and len(doc['files'])==1211);pins.update(pins_for(doc['files'],REPO));pins[str(catalog)]=CAT_SHA
  phase='admission';remote_exclusive(launch);admission();work=P(os.environ['RUNNER_TEMP'])/'chisel-host-boundary-graph';need(work.is_absolute()and not work.exists()and all(not p.is_symlink()for p in(work,*work.parents)));work.mkdir()
@@ -373,6 +484,10 @@ def main():
   stage_step="PROJECT";reports.append(project(name,r))
   stage_step="EMIT";print(json.dumps({'schema':'STRUCTURAL_GRAPH_PROGRESS_V1',**reports[-1],'numerical_pass':False}),flush=True)
   stage_step="POSTCHECK"
+  # BEGIN BOUNDARY COMPILER FAILURE HOOK
+  if name=='compile_boundary_fixture' and type(r.get('native_exit'))is int and r['native_exit']!=0:
+   boundary_identity['boundary_compiler_failure']=boundary_compiler_failure(work/name/'frontend.log.gz',r,pins)
+  # END BOUNDARY COMPILER FAILURE HOOK
   if name in ('graph','diff_official','diff_cached','witness_fixture','boundary_official','boundary_cached','register_census_fixture','clock_init_official','clock_init_cached'):
    stage_step="RETURN";return work/name,r # Parse only after independent cleanup/log-finalization gates.
   need(r.get('native_exit')in ((0,1)if name=='jdk_inventory'else(0,)) and not r.get('errors') and reports[-1]['cleanup_complete'])

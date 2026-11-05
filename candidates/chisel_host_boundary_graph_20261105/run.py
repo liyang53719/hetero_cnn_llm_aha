@@ -1,10 +1,10 @@
 """One source-only structural job. No engine/native, weights, references or IR export."""
 import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request,urllib.error,zipfile
 P=pathlib.Path;D=P(__file__).resolve().parent;REPO=D.parent.parent
-REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_observed_prepare_ordinary_anchor_selection_once.json'
+REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_observed_prepare_provenance_repair_binding_once.json'
 CAT='candidates/gdn32_first_model_execution_20261104/GDN32_FULL_SOURCE_PINS.json'
 CAT_SHA='ad2d4dcaddb213c85fd15adc65f7da5bd74a0d7c3e6c5922c725aa41bdc967cb'
-BASE='f0d0ae1e77a434d36e237a58bfe01713f1276426';BASE_TREE='9816e44dff0fc7402c3c35dbffb8c31c3b035ff6';TREE=12_081_306_272;RESERVE=8<<30
+BASE='6e3d2671ad57829f45c4a6545ba3f503d522977e';BASE_TREE='c406b0013c64a2becc04d82d0f96599760e25aba';TREE=12_081_306_272;RESERVE=8<<30
 from witness_record import parse_record as parse_witness_record
 from compare_observed_prepare import evidence as parse_observed_evidence, budget_for_provenance as parse_observed_budget, sizing_pair as parse_observed_sizing_pair, consumer_for_provenance as parse_observed_consumer, formal_for_provenance as parse_observed_formal, anchor_for_provenance as parse_observed_anchor
 from compare_clock_init_results import auxiliary_evidence as parse_auxiliary_evidence, preexisting_evidence as parse_preexisting_evidence
@@ -114,10 +114,11 @@ METRIC_RE=re.compile(r'GRAPH_PHASE_V1 seq=([0-9]+) kind=(BEGIN|END|SAMPLE|CYCLE_
 PASS_RE=re.compile(r'PASS_DECLARED_CONE_TOPOLOGY_ONLY highSha=([0-9a-f]{64}) annotationsSha=([0-9a-f]{64}) preparedSha=([0-9a-f]{64}) symbols=([0-9]+) leafBindings=17 boundaryInstances=1 boundaryInputFields=26 boundaryAddedPorts=90 nativeInstances=0 evaluatedEdges=0 schedulingQualified=false fullHostAccepted=false suppressedDiagnosticBytes=([0-9]+) cycleSeen=([01])')
 BOUNDARY_GUARD_CODES={'TOPOLOGY': frozenset({'TOPOLOGY_LEAF_ABI', 'TOPOLOGY_MODEL_BINDING', 'TOPOLOGY_IDMA_PATH_COUNT', 'TOPOLOGY_STATEMENT_BOUND', 'TOPOLOGY_WRAPPER_IDENTITY', 'TOPOLOGY_INSTANCE_SEGMENT', 'TOPOLOGY_PATH_BOUNDS', 'TOPOLOGY_BINDING_COUNT'}), 'TRANSFORM': frozenset({'MUX_WIDTHS', 'CYCLIC_EXPRESSION_OBJECT', 'ALIAS_CYCLE', 'PRIVATE_FIELD_NAMESPACE', 'CALLER_EXPANSION_BOUND', 'CALLER_STATEMENT_BOUND', 'ALIAS_SINGLE_DRIVER', 'UNCONDITIONAL_LOW_REQUIRED', 'PROJECTION_RANGE', 'SPLIT_LEAF_ABI', 'TRANSPARENT_WRAPPER', 'MODULE_UNIQUENESS', 'WRAPPER_OUTPUT_PACKING', 'ALIAS_PROJECTION_BOUND', 'LAYOUT_BIT_COVERAGE', 'CALLER_POSTORDER', 'WRAPPER_UNIQUE_DRIVERS', 'CALLER_DEPTH_BOUND', 'ALIAS_IMPLICIT_COERCION', 'PACKED_INPUT_SINGLE_DRIVER', 'CALLER_IDENTITY_BOUND', 'WRAPPER_INPUT_SLICE', 'WRAPPER_MODEL_BINDING', 'CALLER_INSTANCE_NAMES', 'PROJECTED_VALID_IF', 'VALIDIF_WIDTHS', 'PROJECTED_SUB_ACCESS', 'PROJECTED_INFO_EXPR', 'PROJECTED_OTHER', 'PROJECTED_V_RANDOM', 'EXPRESSION_RECURSION_BOUND', 'PACKED_INPUT_WIDTH', 'CALLER_OCCURRENCE_BOUND', 'CALLER_CHILDREN_BOUND', 'EXPRESSION_IDENTITY_BOUND', 'PACKED_WRAPPER_ABI', 'UNSIGNED_WIDTH_REQUIRED', 'BOUNDARY_INSTANCE_FIELD_COUNT', 'CONTROL_PASSTHROUGH', 'EXPANDED_EXPRESSION_BOUND', 'UNRESOLVED_PACKED_BOUNDARY', 'WRAPPER_DRIVER_MISSING', 'TOTAL_FIELD_EXPANSION_BOUND'}), 'NONE': frozenset()}
 BOUNDARY_GUARD_RE='(?:'+'|'.join(sorted({'UNKNOWN'}|set().union(*BOUNDARY_GUARD_CODES.values())))+')'
-FAIL_RE=re.compile(r'FAIL_STRUCTURAL_GRAPH_ONLY stage=('+PHASE_RE+r') exceptionClassSha=([0-9a-f]{64})(?: boundaryStep=(NONE|TOPOLOGY|TRANSFORM) boundaryGuard=('+BOUNDARY_GUARD_RE+r'))?(?: preparedStep=(?P<prepared_step>NONE|STATE|ANNOTATIONS|INIT_REPAIR|TYPES|FLOWS|CLOCK|BINDINGS) clockInitGuard=(?P<clock_init_guard>NONE|UNKNOWN|BOUND|TYPE|INFO|STRUCTURE|DUPLICATE|COUNT|SHAPE|ORIGINAL_MODULE|PREEXISTING|CLOCK|ANNOTATION_TARGET|ANNOTATION_SHAPE|ANNOTATION_PRESET|ANNOTATION_EXTENSION|REFERENCES|DRIVER|CONSUMER|ANCHOR|NONINTERFERENCE) clockInitBound=(?P<clock_init_bound>[A-Z0-9_:]+) clockInitSizing=(?P<clock_init_sizing>[A-Z0-9_:,]+) clockInitAux=(?P<clock_init_aux>[A-Z0-9_:]+) clockInitPreexisting=(?P<clock_init_preexisting>[A-Z0-9_:]+) passAggregate=(?P<pass_aggregate>true|false) passErrorsScanned=(?P<pass_scanned>[0-9]+) passErrorsTruncated=(?P<pass_truncated>true|false) passErrorClasses=(?P<pass_hist>[A-Z0-9_:,]+))? nativeInstances=0 evaluatedEdges=0 schedulingQualified=false fullHostAccepted=false suppressedDiagnosticBytes=(?P<suppressed>[0-9]+) cycleSeen=(?P<cycle>[01])')
+FAIL_RE=re.compile(r'FAIL_STRUCTURAL_GRAPH_ONLY stage=('+PHASE_RE+r') exceptionClassSha=([0-9a-f]{64})(?: boundaryStep=(NONE|TOPOLOGY|TRANSFORM) boundaryGuard=('+BOUNDARY_GUARD_RE+r'))?(?: preparedStep=(?P<prepared_step>NONE|STATE|ANNOTATIONS|INIT_REPAIR|TYPES|FLOWS|CLOCK|BINDINGS|DIAGNOSTIC_STOP) clockInitGuard=(?P<clock_init_guard>NONE|UNKNOWN|BOUND|TYPE|INFO|STRUCTURE|DUPLICATE|COUNT|SHAPE|ORIGINAL_MODULE|PREEXISTING|CLOCK|ANNOTATION_TARGET|ANNOTATION_SHAPE|ANNOTATION_PRESET|ANNOTATION_EXTENSION|REFERENCES|DRIVER|CONSUMER|ANCHOR|NONINTERFERENCE|PROVENANCE) clockInitBound=(?P<clock_init_bound>[A-Z0-9_:]+) clockInitSizing=(?P<clock_init_sizing>[A-Z0-9_:,]+) clockInitAux=(?P<clock_init_aux>[A-Z0-9_:]+) clockInitPreexisting=(?P<clock_init_preexisting>[A-Z0-9_:]+)(?: clockInitProvenance=(?P<clock_init_provenance>[A-Z_]+))? passAggregate=(?P<pass_aggregate>true|false) passErrorsScanned=(?P<pass_scanned>[0-9]+) passErrorsTruncated=(?P<pass_truncated>true|false) passErrorClasses=(?P<pass_hist>[A-Z0-9_:,]+))? nativeInstances=0 evaluatedEdges=0 schedulingQualified=false fullHostAccepted=false suppressedDiagnosticBytes=(?P<suppressed>[0-9]+) cycleSeen=(?P<cycle>[01])')
 PASS_CLASS_HASHES={'T01': '55798a44db78c6aab80261a6a885857f14cfc1ce0073b2b53a9c50f484239751', 'T02': '15f6403ab5b64e42939421b7d3e5d647382eb774981aa4ea920cce93a092561a', 'T03': '61d66402120511aa0eb6ac9b33914e64227ef4c7b937745e747010c5e1e2dfd1', 'T04': '0899f63f4b40d5954568c2db8486c5d252b9d39e3a0f16dabb113957de582411', 'T05': '2748016f6c2552ee805ca4ade2390ec7f05ea28002cf708262dbcba1aed7d564', 'T06': '51fb68974012ffee11a320ac5a9a5de2a01c4efb13951c4e71b5a2047d8f8247', 'T07': '29fc2ca21b85d1225a140f8a003e24d7bda21052691bd7ccc64506f7eabfced1', 'T08': '685fdad6d916225e74101edd084b55ff182ff96b7460a4f46824d82906882b5f', 'T09': 'fa0c112d1da506e0adb11888aca4523d65109b2c277903b4ee6d5e9101e3b8fe', 'T10': '42eb85d8a8723e4f12762f7d092d1a8d8067fa0ae862c56b72d49f64da477e41', 'T11': 'bbc3305f91e129d639b3f2f3e3667e5eca7c41b0c7816fbb27736f2cf475cbac', 'T12': 'ce0827d944715c55300f78749ad55fc536fea76a3f9896b7af4030da5d040318', 'T13': '07368567288e40b02a197c590b238890667ab44e1d813855643b4e4394ff00c2', 'T14': 'b5e1a4edf0b5ea250dfb2ba00d7de9ad84559c1759bc393bc53cb39482f6693f', 'T15': 'f47d7a4f20ff9e197a4c8e44c846c7131b087c924515958218d8be8d12b30a74', 'T16': 'a1892eba49bc551e116f902030c086fcecc2741dec7b5322f443675c7eb19c5b', 'T17': 'e4734c4ebaeb93b393e15948e4a7ea8f69d0c5a68f5b34c2f6e2fbfbdca65893', 'T18': '65e3c1be23f19c99b634667adad7c0da5f00b52b0845c36ad1db4a71212387e4', 'T19': '39195152365eac58862e3a2a390f3be21da5cfc413ec66cc7a2a8fc42458c3a2', 'T20': 'f4f1ec9064e3c1a2b5eed16b171a33f47775377f4f1290426aafc3696e655190', 'T21': '114a5475039b5aa8a979e51aa92939892510436837a279c3514881381fa278be', 'T22': '8a9763a3d26172107b89a6d18d9d1374d3666cdabdeb7df31761fa7604a9b454', 'T23': 'b68761016d4b4546442ede6190810ef493132e6dbbee8402a65bb847b0d808e4', 'T24': 'a8273bf2151fe993f8d53ccd6b8fbd4ffd341d676f6b9ab92feb2825dd6bb379', 'T25': '4e00d9b0cbeb1c10e0d8f086c00cab32c137f8926094df4ff4a0463aa9fbce2f', 'T26': '7a862431e6e9e3087c6a6637c308d82aa090f1f7fbfec68ebafa8f70a6269004', 'T27': '52c60070de0ff1c935357e010e05d1cae4dc8c9e2786c570e00db6560d0254d1', 'T28': 'c9821f372d269ee65250bc54e68ea688e77d494f55562bc8df8cd929bc340264', 'T29': 'f0e83d70271e196ca1197b721f5010d73ab8fda7351c4c2afee5033d5041c641', 'T30': '075594a22ac08cf8449767b50bdc0b460a554813e1b87e5d5dd629de69722bee', 'T31': '1dcd43a78721eb97e90196a26b601e9ddf0ac7e7b6acb5854e751a731e8c041f', 'T32': 'bbb30c18243be20c3f8ab8f172ef70070d33d2a48fa83f837cbfea44a8727f2f', 'F01': '99914bc48af9a0e2d34462f18f8216a168b17a9a1581c5a780ec921fadf0764f', 'BASE_PASS': '892667cf8140b49c85712f16499c40a82f3a47111c56b40c55cfb0f3c0763d7d'}
 PASS_AGGREGATE_HASH='f212da272dce0cd568b09ab66e94cd2954cb40108e3641df8f9cea821cf8dccc'
-CLOCK_INIT_GUARDS={'ANCHOR','ANNOTATION_EXTENSION','ANNOTATION_PRESET','ANNOTATION_SHAPE','ANNOTATION_TARGET','BOUND','CLOCK','CONSUMER','COUNT','DRIVER','DUPLICATE','INFO','NONINTERFERENCE','ORIGINAL_MODULE','PREEXISTING','REFERENCES','SHAPE','STRUCTURE','TYPE'}
+CLOCK_INIT_GUARDS={'PROVENANCE','ANCHOR','ANNOTATION_EXTENSION','ANNOTATION_PRESET','ANNOTATION_SHAPE','ANNOTATION_TARGET','BOUND','CLOCK','CONSUMER','COUNT','DRIVER','DUPLICATE','INFO','NONINTERFERENCE','ORIGINAL_MODULE','PREEXISTING','REFERENCES','SHAPE','STRUCTURE','TYPE'}
+PROOF_REPAIR_REASONS=frozenset({'UNAVAILABLE','REPLAY','REVOKED','CONTEXT','COUNT','RECLAIMED','RECORD','OWNER','USE','REENTRANT'})
 CLOCK_INIT_BOUND_REASONS=frozenset({'GLOBAL_WORK','NAME','TYPE_DEPTH','TYPE_NODES','TYPE_FIELDS','INFO_DEPTH','INFO_NODES','INFO_STRING','INFO_CHILDREN','MODULES','PORTS','STATEMENT_DEPTH','DECLARATIONS','PRINT_STRING','ANNOTATIONS','TARGET_PATH','TARGET_COMPONENT','TARGET_GROUPS','TARGET_MEMBERS','EXPRESSION_DEPTH'})
 CLOCK_INIT_BOUND_PHASES=frozenset({'INDEX_BEFORE','INDEX_PREPARED','CANDIDATES','ANNOTATIONS','USES','ANCHORS','MATCHING','REBUILD','NONINTERFERENCE'})
 def parse_clock_init_bound(step,guard,record):
@@ -167,7 +168,7 @@ def parse_clock_init_sizing(step,guard,bound,record):
   if phase=='BEFORE':need(not any(prepared.values()),'CLOCK_INIT_SIZING_PHASE')
  return dict(status=status,phase=phase,visits=visits,before_complete=status=='COMPLETE' or phase=='PREPARED',prepared_complete=status=='COMPLETE',before=before,prepared=prepared)
 def parse_prepared_evidence(step,aggregate,scanned,truncated,histogram,exception_sha):
- need(step in ('NONE','STATE','ANNOTATIONS','INIT_REPAIR','TYPES','FLOWS','CLOCK','BINDINGS'),'PREPARED_STEP_SCHEMA')
+ need(step in ('NONE','STATE','ANNOTATIONS','INIT_REPAIR','TYPES','FLOWS','CLOCK','BINDINGS','DIAGNOSTIC_STOP'),'PREPARED_STEP_SCHEMA')
  need(aggregate in ('true','false') and truncated in ('true','false'),'PREPARED_PASS_SCHEMA')
  need(type(scanned)is str and re.fullmatch(r'0|[1-9][0-9]{0,3}',scanned),'PREPARED_PASS_COUNT')
  n=int(scanned);need(n<=1024 and (truncated=='false' or n==1024),'PREPARED_PASS_COUNT')
@@ -224,16 +225,17 @@ def parse_register_census(line):
  need(bool(histograms['regUses'])==bool(histograms['regUseInfo']),'REGISTER_CENSUS_USE_INFO')
  return dict(status='OK',registers_scanned=scanned,mismatches=total,sampled=sampled,truncated=total>1024,histograms=histograms)
 
-def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=False,sizing_diagnostics=False,consumer_diagnostics=False,formal_diagnostics=False,anchor_diagnostics=False):
+def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=False,sizing_diagnostics=False,consumer_diagnostics=False,formal_diagnostics=False,anchor_diagnostics=False,proof_repair_diagnostics=False):
  need(type(anchor_diagnostics)is bool and (not anchor_diagnostics or formal_diagnostics),'GRAPH_ANCHOR_MODE')
  need(type(formal_diagnostics)is bool and (not formal_diagnostics or consumer_diagnostics),'GRAPH_FORMAL_MODE')
+ need(type(proof_repair_diagnostics)is bool and (not proof_repair_diagnostics or anchor_diagnostics),'PROOF_REPAIR_MODE')
  need(type(consumer_diagnostics)is bool and (not consumer_diagnostics or sizing_diagnostics),'GRAPH_CONSUMER_MODE')
  need(type(sizing_diagnostics)is bool and (not sizing_diagnostics or observation_only),'GRAPH_SIZING_MODE')
  need(type(observation_only)is bool,'GRAPH_OBSERVATION_MODE')
  need(type(text)is str and len(text.encode('ascii'))<=32768,'GRAPH_LOG_LIMIT')
  need('\r'not in text and (not text or text.endswith('\n')),'GRAPH_LOG_TRUNCATED_LINE')
  lines=text.splitlines();need(len(lines)<=98,'GRAPH_RECORD_LIMIT')
- rows=[];final=None;active=None;next_phase=0;last=None;last_phase=None;cycle_event_seen=False;witness=None;census=None;provenance=None;observer_budget_raw=None;observer_sizing_raw=None;observer_budget=None;observer_sizing=None;observer_consumer_raw=None;observer_consumer=None;observer_formal_raw=None;observer_formal=None;observer_anchor_raw=None;observer_anchor=None
+ rows=[];final=None;active=None;next_phase=0;last=None;last_phase=None;cycle_event_seen=False;witness=None;census=None;provenance=None;observer_budget_raw=None;observer_sizing_raw=None;observer_budget=None;observer_sizing=None;observer_consumer_raw=None;observer_consumer=None;observer_formal_raw=None;observer_formal=None;observer_anchor_raw=None;observer_anchor=None;proof_repair=None
  for line in lines:
   need(final is None,'GRAPH_LOG_TRAILING_OR_LONG')
   if line.startswith('PREPARE_PROVENANCE_V1 '):
@@ -279,6 +281,11 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=Fals
    try:observer_anchor=parse_observed_anchor(provenance,observer_anchor_raw)
    except (ValueError,TypeError):raise Stop('OBSERVER_ANCHOR_SCHEMA')
    continue
+  if line.startswith('PREPARE_REPAIR_V1 '):
+   need(proof_repair_diagnostics and proof_repair is None and active=='prepared_checks' and provenance is not None and provenance['status']=='COMPLETE','PROOF_REPAIR_PHASE')
+   need(line=='PREPARE_REPAIR_V1 status=COMPLETE corrected=394 types=PASS flows=PASS clock=PASS bindings=PASS symbolTableStarted=false','PROOF_REPAIR_SCHEMA')
+   proof_repair=dict(status='COMPLETE_REPAIR_VALIDATION_ONLY',corrected=394,types='PASS',flows='PASS',clock='PASS',bindings='PASS',symbol_table_started=False,full_host_accepted=False)
+   continue
   if line.startswith('REG_INIT_CENSUS_V1 '):
    need(census is None and active=='prepared_checks','REGISTER_CENSUS_PHASE')
    census=parse_register_census(line);continue
@@ -292,6 +299,7 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=Fals
   m=METRIC_RE.fullmatch(line)
   if m:
    seq=int(m[1]);kind=m[2];phase=m[3];values=list(map(int,m.groups()[3:]))
+   if proof_repair is not None:need(phase=='prepared_checks' and kind=='SAMPLE','PROOF_REPAIR_NO_LATER_PHASE')
    wall,cpu,used,maximum,gc_ms,gc_count,cycle=values
    need(seq==len(rows)+1 and seq<=96 and all(0<=v<1<<63 for v in values),'GRAPH_METRIC_RANGE')
    need(used<=maximum and 0<maximum<=15<<30 and wall<=2400000 and cpu<=2400000,'GRAPH_METRIC_RANGE')
@@ -329,6 +337,18 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=Fals
    else:need(b[3]is None and b[4]is None,'BOUNDARY_DIAGNOSTIC_WRONG_PHASE')
    final=dict(kind='failure',phase=b[1],exception_class_sha256=b[2],cycle_seen=b['cycle']=='1')
    if b[1]=='boundary_split':final.update(boundary_step=b[3],boundary_guard=b[4])
+   if proof_repair_diagnostics and b[1]=='prepared_checks':
+    reason=b['clock_init_provenance']
+    need(reason is not None,'PROOF_REPAIR_REASON_MISSING')
+    if b['prepared_step']=='INIT_REPAIR' and b['clock_init_guard']=='PROVENANCE':
+     need(reason in PROOF_REPAIR_REASONS,'PROOF_REPAIR_REASON_SCHEMA')
+    else:need(reason=='NONE','PROOF_REPAIR_REASON_SCOPE')
+    final['clock_init_provenance']=reason
+    if b['prepared_step']=='DIAGNOSTIC_STOP':
+     need(proof_repair is not None and b[2]=='6757b394f9b99b54cc59cd8f05528b770054c25bc6643d413f1a7337f96614d0','PROOF_REPAIR_STOP_SCHEMA')
+    elif proof_repair is not None:
+     need(b['prepared_step']=='BINDINGS','PROOF_REPAIR_RESULT_SCOPE')
+   elif b['clock_init_provenance']is not None:need(False,'PROOF_REPAIR_REASON_UNEXPECTED')
    if b[1]=='prepared_checks':
     if b['prepared_step']=='INIT_REPAIR':
      need(b['clock_init_guard']=='UNKNOWN' or b['clock_init_guard']in CLOCK_INIT_GUARDS,'CLOCK_INIT_GUARD_SCHEMA')
@@ -353,6 +373,7 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=Fals
     else:need(census is None,'REGISTER_CENSUS_WRONG_STEP')
    else:need(census is None and all(b[k]is None for k in ('prepared_step','clock_init_guard','clock_init_bound','clock_init_sizing','clock_init_aux','clock_init_preexisting','pass_aggregate','pass_scanned','pass_truncated','pass_hist')),'PREPARED_DIAGNOSTIC_WRONG_PHASE')
  need(census is None or (final is not None and final['kind']=='failure'),'REGISTER_CENSUS_INCOMPLETE')
+ if proof_repair is not None:need(final is not None and final['kind']=='failure' and final['phase']=='prepared_checks','PROOF_REPAIR_FINAL_REQUIRED')
  clean=receipt.get('status')=='PASS_PROCESS_ONLY' and receipt.get('native_exit')==0 and receipt.get('errors')==[] and receipt.get('worker_started')is True
  if final and final['kind']=='success':need(clean,'GRAPH_FALSE_SUCCESS_RECEIPT')
  # Keep at most last sample/marker per phase in exported JSON, not the full log.
@@ -367,6 +388,8 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=Fals
  if final and 'clock_init_sizing'in final:out['clock_init_sizing']=final['clock_init_sizing']
  if final and 'clock_init_bound'in final:out['clock_init_bound']=final['clock_init_bound']
  if final and 'clock_init_guard'in final:out['clock_init_guard']=final['clock_init_guard']
+ if final and 'clock_init_provenance'in final:out['clock_init_provenance']=final['clock_init_provenance']
+ if proof_repair is not None:out['proof_bound_repair']=proof_repair
  if final and 'register_init_census'in final:out['register_init_census']=final['register_init_census']
  if provenance is not None:out['prepare_provenance']=provenance
  if observer_budget_raw is not None:out['prepare_budget']=observer_budget
@@ -388,6 +411,8 @@ COMPILER_SOURCE_ROLES={
  'RegisterInitCensus.scala':'REGISTER_CENSUS',
  'ClockInitRepresentationRepair.scala':'CLOCK_REPAIR',
  'ClockInitStructuralFixture.scala':'CLOCK_FIXTURE',
+ 'ObservedScheduleIdentity.scala':'OBSERVED_IDENTITY',
+ 'ObservedPrepareAst.scala':'OBSERVED_PHASE',
 }
 COMPILER_CATEGORY_PREFIXES=(
  ('type mismatch','TYPE_MISMATCH'),
@@ -429,7 +454,7 @@ def compiler_failure_summary(text,sources,input_truncated=False,observed_only=Fa
  lines=text.split('\n')
  if any(len(line)>4096 for line in lines):return reject('INPUT_LINE_LENGTH',input_truncated)
  if type(observed_only)is not bool:return reject('SOURCE_MAP',input_truncated)
- source_roles={'ObservedScheduleIdentity.scala':'OBSERVED_IDENTITY','ObservedPrepareAst.scala':'OBSERVED_PHASE','ObservedPrepareStructuralFixture.scala':'OBSERVED_FIXTURE'}if observed_only else COMPILER_SOURCE_ROLES
+ source_roles={'ObservedPrepareStructuralFixture.scala':'OBSERVED_FIXTURE'}if observed_only else COMPILER_SOURCE_ROLES
  if type(sources)is not dict or len(sources)!=len(source_roles):return reject('SOURCE_MAP',input_truncated)
  seen=set()
  for path,entry in sources.items():
@@ -487,7 +512,7 @@ def read_closed_log(path,receipt):
  return text
 
 # BEGIN BOUNDARY COMPILER CLOSED-LOG PROJECTION
-BOUNDARY_COMPILER_SOURCES=('IdmaSplitLayout.scala','IdmaFieldSplitTransform.scala','IdmaPackedBoundarySplit.scala','BoundarySplitStructuralFixture.scala','RegisterInitCensus.scala','ClockInitRepresentationRepair.scala','ClockInitStructuralFixture.scala')
+BOUNDARY_COMPILER_SOURCES=('IdmaSplitLayout.scala','IdmaFieldSplitTransform.scala','IdmaPackedBoundarySplit.scala','BoundarySplitStructuralFixture.scala','RegisterInitCensus.scala','ClockInitRepresentationRepair.scala','ClockInitStructuralFixture.scala','ObservedScheduleIdentity.scala','ObservedPrepareAst.scala')
 def boundary_compiler_failure(path,receipt,pins):
  # This is evidence attached to a failed source-only compiler stage, never a gate.
  try:
@@ -498,7 +523,7 @@ def boundary_compiler_failure(path,receipt,pins):
    need(source.stat().st_size<=262144,'COMPILER_SOURCE_BOUND');need(sha(source)==pins[str(source)],'COMPILER_SOURCE_IDENTITY')
    raw=source.read_bytes();need(b'\r'not in raw and raw.endswith(b'\n'),'COMPILER_SOURCE_LINES')
    count=raw.count(b'\n');need(0<count<=10000,'COMPILER_SOURCE_LINES')
-   sources[str(source)]={'role':dict(zip(BOUNDARY_COMPILER_SOURCES,('LAYOUT','FIELD_SPLIT','PACKED_SPLIT','BOUNDARY_FIXTURE','REGISTER_CENSUS','CLOCK_REPAIR','CLOCK_FIXTURE')))[name],'line_count':count}
+   sources[str(source)]={'role':COMPILER_SOURCE_ROLES[name],'line_count':count}
   text=read_closed_log(path,receipt)
   return compiler_failure_summary(text,sources)
  except BaseException:
@@ -508,15 +533,57 @@ def observed_compiler_failure(path,receipt,pins):
  try:
   need(phase=='compile_observed_fixture' and type(receipt)is dict and type(receipt.get('native_exit'))is int and receipt['native_exit']!=0,'COMPILER_DIAGNOSTIC_SCOPE')
   sources={}
-  for name,role in [('ObservedScheduleIdentity.scala','OBSERVED_IDENTITY'),('ObservedPrepareAst.scala','OBSERVED_PHASE'),('ObservedPrepareStructuralFixture.scala','OBSERVED_FIXTURE')]:
+  for name,role in [('ObservedPrepareStructuralFixture.scala','OBSERVED_FIXTURE')]:
    source=regular(D/'scala'/name);need(str(source)in pins and source.stat().st_size<=262144 and sha(source)==pins[str(source)],'COMPILER_SOURCE_IDENTITY')
    raw=source.read_bytes();need(b'\r'not in raw and raw.endswith(b'\n')and 0<raw.count(b'\n')<=10000,'COMPILER_SOURCE_LINES')
    sources[str(source)]={'role':role,'line_count':raw.count(b'\n')}
   return compiler_failure_summary(read_closed_log(path,receipt),sources,observed_only=True)
  except BaseException:return {'schema':'COMPILER_DIAGNOSTIC_V1','status':'UNAVAILABLE','reason':'CLOSED_LOG_OR_SOURCE_IDENTITY_OR_SCHEMA'}
 
+# Fixed source-only compiler access probes; no generated code is executed.
+API_PROBE_SOURCES={
+ 'positive':('ProvenanceApiPositive.scala','0244cac0b69ed4a0b1f71c89ba1cd786c6b7de58dd484f9d0d1caeba31caffae',470,9),
+ 'negative':('ProvenanceApiNegative.scala','158cf99e15aa571ead1b1eb3ad44a4f02d2d8ff4db2169ba47ec0f4d937d6172',381,8)}
+API_PROBE_ERRORS=(
+ (4,'constructor Grant in class Grant cannot be accessed in object ProvenanceApiNegative from object ProvenanceApiNegative in package simulator'),
+ (5,'constructor Claim in class Claim cannot be accessed in object ProvenanceApiNegative from object ProvenanceApiNegative in package simulator'),
+ (6,'value copy is not a member of chiseltest.simulator.ObservedPrepareAst.Grant'),
+ (7,'value withClaim is not a member of chiseltest.simulator.ObservedPrepareAst.Grant'))
+def api_probe_source(kind,pins):
+ need(kind in API_PROBE_SOURCES,'API_PROBE_KIND')
+ name,digest,size,lines=API_PROBE_SOURCES[kind];path=regular(D/'scala'/name)
+ need(str(path)in pins and pins[str(path)]==digest and path.stat().st_size==size and sha(path)==digest,'API_PROBE_SOURCE_IDENTITY')
+ raw=path.read_bytes();need(raw.isascii()and b'\r'not in raw and raw.endswith(b'\n')and raw.count(b'\n')==lines,'API_PROBE_SOURCE_LINES')
+ return path,raw.decode('ascii').splitlines()
+def api_probe_no_classes(folder):
+ count=0
+ def walk(path,depth):
+  nonlocal count
+  need(depth<=16,'API_PROBE_OUTPUT_DEPTH')
+  with os.scandir(path)as entries:
+   for item in entries:
+    need(count<1024,'API_PROBE_OUTPUT_COUNT');count+=1
+    need(not item.is_symlink(),'API_PROBE_OUTPUT_SYMLINK')
+    if item.is_dir(follow_symlinks=False):walk(item.path,depth+1)
+    else:need(item.is_file(follow_symlinks=False)and not item.name.endswith('.class'),'API_PROBE_GENERATED_CLASS')
+ walk(folder,0)
+def api_probe_result(kind,path,source_lines,text,receipt):
+ need(kind in API_PROBE_SOURCES and type(receipt)is dict,'API_PROBE_KIND')
+ need(type(receipt.get('native_exit'))is int and receipt['native_exit']==(0 if kind=='positive'else 1),'API_PROBE_EXIT')
+ need(receipt.get('status')==('PASS_PROCESS_ONLY'if kind=='positive'else'FAIL_OR_INCOMPLETE')and receipt.get('errors')==[] and type(receipt.get('errors'))is list and receipt.get('worker_started')is True,'API_PROBE_PROCESS')
+ need(type(text)is str and text.isascii()and len(text)<=32768 and '\r'not in text,'API_PROBE_LOG')
+ if kind=='positive':need(text=='','API_PROBE_POSITIVE_DIAGNOSTIC');return
+ need(text.endswith('\n'),'API_PROBE_LINE_ENDING');lines=text.split('\n')
+ need(len(lines)==14 and lines[-1]==''and lines[-2]=='4 errors'and all(len(x)<=4096 for x in lines),'API_PROBE_FRAMING')
+ for i,(line,message)in enumerate(API_PROBE_ERRORS):
+  header,excerpt,caret=lines[3*i:3*i+3]
+  need(header==str(path)+':'+str(line)+': error: '+message,'API_PROBE_HEADER')
+  need(excerpt==source_lines[line-1],'API_PROBE_EXCERPT')
+  need(re.fullmatch(r' *\^',caret)is not None and len(caret)<=len(excerpt)+1,'API_PROBE_CARET')
+# End fixed compiler access probes.
+
 def read_graph_diagnostics(path,receipt,high_sha,annotations_sha):
- return parse_graph_text(read_closed_log(path,receipt),receipt,high_sha,annotations_sha,observation_only=True,sizing_diagnostics=True,consumer_diagnostics=True,formal_diagnostics=True,anchor_diagnostics=True)
+ return parse_graph_text(read_closed_log(path,receipt),receipt,high_sha,annotations_sha,observation_only=True,sizing_diagnostics=True,consumer_diagnostics=True,formal_diagnostics=True,anchor_diagnostics=True,proof_repair_diagnostics=True)
 
 def reject_fixture_failure(text,label,comparator):
  # Caller must first obtain text through read_closed_log. This path always
@@ -542,12 +609,12 @@ def main():
  need(git('diff','--name-only','HEAD^','HEAD')==NONCE and not git('status','--porcelain'))
  nonce=load(REPO/NONCE,4096);need(nonce=={'schema':'ONE_OBSERVED_PREPARE_DIAGNOSTIC_V1','source_commit':source,'base_commit':BASE,'attempts':1,'numerical_execution':False,'native_execution':False,'artifact_upload':False})
  own=load(D/'SOURCE_PINS.json')
- expected_files={'.github/workflows/chisel-host-boundary-graph-once.yml',*[REL+'/'+p for p in ('run.py', 'prepare_jars.py', 'compare_fixture_results.py', 'compare_boundary_results.py', 'witness_record.py', 'modulecache/BoundedCycleWitness.scala', 'modulecache/CycleWitnessFixture.scala', 'modulecache/StructuralDifferential.scala', 'modulecache/SymbolTable.scala', 'scala/CycleWitnessRoles.scala', 'scala/IdmaFieldSplitTransform.scala', 'scala/IdmaSplitLayout.scala', 'scala/IdmaPackedBoundarySplit.scala', 'scala/BoundarySplitStructuralFixture.scala', 'scala/OriginalHostStructuralGraph.scala', 'scala/StructuralMetadataFactory.scala', 'scala/BoundaryIntegrationGuards.scala', 'scala/RegisterInitCensus.scala', 'scala/ClockInitRepresentationRepair.scala', 'scala/ClockInitStructuralFixture.scala', 'compare_clock_init_results.py','compare_schedule_probe.py','scala/ScheduleProbe.scala','compare_observed_prepare.py','scala/ObservedScheduleIdentity.scala','scala/ObservedPrepareAst.scala','scala/ObservedPrepareStructuralFixture.scala') ]}
+ expected_files={'.github/workflows/chisel-host-boundary-graph-once.yml',*[REL+'/'+p for p in ('run.py', 'prepare_jars.py', 'compare_fixture_results.py', 'compare_boundary_results.py', 'witness_record.py', 'modulecache/BoundedCycleWitness.scala', 'modulecache/CycleWitnessFixture.scala', 'modulecache/StructuralDifferential.scala', 'modulecache/SymbolTable.scala', 'scala/CycleWitnessRoles.scala', 'scala/IdmaFieldSplitTransform.scala', 'scala/IdmaSplitLayout.scala', 'scala/IdmaPackedBoundarySplit.scala', 'scala/BoundarySplitStructuralFixture.scala', 'scala/OriginalHostStructuralGraph.scala', 'scala/StructuralMetadataFactory.scala', 'scala/BoundaryIntegrationGuards.scala', 'scala/RegisterInitCensus.scala', 'scala/ClockInitRepresentationRepair.scala', 'scala/ClockInitStructuralFixture.scala', 'compare_clock_init_results.py','compare_schedule_probe.py','scala/ScheduleProbe.scala','compare_observed_prepare.py','scala/ObservedScheduleIdentity.scala','scala/ObservedPrepareAst.scala','scala/ObservedPrepareStructuralFixture.scala','scala/ProvenanceApiPositive.scala','scala/ProvenanceApiNegative.scala') ]}
  need(set(own)=={'schema','files','publication_delta'} and own['schema']=='HOST_BOUNDARY_GRAPH_SOURCE_PINS_V1')
  need(len(own['files'])==len(expected_files) and {row['path']for row in own['files']}==expected_files)
  pins=pins_for(own['files'],REPO);pins[str(D/'SOURCE_PINS.json')]=sha(D/'SOURCE_PINS.json')
  changed=set(git('diff','--name-only',BASE,source).splitlines())
- expected_delta={'.github/workflows/chisel-host-boundary-graph-once.yml', 'candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json', 'candidates/chisel_host_boundary_graph_20261105/compare_observed_prepare.py', 'candidates/chisel_host_boundary_graph_20261105/run.py', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedPrepareAst.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedPrepareStructuralFixture.scala'}
+ expected_delta={'.github/workflows/chisel-host-boundary-graph-once.yml', 'candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json', 'candidates/chisel_host_boundary_graph_20261105/compare_observed_prepare.py', 'candidates/chisel_host_boundary_graph_20261105/run.py', 'candidates/chisel_host_boundary_graph_20261105/scala/ClockInitRepresentationRepair.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedPrepareAst.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedPrepareStructuralFixture.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/OriginalHostStructuralGraph.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/ProvenanceApiNegative.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/ProvenanceApiPositive.scala'}
  need(len(own['publication_delta'])==len(expected_delta) and changed==set(own['publication_delta'])==expected_delta)
  catalog=regular(REPO/CAT);need(sha(catalog)==CAT_SHA);doc=load(catalog);need(doc['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1'and len(doc['files'])==1211);pins.update(pins_for(doc['files'],REPO));pins[str(catalog)]=CAT_SHA
  phase='admission';remote_exclusive(launch);admission();work=P(os.environ['RUNNER_TEMP'])/'chisel-host-boundary-graph';need(work.is_absolute()and not work.exists()and all(not p.is_symlink()for p in(work,*work.parents)));work.mkdir()
@@ -581,7 +648,7 @@ def main():
   if name=='compile_boundary_fixture' and type(r.get('native_exit'))is int and r['native_exit']!=0:
    boundary_identity['boundary_compiler_failure']=boundary_compiler_failure(work/name/'frontend.log.gz',r,pins)
   # END BOUNDARY COMPILER FAILURE HOOK
-  if name in ('graph','diff_official','diff_cached','witness_fixture','boundary_official','boundary_cached','register_census_fixture','clock_init_official','clock_init_cached','observed_official','observed_cached'):
+  if name in ('graph','diff_official','diff_cached','witness_fixture','boundary_official','boundary_cached','register_census_fixture','clock_init_official','clock_init_cached','observed_official','observed_cached','api_probe_positive','api_probe_negative'):
    stage_step="RETURN";return work/name,r # Parse only after independent cleanup/log-finalization gates.
   need(r.get('native_exit')in ((0,1)if name=='jdk_inventory'else(0,)) and not r.get('errors') and reports[-1]['cleanup_complete'])
   stage_step="RETURN";return work/name
@@ -651,7 +718,7 @@ def main():
  boundary_fixture_source=regular(D/'scala/BoundarySplitStructuralFixture.scala')
  need(sha(boundary_fixture_source)=='d4f17a1ac12ed62ebb26f63135c13752a1ff0142097f05d7b907491309c5bce0','CANDIDATE_FIXTURE_SOURCE_CHANGED')
  need(sha(D/'scala/IdmaPackedBoundarySplit.scala')=='27bf9a87064eb66342f2d18b7b268249f7f4c20795f3ea8a31a33f299909e3ee','CANDIDATE_TRANSFORM_SOURCE_CHANGED')
- helpers=[str(regular(D/'scala'/n))for n in ('IdmaSplitLayout.scala','IdmaFieldSplitTransform.scala','IdmaPackedBoundarySplit.scala','BoundarySplitStructuralFixture.scala','RegisterInitCensus.scala','ClockInitRepresentationRepair.scala','ClockInitStructuralFixture.scala')]
+ helpers=[str(regular(D/'scala'/n))for n in ('IdmaSplitLayout.scala','IdmaFieldSplitTransform.scala','IdmaPackedBoundarySplit.scala','BoundarySplitStructuralFixture.scala','RegisterInitCensus.scala','ClockInitRepresentationRepair.scala','ClockInitStructuralFixture.scala','ObservedScheduleIdentity.scala','ObservedPrepareAst.scala')]
  boundaryclasses=stage('compile_boundary_fixture',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',cp,'-d','.',*helpers]),180,3)
  for p in boundaryclasses.rglob('*.class'):pins[str(p)]=sha(p)
  need(not (boundaryclasses/'treadle2/executable/SymbolTable.class').exists() and not (boundaryclasses/'treadle2/executable/SymbolTable$.class').exists())
@@ -694,19 +761,27 @@ def main():
  except (ValueError,TypeError,KeyError):raise Stop('CLOCK_INIT_COMPARATOR_REJECTED')
  need(clock_result=={'status':'PASS_CLOCK_INIT_STRUCTURAL_EQUATIONS_ONLY','cases':3,'block_shape_cases':3,'driver_diagnostic_cases':9,'bound_diagnostic_cases':27,'index_sizing_cases':39,'streaming_cases':186,'legacy_differential_cases':21,'preexisting_diagnostic_cases':72,'negative_guards':27,'equation_vectors_per_case':512,'interpreter_executed':False},'CLOCK_INIT_COVERAGE_REQUIRED')
  boundary_identity['clock_init_qualification']=clock_result
+ # Separate pinned compiler controls: typecheck only, no probe class execution.
+ for probe_kind in ('positive','negative'):
+  probe_path,probe_lines=api_probe_source(probe_kind,pins)
+  probe_folder,probe_receipt=stage('api_probe_'+probe_kind,jvm('1g',cp,'scala.tools.nsc.Main',['-classpath',str(boundaryclasses)+':'+cp,'-Ystop-after:typer','-Xmaxerrs:8','-d','.',str(probe_path)]),120,2)
+  probe_text=read_closed_log(probe_folder/'frontend.log.gz',probe_receipt)
+  api_probe_result(probe_kind,probe_path,probe_lines,probe_text,probe_receipt)
+  api_probe_no_classes(probe_folder)
+ boundary_identity['provenance_api_qualification']={'status':'PASS_PRIVATE_API_TYPECHECK_ONLY','positive_controls':1,'denied_constructor_checks':2,'absent_api_checks':2,'generated_code_executed':False}
  # Qualify diagnostic observation before any original Host compilation.
- observed_sources=[str(regular(D/'scala'/n))for n in ('ObservedScheduleIdentity.scala','ObservedPrepareAst.scala','ObservedPrepareStructuralFixture.scala')]
+ observed_sources=[str(regular(D/'scala'/n))for n in ('ObservedPrepareStructuralFixture.scala',)]
  provenanceclasses=stage('compile_observed_fixture',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',str(boundaryclasses)+':'+cp,'-d','.',*observed_sources]),180,3)
  observed_files=list(provenanceclasses.rglob('*.class'));need(1<=len(observed_files)<=512,'OBSERVER_CLASS_COUNT')
  for path in observed_files:pins[str(regular(path))]=sha(path)
  need(not ({str(p.relative_to(provenanceclasses))for p in observed_files}&{str(p.relative_to(boundaryclasses))for p in boundaryclasses.rglob('*.class')}),'OBSERVER_CLASS_SHADOWING')
- observer_class_sha=sha(regular(provenanceclasses/'chiseltest/simulator/ObservedPrepareAst.class'))
- observer_companion_sha=sha(regular(provenanceclasses/'chiseltest/simulator/ObservedPrepareAst$.class'))
- observed_identity_sha=sha(regular(provenanceclasses/'chiseltest/simulator/ObservedScheduleIdentity$.class'))
+ observer_class_sha=sha(regular(boundaryclasses/'chiseltest/simulator/ObservedPrepareAst.class'))
+ observer_companion_sha=sha(regular(boundaryclasses/'chiseltest/simulator/ObservedPrepareAst$.class'))
+ observed_identity_sha=sha(regular(boundaryclasses/'chiseltest/simulator/ObservedScheduleIdentity$.class'))
  observed_spec=importlib.util.spec_from_file_location('strict_observed_prepare',D/'compare_observed_prepare.py');observed_comparator=importlib.util.module_from_spec(observed_spec);observed_spec.loader.exec_module(observed_comparator)
  observed_results=[]
  for label,expected,location,classpath in [('official',official_pins,official_jar,str(provenanceclasses)+':'+str(boundaryclasses)+':'+cp),('cached',cached_pins,str(patchclasses),str(patchclasses)+':'+str(provenanceclasses)+':'+str(boundaryclasses)+':'+cp)]:
-  folder,receipt=stage('observed_'+label,jvm('1g',classpath,'chiseltest.simulator.ObservedPrepareStructuralFixture',[label,str(provenanceclasses),observer_class_sha,observer_companion_sha,observed_identity_sha,location,expected['class_sha256'],expected['companion_sha256']]),120,2)
+  folder,receipt=stage('observed_'+label,jvm('1g',classpath,'chiseltest.simulator.ObservedPrepareStructuralFixture',[label,str(boundaryclasses),observer_class_sha,observer_companion_sha,observed_identity_sha,location,expected['class_sha256'],expected['companion_sha256'],repair_companion_sha]),120,2)
   text=read_closed_log(folder/'frontend.log.gz',receipt)
   need(receipt.get('worker_started')is True,'OBSERVER_PROCESS_NOT_STARTED')
   if text.startswith('OBSERVED_PREPARE_FAILURE_V1'):
@@ -718,7 +793,7 @@ def main():
   observed_results.append((text,process))
  try:observed_result=observed_comparator.compare(observed_results[0][0],observed_results[1][0],observed_results[0][1],observed_results[1][1])
  except (ValueError,TypeError,KeyError):raise Stop('OBSERVER_COMPARATOR_REJECTED')
- need(observed_result=={'status':'PASS_OBSERVED_PREPARE_FIXTURE_ONLY','cases':9,'parity_cases':9,'suffix_checks':12,'graph_checks':12,'observer_checks':69,'parity_checks':11,'failure_parity_cases':3,'sizing_checks':56,'quota_checks':6,'consumer_checks':24,'consumer_parity_checks':1,'formal_checks':58,'formal_parity_checks':2,'anchor_checks':31,'selection_checks':39,'selection_parity_checks':4,'state_fields':3,'form_absent_in_pinned_api':True,'renames_none':True,'diagnostic_only':True,'interpreter_executed':False,'full_host_accepted':False},'OBSERVER_COVERAGE_REQUIRED')
+ need(observed_result=={'status':'PASS_OBSERVED_PREPARE_FIXTURE_ONLY','cases':9,'parity_cases':9,'suffix_checks':12,'graph_checks':12,'observer_checks':69,'parity_checks':11,'failure_parity_cases':3,'sizing_checks':56,'quota_checks':6,'consumer_checks':24,'consumer_parity_checks':1,'formal_checks':58,'formal_parity_checks':2,'anchor_checks':31,'selection_checks':39,'selection_parity_checks':4,'input_chain_checks':6,'grant_checks':72,'grant_parity_checks':15,'grant_lifecycle_checks':8,'state_fields':3,'form_absent_in_pinned_api':True,'renames_none':True,'diagnostic_only':True,'interpreter_executed':False,'full_host_accepted':False},'OBSERVER_COVERAGE_REQUIRED')
  boundary_identity['observed_prepare_qualification']=observed_result
  gatepath=REPO/'candidates/gdn32_first_model162_producer_20261104/candidate_generation_gate.py';spec=importlib.util.spec_from_file_location('reviewed_graph_inputs',gatepath);gate=importlib.util.module_from_spec(spec);spec.loader.exec_module(gate)
  selection=gate.selected_inputs(REPO,gate.MODEL162_SOURCE);sources=gate.checked_paths(REPO,selection['overlay'],m,selection['contract']);need(len(sources)==162)
@@ -744,7 +819,7 @@ def main():
  need(high.stat().st_size==117714131 and ann.stat().st_size==1379743,'ORIGINAL_HOST_INPUT_SIZE')
  identity={'high_sha256':highsha,'high_bytes':high.stat().st_size,'annotations_sha256':annsha,'annotations_bytes':ann.stat().st_size}
  graph_identity=dict(identity)
- graphdir,graphreceipt=stage('graph',jvm('4g',str(patchclasses)+':'+str(hclasses)+':'+str(provenanceclasses)+':'+str(boundaryclasses)+':'+basecp,'chiseltest.simulator.OriginalHostStructuralGraph',[str(high),highsha,str(ann),annsha,extsha,cached_pins['class_sha256'],cached_pins['companion_sha256'],str(patchclasses),boundary_companion_sha,str(boundaryclasses),census_companion_sha,repair_companion_sha,observer_class_sha,observer_companion_sha,observed_identity_sha,str(provenanceclasses)]),1500,6)
+ graphdir,graphreceipt=stage('graph',jvm('4g',str(patchclasses)+':'+str(hclasses)+':'+str(provenanceclasses)+':'+str(boundaryclasses)+':'+basecp,'chiseltest.simulator.OriginalHostStructuralGraph',[str(high),highsha,str(ann),annsha,extsha,cached_pins['class_sha256'],cached_pins['companion_sha256'],str(patchclasses),boundary_companion_sha,str(boundaryclasses),census_companion_sha,repair_companion_sha,observer_class_sha,observer_companion_sha,observed_identity_sha,str(boundaryclasses)]),1500,6)
  # Budget failures may yield useful diagnostics ONLY after closed/finalized log
  # and complete process cleanup. Never promote markers to numerical/graph PASS.
  try:diagnostics=read_graph_diagnostics(graphdir/'frontend.log.gz',graphreceipt,highsha,annsha)

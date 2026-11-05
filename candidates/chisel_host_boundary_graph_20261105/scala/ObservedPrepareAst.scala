@@ -34,14 +34,24 @@ final class ObservedPrepareAst(expected:Int=394) extends Phase {
   def anchorEvidence:String=anchorResult
   private var formalResult="UNAVAILABLE:0:0:0:0"
   def formalEvidence:String=formalResult
-  override def transform(annotationSeq:AnnotationSeq):AnnotationSeq={
+  private val grantGate=newGate()
+  private var publishedGrant:Grant=null
+  def takeGrant():Grant=grantGate.synchronized {
+    val result=publishedGrant;publishedGrant=null
+    if(grantGate.mode!=0||grantGate.current==null||grantGate.current.revoked)null else result
+  }
+  override def transform(annotationSeq:AnnotationSeq):AnnotationSeq=grantGate.synchronized {
+    publishedGrant=null;val session=beginSession(grantGate)
+    try {
     result="UNAVAILABLE:CENSUS:NOT_RUN:0:0:0:0:0:0:0:0:0"
     budgetResult="NONE";sizingResult="NONE";consumerResult="NONE";anchorResult="NONE";formalResult="UNAVAILABLE:0:0:0:0"
     var circuits=0
-    annotationSeq.flatMap {
+    var pending:GrantData=null
+    val output=annotationSeq.flatMap {
       case FirrtlCircuitAnnotation(circuit)=>
         circuits=if(circuits==0)1 else 2
         val observation=if(circuits==1)try{new Observation(expected)}catch{case _:Throwable=>null}else null
+        if(observation!=null)observation.beginHandoff(session,circuit)
         val state=CircuitState(circuit,annotationSeq)
         var index=0
         try {
@@ -57,7 +67,9 @@ final class ObservedPrepareAst(expected:Int=394) extends Phase {
             index+=1
             nextState
           }
-          if(observation!=null)observation.afterSuffix(54,newState)
+          if(observation!=null){observation.afterSuffix(54,newState)
+            val candidate=observation.takePendingHandoff()
+            if(circuits==1)pending=candidate else if(candidate!=null)candidate.clearOnce()}
           result=if(circuits>1)"UNAVAILABLE:DONE:MULTIPLE_CIRCUITS:0:0:0:0:0:0:0:0:0" else if(observation==null)"UNAVAILABLE:CENSUS:UNEXPECTED:0:0:0:0:0:0:0:0:0" else observation.evidence
           if(circuits==1 && observation!=null){budgetResult=observation.budgetEvidence;sizingResult=observation.sizingEvidence;consumerResult=observation.consumerEvidence;anchorResult=observation.anchorEvidence;formalResult=observation.formalEvidence}
           else {budgetResult="NONE";sizingResult="NONE";consumerResult="NONE";anchorResult="NONE";formalResult="UNAVAILABLE:0:0:0:0"}
@@ -65,10 +77,179 @@ final class ObservedPrepareAst(expected:Int=394) extends Phase {
         } finally if(observation!=null)observation.release()
       case other=>Some(other)
     }
+    if(circuits==1&&pending!=null)try{
+      pending.publish(output);publishedGrant=new Grant(session,pending)
+    }catch{case _:Throwable=>session.revoke();publishedGrant=null}
+    else session.revoke()
+    output
+    }catch{case error:Throwable=>session.revoke();publishedGrant=null;throw error}
+    finally {grantGate.mode=0}
   }
 }
 
 object ObservedPrepareAst {
+  // BEGIN EXACT STATE PROVENANCE HANDOFF
+  private final class ProvenanceEvidence(val code:String) extends RuntimeException(null,null,false,false)
+  private def provenanceFail(code:String):Nothing={
+    val error=new IllegalArgumentException("PROVENANCE");error.addSuppressed(new ProvenanceEvidence(code));throw error}
+  def provenanceReason(error:Throwable):String={
+    if(error==null||error.getClass!=classOf[IllegalArgumentException]||error.getMessage!="PROVENANCE")return "NONE"
+    val xs=error.getSuppressed
+    if(xs.length!=1)return "UNAVAILABLE"
+    xs(0) match{case e:ProvenanceEvidence=>e.code match{
+      case "UNAVAILABLE"|"REPLAY"|"REVOKED"|"CONTEXT"|"COUNT"|"RECLAIMED"|"RECORD"|"OWNER"|"USE"|"REENTRANT"=>e.code
+      case _=>"UNAVAILABLE"}
+      case _=>"UNAVAILABLE"}
+  }
+  private def provenanceNeed(ok:Boolean,code:String):Unit=if(!ok)provenanceFail(code)
+  private def liveWeak[A <: AnyRef](w:WeakReference[A]):A={
+    provenanceNeed(w!=null,"RECLAIMED");val x=w.get;provenanceNeed(x!=null,"RECLAIMED");x}
+  private final class Gate {var mode=0;var current:Session=null}
+  private def newGate():Gate={
+    // Fixed bootstrap metadata precedes dynamic Budget/weak-handle allocation.
+    need(105381888L+14L*1024*1024<=128L*1024*1024,"BOUND");new Gate}
+  private def beginSession(gate:Gate):Session={
+    if(gate.mode!=0){if(gate.current!=null)gate.current.revoke();provenanceFail("REENTRANT")}
+    if(gate.current!=null)gate.current.revoke()
+    val session=new Session(gate);gate.current=session;gate.mode=1;session
+  }
+  private def stageHandoff(session:Session,input:Circuit,expected:Int,b:Budget):GrantData={
+    need(expected>0&&expected<=1024,"COUNT")
+    b.charge(C.Temp,8192);b.charge(C.Clear,16384)
+    b.charge(C.Probe,2L*expected*expected+32L*expected+128L)
+    val data=new GrantData(session,expected,b,new WeakReference(input))
+    session.data=new WeakReference(data);data
+  }
+  private final class Session(val gate:Gate) {
+    var revoked=false;var claimed=false;var data:WeakReference[GrantData]=null
+    def revoke():Unit={revoked=true;if(data!=null){val d=data.get;if(d!=null)d.clearOnce()};data=null}
+  }
+  private final class GrantData(val session:Session,val expected:Int,var budget:Budget,initialInput:WeakReference[Circuit]) {
+    provenanceNeed(expected>0&&expected<=1024,"COUNT")
+    // Producer reserves8192 Temp and16384 Clear before this constructor.
+    private var owners=new Array[WeakReference[Module]](1024)
+    private var registers=new Array[WeakReference[DefRegister]](1024)
+    private var drivers=new Array[WeakReference[Connect]](1024)
+    private var terminals=new Array[WeakReference[Statement]](1024)
+    private var inputRoot:WeakReference[Circuit]=initialInput
+    private var stateRoot:WeakReference[CircuitState]=null
+    private var circuitRoot:WeakReference[Circuit]=null
+    private var annotationRoot:WeakReference[AnyRef]=null
+    private var outerRoot:WeakReference[AnyRef]=null
+    private var captured=0;private var uses=0
+    private var sealedData=false;private var published=false;private var cleared=false
+    def record(id:Int,m:Module,r:DefRegister):Unit={
+      provenanceNeed(!cleared && !sealedData && id>=0&&id<expected,"RECORD")
+      provenanceNeed(owners(id)==null&&registers(id)==null,"RECORD")
+      owners(id)=new WeakReference(m);registers(id)=new WeakReference(r);captured+=1
+    }
+    def use(id:Int,driver:Connect,consumer:Statement):Unit={
+      provenanceNeed(!cleared && !sealedData&&id>=0&&id<expected,"USE")
+      provenanceNeed(drivers(id)==null&&terminals(id)==null,"USE")
+      drivers(id)=new WeakReference(driver);terminals(id)=new WeakReference(consumer);uses+=1
+    }
+    def seal(state:CircuitState):Unit={
+      provenanceNeed(!cleared && !sealedData&&captured==expected&&uses==expected,"COUNT")
+      provenanceNeed(state!=null&&state.getClass==classOf[CircuitState]&&(state.renames eq None),"CONTEXT")
+      var i=0
+      while(i<expected){liveWeak(owners(i));val r=liveWeak(registers(i));liveWeak(drivers(i));liveWeak(terminals(i))
+        var j=0;while(j<i){provenanceNeed(!(r eq liveWeak(registers(j))),"RECORD");j+=1};i+=1}
+      stateRoot=new WeakReference(state);circuitRoot=new WeakReference(state.circuit)
+      annotationRoot=new WeakReference[AnyRef](state.annotations.asInstanceOf[AnyRef]);sealedData=true
+    }
+    def publish(outer:AnnotationSeq):Unit={
+      provenanceNeed(!session.revoked&&(session.gate.current eq session),"REVOKED")
+      provenanceNeed(!cleared&&sealedData && !published&&budget!=null,"UNAVAILABLE")
+      val b=budget;val it=b.iter(outer);var n=0;var found=0
+      while(it.hasNext){b.bound(n<(1<<20));b.charge(C.Visit);val annotation=it.next();n+=1
+        if(annotation!=null&&annotation.getClass==classOf[TreadleCircuitStateAnnotation]){
+          val TreadleCircuitStateAnnotation(s)=annotation
+          provenanceNeed(s eq liveWeak(stateRoot),"CONTEXT");found+=1;provenanceNeed(found==1,"CONTEXT")}}
+      provenanceNeed(found==1,"CONTEXT")
+      val state=liveWeak(stateRoot)
+      provenanceNeed(state.getClass==classOf[CircuitState]&&(state.renames eq None),"CONTEXT")
+      outerRoot=new WeakReference[AnyRef](outer.asInstanceOf[AnyRef])
+      budget=null;published=true
+    }
+    def validate(before:Circuit,state:CircuitState,outer:AnnotationSeq,n:Int):Unit={
+      provenanceNeed(!cleared&&published&&budget==null,"UNAVAILABLE")
+      provenanceNeed(n==expected&&n>0&&n<=1024,"COUNT")
+      provenanceNeed(before eq liveWeak(inputRoot),"CONTEXT")
+      provenanceNeed(state eq liveWeak(stateRoot),"CONTEXT")
+      validateStateContents(state)
+      provenanceNeed(outer.asInstanceOf[AnyRef] eq liveWeak(outerRoot),"CONTEXT")
+    }
+    def validateStateContents(state:CircuitState):Unit={
+      provenanceNeed(state!=null&&state.getClass==classOf[CircuitState]&&(state.renames eq None),"CONTEXT")
+      provenanceNeed(state.circuit eq liveWeak(circuitRoot),"CONTEXT")
+      provenanceNeed(state.annotations.asInstanceOf[AnyRef] eq liveWeak(annotationRoot),"CONTEXT")
+    }
+    // Private-class tiny tests exercise weak loss without GC timing assumptions.
+    def clearRegisterForTest(id:Int):Unit=registers(id).clear()
+    def clearContextForTest():Unit=stateRoot.clear()
+    def clearedForTest:Boolean=cleared&&owners==null&&registers==null&&drivers==null&&terminals==null&&budget==null
+
+    def sameRegister(id:Int,r:DefRegister):Boolean=r eq liveWeak(registers(id))
+    def owner(id:Int,m:Module):Unit=provenanceNeed(m eq liveWeak(owners(id)),"OWNER")
+    def sameUses(id:Int,d:Connect,t:Statement):Unit={
+      provenanceNeed(d eq liveWeak(drivers(id)),"USE");provenanceNeed(t eq liveWeak(terminals(id)),"USE")}
+    def clearOnce():Unit=if(!cleared){
+      cleared=true;budget=null;var i=0
+      while(i<1024){owners(i)=null;registers(i)=null;drivers(i)=null;terminals(i)=null;i+=1}
+      owners=null;registers=null;drivers=null;terminals=null
+      inputRoot=null;stateRoot=null;circuitRoot=null;annotationRoot=null;outerRoot=null
+    }
+  }
+  final class Grant private[ObservedPrepareAst] (private val session:Session,private val data:GrantData) {
+    private var spent=false
+    private[simulator] def consume(before:Circuit,prepared:CircuitState,outer:AnnotationSeq,expected:Int):ClockInitRepresentationRepair.ProvenanceResult=
+      session.gate.synchronized {
+        if(spent||session.claimed)provenanceFail("REPLAY")
+        spent=true;session.claimed=true
+        var claim:Claim=null
+        try{
+          provenanceNeed(!session.revoked && (session.gate.current eq session),"REVOKED")
+          if(session.gate.mode!=0){session.revoke();provenanceFail("REENTRANT")}
+          session.gate.mode=2
+          data.validate(before,prepared,outer,expected)
+          claim=new Claim(session,data)
+          val result=ClockInitRepresentationRepair.applyClaimed(before,prepared,expected,claim)
+          claim.requireCommit();result
+        }finally{
+          if(claim!=null)claim.clearOnce()
+          data.clearOnce();session.data=null
+          if(session.gate.mode==2)session.gate.mode=0
+          java.lang.ref.Reference.reachabilityFence(before)
+          java.lang.ref.Reference.reachabilityFence(prepared)
+          java.lang.ref.Reference.reachabilityFence(outer)
+        }
+      }
+  }
+  final class Claim private[ObservedPrepareAst] (private val session:Session,private val data:GrantData) {
+    private var entered=false;private var active=true;private var reserved=false
+    private var mapping:Array[Int]=null;private var seen:Array[Boolean]=null
+    private var bound=0;private var checkedUses=0
+    private def live():Unit=provenanceNeed(active && !session.revoked && session.claimed &&
+      (session.gate.current eq session)&&session.gate.mode==2&&Thread.holdsLock(session.gate),"REVOKED")
+    private[simulator] def beginRepair():Unit={live();provenanceNeed(!entered,"REPLAY");entered=true}
+    private[simulator] def reserve(expected:Int):Unit={live();provenanceNeed(entered && !reserved&&expected==data.expected,"COUNT")
+      mapping=new Array[Int](1024);seen=new Array[Boolean](1024);reserved=true}
+    private[simulator] def bind(id:Int,m:Module,r:DefRegister):Unit={live();provenanceNeed(reserved&&id==bound&&id<data.expected,"RECORD")
+      var j=0;var found = -1
+      while(j<data.expected){if(data.sameRegister(j,r)){provenanceNeed(found<0,"RECORD");found=j};j+=1}
+      provenanceNeed(found>=0,"RECORD");data.owner(found,m);provenanceNeed(!seen(found),"RECORD")
+      seen(found)=true;mapping(id)=found;bound+=1}
+    private[simulator] def requireRecords(n:Int):Unit={live();provenanceNeed(reserved&&n==data.expected&&bound==n,"RECORD")}
+    private[simulator] def requireUses(id:Int,d:Connect,t:Statement):Unit={live();provenanceNeed(reserved&&id==checkedUses&&id<bound,"USE")
+      data.sameUses(mapping(id),d,t);checkedUses+=1}
+    private[simulator] def requireCommit():Unit={live();provenanceNeed(reserved&&bound==data.expected&&checkedUses==bound,"USE")}
+    private[ObservedPrepareAst] def clearOnce():Unit=if(active){active=false
+      if(mapping!=null){var i=0;while(i<1024){mapping(i)=0;i+=1}}
+      if(seen!=null){var i=0;while(i<1024){seen(i)=false;i+=1}}
+      mapping=null;seen=null}
+  }
+  // END EXACT STATE PROVENANCE HANDOFF
+
   private final class Abort(val reason:String,val bounded:Boolean=false) extends RuntimeException(null,null,false,false) {
     var consumerCode:String="NONE"
     var anchorCode:String="NONE"
@@ -580,7 +761,7 @@ object ObservedPrepareAst {
       (r.flow eq (if(driver&&finalStage)SinkFlow else SourceFlow))&&b.equal(r.name,name)
   }
   // These arrays are callback-local. No terminal/expression root survives a hook.
-  private final class Uses(b:Budget,records:Records,checked:Checked,finalStage:Boolean) {
+  private final class Uses(b:Budget,records:Records,checked:Checked,finalStage:Boolean,handoff:GrantData=null) {
     private val counts=new Array[Int](1024);private val statements=new Array[Statement](2048)
     private val roots=new Array[Expression](2048);private val direct=new Array[Boolean](2048)
     val consumers=new Array[Statement](1024);val anchors=new Array[Int](1024);val portSeen=new Array[Boolean](1024)
@@ -656,6 +837,7 @@ object ObservedPrepareAst {
           case v:Verification if !finalStage=>need(v.info eq reg.info,"INFO");records.formals.add(i,v)
           case _=>consumerFailure("FINAL_KIND",i)}
         if(finalStage&&records.formals.contains(i))need(records.formals.sameFinal(i,consumer),"RELATION")
+        if(finalStage&&handoff!=null)handoff.use(i,driver,consumer)
         consumers(i)=consumer;i+=1
       }
     }
@@ -686,6 +868,15 @@ object ObservedPrepareAst {
     }
   }
   private final class Observation(expected:Int) {
+    private var handoff:GrantData=null
+    private var handoffSealed=false
+    def beginHandoff(session:Session,input:Circuit):Unit=guard{
+      handoff=stageHandoff(session,input,expected,b)
+    }
+    def takePendingHandoff():GrantData={
+      if(!complete|| !handoffSealed)null
+      else {val result=handoff;handoff=null;result}
+    }
     // Bootstrap constant check precedes all observer pools. Logical live reserve,
     // not a claim about JVM RSS or forced reclamation. Full fixed inventory:
     // Budget1; Names2; two Modules4; Records12; Walk1; Uses12; originalSeen1
@@ -693,7 +884,7 @@ object ObservedPrepareAst {
     // and <=550 active standard iterators fit the separate2MiB fixed allowance.
     //20MiB names +2MiB pools +4MiB text +64MiB Info +.5MiB childpayload
     // +8MiB official comparison scratch +2MiB weak/temporary admission =100.5MiB.
-    need(105381888L+12L*1024*1024<=128L*1024*1024,"BOUND")
+    need(105381888L+14L*1024*1024<=128L*1024*1024,"BOUND")
     private val b=new Budget
     private var step="CENSUS";private var status="UNAVAILABLE";private var reason="NOT_RUN"
     private var active=true;private var complete=false;private var records:Records=null
@@ -814,7 +1005,7 @@ object ObservedPrepareAst {
     }
     private def suffix(index:Int,c:Circuit):Unit={
       val finalStage=index==54
-      b.charge(C.Temp,256);val uses=if(finalStage)new Uses(b,records,checked,true)else null
+      b.charge(C.Temp,256);val uses=if(finalStage)new Uses(b,records,checked,true,handoff)else null
       scan(c,(mid,_,p)=>if(finalStage)uses.port(mid,p),(mid,m,s)=>{
         s match{case r:DefRegister=>
           val id=records.find(mid,r.name)
@@ -825,6 +1016,7 @@ object ObservedPrepareAst {
             if(!(old eq r))records.lost(id)=true
             if(!(old.clock eq r.clock))records.clockChanged(id)=true
             records.seen(id)=true;records.update(id,r)
+            if(finalStage&&handoff!=null)handoff.record(id,m.asInstanceOf[Module],r)
           }
           if(finalStage){val mismatch=checked.mismatch(r)
             if(mismatch){need(id>=0,"COUNT");clock(r,b);need(checked.infoPresent(r.info),"INFO")}
@@ -857,6 +1049,7 @@ object ObservedPrepareAst {
             val f=records.formals
             need(f.count<=count&&f.p52==f.count&&f.p53==f.count&&f.p54==f.count,"COUNT")
             formalResult=s"COMPLETE:${f.count}:${f.p52}:${f.p53}:${f.p54}"
+            if(handoff!=null){handoff.seal(after);handoffSealed=true}
             complete=true;status="COMPLETE";step="DONE";reason="NONE"
           }
         }
@@ -871,7 +1064,8 @@ object ObservedPrepareAst {
       s"$status:$step:$reason:$semantic:${b.used(C.Visit)}:${b.used(C.Expr)}"
     }
     def cleaned:Boolean=records==null&&walk==null&&checked==null
-    def release():Unit={if(records!=null){records.clearSnapshot();records.formals.clear()};records=null
+    def release():Unit={if(handoff!=null && !handoffSealed){handoff.clearOnce();handoff=null}
+      if(records!=null){records.clearSnapshot();records.formals.clear()};records=null
       if(walk!=null)walk.clear();walk=null;checked=null}
   }
   // BEGIN INDEPENDENT INITIAL USES SIZING
@@ -1631,6 +1825,144 @@ object ObservedPrepareAst {
     check(observedFailure(sa.copy(name=new String(nameA)),sa).contains(":ANCHOR:"))
     check(observedFailure(Block(List(a,a.copy(name="unrelated",string=StringLit("x"*4097)))),a).contains(":BOUND:"))
     check(observedFailure(Block(List(sa,a.copy(name="unrelated",info=FileInfo("x"*4097)))),sa).contains(":BOUND:"))
+    checks
+  }
+
+  /** Private capability helpers and the real closed repair dispatch; never returns authority. */
+  def grantSelfChecks():Int={
+    var checks=0
+    def check(ok:Boolean):Unit={require(ok,"GRANT_SELFCHECK");checks+=1}
+    def reason(body: =>Unit):String=try{body;"NONE"}catch{
+      case e:Abort=>e.reason
+      case e:IllegalArgumentException=>val p=provenanceReason(e);if(p!="NONE")p else ClockInitRepresentationRepair.guardCode(e)}
+    val info=FileInfo("grant:1");val clock=Reference("clock",ClockType,PortKind,SourceFlow)
+    val ports=Port(info,clock.name,Input,ClockType)::Nil
+    val original=Print(info,StringLit("out"),Nil,clock,UIntLiteral(1),"terminal")
+    final case class Rig(before:Circuit,state:CircuitState,outer:AnnotationSeq,m:Module,r:DefRegister,
+      driver:Connect,terminal:Print,session:Session,data:GrantData,grant:Grant)
+    def rig(publish:Boolean=true,seal:Boolean=true,n:Int=1,badBefore:Boolean=false):Rig={
+      val beforeBody=if(badBefore)Block(List(original,DefWire(info,clock.name,ClockType)))else original
+      val before=Circuit(NoInfo,Module(info,"Top",ports,beforeBody)::Nil,"Top")
+      val r=DefRegister(info,"sample",ClockType,clock,UIntLiteral(0),UIntLiteral(0))
+      val driver=Connect(info,Reference(r.name,ClockType,NodeKind,SinkFlow),clock)
+      val terminal=original.copy(clk=Reference(r.name,ClockType,NodeKind,SourceFlow))
+      val m=Module(info,"Top",ports,Block(List(r,driver,terminal)))
+      val state=CircuitState(Circuit(NoInfo,m::Nil,"Top"),Seq.empty)
+      val outer:AnnotationSeq=TreadleCircuitStateAnnotation(state)::Nil
+      val gate=newGate();val session=new Session(gate);gate.current=session
+      val data=stageHandoff(session,before,n,new Budget)
+      try{
+        data.record(0,m,r);data.use(0,driver,terminal)
+        if(seal)data.seal(state)
+        if(publish)data.publish(outer)
+        Rig(before,state,outer,m,r,driver,terminal,session,data,new Grant(session,data))
+      }catch{case error:Throwable=>data.clearOnce();throw error}
+    }
+    def consume(x:Rig):ClockInitRepresentationRepair.ProvenanceResult=
+      ClockInitRepresentationRepair.applyWithProvenance(x.before,x.state,x.outer,1,x.grant)
+    def claimed(x:Rig)(f:Claim=>Unit):String=x.session.gate.synchronized{
+      x.session.claimed=true;x.session.gate.mode=2;val c=new Claim(x.session,x.data)
+      try{reason{c.beginRepair();c.reserve(1);f(c)}}finally{c.clearOnce();x.data.clearOnce();x.session.gate.mode=0}}
+    locally {val x=rig();val out=consume(x)
+      check(out.corrected==1 && !(out.state.circuit eq x.state.circuit) &&
+        (out.state.annotations eq x.state.annotations)&&(out.state.renames eq None))
+      check(x.data.clearedForTest&&x.data.budget==null)
+      check(reason{consume(x)}=="REPLAY")}
+    check(reason{ClockInitRepresentationRepair.applyWithProvenance(null,null,null,1,null)}=="UNAVAILABLE")
+    locally {val x=rig();check(reason{ClockInitRepresentationRepair.applyWithProvenance(x.before.copy(),x.state,x.outer,1,x.grant)}=="CONTEXT")
+      check(reason{consume(x)}=="REPLAY"&&x.data.clearedForTest)}
+    locally {val x=rig();check(reason{ClockInitRepresentationRepair.applyWithProvenance(x.before,x.state.copy(),x.outer,1,x.grant)}=="CONTEXT")}
+    locally {val x=rig();check(reason{ClockInitRepresentationRepair.applyWithProvenance(x.before,x.state,List(x.outer.head),1,x.grant)}=="CONTEXT")}
+    locally {val x=rig();check(reason{ClockInitRepresentationRepair.applyWithProvenance(x.before,x.state,x.outer,2,x.grant)}=="COUNT")
+      check(reason{consume(x)}=="REPLAY")}
+    locally {val x=rig();x.session.revoke();check(x.data.clearedForTest)
+      check(reason{consume(x)}=="REVOKED");check(reason{consume(x)}=="REPLAY")}
+    locally {val x=rig();x.data.clearContextForTest();check(reason{consume(x)}=="RECLAIMED"&&x.data.clearedForTest)}
+    locally {val x=rig();x.data.clearRegisterForTest(0);check(reason{consume(x)}=="RECLAIMED"&&x.data.clearedForTest)}
+    locally {val x=rig();check(reason{x.data.validateStateContents(x.state.copy(circuit=x.state.circuit.copy()))}=="CONTEXT");x.data.clearOnce()}
+    locally {val x=rig();check(reason{x.data.validateStateContents(x.state.copy(annotations=Vector.empty))}=="CONTEXT");x.data.clearOnce()}
+    locally {val x=rig();check(reason{x.data.validateStateContents(x.state.copy(renames=Some(null)))}=="CONTEXT");x.data.clearOnce()}
+    locally {val x=rig(publish=false);check(x.data.budget!=null);x.data.publish(x.outer);check(x.data.budget==null);x.data.clearOnce()}
+    locally {val x=rig(publish=false,seal=false);check(reason{x.data.publish(x.outer)}=="UNAVAILABLE");x.data.clearOnce();check(x.data.clearedForTest)}
+    check(reason{rig(n=2)}=="COUNT")
+    locally {val x=rig(publish=false,seal=false);check(reason{x.data.record(0,x.m,x.r)}=="RECORD")
+      check(reason{x.data.use(0,x.driver,x.terminal)}=="USE");x.data.clearOnce()}
+    locally {val x=rig(publish=false);check(reason{x.data.publish(List(x.outer.head,x.outer.head))}=="CONTEXT");x.data.clearOnce()}
+    locally {val x=rig(publish=false);check(reason{x.data.publish(TreadleCircuitStateAnnotation(x.state.copy())::Nil)}=="CONTEXT");x.data.clearOnce()}
+    locally {val x=rig(publish=false);check(reason{x.data.publish(Nil)}=="CONTEXT");x.data.clearOnce()}
+    locally {val x=rig(publish=false);check(reason{x.data.publish(scala.collection.immutable.LazyList(x.outer.head))}=="FAMILY");x.data.clearOnce()}
+    locally {val x=rig();check(claimed(x){c=>c.bind(0,x.m,x.r);c.requireRecords(1);c.requireUses(0,x.driver,x.terminal);c.requireCommit()}=="NONE")}
+    locally {val x=rig();check(claimed(x){c=>c.bind(0,x.m.copy(),x.r)}=="OWNER")}
+    locally {val x=rig();check(claimed(x){c=>c.bind(0,x.m,x.r.copy())}=="RECORD")}
+    locally {val x=rig();check(claimed(x){c=>c.bind(0,x.m,x.r);c.bind(1,x.m,x.r)}=="RECORD")}
+    locally {val x=rig();check(claimed(x){c=>c.requireRecords(1)}=="RECORD")}
+    locally {val x=rig();check(claimed(x){c=>c.bind(0,x.m,x.r);c.requireUses(0,x.driver.copy(),x.terminal)}=="USE")}
+    locally {val x=rig();check(claimed(x){c=>c.bind(0,x.m,x.r);c.requireUses(0,x.driver,x.terminal.copy())}=="USE")}
+    locally {val x=rig();check(claimed(x){c=>c.bind(0,x.m,x.r);c.requireCommit()}=="USE")}
+    locally {val x=rig();check(claimed(x){c=>c.beginRepair()}=="REPLAY")}
+    locally {val x=rig();val c=new Claim(x.session,x.data);check(reason{c.beginRepair()}=="REVOKED");c.clearOnce();x.data.clearOnce()}
+    locally {val x=rig();check(claimed(x){c=>c.bind(0,x.m,x.r);c.requireUses(0,x.driver,x.terminal)
+      check(reason{beginSession(x.session.gate)}=="REENTRANT");c.requireCommit()}=="REVOKED")}
+    locally {val x=rig();x.session.gate.mode=1;check(reason{consume(x)}=="REENTRANT"&&x.data.clearedForTest)}
+    locally {val x=rig(badBefore=true);check(reason{consume(x)}=="DUPLICATE")
+      check(reason{consume(x)}=="REPLAY"&&x.data.clearedForTest)}
+    locally {val x=rig();x.data.clearOnce();x.data.clearOnce();check(x.data.clearedForTest)}
+    locally {val x=rig();val b=new Budget;b.used(C.Temp)=C.limits(C.Temp)-8192
+      val d=stageHandoff(new Session(newGate()),x.before,1,b);check(b.used(C.Temp)==C.limits(C.Temp));d.clearOnce();x.data.clearOnce()}
+    locally {val x=rig();val b=new Budget;b.used(C.Temp)=C.limits(C.Temp)-8191
+      check(reason{stageHandoff(new Session(newGate()),x.before,1,b)}=="BUDGET");x.data.clearOnce()}
+    locally {val x=rig();val b=new Budget;b.used(C.Clear)=C.limits(C.Clear)-16384
+      val d=stageHandoff(new Session(newGate()),x.before,1,b);check(b.used(C.Clear)==C.limits(C.Clear));d.clearOnce();x.data.clearOnce()}
+    locally {val x=rig();val b=new Budget;b.used(C.Clear)=C.limits(C.Clear)-16383
+      check(reason{stageHandoff(new Session(newGate()),x.before,1,b)}=="BUDGET");x.data.clearOnce()}
+    locally {val x=rig();val b=new Budget;val charge=2L+32L+128L;b.used(C.Probe)=C.limits(C.Probe)-charge
+      val d=stageHandoff(new Session(newGate()),x.before,1,b);check(b.used(C.Probe)==C.limits(C.Probe));d.clearOnce();x.data.clearOnce()}
+    locally {val x=rig();val b=new Budget;b.used(C.Probe)=C.limits(C.Probe)-161
+      check(reason{stageHandoff(new Session(newGate()),x.before,1,b)}=="BUDGET");x.data.clearOnce()}
+    locally {val x=rig();check(reason{stageHandoff(new Session(newGate()),x.before,1025,new Budget)}=="COUNT");x.data.clearOnce()}
+    locally {val x=rig();check(reason{stageHandoff(new Session(newGate()),x.before,0,new Budget)}=="COUNT");x.data.clearOnce()}
+    locally {val x=rig(publish=false);val filler=FirrtlCircuitAnnotation(x.before)
+      val outer:AnnotationSeq=Vector.fill((1<<20)-1)(filler) :+ TreadleCircuitStateAnnotation(x.state)
+      x.data.publish(outer);check(x.data.budget==null);x.data.clearOnce()}
+    locally {val x=rig(publish=false);val filler=FirrtlCircuitAnnotation(x.before)
+      val outer:AnnotationSeq=Vector.fill(1<<20)(filler) :+ TreadleCircuitStateAnnotation(x.state)
+      check(reason{x.data.publish(outer)}=="BOUND");x.data.clearOnce()}
+    locally {val x=rig();val gate=newGate();val session=new Session(gate);gate.current=session
+      val d=stageHandoff(session,x.before,1024,new Budget);val strong=new Array[DefRegister](1024)
+      var i=0;while(i<1024){val r=x.r.copy(name="bounded"+i);strong(i)=r;d.record(i,x.m,r);d.use(i,x.driver,x.terminal);i+=1}
+      d.seal(x.state);check(reason{d.record(1024,x.m,x.r)}=="RECORD");d.clearOnce();check(d.clearedForTest)
+      java.lang.ref.Reference.reachabilityFence(strong);x.data.clearOnce()}
+    locally {val x=rig();val gate=newGate();val session=new Session(gate);gate.current=session
+      val d=stageHandoff(session,x.before,2,new Budget);d.record(0,x.m,x.r);d.record(1,x.m,x.r)
+      d.use(0,x.driver,x.terminal);d.use(1,x.driver,x.terminal)
+      check(reason{d.seal(x.state)}=="RECORD");d.clearOnce();x.data.clearOnce()}
+    locally {val x=rig();val start=new java.util.concurrent.CountDownLatch(1)
+      val success=new java.util.concurrent.atomic.AtomicInteger(0);val replay=new java.util.concurrent.atomic.AtomicInteger(0)
+      val unexpected=new java.util.concurrent.atomic.AtomicInteger(0)
+      def worker():Thread=new Thread(new Runnable{def run():Unit={
+        try{start.await();consume(x);success.incrementAndGet()}
+        catch{case e:Throwable=>if(provenanceReason(e)=="REPLAY")replay.incrementAndGet()else unexpected.incrementAndGet()}}})
+      val a=worker();val b=worker();a.start();b.start();start.countDown();a.join(10000);b.join(10000)
+      check(!a.isAlive && !b.isAlive && success.get()==1&&replay.get()==1&&unexpected.get()==0&&x.data.clearedForTest)}
+    def permuted(swapped:Int):String={val x=rig();val gate=newGate();val session=new Session(gate);gate.current=session
+      val r2=x.r.copy(name="second");val d2=x.driver.copy(loc=Reference(r2.name,ClockType,NodeKind,SinkFlow))
+      val t2=x.terminal.copy(name="second-terminal",clk=Reference(r2.name,ClockType,NodeKind,SourceFlow))
+      val data=stageHandoff(session,x.before,2,new Budget)
+      data.record(0,x.m,r2);data.record(1,x.m,x.r)
+      data.use(0,d2,t2);data.use(1,if(swapped==1)d2 else x.driver,if(swapped==2)t2 else x.terminal)
+      data.seal(x.state);data.publish(x.outer)
+      val result=gate.synchronized{gate.mode=2;session.claimed=true;val c=new Claim(session,data)
+        try{reason{c.beginRepair();c.reserve(2);c.bind(0,x.m,x.r);c.bind(1,x.m,r2);c.requireRecords(2)
+          c.requireUses(0,x.driver,x.terminal);c.requireUses(1,d2,t2);c.requireCommit()}}
+        finally{c.clearOnce();data.clearOnce();gate.mode=0}}
+      java.lang.ref.Reference.reachabilityFence(r2);java.lang.ref.Reference.reachabilityFence(d2);java.lang.ref.Reference.reachabilityFence(t2)
+      x.data.clearOnce();result}
+    check(permuted(0)=="NONE")
+    check(permuted(1)=="USE")
+    check(permuted(2)=="USE")
+    checks+=ClockInitRepresentationRepair.provenanceBudgetSelfChecks()
+    check(provenanceReason(null)=="NONE"&&provenanceReason(new IllegalArgumentException("BOUND"))=="NONE")
+    check(provenanceReason(new IllegalArgumentException("PROVENANCE"))=="UNAVAILABLE")
     checks
   }
 

@@ -5,7 +5,7 @@ import firrtl2.ir._
 import firrtl2.options.TargetDirAnnotation
 import firrtl2.stage.FirrtlCircuitAnnotation
 import treadle2.TreadleCircuitStateAnnotation
-import treadle2.stage.phases.{PrepareAst,HandleFormalStatements}
+import treadle2.stage.phases.{GetFirrtlAst,SetImplicitOutputInfo,PrepareAst,HandleFormalStatements}
 import treadle2.utils.AugmentPrintf
 import treadle2.executable.SymbolTable
 import java.io.{OutputStream,PrintStream}
@@ -228,12 +228,13 @@ object ObservedPrepareStructuralFixture {
       require(suffix(input,n)==n*3)
       val annotations=Seq(FirrtlCircuitAnnotation(input),TargetDirAnnotation(targetName))
       val official=(new PrepareAst).transform(annotations)
-      val observer=new ObservedPrepareAst(n);val observed=observer.transform(annotations)
+      val observer=new ObservedPrepareAst(n);val observed=observer.transform(checkedInputChain(input,annotations))
       new Parity().apply(official,observed)
       require(observer.evidence.startsWith("COMPLETE:DONE:NONE:"+Vector.fill(7)(n.toString).mkString(":")+":"))
       require(observer.anchorEvidence=="NONE")
       require(observer.formalEvidence=="COMPLETE:1:1:1:1")
       require(observer.budgetEvidence=="NONE" && observer.sizingEvidence=="NONE" && observer.consumerEvidence=="NONE")
+      qualifyGrantRepair(input,observed,observer,n)
       require(graphChecks(state(observed).circuit)==4)
       count+=1
     }
@@ -290,15 +291,160 @@ object ObservedPrepareStructuralFixture {
       }
       val annotations=Seq(FirrtlCircuitAnnotation(input),TargetDirAnnotation(targetName))
       val official=(new PrepareAst).transform(annotations)
-      val observer=new ObservedPrepareAst(2);val observed=observer.transform(annotations)
+      val observer=new ObservedPrepareAst(2);val observed=observer.transform(checkedInputChain(input,annotations))
       new Parity().apply(official,observed)
       require(observer.evidence.startsWith("COMPLETE:DONE:NONE:2:2:2:2:2:2:2:"))
       require(observer.formalEvidence=="COMPLETE:0:0:0:0" && observer.anchorEvidence=="NONE" && observer.consumerEvidence=="NONE")
       require(observer.budgetEvidence=="NONE" && observer.sizingEvidence=="NONE")
+      qualifyGrantRepair(input,observed,observer,2)
       require(graphChecks(state(observed).circuit)==4)
       checks+=1
     }}
     require(checks==4);checks
+  }
+  // Qualification counters are fixture-local scalars, never proof authority.
+  private var grantParityChecks=0
+  private def uniqueInput(input:Circuit,annotations:AnnotationSeq):Unit={
+    family(annotations);var seen=0;var total=0
+    annotations.foreach{a=>require(total<64);total+=1;a match{
+      case FirrtlCircuitAnnotation(c)=>require(c eq input);seen+=1
+      case _=>()
+    }};require(seen==1)
+  }
+  private def checkedInputChain(input:Circuit,annotations:AnnotationSeq):AnnotationSeq={
+    uniqueInput(input,annotations)
+    require(annotations.exists(_.isInstanceOf[TargetDirAnnotation]))
+    val obtained=GetFirrtlAst.transform(annotations);require(obtained eq annotations)
+    uniqueInput(input,obtained)
+    val withInfo=SetImplicitOutputInfo.transform(obtained)
+    uniqueInput(input,withInfo);family(withInfo);require(withInfo.size==annotations.size)
+    val a=annotations.iterator;val b=withInfo.iterator
+    while(a.hasNext && b.hasNext)require(a.next() eq b.next())
+    require(!a.hasNext && !b.hasNext);withInfo
+  }
+  private def inputChainSelfChecks(targetName:String):Int={
+    var checks=0
+    val circuit=Circuit(NoInfo,Seq(Module(NoInfo,"Chain",Seq.empty,EmptyStmt)),"Chain")
+    val annotation=FirrtlCircuitAnnotation(circuit)
+    checkedInputChain(circuit,Seq(annotation,TargetDirAnnotation(targetName)));checks+=1
+    val bare:AnnotationSeq=Seq(annotation);val obtained=GetFirrtlAst.transform(bare)
+    require(obtained eq bare);val withInfo=SetImplicitOutputInfo.transform(obtained)
+    uniqueInput(circuit,withInfo);require(withInfo.size==3 && (withInfo.head eq annotation))
+    require(withInfo(1)==firrtl2.stage.OutputFileAnnotation("Chain") && withInfo(2)==TargetDirAnnotation("test_run_dir/Chain"));checks+=1
+    def rejected(input:Circuit,as:AnnotationSeq):Unit={var bad=false
+      try{uniqueInput(input,as)}catch{case _:IllegalArgumentException=>bad=true};require(bad);checks+=1}
+    val copied=circuit.copy();require(!(copied eq circuit))
+    rejected(circuit,Seq(FirrtlCircuitAnnotation(copied)))
+    rejected(circuit,Seq(annotation,annotation))
+    rejected(circuit,Seq(annotation,FirrtlCircuitAnnotation(copied)))
+    rejected(copied,Seq(annotation));require(checks==6);checks
+  }
+  private def grantLifecycleSelfChecks(targetName:String):Int={
+    var checks=0
+    val before=Compiler.toLowFirrtl(CircuitState(Parser.parse(source("print")),Seq(TargetDirAnnotation(targetName)))).circuit
+    def prepare(observer:ObservedPrepareAst):AnnotationSeq={
+      val input=Seq(FirrtlCircuitAnnotation(before),TargetDirAnnotation(targetName))
+      observer.transform(checkedInputChain(before,input))
+    }
+    def rejected(reason:String)(f: =>Unit):Unit={var code="NONE"
+      try{f}catch{case e:IllegalArgumentException=>code=ObservedPrepareAst.provenanceReason(e)}
+      require(code==reason)
+    }
+    locally{val observer=new ObservedPrepareAst(1);val outer=prepare(observer);val prepared=state(outer)
+      rejected("UNAVAILABLE"){ClockInitRepresentationRepair.applyWithProvenance(before,prepared,outer,1,null)};checks+=1}
+    Vector("BEFORE","STATE","OUTER","COUNT").foreach{kind=>
+      val observer=new ObservedPrepareAst(1);val outer=prepare(observer);val prepared=state(outer);val grant=observer.takeGrant();require(grant!=null)
+      val copiedOuter:AnnotationSeq=outer.iterator.toList;require(outer.nonEmpty && !(copiedOuter eq outer))
+      val copiedBefore=before.copy();require(!(copiedBefore eq before))
+      val copiedState=prepared.copy();require(!(copiedState eq prepared))
+      rejected(if(kind=="COUNT")"COUNT"else"CONTEXT"){
+        ClockInitRepresentationRepair.applyWithProvenance(if(kind=="BEFORE")copiedBefore else before,
+          if(kind=="STATE")copiedState else prepared,if(kind=="OUTER")copiedOuter else outer,
+          if(kind=="COUNT")2 else 1,grant)
+      }
+      rejected("REPLAY"){ClockInitRepresentationRepair.applyWithProvenance(before,prepared,outer,1,grant)};checks+=1
+    }
+    locally{val observer=new ObservedPrepareAst(1);val outer=prepare(observer);val prepared=state(outer);val grant=observer.takeGrant();require(grant!=null)
+      prepare(observer)
+      rejected("REVOKED"){ClockInitRepresentationRepair.applyWithProvenance(before,prepared,outer,1,grant)}
+      rejected("REPLAY"){ClockInitRepresentationRepair.applyWithProvenance(before,prepared,outer,1,grant)};checks+=1}
+    locally{val observer=new ObservedPrepareAst(2)
+      val both=Compiler.toLowFirrtl(CircuitState(Parser.parse(source("both")),Seq(TargetDirAnnotation(targetName)))).circuit
+      val outer=observer.transform(checkedInputChain(both,Seq(FirrtlCircuitAnnotation(both),TargetDirAnnotation(targetName))))
+      val prepared=state(outer);val grant=observer.takeGrant();require(grant!=null)
+      prepare(observer)
+      require(observer.evidence.startsWith("UNAVAILABLE:DISCOVERY:COUNT:") && observer.takeGrant()==null)
+      rejected("REVOKED"){ClockInitRepresentationRepair.applyWithProvenance(both,prepared,outer,2,grant)}
+      rejected("REPLAY"){ClockInitRepresentationRepair.applyWithProvenance(both,prepared,outer,2,grant)};checks+=1}
+    locally{val observer=new ObservedPrepareAst(1);val outer=prepare(observer);val prepared=state(outer)
+      val grant=observer.takeGrant();require(grant!=null)
+      observer.transform(Seq(FirrtlCircuitAnnotation(before),FirrtlCircuitAnnotation(before),TargetDirAnnotation(targetName)))
+      require(observer.takeGrant()==null)
+      rejected("REVOKED"){ClockInitRepresentationRepair.applyWithProvenance(before,prepared,outer,1,grant)}
+      rejected("REPLAY"){ClockInitRepresentationRepair.applyWithProvenance(before,prepared,outer,1,grant)};checks+=1}
+    require(checks==8);checks
+  }
+  private def originalInitErrors(c:Circuit,n:Int):Unit={
+    val errors=try{firrtl2.passes.CheckTypes.run(c);Vector.empty[Throwable]}catch{
+      case e:firrtl2.passes.PassExceptions=>e.exceptions.toVector
+      case e:firrtl2.passes.PassException=>Vector(e)
+    }
+    require(errors.count(_.getClass.getName=="firrtl2.passes.CheckTypes$InvalidRegInit")==n)
+    require(errors.forall(e=>Set("firrtl2.passes.CheckTypes$InvalidRegInit","firrtl2.passes.PassException")(e.getClass.getName)))
+    require(errors.size==n+(if(n>1)1 else 0))
+  }
+  private def initOnly(before:Circuit,after:Circuit,expected:Int):Unit={
+    family(before.modules);family(after.modules);require(before.modules.size<=8 && before.modules.size==after.modules.size)
+    require((before.info eq after.info) && (before.main eq after.main));var changed=0;var visits=0
+    def statement(a:Statement,b:Statement,depth:Int):Unit={require(depth<=256 && visits<4096);visits+=1
+      if(!(a eq b))a match{
+        case x:Block=>require(b.getClass==classOf[Block]);val y=b.asInstanceOf[Block]
+          family(x.stmts);family(y.stmts);require(x.stmts.size==y.stmts.size && x.stmts.size<=4096)
+          x.stmts.zip(y.stmts).foreach{case(p,q)=>statement(p,q,depth+1)}
+        case x:DefRegister=>require(b.getClass==classOf[DefRegister]);val y=b.asInstanceOf[DefRegister]
+          require((x.tpe eq ClockType) && (x.info eq y.info) && (x.name eq y.name) && (x.tpe eq y.tpe) &&
+            (x.clock eq y.clock) && (x.reset eq y.reset))
+          require(y.init.getClass==classOf[DoPrim]);val p=y.init.asInstanceOf[DoPrim]
+          family(p.args);family(p.consts);require((p.op eq firrtl2.PrimOps.AsClock) && (p.tpe eq ClockType) &&
+            p.args.size==1 && p.consts.isEmpty && (p.args.head eq x.init));changed+=1
+        case _=>require(false)
+      }
+    }
+    before.modules.zip(after.modules).foreach{case(a:Module,b:Module)=>
+      require((a.info eq b.info) && (a.name eq b.name) && (a.ports eq b.ports));statement(a.body,b.body,0)
+      case(a,b)=>require(a eq b)}
+    require(changed==expected)
+  }
+  private def symbolDependencyParity(before:Circuit,after:Circuit):Unit={
+    val old=SymbolTable(before,Seq.empty,allowCycles=false);val fresh=SymbolTable(after,Seq.empty,allowCycles=false)
+    require(old.size<=4096 && old.size==fresh.size)
+    val a=old.symbols.toVector.sortBy(_.name);val b=fresh.symbols.toVector.sortBy(_.name)
+    require(a.size==b.size)
+    a.zip(b).foreach{case(x,y)=>
+      require(x.name==y.name && x.dataSize==y.dataSize && x.dataType==y.dataType && x.dataKind==y.dataKind &&
+        x.bitWidth==y.bitWidth && x.slots==y.slots && x.index==y.index && x.cardinalNumber==y.cardinalNumber)
+      new Parity().value(x.firrtlType,y.firrtlType);new Parity().value(x.info,y.info)
+      require(old.childrenOf.getEdges(x).toVector.map(_.name).sorted==fresh.childrenOf.getEdges(y).toVector.map(_.name).sorted)
+      require(old.parentsOf.getEdges(x).toVector.map(_.name).sorted==fresh.parentsOf.getEdges(y).toVector.map(_.name).sorted)
+    }
+    require(old.inputPortsNames.toSet==fresh.inputPortsNames.toSet && old.outputPortsNames.toSet==fresh.outputPortsNames.toSet &&
+      old.registerNames.toSet==fresh.registerNames.toSet && old.instanceNames.toSet==fresh.instanceNames.toSet &&
+      old.orphans.map(_.name).toSet==fresh.orphans.map(_.name).toSet)
+  }
+  private def qualifyGrantRepair(before:Circuit,outer:AnnotationSeq,observer:ObservedPrepareAst,expected:Int):Unit={
+    val prepared=state(outer);require(prepared.productArity==3 && (prepared.renames eq None))
+    originalInitErrors(prepared.circuit,expected)
+    val grant=observer.takeGrant();require(grant!=null && observer.takeGrant()==null)
+    val result=ClockInitRepresentationRepair.applyWithProvenance(before,prepared,outer,expected,grant)
+    require((state(outer) eq prepared) && result.state.productArity==3 && result.corrected==expected && result.noninterferenceTicks>0 && (result.state.annotations eq prepared.annotations) && (result.state.renames eq None))
+    initOnly(prepared.circuit,result.state.circuit,expected)
+    require(firrtl2.passes.CheckTypes.run(result.state.circuit) eq result.state.circuit)
+    require(firrtl2.passes.CheckFlows.run(result.state.circuit) eq result.state.circuit)
+    symbolDependencyParity(prepared.circuit,result.state.circuit)
+    require(graphChecks(result.state.circuit)==4)
+    var replay=false;try{ClockInitRepresentationRepair.applyWithProvenance(before,prepared,outer,expected,grant)}
+      catch{case e:IllegalArgumentException=>replay=ObservedPrepareAst.provenanceReason(e)=="REPLAY"}
+    require(replay);grantParityChecks+=1
   }
   private def suffix(c:Circuit,n:Int):Int={
     val original=CircuitState(c,Seq.empty)
@@ -351,10 +497,11 @@ object ObservedPrepareStructuralFixture {
     val out=System.out;val err=System.err;val muted=new PrintStream(OutputStream.nullOutputStream())
     var rows=Vector.empty[String];var ok=false;var phase="IDENTITY";var target:Path=null
     try{
-      require(args.length==8 && Set("official","cached")(args(0)))
+      require(args.length==9 && Set("official","cached")(args(0)))
       require(loaded(classOf[ObservedPrepareAst],args(1))==args(2))
       require(loaded(ObservedPrepareAst.getClass,args(1))==args(3))
       require(loaded(ObservedScheduleIdentity.getClass,args(1))==args(4))
+      require(loaded(ClockInitRepresentationRepair.getClass,args(1))==args(8))
       require(loaded(classOf[SymbolTable],args(5))==args(6) && loaded(SymbolTable.getClass,args(5))==args(7))
       val base=Paths.get(".").toAbsolutePath.normalize()
       target=Files.createTempDirectory(base,"observed-prepare-fixture-")
@@ -366,8 +513,12 @@ object ObservedPrepareStructuralFixture {
       Console.withOut(muted){Console.withErr(muted){
         // Shared prerequisites execute once per process; repeated row counts
         // identify that same result, not nine separate executions.
+        grantParityChecks=0
         phase="SELFTEST";val selfChecks=ObservedPrepareAst.selfChecks();require(selfChecks==69)
         val parityChecks=paritySelfChecks();require(parityChecks==11)
+        val inputChainChecks=inputChainSelfChecks(targetName);require(inputChainChecks==6)
+        val grantLifecycleChecks=grantLifecycleSelfChecks(targetName);require(grantLifecycleChecks==8)
+        val grantChecks=ObservedPrepareAst.grantSelfChecks();require(grantChecks==72)
         val sizingChecks=ObservedPrepareAst.sizingSelfChecks();require(sizingChecks==56)
         val quotaChecks=ObservedPrepareAst.quotaSelfChecks();require(quotaChecks==6)
         val consumerChecks=ObservedPrepareAst.consumerSelfChecks();require(consumerChecks==24)
@@ -389,7 +540,7 @@ object ObservedPrepareStructuralFixture {
           Vector("base"->low,"nested"->body(low,s=>Block(Seq(EmptyStmt,Block(Seq(s,EmptyStmt)),EmptyStmt))),"recycled"->recycled).map{case(kind,input)=>
             phase="OFFICIAL";val as=Seq(FirrtlCircuitAnnotation(input),TargetDirAnnotation(targetName))
             val official=if(kind=="base")officialBase else (new PrepareAst).transform(as)
-            phase="OBSERVED";val observer=new ObservedPrepareAst(n);val observed=observer.transform(as)
+            phase="OBSERVED";val observer=new ObservedPrepareAst(n);val observed=observer.transform(checkedInputChain(input,as))
             phase="PARITY";new Parity().apply(official,observed)
             val expected="COMPLETE:DONE:NONE:"+Vector.fill(7)(n.toString).mkString(":")+":"
             require(observer.evidence.startsWith(expected))
@@ -408,11 +559,13 @@ object ObservedPrepareStructuralFixture {
               require(rejected.consumerEvidence=="NONE")
               require(rejected.budgetEvidence=="NONE" && rejected.sizingEvidence=="NONE");1
             }else 0
+            qualifyGrantRepair(input,observed,observer,n)
             phase="SUFFIX";val relations=if(kind=="base")suffix(low,n)else 0
             phase="GRAPH";val graphs=if(kind=="base")graphChecks(state(observed).circuit)else 0
-            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" sizingChecks="+sizingChecks+" quotaChecks="+quotaChecks+" consumerChecks="+consumerChecks+" consumerParityChecks="+consumerParityChecks+" formalChecks="+formalChecks+" formalParityChecks="+formalParity+" anchorChecks="+anchorChecks+" selectionChecks="+selectionChecks+" selectionParityChecks="+selectionParity+" stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
+            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" sizingChecks="+sizingChecks+" quotaChecks="+quotaChecks+" consumerChecks="+consumerChecks+" consumerParityChecks="+consumerParityChecks+" formalChecks="+formalChecks+" formalParityChecks="+formalParity+" anchorChecks="+anchorChecks+" selectionChecks="+selectionChecks+" selectionParityChecks="+selectionParity+" inputChainChecks="+inputChainChecks+" grantChecks="+grantChecks+" grantParityChecks=15 grantLifecycleChecks="+grantLifecycleChecks+" stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
           }
         }
+        require(grantParityChecks==15)
         ok=true
       }}
     }catch{case _:Throwable=>rows=Vector("OBSERVED_PREPARE_FAILURE_V1 phase="+phase+" code=REJECTED")}

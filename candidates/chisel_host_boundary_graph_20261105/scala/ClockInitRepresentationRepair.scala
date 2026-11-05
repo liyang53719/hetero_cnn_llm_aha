@@ -1,6 +1,6 @@
 package chiseltest.simulator
 
-import firrtl2.{AnnotationSeq,NodeKind,PortKind,SourceFlow}
+import firrtl2.{AnnotationSeq,CircuitState,NodeKind,PortKind,SourceFlow}
 import firrtl2.ir._
 import firrtl2.annotations._
 
@@ -9,7 +9,7 @@ import firrtl2.annotations._
   */
 object ClockInitRepresentationRepair {
   final case class Result(circuit:Circuit,corrected:Int,noninterferenceTicks:Int=0)
-  val GuardCodes:Set[String]=Set("BOUND","TYPE","INFO","STRUCTURE","DUPLICATE","COUNT","SHAPE",
+  val GuardCodes:Set[String]=Set("PROVENANCE","BOUND","TYPE","INFO","STRUCTURE","DUPLICATE","COUNT","SHAPE",
     "ORIGINAL_MODULE","PREEXISTING","CLOCK","ANNOTATION_TARGET","ANNOTATION_SHAPE",
     "ANNOTATION_PRESET","ANNOTATION_EXTENSION","REFERENCES","DRIVER","CONSUMER","ANCHOR","NONINTERFERENCE")
   def guardCode(error:Throwable):String={
@@ -691,7 +691,7 @@ object ClockInitRepresentationRepair {
     driverFail(step,Vector(Use(s.useStatements(id*2),s.useRoots(id*2),s.direct(id*2)),
       Use(s.useStatements(id*2+1),s.useRoots(id*2+1),s.direct(id*2+1))),s.clocks(id))
   }
-  private def matchUses(s:Selected,a:Aux,b:Budget,c:Checked):Unit={
+  private def matchUses(s:Selected,a:Aux,b:Budget,c:Checked,claim:ObservedPrepareAst.Claim=null):Unit={
     var i=0
     while(i<s.count){
       need(s.uses(i)==2,"REFERENCES");var driver:Connect=null;var consumer:Statement=null;var drivers=0;var consumers=0
@@ -714,10 +714,11 @@ object ClockInitRepresentationRepair {
         case p:Stop=>need(c.same(s.regs(i).info,p.info),"INFO")
         case _=>fail("CONSUMER")
       }
+      if(claim!=null)claim.requireUses(i,driver,consumer)
       s.consumers(i)=consumer;i+=1
     }
   }
-  private def anchor(s:Statement,mid:Int,selected:Selected,a:Aux,b:Budget,c:Checked):Unit={
+  private def anchor(s:Statement,mid:Int,selected:Selected,a:Aux,b:Budget,c:Checked,proven:Boolean=false):Unit={
     var clock:Reference=null;var info:Info=null;var format:String=null;var ret=0;var print=false
     s match {
       case p:Print=>b.bound(p.string.string.length<=4096,"PRINT_STRING")
@@ -727,6 +728,7 @@ object ClockInitRepresentationRepair {
           if(c.infoPresent(p.info)){clock=r;info=p.info;ret=p.ret};case _=>()}
       case _=>()
     }
+    if(proven)return // Original-global validation above remains mandatory.
     if(clock!=null){var i=0
       while(i<selected.count){
         a.charge(AX.Anchor)
@@ -835,7 +837,42 @@ object ClockInitRepresentationRepair {
   // anchor statement; proof module/root and child enqueue+processing ticks unchanged.
   // Only old index ticks are replaced. Iterator scans and ordering may encounter a
   // finite guard earlier, but cannot turn a rejected incomplete scan into success.
-  def apply(before:Circuit,prepared:Circuit,annotations:AnnotationSeq,expected:Int):Result={
+  // BEGIN PROOF BOUND REPAIR ENTRY
+  final case class ProvenanceResult(state:CircuitState,corrected:Int,noninterferenceTicks:Int)
+  def provenanceReason(error:Throwable):String=ObservedPrepareAst.provenanceReason(error)
+  def applyWithProvenance(before:Circuit,prepared:CircuitState,outer:AnnotationSeq,expected:Int,
+    grant:ObservedPrepareAst.Grant):ProvenanceResult={
+    if(grant==null){val error=new IllegalArgumentException("PROVENANCE");throw error}
+    grant.consume(before,prepared,outer,expected)
+  }
+  private[simulator] def applyClaimed(before:Circuit,prepared:CircuitState,expected:Int,
+    claim:ObservedPrepareAst.Claim):ProvenanceResult={
+    if(claim==null)throw new IllegalArgumentException("PROVENANCE")
+    claim.beginRepair()
+    val result=applyCore(before,prepared.circuit,prepared.annotations,expected,claim)
+    val state=prepared.copy(circuit=result.circuit)
+    claim.requireCommit()
+    ProvenanceResult(state,result.corrected,result.noninterferenceTicks)
+  }
+  private def reserveProvenance(a:Aux,expected:Int):Unit={
+    a.alloc(2097152L);a.transient(8192);a.charge(AX.Clear,16384)
+    a.charge(AX.Probe,4L*expected*expected+64L*expected+128L)
+  }
+  private[simulator] def provenanceBudgetSelfChecks():Int={
+    var checks=0
+    val reservations=List((AX.Live,2097152L),(AX.Iterator,8192L),(AX.Clear,16384L),(AX.Probe,4259968L))
+    reservations.foreach{case(id,n)=>
+      val exact=new Aux(id,n);reserveProvenance(exact,1024);require(exact.value(id)==n,"GRANT_BUDGET_SELFCHECK");checks+=1
+      val short=new Aux(id,n-1);var failure:Throwable=null
+      try{reserveProvenance(short,1024)}catch{case e:IllegalArgumentException=>failure=e}
+      require(failure!=null&&guardCode(failure)=="BOUND"&&short.value(id)==0,"GRANT_BUDGET_SELFCHECK");checks+=1
+    };checks
+  }
+  // END PROOF BOUND REPAIR ENTRY
+  def apply(before:Circuit,prepared:Circuit,annotations:AnnotationSeq,expected:Int):Result=
+    applyCore(before,prepared,annotations,expected,null)
+  private def applyCore(before:Circuit,prepared:Circuit,annotations:AnnotationSeq,expected:Int,
+    claim:ObservedPrepareAst.Claim):Result={
     need(expected>0 && expected<=1024,"COUNT")
     // Static bootstrap precheck precedes even the budget object/counter array.
     need(AX.limits(AX.Live)>=768,"BOUND")
@@ -853,6 +890,11 @@ object ClockInitRepresentationRepair {
     // Dedicated standard-library live scratch, reserved once, not per call:
     // WrappedType zip 8 MiB; bounded official Named parser 32 MiB.
     a.alloc(65536L+262144L-768L+8L*1024*1024+32L*1024*1024)
+    if(claim!=null){
+      // Entire2MiB handoff overlap and cleanup reserved before consumer scratch.
+      reserveProvenance(a,expected)
+      claim.reserve(expected)
+    }
     val b=new Budget
     b.name(before.main);b.name(prepared.main);need(a.equal(before.main,prepared.main),"STRUCTURE")
     val names=new ExactNames(a);val fresh=new Modules(a);val old=new Modules(a)
@@ -881,6 +923,7 @@ object ClockInitRepresentationRepair {
                   val clk=r.clock match {case x:Reference if x.tpe==ClockType && x.kind==PortKind && x.flow==SourceFlow=>x;case _=>fail("CLOCK")}
                   need(inputPort(m,clk.name,a),"CLOCK");need(checked.infoPresent(r.info),"INFO")
                   need(selected.count<expected,"COUNT");selected.add(mid,m.name,r,clk)
+                  if(claim!=null)claim.bind(selected.count-1,mm,r)
                 case _=>()
               }
               walker.descend(st);st=walker.next(AX.Visit)
@@ -891,7 +934,8 @@ object ClockInitRepresentationRepair {
         if(!preparedPass){val preparedId=fresh.id(m.name);var i=0
           while(i<selected.count){a.charge(AX.Probe)
             if(selected.moduleIds(i)==preparedId){
-              if(names.contains(selected.regs(i).name))preexistingFail(m,fresh,selected.regs(i),selected.clocks(i))
+              val priorName=names.contains(selected.regs(i).name)
+              if(priorName&&claim==null)preexistingFail(m,fresh,selected.regs(i),selected.clocks(i))
               need(inputPort(m,selected.clocks(i).name,a),"CLOCK");selected.originalSeen(i)=true
             };i+=1
           }
@@ -900,6 +944,7 @@ object ClockInitRepresentationRepair {
       }
     }
     scan(prepared,fresh,true);need(selected.count==expected,"COUNT")
+    if(claim!=null)claim.requireRecords(selected.count)
     a.phase="INDEX_BEFORE";b.phase="INDEX_BEFORE";scan(before,old,false)
     var i=0;while(i<selected.count){need(selected.originalSeen(i),"ORIGINAL_MODULE");i+=1}
     a.phase="USES";b.phase="ANNOTATIONS"
@@ -914,16 +959,17 @@ object ClockInitRepresentationRepair {
           walker.descend(st);st=walker.next(AX.Uses)}
       case _=>()
     };mid+=1}
-    b.phase="MATCHING";matchUses(selected,a,b,checked)
+    b.phase="MATCHING";matchUses(selected,a,b,checked,claim)
     a.phase="ANCHORS";b.phase="ANCHORS"
     val originalModules=a.iter(before.modules)
     while(originalModules.hasNext){originalModules.next() match {
       case m:Module=>
         val id=fresh.id(m.name);walker.start(m.body);var st=walker.next(-1)
-        while(st!=null){anchor(st,id,selected,a,b,checked);walker.descend(st);st=walker.next(-1)}
+        while(st!=null){anchor(st,id,selected,a,b,checked,claim!=null);walker.descend(st);st=walker.next(-1)}
       case _=>()
     }}
-    i=0;while(i<selected.count){need(selected.anchors(i)==1,"ANCHOR");i+=1}
+    if(claim==null){i=0;while(i<selected.count){need(selected.anchors(i)==1,"ANCHOR");i+=1}}
+    else claim.requireCommit()
     a.phase="REBUILD";b.phase="REBUILD"
     val replacements=new Replacements(a)
     i=0;while(i<selected.count){val reg=selected.regs(i)

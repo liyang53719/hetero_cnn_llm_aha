@@ -251,7 +251,7 @@ object OriginalHostStructuralGraph {
     def boundaryFailure(error:Throwable):String=
       if(stage=="boundary_split")" boundaryStep="+boundaryStep+" boundaryGuard="+boundaryGuardCode(boundaryStep,error)else ""
     def preparedFailure(error:Throwable):String=
-      if(stage=="prepared_checks")" preparedStep="+preparedStep+" clockInitGuard="+(if(preparedStep=="INIT_REPAIR")ClockInitRepresentationRepair.guardCode(error)else "NONE")+" clockInitBound="+(if(preparedStep=="INIT_REPAIR")ClockInitRepresentationRepair.boundEvidence(error)else "NONE")+" clockInitSizing="+sizingRecord+" clockInitAux="+(if(preparedStep=="INIT_REPAIR")ClockInitRepresentationRepair.auxiliaryEvidence(error)else "NONE")+" clockInitPreexisting="+(if(preparedStep=="INIT_REPAIR")ClockInitRepresentationRepair.preexistingEvidence(error)else "NONE")+preparedPassEvidence(error)else ""
+      if(stage=="prepared_checks")" preparedStep="+preparedStep+" clockInitGuard="+(if(preparedStep=="INIT_REPAIR")ClockInitRepresentationRepair.guardCode(error)else "NONE")+" clockInitBound="+(if(preparedStep=="INIT_REPAIR")ClockInitRepresentationRepair.boundEvidence(error)else "NONE")+" clockInitSizing="+sizingRecord+" clockInitAux="+(if(preparedStep=="INIT_REPAIR")ClockInitRepresentationRepair.auxiliaryEvidence(error)else "NONE")+" clockInitPreexisting="+(if(preparedStep=="INIT_REPAIR")ClockInitRepresentationRepair.preexistingEvidence(error)else "NONE")+" clockInitProvenance="+(if(preparedStep=="INIT_REPAIR")ClockInitRepresentationRepair.provenanceReason(error)else "NONE")+preparedPassEvidence(error)else ""
     var censusBefore:firrtl2.ir.Circuit=null;var censusAfter:firrtl2.ir.Circuit=null
     var censusRecord:Option[String]=None
     var telemetry:PhaseTelemetry=null
@@ -321,10 +321,10 @@ object OriginalHostStructuralGraph {
         val ann=FirrtlCircuitAnnotation(boundaryLow.circuit)+:boundaryLow.annotations
         val obtained=timed("get_firrtl_ast") {GetFirrtlAst.transform(ann)}
         val withInfo=timed("set_implicit_output_info") {SetImplicitOutputInfo.transform(obtained)}
-        val (prepared,provenance,observerBudget,observerSizing,observerConsumer,observerFormal,observerAnchor)=timed("prepare_ast") {
+        val (prepared,provenance,observerBudget,observerSizing,observerConsumer,observerFormal,observerAnchor,provenanceGrant)=timed("prepare_ast") {
           val observed=new ObservedPrepareAst(394)
           val value=observed.transform(withInfo)
-          (value,observed.evidence,observed.budgetEvidence,observed.sizingEvidence,observed.consumerEvidence,observed.formalEvidence,observed.anchorEvidence)
+          (value,observed.evidence,observed.budgetEvidence,observed.sizingEvidence,observed.consumerEvidence,observed.formalEvidence,observed.anchorEvidence,observed.takeGrant())
         }
         require(provenance.length<=256,"bounded observer evidence")
         require(observerBudget.length<=512 && observerSizing.length<=512 && observerConsumer.length<=512 && observerFormal.length<=256 && observerAnchor.length<=160,"bounded observer sizing evidence")
@@ -343,10 +343,10 @@ object OriginalHostStructuralGraph {
           require(!states.head.annotations.exists(_.isInstanceOf[UnsupportedAnnotation]),"unsupported prepared annotation")
           preparedStep="INIT_REPAIR"
           sizingPrepared=states.head.circuit
-          val initRepair=ClockInitRepresentationRepair(boundaryLow.circuit,states.head.circuit,states.head.annotations,394)
-          require(false,"OBSERVER_DIAGNOSTIC_ONLY") // Never reach SymbolTable in this diagnostic candidate.
+          val initRepair=ClockInitRepresentationRepair.applyWithProvenance(boundaryLow.circuit,states.head,prepared,394,provenanceGrant)
           require(initRepair.corrected==394,"exact full Host instrumentation clock count")
-          val checkedState=states.head.copy(circuit=initRepair.circuit)
+          val checkedState=initRepair.state
+          require(checkedState.renames.isEmpty,"no prepared rename map")
           require(checkedState.annotations eq states.head.annotations,"same original initialization annotations")
           // Same read-only passes and identity postconditions, in the same order.
           censusAfter=checkedState.circuit
@@ -359,6 +359,10 @@ object OriginalHostStructuralGraph {
           preparedStep="BINDINGS"
           val f=new StructuralMetadataFactory(checkedState.circuit,seed=true)
           require(f.bindings==originalBindings,"same prepared leaf inventory")
+          savedOut.println("PREPARE_REPAIR_V1 status=COMPLETE corrected=394 types=PASS flows=PASS clock=PASS bindings=PASS symbolTableStarted=false");savedOut.flush()
+          require(!savedOut.checkError(),"proof-bound repair evidence output failed")
+          preparedStep="DIAGNOSTIC_STOP"
+          require(false,"PROVENANCE_REPAIR_DIAGNOSTIC_ONLY") // Explicit stop before actual Host SymbolTable.
           (checkedState,f)
         }
         val table=timed("symbol_table") {

@@ -26,7 +26,8 @@ KINDS=('base','nested','recycled')
 OBSERVER_CHECKS=69
 PARITY_CHECKS=11
 SIZING_CHECKS=56
-CASE=re.compile(r'OBSERVED_PREPARE_CASE_V1 mode=(print|stop|both) kind=(base|nested|recycled) parity=true records=([12]) suffixChecks=([036]) graphChecks=([04]) observerChecks=([0-9]+) parityChecks=11 failureParityChecks=([01]) sizingChecks=56 stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence=([^ ]+)')
+QUOTA_CHECKS=6
+CASE=re.compile(r'OBSERVED_PREPARE_CASE_V1 mode=(print|stop|both) kind=(base|nested|recycled) parity=true records=([12]) suffixChecks=([036]) graphChecks=([04]) observerChecks=([0-9]+) parityChecks=11 failureParityChecks=([01]) sizingChecks=56 quotaChecks=6 stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence=([^ ]+)')
 FINAL=re.compile(r'OBSERVED_PREPARE_RUN_V1 label=(official|cached) pass=true cases=9 diagnosticOnly=true interpreterExecuted=false fullHostAccepted=false')
 FAILURE=re.compile(r'OBSERVED_PREPARE_FAILURE_V1 phase=(IDENTITY|SELFTEST|LOWER|OFFICIAL|OBSERVED|OBSERVED_FAILURE|PARITY|SUFFIX|GRAPH|CLEANUP) code=REJECTED')
 def process_ok(value):
@@ -53,7 +54,7 @@ def compare(official,cached,official_process,cached_process):
  # Counters and exact prepared-state observations must also match across key implementations.
  need(a==b)
  return dict(status='PASS_OBSERVED_PREPARE_FIXTURE_ONLY',cases=9,parity_cases=9,suffix_checks=12,graph_checks=12,
-  observer_checks=OBSERVER_CHECKS,parity_checks=11,failure_parity_cases=3,sizing_checks=SIZING_CHECKS,state_fields=3,form_absent_in_pinned_api=True,
+  observer_checks=OBSERVER_CHECKS,parity_checks=11,failure_parity_cases=3,sizing_checks=SIZING_CHECKS,quota_checks=QUOTA_CHECKS,state_fields=3,form_absent_in_pinned_api=True,
   renames_none=True,diagnostic_only=True,interpreter_executed=False,full_host_accepted=False)
 def failure(text,label):
  need(type(label)is str and label in ('official','cached'))
@@ -64,7 +65,8 @@ def failure(text,label):
  return dict(status='FAILED_OBSERVED_PREPARE_FIXTURE_ONLY',phase=m[1],code='REJECTED')
 
 # Failure-only resource sizing. Raw prefixes never establish provenance.
-BUDGET_LIMITS={'GLOBAL_VISIT':1<<24,'GLOBAL_EXPR':1<<25,'NAMES':1<<22,'HASH':1<<29,'EQUAL':1<<30,'PROBE':1<<26,'CLEAR':1<<22,'TEMP':1<<24,'SCAN_VISIT':1<<22,'SCAN_EXPR':1<<23}
+SCAN_EXPR_LIMIT=1<<24 # Explicit measured auxiliary per-scan contract; shared Expr remains2^25.
+BUDGET_LIMITS={'GLOBAL_VISIT':1<<24,'GLOBAL_EXPR':1<<25,'NAMES':1<<22,'HASH':1<<29,'EQUAL':1<<30,'PROBE':1<<26,'CLEAR':1<<22,'TEMP':1<<24,'SCAN_VISIT':1<<22,'SCAN_EXPR':SCAN_EXPR_LIMIT}
 BUDGET_KEYS=('shared_used','scan_used','requested','limit','shared_expr','scan_expr','type','info','node','edge','other')
 SIZING_KEYS=('modules','ports','statements','roots','nodes','edges','max_statement_depth','max_expression_depth','work','transient','traversal')
 def numbers(fields,limits):
@@ -77,7 +79,7 @@ def budget_evidence(text):
  if text=='NONE':return None
  if text=='UNAVAILABLE':return {'status':'UNAVAILABLE'}
  f=text.split(':');need(len(f)==12 and f[0]in BUDGET_LIMITS)
- dim=f[0];v=numbers(f[1:],[1<<30,1<<24,1<<30,1<<30,1<<25,1<<23]+[1<<25]*5)
+ dim=f[0];v=numbers(f[1:],[1<<30,1<<24,1<<30,1<<30,1<<25,SCAN_EXPR_LIMIT]+[1<<25]*5)
  d=dict(dimension=dim,**dict(zip(BUDGET_KEYS,v)))
  need(d['requested']>0 and d['limit']==BUDGET_LIMITS[dim] and sum(v[6:])==d['shared_expr'] and d['scan_expr']<=d['shared_expr'])
  if dim in ('GLOBAL_VISIT','SCAN_VISIT'):need(d['shared_used']<=1<<24 and d['scan_used']<=1<<22 and d['scan_used']<=d['shared_used'])

@@ -72,6 +72,7 @@ object ObservedPrepareAst {
   // The independent416MiB old-root lifetime admission is checked by census.
   private object C {
     val Visit=0;val Expr=1;val Names=2;val Hash=3;val Equal=4;val Probe=5;val Clear=6;val Temp=7
+    val ScanExpr:Long=1L<<24
     val limits=Array[Long](1L<<24,1L<<25,1L<<22,1L<<29,1L<<30,1L<<26,1L<<22,1L<<24)
   }
   private final class Budget {
@@ -93,7 +94,7 @@ object ObservedPrepareAst {
     def charge(id:Int,n:Long=1,category:Int=4):Unit={
       if(n<0 || n>C.limits(id)-used(id))reject(id,n,id,C.limits(id),"BUDGET")
       if(id==C.Visit && n>(1L<<22)-scanVisit)reject(id,n,8,1L<<22,"SCAN_BUDGET")
-      if(id==C.Expr && n>(1L<<23)-scanExpr)reject(id,n,9,1L<<23,"SCAN_BUDGET")
+      if(id==C.Expr && n>(C.ScanExpr)-scanExpr)reject(id,n,9,C.ScanExpr,"SCAN_BUDGET")
       used(id)+=n;if(id==C.Visit)scanVisit+=n;if(id==C.Expr){scanExpr+=n;prefix(category)+=n}
     }
     def failureEvidence:String={
@@ -411,7 +412,7 @@ object ObservedPrepareAst {
     // Only invoked from this object's bounded sizingSelfChecks; not a public hook.
     def sizingFixtureFailure(where:String,mode:Int):Unit={
       step=where
-      if(mode==0){b.scanExpr=1L<<23;b.used(C.Expr)=1L<<23;b.prefix(2)=1L<<23;guard{b.charge(C.Expr,1,3)}}
+      if(mode==0){b.scanExpr=C.ScanExpr;b.used(C.Expr)=C.ScanExpr;b.prefix(2)=C.ScanExpr;guard{b.charge(C.Expr,1,3)}}
       else if(mode==1)guard{b.bound(false)}
       else{if(mode==3)b.failedDimension=99;b.used(C.Expr)=1L<<25;b.prefix(4)=1L<<25;guard{b.charge(C.Expr)}}
     }
@@ -720,7 +721,7 @@ object ObservedPrepareAst {
       check(n==C.limits(i)&&rejected("BUDGET"){b.charge(i)}&&b.used(i)==n);i+=1}
     locally {val b=new Budget;b.scanVisit=(1L<<22)-1;b.charge(C.Visit)
       check(rejected("SCAN_BUDGET"){b.charge(C.Visit)}&&b.used(C.Visit)==1)}
-    locally {val b=new Budget;b.scanExpr=(1L<<23)-1;b.charge(C.Expr)
+    locally {val b=new Budget;b.scanExpr=(C.ScanExpr)-1;b.charge(C.Expr)
       check(rejected("SCAN_BUDGET"){b.charge(C.Expr)}&&b.used(C.Expr)==1)}
     locally {val b=new Budget;val n=new Names(b,8,4);n.add("a");n.add("b");n.add("c");n.add("d")
       check(n.contains("d")&&rejected("BOUND"){n.add("e")})
@@ -885,9 +886,9 @@ object ObservedPrepareAst {
     }
     locally {val b=new Budget;b.scanVisit=1L<<22;b.used(C.Visit)=1L<<22
       check(rejected("SCAN_BUDGET"){b.charge(C.Visit)}&&b.failureEvidence.startsWith("SCAN_VISIT:4194304:4194304:1:4194304:"))}
-    locally {val b=new Budget;b.scanExpr=1L<<23;b.used(C.Expr)=1L<<23;b.prefix(2)=1L<<23
-      check(rejected("SCAN_BUDGET"){b.charge(C.Expr,1,3)}&&b.failureEvidence.startsWith("SCAN_EXPR:8388608:8388608:1:8388608:")&&b.prefix(3)==0)}
-    locally {val b=new Budget;b.scanExpr=1L<<23;b.used(C.Expr)=1L<<25;b.prefix(4)=1L<<25
+    locally {val b=new Budget;b.scanExpr=C.ScanExpr;b.used(C.Expr)=C.ScanExpr;b.prefix(2)=C.ScanExpr
+      check(rejected("SCAN_BUDGET"){b.charge(C.Expr,1,3)}&&b.failureEvidence.startsWith("SCAN_EXPR:16777216:16777216:1:16777216:")&&b.prefix(3)==0)}
+    locally {val b=new Budget;b.scanExpr=C.ScanExpr;b.used(C.Expr)=1L<<25;b.prefix(4)=1L<<25
       check(rejected("BUDGET"){b.charge(C.Expr)}&&fields(b.failureEvidence)(0)=="GLOBAL_EXPR")}
     val totalVisits=receipt(2).toLong+receipt(3).toLong+receipt(4).toLong
     def run(s:Sizer,c:Circuit=input):Array[String]=fields(s.run(c))
@@ -966,6 +967,29 @@ object ObservedPrepareAst {
       check(original.startsWith("TRUNCATED:INITIAL_USES:BUDGET:")&&o.evidence==original&&
         o.budgetEvidence=="UNAVAILABLE"&&o.sizingEvidence=="ERROR:UNEXPECTED:0:0:0:0:0:0:0:0:0:0:0"&&
         !o.sizingPendingForTest&&o.cleaned)}
+    checks
+  }
+
+  /** Explicit measured per-scan revision; no other quota changes. */
+  def quotaSelfChecks():Int={
+    var checks=0
+    def check(ok:Boolean):Unit={require(ok,"QUOTA_SELFCHECK");checks+=1}
+    def rejected(body: =>Unit):Boolean=try{body;false}catch{case _:Abort=>true}
+    locally {val b=new Budget;b.used(C.Expr)=1L<<23;b.scanExpr=1L<<23;b.prefix(2)=1L<<23
+      b.charge(C.Expr,1,3)
+      check(b.scanExpr==(1L<<23)+1&&b.used(C.Expr)==(1L<<23)+1&&b.prefix(3)==1&&b.failureEvidence=="NONE")}
+    locally {val b=new Budget;b.used(C.Expr)=C.ScanExpr-1;b.scanExpr=C.ScanExpr-1;b.prefix(2)=C.ScanExpr-1
+      b.charge(C.Expr,1,3);val accepted=b.used(C.Expr)
+      check(accepted==C.ScanExpr&&rejected{b.charge(C.Expr,1,3)}&&b.used(C.Expr)==accepted&&b.prefix(3)==1&&
+        b.failureEvidence=="SCAN_EXPR:16777216:16777216:1:16777216:16777216:16777216:0:0:16777215:1:0")}
+    locally {val b=new Budget;b.used(C.Expr)=C.limits(C.Expr);b.scanExpr=C.ScanExpr;b.prefix(2)=C.limits(C.Expr)
+      check(rejected{b.charge(C.Expr)}&&b.failureEvidence.startsWith("GLOBAL_EXPR:33554432:16777216:1:33554432:"))}
+    locally {val b=new Budget;b.charge(C.Expr,17,1);b.charge(C.Visit,3);b.start()
+      check(b.scanExpr==0&&b.scanVisit==0&&b.used(C.Expr)==17&&b.used(C.Visit)==3&&b.prefix(1)==17)}
+    locally {val b=new Budget;b.charge(C.Expr,C.ScanExpr,2);b.start();b.charge(C.Expr,C.ScanExpr,3);b.start()
+      check(b.used(C.Expr)==(1L<<25)&&b.prefix(2)==C.ScanExpr&&b.prefix(3)==C.ScanExpr&&
+        rejected{b.charge(C.Expr)}&&b.failureEvidence.startsWith("GLOBAL_EXPR:33554432:0:1:33554432:"))}
+    check(C.ScanExpr==(1L<<24)&&C.limits.toList==List[Long](1L<<24,1L<<25,1L<<22,1L<<29,1L<<30,1L<<26,1L<<22,1L<<24))
     checks
   }
 

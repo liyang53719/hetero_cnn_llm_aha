@@ -218,6 +218,7 @@ object ObservedPrepareStructuralFixture {
         phase="SELFTEST";val selfChecks=ObservedPrepareAst.selfChecks();require(selfChecks==69)
         val parityChecks=paritySelfChecks();require(parityChecks==11)
         val sizingChecks=ObservedPrepareAst.sizingSelfChecks();require(sizingChecks==56)
+        val quotaChecks=ObservedPrepareAst.quotaSelfChecks();require(quotaChecks==6)
         rows=Vector("print","stop","both").flatMap{mode=>
           phase="LOWER"
           val low=Compiler.toLowFirrtl(CircuitState(Parser.parse(source(mode)),Seq(TargetDirAnnotation(targetName)))).circuit
@@ -245,7 +246,7 @@ object ObservedPrepareStructuralFixture {
             }else 0
             phase="SUFFIX";val relations=if(kind=="base")suffix(low,n)else 0
             phase="GRAPH";val graphs=if(kind=="base")graphChecks(state(observed).circuit)else 0
-            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" sizingChecks="+sizingChecks+" stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
+            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" sizingChecks="+sizingChecks+" quotaChecks="+quotaChecks+" stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
           }
         }
         ok=true

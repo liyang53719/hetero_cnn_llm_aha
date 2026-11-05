@@ -155,6 +155,12 @@ object ClockInitRepresentationRepair {
         // Trusted entries pin this exact class before any annotation checks.
         try{if(current!=null)owner=if(current.getClass eq classOf[firrtl2.transforms.DedupedResult])"DEDUPED_RESULT"else"OTHER"}
         catch{case _:Throwable=>()}
+      }else if(site=="ANNOTATION_OTHER"){
+        owner="UNAVAILABLE"
+        // Exact loaded class identity is pinned by the trusted entry gate.
+        // Classification only: never read sink/sources or call annotation methods.
+        try{if(current!=null)owner=if(current.getClass eq classOf[firrtl2.transforms.CombinationalPath])"COMBINATIONAL_PATH"else"OTHER"}
+        catch{case _:Throwable=>()}
       }
       primary.addSuppressed(new AnnotationShapeEvidence(site,owner))
     }}
@@ -181,6 +187,19 @@ object ClockInitRepresentationRepair {
     }catch{case _:Throwable=>"UNAVAILABLE"}
   }
   // END INSTANCE TARGET OWNER DIAGNOSTIC
+  // BEGIN ANNOTATION OTHER OWNER DIAGNOSTIC
+  def annotationOtherOwnerEvidence(error:Throwable):String={
+    if(annotationShapeEvidence(error)!="ANNOTATION_OTHER")return "NONE"
+    try{val evidence=error.getSuppressed
+      if(evidence.length!=1)"UNAVAILABLE"
+      else evidence(0) match{
+        case e:AnnotationShapeEvidence if e.site=="ANNOTATION_OTHER"=>e.owner match{
+          case "COMBINATIONAL_PATH"|"OTHER"|"UNAVAILABLE"=>e.owner
+          case _=>"UNAVAILABLE"}
+        case _=>"UNAVAILABLE"}
+    }catch{case _:Throwable=>"UNAVAILABLE"}
+  }
+  // END ANNOTATION OTHER OWNER DIAGNOSTIC
   // END ANNOTATION SHAPE FIRST SITE DIAGNOSTIC
 
   // BEGIN EXACT PROOF-BOUND DEDUP METADATA
@@ -308,7 +327,7 @@ object ClockInitRepresentationRepair {
         while(groups.hasNext){a.charge(AX.Probe);val xs=groups.next();boundedSize(xs,1024,"TARGET_MEMBERS",a,b)
           val members=a.iter(xs);while(members.hasNext)target(members.next(),annotation)}
       case _:NoTargetAnnotation=>()
-      case _=>annotationShapeFail("ANNOTATION_OTHER")
+      case _=>annotationShapeFail("ANNOTATION_OTHER",annotation)
     }}
   }
 
@@ -1971,5 +1990,74 @@ object ClockInitRepresentationRepair {
     checks
   }
   // END DEDUP METADATA SELFCHECKS
+
+  // BEGIN ANNOTATION OTHER OWNER SELFCHECKS
+  /** Requires the pinned CombinationalPath identity gate before invocation. */
+  def annotationOtherOwnerDiagnosticSelfChecks():Int={
+    var checks=0
+    def check(ok:Boolean):Unit={require(ok,"ANNOTATION_OTHER_OWNER_SELFCHECK");checks+=1}
+    final case class TestOther() extends Annotation{
+      def update(r:firrtl2.RenameMap):Seq[Annotation]=throw new AssertionError("OTHER_UPDATE_MUST_NOT_RUN")
+    }
+    final case class TestNamed(target:Named) extends SingleTargetAnnotation[Named]{
+      def duplicate(n:Named):Annotation=copy(target=n)
+    }
+    final case class UnreadTarget() extends SingleTargetAnnotation[Named]{
+      lazy val target:Named=throw new AssertionError("OTHER_LATE_READ")
+      def duplicate(n:Named):Annotation=TestNamed(n)
+    }
+    def run(as:AnnotationSeq):Throwable={
+      val a=new Aux;val b=new Budget;val modules=new Modules(a);val selected=new Selected(a)
+      modules.add(Module(NoInfo,"Top",Nil,EmptyStmt),0)
+      try{checkStreamingAnnotations(as,selected,modules,"Top",b,a);null}
+      catch{case e:IllegalArgumentException=>e}
+    }
+    def owned(annotation:Annotation,expected:String):Unit={val e=run(annotation::Nil)
+      check(e!=null && e.getClass==classOf[IllegalArgumentException] && guardCode(e)=="ANNOTATION_SHAPE" &&
+        annotationShapeEvidence(e)=="ANNOTATION_OTHER" && annotationOtherOwnerEvidence(e)==expected &&
+        annotationInstanceOwnerEvidence(e)=="NONE" && e.getSuppressed.length==1)}
+    val target=ReferenceTarget("private-circuit","private-module",Nil,"private-sink",Nil)
+    val exact=firrtl2.transforms.CombinationalPath(target,List(target))
+    owned(exact,"COMBINATIONAL_PATH")
+    owned(new firrtl2.transforms.CombinationalPath(target,List(target)){},"OTHER")
+    owned(TestOther(),"OTHER")
+    // Null fields prove this diagnostic does not dereference semantic payloads.
+    owned(firrtl2.transforms.CombinationalPath(null,null),"COMBINATIONAL_PATH")
+    val firstOther=run(List(TestOther(),exact))
+    check(annotationOtherOwnerEvidence(firstOther)=="OTHER")
+    val firstExact=run(List(exact,UnreadTarget()))
+    check(annotationOtherOwnerEvidence(firstExact)=="COMBINATIONAL_PATH")
+    val instance=InstanceTarget("Other","private-module",Nil,"private-instance","private-child")
+    val instanceError=run(TestNamed(instance)::Nil)
+    check(annotationShapeEvidence(instanceError)=="INSTANCE_TARGET" && annotationInstanceOwnerEvidence(instanceError)=="OTHER" && annotationOtherOwnerEvidence(instanceError)=="NONE")
+    val circuitError=run(TestNamed(CircuitTarget("Top"))::Nil)
+    check(annotationShapeEvidence(circuitError)=="CIRCUIT_CURRENT" && annotationOtherOwnerEvidence(circuitError)=="NONE")
+    check(run(Nil)==null && annotationOtherOwnerEvidence(null)=="NONE")
+    def evidence(site:String,owner:String):Throwable={val e=new IllegalArgumentException("ANNOTATION_SHAPE")
+      e.addSuppressed(new AnnotationShapeEvidence(site,owner));e}
+    check(annotationOtherOwnerEvidence(evidence("ANNOTATION_OTHER","not-exported"))=="UNAVAILABLE")
+    check(annotationOtherOwnerEvidence(evidence("ANNOTATION_OTHER",null))=="UNAVAILABLE")
+    check(annotationOtherOwnerEvidence(evidence("ANNOTATION_OTHER","NONE"))=="UNAVAILABLE")
+    check(annotationOtherOwnerEvidence(evidence("ANNOTATION_OTHER","DEDUPED_RESULT"))=="UNAVAILABLE")
+    check(annotationOtherOwnerEvidence(evidence("INSTANCE_TARGET","COMBINATIONAL_PATH"))=="NONE")
+    check(annotationOtherOwnerEvidence(evidence("not-exported","COMBINATIONAL_PATH"))=="NONE")
+    check(annotationOtherOwnerEvidence(evidence("ANNOTATION_OTHER","UNAVAILABLE"))=="UNAVAILABLE")
+    val duplicate=evidence("ANNOTATION_OTHER","COMBINATIONAL_PATH")
+    duplicate.addSuppressed(new AnnotationShapeEvidence("ANNOTATION_OTHER","OTHER"))
+    check(annotationShapeEvidence(duplicate)=="UNAVAILABLE" && annotationOtherOwnerEvidence(duplicate)=="NONE")
+    val missing=new IllegalArgumentException("ANNOTATION_SHAPE")
+    check(annotationOtherOwnerEvidence(missing)=="NONE")
+    missing.addSuppressed(new RuntimeException("not-exported"))
+    check(annotationOtherOwnerEvidence(missing)=="NONE")
+    check(annotationOtherOwnerEvidence(new IllegalArgumentException("BOUND"))=="NONE")
+    check(annotationOtherOwnerEvidence(new IllegalArgumentException("ANNOTATION_SHAPE"){})=="NONE")
+    var fallback:Throwable=null
+    try{annotationShapeFail("ANNOTATION_OTHER",null)}catch{case e:IllegalArgumentException=>fallback=e}
+    check(fallback!=null && guardCode(fallback)=="ANNOTATION_SHAPE" && annotationShapeEvidence(fallback)=="ANNOTATION_OTHER" &&
+      annotationOtherOwnerEvidence(fallback)=="UNAVAILABLE" && annotationInstanceOwnerEvidence(fallback)=="NONE" && fallback.getSuppressed.length==1)
+    check(!annotationOtherOwnerEvidence(run(exact::Nil)).contains("private"))
+    checks
+  }
+  // END ANNOTATION OTHER OWNER SELFCHECKS
 
 }

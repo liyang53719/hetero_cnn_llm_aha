@@ -617,6 +617,7 @@ object ObservedPrepareStructuralFixture {
         val annotationShapeChecks=ClockInitRepresentationRepair.annotationShapeDiagnosticSelfChecks();require(annotationShapeChecks==25)
         val ownerChecks=ClockInitRepresentationRepair.annotationInstanceOwnerDiagnosticSelfChecks();require(ownerChecks==22)
         val dedupMetadataChecks=ClockInitRepresentationRepair.dedupMetadataSelfChecks();require(dedupMetadataChecks==82)
+        val otherOwnerChecks=ClockInitRepresentationRepair.annotationOtherOwnerDiagnosticSelfChecks();require(otherOwnerChecks==23)
         val sizingChecks=ObservedPrepareAst.sizingSelfChecks();require(sizingChecks==56)
         val quotaChecks=ObservedPrepareAst.quotaSelfChecks();require(quotaChecks==6)
         val consumerChecks=ObservedPrepareAst.consumerSelfChecks();require(consumerChecks==24)
@@ -661,7 +662,7 @@ object ObservedPrepareStructuralFixture {
             qualifyGrantRepair(input,observed,observer,n)
             phase="SUFFIX";val relations=if(kind=="base")suffix(low,n)else 0
             phase="GRAPH";val graphs=if(kind=="base")graphChecks(state(observed).circuit)else 0
-            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" sizingChecks="+sizingChecks+" quotaChecks="+quotaChecks+" consumerChecks="+consumerChecks+" consumerParityChecks="+consumerParityChecks+" formalChecks="+formalChecks+" formalParityChecks="+formalParity+" anchorChecks="+anchorChecks+" selectionChecks="+selectionChecks+" selectionParityChecks="+selectionParity+" inputChainChecks="+inputChainChecks+" grantChecks="+grantChecks+" grantParityChecks=15 grantLifecycleChecks="+grantLifecycleChecks+" annotationShapeChecks="+annotationShapeChecks+" ownerChecks="+ownerChecks+" dedupMetadataChecks="+dedupMetadataChecks+" dedupMetadataParityChecks="+dedupMetadataParity+" stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
+            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" sizingChecks="+sizingChecks+" quotaChecks="+quotaChecks+" consumerChecks="+consumerChecks+" consumerParityChecks="+consumerParityChecks+" formalChecks="+formalChecks+" formalParityChecks="+formalParity+" anchorChecks="+anchorChecks+" selectionChecks="+selectionChecks+" selectionParityChecks="+selectionParity+" inputChainChecks="+inputChainChecks+" grantChecks="+grantChecks+" grantParityChecks=15 grantLifecycleChecks="+grantLifecycleChecks+" annotationShapeChecks="+annotationShapeChecks+" ownerChecks="+ownerChecks+" dedupMetadataChecks="+dedupMetadataChecks+" dedupMetadataParityChecks="+dedupMetadataParity+" otherOwnerChecks="+otherOwnerChecks+" stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
           }
         }
         require(grantParityChecks==15)

@@ -135,6 +135,30 @@ object ClockInitRepresentationRepair {
     val it=a.iter(xs);var n=0
     while(it.hasNext){b.bound(n<cap,reason);a.charge(AX.Probe);it.next();n+=1};n
   }
+  // BEGIN ANNOTATION SHAPE FIRST SITE DIAGNOSTIC
+  private final class AnnotationShapeEvidence(val site:String) extends RuntimeException(null,null,false,false)
+  private def annotationShapeSite(site:String):Boolean=site match{
+    case "INDEX_NEGATIVE"|"COMPONENT_OTHER"|"CIRCUIT_CURRENT"|"MODULE_SELECTED"|
+         "INSTANCE_TARGET"|"TARGET_OTHER"|"NAMED_OTHER"|"ANNOTATION_OTHER"=>true
+    case _=>false
+  }
+  private def annotationShapeFail(site:String):Nothing={
+    // Preserve the original exact primary before optional bounded evidence.
+    // One evidence object and the suppressed-array storage fit fixed scratch.
+    val primary=new IllegalArgumentException("ANNOTATION_SHAPE")
+    try{if(annotationShapeSite(site))primary.addSuppressed(new AnnotationShapeEvidence(site))}
+    catch{case _:Throwable=>()}
+    throw primary
+  }
+  def annotationShapeEvidence(error:Throwable):String={
+    if(error==null||error.getClass!=classOf[IllegalArgumentException]||error.getMessage!="ANNOTATION_SHAPE")return "NONE"
+    try{val evidence=error.getSuppressed
+      if(evidence.length!=1)"UNAVAILABLE"
+      else evidence(0) match{case e:AnnotationShapeEvidence if annotationShapeSite(e.site)=>e.site;case _=>"UNAVAILABLE"}
+    }catch{case _:Throwable=>"UNAVAILABLE"}
+  }
+  // END ANNOTATION SHAPE FIRST SITE DIAGNOSTIC
+
   private def checkStreamingAnnotations(as:AnnotationSeq,selected:Selected,modules:Modules,circuit:String,b:Budget,a:Aux):Unit={
     boundedSize(as,100000,"ANNOTATIONS",a,b)
     def target(t:Target):Unit={
@@ -149,15 +173,15 @@ object ClockInitRepresentationRepair {
           val parts=a.iter(r.component)
           while(parts.hasNext){a.charge(AX.Probe);parts.next() match {
             case TargetToken.Field(s)=>b.name(s)
-            case TargetToken.Index(i)=>need(i>=0,"ANNOTATION_SHAPE")
+            case TargetToken.Index(i)=>if(!(i>=0))annotationShapeFail("INDEX_NEGATIVE")
             case TargetToken.Init | TargetToken.Reset | TargetToken.Clock=>()
-            case _=>fail("ANNOTATION_SHAPE")
+            case _=>annotationShapeFail("COMPONENT_OTHER")
           }}
-        case c:CircuitTarget=>b.name(c.circuit);need(!a.equal(c.circuit,circuit),"ANNOTATION_SHAPE")
+        case c:CircuitTarget=>b.name(c.circuit);if(!(!a.equal(c.circuit,circuit)))annotationShapeFail("CIRCUIT_CURRENT")
         case m:ModuleTarget=>b.name(m.circuit);b.name(m.module)
-          need(!(a.equal(m.circuit,circuit) && selected.moduleSelected(modules.id(m.module))),"ANNOTATION_SHAPE")
-        case _:InstanceTarget=>fail("ANNOTATION_SHAPE")
-        case _=>fail("ANNOTATION_SHAPE")
+          if(!(!(a.equal(m.circuit,circuit) && selected.moduleSelected(modules.id(m.module)))))annotationShapeFail("MODULE_SELECTED")
+        case _:InstanceTarget=>annotationShapeFail("INSTANCE_TARGET")
+        case _=>annotationShapeFail("TARGET_OTHER")
       }
     }
     def named(n:Named):Unit=n match {
@@ -166,7 +190,7 @@ object ClockInitRepresentationRepair {
         target(checkedNamed(c,a))
       case m:ModuleName=>b.name(m.name);b.name(m.circuit.name);a.transient(16);target(m.toTarget)
       case c:CircuitName=>b.name(c.name);a.transient(16);target(c.toTarget)
-      case _=>fail("ANNOTATION_SHAPE")
+      case _=>annotationShapeFail("NAMED_OTHER")
     }
     val annotations=a.iter(as)
     while(annotations.hasNext){b.tick();val annotation=annotations.next();annotation match {
@@ -181,7 +205,7 @@ object ClockInitRepresentationRepair {
         while(groups.hasNext){a.charge(AX.Probe);val xs=groups.next();boundedSize(xs,1024,"TARGET_MEMBERS",a,b)
           val members=a.iter(xs);while(members.hasNext)target(members.next())}
       case _:NoTargetAnnotation=>()
-      case _=>fail("ANNOTATION_SHAPE")
+      case _=>annotationShapeFail("ANNOTATION_OTHER")
     }}
   }
 
@@ -1596,5 +1620,76 @@ object ClockInitRepresentationRepair {
     require(checks==24);checks
   }
   // END PREEXISTING COLLISION SELFCHECKS
+
+  /** Actual streaming annotation branches plus bounded evidence failure paths. */
+  def annotationShapeDiagnosticSelfChecks():Int={
+    var checks=0
+    def check(ok:Boolean):Unit={require(ok,"ANNOTATION_SHAPE_SELFCHECK");checks+=1}
+    final case class TestNamed(target:Named) extends SingleTargetAnnotation[Named]{
+      def duplicate(n:Named):Annotation=copy(target=n)
+    }
+    final case class TestOther() extends Annotation{
+      def update(r:firrtl2.RenameMap):Seq[Annotation]=Seq(this)
+    }
+    final case class TestPassive() extends NoTargetAnnotation
+    final case class UnreadTarget() extends SingleTargetAnnotation[Named]{
+      lazy val target:Named=throw new AssertionError("ANNOTATION_LATE_READ")
+      def duplicate(n:Named):Annotation=TestNamed(n)
+    }
+    def run(as:AnnotationSeq):Throwable={
+      val a=new Aux;val b=new Budget;val modules=new Modules(a);val selected=new Selected(a)
+      val clock=Reference("clock",ClockType,PortKind,SourceFlow)
+      val reg=DefRegister(FileInfo("shape:1"),"sample",ClockType,clock,UIntLiteral(0),UIntLiteral(0))
+      modules.add(Module(NoInfo,"Top",Nil,EmptyStmt),0);selected.add(0,"Top",reg,clock)
+      try{checkStreamingAnnotations(as,selected,modules,"Top",b,a);null}
+      catch{case e:IllegalArgumentException=>e}
+    }
+    def site(annotation:Annotation,expected:String):Unit={val error=run(annotation::Nil)
+      check(error!=null&&error.getClass==classOf[IllegalArgumentException]&&guardCode(error)=="ANNOTATION_SHAPE"&&
+        annotationShapeEvidence(error)==expected)}
+    val ref=ReferenceTarget("Other","Mod",Nil,"signal",Nil)
+    site(TestNamed(ref.copy(component=TargetToken.Index(-1)::Nil)),"INDEX_NEGATIVE")
+    site(TestNamed(ref.copy(component=TargetToken.Ref("not-a-component")::Nil)),"COMPONENT_OTHER")
+    site(TestNamed(CircuitTarget("Top")),"CIRCUIT_CURRENT")
+    site(TestNamed(ModuleTarget("Top","Top")),"MODULE_SELECTED")
+    site(TestNamed(InstanceTarget("Other","Mod",Nil,"instance","Child")),"INSTANCE_TARGET")
+    site(TestNamed(GenericTarget(None,None,Vector.empty)),"TARGET_OTHER")
+    // Named is sealed in the pinned source; null reaches its actual fallback.
+    site(TestNamed(null),"NAMED_OTHER")
+    site(TestOther(),"ANNOTATION_OTHER")
+    check(annotationShapeEvidence(null)=="NONE")
+    check(annotationShapeEvidence(new IllegalArgumentException("DRIVER"))=="NONE")
+    check(annotationShapeEvidence(new IllegalArgumentException("ANNOTATION_SHAPE"){})=="NONE")
+    val missing=new IllegalArgumentException("ANNOTATION_SHAPE")
+    check(annotationShapeEvidence(missing)=="UNAVAILABLE")
+    missing.addSuppressed(new RuntimeException("not-exported"))
+    check(annotationShapeEvidence(missing)=="UNAVAILABLE")
+    val malformed=new IllegalArgumentException("ANNOTATION_SHAPE")
+    malformed.addSuppressed(new AnnotationShapeEvidence("not-exported"))
+    check(annotationShapeEvidence(malformed)=="UNAVAILABLE")
+    val absent=new IllegalArgumentException("ANNOTATION_SHAPE");absent.addSuppressed(new AnnotationShapeEvidence(null))
+    check(annotationShapeEvidence(absent)=="UNAVAILABLE")
+    val duplicate=new IllegalArgumentException("ANNOTATION_SHAPE")
+    duplicate.addSuppressed(new AnnotationShapeEvidence("TARGET_OTHER"));duplicate.addSuppressed(new AnnotationShapeEvidence("TARGET_OTHER"))
+    check(annotationShapeEvidence(duplicate)=="UNAVAILABLE")
+    var fallback:Throwable=null
+    try{annotationShapeFail("not-exported"*100)}catch{case e:IllegalArgumentException=>fallback=e}
+    check(fallback!=null&&fallback.getClass==classOf[IllegalArgumentException]&&guardCode(fallback)=="ANNOTATION_SHAPE"&&annotationShapeEvidence(fallback)=="UNAVAILABLE")
+    val selected=ReferenceTarget("Top","Top",Nil,"sample",TargetToken.Index(-1)::Nil)
+    val earlier=run(TestNamed(selected)::Nil)
+    check(guardCode(earlier)=="ANNOTATION_TARGET"&&annotationShapeEvidence(earlier)=="NONE")
+    val preset=run(PresetAnnotation(ref)::Nil)
+    check(guardCode(preset)=="ANNOTATION_PRESET"&&annotationShapeEvidence(preset)=="NONE")
+    val bound=run(TestNamed(ref.copy(circuit=""))::Nil)
+    check(guardCode(bound)=="BOUND"&&annotationShapeEvidence(bound)=="NONE")
+    val first=run(List(TestNamed(CircuitTarget("Top")),UnreadTarget()))
+    check(guardCode(first)=="ANNOTATION_SHAPE"&&annotationShapeEvidence(first)=="CIRCUIT_CURRENT")
+    check(run(TestPassive()::Nil)==null)
+    check(run(TestNamed(CircuitTarget("Other"))::Nil)==null)
+    check(run(TestNamed(ModuleTarget("Other","Top"))::Nil)==null)
+    check(run(List(TestNamed(ref.copy(component=List(TargetToken.Field("field"),TargetToken.Index(0),TargetToken.Clock,TargetToken.Reset,TargetToken.Init))),
+      TestNamed(ref.copy(component=TargetToken.Index(Int.MaxValue)::Nil))))==null)
+    checks
+  }
 
 }

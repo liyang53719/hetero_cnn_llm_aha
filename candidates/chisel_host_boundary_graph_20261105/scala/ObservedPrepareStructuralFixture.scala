@@ -4,6 +4,8 @@ import firrtl2.{AnnotationSeq,CircuitState,Parser}
 import firrtl2.ir._
 import firrtl2.options.TargetDirAnnotation
 import firrtl2.stage.FirrtlCircuitAnnotation
+import firrtl2.annotations.{ModuleTarget,InstanceTarget,TargetToken}
+import firrtl2.transforms.DedupedResult
 import treadle2.TreadleCircuitStateAnnotation
 import treadle2.stage.phases.{GetFirrtlAst,SetImplicitOutputInfo,PrepareAst,HandleFormalStatements}
 import treadle2.utils.AugmentPrintf
@@ -78,6 +80,20 @@ object ObservedPrepareStructuralFixture {
       }
       a match {
         case x:String=>string(x,b.asInstanceOf[String])
+        // Exact historical metadata constructors only, under the same parity budgets.
+        case x:Double=>require(!x.isNaN && !x.isInfinity && java.lang.Double.doubleToRawLongBits(x)==java.lang.Double.doubleToRawLongBits(b.asInstanceOf[Double]))
+        case x:DedupedResult=>
+          require(x.getClass==classOf[DedupedResult]);val y=b.asInstanceOf[DedupedResult]
+          require(annotationCount<64);annotationCount+=1
+          value(x.original,y.original,depth+1,ed,td);value(x.duplicate,y.duplicate,depth+1,ed,td)
+          value(x.index,y.index,depth+1,ed,td);seq(x.targets,y.targets,2,depth+1,ed,td)
+        case x:ModuleTarget=>require(x.getClass==classOf[ModuleTarget]);product(x,b.asInstanceOf[ModuleTarget],depth,ed,td)
+        case x:InstanceTarget=>require(x.getClass==classOf[InstanceTarget]);product(x,b.asInstanceOf[InstanceTarget],depth,ed,td)
+        case x:TargetToken.Instance=>require(x.getClass==classOf[TargetToken.Instance]);product(x,b.asInstanceOf[TargetToken.Instance],depth,ed,td)
+        case x:TargetToken.OfModule=>require(x.getClass==classOf[TargetToken.OfModule]);product(x,b.asInstanceOf[TargetToken.OfModule],depth,ed,td)
+        case x:Tuple2[_,_]=>require(x.getClass==classOf[Tuple2[Any,Any]]);product(x,b.asInstanceOf[Tuple2[_,_]],depth,ed,td)
+        case x:Some[_]=>require(x.getClass==classOf[Some[Any]]);value(x.get,b.asInstanceOf[Some[_]].get,depth+1,ed,td)
+        case None=>require(b.asInstanceOf[AnyRef] eq None)
         case x:Int=>require(x==b.asInstanceOf[Int])
         case x:Long=>require(x==b.asInstanceOf[Long])
         case x:Boolean=>require(x==b.asInstanceOf[Boolean])
@@ -431,7 +447,7 @@ object ObservedPrepareStructuralFixture {
       old.registerNames.toSet==fresh.registerNames.toSet && old.instanceNames.toSet==fresh.instanceNames.toSet &&
       old.orphans.map(_.name).toSet==fresh.orphans.map(_.name).toSet)
   }
-  private def qualifyGrantRepair(before:Circuit,outer:AnnotationSeq,observer:ObservedPrepareAst,expected:Int):Unit={
+  private def qualifyGrantRepair(before:Circuit,outer:AnnotationSeq,observer:ObservedPrepareAst,expected:Int,countLegacy:Boolean=true):CircuitState={
     val prepared=state(outer);require(prepared.productArity==3 && (prepared.renames eq None))
     originalInitErrors(prepared.circuit,expected)
     val grant=observer.takeGrant();require(grant!=null && observer.takeGrant()==null)
@@ -444,7 +460,85 @@ object ObservedPrepareStructuralFixture {
     require(graphChecks(result.state.circuit)==4)
     var replay=false;try{ClockInitRepresentationRepair.applyWithProvenance(before,prepared,outer,expected,grant)}
       catch{case e:IllegalArgumentException=>replay=ObservedPrepareAst.provenanceReason(e)=="REPLAY"}
-    require(replay);grantParityChecks+=1
+    require(replay);if(countLegacy)grantParityChecks+=1
+    result.state
+  }
+  // Three real metadata records enter before the verified pipeline, never after a grant.
+  private def dedupRecord(c:CircuitState,mode:String):DedupedResult={
+    family(c.annotations);require(c.annotations.size<=64)
+    var found:DedupedResult=null;var count=0
+    c.annotations.foreach {a=>if(a.getClass==classOf[DedupedResult]){found=a.asInstanceOf[DedupedResult];count+=1}}
+    require(count==1 && found!=null && found.original.getClass==classOf[ModuleTarget])
+    require(found.original.circuit==c.circuit.main)
+    family(found.targets);require(found.targets.size==2)
+    val first=found.targets(0);val second=found.targets(1);family(first);family(second)
+    require(first.size==1 && (first.head.asInstanceOf[AnyRef] eq found.original))
+    if(mode=="INSTANCE"){
+      require(found.original.module=="HistoricalAbsent" && !c.circuit.modules.exists(_.name==found.original.module))
+      require(found.duplicate.getClass==classOf[Some[Any]] && found.duplicate.get.getClass==classOf[InstanceTarget])
+      require(found.index==0.0)
+      val target=found.duplicate.get.asInstanceOf[InstanceTarget]
+      require(target.circuit==c.circuit.main && target.module==c.circuit.main && target.path.isEmpty &&
+        target.instance=="historical_instance" && target.ofModule=="HistoricalAbsent")
+    }else{
+      require(found.original.module==c.circuit.main && registers(c.circuit).nonEmpty)
+      if(mode=="MODULE"){
+        require(found.duplicate.getClass==classOf[Some[Any]] && found.duplicate.get.getClass==classOf[ModuleTarget])
+        val target=found.duplicate.get.asInstanceOf[ModuleTarget]
+        require(target.circuit==c.circuit.main && target.module==c.circuit.main && found.index==1.0)
+      }else require(mode=="NONE" && (found.duplicate eq None) && found.index == -1.0)
+    }
+    if(found.duplicate eq None)require(second.isEmpty)
+    else require(second.size==1 && (second.head.asInstanceOf[AnyRef] eq found.duplicate.get.asInstanceOf[AnyRef]))
+    found
+  }
+  private def dedupMetadataParityChecks(targetName:String):Int={
+    // Five mandatory negative prerequisites; the returned count remains three real cases.
+    var negatives=0
+    def rejected(a:Any,b:Any):Unit={var failed=false;try{new Parity().value(a,b)}catch{
+      case _:IllegalArgumentException=>failed=true};require(failed);negatives+=1}
+    val target=ModuleTarget("Parity","Parity")
+    val record=DedupedResult(target,Some(target),0.0)
+    rejected(record,record.copy(index=1.0))
+    rejected(record,record.copy(index = -0.0))
+    val nan=record.copy(index=Double.NaN);rejected(nan,nan)
+    rejected(record,record.copy(original=ModuleTarget("Parity","Changed")))
+    val unknown=new DedupedResult(target,Some(target),0.0){};rejected(unknown,unknown)
+    require(negatives==5)
+    var checks=0
+    Vector("MODULE","INSTANCE","NONE").foreach {mode=>
+      val input=Compiler.toLowFirrtl(CircuitState(Parser.parse(source(if(mode=="INSTANCE")"stop"else"print")),Seq(TargetDirAnnotation(targetName)))).circuit
+      val selected=ModuleTarget(input.main,input.main)
+      val seeded=if(mode=="MODULE")DedupedResult(selected,Some(selected),1.0)
+        else if(mode=="INSTANCE")DedupedResult(ModuleTarget(input.main,"HistoricalAbsent"),
+          Some(InstanceTarget(input.main,input.main,Nil,"historical_instance","HistoricalAbsent")),0.0)
+        else DedupedResult(selected,None,-1.0)
+      val annotations=Seq(FirrtlCircuitAnnotation(input),TargetDirAnnotation(targetName),seeded)
+      val chain=checkedInputChain(input,annotations)
+      val official=(new PrepareAst).transform(chain)
+      val observer=new ObservedPrepareAst(1);val observed=observer.transform(chain)
+      new Parity().apply(official,observed)
+      require(observer.evidence.startsWith("COMPLETE:DONE:NONE:1:1:1:1:1:1:1:"))
+      require(observer.anchorEvidence=="NONE" && observer.consumerEvidence=="NONE" && observer.formalEvidence=="COMPLETE:0:0:0:0")
+      require(observer.budgetEvidence=="NONE" && observer.sizingEvidence=="NONE")
+      dedupRecord(state(official),mode)
+      val prepared=state(observed);val record=dedupRecord(prepared,mode)
+      val groups=record.targets;val first=groups(0);val second=groups(1)
+      val original=record.original;val duplicate=record.duplicate
+      var strictRejected=false
+      try{ClockInitRepresentationRepair(input,prepared.circuit,prepared.annotations,1)}catch{
+        case e:IllegalArgumentException=>strictRejected=ClockInitRepresentationRepair.guardCode(e)=="ANNOTATION_SHAPE" &&
+          ClockInitRepresentationRepair.annotationShapeEvidence(e)==(if(mode=="INSTANCE")"INSTANCE_TARGET"else"MODULE_SELECTED")}
+      require(strictRejected)
+      val repaired=qualifyGrantRepair(input,observed,observer,1,countLegacy=false)
+      require((repaired.annotations eq prepared.annotations) && (dedupRecord(repaired,mode) eq record))
+      require((record.targets eq groups) && (record.targets(0) eq first) && (record.targets(1) eq second) &&
+        (record.original eq original) && (record.duplicate eq duplicate))
+      require(first.head.asInstanceOf[AnyRef] eq original)
+      if(duplicate.nonEmpty)require(second.head.asInstanceOf[AnyRef] eq duplicate.get.asInstanceOf[AnyRef])
+      checks+=1
+    }
+    require(checks==3);checks
   }
   private def suffix(c:Circuit,n:Int):Int={
     val original=CircuitState(c,Seq.empty)
@@ -522,6 +616,7 @@ object ObservedPrepareStructuralFixture {
         val grantChecks=ObservedPrepareAst.grantSelfChecks();require(grantChecks==72)
         val annotationShapeChecks=ClockInitRepresentationRepair.annotationShapeDiagnosticSelfChecks();require(annotationShapeChecks==25)
         val ownerChecks=ClockInitRepresentationRepair.annotationInstanceOwnerDiagnosticSelfChecks();require(ownerChecks==22)
+        val dedupMetadataChecks=ClockInitRepresentationRepair.dedupMetadataSelfChecks();require(dedupMetadataChecks==82)
         val sizingChecks=ObservedPrepareAst.sizingSelfChecks();require(sizingChecks==56)
         val quotaChecks=ObservedPrepareAst.quotaSelfChecks();require(quotaChecks==6)
         val consumerChecks=ObservedPrepareAst.consumerSelfChecks();require(consumerChecks==24)
@@ -531,6 +626,7 @@ object ObservedPrepareStructuralFixture {
         phase="OBSERVED_FAILURE";val consumerParityChecks=consumerParityCheck(targetName);require(consumerParityChecks==1)
         val formalParity= formalParityChecks(targetName);require(formalParity==2)
         val selectionParity=selectionParityChecks(targetName);require(selectionParity==4)
+        val dedupMetadataParity=dedupMetadataParityChecks(targetName);require(dedupMetadataParity==3)
         rows=Vector("print","stop","both").flatMap{mode=>
           phase="LOWER"
           val low=Compiler.toLowFirrtl(CircuitState(Parser.parse(source(mode)),Seq(TargetDirAnnotation(targetName)))).circuit
@@ -565,7 +661,7 @@ object ObservedPrepareStructuralFixture {
             qualifyGrantRepair(input,observed,observer,n)
             phase="SUFFIX";val relations=if(kind=="base")suffix(low,n)else 0
             phase="GRAPH";val graphs=if(kind=="base")graphChecks(state(observed).circuit)else 0
-            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" sizingChecks="+sizingChecks+" quotaChecks="+quotaChecks+" consumerChecks="+consumerChecks+" consumerParityChecks="+consumerParityChecks+" formalChecks="+formalChecks+" formalParityChecks="+formalParity+" anchorChecks="+anchorChecks+" selectionChecks="+selectionChecks+" selectionParityChecks="+selectionParity+" inputChainChecks="+inputChainChecks+" grantChecks="+grantChecks+" grantParityChecks=15 grantLifecycleChecks="+grantLifecycleChecks+" annotationShapeChecks="+annotationShapeChecks+" ownerChecks="+ownerChecks+" stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
+            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" sizingChecks="+sizingChecks+" quotaChecks="+quotaChecks+" consumerChecks="+consumerChecks+" consumerParityChecks="+consumerParityChecks+" formalChecks="+formalChecks+" formalParityChecks="+formalParity+" anchorChecks="+anchorChecks+" selectionChecks="+selectionChecks+" selectionParityChecks="+selectionParity+" inputChainChecks="+inputChainChecks+" grantChecks="+grantChecks+" grantParityChecks=15 grantLifecycleChecks="+grantLifecycleChecks+" annotationShapeChecks="+annotationShapeChecks+" ownerChecks="+ownerChecks+" dedupMetadataChecks="+dedupMetadataChecks+" dedupMetadataParityChecks="+dedupMetadataParity+" stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
           }
         }
         require(grantParityChecks==15)

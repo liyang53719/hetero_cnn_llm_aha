@@ -141,7 +141,7 @@ object ClockInitRepresentationRepair {
   }
   private def annotationShapeSite(site:String):Boolean=site match{
     case "INDEX_NEGATIVE"|"COMPONENT_OTHER"|"CIRCUIT_CURRENT"|"MODULE_SELECTED"|
-         "INSTANCE_TARGET"|"TARGET_OTHER"|"NAMED_OTHER"|"ANNOTATION_OTHER"=>true
+         "INSTANCE_TARGET"|"TARGET_OTHER"|"NAMED_OTHER"|"ANNOTATION_OTHER"|"DEDUP_METADATA"=>true
     case _=>false
   }
   private def annotationShapeFail(site:String,current:Annotation=null):Nothing={
@@ -183,7 +183,84 @@ object ClockInitRepresentationRepair {
   // END INSTANCE TARGET OWNER DIAGNOSTIC
   // END ANNOTATION SHAPE FIRST SITE DIAGNOSTIC
 
-  private def checkStreamingAnnotations(as:AnnotationSeq,selected:Selected,modules:Modules,circuit:String,b:Budget,a:Aux):Unit={
+  // BEGIN EXACT PROOF-BOUND DEDUP METADATA
+  private def dedupNeed(ok:Boolean):Unit=if(!ok)annotationShapeFail("DEDUP_METADATA")
+  // Each call precharges the null/exact-class classification before getClass.
+  private def dedupExact(x:AnyRef,c:Class[_],a:Aux):Boolean={
+    a.charge(AX.Probe);x!=null && (x.getClass eq c)
+  }
+  private def dedupMore(it:Iterator[_],a:Aux):Boolean={a.charge(AX.Probe);it.hasNext}
+  private def dedupNext(it:Iterator[_],a:Aux):Any={a.charge(AX.Probe);it.next()}
+  private def dedupPath(path:Seq[_],b:Budget,a:Aux):Unit={
+    val entries=a.iter(path);var count=0
+    while(dedupMore(entries,a)){
+      a.charge(AX.Probe);dedupNeed(count<64)
+      val pair=dedupNext(entries,a).asInstanceOf[AnyRef];b.tick()
+      dedupNeed(dedupExact(pair,classOf[Tuple2[_,_]],a))
+      val tuple=pair.asInstanceOf[Tuple2[Any,Any]]
+      a.charge(AX.Probe,2);val left=tuple._1.asInstanceOf[AnyRef];val right=tuple._2.asInstanceOf[AnyRef]
+      dedupNeed(dedupExact(left,classOf[TargetToken.Instance],a))
+      dedupNeed(dedupExact(right,classOf[TargetToken.OfModule],a))
+      a.charge(AX.Probe,2)
+      b.name(left.asInstanceOf[TargetToken.Instance].value);b.name(right.asInstanceOf[TargetToken.OfModule].value)
+      count+=1
+    }
+  }
+  private def dedupTarget(target:AnyRef,original:Boolean,circuit:String,b:Budget,a:Aux):Unit={
+    b.tick()
+    if(dedupExact(target,classOf[ModuleTarget],a)){
+      val m=target.asInstanceOf[ModuleTarget]
+      a.charge(AX.Probe,2);val c=m.circuit;val n=m.module
+      b.name(c);b.name(n);dedupNeed(a.equal(c,circuit))
+    }else{
+      a.charge(AX.Probe);dedupNeed(!original)
+      dedupNeed(dedupExact(target,classOf[InstanceTarget],a))
+      val i=target.asInstanceOf[InstanceTarget]
+      a.charge(AX.Probe,5);val c=i.circuit;val n=i.module;val inst=i.instance;val of=i.ofModule;val path=i.path
+      b.name(c);b.name(n);b.name(inst);b.name(of);dedupNeed(a.equal(c,circuit))
+      dedupPath(path,b,a)
+    }
+  }
+  private def dedupGroups(groups:Seq[Seq[Target]],original:AnyRef,duplicate:AnyRef,a:Aux):Unit={
+    val outer=a.iter(groups);var group=0
+    while(group<2){
+      dedupNeed(dedupMore(outer,a))
+      val members=dedupNext(outer,a).asInstanceOf[Seq[Target]];val inner=a.iter(members)
+      a.charge(AX.Probe);val wanted=if(group==0)original else duplicate
+      a.charge(AX.Probe)
+      if(wanted!=null){
+        dedupNeed(dedupMore(inner,a));val member=dedupNext(inner,a).asInstanceOf[AnyRef]
+        a.charge(AX.Probe);dedupNeed(member eq wanted)
+      }
+      dedupNeed(!dedupMore(inner,a));group+=1
+    }
+    dedupNeed(!dedupMore(outer,a))
+  }
+  private def dedupDuplicate(option:Option[IsModule],index:Double,circuit:String,b:Budget,a:Aux):AnyRef={
+    var duplicate:AnyRef=null
+    a.charge(AX.Probe)
+    if(option eq None){a.charge(AX.Probe);dedupNeed(index == -1.0)}
+    else{
+      dedupNeed(dedupExact(option,classOf[Some[_]],a))
+      a.charge(AX.Probe);duplicate=option.asInstanceOf[Some[IsModule]].value.asInstanceOf[AnyRef]
+      // Ordered primitive comparisons reject NaN and both infinities as well.
+      a.charge(AX.Probe,2);dedupNeed(index>=0.0 && index<=1.0)
+      dedupTarget(duplicate,false,circuit,b,a)
+    }
+    duplicate
+  }
+  private def checkDedupMetadata(record:firrtl2.transforms.DedupedResult,circuit:String,b:Budget,a:Aux):Unit={
+    // Exact owner prerequisite is also enforced here for private qualification.
+    dedupNeed(dedupExact(record,classOf[firrtl2.transforms.DedupedResult],a))
+    a.charge(AX.Probe,4)
+    val original=record.original;val option=record.duplicate;val index=record.index;val groups=record.targets
+    dedupTarget(original,true,circuit,b,a)
+    val duplicate=dedupDuplicate(option,index,circuit,b,a)
+    dedupGroups(groups,original,duplicate,a)
+  }
+  // END EXACT PROOF-BOUND DEDUP METADATA
+
+  private def checkStreamingAnnotations(as:AnnotationSeq,selected:Selected,modules:Modules,circuit:String,b:Budget,a:Aux,proofBound:Boolean=false):Unit={
     boundedSize(as,100000,"ANNOTATIONS",a,b)
     def target(t:Target,current:Annotation):Unit={
       b.tick()
@@ -223,6 +300,8 @@ object ClockInitRepresentationRepair {
            _:treadle2.TreadleTesterAnnotation=>fail("ANNOTATION_EXTENSION")
       case x if x.getClass.getName=="firrtl2.stage.RunFirrtlTransformAnnotation" ||
         x.getClass.getName=="firrtl2.stage.RunFirrtlTransformAnnotation$" || x.getClass.getName=="firrtl2.options.RunFirrtlTransformAnnotation"=>fail("ANNOTATION_EXTENSION")
+      case x if proofBound && dedupExact(x,classOf[firrtl2.transforms.DedupedResult],a)=>
+        checkDedupMetadata(x.asInstanceOf[firrtl2.transforms.DedupedResult],circuit,b,a)
       case x:SingleTargetAnnotation[_]=>named(x.target,annotation)
       case x:MultiTargetAnnotation=>
         boundedSize(x.targets,1024,"TARGET_GROUPS",a,b);val groups=a.iter(x.targets)
@@ -996,7 +1075,7 @@ object ClockInitRepresentationRepair {
     a.phase="INDEX_BEFORE";b.phase="INDEX_BEFORE";scan(before,old,false)
     var i=0;while(i<selected.count){need(selected.originalSeen(i),"ORIGINAL_MODULE");i+=1}
     a.phase="USES";b.phase="ANNOTATIONS"
-    checkStreamingAnnotations(annotations,selected,fresh,prepared.main,b,a)
+    checkStreamingAnnotations(annotations,selected,fresh,prepared.main,b,a,claim!=null)
     b.phase="USES"
     val expressions=new Expressions(a,b,selected);val modules=a.iter(prepared.modules);var mid=0
     while(modules.hasNext){modules.next() match {
@@ -1780,5 +1859,117 @@ object ClockInitRepresentationRepair {
     check(!annotationInstanceOwnerEvidence(run(exact::Nil)).contains("private"))
     checks
   }
+
+  // BEGIN DEDUP METADATA SELFCHECKS
+  def dedupMetadataSelfChecks():Int={
+    var checks=0
+    def check(ok:Boolean):Unit={require(ok,"DEDUP_METADATA_SELFCHECK");checks+=1}
+    def caught(f: =>Unit):Throwable={try{f;null}catch{case e:IllegalArgumentException=>e}}
+    def bad(f: =>Unit):Unit={val e=caught(f);check(e!=null && guardCode(e)=="ANNOTATION_SHAPE" &&
+      annotationShapeEvidence(e)=="DEDUP_METADATA" && annotationInstanceOwnerEvidence(e)=="NONE" && e.getSuppressed.length==1)}
+    def bounded(f: =>Unit):Unit={val e=caught(f);check(e!=null && guardCode(e)=="BOUND")}
+    val original=ModuleTarget("Top","historical-original")
+    val module=ModuleTarget("Top","Top")
+    val instance=InstanceTarget("Top","historical-parent",Nil,"historical-instance","historical-child")
+    def record(d:Option[IsModule],i:Double)=firrtl2.transforms.DedupedResult(original,d,i)
+    def run(r:firrtl2.transforms.DedupedResult,a:Aux=new Aux,b:Budget=new Budget):Unit=checkDedupMetadata(r,"Top",b,a)
+    val simple=record(Some(instance),0.5)
+    check(caught(run(record(None,-1.0)))==null)
+    check(caught(run(record(Some(module),0.0)))==null)
+    check(caught(run(record(Some(module),1.0)))==null)
+    check(caught(run(simple))==null)
+    check(caught(run(firrtl2.transforms.DedupedResult(module,Some(instance),1.0)))==null)
+    check(caught(run(record(Some(instance),-0.0)))==null)
+    bad(run(record(None,0.0)))
+    bad(run(record(None,Double.NaN)))
+    bad(run(record(Some(module),Double.NaN)))
+    bad(run(record(Some(module),Double.PositiveInfinity)))
+    bad(run(record(Some(module),Double.NegativeInfinity)))
+    bad(run(record(Some(module),-0.01)))
+    bad(run(record(Some(module),1.01)))
+    bad(run(record(Some(null),0.0)))
+    bad(run(firrtl2.transforms.DedupedResult(null,None,-1.0)))
+    bad(run(null))
+    bad(dedupDuplicate(null,0.0,"Top",new Budget,new Aux))
+    bad(dedupTarget(new ModuleTarget("Top","historical"){},true,"Top",new Budget,new Aux))
+    bad(dedupTarget(new InstanceTarget("Top","historical",Nil,"i","m"){},false,"Top",new Budget,new Aux))
+    bad(run(new firrtl2.transforms.DedupedResult(original,Some(instance),0.0){}))
+    bad(run(firrtl2.transforms.DedupedResult(ModuleTarget("Other","historical"),None,-1.0)))
+    bad(run(record(Some(ModuleTarget("Other","historical")),0.0)))
+    bad(run(record(Some(instance.copy(circuit="Other")),0.0)))
+    bad(dedupTarget(instance,true,"Top",new Budget,new Aux))
+    bad(dedupTarget(CircuitTarget("Top"),false,"Top",new Budget,new Aux))
+    bad(dedupTarget(ReferenceTarget("Top","Top",Nil,"r",Nil),false,"Top",new Budget,new Aux))
+    bounded(run(firrtl2.transforms.DedupedResult(ModuleTarget("","x"),None,-1.0)))
+    bounded(run(firrtl2.transforms.DedupedResult(ModuleTarget("Top",null),None,-1.0)))
+    bounded(run(record(Some(instance.copy(instance="")),0.0)))
+    bounded(run(record(Some(instance.copy(ofModule="x"*4097)),0.0)))
+    check(caught(run(record(Some(instance.copy(ofModule="x"*4096)),0.0)))==null)
+    val pair=(TargetToken.Instance("i"),TargetToken.OfModule("m"))
+    val path64=List.fill(64)(pair)
+    val b64=new Budget
+    check(caught(run(record(Some(instance.copy(path=path64)),0.0),new Aux,b64))==null && b64.work==66)
+    bad(run(record(Some(instance.copy(path=pair::path64)),0.0)))
+    bad(dedupPath(List(null),new Budget,new Aux))
+    bad(dedupPath(List("not-a-pair"),new Budget,new Aux))
+    bad(dedupPath(List((null,TargetToken.OfModule("m"))),new Budget,new Aux))
+    bad(dedupPath(List((TargetToken.Instance("i"),null)),new Budget,new Aux))
+    bad(dedupPath(List((TargetToken.Field("i"),TargetToken.OfModule("m"))),new Budget,new Aux))
+    bad(dedupPath(List((TargetToken.Instance("i"),TargetToken.Field("m"))),new Budget,new Aux))
+    bounded(dedupPath(List((TargetToken.Instance(""),TargetToken.OfModule("m"))),new Budget,new Aux))
+    bounded(dedupPath(null,new Budget,new Aux))
+    bounded(dedupPath(scala.collection.immutable.Queue(pair),new Budget,new Aux))
+    bounded(new Aux().family(scala.collection.mutable.ArrayBuffer(pair)))
+    bounded(dedupGroups(scala.collection.immutable.Queue(List(original),List(instance)),original,instance,new Aux))
+    check(caught(dedupPath(Vector(pair),new Budget,new Aux))==null)
+    check(caught(dedupPath(scala.collection.immutable.ArraySeq.unsafeWrapArray(Array(pair)),new Budget,new Aux))==null)
+    val valid:Seq[Seq[Target]]=List(List(original),List(instance))
+    check(caught(dedupGroups(valid,original,instance,new Aux))==null)
+    bad(dedupGroups(Nil,original,instance,new Aux))
+    bad(dedupGroups(List(List(original)),original,instance,new Aux))
+    bad(dedupGroups(valid:::List(Nil),original,instance,new Aux))
+    bad(dedupGroups(List(Nil,List(instance)),original,instance,new Aux))
+    bad(dedupGroups(List(List(original,original),List(instance)),original,instance,new Aux))
+    bad(dedupGroups(List(List(original),Nil),original,instance,new Aux))
+    bad(dedupGroups(List(List(original),List(instance,instance)),original,instance,new Aux))
+    bad(dedupGroups(List(List(original.copy()),List(instance)),original,instance,new Aux))
+    bad(dedupGroups(List(List(original),List(instance.copy())),original,instance,new Aux))
+    bad(dedupGroups(valid,original,null,new Aux))
+    check(caught(dedupGroups(List(List(original),Nil),original,null,new Aux))==null)
+    val measured=new Aux;run(simple,measured)
+    val dimensions=List(AX.Probe,AX.Iterator,AX.Equal)
+    dimensions.foreach{dimension=>
+      val used=measured.value(dimension)
+      check(used>0 && caught(run(simple,new Aux(dimension,used)))==null)
+      bounded(run(simple,new Aux(dimension,used-1)))
+      val twice=new Aux(dimension,used*2)
+      check(caught({run(simple,twice);run(simple,twice)})==null && twice.value(dimension)==used*2)
+      bounded(run(simple,twice))
+    }
+    var read=0
+    val witness=new Iterator[Any]{def hasNext:Boolean={read+=1;true};def next():Any={read+=1;null}}
+    bounded(dedupMore(witness,new Aux(AX.Probe,0)))
+    check(read==0)
+    bounded(dedupNext(witness,new Aux(AX.Probe,0)))
+    check(read==0)
+    final case class Other(target:Named) extends SingleTargetAnnotation[Named]{def duplicate(n:Named):Annotation=copy(target=n)}
+    def streaming(annotation:Annotation,proof:Boolean):Throwable={
+      val a=new Aux;val b=new Budget;val modules=new Modules(a);val selected=new Selected(a)
+      modules.add(Module(NoInfo,"Top",Nil,EmptyStmt),0)
+      val clock=Reference("clock",ClockType,PortKind,SourceFlow)
+      selected.add(0,"Top",DefRegister(NoInfo,"sample",ClockType,clock,UIntLiteral(0),UIntLiteral(0)),clock)
+      caught(checkStreamingAnnotations(annotation::Nil,selected,modules,"Top",b,a,proof))
+    }
+    check(streaming(simple,true)==null)
+    check(annotationShapeEvidence(streaming(simple,false))=="INSTANCE_TARGET")
+    check(annotationShapeEvidence(streaming(Other(instance),true))=="INSTANCE_TARGET")
+    check(annotationShapeEvidence(streaming(new firrtl2.transforms.DedupedResult(original,Some(instance),0.0){},true))=="INSTANCE_TARGET")
+    check(streaming(firrtl2.transforms.DedupedResult(module,None,-1.0),true)==null)
+    check(annotationShapeEvidence(streaming(firrtl2.transforms.DedupedResult(module,None,-1.0),false))=="MODULE_SELECTED")
+    check(annotationShapeEvidence(streaming(record(None,1.0),true))=="DEDUP_METADATA")
+    check(streaming(record(None,1.0),false)==null)
+    checks
+  }
+  // END DEDUP METADATA SELFCHECKS
 
 }

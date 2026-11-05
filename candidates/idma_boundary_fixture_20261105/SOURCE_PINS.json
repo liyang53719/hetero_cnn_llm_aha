@@ -3,8 +3,8 @@
   "files": [
     {
       "path": ".github/workflows/idma-boundary-fixture-once.yml",
-      "bytes": 1991,
-      "sha256": "ca41c31201dbde724978e327138f1307783df37b8cecb8feb986eb485a6f385b"
+      "bytes": 2007,
+      "sha256": "165c17b32f05a1a4522b107e9bedf566674911b33ff8b56e5e30683d8a3632b2"
     },
     {
       "path": "candidates/idma_boundary_fixture_20261105/compare_boundary_results.py",
@@ -28,13 +28,13 @@
     },
     {
       "path": "candidates/idma_boundary_fixture_20261105/run.py",
-      "bytes": 16471,
-      "sha256": "19031fc3da15d8fd47b9c46ebd651dea52250d70a0d10f8af21e887ee9a13842"
+      "bytes": 16616,
+      "sha256": "fb6445a872f2d609e213d3383e39936274e85491047d1cbcde4dc313ebc5f37f"
     },
     {
       "path": "candidates/idma_boundary_fixture_20261105/scala/BoundarySplitStructuralFixture.scala",
-      "bytes": 24654,
-      "sha256": "8657fab730e948fb1e9471afe52f0a9cd96e88794baa8b86a1aee5cc534d00e1"
+      "bytes": 25254,
+      "sha256": "823e706239ecb3fbd0b8eebd41710dcfb2311aceef8e40adb5589d94b843c67d"
     },
     {
       "path": "candidates/idma_boundary_fixture_20261105/scala/IdmaFieldSplitTransform.scala",
@@ -55,14 +55,7 @@
   "publication_delta": [
     ".github/workflows/idma-boundary-fixture-once.yml",
     "candidates/idma_boundary_fixture_20261105/SOURCE_PINS.json",
-    "candidates/idma_boundary_fixture_20261105/compare_boundary_results.py",
-    "candidates/idma_boundary_fixture_20261105/modulecache/BoundedCycleWitness.scala",
-    "candidates/idma_boundary_fixture_20261105/modulecache/SymbolTable.scala",
-    "candidates/idma_boundary_fixture_20261105/prepare_jars.py",
     "candidates/idma_boundary_fixture_20261105/run.py",
-    "candidates/idma_boundary_fixture_20261105/scala/BoundarySplitStructuralFixture.scala",
-    "candidates/idma_boundary_fixture_20261105/scala/IdmaFieldSplitTransform.scala",
-    "candidates/idma_boundary_fixture_20261105/scala/IdmaPackedBoundarySplit.scala",
-    "candidates/idma_boundary_fixture_20261105/scala/IdmaSplitLayout.scala"
+    "candidates/idma_boundary_fixture_20261105/scala/BoundarySplitStructuralFixture.scala"
   ]
 }

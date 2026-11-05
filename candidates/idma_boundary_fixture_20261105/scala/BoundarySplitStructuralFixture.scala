@@ -310,7 +310,15 @@ object BoundarySplitStructuralFixture {
       require(args.length==4 && Set("official","cached")(args(0)))
       require(args.slice(1,3).forall(_.matches("[0-9a-f]{64}")))
       require(loaded(classOf[SymbolTable],args(3))==args(1) && loaded(SymbolTable.getClass,args(3))==args(2))
-      target=Some(Files.createTempDirectory("idma-boundary-fixture-"))
+      // SimulatorCompiler.requireTargetDir consumes os.RelPath, not an absolute path.
+      // Keep the one-component owned directory under this process's supervised cwd.
+      val base=Paths.get(".").toAbsolutePath.normalize()
+      val absoluteTarget=Files.createTempDirectory(base,"idma-boundary-fixture-")
+      val relativeTarget=base.relativize(absoluteTarget)
+      require(absoluteTarget.getParent==base && !relativeTarget.isAbsolute &&
+        relativeTarget.getNameCount==1 && relativeTarget.normalize()==relativeTarget &&
+        relativeTarget.toString!="." && relativeTarget.toString!="..","owned relative fixture target")
+      target=Some(relativeTarget)
       System.setOut(muted);System.setErr(muted)
       Console.withOut(muted){Console.withErr(muted){
         rows=Vector("base","true_cycle","self_loop","registered","boundary_cycle","boundary_registered","arithmetic","whole_bus").map{mode=>

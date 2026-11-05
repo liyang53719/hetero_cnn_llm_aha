@@ -2,7 +2,7 @@ name: idma-isolated-boundary-fixture-only
 on:
   push:
     branches: [main]
-    paths: [ci_launch/idma_boundary_fixture_20261105_once.json]
+    paths: [ci_launch/idma_boundary_fixture_20261105_relative_target_once.json]
 permissions:
   contents: read
   actions: read

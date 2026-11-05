@@ -3,13 +3,13 @@
   "files": [
     {
       "path": ".github/workflows/chisel-host-boundary-graph-once.yml",
-      "bytes": 2018,
-      "sha256": "3f4ead9625a6e1e3491813181c07d4c44fbced502ac0334f47a037bd609f37a9"
+      "bytes": 2024,
+      "sha256": "da5f5def3c7974ccdbc937b260f9bcc302d6f54c153edf2a127d57fa89cfeaf7"
     },
     {
       "path": "candidates/chisel_host_boundary_graph_20261105/compare_boundary_results.py",
-      "bytes": 4184,
-      "sha256": "ed6e812757039281dfb1439db11574383ee5e294f74fcd659af5a1b0abc4ba2c"
+      "bytes": 4645,
+      "sha256": "fbcd576927c22cbc3e557403326a8e4995a6c69398b868d2de8a9441b6125934"
     },
     {
       "path": "candidates/chisel_host_boundary_graph_20261105/compare_fixture_results.py",
@@ -43,8 +43,8 @@
     },
     {
       "path": "candidates/chisel_host_boundary_graph_20261105/run.py",
-      "bytes": 32810,
-      "sha256": "1386ac0c900b7d29b61f4c47a18d38336dcb40b53614ce0a58823d6d4dcca6f7"
+      "bytes": 32816,
+      "sha256": "9b142a4527fb123a0d96205e28fd86081cad91eeb54903f6667ce21622794c6c"
     },
     {
       "path": "candidates/chisel_host_boundary_graph_20261105/scala/BoundaryIntegrationGuards.scala",
@@ -53,8 +53,8 @@
     },
     {
       "path": "candidates/chisel_host_boundary_graph_20261105/scala/BoundarySplitStructuralFixture.scala",
-      "bytes": 29631,
-      "sha256": "224d3007b08d11e32a6daa06045f101b9fb88fa97f62573b91f580f705927d94"
+      "bytes": 31936,
+      "sha256": "f96223b1971427a2ad633c7135ffe5d51bbb2a33fa2b47dd84c7ce8b2da899f3"
     },
     {
       "path": "candidates/chisel_host_boundary_graph_20261105/scala/CycleWitnessRoles.scala",
@@ -97,7 +97,6 @@
     "candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json",
     "candidates/chisel_host_boundary_graph_20261105/compare_boundary_results.py",
     "candidates/chisel_host_boundary_graph_20261105/run.py",
-    "candidates/chisel_host_boundary_graph_20261105/scala/BoundarySplitStructuralFixture.scala",
-    "candidates/chisel_host_boundary_graph_20261105/scala/IdmaPackedBoundarySplit.scala"
+    "candidates/chisel_host_boundary_graph_20261105/scala/BoundarySplitStructuralFixture.scala"
   ]
 }

@@ -162,6 +162,9 @@ object BoundarySplitStructuralFixture {
         case firrtl2.ir.DoPrim(firrtl2.PrimOps.Cat,Seq(a,b),_,_) => (run(a)<<width(b))|run(b)
         case firrtl2.ir.DoPrim(firrtl2.PrimOps.Bits,Seq(a),Seq(h,l),_) => (run(a)>>l.toInt)&((BigInt(1)<<(h-l+1).toInt)-1)
         case firrtl2.ir.DoPrim(firrtl2.PrimOps.Pad,Seq(a),_,_)=>run(a)
+        case DoPrim(firrtl2.PrimOps.And,Seq(a,b),Seq(),_)=>
+          require(width(a)>0 && width(b)>0 && width(e)==math.max(width(a),width(b)),"independent AND width")
+          run(a)&run(b)
         case DoPrim(firrtl2.PrimOps.Add,Seq(a,b),_,_)=>run(a)+run(b)
         case DoPrim(firrtl2.PrimOps.Sub,Seq(a,b),_,_)=>run(a)-run(b)
         case DoPrim(firrtl2.PrimOps.Dshl,Seq(a,b),_,_)=>run(a)<<run(b).toInt
@@ -172,6 +175,21 @@ object BoundarySplitStructuralFixture {
       }
       value&((BigInt(1)<<width(e))-1)
     }
+    // Direct independent-oracle checks use literal operands, not transform output.
+    for(wa<-1 to 4;wb<-1 to 4;a<-0 until (1<<wa);b<-0 until (1<<wb)){
+      val w=math.max(wa,wb)
+      val expr=DoPrim(firrtl2.PrimOps.And,Seq(UIntLiteral(BigInt(a),IntWidth(wa)),UIntLiteral(BigInt(b),IntWidth(wb))),Seq.empty,UIntType(IntWidth(w)))
+      val expected=(0 until w).foldLeft(BigInt(0)){case(v,i)=>
+        if(((a>>i)&1)==1 && ((b>>i)&1)==1)v.setBit(i)else v}
+      require(evaluate(expr,Map.empty,Map.empty)==expected,"independent AND selfcheck")
+    }
+    val maskedAnd=DoPrim(firrtl2.PrimOps.And,Seq(Reference("oracle_mask",UIntType(IntWidth(1))),UIntLiteral(3,IntWidth(2))),Seq.empty,UIntType(IntWidth(2)))
+    require(evaluate(maskedAnd,Map.empty,Map("oracle_mask"->BigInt(3)))==1,"independent AND selfcheck")
+    val malformedAnd=maskedAnd.copy(tpe=UIntType(IntWidth(1)))
+    val rejectedAnd=try{evaluate(malformedAnd,Map.empty,Map("oracle_mask"->BigInt(3)));false}catch{
+      case e:IllegalArgumentException if e.getMessage=="requirement failed: independent AND width"=>true
+    }
+    require(rejectedAnd,"independent AND selfcheck")
     val inputs=IdmaSplitLayout.fields.filter(_.direction==Input)
     val outputs=IdmaSplitLayout.fields.filter(_.direction==Output)
     val vars=(inputs.map(f=>("in_"+f.name,f.width))++outputs.map(f=>("b.__sim_idma_field__"+f.name,f.width)))++
@@ -361,10 +379,24 @@ object BoundarySplitStructuralFixture {
     // label, actual SymbolTable class SHA, companion SHA, code location.
     val out=System.out;val err=System.err;val muted=new PrintStream(OutputStream.nullOutputStream())
     var rows=Vector.empty[String];var ok=false
-    var currentCase="none";var phase="identity"
-    // Fixed enums and exception-class digest only; never messages, names or AST.
+    var currentCase="none";var phase="identity";var comparisonStep="NONE"
+    // Exact static messages select fixed codes; never emit messages or AST.
+    def failureCode(e:Throwable):String={
+      if(phase!="bit_equations" || e.getClass!=classOf[IllegalArgumentException])return "UNKNOWN"
+      Option(e.getMessage).getOrElse("") match {
+        case "unimplemented independent fixture operator"=>"UNSUPPORTED_OPERATOR"
+        case "value fixture UInt"=>"UNSUPPORTED_WIDTH"
+        case "requirement failed: independent packed bit equation mismatch"=>"BIT_MISMATCH"
+        case "requirement failed: boundary feedback bit equation must survive"=>"FEEDBACK_MISMATCH"
+        case "requirement failed: prepared bit equations survived"=>"VECTOR_MISMATCH"
+        case "requirement failed: independent AND width"=>"AND_WIDTH"
+        case "requirement failed: independent AND selfcheck"=>"AND_SELFCHECK"
+        case _=>"UNKNOWN"
+      }
+    }
     def failure(e:Throwable):String="BOUNDARY_GRAPH_FAILURE_V1 case="+currentCase+
-      " phase="+phase+" exceptionClassSha="+hash(e.getClass.getName)
+      " phase="+phase+" comparisonStep="+(if(phase=="bit_equations")comparisonStep else "NONE")+
+      " failureCode="+failureCode(e)+" exceptionClassSha="+hash(e.getClass.getName)
     val label=args.headOption.filter(Set("official","cached")).getOrElse("invalid")
     var target:Option[Path]=None
     try{
@@ -403,7 +435,7 @@ object BoundarySplitStructuralFixture {
           phase="type_flow"
           checkTypesAndFlows(repaired.circuit)
           require(repaired.instances==1 && repaired.projectedFields==26)
-          phase="bit_equations"
+          phase="bit_equations";comparisonStep="LOW"
           val vectors=valueComparison(low,repaired.circuit,mode)
           require(vectors==3730+(if(boundaryRegisterMode(mode))1 else 0)+(if(unsignedMuxModes(mode))64 else 0))
           phase="graph"
@@ -424,7 +456,7 @@ object BoundarySplitStructuralFixture {
           checkTypesAndFlows(oldPrepared);checkTypesAndFlows(newPrepared)
           sentinelSurvives(oldPrepared,mode,false)
           sentinelSurvives(newPrepared,mode,true)
-          phase="bit_equations"
+          phase="bit_equations";comparisonStep="PREPARED"
           require(valueComparison(oldPrepared,newPrepared,mode)==vectors,"prepared bit equations survived")
           phase="graph"
           val oldResult=outcome(oldPrepared);require(oldResult=="CYCLE")

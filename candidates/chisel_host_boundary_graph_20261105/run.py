@@ -1,10 +1,10 @@
 """One source-only structural job. No engine/native, weights, references or IR export."""
 import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request,zipfile
 P=pathlib.Path;D=P(__file__).resolve().parent;REPO=D.parent.parent
-REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_unsigned_mux_once.json'
+REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_fixture_oracle_and_once.json'
 CAT='candidates/gdn32_first_model_execution_20261104/GDN32_FULL_SOURCE_PINS.json'
 CAT_SHA='ad2d4dcaddb213c85fd15adc65f7da5bd74a0d7c3e6c5922c725aa41bdc967cb'
-BASE='31c8012f3b398a86da61c69ab917ea0c6f9235eb';BASE_TREE='909ad872a615826e9c18bbecf9a6781244282c43';TREE=12_081_306_272;RESERVE=8<<30
+BASE='3d557aaa963cfa35fccdf897f6f48aa09c90c059';BASE_TREE='1a2f5487fa30fb8674a07d7776fd50d1351c1d5f';TREE=12_081_306_272;RESERVE=8<<30
 from witness_record import parse_record as parse_witness_record
 graph_identity={}
 differential_identity={};boundary_identity={}
@@ -250,7 +250,7 @@ def main():
  need(wt==expected and wr.get('status')=='PASS_PROCESS_ONLY' and wr.get('native_exit')==0 and not wr.get('errors'),'WITNESS_FIXTURE_FAILED')
  differential_identity.update(witness_fixture_status='PASS_19_SMALL_CASES_ONLY',witness_source_sha256=sha(witness_source),witness_fixture_source_sha256=sha(witness_fixture))
  boundary_fixture_source=regular(D/'scala/BoundarySplitStructuralFixture.scala')
- need(sha(boundary_fixture_source)=='224d3007b08d11e32a6daa06045f101b9fb88fa97f62573b91f580f705927d94','CANDIDATE_FIXTURE_SOURCE_CHANGED')
+ need(sha(boundary_fixture_source)=='f96223b1971427a2ad633c7135ffe5d51bbb2a33fa2b47dd84c7ce8b2da899f3','CANDIDATE_FIXTURE_SOURCE_CHANGED')
  need(sha(D/'scala/IdmaPackedBoundarySplit.scala')=='0256cbcaba924bde84fc30c2cf6b602db1a238c035e02cde7263b7d363f20ee5','CANDIDATE_TRANSFORM_SOURCE_CHANGED')
  helpers=[str(regular(D/'scala'/n))for n in ('IdmaSplitLayout.scala','IdmaFieldSplitTransform.scala','IdmaPackedBoundarySplit.scala','BoundarySplitStructuralFixture.scala')]
  boundaryclasses=stage('compile_boundary_fixture',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',cp,'-d','.',*helpers]),180,3)

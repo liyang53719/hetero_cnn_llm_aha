@@ -46,7 +46,8 @@ def compare(official_text,cached_text,official_pins,cached_pins,official_process
 # Failure diagnostics are a separate, strictly rejecting channel. They can
 # never satisfy parse()/compare(), even when a process receipt looks successful.
 PHASES=('identity','parse','lower','negative_guards','type_flow','projection','bit_equations','prepare','graph','cleanup')
-FAILURE=re.compile(r'BOUNDARY_GRAPH_FAILURE_V1 case=(none|'+('|'.join(CASES))+r') phase=('+('|'.join(PHASES))+r') exceptionClassSha=('+HEX+r')')
+FAILURE_CODES=('UNKNOWN','UNSUPPORTED_OPERATOR','UNSUPPORTED_WIDTH','BIT_MISMATCH','FEEDBACK_MISMATCH','VECTOR_MISMATCH','AND_WIDTH','AND_SELFCHECK')
+FAILURE=re.compile(r'BOUNDARY_GRAPH_FAILURE_V1 case=(none|'+('|'.join(CASES))+r') phase=('+('|'.join(PHASES))+r') comparisonStep=(NONE|LOW|PREPARED) failureCode=('+('|'.join(FAILURE_CODES))+r') exceptionClassSha=('+HEX+r')')
 FAIL_FINAL=re.compile(r'BOUNDARY_GRAPH_RUN_V1 label=(official|cached) pass=false numericalPass=false fullHostAccepted=false')
 def parse_failure(text,label):
  need(label in ('official','cached'))
@@ -56,4 +57,6 @@ def parse_failure(text,label):
  need(m is not None and f is not None and f[1]==label)
  need(m[1]!='none' or m[2] in ('identity','cleanup'))
  need(m[2]!='identity' or m[1]=='none')
- return {'status':'FIXTURE_REPORTED_FAILURE','process_label':label,'case':m[1],'phase':m[2],'exception_class_sha256':m[3]}
+ need((m[3] in ('LOW','PREPARED'))==(m[2]=='bit_equations'))
+ need(m[4]=='UNKNOWN' or (m[2]=='bit_equations' and m[5]=='6757b394f9b99b54cc59cd8f05528b770054c25bc6643d413f1a7337f96614d0'))
+ return {'status':'FIXTURE_REPORTED_FAILURE','process_label':label,'case':m[1],'phase':m[2],'comparison_step':m[3],'failure_code':m[4],'exception_class_sha256':m[5]}

@@ -1,10 +1,10 @@
 """One source-only structural job. No engine/native, weights, references or IR export."""
 import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request,zipfile
 P=pathlib.Path;D=P(__file__).resolve().parent;REPO=D.parent.parent
-REL='candidates/chisel_structural_graph_20261104';NONCE='ci_launch/chisel_structural_graph_20261105_cycle_witness_once.json'
+REL='candidates/chisel_structural_graph_20261104';NONCE='ci_launch/chisel_structural_graph_20261105_cycle_witness_fresh_once.json'
 CAT='candidates/gdn32_first_model_execution_20261104/GDN32_FULL_SOURCE_PINS.json'
 CAT_SHA='ad2d4dcaddb213c85fd15adc65f7da5bd74a0d7c3e6c5922c725aa41bdc967cb'
-BASE='442aaad98eaf39e2bbdf1dd6b5bae0972766497f';TREE=12_081_306_272;RESERVE=8<<30
+BASE='364f38c8a6300595281b9cc15202ff4276a0e936';TREE=12_081_306_272;RESERVE=8<<30
 from witness_record import parse_record as parse_witness_record
 graph_identity={}
 differential_identity={}
@@ -139,7 +139,7 @@ def main():
  need(git('diff','--name-only','HEAD^','HEAD')==NONCE and not git('status','--porcelain'))
  nonce=load(REPO/NONCE,4096);need(nonce=={'schema':'ONE_STRUCTURAL_GRAPH_ONLY_V1','source_commit':source,'base_commit':BASE,'attempts':1,'numerical_execution':False,'native_execution':False,'artifact_upload':False})
  own=load(D/'SOURCE_PINS.json');pins=pins_for(own['files'],REPO);pins[str(D/'SOURCE_PINS.json')]=sha(D/'SOURCE_PINS.json')
- changed=set(git('diff','--name-only',BASE,source).splitlines());need(changed==set(own['publication_delta']) and changed=={'candidates/chisel_structural_graph_20261104/modulecache/BoundedCycleWitness.scala', 'candidates/chisel_structural_graph_20261104/compare_fixture_results.py', 'candidates/chisel_structural_graph_20261104/scala/CycleWitnessRoles.scala', 'candidates/chisel_structural_graph_20261104/modulecache/SymbolTable.scala', 'candidates/chisel_structural_graph_20261104/scala/OriginalHostStructuralGraph.scala', 'candidates/chisel_structural_graph_20261104/SOURCE_PINS.json', '.github/workflows/chisel-structural-graph-once.yml', 'candidates/chisel_structural_graph_20261104/modulecache/StructuralDifferential.scala', 'candidates/chisel_structural_graph_20261104/run.py', 'candidates/chisel_structural_graph_20261104/witness_record.py', 'candidates/chisel_structural_graph_20261104/modulecache/CycleWitnessFixture.scala'})
+ changed=set(git('diff','--name-only',BASE,source).splitlines());need(changed==set(own['publication_delta']) and changed=={'candidates/chisel_structural_graph_20261104/SOURCE_PINS.json', 'candidates/chisel_structural_graph_20261104/run.py', '.github/workflows/chisel-structural-graph-once.yml'})
  catalog=regular(REPO/CAT);need(sha(catalog)==CAT_SHA);doc=load(catalog);need(doc['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1'and len(doc['files'])==1211);pins.update(pins_for(doc['files'],REPO));pins[str(catalog)]=CAT_SHA
  phase='admission';remote_exclusive(launch);admission();work=P(os.environ['RUNNER_TEMP'])/'chisel-structural-graph';need(work.is_absolute()and not work.exists()and all(not p.is_symlink()for p in(work,*work.parents)));work.mkdir()
  contract={'schema':'BOUNDED_FRESH_HOST_V1','run_id':int(os.environ['GITHUB_RUN_ID']),'source_commit':source,'launch_commit':launch};contractPath=work/'fresh-host.json';contractPath.write_text(json.dumps(contract));pins[str(contractPath)]=sha(contractPath)

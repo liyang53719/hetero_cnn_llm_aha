@@ -8,7 +8,7 @@ import firrtl2.annotations._
   * No lowering, evaluation, external output, annotation updates or state changes.
   */
 object ClockInitRepresentationRepair {
-  final case class Result(circuit:Circuit,corrected:Int,noninterferenceTicks:Int=0)
+  final case class Result(circuit:Circuit,corrected:Int,noninterferenceTicks:Int=0,workV2:String="NONE")
   val GuardCodes:Set[String]=Set("PROVENANCE","BOUND","TYPE","INFO","STRUCTURE","DUPLICATE","COUNT","SHAPE",
     "ORIGINAL_MODULE","PREEXISTING","CLOCK","ANNOTATION_TARGET","ANNOTATION_SHAPE",
     "ANNOTATION_PRESET","ANNOTATION_EXTENSION","REFERENCES","DRIVER","CONSUMER","ANCHOR","NONINTERFERENCE")
@@ -59,7 +59,7 @@ object ClockInitRepresentationRepair {
   }
   private def fail(code:String):Nothing=throw new IllegalArgumentException(code)
   private def need(p:Boolean,code:String):Unit=if(!p)fail(code)
-  private final class BoundEvidence(val code:String,val uses:String="NONE") extends RuntimeException(null,null,false,false)
+  private final class BoundEvidence(val code:String,val uses:String="NONE",val workV2:String="NONE",val workV2TotalLimit:Long=34364224L) extends RuntimeException(null,null,false,false)
   def boundEvidence(error:Throwable):String={
     if(error==null || guardCode(error)!="BOUND")"NONE"
     else {
@@ -69,7 +69,7 @@ object ClockInitRepresentationRepair {
   }
   // BEGIN USES WORK DIAGNOSTIC
   // No AST references, names, collections or callbacks are retained. Counters
-  // describe occurrences, not identities. Production uses the fixed 5M cap.
+  // describe occurrences, not identities. Legacy fixtures retain the fixed 5M cap.
   private final class UsesWork(val entry:Int) {
     var selectedNodes=0;var otherNodes=0;var selectedEdges=0;var otherEdges=0
     var selectedRoots=0;var otherRoots=0;var selectedStatements=0;var otherStatements=0
@@ -127,11 +127,98 @@ object ClockInitRepresentationRepair {
     }catch{case _:Throwable=>"UNAVAILABLE"}
   }
   // END USES WORK DIAGNOSTIC
-  private final class Budget(private val testInitialWork:Int=0) {
+  // V2 is private and fixed at the production entry. Each legacy semantic tick
+  // is still charged exactly once; named domains do not replace AUX accounting.
+  private sealed trait WorkMode
+  private case object LegacyWork extends WorkMode
+  private case object V2Work extends WorkMode
+  private sealed abstract class WorkDomain(val id:Int,val label:String,val limit:Long)
+  private case object OtherWork extends WorkDomain(0,"OTHER",5000000L)
+  private case object NodeWork extends WorkDomain(1,"NODE",8388608L)
+  private case object EdgeWork extends WorkDomain(2,"EDGE",8388608L)
+  private case object AnchorWork extends WorkDomain(3,"ANCHOR",4194304L)
+  private case object ProofWork extends WorkDomain(4,"PROOF",8392704L)
+  private val workDomains=Vector(OtherWork,NodeWork,EdgeWork,AnchorWork,ProofWork)
+  private val workPhases=Set("INDEX_BEFORE","CANDIDATES","ANNOTATIONS","USES","MATCHING","ANCHORS","REBUILD","NONINTERFERENCE")
+  private final class WorkLedger(seed:Vector[Long],val totalLimit:Long) {
+    require(totalLimit>=0 && totalLimit<=34364224L)
+    private val counts=new Array[Long](5)
+    require(seed.isEmpty || seed.size==5)
+    private var sum=0L
+    private var i=0
+    while(i<5){val n=if(seed.isEmpty)0L else seed(i);require(n>=0 && n<=workDomains(i).limit)
+      counts(i)=n;sum+=n;i+=1}
+    require(sum<=totalLimit)
+    def total:Long=sum
+    def value(d:WorkDomain):Long=counts(d.id)
+    def snapshot(prefix:String):String=prefix+":"+counts.mkString(":")+":"+sum
+    def tick(d:WorkDomain,phase:String):Unit={
+      require(workPhases(phase))
+      val reason=if(counts(d.id)>=d.limit)d.label else if(sum>=totalLimit)"TOTAL"else "NONE"
+      if(reason!="NONE"){
+        val error=new IllegalArgumentException("BOUND")
+        var diagnostic="UNAVAILABLE"
+        try{diagnostic=snapshot("V2:PREFIX:"+phase+":"+reason)}catch{case _:Throwable=>()}
+        error.addSuppressed(new BoundEvidence("WORK_V2_"+reason+":"+phase+":"+sum,
+          "NONE",diagnostic,totalLimit))
+        throw error
+      }
+      // Check before addition: neither failed work nor callbacks receive credit.
+      counts(d.id)+=1L;sum+=1L
+    }
+  }
+  private def validWorkV2(s:String,totalLimit:Long=34364224L):Boolean={
+    if(totalLimit<0 || totalLimit>34364224L)return false
+    if(s==null || s.length>200)return false
+    var separators=0;var i=0
+    while(i<s.length){if(s.charAt(i)==':')separators+=1;if(separators>9)return false;i+=1}
+    val f=s.split(":",-1)
+    if(f.length!=10 || f(0)!="V2" || f(1)!="PREFIX" ||
+      !(workDomains.exists(_.label==f(3)) || f(3)=="TOTAL" || f(3)=="NONE") || !workPhases(f(2)))return false
+    var sum=0L;i=0
+    while(i<6){val t=f(i+4)
+      if(t.isEmpty || t.length>8 || (t.length>1 && t.head=='0'))return false
+      var n=0L;var j=0
+      while(j<t.length){val c=t.charAt(j);if(c<'0'||c>'9')return false;n=n*10+c-'0';j+=1}
+      if(n>(if(i<5)workDomains(i).limit else 34364224L))return false
+      if(i<5)sum+=n else if(n!=sum)return false
+      i+=1
+    }
+    val domain=workDomains.find(_.label==f(3))
+    if(sum>totalLimit)return false
+    if(domain.exists(d=>f(d.id+4).toLong!=d.limit))return false
+    if(f(3)=="TOTAL" && sum!=totalLimit)return false
+    if((f(3)=="NODE" || f(3)=="EDGE") && f(2)!="USES")return false
+    if(f(3)=="ANCHOR" && f(2)!="ANCHORS")return false
+    if(f(3)=="PROOF" && f(2)!="NONINTERFERENCE")return false
+    true
+  }
+  private val workBoundReasons=Set("EXPRESSION_DEPTH","INFO_CHILDREN","INFO_DEPTH","INFO_NODES","INFO_STRING",
+    "MODULES","NAME","PORTS","PRINT_STRING","STATEMENT_DEPTH","TARGET_MEMBERS","TYPE_DEPTH","TYPE_FIELDS",
+    "TYPE_NODES","ANNOTATIONS","TARGET_PATH","TARGET_COMPONENT","TARGET_GROUPS")
+  def workV2Evidence(error:Throwable):String={
+    if(error==null || guardCode(error)!="BOUND")return "NONE"
+    val es=error.getSuppressed
+    if(es.length!=1)return "UNAVAILABLE"
+    es(0) match {
+      case e:BoundEvidence if e.workV2!="NONE"=>
+        if(validWorkV2(e.workV2,e.workV2TotalLimit)){
+          val f=e.workV2.split(":",-1)
+          if((f(3)=="NONE" && workBoundReasons.exists(r=>e.code==r+":"+f(2)+":"+f(9))) ||
+            (f(3)!="NONE" && e.code=="WORK_V2_"+f(3)+":"+f(2)+":"+f(9)))e.workV2 else "UNAVAILABLE"
+        }else "UNAVAILABLE"
+      case _:BoundEvidence=>"NONE"
+      case _=>"UNAVAILABLE"
+    }
+  }
+  private final class Budget(private val testInitialWork:Int=0,private val mode:WorkMode=LegacyWork,
+    private val seed:Vector[Long]=Vector.empty,private val testTotalLimit:Long=34364224L) {
     require(testInitialWork>=0 && testInitialWork<=5000000)
     private var n=testInitialWork
+    private val ledger=if(mode==V2Work)new WorkLedger(seed,testTotalLimit)else null
     var uses:UsesWork=null
-    def work:Int=n
+    def work:Int=if(ledger==null)n else ledger.total.toInt
+    def workV2:String=if(ledger==null)"NONE"else ledger.snapshot("V2:COMPLETE:DONE:NONE")
     var phase="INDEX_BEFORE"
     def bound(p:Boolean,reason:String):Unit=if(!p){
       val error=new IllegalArgumentException("BOUND")
@@ -142,9 +229,14 @@ object ClockInitRepresentationRepair {
         diagnostic="UNAVAILABLE"
         try{if(uses!=null)diagnostic=uses.snapshot}catch{case _:Throwable=>()}
       }
-      error.addSuppressed(new BoundEvidence(reason+":"+phase+":"+n,diagnostic));throw error
+      var v2Diagnostic=if(ledger==null)"NONE"else "UNAVAILABLE"
+      try{if(ledger!=null)v2Diagnostic=ledger.snapshot("V2:PREFIX:"+phase+":NONE")}catch{case _:Throwable=>()}
+      error.addSuppressed(new BoundEvidence(reason+":"+phase+":"+work,diagnostic,v2Diagnostic));throw error
     }
-    def tick():Unit={n+=1;bound(n<=5000000,"GLOBAL_WORK")}
+    def tick(domain:WorkDomain=OtherWork):Unit={
+      if(ledger==null){n+=1;bound(n<=5000000,"GLOBAL_WORK")}
+      else ledger.tick(domain,phase)
+    }
     def name(s:String):Unit=bound(s!=null && s.nonEmpty && s.length<=4096,"NAME")
   }
   private def boundedType(t:Type,b:Budget):Unit={
@@ -835,9 +927,9 @@ object ClockInitRepresentationRepair {
     def start(s:Statement):Unit={require(depth<0 && root==null);root=s}
     var currentDepth=0
     def next(counter:Int):Statement={
-      if(root!=null){if(counter>=0)a.charge(counter)else b.tick();val s=root;root=null;currentDepth=0;return s}
+      if(root!=null){if(counter>=0)a.charge(counter)else b.tick(AnchorWork);val s=root;root=null;currentDepth=0;return s}
       while(depth>=0){val it=stack(depth)
-        if(it.hasNext){if(counter>=0)a.charge(counter)else b.tick();currentDepth=depth+1;b.bound(currentDepth<=256,"STATEMENT_DEPTH");return it.next()}
+        if(it.hasNext){if(counter>=0)a.charge(counter)else b.tick(AnchorWork);currentDepth=depth+1;b.bound(currentDepth<=256,"STATEMENT_DEPTH");return it.next()}
         stack(depth)=null;depth-=1
       };null
     }
@@ -934,9 +1026,9 @@ object ClockInitRepresentationRepair {
     }
     private def child(d:Int):Expression={
       val it=its(d)
-      if(it!=null){if(it.hasNext){if(census!=null)census.category="EDGE";b.tick();if(census!=null)census.edge();it.next()}else null}
+      if(it!=null){if(it.hasNext){if(census!=null)census.category="EDGE";b.tick(EdgeWork);if(census!=null)census.edge();it.next()}else null}
       else {val x=pos(d) match {case 0=>first(d);case 1=>second(d);case 2=>third(d);case _=>null}
-        if(x!=null){if(census!=null)census.category="EDGE";b.tick();if(census!=null)census.edge();pos(d)+=1};x}
+        if(x!=null){if(census!=null)census.category="EDGE";b.tick(EdgeWork);if(census!=null)census.edge();pos(d)+=1};x}
     }
     var statement:Statement=null;var moduleId=0;var hasSelected=false
     val root:Expression=>Unit=r=>{
@@ -944,7 +1036,7 @@ object ClockInitRepresentationRepair {
       var depth=0;var e=r;var active=true
       while(active){
         if(census!=null)census.category="NODE"
-        b.tick();if(census!=null)census.node(depth==0);b.bound(depth<=256,"EXPRESSION_DEPTH")
+        b.tick(NodeWork);if(census!=null)census.node(depth==0);b.bound(depth<=256,"EXPRESSION_DEPTH")
         e match {case ref:Reference=>b.name(ref.name)
           if(hasSelected){val id=selected.find(moduleId,ref.name);if(id>=0)selected.addUse(id,statement,r,depth==0)}
           case _=>()}
@@ -1063,7 +1155,7 @@ object ClockInitRepresentationRepair {
     need((result.info eq prepared.info) && (result.main eq prepared.main),"NONINTERFERENCE")
     val oi=new Array[Iterator[Statement]](258);val ni=new Array[Iterator[Statement]](258)
     var ticks=0;var changed=0
-    def tick():Unit={b.tick();ticks+=1}
+    def tick():Unit={b.tick(ProofWork);ticks+=1}
     val oldModules=a.iter(prepared.modules);val newModules=a.iter(result.modules)
     while(oldModules.hasNext && newModules.hasNext){
       tick();val prior=oldModules.next();val revised=newModules.next()
@@ -1111,10 +1203,11 @@ object ClockInitRepresentationRepair {
   // one tick per checked Type/Info node; one per annotation/target; expression
   // root/processing and every child enqueue each retain one tick; one per original
   // anchor statement; proof module/root and child enqueue+processing ticks unchanged.
-  // Only old index ticks are replaced. Iterator scans and ordering may encounter a
-  // finite guard earlier, but cannot turn a rejected incomplete scan into success.
+  // Every existing semantic tick is preserved. Production V2 is an explicitly
+  // larger, fixed logical-work envelope; the legacy5M limit remains qualified
+  // only in legacy mode. Neither mode permits successful incomplete traversal.
   // BEGIN PROOF BOUND REPAIR ENTRY
-  final case class ProvenanceResult(state:CircuitState,corrected:Int,noninterferenceTicks:Int)
+  final case class ProvenanceResult(state:CircuitState,corrected:Int,noninterferenceTicks:Int,workV2:String="NONE")
   def provenanceReason(error:Throwable):String=ObservedPrepareAst.provenanceReason(error)
   def applyWithProvenance(before:Circuit,prepared:CircuitState,outer:AnnotationSeq,expected:Int,
     grant:ObservedPrepareAst.Grant):ProvenanceResult={
@@ -1128,7 +1221,7 @@ object ClockInitRepresentationRepair {
     val result=applyCore(before,prepared.circuit,prepared.annotations,expected,claim)
     val state=prepared.copy(circuit=result.circuit)
     claim.requireCommit()
-    ProvenanceResult(state,result.corrected,result.noninterferenceTicks)
+    ProvenanceResult(state,result.corrected,result.noninterferenceTicks,result.workV2)
   }
   private def reserveProvenance(a:Aux,expected:Int):Unit={
     a.alloc(2097152L);a.transient(8192);a.charge(AX.Clear,16384)
@@ -1153,7 +1246,7 @@ object ClockInitRepresentationRepair {
     // Static bootstrap precheck precedes even the budget object/counter array.
     need(AX.limits(AX.Live)>=768,"BOUND")
     val a=new Aux
-    // Allocation inventory: 38 fixed arrays total (Aux1, namespace2, modules6,
+    // Allocation inventory: 39 fixed arrays total (including V2 ledger), formerly38 (Aux1, namespace2, modules6,
     // selected14, replacements2, Walk1, Expressions5, Rewriter4, proof2, outer1).
     // Their headers and <64 scalar/closure objects fit the 64 KiB fixed reserve;
     // enumerated table/metadata payloads are charged by their constructors. The
@@ -1171,7 +1264,7 @@ object ClockInitRepresentationRepair {
       reserveProvenance(a,expected)
       claim.reserve(expected)
     }
-    val b=new Budget
+    val b=new Budget(mode=V2Work)
     b.name(before.main);b.name(prepared.main);need(a.equal(before.main,prepared.main),"STRUCTURE")
     val names=new ExactNames(a);val fresh=new Modules(a);val old=new Modules(a)
     val selected=new Selected(a);val checked=new Checked(a,b);val walker=new Walk(a,b)
@@ -1227,12 +1320,17 @@ object ClockInitRepresentationRepair {
     checkStreamingAnnotations(annotations,selected,fresh,prepared.main,b,a,claim!=null)
     b.phase="USES"
     // Partition the already precharged 64 KiB fixed reserve: original <64
-    // scalar/closure objects *256 <=16 KiB, 38 array headers *256 =9.5 KiB,
-    // plus8 KiB dedicated diagnostic scratch totals <=33.5 KiB. Diagnostic
+    // scalar/closure objects *256 <=16 KiB, 39 array headers *256 <9.75 KiB,
+    // plus8 KiB dedicated diagnostic scratch totals <=34 KiB. Diagnostic
     // scratch covers census (<128 payload bytes), extended evidence, <=105
     // character snapshot/builder/backing and accessor's <=14 short fields,
     // field array and 11-Int validation array. It replaces no live AST reserve.
-    // No production array or cap/reservation is added; accessor runs on failure.
+    // V2 adds one five-Long ledger array and scalar object within this same
+    // fixed reserve; no AUX reservation is reduced. Its scalar objects, five
+    // typed domain and two mode singletons, static Vector and both Set tables,
+    // and <=200-character formatting/parser scratch fit16 KiB of remaining
+    // fixed64 KiB headroom (34+16<64 KiB).
+    // Accessors run on failure; no AST/name references enter the ledger.
     val census=new UsesWork(b.work);b.uses=census
     val expressions=new Expressions(a,b,selected,census);val modules=a.iter(prepared.modules);var mid=0
     while(modules.hasNext){modules.next() match {
@@ -1279,7 +1377,99 @@ object ClockInitRepresentationRepair {
     val result=prepared.copy(modules=scala.collection.immutable.ArraySeq.unsafeWrapArray(rebuilt))
     a.phase="NONINTERFERENCE";b.phase="NONINTERFERENCE"
     val ticks=prove(prepared,result,selected,expected,a,b)
-    Result(result,expected,ticks)
+    Result(result,expected,ticks,b.workV2)
+  }
+
+  /** V2 qualification uses private seeds only; callers cannot change limits. */
+  def workV2SelfChecks():Int={
+    var checks=0
+    def check(p:Boolean):Unit={require(p,"WORK_V2_SELFCHECK");checks+=1}
+    def caught(op: =>Unit):Throwable={var e:Throwable=null;try{op}catch{case x:IllegalArgumentException=>e=x};e}
+    def seed(d:WorkDomain,n:Long):Vector[Long]=Vector.tabulate(5)(i=>if(i==d.id)n else 0L)
+    workDomains.foreach{d=>
+      val phase=if(d==AnchorWork)"ANCHORS"else if(d==ProofWork)"NONINTERFERENCE"else "USES"
+      val b=new Budget(mode=V2Work,seed=seed(d,d.limit-1));b.phase=phase
+      b.tick(d);check(b.work.toLong==d.limit)
+      val prior=b.workV2;val e=caught(b.tick(d))
+      check(guardCode(e)=="BOUND" && boundEvidence(e)=="WORK_V2_"+d.label+":"+phase+":"+d.limit)
+      check(b.workV2==prior && workV2Evidence(e)=="V2:PREFIX:"+phase+":"+d.label+":"+seed(d,d.limit).mkString(":")+":"+d.limit)
+      check(caught(b.tick(d))!=null && b.workV2==prior) // no reset or retry credit
+      b.phase="MATCHING";check(caught(b.tick(d))!=null && b.workV2==prior) // no phase reset
+      check(caught(new Budget(mode=V2Work,seed=seed(d,d.limit+1)))!=null)
+      check(caught(new Budget(mode=V2Work,seed=seed(d,-1)))!=null)
+      check(caught(new Budget(mode=V2Work,seed=seed(d,Long.MaxValue)))!=null)
+    }
+    val all=workDomains.map(_.limit)
+    val full=new Budget(mode=V2Work,seed=all)
+    check(full.work==34364224 && full.workV2=="V2:COMPLETE:DONE:NONE:"+all.mkString(":")+":34364224")
+    val aggregate=new Budget(mode=V2Work,testTotalLimit=5);aggregate.phase="CANDIDATES"
+    aggregate.tick();aggregate.phase="USES";aggregate.tick(NodeWork);aggregate.tick(EdgeWork)
+    aggregate.phase="ANCHORS";aggregate.tick(AnchorWork);aggregate.phase="NONINTERFERENCE";aggregate.tick(ProofWork)
+    check(aggregate.workV2=="V2:COMPLETE:DONE:NONE:1:1:1:1:1:5")
+    val totalFailure=caught(aggregate.tick())
+    check(boundEvidence(totalFailure)=="WORK_V2_TOTAL:NONINTERFERENCE:5" &&
+      workV2Evidence(totalFailure)=="V2:PREFIX:NONINTERFERENCE:TOTAL:1:1:1:1:1:5")
+    check(aggregate.work==5)
+    check(caught(new Budget(mode=V2Work,testTotalLimit=Long.MaxValue))!=null)
+    check(caught(new Budget(mode=V2Work,testTotalLimit= -1L))!=null)
+    check(caught(new Budget(mode=V2Work,seed=Vector(1L)))!=null)
+    // Exact shared subtree traversal remains occurrence-based: 3 nodes,2 edges.
+    val a=new Aux;val b=new Budget(mode=V2Work);b.phase="USES"
+    val selected=new Selected(a);val ex=new Expressions(a,b,selected)
+    val zero=UIntLiteral(0,IntWidth(1));val shared=DoPrim(firrtl2.PrimOps.Add,Seq(zero,zero),Nil,UIntType(IntWidth(1)))
+    ex.root(shared);check(b.workV2=="V2:COMPLETE:DONE:NONE:0:3:2:0:0:5")
+    ex.root(shared);check(b.workV2=="V2:COMPLETE:DONE:NONE:0:6:4:0:0:10")
+    b.phase="MATCHING";b.tick();b.phase="ANCHORS";b.tick();b.tick(AnchorWork)
+    b.phase="NONINTERFERENCE";b.tick(ProofWork)
+    check(b.workV2=="V2:COMPLETE:DONE:NONE:2:6:4:1:1:14")
+    // Failed node admission occurs before foreachExpr callbacks.
+    var callbacks=0
+    val unread=new Reference("private",UIntType(IntWidth(1)),NodeKind,SourceFlow){
+      override def foreachExpr(f:Expression=>Unit):Unit={callbacks+=1}
+    }
+    val exhausted=new Budget(mode=V2Work,seed=seed(NodeWork,NodeWork.limit));exhausted.phase="USES"
+    val stopped=new Expressions(new Aux,exhausted,new Selected(new Aux))
+    check(guardCode(caught(stopped.root(unread)))=="BOUND" && callbacks==0)
+    val edgeBudget=new Budget(mode=V2Work,seed=seed(EdgeWork,EdgeWork.limit));edgeBudget.phase="USES"
+    val edgeStopped=new Expressions(new Aux,edgeBudget,new Selected(new Aux))
+    check(guardCode(caught(edgeStopped.root(SubField(unread,"f"))))=="BOUND" && callbacks==0)
+    val nameBudget=new Budget(mode=V2Work);nameBudget.phase="MATCHING"
+    val nameFailure=caught(nameBudget.name(""))
+    check(boundEvidence(nameFailure)=="NAME:MATCHING:0" &&
+      workV2Evidence(nameFailure)=="V2:PREFIX:MATCHING:NONE:0:0:0:0:0:0")
+    check(workV2Evidence(null)=="NONE" && workV2Evidence(new IllegalArgumentException("DRIVER"))=="NONE")
+    val malformed=new IllegalArgumentException("BOUND")
+    malformed.addSuppressed(new BoundEvidence("WORK_V2_NODE:USES:0","NONE","V2:PREFIX:USES:NODE:0:0:0:0:0:1"))
+    check(workV2Evidence(malformed)=="UNAVAILABLE")
+    val frozen=workV2Evidence(totalFailure);aggregate.phase="MATCHING"
+    check(workV2Evidence(totalFailure)==frozen)
+    val tree=Block(Seq(EmptyStmt));val walkBudget=new Budget(mode=V2Work);walkBudget.phase="ANCHORS"
+    val walker=new Walk(new Aux,walkBudget);walker.start(tree)
+    var st=walker.next(-1);while(st!=null){walker.descend(st);st=walker.next(-1)}
+    check(walkBudget.workV2=="V2:COMPLETE:DONE:NONE:0:0:0:2:0:2")
+    val prior=Circuit(NoInfo,Seq(Module(NoInfo,"M",Nil,tree)),"M")
+    val revised=prior.copy(modules=Seq(prior.modules.head.asInstanceOf[Module].copy(body=Block(Seq(EmptyStmt)))))
+    val proofBudget=new Budget(mode=V2Work);proofBudget.phase="NONINTERFERENCE"
+    val proofAux=new Aux
+    check(prove(prior,revised,new Selected(proofAux),0,proofAux,proofBudget)==4 &&
+      proofBudget.workV2=="V2:COMPLETE:DONE:NONE:0:0:0:0:4:4")
+    check(!validWorkV2("V1:PREFIX:USES:NODE:0:0:0:0:0:0") &&
+      !validWorkV2("V2:PREFIX:USES:NODE:00:0:0:0:0:0"))
+    check(!validWorkV2("V2:PREFIX:USES:NODE:0:8388609:0:0:0:8388609") &&
+      !validWorkV2("V2:PREFIX:UNKNOWN:NODE:0:0:0:0:0:0"))
+    check(!validWorkV2("V2:PREFIX:USES:NODE:0:8388607:0:0:0:8388607"))
+    check(!validWorkV2("V2:PREFIX:MATCHING:NODE:0:8388608:0:0:0:8388608"))
+    check(!validWorkV2("V2:PREFIX:NONINTERFERENCE:TOTAL:0:0:0:0:0:0"))
+    val wrongReason=new IllegalArgumentException("BOUND")
+    wrongReason.addSuppressed(new BoundEvidence("NAME:ANCHORS:99","NONE","V2:PREFIX:MATCHING:NONE:0:0:0:0:0:0"))
+    check(workV2Evidence(wrongReason)=="UNAVAILABLE")
+    val unknownReason=new IllegalArgumentException("BOUND")
+    unknownReason.addSuppressed(new BoundEvidence("UNKNOWN:MATCHING:0","NONE","V2:PREFIX:MATCHING:NONE:0:0:0:0:0:0"))
+    check(workV2Evidence(unknownReason)=="UNAVAILABLE")
+    // Explicit legacy mode retains historical attempted-tick evidence.
+    val legacy=new Budget(5000000);legacy.phase="USES"
+    check(boundEvidence(caught(legacy.tick(NodeWork)))=="GLOBAL_WORK:USES:5000001" && legacy.work==5000001)
+    checks
   }
 
   /** Qualification only. Production constants are never parameterized by callers. */

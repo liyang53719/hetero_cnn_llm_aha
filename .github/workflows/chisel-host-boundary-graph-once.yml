@@ -1,8 +1,8 @@
-name: chisel-host-boundary-structural-graph-only
+name: prepare-schedule-probe-only
 on:
   push:
     branches: [main]
-    paths: [ci_launch/chisel_host_boundary_graph_20261105_preexisting_collision_diagnostic_once.json]
+    paths: [ci_launch/chisel_host_boundary_graph_20261105_prepare_schedule_probe_once.json]
 permissions:
   contents: read
   actions: read

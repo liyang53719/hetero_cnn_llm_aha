@@ -1,9 +1,9 @@
 """Exact structural/equation fixture comparison. No interpreter acceptance."""
 import re
 CASES=('print','stop','both')
-ROW=re.compile(r'CLOCK_INIT_CASE_V1 id=(print|stop|both) corrected=([12]) negativeGuards=([0-9]+) equations=512 shapeChecks=1 driverChecks=3 boundChecks=9 sizingChecks=13 streamingChecks=62 differentialChecks=7 graphDigest=([0-9a-f]{64})')
+ROW=re.compile(r'CLOCK_INIT_CASE_V1 id=(print|stop|both) corrected=([12]) negativeGuards=([0-9]+) equations=512 shapeChecks=1 driverChecks=3 boundChecks=9 sizingChecks=13 streamingChecks=62 differentialChecks=7 preexistingChecks=24 graphDigest=([0-9a-f]{64})')
 GUARDS={'ANCHOR','ANNOTATION_EXTENSION','ANNOTATION_PRESET','ANNOTATION_SHAPE','ANNOTATION_TARGET','BOUND','CLOCK','CONSUMER','COUNT','DRIVER','DUPLICATE','INFO','NONINTERFERENCE','ORIGINAL_MODULE','PREEXISTING','REFERENCES','SHAPE','STRUCTURE','TYPE'}
-FAIL=re.compile(r'CLOCK_INIT_FAILURE_V1 phase=(IDENTITY|LOWER|PREPARE|ORIGINAL_ERRORS|REPAIR|VALIDATE|NEGATIVE|GRAPH|EQUATIONS|CLEANUP) guard=(NONE|UNKNOWN|ANCHOR|ANNOTATION_EXTENSION|ANNOTATION_PRESET|ANNOTATION_SHAPE|ANNOTATION_TARGET|BOUND|CLOCK|CONSUMER|COUNT|DRIVER|DUPLICATE|INFO|NONINTERFERENCE|ORIGINAL_MODULE|PREEXISTING|REFERENCES|SHAPE|STRUCTURE|TYPE) driver=([A-Z_:]+) aux=([A-Z0-9_:]+) exceptionClassSha=([0-9a-f]{64})')
+FAIL=re.compile(r'CLOCK_INIT_FAILURE_V1 phase=(IDENTITY|LOWER|PREPARE|ORIGINAL_ERRORS|REPAIR|VALIDATE|NEGATIVE|GRAPH|EQUATIONS|CLEANUP) guard=(NONE|UNKNOWN|ANCHOR|ANNOTATION_EXTENSION|ANNOTATION_PRESET|ANNOTATION_SHAPE|ANNOTATION_TARGET|BOUND|CLOCK|CONSUMER|COUNT|DRIVER|DUPLICATE|INFO|NONINTERFERENCE|ORIGINAL_MODULE|PREEXISTING|REFERENCES|SHAPE|STRUCTURE|TYPE) driver=([A-Z_:]+) aux=([A-Z0-9_:]+) preexisting=([A-Z0-9_:]+) exceptionClassSha=([0-9a-f]{64})')
 def need(x):
  if not x:raise ValueError('CLOCK_INIT_FIXTURE_SCHEMA')
 def parse(text,label,process):
@@ -17,7 +17,7 @@ def parse(text,label,process):
  return rows
 def compare(official,cached,official_process,cached_process):
  a=parse(official,'official',official_process);b=parse(cached,'cached',cached_process);need(a==b)
- return dict(status='PASS_CLOCK_INIT_STRUCTURAL_EQUATIONS_ONLY',cases=3,block_shape_cases=3,driver_diagnostic_cases=9,bound_diagnostic_cases=27,index_sizing_cases=39,streaming_cases=186,legacy_differential_cases=21,negative_guards=27,equation_vectors_per_case=512,interpreter_executed=False)
+ return dict(status='PASS_CLOCK_INIT_STRUCTURAL_EQUATIONS_ONLY',cases=3,block_shape_cases=3,driver_diagnostic_cases=9,bound_diagnostic_cases=27,index_sizing_cases=39,streaming_cases=186,legacy_differential_cases=21,preexisting_diagnostic_cases=72,negative_guards=27,equation_vectors_per_case=512,interpreter_executed=False)
 def failure(text,label):
  need(label in ('official','cached')and type(text)is str and text.isascii()and len(text)<=4096 and text.endswith('\n'))
  need('\r'not in text);parts=text.split('\n');need(len(parts)==3 and parts[-1]=='');lines=parts[:-1]
@@ -25,14 +25,17 @@ def failure(text,label):
  need(lines[1]=='CLOCK_INIT_RUN_V1 label='+label+' pass=false cases=0 numericalPass=false interpreterExecuted=false fullHostAccepted=false')
  if m[1]=='REPAIR':
   need(m[2]=='UNKNOWN' or m[2]in GUARDS)
-  need(m[2]=='UNKNOWN' or m[5]=='6757b394f9b99b54cc59cd8f05528b770054c25bc6643d413f1a7337f96614d0')
+  need(m[2]=='UNKNOWN' or m[6]=='6757b394f9b99b54cc59cd8f05528b770054c25bc6643d413f1a7337f96614d0')
  else:need(m[2]=='NONE')
  detail=driver_evidence(m[3])
  if m[1]=='REPAIR' and m[2]=='DRIVER':need(detail['status']!='NONE')
  else:need(detail['status']=='NONE')
  aux=auxiliary_evidence(m[4])
  if not(m[1]=='REPAIR' and m[2]=='BOUND'):need(aux['status']=='NONE')
- return dict(phase=m[1],guard=m[2],driver=detail,auxiliary=aux,exception_class_sha256=m[5])
+ preexisting=preexisting_evidence(m[5])
+ if m[1]=='REPAIR' and m[2]=='PREEXISTING':need(preexisting['status']!='NONE')
+ else:need(preexisting['status']=='NONE')
+ return dict(phase=m[1],guard=m[2],driver=detail,auxiliary=aux,preexisting=preexisting,exception_class_sha256=m[6])
 
 def driver_evidence(text):
  need(type(text)is str and len(text)<=192)
@@ -65,3 +68,51 @@ def auxiliary_evidence(text):
  need(limit==AUXILIARY_LIMITS[reason] and used<=limit and requested>0 and requested>limit-used)
  if reason=='SEQUENCE_FAMILY':need((used,requested,limit)==(0,1,0))
  return dict(status='AVAILABLE',reason=reason,phase=phase,used=used,requested=requested,limit=limit)
+
+# BEGIN PREEXISTING COLLISION EVIDENCE PARSER
+PREEXISTING_ROLES=frozenset({'NONE','PORT','WIRE','REGISTER','NODE','INSTANCE','MEMORY','PRINT','STOP','VERIFICATION','OTHER','MIXED','UNKNOWN'})
+PREEXISTING_TYPES=frozenset({'NONE','CLOCK','UINT','SINT','ANALOG','RESET','ASYNCRESET','BUNDLE','VECTOR','OTHER','MIXED','UNKNOWN'})
+PREEXISTING_COUNTS=frozenset({'ZERO','ONE','MANY','UNKNOWN'})
+PREEXISTING_FLAGS=frozenset({'TRUE','FALSE','NA','UNKNOWN'})
+def preexisting_evidence(text):
+ """Finite failure-only collision evidence; never names, Info text or AST data."""
+ need(type(text)is str and len(text)<=384 and text.isascii() and not any(c.isspace() for c in text))
+ if text in ('NONE','UNAVAILABLE'):return {'status':text}
+ parts=text.split(':');need(len(parts)==14)
+ status,step,visits,chars,old_role,old_type,old_count,new_role,new_type,new_count,selected,info,reference,survives=parts
+ need(status in ('COMPLETE','TRUNCATED') and step in ('ORIGINAL','PREPARED','RELATIONS','DONE'))
+ need((status=='COMPLETE')==(step=='DONE'))
+ def number(value,limit):
+  need(re.fullmatch(r'0|[1-9][0-9]{0,8}',value)is not None)
+  result=int(value);need(result<=limit);return result
+ visits=number(visits,2097152);chars=number(chars,268435456)
+ need(old_role in PREEXISTING_ROLES and new_role in PREEXISTING_ROLES)
+ need(old_type in PREEXISTING_TYPES and new_type in PREEXISTING_TYPES)
+ need(old_count in PREEXISTING_COUNTS and new_count in PREEXISTING_COUNTS)
+ need(all(flag in PREEXISTING_FLAGS for flag in (selected,info,reference,survives)))
+ if status=='TRUNCATED':need(all(field=='UNKNOWN' for field in parts[4:]))
+ else:
+  need(old_count in ('ZERO','ONE','MANY') and new_count in ('ZERO','ONE','MANY'))
+  need(old_role!='UNKNOWN' and new_role!='UNKNOWN')
+  for role,typ,count in ((old_role,old_type,old_count),(new_role,new_type,new_count)):
+   if count=='ZERO':need(role=='NONE' and typ=='NONE')
+   else:need(role!='NONE' and typ!='NONE')
+   if count=='ONE':need(role!='MIXED' and typ!='MIXED')
+  need(selected in ('TRUE','FALSE'))
+  if new_count=='ZERO':need(selected=='FALSE')
+  if selected=='TRUE':
+   need(new_count in ('ONE','MANY') and new_role in ('REGISTER','MIXED') and new_type in ('CLOCK','MIXED'))
+   if new_count=='ONE':need(new_role=='REGISTER' and new_type=='CLOCK')
+  if old_count=='ZERO':need(info==reference==survives=='NA')
+  elif old_count=='MANY':need(info==reference==survives=='UNKNOWN')
+  elif old_count=='ONE':
+   need(info in ('TRUE','FALSE','UNKNOWN'))
+   if old_role in ('REGISTER','NODE'):need(reference in ('TRUE','FALSE','UNKNOWN'))
+   else:need(reference=='NA')
+   if old_role=='PORT':need(survives=='NA')
+   else:need(survives in ('TRUE','FALSE'))
+ return dict(status=status,step=step,visits=visits,chars=chars,
+  original_role=old_role,original_type=old_type,original_count=old_count,
+  prepared_role=new_role,prepared_type=new_type,prepared_count=new_count,
+  selected_identity=selected,info_equal=info,reference_equal=reference,object_survives=survives)
+# END PREEXISTING COLLISION EVIDENCE PARSER

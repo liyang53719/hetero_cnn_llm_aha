@@ -891,7 +891,7 @@ object ClockInitRepresentationRepair {
         if(!preparedPass){val preparedId=fresh.id(m.name);var i=0
           while(i<selected.count){a.charge(AX.Probe)
             if(selected.moduleIds(i)==preparedId){
-              need(!names.contains(selected.regs(i).name),"PREEXISTING")
+              if(names.contains(selected.regs(i).name))preexistingFail(m,fresh,selected.regs(i),selected.clocks(i))
               need(inputPort(m,selected.clocks(i).name,a),"CLOCK");selected.originalSeen(i)=true
             };i+=1
           }
@@ -1219,5 +1219,336 @@ object ClockInitRepresentationRepair {
     }
     require(checks==62);checks
   }
+  // BEGIN PREEXISTING COLLISION DIAGNOSTIC
+  // Failure-only evidence. It cannot authorize a repair or replace PREEXISTING.
+  private final class PreexistingEvidence(val code:String) extends RuntimeException(null,null,false,false)
+  private final class CollisionTruncated extends RuntimeException(null,null,false,false)
+  private final class CollisionUnknown extends RuntimeException(null,null,false,false)
+  private def collisionCodeValid(code:String):Boolean={
+    if(code==null || code.length>384)return false
+    if(code=="UNAVAILABLE")return true
+    var i=0
+    while(i<code.length){val c=code.charAt(i)
+      if(!((c>='A' && c<='Z') || (c>='0' && c<='9') || c==':' || c=='_'))return false;i+=1}
+    val fields=code.split(":",-1);if(fields.length!=14)return false
+    def number(s:String,max:Long):Boolean={
+      if(s.isEmpty || s.length>9 || (s.length>1 && s.charAt(0)=='0'))return false
+      var value=0L;var j=0
+      while(j<s.length){val c=s.charAt(j);if(c<'0' || c>'9')return false;value=value*10+c-'0';j+=1}
+      value<=max
+    }
+    def role(s:String):Boolean=s match {
+      case "NONE" | "PORT" | "WIRE" | "REGISTER" | "NODE" | "INSTANCE" | "MEMORY" |
+           "PRINT" | "STOP" | "VERIFICATION" | "OTHER" | "MIXED"=>true
+      case _=>false
+    }
+    def tpe(s:String):Boolean=s match {
+      case "NONE" | "CLOCK" | "UINT" | "SINT" | "ANALOG" | "RESET" | "ASYNCRESET" |
+           "BUNDLE" | "VECTOR" | "OTHER" | "MIXED" | "UNKNOWN"=>true
+      case _=>false
+    }
+    def count(s:String):Boolean=s=="ZERO" || s=="ONE" || s=="MANY"
+    def flag(s:String):Boolean=s=="TRUE" || s=="FALSE" || s=="NA" || s=="UNKNOWN"
+    if(!number(fields(2),2097152L) || !number(fields(3),268435456L))return false
+    if(fields(0)=="TRUNCATED"){
+      if(fields(1)!="ORIGINAL" && fields(1)!="PREPARED" && fields(1)!="RELATIONS")return false
+      i=4;while(i<14){if(fields(i)!="UNKNOWN")return false;i+=1};true
+    }else if(fields(0)=="COMPLETE" && fields(1)=="DONE"){
+      role(fields(4)) && tpe(fields(5)) && count(fields(6)) && role(fields(7)) && tpe(fields(8)) && count(fields(9)) &&
+        (fields(10)=="TRUE" || fields(10)=="FALSE") && flag(fields(11)) && flag(fields(12)) && flag(fields(13))
+    }else false
+  }
+  def preexistingEvidence(error:Throwable):String=try{
+    if(error==null || guardCode(error)!="PREEXISTING")"NONE"
+    else {val xs=error.getSuppressed
+      if(xs.length==1)xs(0) match {case e:PreexistingEvidence=>if(collisionCodeValid(e.code))e.code else "UNAVAILABLE";case _=>"UNAVAILABLE"}
+      else "UNAVAILABLE"
+    }
+  }catch{case _:Throwable=>"UNAVAILABLE"}
+  private final class CollisionBudget(val visitLimit:Int=2097152,val charLimit:Long=268435456L) {
+    require(visitLimit>=0 && visitLimit<=2097152 && charLimit>=0 && charLimit<=268435456L)
+    var visits=0;var characters=0L;var step="ORIGINAL"
+    def visit():Unit={if(visits==visitLimit)throw new CollisionTruncated;visits+=1}
+    def equal(x:String,y:String):Boolean={
+      require(x!=null && y!=null)
+      if(x.length!=y.length)return false
+      var i=0
+      while(i<x.length){if(characters==charLimit)throw new CollisionTruncated
+        characters+=1;if(x.charAt(i)!=y.charAt(i))return false;i+=1};true
+    }
+    def iterator[A](xs:Seq[A]):Iterator[A]=xs match {
+      case _:scala.collection.immutable.List[_] | _:scala.collection.immutable.Vector[_] |
+           _:scala.collection.immutable.ArraySeq.ofRef[_]=>xs.iterator
+      case _=>throw new CollisionUnknown
+    }
+    def partial:String="TRUNCATED:"+step+":"+visits+":"+characters+
+      ":UNKNOWN:UNKNOWN:UNKNOWN:UNKNOWN:UNKNOWN:UNKNOWN:UNKNOWN:UNKNOWN:UNKNOWN:UNKNOWN"
+  }
+  private final class CollisionMatch {
+    var count=0;var role="NONE";var tpe="NONE";var info:Info=null
+    var statement:Statement=null;var reference:Expression=null
+    var selectedSeen=false;var originalSurvives=false
+    def add(r:String,t:String,i:Info,s:Statement,e:Expression):Unit={
+      if(count==0){role=r;tpe=t;info=i;statement=s;reference=e}
+      else {if(role!=r)role="MIXED";if(tpe!=t)tpe="MIXED"}
+      count+=1
+    }
+    def multiplicity:String=if(count==0)"ZERO"else if(count==1)"ONE"else "MANY"
+  }
+  // This is a top-constructor classification, not structural type equality.
+  // In particular it never visits Bundle/Vector children or compares widths.
+  private def collisionType(t:Type):String=t match {
+    case ClockType=>"CLOCK";case _:UIntType=>"UINT";case _:SIntType=>"SINT"
+    case _:AnalogType=>"ANALOG";case ResetType=>"RESET";case AsyncResetType=>"ASYNCRESET"
+    case _:BundleType=>"BUNDLE";case _:VectorType=>"VECTOR";case UnknownType=>"UNKNOWN";case null=>"OTHER";case _=>"OTHER"
+  }
+  private def collisionExpressionType(e:Expression):String=e match {
+    // These exact pinned classes have stored type fields. InfoExpr and unknown
+    // delegating wrappers deliberately remain OTHER without invoking .tpe.
+    case x:Reference if x.getClass==classOf[Reference]=>collisionType(x.tpe)
+    case x:SubField if x.getClass==classOf[SubField]=>collisionType(x.tpe)
+    case x:SubIndex if x.getClass==classOf[SubIndex]=>collisionType(x.tpe)
+    case x:SubAccess if x.getClass==classOf[SubAccess]=>collisionType(x.tpe)
+    case x:Mux if x.getClass==classOf[Mux]=>collisionType(x.tpe)
+    case x:ValidIf if x.getClass==classOf[ValidIf]=>collisionType(x.tpe)
+    case x:DoPrim if x.getClass==classOf[DoPrim]=>collisionType(x.tpe)
+    case x:UIntLiteral if x.getClass==classOf[UIntLiteral]=>"UINT"
+    case x:SIntLiteral if x.getClass==classOf[SIntLiteral]=>"SINT"
+    case _=>"OTHER"
+  }
+  private def collisionDeclaration(s:Statement,out:CollisionMatch):Unit=s match {
+    case x:DefRegister=>out.add("REGISTER",collisionType(x.tpe),x.info,x,x.clock)
+    case x:DefNode=>out.add("NODE",collisionExpressionType(x.value),x.info,x,x.value)
+    case x:DefWire=>out.add("WIRE",collisionType(x.tpe),x.info,x,null)
+    case x:DefInstance=>out.add("INSTANCE",collisionType(x.tpe),x.info,x,null)
+    case x:DefMemory=>out.add("MEMORY",collisionType(x.dataType),x.info,x,null)
+    case x:Print=>out.add("PRINT","OTHER",x.info,x,null)
+    case x:Stop=>out.add("STOP","OTHER",x.info,x,null)
+    case x:Verification=>out.add("VERIFICATION","OTHER",x.info,x,null)
+    case x:IsDeclaration=>out.add("OTHER","OTHER",x.info,s,null)
+    case _=>throw new CollisionUnknown
+  }
+  private def collisionScan(m:DefModule,selected:DefRegister,original:Statement,out:CollisionMatch,b:CollisionBudget):Unit={
+    val ports=b.iterator(m.ports)
+    while(ports.hasNext){b.visit();val p=ports.next()
+      if(b.equal(p.name,selected.name))out.add("PORT",collisionType(p.tpe),p.info,null,null)
+    }
+    m match {
+      case mm:Module=>
+        // 258 reference slots; at most257 live standard iterators/Two objects.
+        // Together with bounded Info recursion and scalar records this is <128KiB.
+        val frames=new Array[Iterator[Statement]](258)
+        b.visit();var depth = -1;var s:Statement=mm.body;var active=true
+        while(active){
+          if(s eq original)out.originalSurvives=true
+          s match {case d:IsDeclaration if b.equal(d.name,selected.name)=>
+            collisionDeclaration(s,out);if(s eq selected)out.selectedSeen=true
+            case _=>()}
+          val children:Iterator[Statement]=s match {
+            case x:Block=>b.iterator(x.stmts)
+            case x:Conditionally=>new Two(x.conseq,x.alt)
+            case _=>s.foreachStmt(rejectStatementChild);Iterator.empty
+          }
+          if(children.hasNext){if(depth==255)throw new CollisionTruncated;depth+=1;frames(depth)=children}
+          var next:Statement=null
+          while(depth>=0 && next==null){val it=frames(depth)
+            if(it.hasNext){b.visit();next=it.next()}else{frames(depth)=null;depth-=1}}
+          if(next==null)active=false else s=next
+        }
+      case _:ExtModule=>()
+      case _=>throw new CollisionUnknown
+    }
+  }
+  private final class CollisionInfo(b:CollisionBudget) {
+    private var count=0
+    private def validate(i:Info,depth:Int):Unit={
+      if(depth>16 || count==256)throw new CollisionUnknown;count+=1
+      i match {
+        case NoInfo=>()
+        case x:FileInfo=>if(x.escaped==null || x.escaped.length>4096)throw new CollisionUnknown
+        case x:MultiInfo=>val it=b.iterator(x.infos);var children=0
+          while(it.hasNext){if(children==64)throw new CollisionUnknown;children+=1;validate(it.next(),depth+1)}
+        case _=>throw new CollisionUnknown
+      }
+    }
+    private def equal(x:Info,y:Info,depth:Int):Boolean={
+      if(depth>16)throw new CollisionUnknown
+      x match {
+        case NoInfo=>y eq NoInfo
+        case f:FileInfo=>y match {case g:FileInfo=>b.equal(f.escaped,g.escaped);case _=>false}
+        case m:MultiInfo=>y match {
+          case n:MultiInfo=>val xi=b.iterator(m.infos);val yi=b.iterator(n.infos)
+            while(xi.hasNext && yi.hasNext){if(!equal(xi.next(),yi.next(),depth+1))return false}
+            !xi.hasNext && !yi.hasNext
+          case _=>false
+        }
+        case _=>throw new CollisionUnknown
+      }
+    }
+    def relation(x:Info,y:Info):String=try{
+      count=0;validate(x,0);count=0;validate(y,0)
+      if(equal(x,y,0))"TRUE"else"FALSE"
+    }catch{case _:CollisionUnknown=>"UNKNOWN"}
+  }
+  private def collisionReference(e:Expression,clock:Reference,b:CollisionBudget):String=e match {
+    // Selected clock was already qualified as ClockType/PortKind/SourceFlow.
+    // Exact equality therefore only needs its name and these singleton fields;
+    // no recursive Type.equals, widths or arbitrary expression equality is used.
+    case r:Reference=>
+      if(clock.tpe!=ClockType || clock.kind!=PortKind || clock.flow!=SourceFlow)"UNKNOWN"
+      else if(r.tpe!=ClockType || r.kind!=PortKind || r.flow!=SourceFlow)"FALSE"
+      else if(b.equal(r.name,clock.name))"TRUE"else"FALSE"
+    case _=>"FALSE"
+  }
+  private def collisionCollect(original:DefModule,prepared:DefModule,selected:DefRegister,clock:Reference,b:CollisionBudget):String=try{
+    require(selected.name!=null && selected.name.nonEmpty && selected.name.length<=4096)
+    val old=new CollisionMatch;val fresh=new CollisionMatch
+    collisionScan(original,selected,null,old,b)
+    b.step="PREPARED";collisionScan(prepared,selected,if(old.count==1)old.statement else null,fresh,b)
+    b.step="RELATIONS"
+    val info=if(old.count==0)"NA"else if(old.count!=1)"UNKNOWN"else(new CollisionInfo(b)).relation(old.info,selected.info)
+    val reference=if(old.count==0)"NA"else if(old.count!=1)"UNKNOWN"
+      else if(old.role=="REGISTER" || old.role=="NODE")collisionReference(old.reference,clock,b)else"NA"
+    val survives=if(old.count==0)"NA"else if(old.count!=1)"UNKNOWN"
+      else if(old.statement==null)"NA"else if(fresh.originalSurvives)"TRUE"else"FALSE"
+    "COMPLETE:DONE:"+b.visits+":"+b.characters+":"+old.role+":"+old.tpe+":"+old.multiplicity+
+      ":"+fresh.role+":"+fresh.tpe+":"+fresh.multiplicity+":"+(if(fresh.selectedSeen)"TRUE"else"FALSE")+
+      ":"+info+":"+reference+":"+survives
+  }catch{case _:CollisionTruncated=>b.partial;case _:Throwable=>"UNAVAILABLE"}
+  private def preexistingFail(original:DefModule,fresh:Modules,selected:DefRegister,clock:Reference):Nothing={
+    val error=new IllegalArgumentException("PREEXISTING")
+    try{
+      // Any lookup/allocation/scan problem stays inside this diagnostic boundary.
+      val prepared=fresh.get(original.name)
+      val code=collisionCollect(original,prepared,selected,clock,new CollisionBudget)
+      error.addSuppressed(new PreexistingEvidence(code))
+    }catch{case _:Throwable=>()}
+    throw error
+  }
+  // END PREEXISTING COLLISION DIAGNOSTIC
+  // BEGIN PREEXISTING COLLISION SELFCHECKS
+  def preexistingSelfChecks():Int={
+    var checks=0
+    def check(p:Boolean):Unit={require(p);checks+=1}
+    val info=FileInfo("origin");val zero=UIntLiteral(0,IntWidth(1))
+    val clock=Reference("clk",ClockType,PortKind,SourceFlow)
+    val selected=DefRegister(info,"delay",ClockType,clock,zero,zero)
+    val node=DefNode(info,"delay",clock)
+    def module(s:Statement,ports:Seq[Port]=Nil):Module=Module(NoInfo,"M",ports,s)
+    def collect(old:DefModule,fresh:DefModule,b:CollisionBudget=new CollisionBudget):String=
+      collisionCollect(old,fresh,selected,clock,b)
+    def fields(s:String):Array[String]={val xs=s.split(":",-1);require(xs.length==14);xs}
+    def partial(step:String,visits:Int,chars:Long):String="TRUNCATED:"+step+":"+visits+":"+chars+
+      ":UNKNOWN:UNKNOWN:UNKNOWN:UNKNOWN:UNKNOWN:UNKNOWN:UNKNOWN:UNKNOWN:UNKNOWN:UNKNOWN"
+    val exact="COMPLETE:DONE:2:19:NODE:CLOCK:ONE:REGISTER:CLOCK:ONE:TRUE:TRUE:TRUE:FALSE"
+    check(collect(module(node),module(selected))==exact)
+    locally {
+      val original=selected.copy();val xs=fields(collect(module(original),module(Block(Seq(original,selected)))))
+      check(xs(4)=="REGISTER" && xs(6)=="ONE" && xs(9)=="MANY" && xs(10)=="TRUE" && xs(13)=="TRUE")
+    }
+    locally {
+      val xs=fields(collect(module(EmptyStmt,Seq(Port(info,"delay",Input,ClockType))),module(selected)))
+      check(xs(4)=="PORT" && xs(5)=="CLOCK" && xs(6)=="ONE" && xs(11)=="TRUE" && xs(12)=="NA" && xs(13)=="NA")
+    }
+    locally {
+      val xs=fields(collect(module(DefWire(NoInfo,"delay",UIntType(IntWidth(3)))),module(selected)))
+      check(xs(4)=="WIRE" && xs(5)=="UINT" && xs(11)=="FALSE" && xs(12)=="NA" && xs(13)=="FALSE")
+    }
+    locally {
+      val xs=fields(collect(module(Block(Seq(node,DefWire(info,"delay",UIntType(IntWidth(1)))))),module(selected)))
+      check(xs(4)=="MIXED" && xs(5)=="MIXED" && xs(6)=="MANY" && xs(11)=="UNKNOWN" && xs(12)=="UNKNOWN" && xs(13)=="UNKNOWN")
+    }
+    locally {
+      val xs=fields(collect(module(Block(Seq(node,node.copy()))),module(selected)))
+      check(xs(4)=="NODE" && xs(5)=="CLOCK" && xs(6)=="MANY" && xs(11)=="UNKNOWN")
+    }
+    locally {
+      val xs=fields(collect(module(node),module(selected.copy())))
+      check(xs(9)=="ONE" && xs(10)=="FALSE")
+    }
+    locally {
+      val xs=fields(collect(module(EmptyStmt),module(EmptyStmt)))
+      check(xs.drop(4).mkString(":")=="NONE:NONE:ZERO:NONE:NONE:ZERO:FALSE:NA:NA:NA")
+    }
+    locally {
+      val xs=fields(collect(module(node.copy(value=clock.copy(flow=firrtl2.SinkFlow))),module(selected)))
+      check(xs(12)=="FALSE")
+    }
+    locally {
+      val multi=new MultiInfo(Seq(FileInfo("first"),FileInfo("second")))
+      val reversed=new MultiInfo(Seq(FileInfo("second"),FileInfo("first")))
+      val reg=selected.copy(info=multi)
+      val xs=fields(collisionCollect(module(node.copy(info=reversed)),module(reg),reg,clock,new CollisionBudget))
+      check(xs(11)=="FALSE")
+    }
+    locally {
+      val deep=(0 until 17).foldLeft[Info](info)((i,_)=>new MultiInfo(Seq(i)))
+      val xs=fields(collect(module(node.copy(info=deep)),module(selected)))
+      check(xs(0)=="COMPLETE" && xs(11)=="UNKNOWN" && xs(12)=="TRUE")
+    }
+    check(collect(module(node),module(selected),new CollisionBudget(2097152,18))==partial("RELATIONS",2,18))
+    check(collect(module(node),module(selected),new CollisionBudget(1,268435456L))==partial("PREPARED",1,5))
+    check(collect(module(node),module(selected),new CollisionBudget(0,268435456L))==partial("ORIGINAL",0,0))
+    locally {
+      val tree=(0 until 256).foldLeft[Statement](node)((s,_)=>Block(Seq(s)))
+      val xs=fields(collect(module(tree),module(selected)))
+      check(xs(0)=="COMPLETE" && xs(2)=="258" && xs(4)=="NODE")
+    }
+    locally {
+      val tree=(0 until 257).foldLeft[Statement](node)((s,_)=>Block(Seq(s)))
+      check(collect(module(tree),module(selected))==partial("ORIGINAL",257,0))
+    }
+    locally {
+      val b=new CollisionBudget(2,19);val out=collect(module(node),module(selected),b)
+      check(out==exact && b.visits==2 && b.characters==19)
+    }
+    locally {
+      val sentinel="PRIVATE_COLLISION_NAME_"+"z"*32
+      val reg=selected.copy(name=sentinel);val n=node.copy(name=sentinel)
+      val out=collisionCollect(module(n),module(reg),reg,clock,new CollisionBudget)
+      check(out.startsWith("COMPLETE:DONE:") && !out.contains(sentinel) && !out.contains(info.escaped))
+    }
+    locally {
+      val a=new Aux;val ms=new Modules(a);ms.add(module(selected),0)
+      var caught:Throwable=null
+      try{preexistingFail(module(node),ms,selected,clock)}catch{case e:IllegalArgumentException=>caught=e}
+      check(caught!=null && caught.getClass==classOf[IllegalArgumentException] && guardCode(caught)=="PREEXISTING" && preexistingEvidence(caught)==exact)
+    }
+    locally {
+      val a=new Aux(AX.Hash,1);val ms=new Modules(a);ms.add(module(selected),0)
+      var caught:Throwable=null
+      try{preexistingFail(module(node),ms,selected,clock)}catch{case e:IllegalArgumentException=>caught=e}
+      check(caught!=null && guardCode(caught)=="PREEXISTING" && preexistingEvidence(caught)=="UNAVAILABLE")
+    }
+    locally {
+      val missing=new IllegalArgumentException("PREEXISTING")
+      val bad=new IllegalArgumentException("PREEXISTING");bad.addSuppressed(new RuntimeException())
+      val duplicate=new IllegalArgumentException("PREEXISTING")
+      duplicate.addSuppressed(new PreexistingEvidence(exact));duplicate.addSuppressed(new PreexistingEvidence(exact))
+      check(preexistingEvidence(null)=="NONE" && preexistingEvidence(new IllegalArgumentException("CLOCK"))=="NONE" &&
+        preexistingEvidence(missing)=="UNAVAILABLE" && preexistingEvidence(bad)=="UNAVAILABLE" && preexistingEvidence(duplicate)=="UNAVAILABLE")
+    }
+    locally {
+      val xs=fields(collect(module(DefWire(info,"delay",UnknownType)),module(selected)))
+      check(xs(4)=="WIRE" && xs(5)=="UNKNOWN" && xs(6)=="ONE")
+    }
+    locally {
+      val xs=fields(collect(module(node.copy(value=firrtl2.EmptyExpression)),module(selected)))
+      val deep=(0 until 4096).foldLeft[Expression](firrtl2.EmptyExpression)((e,_)=>ValidIf(clock,e,ClockType))
+      val ys=fields(collect(module(node.copy(value=deep)),module(selected),new CollisionBudget(2,16)))
+      check(xs(0)=="COMPLETE" && xs(4)=="NODE" && xs(5)=="OTHER" && xs(12)=="FALSE" &&
+        ys(0)=="COMPLETE" && ys(2)=="2" && ys(5)=="CLOCK")
+    }
+    locally {
+      val bad=new IllegalArgumentException("PREEXISTING")
+      bad.addSuppressed(new PreexistingEvidence(exact.replace(":NODE:",":INVENTED_TOKEN:")))
+      val badCounter=new IllegalArgumentException("PREEXISTING")
+      badCounter.addSuppressed(new PreexistingEvidence(exact.replace(":2:19:",":02:19:")))
+      check(preexistingEvidence(bad)=="UNAVAILABLE" && preexistingEvidence(badCounter)=="UNAVAILABLE" &&
+        !collisionCodeValid("x"*385) && !collisionCodeValid(exact.replace(":2:19:",":2097153:19:")))
+    }
+    require(checks==24);checks
+  }
+  // END PREEXISTING COLLISION SELFCHECKS
 
 }

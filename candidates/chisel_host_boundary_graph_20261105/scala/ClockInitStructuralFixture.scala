@@ -327,6 +327,7 @@ object ClockInitStructuralFixture {
           val sizingChecks=ClockInitRepresentationRepair.sizingSelfChecks();require(sizingChecks==13)
           val differential=differentialChecks(low,state.circuit,state.annotations,n);require(differential==7)
           val streamingChecks=ClockInitRepresentationRepair.streamingSelfChecks();require(streamingChecks==62)
+          val preexistingChecks=ClockInitRepresentationRepair.preexistingSelfChecks();require(preexistingChecks==24)
           phase="REPAIR"
           val fixed=ClockInitRepresentationRepair(low,state.circuit,state.annotations,n)
           require(fixed.corrected==n);unchanged(state.circuit,fixed.circuit,n)
@@ -354,15 +355,15 @@ object ClockInitStructuralFixture {
             }
           }
           phase="EQUATIONS";val vectors=equations()
-          "CLOCK_INIT_CASE_V1 id="+mode+" corrected="+n+" negativeGuards="+guards+" equations="+vectors+" shapeChecks=1 driverChecks=3 boundChecks=9 sizingChecks=13 streamingChecks=62 differentialChecks=7 graphDigest="+digest
+          "CLOCK_INIT_CASE_V1 id="+mode+" corrected="+n+" negativeGuards="+guards+" equations="+vectors+" shapeChecks=1 driverChecks=3 boundChecks=9 sizingChecks=13 streamingChecks=62 differentialChecks=7 preexistingChecks=24 graphDigest="+digest
         }
         ok=true
       }}
-    }catch{case e:Throwable=>rows=Vector("CLOCK_INIT_FAILURE_V1 phase="+phase+" guard="+(if(phase=="REPAIR")ClockInitRepresentationRepair.guardCode(e)else "NONE")+" driver="+(if(phase=="REPAIR")ClockInitRepresentationRepair.driverEvidence(e)else "NONE")+" aux="+(if(phase=="REPAIR")ClockInitRepresentationRepair.auxiliaryEvidence(e)else "NONE")+" exceptionClassSha="+hash(e.getClass.getName))}
+    }catch{case e:Throwable=>rows=Vector("CLOCK_INIT_FAILURE_V1 phase="+phase+" guard="+(if(phase=="REPAIR")ClockInitRepresentationRepair.guardCode(e)else "NONE")+" driver="+(if(phase=="REPAIR")ClockInitRepresentationRepair.driverEvidence(e)else "NONE")+" aux="+(if(phase=="REPAIR")ClockInitRepresentationRepair.auxiliaryEvidence(e)else "NONE")+" preexisting="+(if(phase=="REPAIR")ClockInitRepresentationRepair.preexistingEvidence(e)else "NONE")+" exceptionClassSha="+hash(e.getClass.getName))}
     finally{
       System.setOut(out);System.setErr(err)
       try{target.foreach{dir=>val stream=Files.walk(dir);val xs=try{val it=stream.iterator();val b=Vector.newBuilder[Path];var n=0;while(it.hasNext && n<257){b+=it.next();n+=1};require(n<=256 && !it.hasNext);b.result()}finally{stream.close()};xs.sortBy(p=> -p.getNameCount).foreach(Files.delete(_))}}
-      catch{case e:Throwable=>ok=false;rows=Vector("CLOCK_INIT_FAILURE_V1 phase=CLEANUP guard=NONE driver=NONE aux=NONE exceptionClassSha="+hash(e.getClass.getName))}
+      catch{case e:Throwable=>ok=false;rows=Vector("CLOCK_INIT_FAILURE_V1 phase=CLEANUP guard=NONE driver=NONE aux=NONE preexisting=NONE exceptionClassSha="+hash(e.getClass.getName))}
       muted.close()
     }
     rows.foreach(out.println)

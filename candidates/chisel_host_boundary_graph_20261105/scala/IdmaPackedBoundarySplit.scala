@@ -128,6 +128,9 @@ object IdmaPackedBoundarySplit {
                   else cat(Seq(UIntLiteral(0,IntWidth(h-n+1)),apply(x,n-1,l)))
                 }
                 Mux(apply(c,0,0),unsignedArm(a),unsignedArm(b),uint(h-l+1))
+              case ValidIf(c,v,_)=>
+                require(width(c)==1 && width(v)==width(e),"exact validif widths")
+                ValidIf(apply(c,0,0),apply(v,h,l),uint(h-l+1))
               case p:DoPrim=>
                 // Keep shifts, arithmetic, comparison and casts intact.
                 // Unsupported signed/unknown operands fail width validation.

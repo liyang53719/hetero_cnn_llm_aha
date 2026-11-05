@@ -29,7 +29,8 @@ object BoundarySplitStructuralFixture {
   private def cat(xs:Seq[String]):String=xs.reduceLeft((a,b)=>s"cat($a, $b)")
   private val original="idma_backend_rw_axi_flat_wrap"
   private val unsignedMuxModes=Set("mux_narrow_true","mux_narrow_false","mux_boundary_cycle","mux_boundary_registered")
-  private def boundaryRegisterMode(mode:String):Boolean=Set("boundary_registered","mux_boundary_registered")(mode)
+  private val validityModes=Set("validif_full","validif_mixed","validif_nested","validif_zero","validif_cycle","validif_registered")
+  private def boundaryRegisterMode(mode:String):Boolean=Set("boundary_registered","mux_boundary_registered","validif_registered")(mode)
   private def source(control:String):String={
     val ins=IdmaSplitLayout.fields.filter(_.direction==Input)
     val inputPorts=ins.map(f=>s"    input in_${f.name} : UInt<${f.width}>").mkString("\n")
@@ -41,7 +42,17 @@ object BoundarySplitStructuralFixture {
       val parts=ins.filter(_.bus==bus).sortBy(f=> -f.lsb).map{f=>
         // Base r_id is selected from ar_id; dedicated modes add real feedback.
         // Whole-symbol packed dependencies manufacture the forbidden path.
-        if(f.name=="axi_read_rsp_i__r_last" && Set("boundary_cycle","mux_boundary_cycle")(control)){
+        if(f.name=="axi_read_rsp_i__r_data" && control=="validif_mixed"){
+          "cat(bits(in_axi_read_rsp_i__r_data, 511, 256), mux(in_axi_read_rsp_i__b_valid, pad(validif(in_axi_write_rsp_i__b_valid, bits(in_axi_read_rsp_i__r_data, 19, 0)), 128), bits(in_axi_read_rsp_i__r_data, 255, 0)))"
+        }else if(f.name=="axi_read_rsp_i__r_data" && control=="validif_nested"){
+          "validif(in_axi_write_rsp_i__b_valid, mux(in_axi_read_rsp_i__b_valid, cat(validif(in_axi_write_rsp_i__r_valid, bits(in_axi_read_rsp_i__r_data, 255, 0)), bits(in_axi_read_rsp_i__r_data, 255, 0)), in_axi_read_rsp_i__r_data))"
+        }else if(f.name=="axi_read_rsp_i__b_resp" && control=="validif_zero"){
+          "validif(in_axi_write_rsp_i__b_valid, UInt<2>(0))"
+        }else if(f.name=="axi_read_rsp_i__r_last" && control=="validif_cycle"){
+          "validif(in_axi_write_rsp_i__b_valid, bits(b.axi_read_req_o, 0, 0))"
+        }else if(f.name=="axi_read_rsp_i__r_last" && control=="validif_registered"){
+          "validif(in_axi_write_rsp_i__b_valid, q_boundary)"
+        }else if(f.name=="axi_read_rsp_i__r_last" && Set("boundary_cycle","mux_boundary_cycle")(control)){
           "bits(b.axi_read_req_o, 0, 0)"
         }else if(f.name=="axi_read_rsp_i__r_last" && boundaryRegisterMode(control)){
           "q_boundary"
@@ -75,13 +86,15 @@ object BoundarySplitStructuralFixture {
         val outer=if(narrowFirst)"mux(in_axi_read_rsp_i__b_valid, __fixture_mux_short, __fixture_mux_wide)"else
           "mux(in_axi_read_rsp_i__b_valid, __fixture_mux_wide, __fixture_mux_short)"
         s"    node __fixture_mux_short = $short\n    node __fixture_mux_wide = ${cat(parts)}\n    b.$bus <= $outer"
-      }else s"    b.$bus <= ${cat(parts)}"
+      }else if(control=="validif_full" && bus=="axi_read_rsp_i")
+        s"    b.$bus <= validif(in_axi_write_rsp_i__b_valid, ${cat(parts)})"
+      else s"    b.$bus <= ${cat(parts)}"
     }.mkString("\n")
     // Packed input expressions may read this register, so declare it first.
     val declarations=if(boundaryRegisterMode(control))"    reg q_boundary : UInt<1>, clock\n"else ""
     val extra=control match {
-      case "base" | "arithmetic" | "whole_bus" | "boundary_cycle" | "mux_narrow_true" | "mux_narrow_false" | "mux_boundary_cycle"=>"    fixture_sentinel <= bits(b.axi_read_req_o, 0, 0)\n"
-      case "boundary_registered" | "mux_boundary_registered"=>"    q_boundary <= bits(b.axi_read_req_o, 0, 0)\n    fixture_sentinel <= q_boundary\n"
+      case "base" | "arithmetic" | "whole_bus" | "boundary_cycle" | "mux_narrow_true" | "mux_narrow_false" | "mux_boundary_cycle" | "validif_full" | "validif_mixed" | "validif_nested" | "validif_zero" | "validif_cycle"=>"    fixture_sentinel <= bits(b.axi_read_req_o, 0, 0)\n"
+      case "boundary_registered" | "mux_boundary_registered" | "validif_registered"=>"    q_boundary <= bits(b.axi_read_req_o, 0, 0)\n    fixture_sentinel <= q_boundary\n"
       // Normal lowering/preparation must never receive intentional local cycles.
       case "true_cycle" | "self_loop"=>"    fixture_sentinel <= UInt<1>(0)\n"
       case "registered"=>"    reg q : UInt<1>, clock\n    q <= not(q)\n    fixture_sentinel <= q\n"
@@ -112,6 +125,256 @@ object BoundarySplitStructuralFixture {
     val a=Seq(FirrtlCircuitAnnotation(c),TargetDirAnnotation(target.toString))
     val p=(new PrepareAst).transform(SetImplicitOutputInfo.transform(GetFirrtlAst.transform(a)))
     val states=p.collect{case TreadleCircuitStateAnnotation(s)=>s};require(states.size==1);states.head.circuit
+  }
+  private val validityControls=Vector("in_axi_write_rsp_i__b_valid","in_axi_read_rsp_i__b_valid","in_axi_write_rsp_i__r_valid")
+  private def validityDirected(vars:Seq[(String,Int)],zero:Map[String,BigInt],ones:Map[String,BigInt]):Vector[Map[String,BigInt]]={
+    val activeZero=validityControls.foldLeft(zero)((env,n)=>env.updated(n,BigInt(1)))
+    val activeBasis=vars.toVector.flatMap{case(n,w)=>(0 until w).map(i=>activeZero.updated(n,BigInt(1)<<i))}
+    val grid=(for(bits<-0 until 8;base<-Vector(zero,ones))yield
+      validityControls.zipWithIndex.foldLeft(base){case(env,(n,i))=>env.updated(n,BigInt((bits>>i)&1))}).toVector
+    require(grid.size==16,"validity deterministic condition grid")
+    // Select the other authored Mux arm while the enclosing ValidIf remains true.
+    val alternateZero=activeZero.updated("in_axi_read_rsp_i__b_valid",BigInt(0))
+    val alternateBasis=(0 until 512).map(i=>alternateZero.updated("in_axi_read_rsp_i__r_data",BigInt(1)<<i)).toVector
+    activeBasis++alternateBasis++grid
+  }
+  // Standalone low-stage oracle. Does not call the transform or concrete evaluator.
+  private def validityComparison(before:Circuit,after:Circuit,mode:String):Int={
+    require(Set("validif_full","validif_mixed","validif_nested","validif_zero","validif_cycle","validif_registered")(mode),"validity fixture mode")
+    def mask(w:Int):BigInt={require(w>0 && w<=16384,"validity bounded width");(BigInt(1)<<w)-1}
+    def width(e:Expression):Int=e.tpe match {
+      case UIntType(IntWidth(w)) if w>0 && w<=16384=>w.toInt
+      case _=>throw new IllegalArgumentException("validity fixture UInt")
+    }
+    case class Result(value:BigInt,definedMask:BigInt,width:Int){
+      require((value & ~mask(width))==0 && (definedMask & ~mask(width))==0,"validity normalized result")
+    }
+    def result(v:BigInt,m:BigInt,w:Int):Result=Result(v&mask(w),m&mask(w),w)
+    def known(v:BigInt,w:Int):Result=result(v,mask(w),w)
+    def fully(r:Result):Boolean=r.definedMask==mask(r.width)
+    def pad(r:Result,w:Int):Result={
+      require(w>=r.width,"validity pad width")
+      result(r.value,r.definedMask|(mask(w)^mask(r.width)),w)
+    }
+    def slice(r:Result,h:Int,l:Int):Result={
+      require(l>=0 && h>=l && h<r.width,"validity slice bounds")
+      result(r.value>>l,r.definedMask>>l,h-l+1)
+    }
+    def concat(a:Result,b:Result):Result=
+      result((a.value<<b.width)|b.value,(a.definedMask<<b.width)|b.definedMask,a.width+b.width)
+    def stmts(s:Statement):Vector[Statement]=s match{case Block(xs)=>xs.toVector.flatMap(stmts);case x=>Vector(x)}
+    def top(c:Circuit):Module=c.modules.collectFirst{case m:Module if m.name=="Top"=>m}.get
+    def drivers(m:Module):Map[String,Expression]=stmts(m.body).flatMap{
+      case DefNode(_,n,v)=>Some(n->v)
+      case Connect(_,l,r)=>Some(l.serialize->r)
+      case _=>None
+    }.toMap
+    // Count actual reached ValidIf conditions separately on each side, not Mux conditions.
+    final class Seen(val track:Boolean=true) {
+      var trueConditions=0L;var falseConditions=0L;var definedBits=0L;var undefinedBits=0L
+      val conditions=scala.collection.mutable.Map.empty[String,(Long,Long)]
+      def record(c:Expression,on:Boolean):Unit={
+        if(!track)return
+        val n=c match{case Reference(n,_,_,_) if validityControls.contains(n)=>n
+          case _=>throw new IllegalArgumentException("validity sampled condition identity")}
+        val previous=conditions.getOrElse(n,(0L,0L))
+        conditions(n)=if(on)(previous._1+1,previous._2)else(previous._1,previous._2+1)
+      }
+    }
+    def evaluate(e:Expression,ds:Map[String,Expression],env:Map[String,BigInt],seen:Seen,
+        active:Set[String]=Set.empty):Result={
+      val w=width(e)
+      def run(x:Expression):Result=evaluate(x,ds,env,seen,active)
+      def condition(c:Expression):Boolean={
+        require(width(c)==1,"validity condition width")
+        val r=run(c)
+        require(fully(r),"validity undefined condition")
+        r.value!=0
+      }
+      val out=e match {
+        case UIntLiteral(v,_)=>known(v,w)
+        case _:Reference | _:SubField=>
+          val n=e.serialize
+          env.get(n) match {
+            case Some(v)=>known(v,w) // Registers are environment leaves, never next-state recursion.
+            case None=>
+              require(!active(n),"validity alias cycle")
+              val r=evaluate(ds.getOrElse(n,throw new IllegalArgumentException("validity missing driver")),ds,env,seen,active+n)
+              require(r.width==w,"validity alias width");r
+          }
+        case ValidIf(c,v,_)=>
+          require(width(v)==w,"validity ValidIf width")
+          val on=condition(c);seen.record(c,on)
+          if(on){seen.trueConditions+=1;run(v)}
+          else{seen.falseConditions+=1;result(0,0,w)}
+        case Mux(c,a,b,_)=>
+          require(w==math.max(width(a),width(b)),"validity mux width")
+          pad(if(condition(c))run(a)else run(b),w)
+        case DoPrim(firrtl2.PrimOps.Cat,Seq(a,b),Seq(),_)=>
+          require(w==width(a)+width(b),"validity cat width");concat(run(a),run(b))
+        case DoPrim(firrtl2.PrimOps.Bits,Seq(a),Seq(h,l),_)=>
+          require(l>=0 && h>=l && h<width(a) && h-l+1==w,"validity bits width")
+          slice(run(a),h.toInt,l.toInt)
+        case DoPrim(firrtl2.PrimOps.Pad,Seq(a),Seq(n),_)=>
+          require(n>=0 && n<=16384 && w==math.max(width(a),n.toInt),"validity pad width")
+          pad(run(a),w)
+        case DoPrim(op,args,consts,_)=>
+          val rs=args.map(run)
+          require(rs.forall(fully),"validity partial arithmetic unsupported")
+          val value=(op,rs,consts) match {
+            case (firrtl2.PrimOps.And,Seq(a,b),Seq())=>
+              require(w==math.max(a.width,b.width),"validity AND width");a.value&b.value
+            case (firrtl2.PrimOps.Add,Seq(a,b),Seq())=>
+              require(w==math.max(a.width,b.width)+1,"validity ADD width");a.value+b.value
+            case (firrtl2.PrimOps.Sub,Seq(a,b),Seq())=>
+              require(w==math.max(a.width,b.width)+1,"validity SUB width");a.value-b.value
+            case (firrtl2.PrimOps.Dshl,Seq(a,b),Seq())=>
+              require(b.width<=14 && w==a.width+(1<<b.width)-1,"validity DSHL width");a.value<<b.value.toInt
+            case (firrtl2.PrimOps.Shr,Seq(a),Seq(n))=>
+              require(n>=0 && n.isValidInt && w==math.max(1,a.width-n.toInt),"validity SHR width");a.value>>n.toInt
+            case (firrtl2.PrimOps.Lt,Seq(a,b),Seq())=>
+              require(w==1,"validity LT width");if(a.value<b.value)BigInt(1)else BigInt(0)
+            case (firrtl2.PrimOps.Orr,Seq(a),Seq())=>
+              require(w==1,"validity ORR width");if(a.value!=0)BigInt(1)else BigInt(0)
+            case _=>throw new IllegalArgumentException("unimplemented independent validity operator")
+          }
+          known(value,w)
+        case _=>throw new IllegalArgumentException("unimplemented independent validity operator")
+      }
+      require(out.width==w,"validity result width");out
+    }
+    // Direct tests are constructed from literals, not transformed expressions.
+    val selfSeen=new Seen(false)
+    def lit(v:Int,w:Int):Expression=UIntLiteral(BigInt(v),IntWidth(w))
+    def vi(c:Expression,v:Expression):Expression=ValidIf(c,v,v.tpe)
+    def check(e:Expression):Result=evaluate(e,Map.empty,Map.empty,selfSeen)
+    def rejects(e:Expression,message:String):Unit={
+      val rejected=try{check(e);false}catch{
+        case x:IllegalArgumentException if x.getMessage==message || x.getMessage=="requirement failed: "+message=>true
+      }
+      require(rejected,"validity rejection selfcheck")
+    }
+    val invalid=vi(lit(0,1),lit(3,2))
+    require(check(vi(lit(1,1),lit(3,2)))==known(3,2),"validity true selfcheck")
+    require(check(invalid).definedMask==0,"validity false selfcheck")
+    val padded=DoPrim(firrtl2.PrimOps.Pad,Seq(invalid),Seq(BigInt(4)),UIntType(IntWidth(4)))
+    require(check(padded)==result(0,12,4),"validity padded zero selfcheck")
+    val joined=DoPrim(firrtl2.PrimOps.Cat,Seq(lit(2,2),padded),Seq.empty,UIntType(IntWidth(6)))
+    require(check(joined)==result(32,60,6),"validity mixed cat selfcheck")
+    val extracted=DoPrim(firrtl2.PrimOps.Bits,Seq(joined),Seq(BigInt(4),BigInt(1)),UIntType(IntWidth(4)))
+    require(check(extracted)==result(0,14,4),"validity mixed bits selfcheck")
+    require(check(vi(lit(0,1),DoPrim(firrtl2.PrimOps.Pad,Seq(lit(3,2)),Seq(BigInt(4)),UIntType(IntWidth(4))))).definedMask==0,
+      "validity invalid wide differs from padded invalid narrow")
+    require(check(Mux(lit(1,1),padded,lit(15,4),UIntType(IntWidth(4))))==check(padded),"validity mux true selfcheck")
+    require(check(Mux(lit(0,1),padded,lit(15,4),UIntType(IntWidth(4))))==known(15,4),"validity mux false selfcheck")
+    val unknownCondition=vi(lit(0,1),lit(1,1))
+    rejects(vi(unknownCondition,lit(3,2)),"validity undefined condition")
+    rejects(Mux(unknownCondition,lit(1,1),lit(0,1),UIntType(IntWidth(1))),"validity undefined condition")
+    rejects(DoPrim(firrtl2.PrimOps.Add,Seq(invalid,lit(1,2)),Seq.empty,UIntType(IntWidth(3))),"validity partial arithmetic unsupported")
+    rejects(DoPrim(firrtl2.PrimOps.Not,Seq(lit(1,1)),Seq.empty,UIntType(IntWidth(1))),"unimplemented independent validity operator")
+    // Exercise the mask algebra exhaustively on small independently chosen values/masks.
+    for(w<-1 to 4;v<-0 until (1<<w);m<-0 until (1<<w)){
+      val r=result(v,m,w)
+      for(l<-0 until w;h<-l until w){
+        val s=slice(r,h,l)
+        for(i<-0 until s.width){
+          require(s.value.testBit(i)==r.value.testBit(i+l) && s.definedMask.testBit(i)==r.definedMask.testBit(i+l),"validity slice selfcheck")
+        }
+      }
+      val p=pad(r,w+2)
+      require((p.definedMask>>w)==3 && (p.value>>w)==0 && slice(p,w-1,0)==r,"validity pad selfcheck")
+      val c=concat(known(2,2),r)
+      require(slice(c,w-1,0)==r && slice(c,w+1,w)==known(2,2),"validity cat selfcheck")
+    }
+    val old=drivers(top(before));val fresh=drivers(top(after))
+    val inputs=IdmaSplitLayout.fields.filter(_.direction==Input)
+    val outputs=IdmaSplitLayout.fields.filter(_.direction==Output)
+    require(inputs.size==26 && inputs.map(_.width).sum==1064,"validity full input coverage")
+    val vars=(inputs.map(f=>("in_"+f.name,f.width))++outputs.map(f=>("b.__sim_idma_field__"+f.name,f.width)))++
+      (if(boundaryRegisterMode(mode))Vector("q_boundary"->1)else Vector.empty)
+    require(vars.map(_._2).sum==2634+(if(boundaryRegisterMode(mode))1 else 0))
+    val zero=vars.map{case(n,_)=>n->BigInt(0)}.toMap
+    val basis=vars.flatMap{case(n,w)=>(0 until w).map(i=>zero.updated(n,BigInt(1)<<i))}
+    val random=new scala.util.Random(0x52734L)
+    val mixed=Vector.fill(64)(vars.map{case(n,w)=>n->BigInt(w,random)}.toMap)
+    val ones=vars.map{case(n,w)=>n->mask(w)}.toMap
+    val directed=(0 to 512).flatMap{i=>
+      val a=(BigInt(1)<<i)-1
+      Vector(zero.updated("in_axi_read_rsp_i__r_data",a).updated("in_axi_write_rsp_i__r_data",BigInt(1)),
+        zero.updated("in_axi_read_rsp_i__r_data",BigInt(0)).updated("in_axi_write_rsp_i__r_data",a))
+    }++(0 to 3).map(i=>ones.updated("in_axi_write_rsp_i__b_resp",BigInt(i)))
+    val samples=Vector(zero,ones)++basis++mixed++directed++validityDirected(vars,zero,ones)
+    require(samples.size==6892+(if(boundaryRegisterMode(mode))2 else 0),"validity sample count")
+    val oldSeen=new Seen;val newSeen=new Seen
+    samples.foreach{base=>
+      val packed=IdmaSplitLayout.busWidths.keys.filter(_.endsWith("_o")).map{bus=>
+        val v=outputs.filter(_.bus==bus).foldLeft(BigInt(0)){case(acc,f)=>acc|(base("b.__sim_idma_field__"+f.name)<<f.lsb)}
+        ("b."+bus)->v
+      }.toMap
+      val env=base++packed
+      val oldValues=IdmaSplitLayout.busWidths.keys.filter(_.endsWith("_i")).map{bus=>
+        bus->evaluate(old("b."+bus),old,env,oldSeen)
+      }.toMap
+      inputs.foreach{f=>
+        val expected=slice(oldValues(f.bus),f.lsb+f.width-1,f.lsb)
+        val observed=evaluate(fresh("b.__sim_idma_field__"+f.name),fresh,env,newSeen)
+        require(observed.width==f.width && observed.definedMask==expected.definedMask,"independent validity mask mismatch")
+        require(((observed.value^expected.value)&expected.definedMask)==0,"independent validity known bit mismatch")
+        oldSeen.definedBits+=expected.definedMask.bitCount;oldSeen.undefinedBits+=f.width-expected.definedMask.bitCount
+        newSeen.definedBits+=observed.definedMask.bitCount;newSeen.undefinedBits+=f.width-observed.definedMask.bitCount
+        if(f.name=="axi_read_rsp_i__r_last" && Set("validif_cycle","validif_registered")(mode)){
+          val wanted=if(mode=="validif_cycle")base("b.__sim_idma_field__axi_read_req_o__r_ready")else base("q_boundary")
+          require(((observed.value^wanted)&observed.definedMask)==0,"validity boundary feedback equation")
+        }
+      }
+    }
+    for(s<-Seq(oldSeen,newSeen)){
+      require(s.trueConditions>0 && s.falseConditions>0,"validity condition coverage")
+      val expectedConditions=if(mode=="validif_nested")Set("in_axi_write_rsp_i__b_valid","in_axi_write_rsp_i__r_valid")else Set("in_axi_write_rsp_i__b_valid")
+      require(s.conditions.keySet.toSet==expectedConditions && s.conditions.values.forall{case(t,f)=>t>0 && f>0},"validity per-condition coverage")
+      require(s.definedBits>0 && s.undefinedBits>0,"validity defined and undefined coverage")
+      require(s.definedBits+s.undefinedBits==samples.size.toLong*1064,"validity every bit covered")
+    }
+    samples.size
+  }
+
+  private def requireNoValidIf(c:Circuit):Unit={
+    def expr(e:Expression):Unit={require(!e.isInstanceOf[ValidIf],"official preparation removed ValidIf");e.foreachExpr(expr)}
+    def stmt(s:Statement):Unit={s.foreachExpr(expr);s.foreachStmt(stmt)}
+    c.modules.collect{case m:Module if m.name=="Top"=>m}.foreach(m=>stmt(m.body))
+  }
+  private def checkValidityStructure(before:Circuit,after:Circuit,mode:String):Unit={
+    def stmts(s:Statement):Vector[Statement]=s match{case Block(xs)=>xs.toVector.flatMap(stmts);case x=>Vector(x)}
+    def inspect(c:Circuit,split:Boolean):(Set[String],Int,Boolean,Boolean,Boolean)={
+      val top=c.modules.collectFirst{case m:Module if m.name=="Top"=>m}.get
+      val ss=stmts(top.body);val regs=ss.collect{case r:DefRegister=>r.name}.toSet
+      val ds=ss.flatMap{case DefNode(_,n,e)=>Some(n->e);case Connect(_,l,r)=>Some(l.serialize->r);case _=>None}.toMap
+      var conditions=Set.empty[String];var count=0;var zero=false;var unequal=false;var padded=false
+      def walk(e:Expression,active:Set[String]=Set.empty):Unit=e match{
+        case Reference(n,_,_,_) if ds.contains(n) && !regs(n)=>
+          require(!active(n),"validity structural alias cycle");walk(ds(n),active+n)
+        case ValidIf(cond,value,_)=>
+          count+=1
+          cond match{case Reference(n,UIntType(IntWidth(w)),_,_) if w==1 && n.startsWith("in_")=>conditions+=n
+            case _=>throw new IllegalArgumentException("validity fixture condition structure")}
+          value match{case UIntLiteral(v,_) if v==0=>zero=true;case _=>()}
+          walk(value,active)
+        case x@Mux(_,a,b,_)=>
+          (a.tpe,b.tpe,x.tpe) match{case (UIntType(IntWidth(wa)),UIntType(IntWidth(wb)),UIntType(IntWidth(w))) if wa==128 && wb==256 && w==256=>unequal=true;case _=>()}
+          x.foreachExpr(y=>walk(y,active))
+        case x@DoPrim(firrtl2.PrimOps.Pad,Seq(_:ValidIf),Seq(n),_) if n==128=>
+          padded=true;x.foreachExpr(y=>walk(y,active))
+        case x=>x.foreachExpr(y=>walk(y,active))
+      }
+      val roots=if(split)IdmaSplitLayout.fields.filter(_.direction==Input).map(f=>"b.__sim_idma_field__"+f.name)
+        else IdmaSplitLayout.busWidths.keys.filter(_.endsWith("_i")).toVector.map("b."+_)
+      roots.foreach(n=>walk(ds(n)))
+      (conditions,count,zero,unequal,padded)
+    }
+    val old=inspect(before,false);val fresh=inspect(after,true)
+    require(old._2>0 && fresh._2>0 && old._1.nonEmpty && fresh._1==old._1,"low validity condition cones preserved")
+    if(mode=="validif_mixed")require(old._4 && old._5,"actual unequal mux and padded invalid narrow survived low")
+    if(mode=="validif_zero")require(old._3 && fresh._3,"zero data retains validity condition")
   }
   private def requireUnequalMuxes(c:Circuit,mode:String):Unit={
     if(!unsignedMuxModes(mode))return
@@ -216,7 +479,7 @@ object BoundarySplitStructuralFixture {
           .updated("in_axi_read_rsp_i__r_data",large)
     }else Vector.empty[Map[String,BigInt]]
     require(muxDirected.size==(if(unsignedMuxModes(mode))64 else 0))
-    val samples=Vector(zero,ones)++basis++mixed++directed++muxDirected
+    val samples=Vector(zero,ones)++basis++mixed++directed++muxDirected++(if(validityModes(mode))validityDirected(vars,zero,ones)else Vector.empty)
     samples.foreach { base=>
       val packed=IdmaSplitLayout.busWidths.keys.filter(_.endsWith("_o")).map{bus=>
         val v=outputs.filter(_.bus==bus).foldLeft(BigInt(0)){case(acc,f)=>acc|(base("b.__sim_idma_field__"+f.name)<<f.lsb)}
@@ -281,11 +544,11 @@ object BoundarySplitStructuralFixture {
     mode match{
       case "true_cycle" | "self_loop"=>require(cyclic("fixture_sentinel"),"real combinational cycle sentinel survived")
       case "registered"=>require(regs("q") && reaches("fixture_sentinel","q"),"register sentinel survived")
-      case "boundary_registered" | "mux_boundary_registered"=>
+      case "boundary_registered" | "mux_boundary_registered" | "validif_registered"=>
         require(regs("q_boundary") && reaches("fixture_sentinel","q_boundary"),"boundary register survived")
         require(ds.get("q_boundary").exists(e=>refs(e).exists(n=>reaches(n,"b.axi_read_req_o"))),"boundary register next state survived")
         if(split)require(reaches("b.__sim_idma_field__axi_read_rsp_i__r_last","q_boundary"),"boundary register cut survived")
-      case "boundary_cycle" | "mux_boundary_cycle" if split=>
+      case "boundary_cycle" | "mux_boundary_cycle" | "validif_cycle" if split=>
         require(reaches("b.__sim_idma_field__axi_read_rsp_i__r_last","b.__sim_idma_field__axi_read_req_o__r_ready"),"real boundary feedback survived")
       case "whole_bus" if split=>
         IdmaSplitLayout.fields.filter(_.bus=="axi_read_req_o").foreach{f=>
@@ -368,7 +631,19 @@ object BoundarySplitStructuralFixture {
     badMux(cond,UIntLiteral(0,IntWidth(533)),narrow,message="exact mux widths")
     badMux(cond,wide,narrow,result=UIntType(UnknownWidth))
     badMux(cond,wide,narrow,result=SIntType(IntWidth(532)))
-    19
+    def badValid(cnd:Expression,value:Expression,result:Type=t,message:String="known bounded UInt"):Unit=
+      rejected(replacing(ValidIf(cnd,value,result),Seq.empty),message)
+    badValid(UIntLiteral(0,IntWidth(2)),wide,message="exact validif widths")
+    badValid(SIntLiteral(0,IntWidth(1)),wide)
+    badValid(Reference("bad_valid_cond",UIntType(UnknownWidth)),wide)
+    badValid(cond,SIntLiteral(0,IntWidth(532)))
+    badValid(cond,Reference("bad_valid_value",UIntType(UnknownWidth)))
+    badValid(cond,UIntLiteral(0,IntWidth(0)))
+    badValid(cond,wide,result=SIntType(IntWidth(532)))
+    badValid(cond,wide,result=UIntType(UnknownWidth))
+    badValid(cond,wide,result=UIntType(IntWidth(0)))
+    badValid(cond,UIntLiteral(0,IntWidth(531)),message="exact validif widths")
+    29
   }
   private def loaded(c:Class[_],location:String):String={
     require(Paths.get(c.getProtectionDomain.getCodeSource.getLocation.toURI).toRealPath()==Paths.get(location).toRealPath())
@@ -391,6 +666,17 @@ object BoundarySplitStructuralFixture {
         case "requirement failed: prepared bit equations survived"=>"VECTOR_MISMATCH"
         case "requirement failed: independent AND width"=>"AND_WIDTH"
         case "requirement failed: independent AND selfcheck"=>"AND_SELFCHECK"
+        case "requirement failed: independent validity mask mismatch"=>"VALIDITY_MASK_MISMATCH"
+        case "requirement failed: independent validity known bit mismatch"=>"VALIDITY_VALUE_MISMATCH"
+        case "requirement failed: validity undefined condition"=>"VALIDITY_UNDEFINED_CONDITION"
+        case "requirement failed: validity partial arithmetic unsupported"=>"VALIDITY_PARTIAL_OPERATOR"
+        case "unimplemented independent validity operator"=>"VALIDITY_UNSUPPORTED_OPERATOR"
+        case "requirement failed: validity condition coverage"=>"VALIDITY_COVERAGE"
+        case "requirement failed: validity defined and undefined coverage"=>"VALIDITY_COVERAGE"
+        case "requirement failed: validity every bit covered"=>"VALIDITY_COVERAGE"
+        case "requirement failed: low validity condition cones preserved"=>"VALIDITY_STRUCTURE"
+        case "requirement failed: zero data retains validity condition"=>"VALIDITY_STRUCTURE"
+        case "requirement failed: official preparation removed ValidIf"=>"VALIDITY_PREPARED_RESIDUE"
         case _=>"UNKNOWN"
       }
     }
@@ -414,7 +700,7 @@ object BoundarySplitStructuralFixture {
       target=Some(relativeTarget)
       System.setOut(muted);System.setErr(muted)
       Console.withOut(muted){Console.withErr(muted){
-        rows=Vector("base","true_cycle","self_loop","registered","boundary_cycle","boundary_registered","arithmetic","whole_bus","mux_narrow_true","mux_narrow_false","mux_boundary_cycle","mux_boundary_registered").map{mode=>
+        rows=Vector("base","true_cycle","self_loop","registered","boundary_cycle","boundary_registered","arithmetic","whole_bus","mux_narrow_true","mux_narrow_false","mux_boundary_cycle","mux_boundary_registered","validif_full","validif_mixed","validif_nested","validif_zero","validif_cycle","validif_registered").map{mode=>
           currentCase=mode;phase="parse"
           val c=Parser.parse(source(mode))
           val ext=c.modules.collect{case e:ExtModule=>e};require(ext.size==1)
@@ -424,7 +710,7 @@ object BoundarySplitStructuralFixture {
           val scaffold=Compiler.toLowFirrtl(CircuitState(split,Seq(TargetDirAnnotation(target.get.toString)))).circuit
           requireUnequalMuxes(scaffold,mode)
           phase="negative_guards"
-          if(mode=="base")require(negativeCases(scaffold)==19)
+          if(mode=="base")require(negativeCases(scaffold)==29)
           val localCycle=Set("true_cycle","self_loop")(mode)
           val low=injectLocalCycle(scaffold,mode)
           phase="type_flow"
@@ -436,13 +722,15 @@ object BoundarySplitStructuralFixture {
           checkTypesAndFlows(repaired.circuit)
           require(repaired.instances==1 && repaired.projectedFields==26)
           phase="bit_equations";comparisonStep="LOW"
-          val vectors=valueComparison(low,repaired.circuit,mode)
-          require(vectors==3730+(if(boundaryRegisterMode(mode))1 else 0)+(if(unsignedMuxModes(mode))64 else 0))
+          if(validityModes(mode))checkValidityStructure(low,repaired.circuit,mode)
+          val vectors=if(validityModes(mode))validityComparison(low,repaired.circuit,mode)else valueComparison(low,repaired.circuit,mode)
+          require(vectors==(if(validityModes(mode))6892+(if(boundaryRegisterMode(mode))2 else 0)else 3730+(if(boundaryRegisterMode(mode))1 else 0)+(if(unsignedMuxModes(mode))64 else 0)))
           phase="graph"
           sentinelSurvives(repaired.circuit,mode,true)
           // Exercise the candidate on the injected low graph. No intentional
           // local cycle enters Compiler/PrepareAst, where CheckCombLoops runs.
           val lowOld=outcome(low);val lowNew=outcome(repaired.circuit)
+          require(lowOld=="CYCLE" && (lowNew=="CYCLE")==Set("true_cycle","self_loop","boundary_cycle","mux_boundary_cycle","validif_cycle")(mode),"low cycle and register outcomes preserved")
           if(localCycle)require(lowOld=="CYCLE" && lowNew=="CYCLE","low local cycle cannot be bypassed")
           phase="prepare"
           val oldPrepared=injectLocalCycle(prepared(scaffold,target.get),mode)
@@ -457,14 +745,16 @@ object BoundarySplitStructuralFixture {
           sentinelSurvives(oldPrepared,mode,false)
           sentinelSurvives(newPrepared,mode,true)
           phase="bit_equations";comparisonStep="PREPARED"
+          if(validityModes(mode)){requireNoValidIf(oldPrepared);requireNoValidIf(newPrepared)}
           require(valueComparison(oldPrepared,newPrepared,mode)==vectors,"prepared bit equations survived")
           phase="graph"
           val oldResult=outcome(oldPrepared);require(oldResult=="CYCLE")
           val result=outcome(newPrepared)
           if(localCycle)require(result=="CYCLE","prepared local cycle cannot be bypassed")
-          require((result=="CYCLE")==Set("true_cycle","self_loop","boundary_cycle","mux_boundary_cycle")(mode),"no true cycle bypass")
+          require((result=="CYCLE")==Set("true_cycle","self_loop","boundary_cycle","mux_boundary_cycle","validif_cycle")(mode),"no true cycle bypass")
           "BOUNDARY_GRAPH_CASE_V1 id="+mode+" lowOriginal="+lowOld+" lowTransformed="+lowNew+
-            " original="+oldResult+" transformed="+result+" bitEquationPhases=2 bitEquationVectors="+vectors
+            " original="+oldResult+" transformed="+result+" bitEquationPhases=2 bitEquationVectors="+vectors+
+            " lowSemantics="+(if(validityModes(mode))"VALIDITY_MASK"else"CONCRETE")+" preparedSemantics=CONCRETE"
         }
         ok=true
       }}
@@ -485,7 +775,7 @@ object BoundarySplitStructuralFixture {
       muted.close()
     }
     rows.foreach(out.println)
-    val coverage=if(ok)" cases=12 negativeGuards=19"else ""
+    val coverage=if(ok)" cases=18 negativeGuards=29 validityCases=6"else ""
     out.println("BOUNDARY_GRAPH_RUN_V1 label="+label+" pass="+ok+coverage+" numericalPass=false fullHostAccepted=false")
     if(!ok)System.exit(2)
   }

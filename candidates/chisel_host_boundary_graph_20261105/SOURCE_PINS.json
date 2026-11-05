@@ -3,8 +3,8 @@
   "files": [
     {
       "path": ".github/workflows/chisel-host-boundary-graph-once.yml",
-      "bytes": 2034,
-      "sha256": "4ea188f025ed6441dc643e0c8b00ddf04354ce0558430e3f4be28021da62800a"
+      "bytes": 2040,
+      "sha256": "05ca92fc1589618bfee52cc6dfc6bd4194c886d926acdecb6cbb9354e2872be2"
     },
     {
       "path": "candidates/chisel_host_boundary_graph_20261105/compare_boundary_results.py",
@@ -48,8 +48,8 @@
     },
     {
       "path": "candidates/chisel_host_boundary_graph_20261105/run.py",
-      "bytes": 46044,
-      "sha256": "178192a717bc4d26b626e9a48bd255bab67ce1c3eba56549949b136884bac924"
+      "bytes": 45789,
+      "sha256": "bee75de3c5d9cb176eed99b52947e9d619bbc336bc22ea81323cbae8e88cee8f"
     },
     {
       "path": "candidates/chisel_host_boundary_graph_20261105/scala/BoundaryIntegrationGuards.scala",
@@ -115,9 +115,6 @@
   "publication_delta": [
     ".github/workflows/chisel-host-boundary-graph-once.yml",
     "candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json",
-    "candidates/chisel_host_boundary_graph_20261105/compare_clock_init_results.py",
-    "candidates/chisel_host_boundary_graph_20261105/run.py",
-    "candidates/chisel_host_boundary_graph_20261105/scala/ClockInitRepresentationRepair.scala",
-    "candidates/chisel_host_boundary_graph_20261105/scala/ClockInitStructuralFixture.scala"
+    "candidates/chisel_host_boundary_graph_20261105/run.py"
   ]
 }

@@ -25,6 +25,65 @@ import treadle2.stage.phases.{GetFirrtlAst,PrepareAst,SetImplicitOutputInfo}
 object OriginalHostStructuralGraph {
   private def sha(b:Array[Byte]):String=MessageDigest.getInstance("SHA-256").digest(b).map(x=>f"${x&255}%02x").mkString
   private def hash(s:String):String=sha(s.getBytes(UTF_8))
+  // Failure-only disclosure: exact reviewed static messages map to finite codes.
+  // No message, stack, source name, path, AST, or message-derived hash is emitted.
+  private val topologyGuardCodes=Map[String,String](
+    "requirement failed: bounded exact hierarchy path" -> "TOPOLOGY_PATH_BOUNDS",
+    "requirement failed: bounded integration statements" -> "TOPOLOGY_STATEMENT_BOUND",
+    "requirement failed: exact generated wrapper/leaf binding" -> "TOPOLOGY_MODEL_BINDING",
+    "requirement failed: one actual iDMA hierarchy path" -> "TOPOLOGY_IDMA_PATH_COUNT",
+    "requirement failed: original high wrapper module identity" -> "TOPOLOGY_WRAPPER_IDENTITY",
+    "requirement failed: same seventeen leaf paths" -> "TOPOLOGY_BINDING_COUNT",
+    "requirement failed: unchanged split leaf ABI" -> "TOPOLOGY_LEAF_ABI",
+    "requirement failed: unique exact instance segment" -> "TOPOLOGY_INSTANCE_SEGMENT"
+  )
+  private val transformGuardCodes=Map[String,String](
+    "known bounded UInt required" -> "UNSIGNED_WIDTH_REQUIRED",
+    "missing wrapper driver" -> "WRAPPER_DRIVER_MISSING",
+    "requirement failed: alias cycle is not a repairable packed view" -> "ALIAS_CYCLE",
+    "requirement failed: bounded alias projection" -> "ALIAS_PROJECTION_BOUND",
+    "requirement failed: bounded caller expression children" -> "CALLER_CHILDREN_BOUND",
+    "requirement failed: bounded caller expression depth" -> "CALLER_DEPTH_BOUND",
+    "requirement failed: bounded caller expression expansion" -> "CALLER_EXPANSION_BOUND",
+    "requirement failed: bounded caller expression identities" -> "CALLER_IDENTITY_BOUND",
+    "requirement failed: bounded caller statements" -> "CALLER_STATEMENT_BOUND",
+    "requirement failed: bounded expanded expression" -> "EXPANDED_EXPRESSION_BOUND",
+    "requirement failed: bounded expression identities" -> "EXPRESSION_IDENTITY_BOUND",
+    "requirement failed: bounded expression recursion" -> "EXPRESSION_RECURSION_BOUND",
+    "requirement failed: bounded total caller expression occurrences" -> "CALLER_OCCURRENCE_BOUND",
+    "requirement failed: bounded total expanded field expressions" -> "TOTAL_FIELD_EXPANSION_BOUND",
+    "requirement failed: caller expression postorder" -> "CALLER_POSTORDER",
+    "requirement failed: cyclic expression object" -> "CYCLIC_EXPRESSION_OBJECT",
+    "requirement failed: distinct caller instances" -> "CALLER_INSTANCE_NAMES",
+    "requirement failed: each caller has exactly one original packed input driver" -> "PACKED_INPUT_SINGLE_DRIVER",
+    "requirement failed: exact mux widths" -> "MUX_WIDTHS",
+    "requirement failed: exact nonoverlapping complete packed bus" -> "LAYOUT_BIT_COVERAGE",
+    "requirement failed: exact original packed wrapper ABI" -> "PACKED_WRAPPER_ABI",
+    "requirement failed: exact split leaf ABI including order" -> "SPLIT_LEAF_ABI",
+    "requirement failed: fresh private field namespace" -> "PRIVATE_FIELD_NAMESPACE",
+    "requirement failed: implicit coercion forbidden" -> "ALIAS_IMPLICIT_COERCION",
+    "requirement failed: must be unconditional low FIRRTL" -> "UNCONDITIONAL_LOW_REQUIRED",
+    "requirement failed: one non-invalid driver required" -> "ALIAS_SINGLE_DRIVER",
+    "requirement failed: one original iDMA boundary only" -> "BOUNDARY_INSTANCE_FIELD_COUNT",
+    "requirement failed: original wrapper input projection" -> "WRAPPER_INPUT_SLICE",
+    "requirement failed: original wrapper output packing" -> "WRAPPER_OUTPUT_PACKING",
+    "requirement failed: packed input driver width" -> "PACKED_INPUT_WIDTH",
+    "requirement failed: projection range" -> "PROJECTION_RANGE",
+    "requirement failed: transparent generated wrapper only" -> "TRANSPARENT_WRAPPER",
+    "requirement failed: unchanged direct control passthrough" -> "CONTROL_PASSTHROUGH",
+    "requirement failed: unchanged split model binding" -> "WRAPPER_MODEL_BINDING",
+    "requirement failed: unique modules" -> "MODULE_UNIQUENESS",
+    "requirement failed: unresolved packed boundary" -> "UNRESOLVED_PACKED_BOUNDARY",
+    "requirement failed: wrapper unique drivers" -> "WRAPPER_UNIQUE_DRIVERS",
+    "unsupported projected expression" -> "PROJECTED_EXPRESSION_KIND"
+  )
+  private def boundaryGuardCode(step:String,error:Throwable):String={
+    if(error==null || error.getClass!=classOf[IllegalArgumentException])return "UNKNOWN"
+    val message=error.getMessage
+    if(message==null || message.length>160)return "UNKNOWN"
+    val codes=step match {case "TOPOLOGY"=>topologyGuardCodes;case "TRANSFORM"=>transformGuardCodes;case _=>Map.empty[String,String]}
+    codes.getOrElse(message,"UNKNOWN")
+  }
   private def loaded(c:Class[_],location:String):String={
     require(Paths.get(c.getProtectionDomain.getCodeSource.getLocation.toURI).toRealPath()==Paths.get(location).toRealPath(),"actual graph class code location")
     val in=c.getResourceAsStream("/"+c.getName.replace('.','/')+".class")
@@ -128,6 +187,9 @@ object OriginalHostStructuralGraph {
     val savedOut=System.out;val savedErr=System.err
     val sink=new DiagnosticSink;val muted=new PrintStream(sink,true,"UTF-8")
     var stage="admission";var result="FAIL_STRUCTURAL_GRAPH_ONLY stage=admission";var failed=true
+    var boundaryStep="NONE"
+    def boundaryFailure(error:Throwable):String=
+      if(stage=="boundary_split")" boundaryStep="+boundaryStep+" boundaryGuard="+boundaryGuardCode(boundaryStep,error)else ""
     var telemetry:PhaseTelemetry=null
     def timed[T](name:String)(body: => T):T={
       stage=name;telemetry.begin(name);val value=body;telemetry.end();value
@@ -172,7 +234,9 @@ object OriginalHostStructuralGraph {
           require(TopmoduleInfo(low.circuit).clocks==Seq("clock"),"original clock")
         }
         val (boundary,topology)=timed("boundary_split") {
+          boundaryStep="TOPOLOGY"
           val topology=BoundaryIntegrationGuards.topology(low.circuit,wrapperName,originalBindings)
+          boundaryStep="TRANSFORM"
           (IdmaPackedBoundarySplit(low.circuit,wrapperName),topology)
         }
         val boundaryLow=timed("boundary_checks") {
@@ -216,11 +280,11 @@ object OriginalHostStructuralGraph {
         failed=false
       }}
     }catch{case error:Throwable=>
-      result="FAIL_STRUCTURAL_GRAPH_ONLY stage="+stage+" exceptionClassSha="+hash(error.getClass.getName)+
+      result="FAIL_STRUCTURAL_GRAPH_ONLY stage="+stage+" exceptionClassSha="+hash(error.getClass.getName)+boundaryFailure(error)+
         " nativeInstances=0 evaluatedEdges=0 schedulingQualified=false fullHostAccepted=false"
     }finally{
       try {if(telemetry!=null){telemetry.stop();require(!telemetry.failed,"sampler metrics failed")}}catch{case error:Throwable=>
-        failed=true;result="FAIL_STRUCTURAL_GRAPH_ONLY stage="+stage+" exceptionClassSha="+hash(error.getClass.getName)+
+        failed=true;result="FAIL_STRUCTURAL_GRAPH_ONLY stage="+stage+" exceptionClassSha="+hash(error.getClass.getName)+boundaryFailure(error)+
           " nativeInstances=0 evaluatedEdges=0 schedulingQualified=false fullHostAccepted=false"
       }
       System.setOut(savedOut);System.setErr(savedErr)

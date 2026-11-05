@@ -251,6 +251,8 @@ object OriginalHostStructuralGraph {
       if(stage=="boundary_split")" boundaryStep="+boundaryStep+" boundaryGuard="+boundaryGuardCode(boundaryStep,error)else ""
     def preparedFailure(error:Throwable):String=
       if(stage=="prepared_checks")" preparedStep="+preparedStep+preparedPassEvidence(error)else ""
+    var censusBefore:firrtl2.ir.Circuit=null;var censusAfter:firrtl2.ir.Circuit=null
+    var censusRecord:Option[String]=None
     var telemetry:PhaseTelemetry=null
     def timed[T](name:String)(body: => T):T={
       stage=name;telemetry.begin(name);val value=body;telemetry.end();value
@@ -260,10 +262,11 @@ object OriginalHostStructuralGraph {
       Console.withOut(muted){Console.withErr(muted){
         telemetry=new PhaseTelemetry(savedOut,sink);sink.onCycle=()=>telemetry.cycleDetected();telemetry.startSampling()
         timed("admission") {
-          require(args.length==10,"pinned high,annotations,iDMA and actual loaded class identities")
+          require(args.length==11,"pinned high,annotations,iDMA and actual loaded class identities")
           require(args.slice(5,7).forall(_.matches("[0-9a-f]{64}")) && args(8).matches("[0-9a-f]{64}"))
           require(loaded(classOf[SymbolTable],args(7))==args(5) && loaded(SymbolTable.getClass,args(7))==args(6),"qualified graph SymbolTable bytes")
           require(loaded(IdmaPackedBoundarySplit.getClass,args(9))==args(8),"same boundary transform class as paired fixture")
+          require(loaded(RegisterInitCensus.getClass,args(9))==args(10),"same census class as synthetic prerequisite")
           require(Files.getFileStore(Paths.get(args(0)).toAbsolutePath).getUsableSpace>=8L*1024*1024*1024,"unchanged8GiB reserve")
         }
         val (highText,annotationText)=timed("read") {
@@ -309,6 +312,7 @@ object OriginalHostStructuralGraph {
           require(TopmoduleInfo(revised.circuit).clocks==Seq("clock"),"unchanged original clock")
           revised
         }
+        censusBefore=boundaryLow.circuit
         val ann=FirrtlCircuitAnnotation(boundaryLow.circuit)+:boundaryLow.annotations
         val obtained=timed("get_firrtl_ast") {GetFirrtlAst.transform(ann)}
         val withInfo=timed("set_implicit_output_info") {SetImplicitOutputInfo.transform(obtained)}
@@ -320,6 +324,7 @@ object OriginalHostStructuralGraph {
           preparedStep="ANNOTATIONS"
           require(!states.head.annotations.exists(_.isInstanceOf[UnsupportedAnnotation]),"unsupported prepared annotation")
           // Same read-only passes and identity postconditions, in the same order.
+          censusAfter=states.head.circuit
           preparedStep="TYPES"
           require(firrtl2.passes.CheckTypes.run(states.head.circuit) eq states.head.circuit,"CheckTypes returned another circuit")
           preparedStep="FLOWS"
@@ -349,15 +354,19 @@ object OriginalHostStructuralGraph {
         failed=false
       }}
     }catch{case error:Throwable=>
+      if(stage=="prepared_checks" && preparedStep=="TYPES")
+        censusRecord=Some(try RegisterInitCensus.record(censusAfter,censusBefore) catch{case _:Throwable=>"REG_INIT_CENSUS_V1 regCensus=UNAVAILABLE"})
       result="FAIL_STRUCTURAL_GRAPH_ONLY stage="+stage+" exceptionClassSha="+hash(error.getClass.getName)+boundaryFailure(error)+preparedFailure(error)+
         " nativeInstances=0 evaluatedEdges=0 schedulingQualified=false fullHostAccepted=false"
     }finally{
       try {if(telemetry!=null){telemetry.stop();require(!telemetry.failed,"sampler metrics failed")}}catch{case error:Throwable=>
-        failed=true;result="FAIL_STRUCTURAL_GRAPH_ONLY stage="+stage+" exceptionClassSha="+hash(error.getClass.getName)+boundaryFailure(error)+preparedFailure(error)+
-          " nativeInstances=0 evaluatedEdges=0 schedulingQualified=false fullHostAccepted=false"
+        // Preserve the primary failure and its census if cleanup also fails.
+        if(!failed){failed=true;result="FAIL_STRUCTURAL_GRAPH_ONLY stage="+stage+" exceptionClassSha="+hash(error.getClass.getName)+boundaryFailure(error)+preparedFailure(error)+
+          " nativeInstances=0 evaluatedEdges=0 schedulingQualified=false fullHostAccepted=false"}
       }
       System.setOut(savedOut);System.setErr(savedErr)
     }
+    censusRecord.foreach(savedOut.println)
     savedOut.println(result+" suppressedDiagnosticBytes="+sink.bytes+" cycleSeen="+(if(sink.cycleSeen)1 else 0))
     savedOut.flush()
     if(failed)System.exit(2)

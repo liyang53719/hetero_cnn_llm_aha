@@ -4,8 +4,8 @@ import firrtl2.{AnnotationSeq,CircuitState,Parser}
 import firrtl2.ir._
 import firrtl2.options.TargetDirAnnotation
 import firrtl2.stage.FirrtlCircuitAnnotation
-import firrtl2.annotations.{ModuleTarget,InstanceTarget,TargetToken}
-import firrtl2.transforms.DedupedResult
+import firrtl2.annotations.{ModuleTarget,InstanceTarget,ReferenceTarget,TargetToken}
+import firrtl2.transforms.{DedupedResult,CombinationalPath,CheckCombLoops}
 import treadle2.TreadleCircuitStateAnnotation
 import treadle2.stage.phases.{GetFirrtlAst,SetImplicitOutputInfo,PrepareAst,HandleFormalStatements}
 import treadle2.utils.AugmentPrintf
@@ -15,7 +15,7 @@ import java.nio.file.{Files,Path,Paths}
 import java.nio.charset.StandardCharsets.UTF_8
 import java.security.MessageDigest
 
-/** Tiny observation qualification only. Never invoke repair or an execution engine. */
+/** Tiny observation/repair qualification only. Never invoke an execution engine. */
 object ObservedPrepareStructuralFixture {
   private def sha(bytes:Array[Byte]):String=MessageDigest.getInstance("SHA-256").digest(bytes).map(x=>f"${x&255}%02x").mkString
   private def loaded(c:Class[_],location:String):String={
@@ -87,6 +87,11 @@ object ObservedPrepareStructuralFixture {
           require(annotationCount<64);annotationCount+=1
           value(x.original,y.original,depth+1,ed,td);value(x.duplicate,y.duplicate,depth+1,ed,td)
           value(x.index,y.index,depth+1,ed,td);seq(x.targets,y.targets,2,depth+1,ed,td)
+        case x:CombinationalPath=>
+          require(x.getClass==classOf[CombinationalPath]);val y=b.asInstanceOf[CombinationalPath]
+          require(annotationCount<64);annotationCount+=1
+          value(x.sink,y.sink,depth+1,ed,td);seq(x.sources,y.sources,64,depth+1,ed,td)
+        case x:ReferenceTarget=>require(x.getClass==classOf[ReferenceTarget]);product(x,b.asInstanceOf[ReferenceTarget],depth,ed,td)
         case x:ModuleTarget=>require(x.getClass==classOf[ModuleTarget]);product(x,b.asInstanceOf[ModuleTarget],depth,ed,td)
         case x:InstanceTarget=>require(x.getClass==classOf[InstanceTarget]);product(x,b.asInstanceOf[InstanceTarget],depth,ed,td)
         case x:TargetToken.Instance=>require(x.getClass==classOf[TargetToken.Instance]);product(x,b.asInstanceOf[TargetToken.Instance],depth,ed,td)
@@ -540,6 +545,99 @@ object ObservedPrepareStructuralFixture {
     }
     require(checks==3);checks
   }
+  // Comparator-only malformed pairs never enter a preparation pipeline.
+  private def combinationalPathParitySelfChecks():Int={
+    var checks=0
+    def rejected(a:Any,b:Any):Unit={var bad=false;try{new Parity().value(a,b)}catch{
+      case _:IllegalArgumentException=>bad=true};require(bad);checks+=1}
+    val top=ModuleTarget("PathParity","PathParity")
+    val sink=top.ref("out");val a=top.ref("a");val b=top.ref("b")
+    val path=CombinationalPath(sink,List(a,b))
+    new Parity().value(path,path.copy());checks+=1
+    rejected(path,path.copy(sink=top.ref("other")))
+    rejected(path,path.copy(sources=List(a,top.ref("other"))))
+    rejected(path,path.copy(sources=List(b,a)))
+    val other=path.copy(sink=top.ref("other"))
+    rejected(List(path,other),List(other,path))
+    val subclass=new CombinationalPath(sink,List(a,b)){};rejected(subclass,subclass)
+    rejected(a,a.copy(module="Other"))
+    require(checks==7);checks
+  }
+  private def pathRecords(as:AnnotationSeq):Vector[CombinationalPath]={
+    family(as);require(as.size<=64)
+    val result=as.collect{case p:CombinationalPath=>require(p.getClass==classOf[CombinationalPath]);p}.toVector
+    require(result.nonEmpty && result.size<=4);result
+  }
+  // Canonicalization is confined to tiny recomputation comparisons; production
+  // annotations, source order and endpoint identities are never rewritten.
+  private def pathEdges(as:AnnotationSeq,main:String):Vector[(String,Vector[String])]={
+    pathRecords(as).map{p=>
+      def endpoint(r:ReferenceTarget):String={require(r!=null && r.getClass==classOf[ReferenceTarget])
+        family(r.path);family(r.component)
+        require(r.circuit==main && r.module==main && r.path.isEmpty && r.component.isEmpty &&
+          r.ref.nonEmpty && r.ref.length<=64);r.ref}
+      family(p.sources);require(p.sources.nonEmpty && p.sources.size<=4)
+      endpoint(p.sink)->p.sources.map(endpoint).toVector.sorted
+    }.sortBy(_._1)
+  }
+  // An independent producer establishes expected edges before the observer.
+  // PrepareAst itself produces admitted records. Every fixture retains q.
+  private def combinationalPathParityChecks(targetName:String):Int={
+    var checks=0
+    Vector("DIRECT","BINARY","TWO_SINKS").foreach{mode=>
+      val base=source(if(mode=="BINARY")"stop"else"print")
+      // Keep the original out <= q observable so lowering cannot erase q.
+      val ports="    output out : UInt<1>\n    output path_out : UInt<1>\n"+
+        (if(mode=="TWO_SINKS")"    output tap : UInt<1>\n"else "")
+      val connections="    out <= q\n    path_out <= "+
+        (if(mode=="BINARY")"or(en, stop_en)"else "en")+"\n"+
+        (if(mode=="TWO_SINKS")"    tap <= stop_en\n"else "")
+      val text=base.replace("    output out : UInt<1>\n",ports).replace("    out <= q\n",connections)
+      val input=Compiler.toLowFirrtl(CircuitState(Parser.parse(text),Seq(TargetDirAnnotation(targetName)))).circuit
+      val produced=(new CheckCombLoops).runTransform(CircuitState(input,Seq.empty))
+      require(produced.circuit eq input)
+      val expected=if(mode=="DIRECT")Vector("path_out"->Vector("en"))
+        else if(mode=="BINARY")Vector("path_out"->Vector("en","stop_en"))
+        else Vector("path_out"->Vector("en"),"tap"->Vector("stop_en"))
+      require(pathEdges(produced.annotations,input.main)==expected)
+      // PrepareAst includes CheckCombLoops and appends its own records. The
+      // independent producer above is an oracle only; seeding it would duplicate
+      // summaries. Let the actual official/observed pipeline produce metadata.
+      val annotations:AnnotationSeq=Seq(FirrtlCircuitAnnotation(input),TargetDirAnnotation(targetName))
+      val chain=checkedInputChain(input,annotations)
+      val official=(new PrepareAst).transform(chain)
+      val observer=new ObservedPrepareAst(1);val observed=observer.transform(chain)
+      new Parity().apply(official,observed)
+      require(observer.evidence.startsWith("COMPLETE:DONE:NONE:1:1:1:1:1:1:1:"))
+      require(observer.anchorEvidence=="NONE" && observer.consumerEvidence=="NONE" && observer.formalEvidence=="COMPLETE:0:0:0:0")
+      require(observer.budgetEvidence=="NONE" && observer.sizingEvidence=="NONE")
+      val prepared=state(observed);val records=pathRecords(prepared.annotations)
+      require(pathEdges(prepared.annotations,input.main)==expected)
+      val sinks=records.map(_.sink);val sources=records.map(_.sources)
+      val endpoints=sources.map(_.toVector)
+      var strict=false
+      try{ClockInitRepresentationRepair(input,prepared.circuit,prepared.annotations,1)}catch{
+        case e:IllegalArgumentException=>strict=ClockInitRepresentationRepair.guardCode(e)=="ANNOTATION_SHAPE" &&
+          ClockInitRepresentationRepair.annotationShapeEvidence(e)=="ANNOTATION_OTHER" &&
+          ClockInitRepresentationRepair.annotationOtherOwnerEvidence(e)=="COMBINATIONAL_PATH"}
+      require(strict)
+      val repaired=qualifyGrantRepair(input,observed,observer,1,countLegacy=false)
+      require(repaired.annotations eq prepared.annotations)
+      val retained=pathRecords(repaired.annotations);require(retained.size==records.size)
+      records.indices.foreach{i=>
+        require((retained(i) eq records(i)) && (retained(i).sink eq sinks(i)) && (retained(i).sources eq sources(i)))
+        require(retained(i).sources.size==endpoints(i).size)
+        retained(i).sources.indices.foreach{j=>require(retained(i).sources(j) eq endpoints(i)(j))}
+      }
+      // Tiny test only: recompute both sides without carrying old summaries.
+      val beforeGraph=(new CheckCombLoops).runTransform(CircuitState(prepared.circuit,Seq.empty))
+      val afterGraph=(new CheckCombLoops).runTransform(CircuitState(repaired.circuit,Seq.empty))
+      require(pathEdges(beforeGraph.annotations,input.main)==expected && pathEdges(afterGraph.annotations,input.main)==expected)
+      require(pathEdges(repaired.annotations,input.main)==expected)
+      checks+=1
+    }
+    require(checks==3);checks
+  }
   private def suffix(c:Circuit,n:Int):Int={
     val original=CircuitState(c,Seq.empty)
     val first=(new AugmentPrintf).runTransform(original)
@@ -611,6 +709,7 @@ object ObservedPrepareStructuralFixture {
         grantParityChecks=0
         phase="SELFTEST";val selfChecks=ObservedPrepareAst.selfChecks();require(selfChecks==69)
         val parityChecks=paritySelfChecks();require(parityChecks==11)
+        val combinationalPathParityChecksCount=combinationalPathParitySelfChecks();require(combinationalPathParityChecksCount==7)
         val inputChainChecks=inputChainSelfChecks(targetName);require(inputChainChecks==6)
         val grantLifecycleChecks=grantLifecycleSelfChecks(targetName);require(grantLifecycleChecks==8)
         val grantChecks=ObservedPrepareAst.grantSelfChecks();require(grantChecks==72)
@@ -618,6 +717,7 @@ object ObservedPrepareStructuralFixture {
         val ownerChecks=ClockInitRepresentationRepair.annotationInstanceOwnerDiagnosticSelfChecks();require(ownerChecks==22)
         val dedupMetadataChecks=ClockInitRepresentationRepair.dedupMetadataSelfChecks();require(dedupMetadataChecks==82)
         val otherOwnerChecks=ClockInitRepresentationRepair.annotationOtherOwnerDiagnosticSelfChecks();require(otherOwnerChecks==23)
+        val combinationalPathChecks=ClockInitRepresentationRepair.combinationalPathSelfChecks();require(combinationalPathChecks==99)
         val sizingChecks=ObservedPrepareAst.sizingSelfChecks();require(sizingChecks==56)
         val quotaChecks=ObservedPrepareAst.quotaSelfChecks();require(quotaChecks==6)
         val consumerChecks=ObservedPrepareAst.consumerSelfChecks();require(consumerChecks==24)
@@ -628,6 +728,7 @@ object ObservedPrepareStructuralFixture {
         val formalParity= formalParityChecks(targetName);require(formalParity==2)
         val selectionParity=selectionParityChecks(targetName);require(selectionParity==4)
         val dedupMetadataParity=dedupMetadataParityChecks(targetName);require(dedupMetadataParity==3)
+        val combinationalPathParity=combinationalPathParityChecks(targetName);require(combinationalPathParity==3)
         rows=Vector("print","stop","both").flatMap{mode=>
           phase="LOWER"
           val low=Compiler.toLowFirrtl(CircuitState(Parser.parse(source(mode)),Seq(TargetDirAnnotation(targetName)))).circuit
@@ -662,7 +763,7 @@ object ObservedPrepareStructuralFixture {
             qualifyGrantRepair(input,observed,observer,n)
             phase="SUFFIX";val relations=if(kind=="base")suffix(low,n)else 0
             phase="GRAPH";val graphs=if(kind=="base")graphChecks(state(observed).circuit)else 0
-            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" sizingChecks="+sizingChecks+" quotaChecks="+quotaChecks+" consumerChecks="+consumerChecks+" consumerParityChecks="+consumerParityChecks+" formalChecks="+formalChecks+" formalParityChecks="+formalParity+" anchorChecks="+anchorChecks+" selectionChecks="+selectionChecks+" selectionParityChecks="+selectionParity+" inputChainChecks="+inputChainChecks+" grantChecks="+grantChecks+" grantParityChecks=15 grantLifecycleChecks="+grantLifecycleChecks+" annotationShapeChecks="+annotationShapeChecks+" ownerChecks="+ownerChecks+" dedupMetadataChecks="+dedupMetadataChecks+" dedupMetadataParityChecks="+dedupMetadataParity+" otherOwnerChecks="+otherOwnerChecks+" stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
+            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" sizingChecks="+sizingChecks+" quotaChecks="+quotaChecks+" consumerChecks="+consumerChecks+" consumerParityChecks="+consumerParityChecks+" formalChecks="+formalChecks+" formalParityChecks="+formalParity+" anchorChecks="+anchorChecks+" selectionChecks="+selectionChecks+" selectionParityChecks="+selectionParity+" inputChainChecks="+inputChainChecks+" grantChecks="+grantChecks+" grantParityChecks=15 grantLifecycleChecks="+grantLifecycleChecks+" annotationShapeChecks="+annotationShapeChecks+" ownerChecks="+ownerChecks+" dedupMetadataChecks="+dedupMetadataChecks+" dedupMetadataParityChecks="+dedupMetadataParity+" otherOwnerChecks="+otherOwnerChecks+" combinationalPathChecks="+combinationalPathChecks+" combinationalPathParitySelfChecks="+combinationalPathParityChecksCount+" combinationalPathParityChecks="+combinationalPathParity+" stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
           }
         }
         require(grantParityChecks==15)

@@ -2,7 +2,7 @@ name: observed-prepare-provenance-only
 on:
   push:
     branches: [main]
-    paths: [ci_launch/chisel_host_boundary_graph_20261105_repair_annotation_other_owner_once.json]
+    paths: [ci_launch/chisel_host_boundary_graph_20261105_repair_combinational_path_once.json]
 permissions:
   contents: read
   actions: read

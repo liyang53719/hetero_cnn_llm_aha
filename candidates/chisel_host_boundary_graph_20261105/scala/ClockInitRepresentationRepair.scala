@@ -141,7 +141,7 @@ object ClockInitRepresentationRepair {
   }
   private def annotationShapeSite(site:String):Boolean=site match{
     case "INDEX_NEGATIVE"|"COMPONENT_OTHER"|"CIRCUIT_CURRENT"|"MODULE_SELECTED"|
-         "INSTANCE_TARGET"|"TARGET_OTHER"|"NAMED_OTHER"|"ANNOTATION_OTHER"|"DEDUP_METADATA"=>true
+         "INSTANCE_TARGET"|"TARGET_OTHER"|"NAMED_OTHER"|"ANNOTATION_OTHER"|"DEDUP_METADATA"|"COMBINATIONAL_PATH"=>true
     case _=>false
   }
   private def annotationShapeFail(site:String,current:Annotation=null):Nothing={
@@ -279,6 +279,64 @@ object ClockInitRepresentationRepair {
   }
   // END EXACT PROOF-BOUND DEDUP METADATA
 
+  // BEGIN EXACT PROOF-BOUND COMBINATIONAL PATH
+  private def combNeed(ok:Boolean):Unit=if(!ok)annotationShapeFail("COMBINATIONAL_PATH")
+  private def combExact(x:AnyRef,c:Class[_],a:Aux):Boolean={
+    a.charge(AX.Probe);x!=null && (x.getClass eq c)
+  }
+  private def combMore(it:Iterator[_],a:Aux):Boolean={a.charge(AX.Probe);it.hasNext}
+  private def combNext(it:Iterator[_],a:Aux):Any={a.charge(AX.Probe);it.next()}
+  private def combEmpty(xs:Seq[_],a:Aux):Unit={val it=a.iter(xs);combNeed(!combMore(it,a))}
+  private def combPort(m:DefModule,name:String,sink:Boolean,b:Budget,a:Aux):Unit={
+    a.charge(AX.Probe);val ports=m.ports;val it=a.iter(ports);var count=0;var matches=0
+    // Scan through the end: malformed duplicate names must not be hidden by an
+    // early successful lookup. No new index or collection is constructed.
+    while(combMore(it,a)){
+      a.charge(AX.Probe);b.bound(count<250000,"PORTS")
+      b.tick();val raw=combNext(it,a).asInstanceOf[AnyRef]
+      combNeed(combExact(raw,classOf[Port],a));val port=raw.asInstanceOf[Port]
+      a.charge(AX.Probe);val portName=port.name;b.name(portName)
+      if(a.equal(portName,name)){
+        a.charge(AX.Probe,3);val direction=port.direction;val tpe=port.tpe
+        combNeed(matches==0);matches+=1
+        combNeed(if(sink)direction eq Output else direction eq Input)
+        a.charge(AX.Probe)
+        combNeed(tpe match {
+          case _:UIntType | _:SIntType | ClockType | ResetType | AsyncResetType | _:AnalogType=>true
+          case _=>false
+        })
+      };count+=1
+    }
+    a.charge(AX.Probe);combNeed(matches==1)
+  }
+  private def combTarget(raw:AnyRef,sink:Boolean,top:DefModule,mid:Int,selected:Selected,
+    circuit:String,b:Budget,a:Aux):Unit={
+    b.tick();combNeed(combExact(raw,classOf[ReferenceTarget],a))
+    val r=raw.asInstanceOf[ReferenceTarget]
+    a.charge(AX.Probe,5);val c=r.circuit;val m=r.module;val ref=r.ref;val path=r.path;val parts=r.component
+    b.name(c);b.name(m);b.name(ref)
+    combNeed(a.equal(c,circuit));combNeed(a.equal(m,circuit))
+    combEmpty(path,a);combEmpty(parts,a)
+    need(selected.find(mid,ref)<0,"ANNOTATION_TARGET")
+    combPort(top,ref,sink,b,a)
+  }
+  private def checkCombinationalPath(record:firrtl2.transforms.CombinationalPath,selected:Selected,
+    modules:Modules,circuit:String,b:Budget,a:Aux):Unit={
+    combNeed(combExact(record,classOf[firrtl2.transforms.CombinationalPath],a))
+    a.charge(AX.Probe,2);val sink=record.sink;val sources=record.sources
+    val top=modules.get(circuit);val mid=modules.id(circuit)
+    a.charge(AX.Probe);combNeed(top!=null && mid>=0)
+    combTarget(sink,true,top,mid,selected,circuit,b,a)
+    val it=a.iter(sources);var count=0
+    while(combMore(it,a)){
+      a.charge(AX.Probe);b.bound(count<1024,"TARGET_MEMBERS")
+      val source=combNext(it,a).asInstanceOf[AnyRef]
+      combTarget(source,false,top,mid,selected,circuit,b,a);count+=1
+    }
+    a.charge(AX.Probe);combNeed(count>0)
+  }
+  // END EXACT PROOF-BOUND COMBINATIONAL PATH
+
   private def checkStreamingAnnotations(as:AnnotationSeq,selected:Selected,modules:Modules,circuit:String,b:Budget,a:Aux,proofBound:Boolean=false):Unit={
     boundedSize(as,100000,"ANNOTATIONS",a,b)
     def target(t:Target,current:Annotation):Unit={
@@ -321,6 +379,8 @@ object ClockInitRepresentationRepair {
         x.getClass.getName=="firrtl2.stage.RunFirrtlTransformAnnotation$" || x.getClass.getName=="firrtl2.options.RunFirrtlTransformAnnotation"=>fail("ANNOTATION_EXTENSION")
       case x if proofBound && dedupExact(x,classOf[firrtl2.transforms.DedupedResult],a)=>
         checkDedupMetadata(x.asInstanceOf[firrtl2.transforms.DedupedResult],circuit,b,a)
+      case x if proofBound && combExact(x,classOf[firrtl2.transforms.CombinationalPath],a)=>
+        checkCombinationalPath(x.asInstanceOf[firrtl2.transforms.CombinationalPath],selected,modules,circuit,b,a)
       case x:SingleTargetAnnotation[_]=>named(x.target,annotation)
       case x:MultiTargetAnnotation=>
         boundedSize(x.targets,1024,"TARGET_GROUPS",a,b);val groups=a.iter(x.targets)
@@ -1990,6 +2050,129 @@ object ClockInitRepresentationRepair {
     checks
   }
   // END DEDUP METADATA SELFCHECKS
+
+  // BEGIN COMBINATIONAL PATH SELFCHECKS
+  /** Tiny, same-code qualification; never starts a tester or updates annotations. */
+  def combinationalPathSelfChecks():Int={
+    var checks=0
+    def check(ok:Boolean):Unit={require(ok,"COMBINATIONAL_PATH_SELFCHECK");checks+=1}
+    def caught(body: => Unit):Throwable=try{body;null}catch{case e:IllegalArgumentException=>e}
+    def bad(body: => Unit):Unit={val e=caught(body);check(e!=null && guardCode(e)=="ANNOTATION_SHAPE" &&
+      annotationShapeEvidence(e)=="COMBINATIONAL_PATH")}
+    def bounded(body: => Unit):Unit={val e=caught(body);check(e!=null && guardCode(e)=="BOUND")}
+    val out=ReferenceTarget("Top","Top",Nil,"out",Nil)
+    val in=ReferenceTarget("Top","Top",Nil,"in",Nil)
+    val ports=List(Port(NoInfo,"out",Output,UIntType(IntWidth(1))),Port(NoInfo,"in",Input,UIntType(IntWidth(1))))
+    val top=Module(NoInfo,"Top",ports,EmptyStmt)
+    val setup=new Aux;val modules=new Modules(setup);modules.add(top,0);val selected=new Selected(setup)
+    val simple=firrtl2.transforms.CombinationalPath(out,List(in))
+    def run(record:firrtl2.transforms.CombinationalPath,a:Aux=new Aux,b:Budget=new Budget):Unit={
+      val localModules=new Modules(a);localModules.add(top,0);val localSelected=new Selected(a)
+      checkCombinationalPath(record,localSelected,localModules,"Top",b,a)
+    }
+    def target(t:AnyRef,sink:Boolean=true,m:DefModule=top,a:Aux=new Aux):Unit=
+      combTarget(t,sink,m,0,selected,"Top",new Budget,a)
+    check(caught(run(simple))==null)
+    val missingBudget=new Aux;val missingModules=new Modules(missingBudget);val missingSelected=new Selected(missingBudget)
+    bad(checkCombinationalPath(simple,missingSelected,missingModules,"Top",new Budget,missingBudget))
+    check(caught(run(simple.copy(sources=Vector(in))))==null)
+    check(caught(run(simple.copy(sources=scala.collection.immutable.ArraySeq.unsafeWrapArray(Array(in)))))==null)
+    bad(run(null));bad(run(new firrtl2.transforms.CombinationalPath(out,List(in)){}))
+    bad(run(simple.copy(sink=null)));bad(run(simple.copy(sources=Nil)))
+    bounded(run(simple.copy(sources=null)))
+    bounded(run(simple.copy(sources=scala.collection.immutable.Queue(in))))
+    bad(run(simple.copy(sources=List(null))))
+    bad(target(new ReferenceTarget("Top","Top",Nil,"out",Nil){}))
+    bad(run(simple.copy(sources=List(new ReferenceTarget("Top","Top",Nil,"in",Nil){}))))
+    bad(target(ModuleTarget("Top","Top")))
+    bad(run(simple.copy(sink=out.copy(circuit="Other"))))
+    bad(run(simple.copy(sink=out.copy(module="Other"))))
+    bad(run(simple.copy(sources=List(in.copy(circuit="Other")))))
+    bad(run(simple.copy(sources=List(in.copy(module="Other")))))
+    bad(run(simple.copy(sink=out.copy(ref="missing"))))
+    bad(run(simple.copy(sources=List(in.copy(ref="missing")))))
+    bad(run(simple.copy(sink=in)));bad(run(simple.copy(sources=List(out))))
+    bad(target(out,true,top.copy(ports=ports :+ ports.head)))
+    bad(target(out,true,top.copy(ports=List(ports.head.copy(tpe=VectorType(UIntType(IntWidth(1)),1))))))
+    bad(target(out,true,top.copy(ports=List(ports.head.copy(tpe=BundleType(Nil))))))
+    bad(target(out,true,top.copy(ports=List(ports.head.copy(tpe=UnknownType)))))
+    bad(target(out,true,top.copy(ports=List(null))))
+    bad(target(out,true,top.copy(ports=ports :+ null)))
+    bounded(target(out,true,top.copy(ports=scala.collection.immutable.Queue(ports.head))))
+    val path=List((TargetToken.Instance("i"),TargetToken.OfModule("M")))
+    bad(run(simple.copy(sink=out.copy(path=path))))
+    bad(run(simple.copy(sources=List(in.copy(path=path)))))
+    bad(run(simple.copy(sink=out.copy(component=List(TargetToken.Field("f"))))))
+    bad(run(simple.copy(sources=List(in.copy(component=List(TargetToken.Index(0)))))))
+    bounded(run(simple.copy(sink=out.copy(path=null))))
+    bounded(run(simple.copy(sources=List(in.copy(component=null)))))
+    bounded(run(simple.copy(sink=out.copy(path=scala.collection.immutable.Queue.empty))))
+    bounded(run(simple.copy(sources=List(in.copy(component=scala.collection.immutable.Queue.empty)))))
+    check(caught(run(simple.copy(sink=out.copy(path=Vector.empty,component=Vector.empty))))==null)
+    check(caught(run(simple.copy(sources=List(in.copy(path=Vector.empty,component=Vector.empty)))))==null)
+    for(value<-List(null,"","x"*4097)){
+      bounded(run(simple.copy(sink=out.copy(circuit=value))))
+      bounded(run(simple.copy(sink=out.copy(module=value))))
+      bounded(run(simple.copy(sink=out.copy(ref=value))))
+      bounded(run(simple.copy(sources=List(in.copy(circuit=value)))))
+      bounded(run(simple.copy(sources=List(in.copy(module=value)))))
+      bounded(run(simple.copy(sources=List(in.copy(ref=value)))))
+    }
+    val longName="x"*4096
+    check(caught(target(out.copy(ref=longName),true,top.copy(ports=List(ports.head.copy(name=longName)))))==null)
+    check(caught(target(in.copy(ref=longName),false,top.copy(ports=List(ports(1).copy(name=longName)))))==null)
+    val b=new Budget;check(caught(run(simple.copy(sources=List.fill(1024)(in)),new Aux,b))==null)
+    check(b.work==3075) // 1025 endpoints, each with two inspected ports.
+    val tooMany=caught(run(simple.copy(sources=List.fill(1025)(in))))
+    check(tooMany!=null && boundEvidence(tooMany).startsWith("TARGET_MEMBERS:"))
+    var sequenceRead=0
+    val custom=new scala.collection.immutable.AbstractSeq[ReferenceTarget]{
+      def length:Int={sequenceRead+=1;throw new AssertionError("COMB_LENGTH")}
+      def apply(i:Int):ReferenceTarget={sequenceRead+=1;throw new AssertionError("COMB_APPLY")}
+      override def iterator:Iterator[ReferenceTarget]={sequenceRead+=1;throw new AssertionError("COMB_ITERATOR")}
+    }
+    bounded(run(simple.copy(sources=custom)));check(sequenceRead==0)
+    bounded(combEmpty(custom,new Aux));check(sequenceRead==0)
+    bounded(new Aux().family(scala.collection.mutable.ArrayBuffer(in)))
+    var iteratorRead=0
+    val witness=new Iterator[Any]{def hasNext:Boolean={iteratorRead+=1;true};def next():Any={iteratorRead+=1;null}}
+    bounded(combMore(witness,new Aux(AX.Probe,0)));check(iteratorRead==0)
+    bounded(combNext(witness,new Aux(AX.Probe,0)));check(iteratorRead==0)
+    bounded(combExact(null,classOf[ReferenceTarget],new Aux(AX.Probe,0))) // Charge precedes classification.
+    val measured=new Aux;run(simple,measured)
+    for(dimension<-List(AX.Probe,AX.Iterator,AX.Equal,AX.Hash)){
+      val used=measured.value(dimension)
+      check(used>0 && caught(run(simple,new Aux(dimension,used)))==null)
+      bounded(run(simple,new Aux(dimension,used-1)))
+      val twice=new Aux(dimension,used*2)
+      check(caught({run(simple,twice);run(simple,twice)})==null && twice.value(dimension)==used*2)
+      bounded(run(simple,twice))
+    }
+    check(measured.namedConversions==0 && measured.value(AX.Live)==768L+(8192L*20+768)+(32768L+262144L+32L*256) && measured.value(AX.Copy)==0 &&
+      measured.value(AX.ArrayCopy)==0 && measured.value(AX.Entries)==0)
+    val clock=Reference("clock",ClockType,PortKind,SourceFlow)
+    selected.add(0,"Top",DefRegister(NoInfo,"chosen",ClockType,clock,UIntLiteral(0),UIntLiteral(0)),clock)
+    val selectedError=caught(target(out.copy(ref="chosen")))
+    check(selectedError!=null && guardCode(selectedError)=="ANNOTATION_TARGET")
+    val selectedSource=caught(target(in.copy(ref="chosen"),false))
+    check(selectedSource!=null && guardCode(selectedSource)=="ANNOTATION_TARGET")
+    def streaming(as:AnnotationSeq,proof:Boolean):Throwable=
+      caught(checkStreamingAnnotations(as,selected,modules,"Top",new Budget,new Aux,proof))
+    check(streaming(simple::Nil,true)==null)
+    check(guardCode(streaming(List(PresetAnnotation(in),simple.copy(sink=null)),true))=="ANNOTATION_PRESET")
+    check(guardCode(streaming(List(treadle2.BlackBoxFactoriesAnnotation(Nil),simple.copy(sink=null)),true))=="ANNOTATION_EXTENSION")
+    check(annotationOtherOwnerEvidence(streaming(simple::Nil,false))=="COMBINATIONAL_PATH")
+    check(annotationOtherOwnerEvidence(streaming(new firrtl2.transforms.CombinationalPath(out,List(in)){}::Nil,true))=="OTHER")
+    final case class UnreadTarget() extends SingleTargetAnnotation[Named]{
+      lazy val target:Named=throw new AssertionError("COMB_LATE_READ")
+      def duplicate(n:Named):Annotation=throw new AssertionError("COMB_DUPLICATE")
+    }
+    check(annotationShapeEvidence(streaming(List(simple.copy(sink=null),UnreadTarget()),true))=="COMBINATIONAL_PATH")
+    check(annotationOtherOwnerEvidence(streaming(List(simple,UnreadTarget()),false))=="COMBINATIONAL_PATH")
+    check(simple.sink.eq(out) && simple.sources.head.eq(in))
+    checks
+  }
+  // END COMBINATIONAL PATH SELFCHECKS
 
   // BEGIN ANNOTATION OTHER OWNER SELFCHECKS
   /** Requires the pinned CombinationalPath identity gate before invocation. */

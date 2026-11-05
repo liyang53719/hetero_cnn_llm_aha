@@ -321,13 +321,16 @@ object OriginalHostStructuralGraph {
         val ann=FirrtlCircuitAnnotation(boundaryLow.circuit)+:boundaryLow.annotations
         val obtained=timed("get_firrtl_ast") {GetFirrtlAst.transform(ann)}
         val withInfo=timed("set_implicit_output_info") {SetImplicitOutputInfo.transform(obtained)}
-        val (prepared,provenance)=timed("prepare_ast") {
+        val (prepared,provenance,observerBudget,observerSizing)=timed("prepare_ast") {
           val observed=new ObservedPrepareAst(394)
           val value=observed.transform(withInfo)
-          (value,observed.evidence)
+          (value,observed.evidence,observed.budgetEvidence,observed.sizingEvidence)
         }
         require(provenance.length<=256,"bounded observer evidence")
-        savedOut.println("PREPARE_PROVENANCE_V1 "+provenance);savedOut.flush()
+        require(observerBudget.length<=512 && observerSizing.length<=512,"bounded observer sizing evidence")
+        savedOut.println("PREPARE_PROVENANCE_V1 "+provenance)
+        savedOut.println("PREPARE_BUDGET_V1 "+observerBudget)
+        savedOut.println("PREPARE_USES_SIZING_V1 "+observerSizing);savedOut.flush()
         require(!savedOut.checkError(),"observer evidence output failed")
         val (state,factory)=timed("prepared_checks") {
           preparedStep="STATE"

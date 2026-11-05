@@ -217,6 +217,7 @@ object ObservedPrepareStructuralFixture {
         // identify that same result, not nine separate executions.
         phase="SELFTEST";val selfChecks=ObservedPrepareAst.selfChecks();require(selfChecks==69)
         val parityChecks=paritySelfChecks();require(parityChecks==11)
+        val sizingChecks=ObservedPrepareAst.sizingSelfChecks();require(sizingChecks==56)
         rows=Vector("print","stop","both").flatMap{mode=>
           phase="LOWER"
           val low=Compiler.toLowFirrtl(CircuitState(Parser.parse(source(mode)),Seq(TargetDirAnnotation(targetName)))).circuit
@@ -233,16 +234,18 @@ object ObservedPrepareStructuralFixture {
             phase="PARITY";new Parity().apply(official,observed)
             val expected="COMPLETE:DONE:NONE:"+Vector.fill(7)(n.toString).mkString(":")+":"
             require(observer.evidence.startsWith(expected))
+            require(observer.budgetEvidence=="NONE" && observer.sizingEvidence=="NONE")
             if(kind=="recycled")require(registers(state(observed).circuit).exists(_.name==firstName))
             val failureParity=if(kind=="base"){
               phase="OBSERVED_FAILURE";val rejected=new ObservedPrepareAst(n+1)
               val unchangedOutput=rejected.transform(as)
               phase="PARITY";new Parity().apply(official,unchangedOutput)
-              require(rejected.evidence.startsWith("UNAVAILABLE:DISCOVERY:COUNT:0:0:0:0:0:0:0:"));1
+              require(rejected.evidence.startsWith("UNAVAILABLE:DISCOVERY:COUNT:0:0:0:0:0:0:0:"))
+              require(rejected.budgetEvidence=="NONE" && rejected.sizingEvidence=="NONE");1
             }else 0
             phase="SUFFIX";val relations=if(kind=="base")suffix(low,n)else 0
             phase="GRAPH";val graphs=if(kind=="base")graphChecks(state(observed).circuit)else 0
-            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
+            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" sizingChecks="+sizingChecks+" stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
           }
         }
         ok=true

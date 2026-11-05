@@ -25,8 +25,12 @@ final class ObservedPrepareAst(expected:Int=394) extends Phase {
   ObservedScheduleIdentity.verify(transforms)
   private var result="UNAVAILABLE:CENSUS:NOT_RUN:0:0:0:0:0:0:0:0:0"
   def evidence:String=result
+  private var budgetResult="NONE";private var sizingResult="NONE"
+  def budgetEvidence:String=budgetResult
+  def sizingEvidence:String=sizingResult
   override def transform(annotationSeq:AnnotationSeq):AnnotationSeq={
     result="UNAVAILABLE:CENSUS:NOT_RUN:0:0:0:0:0:0:0:0:0"
+    budgetResult="NONE";sizingResult="NONE"
     var circuits=0
     annotationSeq.flatMap {
       case FirrtlCircuitAnnotation(circuit)=>
@@ -38,6 +42,7 @@ final class ObservedPrepareAst(expected:Int=394) extends Phase {
           val newState=transforms.foldLeft(state){case(prevState,transform)=>
             // The previous fold invocation has returned: its old accumulator is
             // no longer retained by an observer scan. No transform intervenes.
+            if(observation!=null && index==52)observation.sizePending(prevState)
             if(observation!=null && (index==53 || index==54))observation.afterSuffix(index-1,prevState)
             if(observation!=null)observation.before(index,prevState)
             val admittedInput=if(index==51 && observation!=null && observation.retainsInput)prevState else null
@@ -48,6 +53,8 @@ final class ObservedPrepareAst(expected:Int=394) extends Phase {
           }
           if(observation!=null)observation.afterSuffix(54,newState)
           result=if(circuits>1)"UNAVAILABLE:DONE:MULTIPLE_CIRCUITS:0:0:0:0:0:0:0:0:0" else if(observation==null)"UNAVAILABLE:CENSUS:UNEXPECTED:0:0:0:0:0:0:0:0:0" else observation.evidence
+          if(circuits==1 && observation!=null){budgetResult=observation.budgetEvidence;sizingResult=observation.sizingEvidence}
+          else {budgetResult="NONE";sizingResult="NONE"}
           Some(TreadleCircuitStateAnnotation(newState))
         } finally if(observation!=null)observation.release()
       case other=>Some(other)
@@ -71,11 +78,30 @@ object ObservedPrepareAst {
     val used=new Array[Long](8)
     var scanVisit=0L;var scanExpr=0L
     def start():Unit={scanVisit=0;scanExpr=0}
-    def charge(id:Int,n:Long=1):Unit={
-      if(n<0 || n>C.limits(id)-used(id))throw new Abort("BUDGET",true)
-      if(id==C.Visit && n>(1L<<22)-scanVisit)throw new Abort("SCAN_BUDGET",true)
-      if(id==C.Expr && n>(1L<<23)-scanExpr)throw new Abort("SCAN_BUDGET",true)
-      used(id)+=n;if(id==C.Visit)scanVisit+=n;if(id==C.Expr)scanExpr+=n
+    // Successful categories TYPE/INFO/NODE/EDGE/OTHER. No rejected charge is
+    // included, and default OTHER preserves every existing generic charge site.
+    val prefix=new Array[Long](5)
+    var failedDimension = -1
+    private var failedUsed=0L;private var failedScan=0L;private var failedRequest=0L;private var failedLimit=0L
+    private var failedExpr=0L;private var failedScanExpr=0L
+    private def reject(id:Int,n:Long,dimension:Int,limit:Long,code:String):Nothing={
+      if(failedDimension<0 && n>=0){failedDimension=dimension;failedUsed=used(id)
+        failedScan=if(id==C.Visit)scanVisit else if(id==C.Expr)scanExpr else 0L
+        failedRequest=n;failedLimit=limit;failedExpr=used(C.Expr);failedScanExpr=scanExpr}
+      throw new Abort(code,true)
+    }
+    def charge(id:Int,n:Long=1,category:Int=4):Unit={
+      if(n<0 || n>C.limits(id)-used(id))reject(id,n,id,C.limits(id),"BUDGET")
+      if(id==C.Visit && n>(1L<<22)-scanVisit)reject(id,n,8,1L<<22,"SCAN_BUDGET")
+      if(id==C.Expr && n>(1L<<23)-scanExpr)reject(id,n,9,1L<<23,"SCAN_BUDGET")
+      used(id)+=n;if(id==C.Visit)scanVisit+=n;if(id==C.Expr){scanExpr+=n;prefix(category)+=n}
+    }
+    def failureEvidence:String={
+      if(failedDimension<0)return "NONE"
+      val dim=failedDimension match{case 0=>"GLOBAL_VISIT";case 1=>"GLOBAL_EXPR";case 2=>"NAMES"
+        case 3=>"HASH";case 4=>"EQUAL";case 5=>"PROBE";case 6=>"CLEAR";case 7=>"TEMP"
+        case 8=>"SCAN_VISIT";case 9=>"SCAN_EXPR"}
+      s"$dim:$failedUsed:$failedScan:$failedRequest:$failedLimit:$failedExpr:$failedScanExpr:${prefix(0)}:${prefix(1)}:${prefix(2)}:${prefix(3)}:${prefix(4)}"
     }
     def bound(p:Boolean):Unit=if(!p)throw new Abort("BOUND",true)
     def name(s:String):Unit=bound(s!=null && s.nonEmpty && s.length<=4096)
@@ -170,7 +196,7 @@ object ObservedPrepareAst {
       val tc=t.getClass
       need(tc==classOf[VectorType]||tc==classOf[BundleType]||tc==classOf[UIntType]||tc==classOf[SIntType]||
         tc==classOf[AnalogType]||(t eq ClockType)||(t eq ResetType)||(t eq AsyncResetType)||(t eq UnknownType),"TYPE")
-      b.charge(C.Temp,2);b.charge(C.Expr);b.bound(d<=64);nodes+=1;b.bound(nodes<=4096)
+      b.charge(C.Temp,2);b.charge(C.Expr,1,0);b.bound(d<=64);nodes+=1;b.bound(nodes<=4096)
       t match {
         case VectorType(x,n)=>b.bound(n>=0);typ(x,d+1)
         case BundleType(fs)=>b.size(fs,4096);val it=b.iter(fs)
@@ -191,7 +217,7 @@ object ObservedPrepareAst {
     }
     private def info(i:Info,d:Int):Unit={
       need((i eq NoInfo)||i.getClass==classOf[FileInfo]||i.getClass==classOf[MultiInfo],"INFO")
-      b.charge(C.Temp,2);b.charge(C.Expr);b.bound(d<=16);nodes+=1;b.bound(nodes<=256)
+      b.charge(C.Temp,2);b.charge(C.Expr,1,1);b.bound(d<=16);nodes+=1;b.bound(nodes<=256)
       if(snapshot){b.bound(infoNodes<65536);infoNodes+=1}
       i match {
         case NoInfo=>()
@@ -204,7 +230,7 @@ object ObservedPrepareAst {
       }
     }
     def infoPresent(i:Info):Boolean={nodes=0;present=false;info(i,0);present}
-    private def eqInfo(x:Info,y:Info,d:Int):Boolean={b.charge(C.Expr);b.bound(d<=16)
+    private def eqInfo(x:Info,y:Info,d:Int):Boolean={b.charge(C.Expr,1,1);b.bound(d<=16)
       x match {
         case NoInfo=>y eq NoInfo
         case f:FileInfo=>y match{case g:FileInfo=>b.equal(f.escaped,g.escaped);case _=>false}
@@ -289,13 +315,13 @@ object ObservedPrepareAst {
         collectDepth=d;e.foreachExpr(collect);pos(d)=0}
     }
     private def child(d:Int):Expression={val it=its(d)
-      if(it!=null){if(it.hasNext){b.charge(C.Expr);it.next()}else null}
+      if(it!=null){if(it.hasNext){b.charge(C.Expr,1,3);it.next()}else null}
       else{val e=pos(d)match{case 0=>first(d);case 1=>second(d);case 2=>third(d);case _=>null}
-        if(e!=null){b.charge(C.Expr);pos(d)+=1};e}}
+        if(e!=null){b.charge(C.Expr,1,3);pos(d)+=1};e}}
     private var statement:Statement=null;private var mid=0
     private val root:Expression=>Unit=r=>{
       var e=r;var depth=0;var active=true
-      while(active){b.charge(C.Expr);b.bound(depth<=256)
+      while(active){b.charge(C.Expr,1,2);b.bound(depth<=256)
         if(e.getClass==classOf[Reference]){val ref=e.asInstanceOf[Reference];b.name(ref.name)
           val id=records.find(mid,ref.name)
           if(id>=0){need(counts(id)<2,"REFERENCES");val k=id*2+counts(id)
@@ -378,8 +404,34 @@ object ObservedPrepareAst {
     private var walk:Walk=null;private var checked:Checked=null
     private var created=0;private var p52=0;private var p53=0;private var p54=0
     private var count=0;private var lost=0;private var changed=0
+    private var pendingSizing=false
+    private var budgetResult="NONE";private var sizingResult="NONE"
+    def budgetEvidence:String=budgetResult
+    def sizingEvidence:String=sizingResult
+    // Only invoked from this object's bounded sizingSelfChecks; not a public hook.
+    def sizingFixtureFailure(where:String,mode:Int):Unit={
+      step=where
+      if(mode==0){b.scanExpr=1L<<23;b.used(C.Expr)=1L<<23;b.prefix(2)=1L<<23;guard{b.charge(C.Expr,1,3)}}
+      else if(mode==1)guard{b.bound(false)}
+      else{if(mode==3)b.failedDimension=99;b.used(C.Expr)=1L<<25;b.prefix(4)=1L<<25;guard{b.charge(C.Expr)}}
+    }
+    def sizingPendingForTest:Boolean=pendingSizing
+    def sizePending(state:CircuitState):Unit=if(pendingSizing){
+      pendingSizing=false
+      // Independent counters; no old-input handle or exhausted-budget reuse.
+      try{sizingResult=runSizing(state.circuit)}catch{case _:Throwable=>sizingResult="ERROR:UNEXPECTED:0:0:0:0:0:0:0:0:0:0:0"}
+    }
     private def guard(body: =>Unit):Unit=if(active){try body catch{
-      case e:Abort=>status=if(e.bounded)"TRUNCATED"else"UNAVAILABLE";reason=e.reason;active=false;release()
+      case e:Abort=>
+        val eligible=step=="INITIAL_USES" && (e.reason=="BUDGET" || e.reason=="SCAN_BUDGET") && b.failedDimension>=0
+        // Preserve the primary failure and release AST-owning pools before any
+        // failure-only string formatting. A catch-body failure needs its own catch.
+        status=if(e.bounded)"TRUNCATED"else"UNAVAILABLE";reason=e.reason;active=false;release()
+        if(eligible)try{
+          val record=b.failureEvidence
+          if(record!="NONE" && record.length<=512){budgetResult=record;pendingSizing=true}
+          else {budgetResult="UNAVAILABLE";sizingResult="ERROR:UNEXPECTED:0:0:0:0:0:0:0:0:0:0:0";pendingSizing=false}
+        }catch{case _:Throwable=>budgetResult="UNAVAILABLE";sizingResult="ERROR:UNEXPECTED:0:0:0:0:0:0:0:0:0:0:0";pendingSizing=false}
       case _:Throwable=>status="UNAVAILABLE";reason="UNEXPECTED";active=false;release()
     }}
     // Shared module/port/statement traversal. f never escapes this callback.
@@ -512,6 +564,150 @@ object ObservedPrepareAst {
     def release():Unit={if(records!=null)records.clearSnapshot();records=null
       if(walk!=null)walk.clear();walk=null;checked=null}
   }
+  // BEGIN INDEPENDENT INITIAL USES SIZING
+  private final class SizingAbort(val reason:String,val error:Boolean=false) extends RuntimeException(null,null,false,false)
+  private final class Sizer(visitLimit:Long=1L<<22,nodeLimit:Long=1L<<24,edgeLimit:Long=1L<<24,
+    workLimit:Long=1L<<26,transientLimit:Long=1L<<24,depthLimit:Int=256) {
+    // Private small limits are used only by same-code selfchecks. Production uses
+    // every default unchanged. Fixed arrays/headers+256KiB frames+1MiB scratch<2MiB.
+    if(!(visitLimit>=0&&visitLimit<=(1L<<22)&&nodeLimit>=0&&nodeLimit<=(1L<<24)&&
+      edgeLimit>=0&&edgeLimit<=(1L<<24)&&workLimit>=0&&workLimit<=(1L<<26)&&
+      transientLimit>=0&&transientLimit<=(1L<<24)&&depthLimit>=0&&depthLimit<=256))
+      throw new SizingAbort("UNEXPECTED",true)
+    var modules=0L;var ports=0L;var statements=0L;var roots=0L;var nodes=0L;var edges=0L
+    var work=0L;var transient=0L;var maxStatementDepth=0;var maxExpressionDepth=0
+    private var status="COMPLETE";private var reason="NONE"
+    private def stop(code:String):Nothing=throw new SizingAbort(code)
+    private def error(code:String):Nothing=throw new SizingAbort(code,true)
+    private def tick(n:Long=1):Unit={if(n>workLimit-work)stop("WORK");work+=n}
+    private def allocate(n:Long,objects:Long=1):Unit={
+      if(n>transientLimit-transient)stop("TRANSIENT")
+      tick(objects);transient+=n
+    }
+    // Six arrays: five reference[257] + one Int[257]=11,308 payload bytes.
+    //48 payload units +eight header/object units. Constructor/closures are included.
+    allocate(56,8)
+    private val statementIts=new Array[Iterator[Statement]](257)
+    private val expressionIts=new Array[Iterator[Expression]](257)
+    private val first=new Array[Expression](257);private val second=new Array[Expression](257)
+    private val third=new Array[Expression](257);private val pos=new Array[Int](257)
+    private def family(s:scala.collection.Seq[_]):Unit=s match{
+      case _:List[_]|_:Vector[_]|_:scala.collection.immutable.ArraySeq.ofRef[_]=>()
+      case _=>error("FAMILY")
+    }
+    private def iter[A](s:scala.collection.Seq[A]):Iterator[A]={family(s);allocate(1);s.iterator}
+    private def visit(kind:Int):Unit={
+      if(modules+ports+statements>=visitLimit)stop("VISITS")
+      tick();if(kind==0)modules+=1 else if(kind==1)ports+=1 else statements+=1
+    }
+    private def node(depth:Int):Unit={
+      if(depth>depthLimit)stop("DEPTH")
+      if(nodes>=nodeLimit)stop("NODES")
+      tick();nodes+=1;if(depth>maxExpressionDepth)maxExpressionDepth=depth
+    }
+    private def edge():Unit={if(edges>=edgeLimit)stop("EDGES");tick();edges+=1}
+    private var collecting=0
+    allocate(1)
+    private val collect:Expression=>Unit=e=>{
+      val d=collecting
+      pos(d)match{case 0=>first(d)=e;case 1=>second(d)=e;case 2=>third(d)=e;case _=>error("EXPRESSION")}
+      pos(d)+=1
+    }
+    private def init(e:Expression,d:Int):Unit={
+      expressionIts(d)=null;first(d)=null;second(d)=null;third(d)=null;pos(d)=0
+      val c=e.getClass
+      if(c==classOf[DoPrim])expressionIts(d)=iter(e.asInstanceOf[DoPrim].args)
+      else if(c==classOf[Reference]||c==classOf[UIntLiteral]||c==classOf[SIntLiteral]||
+        (e eq firrtl2.WVoid)||(e eq firrtl2.WInvalid)||(e eq firrtl2.EmptyExpression)){
+        // Pinned exact leaf foreachExpr methods are literal no-ops. No callback
+        // or iterator is allocated; the node charge and cleared child slots stay.
+        ()
+      }else {
+        if(!(c==classOf[SubField]||c==classOf[SubIndex]||c==classOf[SubAccess]||
+          c==classOf[Mux]||c==classOf[ValidIf]))error("EXPRESSION")
+        allocate(2);collecting=d;e.foreachExpr(collect);pos(d)=0
+      }
+    }
+    private def child(d:Int):Expression={val it=expressionIts(d)
+      if(it!=null){if(it.hasNext){edge();it.next()}else null}
+      else {val e=pos(d)match{case 0=>first(d);case 1=>second(d);case 2=>third(d);case _=>null}
+        if(e!=null){edge();pos(d)+=1};e}
+    }
+    allocate(1)
+    private val root:Expression=>Unit=r=>{
+      // A root dispatch can succeed before its node charge fails. Prefix roots
+      // therefore need not be<=nodes; its independent bound still holds.
+      if(roots>=nodeLimit)stop("NODES");tick();roots+=1
+      var e=r;var depth=0;var active=true
+      while(active){node(depth);init(e,depth);var next=child(depth)
+        while(next==null&&depth>0){expressionIts(depth)=null;first(depth)=null;second(depth)=null;third(depth)=null
+          depth-=1;next=child(depth)}
+        if(next==null)active=false else{if(depth>=depthLimit)stop("DEPTH");depth+=1;e=next}
+      }
+      expressionIts(0)=null;first(0)=null;second(0)=null;third(0)=null
+    }
+    private def children(s:Statement):Iterator[Statement]=s match{
+      case x:Block=>iter(x.stmts)
+      case x:Conditionally=>allocate(1);new Two(x.conseq,x.alt)
+      case _=>Iterator.empty
+    }
+    private def statement(s:Statement,depth:Int):Unit={
+      if(depth>depthLimit)stop("DEPTH")
+      visit(2);if(depth>maxStatementDepth)maxStatementDepth=depth
+      try supported(s)catch{case _:Abort=>error("STRUCTURE")}
+      s match{case p:Print=>family(p.args);case p:Attach=>family(p.exprs)
+        case p:firrtl2.WDefInstanceConnector=>family(p.portCons)
+        case p:firrtl2.CDefMPort=>family(p.exps);case _=>()}
+      allocate(2);s.foreachExpr(root)
+    }
+    private def walk(s:Statement):Unit={
+      var depth=0;var current=s;var active=true
+      while(active){statement(current,depth);val it=children(current)
+        if(it.hasNext){if(depth>=depthLimit)stop("DEPTH");statementIts(depth)=it;depth+=1;tick();current=it.next()}
+        else {var found=false
+          while(depth>0 && !found){val parent=statementIts(depth-1)
+            if(parent.hasNext){tick();current=parent.next();found=true}
+            else{statementIts(depth-1)=null;depth-=1}}
+          if(!found)active=false
+        }
+      }
+    }
+    def cleaned:Boolean={var i=0;while(i<257){
+      if(statementIts(i)!=null||expressionIts(i)!=null||first(i)!=null||second(i)!=null||third(i)!=null)return false
+      i+=1};true}
+    private def clear():Unit={var i=0;while(i<257){statementIts(i)=null;expressionIts(i)=null
+      first(i)=null;second(i)=null;third(i)=null;pos(i)=0;i+=1}}
+    def run(c:Circuit):String={
+      try {
+        val ms=iter(c.modules)
+        while(ms.hasNext){if(modules>=4096)stop("VISITS");visit(0);val m=ms.next()
+          if(m.getClass!=classOf[Module]&&m.getClass!=classOf[ExtModule])error("STRUCTURE")
+          val ps=iter(m.ports);var pc=0
+          while(ps.hasNext){if(pc>=250000)stop("VISITS");visit(1);val p=ps.next()
+            if(p.getClass!=classOf[Port])error("STRUCTURE");pc+=1}
+          m match{case mm:Module=>walk(mm.body);case _=>()}
+        }
+        if(edges!=nodes-roots)error("UNEXPECTED")
+      }catch{
+        case e:SizingAbort=>status=if(e.error)"ERROR"else"TRUNCATED";reason=e.reason
+        case _:Throwable=>status="ERROR";reason="UNEXPECTED"
+      }finally clear()
+      s"$status:$reason:$modules:$ports:$statements:$roots:$nodes:$edges:$maxStatementDepth:$maxExpressionDepth:$work:$transient:${nodes+edges}"
+    }
+  }
+  private def runSizing(c:Circuit):String={
+    // Bootstrap reserve is static and checked before any Sizer object or arrays.
+    if(11308L+8L*256+1024L*256+1048576L>2L*1024*1024)
+      return "ERROR:UNEXPECTED:0:0:0:0:0:0:0:0:0:0:0"
+    var s:Sizer=null
+    try{s=new Sizer;s.run(c)}catch{
+      case e:SizingAbort=>val status=if(e.error)"ERROR"else"TRUNCATED"
+        s"$status:${e.reason}:0:0:0:0:0:0:0:0:0:0:0"
+      case _:Throwable=>"ERROR:UNEXPECTED:0:0:0:0:0:0:0:0:0:0:0"
+    }
+  }
+  // END INDEPENDENT INITIAL USES SIZING
+
   /** Bounded production-helper tests; no transformations or external output. */
   def selfChecks():Int={
     var checks=0
@@ -649,4 +845,128 @@ object ObservedPrepareAst {
       check(rejected("BUDGET"){b.iter(List(1))}&&b.used(C.Temp)==C.limits(C.Temp))}
     checks
   }
+  /** Independent sizing tests; the original69 checks are deliberately unchanged. */
+  def sizingSelfChecks():Int={
+    var checks=0
+    def check(ok:Boolean):Unit={require(ok,"SIZING_SELFCHECK");checks+=1}
+    def rejected(code:String)(body: =>Unit):Boolean=try{body;false}catch{
+      case x:Abort=>x.reason==code;case x:SizingAbort=>x.reason==code}
+    def fields(s:String):Array[String]=s.split(":",-1)
+    val info=FileInfo("sizing:1");val clk=Reference("clock",ClockType,PortKind,SourceFlow)
+    val leaf=UIntLiteral(0)
+    val shared=DoPrim(firrtl2.PrimOps.And,List(leaf,leaf),Nil,UIntType(IntWidth(1)))
+    val mux=Mux(leaf,shared,shared,UIntType(IntWidth(1)))
+    val con=Connect(info,Reference("out",UIntType(IntWidth(1))),mux)
+    val print=Print(info,StringLit("size"),List(shared,shared),clk,leaf,"print")
+    val body=Block(List(con,print))
+    def circuit(s:Statement):Circuit=Circuit(NoInfo,List(Module(NoInfo,"Top",List(Port(NoInfo,"clock",Input,ClockType)),s)),"Top")
+    val input=circuit(body)
+    val sized=new Sizer;val receipt=fields(sized.run(input))
+    check(receipt.take(2).toList==List("COMPLETE","NONE"))
+    check(receipt.slice(2,8).map(_.toLong).toList==List(1L,1L,3L,6L,17L,11L))
+    check(receipt(8)=="1"&&receipt(9)=="2"&&receipt(12)=="28"&&sized.cleaned)
+    locally {val b=new Budget;val r=new Records(b);val uses=new Uses(b,r,new Checked(b),false);val walk=new Walk(b)
+      walk.start(body);var s=walk.next();while(s!=null){uses.scan(s,0);walk.descend(s);s=walk.next()}
+      check(b.used(C.Expr)==28&&b.prefix(2)==17&&b.prefix(3)==11&&b.prefix.sum==28)
+    }
+    locally {val b=new Budget;val checked=new Checked(b)
+      val r=DefRegister(info,"r",ClockType,clk,leaf,leaf)
+      checked.mismatch(r);checked.infoPresent(info);checked.same(info,info);b.charge(C.Expr)
+      check(b.prefix.toList==List(2L,4L,0L,0L,1L)&&b.prefix.sum==b.used(C.Expr))
+    }
+    val dimensions=Array("GLOBAL_VISIT","GLOBAL_EXPR","NAMES","HASH","EQUAL","PROBE","CLEAR","TEMP")
+    var i=0
+    while(i<8){val b=new Budget;b.used(i)=C.limits(i);if(i==C.Expr)b.prefix(4)=C.limits(i)
+      val before=b.prefix.clone();val failure=rejected("BUDGET"){b.charge(i)};val first=b.failureEvidence
+      rejected("BUDGET"){b.charge(i)}
+      check(failure&&fields(first)(0)==dimensions(i)&&fields(first)(1).toLong==C.limits(i)&&
+        fields(first)(2)=="0"&&fields(first)(3)=="1"&&before.toList==b.prefix.toList&&b.failureEvidence==first)
+      i+=1
+    }
+    locally {val b=new Budget;b.scanVisit=1L<<22;b.used(C.Visit)=1L<<22
+      check(rejected("SCAN_BUDGET"){b.charge(C.Visit)}&&b.failureEvidence.startsWith("SCAN_VISIT:4194304:4194304:1:4194304:"))}
+    locally {val b=new Budget;b.scanExpr=1L<<23;b.used(C.Expr)=1L<<23;b.prefix(2)=1L<<23
+      check(rejected("SCAN_BUDGET"){b.charge(C.Expr,1,3)}&&b.failureEvidence.startsWith("SCAN_EXPR:8388608:8388608:1:8388608:")&&b.prefix(3)==0)}
+    locally {val b=new Budget;b.scanExpr=1L<<23;b.used(C.Expr)=1L<<25;b.prefix(4)=1L<<25
+      check(rejected("BUDGET"){b.charge(C.Expr)}&&fields(b.failureEvidence)(0)=="GLOBAL_EXPR")}
+    val totalVisits=receipt(2).toLong+receipt(3).toLong+receipt(4).toLong
+    def run(s:Sizer,c:Circuit=input):Array[String]=fields(s.run(c))
+    check(run(new Sizer(visitLimit=totalVisits))(0)=="COMPLETE")
+    check(run(new Sizer(visitLimit=totalVisits-1))(1)=="VISITS")
+    check(run(new Sizer(nodeLimit=17))(0)=="COMPLETE")
+    check(run(new Sizer(nodeLimit=16))(1)=="NODES")
+    check(run(new Sizer(edgeLimit=11))(0)=="COMPLETE")
+    check(run(new Sizer(edgeLimit=10))(1)=="EDGES")
+    val work=receipt(10).toLong;val transient=receipt(11).toLong
+    check(run(new Sizer(workLimit=work))(0)=="COMPLETE")
+    check(run(new Sizer(workLimit=work-1))(1)=="WORK")
+    check(run(new Sizer(transientLimit=transient))(0)=="COMPLETE")
+    check(run(new Sizer(transientLimit=transient-1))(1)=="TRANSIENT")
+    check(rejected("TRANSIENT"){new Sizer(transientLimit=55)})
+    check(rejected("WORK"){new Sizer(workLimit=7)})
+    check(run(new Sizer(depthLimit=2))(0)=="COMPLETE")
+    check(run(new Sizer(depthLimit=1))(1)=="DEPTH")
+    locally {var deep:Statement=EmptyStmt;var j=0;while(j<256){deep=Block(deep::Nil);j+=1}
+      check(run(new Sizer,circuit(deep))(0)=="COMPLETE")
+      check(run(new Sizer,circuit(Block(deep::Nil)))(1)=="DEPTH")}
+    locally {var deep:Expression=leaf;var j=0;while(j<256){deep=ValidIf(leaf,deep,UIntType(IntWidth(1)));j+=1}
+      check(run(new Sizer,circuit(DefNode(info,"deep",deep)))(0)=="COMPLETE")
+      check(run(new Sizer,circuit(DefNode(info,"deep",ValidIf(leaf,deep,UIntType(IntWidth(1))))))(1)=="DEPTH")}
+    locally {val s=new Sizer;val r=run(s,circuit(Block(scala.collection.immutable.LazyList(EmptyStmt))))
+      check(r(0)=="ERROR"&&r(1)=="FAMILY"&&s.cleaned)}
+    locally {val s=new Sizer;val r=run(s,circuit(DefNode(info,"x",DoPrim(firrtl2.PrimOps.And,
+        scala.collection.immutable.LazyList(leaf),Nil,UIntType(IntWidth(1))))))
+      check(r(0)=="ERROR"&&r(1)=="FAMILY"&&s.cleaned)}
+    locally {val s=new Sizer;val r=run(s,circuit(Block(List.fill(1024)(EmptyStmt))))
+      check(r(0)=="COMPLETE"&&r(4)=="1025"&&r(6)=="0"&&r(7)=="0"&&s.cleaned)}
+    locally {val s=new Sizer;val r=run(s,circuit(DefNode(info,"empty",firrtl2.EmptyExpression)))
+      check(r(0)=="COMPLETE"&&r(5)=="1"&&r(6)=="1"&&r(7)=="0")}
+    locally {val s=new Sizer(nodeLimit=1);val r=run(s,circuit(Connect(info,leaf,leaf)))
+      check(r(0)=="TRUNCATED"&&r(1)=="NODES"&&r(5)=="1"&&r(6)=="1"&&s.cleaned)}
+    locally {val s=new Sizer(nodeLimit=1);val r=run(s,circuit(DefNode(info,"node",shared)))
+      check(r(0)=="TRUNCATED"&&r(1)=="NODES"&&r(6)=="1"&&r(7)=="1"&&s.cleaned)}
+    // Trigger using the production budget/guard and next-iteration callback.
+    // It is an internal callback identity test, not official full-pipeline parity.
+    locally {val o=new Observation(1);val state=CircuitState(input,Seq.empty)
+      o.sizingFixtureFailure("INITIAL_USES",0)
+      val primary=o.evidence;val budget=o.budgetEvidence;val c0=state.circuit;val a0=state.annotations
+      check(primary.startsWith("TRUNCATED:INITIAL_USES:SCAN_BUDGET:")&&o.sizingEvidence=="NONE"&&o.sizingPendingForTest)
+      o.sizePending(state)
+      check(o.evidence==primary&&o.budgetEvidence==budget&&fields(o.sizingEvidence)(0)=="COMPLETE"&&
+        (state.circuit eq c0)&&(state.annotations eq a0) && !o.sizingPendingForTest)
+      val once=o.sizingEvidence;o.sizePending(CircuitState(circuit(EmptyStmt),Seq.empty))
+      check(o.sizingEvidence==once)
+    }
+    locally {val o=new Observation(1);o.sizingFixtureFailure("INITIAL_USES",1)
+      check(o.evidence.startsWith("TRUNCATED:INITIAL_USES:BOUND:")&&o.budgetEvidence=="NONE"&&o.sizingEvidence=="NONE" && !o.sizingPendingForTest)}
+    locally {val o=new Observation(1);o.sizingFixtureFailure("ORIGINAL",2)
+      check(o.budgetEvidence=="NONE"&&o.sizingEvidence=="NONE" && !o.sizingPendingForTest)}
+    locally {val o=new Observation(1);o.sizingFixtureFailure("INITIAL_USES",0);val primary=o.evidence;val budget=o.budgetEvidence
+      o.sizePending(CircuitState(circuit(Block(scala.collection.immutable.LazyList(EmptyStmt))),Seq.empty))
+      check(o.evidence==primary&&o.budgetEvidence==budget&&o.sizingEvidence.startsWith("ERROR:FAMILY:"))}
+    val leaves=List[Expression](clk,leaf,SIntLiteral(0),firrtl2.WVoid,firrtl2.WInvalid,firrtl2.EmptyExpression)
+    var li=0
+    while(li<6){val expression=leaves(li);val stmt=DefNode(info,"leaf",expression)
+      val census=run(new Sizer,circuit(stmt));val b=new Budget;val records=new Records(b)
+      new Uses(b,records,new Checked(b),false).scan(stmt,0)
+      check(census(0)=="COMPLETE"&&census(5)=="1"&&census(6)=="1"&&census(7)=="0"&&
+        b.used(C.Expr)==1&&b.prefix(2)==1&&b.prefix(3)==0)
+      li+=1
+    }
+    locally {val expr=new Reference("subclass",ClockType,PortKind,SourceFlow){}
+      val s=new Sizer;val r=run(s,circuit(DefNode(info,"bad",expr)))
+      check(r(0)=="ERROR"&&r(1)=="EXPRESSION"&&s.cleaned)}
+    locally {val stmt=new DefNode(info,"bad",leaf){}
+      val s=new Sizer;val r=run(s,circuit(stmt))
+      check(r(0)=="ERROR"&&r(1)=="STRUCTURE"&&s.cleaned)}
+    locally {val r=run(new Sizer,circuit(DefNode(info,"emptyprim",DoPrim(firrtl2.PrimOps.And,Nil,Nil,UIntType(IntWidth(1))))))
+      check(r(0)=="COMPLETE"&&r(5)=="1"&&r(6)=="1"&&r(7)=="0")}
+    locally {val o=new Observation(1);o.sizingFixtureFailure("INITIAL_USES",3)
+      val original=o.evidence;o.sizePending(CircuitState(input,Seq.empty))
+      check(original.startsWith("TRUNCATED:INITIAL_USES:BUDGET:")&&o.evidence==original&&
+        o.budgetEvidence=="UNAVAILABLE"&&o.sizingEvidence=="ERROR:UNEXPECTED:0:0:0:0:0:0:0:0:0:0:0"&&
+        !o.sizingPendingForTest&&o.cleaned)}
+    checks
+  }
+
 }

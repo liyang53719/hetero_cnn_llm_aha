@@ -250,7 +250,7 @@ object OriginalHostStructuralGraph {
     def boundaryFailure(error:Throwable):String=
       if(stage=="boundary_split")" boundaryStep="+boundaryStep+" boundaryGuard="+boundaryGuardCode(boundaryStep,error)else ""
     def preparedFailure(error:Throwable):String=
-      if(stage=="prepared_checks")" preparedStep="+preparedStep+preparedPassEvidence(error)else ""
+      if(stage=="prepared_checks")" preparedStep="+preparedStep+" clockInitGuard="+(if(preparedStep=="INIT_REPAIR")ClockInitRepresentationRepair.guardCode(error)else "NONE")+preparedPassEvidence(error)else ""
     var censusBefore:firrtl2.ir.Circuit=null;var censusAfter:firrtl2.ir.Circuit=null
     var censusRecord:Option[String]=None
     var telemetry:PhaseTelemetry=null
@@ -262,11 +262,12 @@ object OriginalHostStructuralGraph {
       Console.withOut(muted){Console.withErr(muted){
         telemetry=new PhaseTelemetry(savedOut,sink);sink.onCycle=()=>telemetry.cycleDetected();telemetry.startSampling()
         timed("admission") {
-          require(args.length==11,"pinned high,annotations,iDMA and actual loaded class identities")
+          require(args.length==12,"pinned high,annotations,iDMA and actual loaded class identities")
           require(args.slice(5,7).forall(_.matches("[0-9a-f]{64}")) && args(8).matches("[0-9a-f]{64}"))
           require(loaded(classOf[SymbolTable],args(7))==args(5) && loaded(SymbolTable.getClass,args(7))==args(6),"qualified graph SymbolTable bytes")
           require(loaded(IdmaPackedBoundarySplit.getClass,args(9))==args(8),"same boundary transform class as paired fixture")
           require(loaded(RegisterInitCensus.getClass,args(9))==args(10),"same census class as synthetic prerequisite")
+          require(loaded(ClockInitRepresentationRepair.getClass,args(9))==args(11),"same clock init repair as paired fixture")
           require(Files.getFileStore(Paths.get(args(0)).toAbsolutePath).getUsableSpace>=8L*1024*1024*1024,"unchanged8GiB reserve")
         }
         val (highText,annotationText)=timed("read") {
@@ -323,18 +324,23 @@ object OriginalHostStructuralGraph {
           require(states.size==1,"one actual prepared AST")
           preparedStep="ANNOTATIONS"
           require(!states.head.annotations.exists(_.isInstanceOf[UnsupportedAnnotation]),"unsupported prepared annotation")
+          preparedStep="INIT_REPAIR"
+          val initRepair=ClockInitRepresentationRepair(boundaryLow.circuit,states.head.circuit,states.head.annotations,394)
+          require(initRepair.corrected==394,"exact full Host instrumentation clock count")
+          val checkedState=states.head.copy(circuit=initRepair.circuit)
+          require(checkedState.annotations eq states.head.annotations,"same original initialization annotations")
           // Same read-only passes and identity postconditions, in the same order.
-          censusAfter=states.head.circuit
+          censusAfter=checkedState.circuit
           preparedStep="TYPES"
-          require(firrtl2.passes.CheckTypes.run(states.head.circuit) eq states.head.circuit,"CheckTypes returned another circuit")
+          require(firrtl2.passes.CheckTypes.run(checkedState.circuit) eq checkedState.circuit,"CheckTypes returned another circuit")
           preparedStep="FLOWS"
-          require(firrtl2.passes.CheckFlows.run(states.head.circuit) eq states.head.circuit,"CheckFlows returned another circuit")
+          require(firrtl2.passes.CheckFlows.run(checkedState.circuit) eq checkedState.circuit,"CheckFlows returned another circuit")
           preparedStep="CLOCK"
-          require(TopmoduleInfo(states.head.circuit).clocks==Seq("clock"),"unchanged prepared original clock")
+          require(TopmoduleInfo(checkedState.circuit).clocks==Seq("clock"),"unchanged prepared original clock")
           preparedStep="BINDINGS"
-          val f=new StructuralMetadataFactory(states.head.circuit,seed=true)
+          val f=new StructuralMetadataFactory(checkedState.circuit,seed=true)
           require(f.bindings==originalBindings,"same prepared leaf inventory")
-          (states.head,f)
+          (checkedState,f)
         }
         val table=timed("symbol_table") {
           val roles=CycleWitnessRoles(state.circuit,factory.bindings)

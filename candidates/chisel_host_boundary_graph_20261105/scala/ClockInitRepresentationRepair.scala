@@ -111,6 +111,10 @@ object ClockInitRepresentationRepair {
     case Reference(name,ClockType,NodeKind,SourceFlow)=>name==n
     case _=>false
   }
+  private def delayedSink(e:Expression,n:String):Boolean=e match {
+    case Reference(name,ClockType,NodeKind,firrtl2.SinkFlow)=>name==n
+    case _=>false
+  }
   private final case class Index(module:DefModule,names:Set[String],ports:Map[String,Port],statements:Vector[Statement])
   private def index(c:Circuit,b:Budget):Map[String,Index]={
     b.name(c.main);need(c.modules.size<=4096,"BOUND")
@@ -262,7 +266,7 @@ object ClockInitRepresentationRepair {
     selected.foreach{c=>
       val found=uses((c.module,c.reg.name))
       need(found.size==2,"REFERENCES")
-      val drivers=found.collect{case Use(x:Connect,root,true) if (root eq x.loc) && delayedRef(x.loc,c.reg.name)=>x}
+      val drivers=found.collect{case Use(x:Connect,root,true) if (root eq x.loc) && delayedSink(x.loc,c.reg.name)=>x}
       if(drivers.size!=1)driverFail("SELECT",found,c.clock)
       val driver=drivers.head
       if(driver.expr!=c.clock)driverFail("RHS",found,c.clock)

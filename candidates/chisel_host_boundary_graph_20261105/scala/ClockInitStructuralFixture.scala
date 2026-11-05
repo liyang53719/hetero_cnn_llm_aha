@@ -112,13 +112,25 @@ object ClockInitStructuralFixture {
     val regs=prepared.modules.collect{case m:Module=>flat(m.body).collect{case r:DefRegister if r.tpe==ClockType=>r}}.flatten
     require(regs.size==2);val r=regs.head
     val ref=Reference(r.name,ClockType,firrtl2.NodeKind,firrtl2.SourceFlow)
+    val sinkRef=ref.copy(flow=firrtl2.SinkFlow)
     def badReg(f:DefRegister=>DefRegister)=replace(prepared,{case x:DefRegister if x.name==r.name=>f(x);case x=>x})
-    val driver=prepared.modules.collect{case m:Module=>flat(m.body).collect{case c:Connect if c.loc==ref=>c}}.flatten
+    val driver=prepared.modules.collect{case m:Module=>flat(m.body).collect{case c:Connect if c.loc==sinkRef=>c}}.flatten
     require(driver.size==1)
     val consumer=prepared.modules.collect{case m:Module=>flat(m.body).collect{case p:Print if p.clk==ref=>p;case p:Stop if p.clk==ref=>p}}.flatten
     require(consumer.size==1)
     val zero=UIntLiteral(0,IntWidth(1));val one=UIntLiteral(1,IntWidth(1))
+    def withSink(kind:firrtl2.Kind,flow:firrtl2.Flow):Circuit=replace(prepared,{
+      case c:Connect if c.loc==sinkRef=>c.copy(loc=sinkRef.copy(kind=kind,flow=flow));case x=>x})
+    def withConsumer(kind:firrtl2.Kind,flow:firrtl2.Flow):Circuit=replace(prepared,{
+      case p:Print if p.clk==ref=>p.copy(clk=ref.copy(kind=kind,flow=flow))
+      case p:Stop if p.clk==ref=>p.copy(clk=ref.copy(kind=kind,flow=flow));case x=>x})
     val mutations=Vector[(Circuit,Circuit,firrtl2.AnnotationSeq)](
+      (before,withSink(firrtl2.NodeKind,firrtl2.SourceFlow),annotations),
+      (before,withSink(firrtl2.NodeKind,firrtl2.UnknownFlow),annotations),
+      (before,withSink(firrtl2.RegKind,firrtl2.SinkFlow),annotations),
+      (before,withConsumer(firrtl2.NodeKind,firrtl2.SinkFlow),annotations),
+      (before,withConsumer(firrtl2.NodeKind,firrtl2.UnknownFlow),annotations),
+      (before,withConsumer(firrtl2.RegKind,firrtl2.SourceFlow),annotations),
       (before,badReg(_.copy(init=one)),annotations),
       (before,badReg(_.copy(init=SIntLiteral(0,IntWidth(1)))),annotations),
       (before,append(badReg(_.copy(clock=Reference("alias_clock",ClockType,firrtl2.NodeKind,firrtl2.SourceFlow))),Seq(DefNode(NoInfo,"alias_clock",r.clock))),annotations),
@@ -131,19 +143,22 @@ object ClockInitStructuralFixture {
       (before,badReg(_.copy(reset=UIntLiteral(0,IntWidth(0)))),annotations),
       (append(before,Seq(DefWire(NoInfo,r.name,ClockType))),prepared,annotations),
       (before,append(prepared,driver),annotations),
-      (before,replace(prepared,{case c:Connect if c.loc==ref=>EmptyStmt;case x=>x}),annotations),
-      (before,replace(prepared,{case c:Connect if c.loc==ref=>c.copy(expr=DoPrim(firrtl2.PrimOps.AsClock,Seq(zero),Seq.empty,ClockType));case x=>x}),annotations),
+      (before,replace(prepared,{case c:Connect if c.loc==sinkRef=>EmptyStmt;case x=>x}),annotations),
+      (before,replace(prepared,{case c:Connect if c.loc==sinkRef=>c.copy(expr=DoPrim(firrtl2.PrimOps.AsClock,Seq(zero),Seq.empty,ClockType));case x=>x}),annotations),
       (before,append(prepared,consumer),annotations),
       (before,append(prepared,Seq(DefNode(NoInfo,"unexpected_alias",ref))),annotations),
       (before,badReg(_.copy(info=NoInfo)),annotations),
-      (before,replace(prepared,{case c:Connect if c.loc==ref=>c.copy(info=FileInfo("different"));case x=>x}),annotations),
+      (before,replace(prepared,{case c:Connect if c.loc==sinkRef=>c.copy(info=FileInfo("different"));case x=>x}),annotations),
       (replace(before,{case _:Print=>EmptyStmt;case _:Stop=>EmptyStmt;case x=>x}),prepared,annotations),
       (append(before,before.modules.collect{case m:Module=>flat(m.body).collect{case p:Print=>p;case p:Stop=>p}}.flatten),prepared,annotations),
       (before,append(prepared,Seq(DefRegister(NoInfo,"other_mismatch",SIntType(IntWidth(1)),r.clock,zero,zero))),annotations)
     )
-    mutations.foreach{case(b,p,a)=>
+    mutations.zipWithIndex.foreach{case((b,p,a),index)=>
       var rejected=false
-      try{ClockInitRepresentationRepair(b,p,a,2)}catch{case e:IllegalArgumentException=>rejected=ClockInitRepresentationRepair.GuardCodes(e.getMessage)}
+      try{ClockInitRepresentationRepair(b,p,a,2)}catch{case e:IllegalArgumentException=>
+        val code=ClockInitRepresentationRepair.guardCode(e)
+        rejected=if(index<3)code=="DRIVER"else if(index<6)code=="CONSUMER"else ClockInitRepresentationRepair.GuardCodes(code)
+      }
       require(rejected,"exact repair guard rejection")
     }
     mutations.size
@@ -160,12 +175,12 @@ object ClockInitStructuralFixture {
     val ports=Seq(Port(NoInfo,"clock",Input,ClockType))
     def circuit(body:Statement)=Circuit(NoInfo,Seq(Module(NoInfo,"Diagnostic",ports,body)),"Diagnostic")
     val before=circuit(print)
-    val prepared=circuit(Block(Seq(r,Connect(inf,delayed,clock),print.copy(clk=delayed))))
+    val prepared=circuit(Block(Seq(r,Connect(inf,delayed.copy(flow=firrtl2.SinkFlow),clock),print.copy(clk=delayed))))
     val annotations=Seq.empty[firrtl2.annotations.Annotation];val n=1
     require(ClockInitRepresentationRepair(before,prepared,annotations,n).corrected==1)
     val name=r.name
     def sinkChange(c:Connect):Connect=c.loc match {
-      case x:Reference if x.name==name=>c.copy(loc=x.copy(flow=firrtl2.SinkFlow))
+      case x:Reference if x.name==name=>c.copy(loc=x.copy(flow=firrtl2.SourceFlow))
       case _=>c
     }
     val sink=replace(prepared,{case c:Connect=>sinkChange(c);case x=>x})
@@ -180,9 +195,9 @@ object ClockInitStructuralFixture {
       case x=>x
     })
     val cases=Vector(
-      sink->"SELECT:ONE:CLOCK:NODE:SINK:TRUE:TRUE:TRUE:TRUE:ONE:CLOCK:NODE:SOURCE",
-      rhs->"RHS:ONE:CLOCK:NODE:SOURCE:TRUE:TRUE:TRUE:FALSE:ONE:CLOCK:NODE:SOURCE",
-      consumer->"SELECT:ONE:CLOCK:NODE:SINK:TRUE:TRUE:TRUE:TRUE:ONE:CLOCK:REG:SOURCE")
+      sink->"SELECT:ONE:CLOCK:NODE:SOURCE:TRUE:TRUE:TRUE:TRUE:ONE:CLOCK:NODE:SOURCE",
+      rhs->"RHS:ONE:CLOCK:NODE:SINK:TRUE:TRUE:TRUE:FALSE:ONE:CLOCK:NODE:SOURCE",
+      consumer->"SELECT:ONE:CLOCK:NODE:SOURCE:TRUE:TRUE:TRUE:TRUE:ONE:CLOCK:REG:SOURCE")
     cases.foreach{case(c,expected)=>
       var error:Option[IllegalArgumentException]=None
       try{ClockInitRepresentationRepair(before,c,annotations,n)}catch{case e:IllegalArgumentException=>error=Some(e)}

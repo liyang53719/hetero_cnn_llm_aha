@@ -12,12 +12,12 @@ def parse(text,label,process):
  need('\r'not in text);parts=text.split('\n');need(len(parts)==5 and parts[-1]=='');lines=parts[:-1]
  rows=[]
  for i,line in enumerate(lines[:3]):
-  m=ROW.fullmatch(line);need(m is not None and m[1]==CASES[i] and int(m[2])==(2 if i==2 else 1)and int(m[3])==(21 if i==2 else 0));rows.append(m.groups())
+  m=ROW.fullmatch(line);need(m is not None and m[1]==CASES[i] and int(m[2])==(2 if i==2 else 1)and int(m[3])==(27 if i==2 else 0));rows.append(m.groups())
  need(lines[3]=='CLOCK_INIT_RUN_V1 label='+label+' pass=true cases=3 numericalPass=false interpreterExecuted=false fullHostAccepted=false')
  return rows
 def compare(official,cached,official_process,cached_process):
  a=parse(official,'official',official_process);b=parse(cached,'cached',cached_process);need(a==b)
- return dict(status='PASS_CLOCK_INIT_STRUCTURAL_EQUATIONS_ONLY',cases=3,block_shape_cases=3,driver_diagnostic_cases=9,negative_guards=21,equation_vectors_per_case=512,interpreter_executed=False)
+ return dict(status='PASS_CLOCK_INIT_STRUCTURAL_EQUATIONS_ONLY',cases=3,block_shape_cases=3,driver_diagnostic_cases=9,negative_guards=27,equation_vectors_per_case=512,interpreter_executed=False)
 def failure(text,label):
  need(label in ('official','cached')and type(text)is str and text.isascii()and len(text)<=4096 and text.endswith('\n'))
  need('\r'not in text);parts=text.split('\n');need(len(parts)==3 and parts[-1]=='');lines=parts[:-1]
@@ -44,6 +44,6 @@ def driver_evidence(text):
  metadata(count,typ,kind,flow);metadata(cons,ct,ck,cf)
  equality=(n,t,k,f);need(all(v in ('TRUE','FALSE')for v in equality)or equality==('NA',)*4)
  if count!='ONE':need(equality==('NA',)*4)
- if step=='RHS':need((count,typ,kind,flow)==('ONE','CLOCK','NODE','SOURCE')and equality!=('TRUE',)*4)
- if step=='SELECT' and count=='ONE':need((typ,kind,flow)!=('CLOCK','NODE','SOURCE'))
+ if step=='RHS':need((count,typ,kind,flow)==('ONE','CLOCK','NODE','SINK')and equality!=('TRUE',)*4)
+ if step=='SELECT' and count=='ONE':need((typ,kind,flow)!=('CLOCK','NODE','SINK'))
  return dict(status='AVAILABLE',step=step,direct_sink_count=count,sink_type=typ,sink_kind=kind,sink_flow=flow,rhs_name_equal=n,rhs_type_equal=t,rhs_kind_equal=k,rhs_flow_equal=f,direct_consumer_count=cons,consumer_type=ct,consumer_kind=ck,consumer_flow=cf)

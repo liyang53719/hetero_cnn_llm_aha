@@ -238,6 +238,7 @@ object ClockInitStructuralFixture {
           val state=states.head;val n=if(mode=="both")2 else 1
           phase="ORIGINAL_ERRORS";originalErrors(state.circuit,n)
           phase="NEGATIVE";val driverChecks=driverDiagnostics();require(driverChecks==3)
+          val boundChecks=ClockInitRepresentationRepair.boundDiagnosticSelfChecks();require(boundChecks==9)
           phase="REPAIR"
           val fixed=ClockInitRepresentationRepair(low,state.circuit,state.annotations,n)
           require(fixed.corrected==n);unchanged(state.circuit,fixed.circuit,n)
@@ -265,7 +266,7 @@ object ClockInitStructuralFixture {
             }
           }
           phase="EQUATIONS";val vectors=equations()
-          "CLOCK_INIT_CASE_V1 id="+mode+" corrected="+n+" negativeGuards="+guards+" equations="+vectors+" shapeChecks=1 driverChecks=3 graphDigest="+digest
+          "CLOCK_INIT_CASE_V1 id="+mode+" corrected="+n+" negativeGuards="+guards+" equations="+vectors+" shapeChecks=1 driverChecks=3 boundChecks=9 graphDigest="+digest
         }
         ok=true
       }}

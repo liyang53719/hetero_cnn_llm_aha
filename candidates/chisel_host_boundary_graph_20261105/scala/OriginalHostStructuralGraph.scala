@@ -250,7 +250,7 @@ object OriginalHostStructuralGraph {
     def boundaryFailure(error:Throwable):String=
       if(stage=="boundary_split")" boundaryStep="+boundaryStep+" boundaryGuard="+boundaryGuardCode(boundaryStep,error)else ""
     def preparedFailure(error:Throwable):String=
-      if(stage=="prepared_checks")" preparedStep="+preparedStep+" clockInitGuard="+(if(preparedStep=="INIT_REPAIR")ClockInitRepresentationRepair.guardCode(error)else "NONE")+preparedPassEvidence(error)else ""
+      if(stage=="prepared_checks")" preparedStep="+preparedStep+" clockInitGuard="+(if(preparedStep=="INIT_REPAIR")ClockInitRepresentationRepair.guardCode(error)else "NONE")+" clockInitBound="+(if(preparedStep=="INIT_REPAIR")ClockInitRepresentationRepair.boundEvidence(error)else "NONE")+preparedPassEvidence(error)else ""
     var censusBefore:firrtl2.ir.Circuit=null;var censusAfter:firrtl2.ir.Circuit=null
     var censusRecord:Option[String]=None
     var telemetry:PhaseTelemetry=null

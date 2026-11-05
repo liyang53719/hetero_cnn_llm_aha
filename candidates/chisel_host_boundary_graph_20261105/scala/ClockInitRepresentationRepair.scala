@@ -59,19 +59,32 @@ object ClockInitRepresentationRepair {
   }
   private def fail(code:String):Nothing=throw new IllegalArgumentException(code)
   private def need(p:Boolean,code:String):Unit=if(!p)fail(code)
+  private final class BoundEvidence(val code:String) extends RuntimeException(null,null,false,false)
+  def boundEvidence(error:Throwable):String={
+    if(error==null || guardCode(error)!="BOUND")"NONE"
+    else {
+      val entries=error.getSuppressed
+      if(entries.length!=1)"UNAVAILABLE"else entries.head match{case e:BoundEvidence=>e.code;case _=>"UNAVAILABLE"}
+    }
+  }
   private final class Budget {
     private var n=0
-    def tick():Unit={n+=1;need(n<=5000000,"BOUND")}
-    def name(s:String):Unit=need(s!=null && s.nonEmpty && s.length<=4096,"BOUND")
+    var phase="INDEX_BEFORE"
+    def bound(p:Boolean,reason:String):Unit=if(!p){
+      val error=new IllegalArgumentException("BOUND")
+      error.addSuppressed(new BoundEvidence(reason+":"+phase+":"+n));throw error
+    }
+    def tick():Unit={n+=1;bound(n<=5000000,"GLOBAL_WORK")}
+    def name(s:String):Unit=bound(s!=null && s.nonEmpty && s.length<=4096,"NAME")
   }
   private def boundedType(t:Type,b:Budget):Unit={
     var stack=List((t,0));var count=0
     while(stack.nonEmpty){
       val (x,d)=stack.head;stack=stack.tail;b.tick();count+=1
-      need(d<=64 && count<=4096,"BOUND")
+      b.bound(d<=64,"TYPE_DEPTH");b.bound(count<=4096,"TYPE_NODES")
       x match {
         case VectorType(a,n)=>need(n>=0,"TYPE");stack=(a,d+1)::stack
-        case BundleType(fs)=>need(fs.size<=4096,"BOUND");fs.foreach{f=>b.name(f.name);stack=(f.tpe,d+1)::stack}
+        case BundleType(fs)=>b.bound(fs.size<=4096,"TYPE_FIELDS");fs.foreach{f=>b.name(f.name);stack=(f.tpe,d+1)::stack}
         case _=>()
       }
     }
@@ -85,11 +98,11 @@ object ClockInitRepresentationRepair {
     var stack=List((info,0));var count=0;var present=false
     while(stack.nonEmpty){
       val (x,d)=stack.head;stack=stack.tail;b.tick();count+=1
-      need(d<=16 && count<=256,"BOUND")
+      b.bound(d<=16,"INFO_DEPTH");b.bound(count<=256,"INFO_NODES")
       x match {
         case NoInfo=>()
-        case FileInfo(s)=>need(s.length<=4096,"BOUND");if(s.nonEmpty)present=true
-        case MultiInfo(xs)=>need(xs.size<=64,"BOUND");xs.foreach(i=>stack=(i,d+1)::stack)
+        case FileInfo(s)=>b.bound(s.length<=4096,"INFO_STRING");if(s.nonEmpty)present=true
+        case MultiInfo(xs)=>b.bound(xs.size<=64,"INFO_CHILDREN");xs.foreach(i=>stack=(i,d+1)::stack)
         case _=>fail("INFO")
       }
     }
@@ -117,20 +130,20 @@ object ClockInitRepresentationRepair {
   }
   private final case class Index(module:DefModule,names:Set[String],ports:Map[String,Port],statements:Vector[Statement])
   private def index(c:Circuit,b:Budget):Map[String,Index]={
-    b.name(c.main);need(c.modules.size<=4096,"BOUND")
+    b.name(c.main);b.bound(c.modules.size<=4096,"MODULES")
     val out=scala.collection.mutable.HashMap.empty[String,Index]
     c.modules.foreach{m=>
       b.tick();b.name(m.name);need(!out.contains(m.name),"DUPLICATE")
       val names=scala.collection.mutable.HashSet.empty[String]
       val ports=scala.collection.mutable.HashMap.empty[String,Port]
-      need(m.ports.size<=250000,"BOUND")
+      b.bound(m.ports.size<=250000,"PORTS")
       m.ports.foreach{p=>b.tick();b.name(p.name);need(names.add(p.name),"DUPLICATE");ports(p.name)=p}
       val ss=Vector.newBuilder[Statement]
       m match {
         case mm:Module=>
           var stack=List((mm.body,0))
           while(stack.nonEmpty){
-            val (s,d)=stack.head;stack=stack.tail;b.tick();need(d<=256,"BOUND");ss+=s
+            val (s,d)=stack.head;stack=stack.tail;b.tick();b.bound(d<=256,"STATEMENT_DEPTH");ss+=s
             s match {
               // Unnamed instrumentation carries no referenceable symbol. Keep
               // its statement for anchor matching; never excuse empty state names.
@@ -140,7 +153,7 @@ object ClockInitRepresentationRepair {
               case decl:IsDeclaration=>b.name(decl.name);need(names.add(decl.name),"DUPLICATE")
               case _=>()
             }
-            need(names.size<=250000,"BOUND")
+            b.bound(names.size<=250000,"DECLARATIONS")
             s.foreachStmt{x=>b.tick();stack=(x,d+1)::stack}
           }
         case _:ExtModule=>()
@@ -155,7 +168,7 @@ object ClockInitRepresentationRepair {
   private final case class AnchorKey(module:String,print:Boolean,clock:String,info:Info,format:String,ret:Int)
   private def anchorKey(module:String,s:Statement,b:Budget):Option[AnchorKey]=s match {
     case p:Print=>
-      need(p.string.string.length<=4096,"BOUND")
+      b.bound(p.string.string.length<=4096,"PRINT_STRING")
       clockRef(p.clk).filter(_=>checkedInfo(p.info,b)).map(c=>AnchorKey(module,true,c.name,p.info,p.string.string,0))
     case p:Stop=>clockRef(p.clk).filter(_=>checkedInfo(p.info,b)).map(c=>AnchorKey(module,false,c.name,p.info,"",p.ret))
     case _=>None
@@ -163,13 +176,13 @@ object ClockInitRepresentationRepair {
 
 
   private def checkAnnotations(as:AnnotationSeq,selected:Set[(String,String)],circuit:String,b:Budget):Unit={
-    need(as.size<=100000,"BOUND")
+    b.bound(as.size<=100000,"ANNOTATIONS")
     def target(t:Target):Unit={
       b.tick()
       t match {
         case r:ReferenceTarget=>
           b.name(r.circuit);b.name(r.module);b.name(r.ref)
-          need(r.path.size<=64 && r.component.size<=64,"BOUND")
+          b.bound(r.path.size<=64,"TARGET_PATH");b.bound(r.component.size<=64,"TARGET_COMPONENT")
           r.path.foreach{case(i,m)=>b.name(i.value);b.name(m.value)}
           // Any component of the register, including init/reset/clock, is excluded.
           val module=if(r.path.isEmpty)r.module else r.path.last._2.value
@@ -203,18 +216,53 @@ object ClockInitRepresentationRepair {
         "firrtl2.options.RunFirrtlTransformAnnotation")(x.getClass.getName)=>fail("ANNOTATION_EXTENSION")
       case x:SingleTargetAnnotation[_]=>named(x.target)
       case x:MultiTargetAnnotation=>
-        need(x.targets.size<=1024,"BOUND")
-        x.targets.foreach{xs=>need(xs.size<=1024,"BOUND");xs.foreach(target)}
+        b.bound(x.targets.size<=1024,"TARGET_GROUPS")
+        x.targets.foreach{xs=>b.bound(xs.size<=1024,"TARGET_MEMBERS");xs.foreach(target)}
       case _:NoTargetAnnotation=>()
       case _=>fail("ANNOTATION_SHAPE")
     }}
+  }
+
+  /** Tiny qualification only: exercise the same private bounds and evidence code. */
+  def boundDiagnosticSelfChecks():Int={
+    var checks=0
+    def rejected(reason:String)(operation:Budget=>Unit):Unit={
+      val b=new Budget;b.phase="CANDIDATES"
+      var caught:Throwable=null
+      try{operation(b)}catch{case e:IllegalArgumentException=>caught=e}
+      require(caught!=null && caught.getClass==classOf[IllegalArgumentException] && guardCode(caught)=="BOUND")
+      val code=boundEvidence(caught).split(":",-1)
+      require(code.length==3 && code(0)==reason && code(1)=="CANDIDATES")
+      val work=code(2).toInt
+      require(work>=0 && work<=5000001 && (if(reason=="GLOBAL_WORK")work==5000001 else work<=5000000))
+      checks+=1
+    }
+    rejected("GLOBAL_WORK"){b=>var n=0;while(n<5000000){b.tick();n+=1};b.tick()}
+    rejected("NAME"){b=>b.name("x"*4096);b.name("x"*4097)}
+    def deepType(n:Int):Type=(0 until n).foldLeft[Type](ClockType)((t,_)=>VectorType(t,1))
+    rejected("TYPE_DEPTH"){b=>boundedType(deepType(64),b);boundedType(deepType(65),b)}
+    rejected("TYPE_FIELDS"){b=>boundedType(BundleType(Vector.fill(4097)(Field("x",Default,ClockType))),b)}
+    rejected("TYPE_NODES"){b=>boundedType(BundleType(Vector.fill(4096)(Field("x",Default,ClockType))),b)}
+    def deepInfo(n:Int):Info=(0 until n).foldLeft[Info](FileInfo("x"))((i,_)=>new MultiInfo(Seq(i)))
+    rejected("INFO_DEPTH"){b=>checkedInfo(deepInfo(16),b);checkedInfo(deepInfo(17),b)}
+    rejected("INFO_STRING"){b=>checkedInfo(FileInfo("x"*4096),b);checkedInfo(FileInfo("x"*4097),b)}
+    rejected("INFO_CHILDREN"){b=>checkedInfo(new MultiInfo(Vector.fill(64)(NoInfo)),b);checkedInfo(new MultiInfo(Vector.fill(65)(NoInfo)),b)}
+    rejected("INFO_NODES"){b=>checkedInfo(new MultiInfo(Vector.fill(5)(new MultiInfo(Vector.fill(64)(NoInfo)))),b)}
+    require(boundEvidence(null)=="NONE" && boundEvidence(new IllegalArgumentException("DRIVER"))=="NONE")
+    val missing=new IllegalArgumentException("BOUND")
+    require(boundEvidence(missing)=="UNAVAILABLE")
+    missing.addSuppressed(new BoundEvidence("NAME:CANDIDATES:0"))
+    missing.addSuppressed(new BoundEvidence("NAME:CANDIDATES:0"))
+    require(boundEvidence(missing)=="UNAVAILABLE")
+    checks
   }
 
   def apply(before:Circuit,prepared:Circuit,annotations:AnnotationSeq,expected:Int):Result={
     need(expected>0 && expected<=1024,"COUNT")
     val b=new Budget
     need(before.main==prepared.main,"STRUCTURE")
-    val old=index(before,b);val fresh=index(prepared,b)
+    val old=index(before,b);b.phase="INDEX_PREPARED";val fresh=index(prepared,b)
+    b.phase="CANDIDATES"
     val candidates=Vector.newBuilder[Candidate]
     var candidateCount=0
     fresh.foreach{case(module,idx)=>idx.statements.foreach{
@@ -235,7 +283,9 @@ object ClockInitRepresentationRepair {
     val selected=candidates.result()
     need(selected.size==expected,"COUNT")
     val keys=selected.map(c=>(c.module,c.reg.name)).toSet
+    b.phase="ANNOTATIONS"
     checkAnnotations(annotations,keys,prepared.main,b)
+    b.phase="USES"
     val uses=scala.collection.mutable.HashMap.empty[(String,String),Vector[Use]]
     keys.foreach(k=>uses(k)=Vector.empty)
     // Count every Reference occurrence through every expression, including unused
@@ -244,7 +294,7 @@ object ClockInitRepresentationRepair {
       s.foreachExpr{root=>
         var stack=List((root,0))
         while(stack.nonEmpty){
-          val (e,d)=stack.head;stack=stack.tail;b.tick();need(d<=256,"BOUND")
+          val (e,d)=stack.head;stack=stack.tail;b.tick();b.bound(d<=256,"EXPRESSION_DEPTH")
           e match {
             case r:Reference=>
               b.name(r.name)
@@ -259,10 +309,12 @@ object ClockInitRepresentationRepair {
         }
       }
     }}
+    b.phase="ANCHORS"
     val anchorCounts=scala.collection.mutable.HashMap.empty[AnchorKey,Int]
     old.foreach{case(module,idx)=>idx.statements.foreach{s=>
       b.tick();anchorKey(module,s,b).foreach{k=>anchorCounts(k)=anchorCounts.getOrElse(k,0)+1}
     }}
+    b.phase="MATCHING"
     selected.foreach{c=>
       val found=uses((c.module,c.reg.name))
       need(found.size==2,"REFERENCES")
@@ -279,7 +331,7 @@ object ClockInitRepresentationRepair {
       val consumer=consumers.head
       val key=consumer match {
         case p:Print=>
-          need(sameInfo(c.reg.info,p.info,b),"INFO");need(p.string.string.length<=4096,"BOUND")
+          need(sameInfo(c.reg.info,p.info,b),"INFO");b.bound(p.string.string.length<=4096,"PRINT_STRING")
           AnchorKey(c.module,true,c.clock.name,p.info,p.string.string,0)
         case p:Stop=>need(sameInfo(c.reg.info,p.info,b),"INFO");AnchorKey(c.module,false,c.clock.name,p.info,"",p.ret)
         case _=>fail("CONSUMER")
@@ -287,6 +339,7 @@ object ClockInitRepresentationRepair {
       need(anchorCounts.getOrElse(key,0)==1,"ANCHOR")
     }
     // Only after all checks: rebuild changed ancestors, reusing every other node.
+    b.phase="REBUILD"
     val replacements=new java.util.IdentityHashMap[Statement,Statement]()
     selected.foreach{c=>
       val typedZero=DoPrim(firrtl2.PrimOps.AsClock,Seq(c.reg.init),Seq.empty,ClockType)
@@ -314,6 +367,7 @@ object ClockInitRepresentationRepair {
     // or whole-tree structural equality. Changed paths may contain Blocks only.
     need((result.info eq prepared.info) && (result.main eq prepared.main) &&
       result.modules.size==prepared.modules.size,"NONINTERFERENCE")
+    b.phase="NONINTERFERENCE"
     val selectedRegisters=new java.util.IdentityHashMap[Statement,java.lang.Boolean]()
     selected.foreach(c=>selectedRegisters.put(c.reg,java.lang.Boolean.TRUE))
     var changedRegisters=0

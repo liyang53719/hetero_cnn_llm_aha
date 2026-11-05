@@ -1,8 +1,8 @@
-name: prepare-schedule-probe-only
+name: observed-prepare-provenance-only
 on:
   push:
     branches: [main]
-    paths: [ci_launch/chisel_host_boundary_graph_20261105_prepare_schedule_probe_fresh_once.json]
+    paths: [ci_launch/chisel_host_boundary_graph_20261105_observed_prepare_provenance_once.json]
 permissions:
   contents: read
   actions: read

@@ -1,11 +1,12 @@
 """One source-only structural job. No engine/native, weights, references or IR export."""
 import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request,urllib.error,zipfile
 P=pathlib.Path;D=P(__file__).resolve().parent;REPO=D.parent.parent
-REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_prepare_schedule_probe_fresh_once.json'
+REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_observed_prepare_provenance_once.json'
 CAT='candidates/gdn32_first_model_execution_20261104/GDN32_FULL_SOURCE_PINS.json'
 CAT_SHA='ad2d4dcaddb213c85fd15adc65f7da5bd74a0d7c3e6c5922c725aa41bdc967cb'
-BASE='d1659c3ac99fd7acaf4684696e91bb2a11fa02ab';BASE_TREE='3688387a657f909be9a4aabfa54349affafe4931';TREE=12_081_306_272;RESERVE=8<<30
+BASE='5fc18f522811d844938a9a2f57e9e7dcf03c58d9';BASE_TREE='100cb0d76fe916c75b77a8996acff66b1f35a45d';TREE=12_081_306_272;RESERVE=8<<30
 from witness_record import parse_record as parse_witness_record
+from compare_observed_prepare import evidence as parse_observed_evidence
 from compare_clock_init_results import auxiliary_evidence as parse_auxiliary_evidence, preexisting_evidence as parse_preexisting_evidence
 graph_identity={}
 differential_identity={};boundary_identity={}
@@ -210,13 +211,19 @@ def parse_register_census(line):
  need(bool(histograms['regUses'])==bool(histograms['regUseInfo']),'REGISTER_CENSUS_USE_INFO')
  return dict(status='OK',registers_scanned=scanned,mismatches=total,sampled=sampled,truncated=total>1024,histograms=histograms)
 
-def parse_graph_text(text,receipt,high_sha,annotations_sha):
+def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=False):
+ need(type(observation_only)is bool,'GRAPH_OBSERVATION_MODE')
  need(type(text)is str and len(text.encode('ascii'))<=32768,'GRAPH_LOG_LIMIT')
- need(not text or text.endswith('\n'),'GRAPH_LOG_TRUNCATED_LINE')
+ need('\r'not in text and (not text or text.endswith('\n')),'GRAPH_LOG_TRUNCATED_LINE')
  lines=text.splitlines();need(len(lines)<=98,'GRAPH_RECORD_LIMIT')
- rows=[];final=None;active=None;next_phase=0;last=None;last_phase=None;cycle_event_seen=False;witness=None;census=None
+ rows=[];final=None;active=None;next_phase=0;last=None;last_phase=None;cycle_event_seen=False;witness=None;census=None;provenance=None
  for line in lines:
   need(final is None,'GRAPH_LOG_TRAILING_OR_LONG')
+  if line.startswith('PREPARE_PROVENANCE_V1 '):
+   need(observation_only and provenance is None and active is None and last_phase=='prepare_ast' and next_phase==PHASES.index('prepared_checks'),'OBSERVER_RECORD_PHASE')
+   try:provenance=parse_observed_evidence(line[len('PREPARE_PROVENANCE_V1 '):],394)
+   except (ValueError,TypeError):raise Stop('OBSERVER_RECORD_SCHEMA')
+   continue
   if line.startswith('REG_INIT_CENSUS_V1 '):
    need(census is None and active=='prepared_checks','REGISTER_CENSUS_PHASE')
    census=parse_register_census(line);continue
@@ -236,6 +243,7 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha):
    if last:
     need(all(values[i]>=last[i]for i in (0,1,4,5,6)) and maximum==last[3],'GRAPH_METRIC_REGRESSION')
    if kind=='BEGIN':
+    if observation_only and phase=='prepared_checks':need(provenance is not None,'OBSERVER_RECORD_MISSING')
     need(active is None and next_phase<len(PHASES) and phase==PHASES[next_phase],'GRAPH_PHASE_ORDER');active=phase
    else:
     need(active==phase,'GRAPH_PHASE_ORDER')
@@ -248,6 +256,7 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha):
   a=PASS_RE.fullmatch(line);b=FAIL_RE.fullmatch(line)
   need(a is not None or b is not None,'GRAPH_LOG_NOT_WHITELISTED')
   if a:
+   need(not observation_only,'OBSERVER_DIAGNOSTIC_CANNOT_PASS')
    need(active is None and next_phase==len(PHASES) and witness is None,'GRAPH_SUCCESS_INCOMPLETE_PHASES')
    need(a[1]==high_sha and a[2]==annotations_sha and a[6]=='0' and (not last or last[6]==0),'GRAPH_SUCCESS_IDENTITY_OR_CYCLE')
    need(int(a[4])>0 and int(a[4])<1<<63 and int(a[5])<=8<<20,'GRAPH_FINAL_RANGE')
@@ -300,6 +309,7 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha):
  if final and 'clock_init_bound'in final:out['clock_init_bound']=final['clock_init_bound']
  if final and 'clock_init_guard'in final:out['clock_init_guard']=final['clock_init_guard']
  if final and 'register_init_census'in final:out['register_init_census']=final['register_init_census']
+ if provenance is not None:out['prepare_provenance']=provenance
  if witness is not None:
   need(final is not None and final['kind']=='failure' and final['cycle_seen'],'GRAPH_WITNESS_WITHOUT_CYCLE_FAILURE')
   out['cycle_witness']=witness
@@ -337,7 +347,7 @@ COMPILER_CATEGORY_PREFIXES=(
  ("']' expected",'SYNTAX'),
  ('identifier expected','SYNTAX'),
 )
-def compiler_failure_summary(text,sources,input_truncated=False,schedule_only=False):
+def compiler_failure_summary(text,sources,input_truncated=False,observed_only=False):
  """Pure lossy compiler-failure metadata; never source text or success evidence."""
  out=dict(schema='COMPILER_DIAGNOSTIC_V1',status='FAILED_COMPILER_DIAGNOSTIC_ONLY',
   parse_status='COMPLETE',rejection='NONE',header_count=0,row_count=0,
@@ -354,8 +364,8 @@ def compiler_failure_summary(text,sources,input_truncated=False,schedule_only=Fa
  if '\r'in text or (text and not text.endswith('\n')):return reject('INPUT_LINE_ENDINGS',input_truncated)
  lines=text.split('\n')
  if any(len(line)>4096 for line in lines):return reject('INPUT_LINE_LENGTH',input_truncated)
- if type(schedule_only)is not bool:return reject('SOURCE_MAP',input_truncated)
- source_roles={'ScheduleProbe.scala':'SCHEDULE_PROBE'}if schedule_only else COMPILER_SOURCE_ROLES
+ if type(observed_only)is not bool:return reject('SOURCE_MAP',input_truncated)
+ source_roles={'ObservedScheduleIdentity.scala':'OBSERVED_IDENTITY','ObservedPrepareAst.scala':'OBSERVED_PHASE','ObservedPrepareStructuralFixture.scala':'OBSERVED_FIXTURE'}if observed_only else COMPILER_SOURCE_ROLES
  if type(sources)is not dict or len(sources)!=len(source_roles):return reject('SOURCE_MAP',input_truncated)
  seen=set()
  for path,entry in sources.items():
@@ -430,16 +440,19 @@ def boundary_compiler_failure(path,receipt,pins):
  except BaseException:
   return {'schema':'COMPILER_DIAGNOSTIC_V1','status':'UNAVAILABLE','reason':'CLOSED_LOG_OR_SOURCE_IDENTITY_OR_SCHEMA'}
 # END BOUNDARY COMPILER CLOSED-LOG PROJECTION
-def schedule_compiler_failure(path,receipt,pins):
+def observed_compiler_failure(path,receipt,pins):
  try:
-  need(phase=='compile_schedule_probe' and type(receipt)is dict and type(receipt.get('native_exit'))is int and receipt['native_exit']!=0,'COMPILER_DIAGNOSTIC_SCOPE')
-  source=regular(D/'scala/ScheduleProbe.scala');need(str(source)in pins and source.stat().st_size<=262144 and sha(source)==pins[str(source)],'COMPILER_SOURCE_IDENTITY')
-  raw=source.read_bytes();need(b'\r'not in raw and raw.endswith(b'\n')and 0<raw.count(b'\n')<=10000,'COMPILER_SOURCE_LINES')
-  return compiler_failure_summary(read_closed_log(path,receipt),{str(source):{'role':'SCHEDULE_PROBE','line_count':raw.count(b'\n')}},schedule_only=True)
+  need(phase=='compile_observed_fixture' and type(receipt)is dict and type(receipt.get('native_exit'))is int and receipt['native_exit']!=0,'COMPILER_DIAGNOSTIC_SCOPE')
+  sources={}
+  for name,role in [('ObservedScheduleIdentity.scala','OBSERVED_IDENTITY'),('ObservedPrepareAst.scala','OBSERVED_PHASE'),('ObservedPrepareStructuralFixture.scala','OBSERVED_FIXTURE')]:
+   source=regular(D/'scala'/name);need(str(source)in pins and source.stat().st_size<=262144 and sha(source)==pins[str(source)],'COMPILER_SOURCE_IDENTITY')
+   raw=source.read_bytes();need(b'\r'not in raw and raw.endswith(b'\n')and 0<raw.count(b'\n')<=10000,'COMPILER_SOURCE_LINES')
+   sources[str(source)]={'role':role,'line_count':raw.count(b'\n')}
+  return compiler_failure_summary(read_closed_log(path,receipt),sources,observed_only=True)
  except BaseException:return {'schema':'COMPILER_DIAGNOSTIC_V1','status':'UNAVAILABLE','reason':'CLOSED_LOG_OR_SOURCE_IDENTITY_OR_SCHEMA'}
 
 def read_graph_diagnostics(path,receipt,high_sha,annotations_sha):
- return parse_graph_text(read_closed_log(path,receipt),receipt,high_sha,annotations_sha)
+ return parse_graph_text(read_closed_log(path,receipt),receipt,high_sha,annotations_sha,observation_only=True)
 
 def reject_fixture_failure(text,label,comparator):
  # Caller must first obtain text through read_closed_log. This path always
@@ -456,36 +469,6 @@ def stage_cpu_budget(name,seconds):
   need(seconds==1500,'GRAPH_WALL_CONTRACT');return 1200
  return min(seconds,600)
 
-# BEGIN PREPARE SCHEDULE CATALOG
-# Public class identities only. The catalog remains private; no jar paths/names are exported.
-def schedule_catalog(jar_paths):
- need(type(jar_paths)is dict and set(jar_paths)=={'FIRRTL','TREADLE'},'SCHEDULE_CATALOG_JARS')
- records={};bytes_read=0
- for token in ('FIRRTL','TREADLE'):
-  with zipfile.ZipFile(regular(jar_paths[token]))as z:
-   entries=z.infolist();need(len(entries)<=32768,'SCHEDULE_CATALOG_ENTRIES')
-   seen=set()
-   for entry in entries:
-    name=entry.filename
-    need(type(name)is str and len(name)<=512 and name not in seen,'SCHEDULE_CATALOG_ENTRY');seen.add(name)
-    if not name.endswith('.class'):continue
-    binary=name[:-6].replace('/','.')
-    need(re.fullmatch(r'[A-Za-z_$][A-Za-z0-9_$]*(?:\.[A-Za-z_$][A-Za-z0-9_$]*)*',binary)is not None,'SCHEDULE_CATALOG_CLASS_NAME')
-    need(0<entry.file_size<=1048576 and bytes_read+entry.file_size<=67108864,'SCHEDULE_CATALOG_CLASS_BOUND')
-    bytes_read+=entry.file_size;data=z.read(entry);need(len(data)==entry.file_size,'SCHEDULE_CATALOG_CLASS_SIZE')
-    key=hashlib.sha256(binary.encode('utf-8')).hexdigest()
-    need(key not in records and len(records)<16384,'SCHEDULE_CATALOG_DUPLICATE')
-    records[key]=(binary,hashlib.sha256(data).hexdigest(),token)
- need(bool(records),'SCHEDULE_CATALOG_EMPTY')
- catalog={key:{'class_sha':records[key][1],'jar':records[key][2]}for key in sorted(records)}
- text=''.join(str(i)+'\t'+records[key][0]+'\t'+records[key][1]+'\t'+records[key][2]+'\n'for i,key in enumerate(sorted(records)))
- need(0<len(text.encode('ascii'))<=4194304,'SCHEDULE_CATALOG_TEXT_BOUND')
- identities={role:hashlib.sha256(name.encode()).hexdigest()for role,name in [('PREPARE','treadle2.stage.phases.PrepareAst'),('COMPILER','firrtl2.stage.transforms.Compiler'),('AUGMENT','treadle2.utils.AugmentPrintf')]}
- need(all(key in catalog for key in identities.values()),'SCHEDULE_CATALOG_IDENTITY_MISSING')
- need(catalog[identities['COMPILER']]['jar']=='FIRRTL' and catalog[identities['PREPARE']]['jar']==catalog[identities['AUGMENT']]['jar']=='TREADLE','SCHEDULE_CATALOG_IDENTITY_LOCATION')
- return text,catalog,identities
-# END PREPARE SCHEDULE CATALOG
-
 def main():
  global phase,graph_identity,differential_identity,boundary_identity,stage_step,exclusivity_endpoint,stage_receipt
  graph_identity={};differential_identity={};boundary_identity={}
@@ -493,14 +476,14 @@ def main():
  phase='identity';need(os.environ.get('GITHUB_REPOSITORY')=='liyang53719/hetero_cnn_llm_aha' and os.environ.get('GITHUB_REF')=='refs/heads/main' and os.environ.get('GITHUB_EVENT_NAME')=='push' and os.environ.get('GITHUB_RUN_ATTEMPT')=='1')
  launch=git('rev-parse','HEAD');need(launch==os.environ.get('GITHUB_SHA'));source=git('rev-parse','HEAD^');need(git('rev-parse',BASE+'^{tree}')==BASE_TREE and git('rev-parse',source+'^')==BASE)
  need(git('diff','--name-only','HEAD^','HEAD')==NONCE and not git('status','--porcelain'))
- nonce=load(REPO/NONCE,4096);need(nonce=={'schema':'ONE_PREPARE_SCHEDULE_ONLY_V1','source_commit':source,'base_commit':BASE,'attempts':1,'numerical_execution':False,'native_execution':False,'artifact_upload':False})
+ nonce=load(REPO/NONCE,4096);need(nonce=={'schema':'ONE_OBSERVED_PREPARE_DIAGNOSTIC_V1','source_commit':source,'base_commit':BASE,'attempts':1,'numerical_execution':False,'native_execution':False,'artifact_upload':False})
  own=load(D/'SOURCE_PINS.json')
- expected_files={'.github/workflows/chisel-host-boundary-graph-once.yml',*[REL+'/'+p for p in ('run.py', 'prepare_jars.py', 'compare_fixture_results.py', 'compare_boundary_results.py', 'witness_record.py', 'modulecache/BoundedCycleWitness.scala', 'modulecache/CycleWitnessFixture.scala', 'modulecache/StructuralDifferential.scala', 'modulecache/SymbolTable.scala', 'scala/CycleWitnessRoles.scala', 'scala/IdmaFieldSplitTransform.scala', 'scala/IdmaSplitLayout.scala', 'scala/IdmaPackedBoundarySplit.scala', 'scala/BoundarySplitStructuralFixture.scala', 'scala/OriginalHostStructuralGraph.scala', 'scala/StructuralMetadataFactory.scala', 'scala/BoundaryIntegrationGuards.scala', 'scala/RegisterInitCensus.scala', 'scala/ClockInitRepresentationRepair.scala', 'scala/ClockInitStructuralFixture.scala', 'compare_clock_init_results.py','compare_schedule_probe.py','scala/ScheduleProbe.scala') ]}
+ expected_files={'.github/workflows/chisel-host-boundary-graph-once.yml',*[REL+'/'+p for p in ('run.py', 'prepare_jars.py', 'compare_fixture_results.py', 'compare_boundary_results.py', 'witness_record.py', 'modulecache/BoundedCycleWitness.scala', 'modulecache/CycleWitnessFixture.scala', 'modulecache/StructuralDifferential.scala', 'modulecache/SymbolTable.scala', 'scala/CycleWitnessRoles.scala', 'scala/IdmaFieldSplitTransform.scala', 'scala/IdmaSplitLayout.scala', 'scala/IdmaPackedBoundarySplit.scala', 'scala/BoundarySplitStructuralFixture.scala', 'scala/OriginalHostStructuralGraph.scala', 'scala/StructuralMetadataFactory.scala', 'scala/BoundaryIntegrationGuards.scala', 'scala/RegisterInitCensus.scala', 'scala/ClockInitRepresentationRepair.scala', 'scala/ClockInitStructuralFixture.scala', 'compare_clock_init_results.py','compare_schedule_probe.py','scala/ScheduleProbe.scala','compare_observed_prepare.py','scala/ObservedScheduleIdentity.scala','scala/ObservedPrepareAst.scala','scala/ObservedPrepareStructuralFixture.scala') ]}
  need(set(own)=={'schema','files','publication_delta'} and own['schema']=='HOST_BOUNDARY_GRAPH_SOURCE_PINS_V1')
  need(len(own['files'])==len(expected_files) and {row['path']for row in own['files']}==expected_files)
  pins=pins_for(own['files'],REPO);pins[str(D/'SOURCE_PINS.json')]=sha(D/'SOURCE_PINS.json')
  changed=set(git('diff','--name-only',BASE,source).splitlines())
- expected_delta={'.github/workflows/chisel-host-boundary-graph-once.yml', 'candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json', 'candidates/chisel_host_boundary_graph_20261105/run.py'}
+ expected_delta={'.github/workflows/chisel-host-boundary-graph-once.yml', 'candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json', 'candidates/chisel_host_boundary_graph_20261105/compare_observed_prepare.py', 'candidates/chisel_host_boundary_graph_20261105/run.py', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedPrepareAst.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedPrepareStructuralFixture.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedScheduleIdentity.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/OriginalHostStructuralGraph.scala'}
  need(len(own['publication_delta'])==len(expected_delta) and changed==set(own['publication_delta'])==expected_delta)
  catalog=regular(REPO/CAT);need(sha(catalog)==CAT_SHA);doc=load(catalog);need(doc['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1'and len(doc['files'])==1211);pins.update(pins_for(doc['files'],REPO));pins[str(catalog)]=CAT_SHA
  phase='admission';remote_exclusive(launch);admission();work=P(os.environ['RUNNER_TEMP'])/'chisel-host-boundary-graph';need(work.is_absolute()and not work.exists()and all(not p.is_symlink()for p in(work,*work.parents)));work.mkdir()
@@ -529,12 +512,12 @@ def main():
   stage_step="EMIT";print(json.dumps({'schema':'STRUCTURAL_GRAPH_PROGRESS_V1',**reports[-1],'numerical_pass':False}),flush=True)
   stage_step="POSTCHECK"
   # BEGIN BOUNDARY COMPILER FAILURE HOOK
-  if name=='compile_schedule_probe' and type(r.get('native_exit'))is int and r['native_exit']!=0:
-   boundary_identity['schedule_compiler_failure']=schedule_compiler_failure(work/name/'frontend.log.gz',r,pins)
+  if name=='compile_observed_fixture' and type(r.get('native_exit'))is int and r['native_exit']!=0:
+   boundary_identity['observed_compiler_failure']=observed_compiler_failure(work/name/'frontend.log.gz',r,pins)
   if name=='compile_boundary_fixture' and type(r.get('native_exit'))is int and r['native_exit']!=0:
    boundary_identity['boundary_compiler_failure']=boundary_compiler_failure(work/name/'frontend.log.gz',r,pins)
   # END BOUNDARY COMPILER FAILURE HOOK
-  if name in ('graph','diff_official','diff_cached','witness_fixture','boundary_official','boundary_cached','register_census_fixture','clock_init_official','clock_init_cached','schedule_probe'):
+  if name in ('graph','diff_official','diff_cached','witness_fixture','boundary_official','boundary_cached','register_census_fixture','clock_init_official','clock_init_cached','observed_official','observed_cached'):
    stage_step="RETURN";return work/name,r # Parse only after independent cleanup/log-finalization gates.
   need(r.get('native_exit')in ((0,1)if name=='jdk_inventory'else(0,)) and not r.get('errors') and reports[-1]['cleanup_complete'])
   stage_step="RETURN";return work/name
@@ -563,38 +546,153 @@ def main():
   else:jars.append(str(p))
  need(len(jars)==106 and plugin is not None);cp=':'.join(jars)
  def jvm(heap,classpath,main,args=()):return [java,'-XX:-UsePerfData','-XX:ActiveProcessorCount=1','-XX:ReservedCodeCacheSize=128m','-Xss4m','-Xmx'+heap,'-XX:-HeapDumpOnOutOfMemoryError','-XX:ErrorFile=/dev/null','-cp',classpath,main,*args]
- # Schedule discovery only: no circuit, original source compilation, graph or engine.
- jar_paths={}
- for token,name in [('FIRRTL','firrtl2_2.13-6.0.0.jar'),('TREADLE','chiseltest_2.13-6.0.0.jar')]:
-  matches=[x for x in jars if P(x).name==name];need(len(matches)==1,'SCHEDULE_JAR_UNIQUE');jar_paths[token]=matches[0]
- catalog_text,catalog,identities=schedule_catalog(jar_paths)
- catalog_path=work/'schedule_catalog.tsv';catalog_path.write_text(catalog_text,encoding='ascii');pins[str(catalog_path)]=sha(catalog_path)
- probe_source=regular(D/'scala/ScheduleProbe.scala')
- classes=stage('compile_schedule_probe',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',cp,'-d','.',str(probe_source)]),90,3)
- classfiles=list(classes.rglob('*.class'));need(1<=len(classfiles)<=64,'SCHEDULE_CLASS_COUNT')
- for path in classfiles:pins[str(regular(path))]=sha(path)
- forwarder=regular(classes/'chiseltest/simulator/ScheduleProbe.class');module=regular(classes/'chiseltest/simulator/ScheduleProbe$.class')
- identities['PROBE']=sha(module)
- args=[str(catalog_path),sha(catalog_path),jar_paths['FIRRTL'],sha(jar_paths['FIRRTL']),jar_paths['TREADLE'],sha(jar_paths['TREADLE']),str(classes),sha(forwarder),sha(module)]
- folder,receipt=stage('schedule_probe',jvm('1g',str(classes)+':'+cp,'chiseltest.simulator.ScheduleProbe',args),90,2)
- text=read_closed_log(folder/'frontend.log.gz',receipt)
- spec=importlib.util.spec_from_file_location('strict_schedule_probe',D/'compare_schedule_probe.py');comparator=importlib.util.module_from_spec(spec);spec.loader.exec_module(comparator)
- if text.startswith('PREPARE_SCHEDULE_FAILURE_V1'):
-  try:boundary_identity['schedule_failure']=comparator.failure(text)
-  except (ValueError,TypeError,KeyError):raise Stop('SCHEDULE_FAILURE_SCHEMA')
-  raise Stop('SCHEDULE_PROBE_REPORTED_FAILURE')
- need(receipt.get('status')=='PASS_PROCESS_ONLY' and receipt.get('worker_started')is True and type(receipt.get('native_exit'))is int and receipt['native_exit']==0 and receipt.get('errors')==[],'SCHEDULE_PROCESS_FAILED')
- try:parsed=comparator.parse(text,catalog,identities)
- except (ValueError,TypeError,KeyError):raise Stop('SCHEDULE_RECEIPT_REJECTED')
- # Preserve exact order/duplicates while exporting only catalog ordinals and pinned identities.
- summary={k:v for k,v in parsed.items()if k!='rows'}
- summary['ordered_catalog_ids']=[row['catalog_index']for row in parsed['rows']]
- need(shutil.disk_usage(work).free>=RESERVE,'SCHEDULE_FINAL_RESERVE')
- for path,digest in pins.items():need(sha(path)==digest,'SCHEDULE_FINAL_PIN_CHANGED')
- return {'schema':'PREPARE_SCHEDULE_PROBE_V1','status':'PASS_PREPARE_SCHEDULE_ONLY','schedule':summary,'catalog_sha256':sha(catalog_path),'catalog_count':len(catalog),'source_commit':source,'launch_commit':launch,'helper_manifest_sha256':sha(D/'SOURCE_PINS.json'),'jdk_inventory_sha256':sha(work/'jdk_inventory.json'),'final_reserve_preserved':True,'owned_process_cleanup_complete':all(r['cleanup_complete']for r in reports),'transformations_run':False,'circuit_constructed':False,'host_started':False,'full_host_accepted':False,'dut_provider_native_loaded':False,'dut_evaluated':False,'weights_read':False,'numerical_pass':False,'stages':reports}
+ # Compile a narrowly patched official SymbolTable and one common fixture.
+ # No JVM simulation engine or native library is constructed by either.
+ patch_source=regular(D/'modulecache/SymbolTable.scala');fixture_source=regular(D/'modulecache/StructuralDifferential.scala')
+ need(sha(patch_source)=='363cfcbc9df17d340580b2308551a83877ab91637c42bda3a6351e2b9fd22fc3')
+ witness_source=regular(D/'modulecache/BoundedCycleWitness.scala')
+ official_jars=[p for p in jars if P(p).name=='chiseltest_2.13-6.0.0.jar'];need(len(official_jars)==1)
+ official_jar=official_jars[0]
+ with zipfile.ZipFile(official_jar)as z:
+  official_pins={'source_sha256':'9d8cf72aa1efb8c7ebd3e174da99e509bd7d44aec60a1c391b0dfc6f7b453bab','class_sha256':hashlib.sha256(z.read('treadle2/executable/SymbolTable.class')).hexdigest(),'companion_sha256':hashlib.sha256(z.read('treadle2/executable/SymbolTable$.class')).hexdigest()}
+ patchclasses=stage('compile_modulecache',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',cp,'-d','.',str(patch_source),str(witness_source)]),90,3)
+ for p in patchclasses.rglob('*.class'):pins[str(p)]=sha(p)
+ cached_pins={'source_sha256':sha(patch_source),'class_sha256':sha(regular(patchclasses/'treadle2/executable/SymbolTable.class')),'companion_sha256':sha(regular(patchclasses/'treadle2/executable/SymbolTable$.class'))}
+ need(cached_pins['companion_sha256']!=official_pins['companion_sha256'])
+ fixtureclasses=stage('compile_fixture',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',cp,'-d','.',str(fixture_source)]),90,3)
+ for p in fixtureclasses.rglob('*.class'):pins[str(p)]=sha(p)
+ need(not (fixtureclasses/'treadle2/executable/SymbolTable.class').exists() and not (fixtureclasses/'treadle2/executable/SymbolTable$.class').exists())
+ compare_spec=importlib.util.spec_from_file_location('strict_fixture_compare',D/'compare_fixture_results.py');comparator=importlib.util.module_from_spec(compare_spec);compare_spec.loader.exec_module(comparator)
+ differential_identity={'differential_status':'PENDING','official_symbol_table':official_pins,'patched_symbol_table':cached_pins,'fixture_source_sha256':sha(fixture_source),'interpreter_bookkeeping_modified':True}
+ results=[]
+ for label,expected,location,classpath in [('official',official_pins,official_jar,str(fixtureclasses)+':'+cp),('cached',cached_pins,str(patchclasses),str(patchclasses)+':'+str(fixtureclasses)+':'+cp)]:
+  folder,receipt=stage('diff_'+label,jvm('1g',classpath,'treadle2.executable.StructuralDifferential',[label,expected['source_sha256'],expected['class_sha256'],expected['companion_sha256'],location]),45,2)
+  text=read_closed_log(folder/'frontend.log.gz',receipt)
+  need(receipt.get('status')=='PASS_PROCESS_ONLY' and receipt.get('worker_started')is True,'DIFFERENTIAL_PROCESS_FAILED')
+  # These booleans are derived from the actual closed-log checks above, not a synthetic receipt.
+  process={'exit':receipt.get('native_exit'),'errors':receipt.get('errors'),'cleanup_complete':(receipt.get('cleanup_proof')or{}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP','log_finalized':(receipt.get('log_capture')or{}).get('gzip_finalized')is True}
+  results.append((text,process))
+ differential=comparator.compare(results[0][0],results[1][0],official_pins,cached_pins,results[0][1],results[1][1])
+ differential_identity.update(differential_status=differential['status'],differential_cases=differential['cases'])
+ # Qualify the exact witness implementation before any large original graph.
+ witness_fixture=regular(D/'modulecache/CycleWitnessFixture.scala')
+ witnessclasses=stage('compile_witness_fixture',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',str(patchclasses)+':'+cp,'-d','.',str(witness_fixture)]),90,3)
+ for p in witnessclasses.rglob('*.class'):pins[str(p)]=sha(p)
+ wf,wr=stage('witness_fixture',jvm('1g',str(patchclasses)+':'+str(witnessclasses)+':'+cp,'treadle2.executable.CycleWitnessFixture'),45,2)
+ wt=read_closed_log(wf/'frontend.log.gz',wr)
+ cases=('self_loop','multi_loop','acyclic','reachable_other_cycle','node_cap','edge_cap','output_cap','time_cap','reverse_edge','invalid_role','name_cap','lazy_edges','callback_error','malformed_record','record_disclosure','reverse_asymmetric','reverse_direction_mismatch','forward_fanout_reverse_cycle','exception_noninterference')
+ expected=''.join('CYCLE_FIXTURE_V1 case='+c+' outcome=PASS\n'for c in cases)+'CYCLE_FIXTURE_FINAL_V1 cases=19 status=PASS\n'
+ need(wt==expected and wr.get('status')=='PASS_PROCESS_ONLY' and wr.get('native_exit')==0 and not wr.get('errors'),'WITNESS_FIXTURE_FAILED')
+ differential_identity.update(witness_fixture_status='PASS_19_SMALL_CASES_ONLY',witness_source_sha256=sha(witness_source),witness_fixture_source_sha256=sha(witness_fixture))
+ boundary_fixture_source=regular(D/'scala/BoundarySplitStructuralFixture.scala')
+ need(sha(boundary_fixture_source)=='d4f17a1ac12ed62ebb26f63135c13752a1ff0142097f05d7b907491309c5bce0','CANDIDATE_FIXTURE_SOURCE_CHANGED')
+ need(sha(D/'scala/IdmaPackedBoundarySplit.scala')=='27bf9a87064eb66342f2d18b7b268249f7f4c20795f3ea8a31a33f299909e3ee','CANDIDATE_TRANSFORM_SOURCE_CHANGED')
+ helpers=[str(regular(D/'scala'/n))for n in ('IdmaSplitLayout.scala','IdmaFieldSplitTransform.scala','IdmaPackedBoundarySplit.scala','BoundarySplitStructuralFixture.scala','RegisterInitCensus.scala','ClockInitRepresentationRepair.scala','ClockInitStructuralFixture.scala')]
+ boundaryclasses=stage('compile_boundary_fixture',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',cp,'-d','.',*helpers]),180,3)
+ for p in boundaryclasses.rglob('*.class'):pins[str(p)]=sha(p)
+ need(not (boundaryclasses/'treadle2/executable/SymbolTable.class').exists() and not (boundaryclasses/'treadle2/executable/SymbolTable$.class').exists())
+ boundary_compare_spec=importlib.util.spec_from_file_location('strict_boundary_compare',D/'compare_boundary_results.py');boundary_comparator=importlib.util.module_from_spec(boundary_compare_spec);boundary_compare_spec.loader.exec_module(boundary_comparator)
+ boundary_identity={'boundary_status':'PENDING','official_symbol_table':official_pins,'patched_symbol_table':cached_pins,'boundary_fixture_source_sha256':sha(boundary_fixture_source),'boundary_transform_source_sha256':sha(D/'scala/IdmaPackedBoundarySplit.scala'),'interpreter_bookkeeping_modified':True}
+ results=[]
+ for label,expected,location,classpath in [('official',official_pins,official_jar,str(boundaryclasses)+':'+cp),('cached',cached_pins,str(patchclasses),str(patchclasses)+':'+str(boundaryclasses)+':'+cp)]:
+  folder,receipt=stage('boundary_'+label,jvm('1g',classpath,'chiseltest.simulator.BoundarySplitStructuralFixture',[label,expected['class_sha256'],expected['companion_sha256'],location]),120,2)
+  text=read_closed_log(folder/'frontend.log.gz',receipt)
+  need(receipt.get('worker_started')is True,'BOUNDARY_PROCESS_NOT_STARTED')
+  reject_fixture_failure(text,label,boundary_comparator)
+  need(receipt.get('status')=='PASS_PROCESS_ONLY' and receipt.get('worker_started')is True,'BOUNDARY_PROCESS_FAILED')
+  process={'exit':receipt.get('native_exit'),'errors':receipt.get('errors'),'cleanup_complete':(receipt.get('cleanup_proof')or{}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP','log_finalized':(receipt.get('log_capture')or{}).get('gzip_finalized')is True}
+  results.append((text,process))
+ boundary_result=boundary_comparator.compare(results[0][0],results[1][0],official_pins,cached_pins,results[0][1],results[1][1])
+ need(boundary_result['status']=='PASS_ISOLATED_BOUNDARY_FIXTURE_ONLY','BOUNDARY_PREFLIGHT_FAILED')
+ need(boundary_result['cases']==18 and boundary_result['negative_guard_cases']==29 and boundary_result['validity_mask_cases']==6 and boundary_result['bit_equation_phases']==2 and boundary_result['vectors_per_phase']=={'default':3730,'boundary_registered':3731,'unequal_mux':3794,'mux_boundary_registered':3795,'validity_default':6892,'validity_registered':6894},'BOUNDARY_EXTENDED_COVERAGE_REQUIRED')
+ boundary_identity.update(boundary_status=boundary_result['status'],boundary_cases=boundary_result['cases'],boundary_negative_guard_cases=boundary_result['negative_guard_cases'],boundary_validity_mask_cases=boundary_result['validity_mask_cases'],boundary_transform_qualification='CURRENT_RUN_PAIRED_FIXTURE_ONLY')
+ census_companion_sha=sha(regular(boundaryclasses/'chiseltest/simulator/RegisterInitCensus$.class'))
+ censusfolder,censusreceipt=stage('register_census_fixture',jvm('1g',str(boundaryclasses)+':'+cp,'chiseltest.simulator.RegisterInitCensus',[census_companion_sha,str(boundaryclasses)]),30,2)
+ census_text=read_closed_log(censusfolder/'frontend.log.gz',censusreceipt)
+ need(census_text=='REGISTER_INIT_CENSUS_FIXTURE_V1 status=PASS\n' and censusreceipt.get('status')=='PASS_PROCESS_ONLY' and censusreceipt.get('native_exit')==0 and censusreceipt.get('errors')==[] and censusreceipt.get('worker_started')is True,'REGISTER_CENSUS_PREREQUISITE_FAILED')
+ boundary_identity['register_census_fixture_status']='PASS_SYNTHETIC_ONLY'
+ repair_companion_sha=sha(regular(boundaryclasses/'chiseltest/simulator/ClockInitRepresentationRepair$.class'))
+ clock_spec=importlib.util.spec_from_file_location('strict_clock_init_compare',D/'compare_clock_init_results.py');clock_comparator=importlib.util.module_from_spec(clock_spec);clock_spec.loader.exec_module(clock_comparator)
+ clock_results=[]
+ for label,expected,location,classpath in [('official',official_pins,official_jar,str(boundaryclasses)+':'+cp),('cached',cached_pins,str(patchclasses),str(patchclasses)+':'+str(boundaryclasses)+':'+cp)]:
+  folder,receipt=stage('clock_init_'+label,jvm('1g',classpath,'chiseltest.simulator.ClockInitStructuralFixture',[label,expected['class_sha256'],expected['companion_sha256'],location,repair_companion_sha,str(boundaryclasses)]),120,2)
+  text=read_closed_log(folder/'frontend.log.gz',receipt)
+  need(receipt.get('worker_started')is True,'CLOCK_INIT_PROCESS_NOT_STARTED')
+  if text.startswith('CLOCK_INIT_FAILURE_V1 '):
+   try:detail=clock_comparator.failure(text,label)
+   except (ValueError,TypeError,KeyError):raise Stop('CLOCK_INIT_FAILURE_SCHEMA')
+   boundary_identity['clock_init_failure']=dict(label=label,**detail)
+   raise Stop('CLOCK_INIT_FIXTURE_FAILED')
+  process={'exit':receipt.get('native_exit'),'errors':receipt.get('errors'),'cleanup_complete':(receipt.get('cleanup_proof')or{}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP','log_finalized':(receipt.get('log_capture')or{}).get('gzip_finalized')is True}
+  need(receipt.get('status')=='PASS_PROCESS_ONLY','CLOCK_INIT_PROCESS_FAILED')
+  clock_results.append((text,process))
+ try:clock_result=clock_comparator.compare(clock_results[0][0],clock_results[1][0],clock_results[0][1],clock_results[1][1])
+ except (ValueError,TypeError,KeyError):raise Stop('CLOCK_INIT_COMPARATOR_REJECTED')
+ need(clock_result=={'status':'PASS_CLOCK_INIT_STRUCTURAL_EQUATIONS_ONLY','cases':3,'block_shape_cases':3,'driver_diagnostic_cases':9,'bound_diagnostic_cases':27,'index_sizing_cases':39,'streaming_cases':186,'legacy_differential_cases':21,'preexisting_diagnostic_cases':72,'negative_guards':27,'equation_vectors_per_case':512,'interpreter_executed':False},'CLOCK_INIT_COVERAGE_REQUIRED')
+ boundary_identity['clock_init_qualification']=clock_result
+ # Qualify diagnostic observation before any original Host compilation.
+ observed_sources=[str(regular(D/'scala'/n))for n in ('ObservedScheduleIdentity.scala','ObservedPrepareAst.scala','ObservedPrepareStructuralFixture.scala')]
+ provenanceclasses=stage('compile_observed_fixture',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',str(boundaryclasses)+':'+cp,'-d','.',*observed_sources]),180,3)
+ observed_files=list(provenanceclasses.rglob('*.class'));need(1<=len(observed_files)<=512,'OBSERVER_CLASS_COUNT')
+ for path in observed_files:pins[str(regular(path))]=sha(path)
+ need(not ({str(p.relative_to(provenanceclasses))for p in observed_files}&{str(p.relative_to(boundaryclasses))for p in boundaryclasses.rglob('*.class')}),'OBSERVER_CLASS_SHADOWING')
+ observer_class_sha=sha(regular(provenanceclasses/'chiseltest/simulator/ObservedPrepareAst.class'))
+ observer_companion_sha=sha(regular(provenanceclasses/'chiseltest/simulator/ObservedPrepareAst$.class'))
+ observed_identity_sha=sha(regular(provenanceclasses/'chiseltest/simulator/ObservedScheduleIdentity$.class'))
+ observed_spec=importlib.util.spec_from_file_location('strict_observed_prepare',D/'compare_observed_prepare.py');observed_comparator=importlib.util.module_from_spec(observed_spec);observed_spec.loader.exec_module(observed_comparator)
+ observed_results=[]
+ for label,expected,location,classpath in [('official',official_pins,official_jar,str(provenanceclasses)+':'+str(boundaryclasses)+':'+cp),('cached',cached_pins,str(patchclasses),str(patchclasses)+':'+str(provenanceclasses)+':'+str(boundaryclasses)+':'+cp)]:
+  folder,receipt=stage('observed_'+label,jvm('1g',classpath,'chiseltest.simulator.ObservedPrepareStructuralFixture',[label,str(provenanceclasses),observer_class_sha,observer_companion_sha,observed_identity_sha,location,expected['class_sha256'],expected['companion_sha256']]),120,2)
+  text=read_closed_log(folder/'frontend.log.gz',receipt)
+  need(receipt.get('worker_started')is True,'OBSERVER_PROCESS_NOT_STARTED')
+  if text.startswith('OBSERVED_PREPARE_FAILURE_V1'):
+   try:boundary_identity['observed_prepare_failure']=dict(label=label,**observed_comparator.failure(text,label))
+   except (ValueError,TypeError,KeyError):raise Stop('OBSERVER_FAILURE_SCHEMA')
+   raise Stop('OBSERVER_FIXTURE_REPORTED_FAILURE')
+  need(receipt.get('status')=='PASS_PROCESS_ONLY','OBSERVER_PROCESS_FAILED')
+  process={'exit':receipt.get('native_exit'),'errors':receipt.get('errors'),'cleanup_complete':(receipt.get('cleanup_proof')or{}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP','log_finalized':(receipt.get('log_capture')or{}).get('gzip_finalized')is True}
+  observed_results.append((text,process))
+ try:observed_result=observed_comparator.compare(observed_results[0][0],observed_results[1][0],observed_results[0][1],observed_results[1][1])
+ except (ValueError,TypeError,KeyError):raise Stop('OBSERVER_COMPARATOR_REJECTED')
+ need(observed_result=={'status':'PASS_OBSERVED_PREPARE_FIXTURE_ONLY','cases':9,'parity_cases':9,'suffix_checks':12,'graph_checks':12,'observer_checks':69,'parity_checks':11,'failure_parity_cases':3,'state_fields':3,'form_absent_in_pinned_api':True,'renames_none':True,'diagnostic_only':True,'interpreter_executed':False,'full_host_accepted':False},'OBSERVER_COVERAGE_REQUIRED')
+ boundary_identity['observed_prepare_qualification']=observed_result
+ gatepath=REPO/'candidates/gdn32_first_model162_producer_20261104/candidate_generation_gate.py';spec=importlib.util.spec_from_file_location('reviewed_graph_inputs',gatepath);gate=importlib.util.module_from_spec(spec);spec.loader.exec_module(gate)
+ selection=gate.selected_inputs(REPO,gate.MODEL162_SOURCE);sources=gate.checked_paths(REPO,selection['overlay'],m,selection['contract']);need(len(sources)==162)
+ # The live 2400-second gate remains authoritative before every later stage.
+ classes=stage('compile_original',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',cp,'-Xplugin:'+plugin,'-language:reflectiveCalls','-d','.',*sources]),300,3)
+ for p in classes.rglob('*.class'):pins[str(p)]=sha(p)
+ basecp=str(classes)+':'+cp
+ helpers=[str(regular(D/'scala'/n))for n in ('OriginalHostStructuralGraph.scala','StructuralMetadataFactory.scala','CycleWitnessRoles.scala','BoundaryIntegrationGuards.scala')]
+ hclasses=stage('compile_graph',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',str(patchclasses)+':'+str(provenanceclasses)+':'+str(boundaryclasses)+':'+basecp,'-d','.',*helpers]),300,3)
+ for p in hclasses.rglob('*.class'):pins[str(p)]=sha(p)
+ need(not ({str(p.relative_to(hclasses))for p in hclasses.rglob('*.class')}&({str(p.relative_to(boundaryclasses))for p in boundaryclasses.rglob('*.class')}|{str(p.relative_to(provenanceclasses))for p in provenanceclasses.rglob('*.class')})),'QUALIFIED_CLASS_SHADOWING')
+ boundary_companion_sha=sha(regular(boundaryclasses/'heteronpu/continuous/model/IdmaPackedBoundarySplit$.class'))
+ highdir=stage('original_high',jvm('4g',basecp,'chiseltest.simulator.DiagnoseOriginalHostMoePhaseV5'),600,6)/'host-diagnostic'
+ high=regular(highdir/'original-high.fir');ann=regular(highdir/'high-annotations.json');ext=regular(highdir/'high-extmodules.fir')
+ need(high.stat().st_size<=512<<20 and ann.stat().st_size<=16<<20 and ext.stat().st_size<=1<<20)
+ # Separate inventory emitted by the unchanged original diagnostic is cross-bound
+ # to the complete freshly generated high by the structural helper's own parser.
+ blocks=re.split(r'(?m)(?=^extmodule )',ext.read_text());matches=[b for b in blocks if b.startswith('extmodule idma_backend_rw_axi_flat_wrap :')];need(len(matches)==1)
+ need(matches[0].endswith('\n'));exttext=matches[0][:-1];extsha='85b299b3b237b70a8450315f887a2f8aad53bd86c95fb8d9a2ff943173cb4193';need(hashlib.sha256(exttext.encode()).hexdigest()==extsha)
+ for p in (high,ann,ext):pins[str(p)]=sha(p)
+ highsha=sha(high);annsha=sha(ann)
+ need(highsha=='9130abce09a3ca5b27e4b92eadfa3b2a133d9d17825009f5b5d0ef673b97390f' and annsha=='2bea49e84f2ca30a5409e33c33ae71772f67772269851ae271137feb55bf9303','ORIGINAL_HOST_INPUT_IDENTITY')
+ need(high.stat().st_size==117714131 and ann.stat().st_size==1379743,'ORIGINAL_HOST_INPUT_SIZE')
+ identity={'high_sha256':highsha,'high_bytes':high.stat().st_size,'annotations_sha256':annsha,'annotations_bytes':ann.stat().st_size}
+ graph_identity=dict(identity)
+ graphdir,graphreceipt=stage('graph',jvm('4g',str(patchclasses)+':'+str(hclasses)+':'+str(provenanceclasses)+':'+str(boundaryclasses)+':'+basecp,'chiseltest.simulator.OriginalHostStructuralGraph',[str(high),highsha,str(ann),annsha,extsha,cached_pins['class_sha256'],cached_pins['companion_sha256'],str(patchclasses),boundary_companion_sha,str(boundaryclasses),census_companion_sha,repair_companion_sha,observer_class_sha,observer_companion_sha,observed_identity_sha,str(provenanceclasses)]),1500,6)
+ # Budget failures may yield useful diagnostics ONLY after closed/finalized log
+ # and complete process cleanup. Never promote markers to numerical/graph PASS.
+ try:diagnostics=read_graph_diagnostics(graphdir/'frontend.log.gz',graphreceipt,highsha,annsha)
+ except BaseException as error:
+  diagnostics={'status':'FAIL_OR_INCOMPLETE','reason':error.code if isinstance(error,Stop)else'GRAPH_DIAGNOSTIC_REJECTED'}
+ need(shutil.disk_usage(work).free>=RESERVE)
+ need(diagnostics['status']!='STRUCTURAL_GRAPH_ONLY_DECLARED_DEPENDENCIES','OBSERVER_DIAGNOSTIC_CANNOT_PASS')
+ for path,digest in pins.items():need(sha(path)==digest)
+ return {'schema':'STRUCTURAL_GRAPH_ONLY_V1',**diagnostics,**identity,**differential_identity,**boundary_identity,'full_host_accepted':False,'final_reserve_preserved':True,'owned_process_cleanup_complete':all(r['cleanup_complete']for r in reports),'private_job_files_exported':False,'source_commit':source,'launch_commit':launch,'catalog_sha256':CAT_SHA,'jdk_inventory_sha256':sha(work/'jdk_inventory.json'),'helper_manifest_sha256':sha(D/'SOURCE_PINS.json'),'expected_leaf_bindings':17,'dut_provider_native_loaded':False,'dut_evaluated':False,'weights_read':False,'numerical_pass':False,'stages':reports}
 if __name__=='__main__':
  phase='startup';ok=False
- try:result=main();ok=result['status']=='PASS_PREPARE_SCHEDULE_ONLY'
- except BaseException as error:result={'schema':'PREPARE_SCHEDULE_PROBE_V1',**graph_identity,**differential_identity,**boundary_identity,'full_host_accepted':False,'status':'FAIL_OR_INCOMPLETE','stage':phase,'reason':error.code if isinstance(error,Stop)else'UNCLASSIFIED_FAILURE','stage_diagnostic':stage_failure_diagnostic(error),'dut_provider_native_loaded':False,'dut_evaluated':False,'weights_read':False,'numerical_pass':False}
+ try:result=main();ok=False # Observation-only candidate never declares graph acceptance.
+ except BaseException as error:result={'schema':'STRUCTURAL_GRAPH_ONLY_V1',**graph_identity,**differential_identity,**boundary_identity,'full_host_accepted':False,'status':'FAIL_OR_INCOMPLETE','stage':phase,'reason':error.code if isinstance(error,Stop)else'UNCLASSIFIED_FAILURE','stage_diagnostic':stage_failure_diagnostic(error),'dut_provider_native_loaded':False,'dut_evaluated':False,'weights_read':False,'numerical_pass':False}
  encoded=json.dumps(result,separators=(',',':'));need(len(encoded)<=16384);print(encoded,flush=True)
  sys.exit(0 if ok else 2)

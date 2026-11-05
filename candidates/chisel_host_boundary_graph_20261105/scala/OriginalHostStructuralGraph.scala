@@ -263,12 +263,15 @@ object OriginalHostStructuralGraph {
       Console.withOut(muted){Console.withErr(muted){
         telemetry=new PhaseTelemetry(savedOut,sink);sink.onCycle=()=>telemetry.cycleDetected();telemetry.startSampling()
         timed("admission") {
-          require(args.length==12,"pinned high,annotations,iDMA and actual loaded class identities")
+          require(args.length==16,"pinned high,annotations,iDMA and actual loaded class identities")
           require(args.slice(5,7).forall(_.matches("[0-9a-f]{64}")) && args(8).matches("[0-9a-f]{64}"))
           require(loaded(classOf[SymbolTable],args(7))==args(5) && loaded(SymbolTable.getClass,args(7))==args(6),"qualified graph SymbolTable bytes")
           require(loaded(IdmaPackedBoundarySplit.getClass,args(9))==args(8),"same boundary transform class as paired fixture")
           require(loaded(RegisterInitCensus.getClass,args(9))==args(10),"same census class as synthetic prerequisite")
           require(loaded(ClockInitRepresentationRepair.getClass,args(9))==args(11),"same clock init repair as paired fixture")
+          require(loaded(classOf[ObservedPrepareAst],args(15))==args(12),"same observed phase class as paired fixture")
+          require(loaded(ObservedPrepareAst.getClass,args(15))==args(13),"same observer companion as paired fixture")
+          require(loaded(ObservedScheduleIdentity.getClass,args(15))==args(14),"same observed schedule verifier as paired fixture")
           require(Files.getFileStore(Paths.get(args(0)).toAbsolutePath).getUsableSpace>=8L*1024*1024*1024,"unchanged8GiB reserve")
         }
         val (highText,annotationText)=timed("read") {
@@ -318,7 +321,14 @@ object OriginalHostStructuralGraph {
         val ann=FirrtlCircuitAnnotation(boundaryLow.circuit)+:boundaryLow.annotations
         val obtained=timed("get_firrtl_ast") {GetFirrtlAst.transform(ann)}
         val withInfo=timed("set_implicit_output_info") {SetImplicitOutputInfo.transform(obtained)}
-        val prepared=timed("prepare_ast") {(new PrepareAst).transform(withInfo)}
+        val (prepared,provenance)=timed("prepare_ast") {
+          val observed=new ObservedPrepareAst(394)
+          val value=observed.transform(withInfo)
+          (value,observed.evidence)
+        }
+        require(provenance.length<=256,"bounded observer evidence")
+        savedOut.println("PREPARE_PROVENANCE_V1 "+provenance);savedOut.flush()
+        require(!savedOut.checkError(),"observer evidence output failed")
         val (state,factory)=timed("prepared_checks") {
           preparedStep="STATE"
           val states=prepared.collect{case TreadleCircuitStateAnnotation(s)=>s}
@@ -328,6 +338,7 @@ object OriginalHostStructuralGraph {
           preparedStep="INIT_REPAIR"
           sizingPrepared=states.head.circuit
           val initRepair=ClockInitRepresentationRepair(boundaryLow.circuit,states.head.circuit,states.head.annotations,394)
+          require(false,"OBSERVER_DIAGNOSTIC_ONLY") // Never reach SymbolTable in this diagnostic candidate.
           require(initRepair.corrected==394,"exact full Host instrumentation clock count")
           val checkedState=states.head.copy(circuit=initRepair.circuit)
           require(checkedState.annotations eq states.head.annotations,"same original initialization annotations")

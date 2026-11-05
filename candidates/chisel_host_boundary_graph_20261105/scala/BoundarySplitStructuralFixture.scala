@@ -28,6 +28,8 @@ object BoundarySplitStructuralFixture {
   }
   private def cat(xs:Seq[String]):String=xs.reduceLeft((a,b)=>s"cat($a, $b)")
   private val original="idma_backend_rw_axi_flat_wrap"
+  private val unsignedMuxModes=Set("mux_narrow_true","mux_narrow_false","mux_boundary_cycle","mux_boundary_registered")
+  private def boundaryRegisterMode(mode:String):Boolean=Set("boundary_registered","mux_boundary_registered")(mode)
   private def source(control:String):String={
     val ins=IdmaSplitLayout.fields.filter(_.direction==Input)
     val inputPorts=ins.map(f=>s"    input in_${f.name} : UInt<${f.width}>").mkString("\n")
@@ -39,9 +41,9 @@ object BoundarySplitStructuralFixture {
       val parts=ins.filter(_.bus==bus).sortBy(f=> -f.lsb).map{f=>
         // Base r_id is selected from ar_id; dedicated modes add real feedback.
         // Whole-symbol packed dependencies manufacture the forbidden path.
-        if(f.name=="axi_read_rsp_i__r_last" && control=="boundary_cycle"){
+        if(f.name=="axi_read_rsp_i__r_last" && Set("boundary_cycle","mux_boundary_cycle")(control)){
           "bits(b.axi_read_req_o, 0, 0)"
-        }else if(f.name=="axi_read_rsp_i__r_last" && control=="boundary_registered"){
+        }else if(f.name=="axi_read_rsp_i__r_last" && boundaryRegisterMode(control)){
           "q_boundary"
         }else if(control=="arithmetic" && f.name=="axi_read_rsp_i__r_data"){
           "bits(add(in_axi_read_rsp_i__r_data, in_axi_write_rsp_i__r_data), 511, 0)"
@@ -63,13 +65,23 @@ object BoundarySplitStructuralFixture {
           s"mux(bits(b.axi_read_req_o, ${av.lsb}, ${av.lsb}), in_${f.name}, UInt<2>(3))"
         }else s"in_${f.name}"
       }
-      s"    b.$bus <= ${cat(parts)}"
+      if(unsignedMuxModes(control) && bus=="axi_read_rsp_i"){
+        // Nested unequal arms and exact-width node aliases must survive official low.
+        val short12="bits(in_axi_write_rsp_i__r_data, 11, 0)"
+        val short20="bits(in_axi_write_rsp_i__r_data, 19, 0)"
+        val narrowFirst=control!="mux_narrow_false"
+        val short=if(narrowFirst)s"mux(in_axi_write_rsp_i__b_valid, $short12, $short20)"else
+          s"mux(in_axi_write_rsp_i__b_valid, $short20, $short12)"
+        val outer=if(narrowFirst)"mux(in_axi_read_rsp_i__b_valid, __fixture_mux_short, __fixture_mux_wide)"else
+          "mux(in_axi_read_rsp_i__b_valid, __fixture_mux_wide, __fixture_mux_short)"
+        s"    node __fixture_mux_short = $short\n    node __fixture_mux_wide = ${cat(parts)}\n    b.$bus <= $outer"
+      }else s"    b.$bus <= ${cat(parts)}"
     }.mkString("\n")
     // Packed input expressions may read this register, so declare it first.
-    val declarations=if(control=="boundary_registered")"    reg q_boundary : UInt<1>, clock\n"else ""
+    val declarations=if(boundaryRegisterMode(control))"    reg q_boundary : UInt<1>, clock\n"else ""
     val extra=control match {
-      case "base" | "arithmetic" | "whole_bus" | "boundary_cycle"=>"    fixture_sentinel <= bits(b.axi_read_req_o, 0, 0)\n"
-      case "boundary_registered"=>"    q_boundary <= bits(b.axi_read_req_o, 0, 0)\n    fixture_sentinel <= q_boundary\n"
+      case "base" | "arithmetic" | "whole_bus" | "boundary_cycle" | "mux_narrow_true" | "mux_narrow_false" | "mux_boundary_cycle"=>"    fixture_sentinel <= bits(b.axi_read_req_o, 0, 0)\n"
+      case "boundary_registered" | "mux_boundary_registered"=>"    q_boundary <= bits(b.axi_read_req_o, 0, 0)\n    fixture_sentinel <= q_boundary\n"
       // Normal lowering/preparation must never receive intentional local cycles.
       case "true_cycle" | "self_loop"=>"    fixture_sentinel <= UInt<1>(0)\n"
       case "registered"=>"    reg q : UInt<1>, clock\n    q <= not(q)\n    fixture_sentinel <= q\n"
@@ -100,6 +112,25 @@ object BoundarySplitStructuralFixture {
     val a=Seq(FirrtlCircuitAnnotation(c),TargetDirAnnotation(target.toString))
     val p=(new PrepareAst).transform(SetImplicitOutputInfo.transform(GetFirrtlAst.transform(a)))
     val states=p.collect{case TreadleCircuitStateAnnotation(s)=>s};require(states.size==1);states.head.circuit
+  }
+  private def requireUnequalMuxes(c:Circuit,mode:String):Unit={
+    if(!unsignedMuxModes(mode))return
+    val seen=scala.collection.mutable.Set.empty[(Int,Int,Int)]
+    def expr(e:Expression):Unit={
+      e match {
+        case Mux(_,a,b,UIntType(IntWidth(w)))=>
+          (a.tpe,b.tpe) match {
+            case (UIntType(IntWidth(wa)),UIntType(IntWidth(wb))) if wa!=wb=>seen+=((wa.toInt,wb.toInt,w.toInt))
+            case _=>()
+          }
+        case _=>()
+      }
+      e.foreachExpr(expr)
+    }
+    def stmt(s:Statement):Unit={s.foreachExpr(expr);s.foreachStmt(stmt)}
+    c.modules.collect{case m:Module if m.name=="Top"=>m}.foreach(m=>stmt(m.body))
+    val wanted=if(mode=="mux_narrow_false")Set((532,20,532),(20,12,20))else Set((20,532,532),(12,20,20))
+    require(wanted.subsetOf(seen.toSet),"actual unequal UInt muxes survived official low")
   }
   private def digest(t:SymbolTable):String={
     require(t.size<10000)
@@ -144,8 +175,8 @@ object BoundarySplitStructuralFixture {
     val inputs=IdmaSplitLayout.fields.filter(_.direction==Input)
     val outputs=IdmaSplitLayout.fields.filter(_.direction==Output)
     val vars=(inputs.map(f=>("in_"+f.name,f.width))++outputs.map(f=>("b.__sim_idma_field__"+f.name,f.width)))++
-      (if(mode=="boundary_registered")Vector("q_boundary"->1)else Vector.empty)
-    require(vars.map(_._2).sum==2634+(if(mode=="boundary_registered")1 else 0))
+      (if(boundaryRegisterMode(mode))Vector("q_boundary"->1)else Vector.empty)
+    require(vars.map(_._2).sum==2634+(if(boundaryRegisterMode(mode))1 else 0))
     val zero=vars.map{case(n,_)=>n->BigInt(0)}.toMap
     val basis=vars.flatMap{case(n,w)=>(0 until w).map(i=>zero.updated(n,BigInt(1)<<i))}
     val random=new scala.util.Random(0x52734L)
@@ -157,7 +188,17 @@ object BoundarySplitStructuralFixture {
       Vector(zero.updated("in_axi_read_rsp_i__r_data",a).updated("in_axi_write_rsp_i__r_data",BigInt(1)),
         zero.updated("in_axi_read_rsp_i__r_data",BigInt(0)).updated("in_axi_write_rsp_i__r_data",a))
     }++(0 to 3).map(i=>ones.updated("in_axi_write_rsp_i__b_resp",BigInt(i)))
-    val samples=Vector(zero,ones)++basis++mixed++directed
+    val muxDirected=if(unsignedMuxModes(mode)){
+      for(outer<-Vector(0,1);inner<-Vector(0,1);
+          small<-Vector(BigInt(0),BigInt(1),BigInt(1)<<19,(BigInt(1)<<20)-1);
+          large<-Vector(BigInt(0),BigInt(1),BigInt(1)<<511,(BigInt(1)<<512)-1))yield
+        ones.updated("in_axi_read_rsp_i__b_valid",BigInt(outer))
+          .updated("in_axi_write_rsp_i__b_valid",BigInt(inner))
+          .updated("in_axi_write_rsp_i__r_data",small)
+          .updated("in_axi_read_rsp_i__r_data",large)
+    }else Vector.empty[Map[String,BigInt]]
+    require(muxDirected.size==(if(unsignedMuxModes(mode))64 else 0))
+    val samples=Vector(zero,ones)++basis++mixed++directed++muxDirected
     samples.foreach { base=>
       val packed=IdmaSplitLayout.busWidths.keys.filter(_.endsWith("_o")).map{bus=>
         val v=outputs.filter(_.bus==bus).foldLeft(BigInt(0)){case(acc,f)=>acc|(base("b.__sim_idma_field__"+f.name)<<f.lsb)}
@@ -222,11 +263,11 @@ object BoundarySplitStructuralFixture {
     mode match{
       case "true_cycle" | "self_loop"=>require(cyclic("fixture_sentinel"),"real combinational cycle sentinel survived")
       case "registered"=>require(regs("q") && reaches("fixture_sentinel","q"),"register sentinel survived")
-      case "boundary_registered"=>
+      case "boundary_registered" | "mux_boundary_registered"=>
         require(regs("q_boundary") && reaches("fixture_sentinel","q_boundary"),"boundary register survived")
         require(ds.get("q_boundary").exists(e=>refs(e).exists(n=>reaches(n,"b.axi_read_req_o"))),"boundary register next state survived")
         if(split)require(reaches("b.__sim_idma_field__axi_read_rsp_i__r_last","q_boundary"),"boundary register cut survived")
-      case "boundary_cycle" if split=>
+      case "boundary_cycle" | "mux_boundary_cycle" if split=>
         require(reaches("b.__sim_idma_field__axi_read_rsp_i__r_last","b.__sim_idma_field__axi_read_req_o__r_ready"),"real boundary feedback survived")
       case "whole_bus" if split=>
         IdmaSplitLayout.fields.filter(_.bus=="axi_read_req_o").foreach{f=>
@@ -295,7 +336,21 @@ object BoundarySplitStructuralFixture {
       case m=>m
     })
     rejected(wrong,"fresh private field namespace")
-    9
+    // New UInt mux domain: reject malformed condition/arm/result widths and types.
+    val wide=UIntLiteral(0,IntWidth(532));val narrow=UIntLiteral(0,IntWidth(20));val cond=UIntLiteral(0,IntWidth(1))
+    def badMux(cnd:Expression,a:Expression,b:Expression,result:Type=t,message:String="known bounded UInt"):Unit=
+      rejected(replacing(Mux(cnd,a,b,result),Seq.empty),message)
+    badMux(UIntLiteral(0,IntWidth(2)),wide,narrow,message="exact mux widths")
+    badMux(SIntLiteral(0,IntWidth(1)),wide,narrow)
+    badMux(Reference("bad_mux_cond",UIntType(UnknownWidth)),wide,narrow)
+    badMux(cond,SIntLiteral(0,IntWidth(20)),wide)
+    badMux(cond,wide,Reference("bad_mux_arm",UIntType(UnknownWidth)))
+    badMux(cond,UIntLiteral(0,IntWidth(0)),wide)
+    badMux(cond,UIntLiteral(0,IntWidth(531)),narrow,message="exact mux widths")
+    badMux(cond,UIntLiteral(0,IntWidth(533)),narrow,message="exact mux widths")
+    badMux(cond,wide,narrow,result=UIntType(UnknownWidth))
+    badMux(cond,wide,narrow,result=SIntType(IntWidth(532)))
+    19
   }
   private def loaded(c:Class[_],location:String):String={
     require(Paths.get(c.getProtectionDomain.getCodeSource.getLocation.toURI).toRealPath()==Paths.get(location).toRealPath())
@@ -327,7 +382,7 @@ object BoundarySplitStructuralFixture {
       target=Some(relativeTarget)
       System.setOut(muted);System.setErr(muted)
       Console.withOut(muted){Console.withErr(muted){
-        rows=Vector("base","true_cycle","self_loop","registered","boundary_cycle","boundary_registered","arithmetic","whole_bus").map{mode=>
+        rows=Vector("base","true_cycle","self_loop","registered","boundary_cycle","boundary_registered","arithmetic","whole_bus","mux_narrow_true","mux_narrow_false","mux_boundary_cycle","mux_boundary_registered").map{mode=>
           currentCase=mode;phase="parse"
           val c=Parser.parse(source(mode))
           val ext=c.modules.collect{case e:ExtModule=>e};require(ext.size==1)
@@ -335,8 +390,9 @@ object BoundarySplitStructuralFixture {
           val split=IdmaFieldSplitTransform(c,hash(ext.head.serialize))
           phase="lower"
           val scaffold=Compiler.toLowFirrtl(CircuitState(split,Seq(TargetDirAnnotation(target.get.toString)))).circuit
+          requireUnequalMuxes(scaffold,mode)
           phase="negative_guards"
-          if(mode=="base")require(negativeCases(scaffold)==9)
+          if(mode=="base")require(negativeCases(scaffold)==19)
           val localCycle=Set("true_cycle","self_loop")(mode)
           val low=injectLocalCycle(scaffold,mode)
           phase="type_flow"
@@ -349,7 +405,7 @@ object BoundarySplitStructuralFixture {
           require(repaired.instances==1 && repaired.projectedFields==26)
           phase="bit_equations"
           val vectors=valueComparison(low,repaired.circuit,mode)
-          require(vectors==3730+(if(mode=="boundary_registered")1 else 0))
+          require(vectors==3730+(if(boundaryRegisterMode(mode))1 else 0)+(if(unsignedMuxModes(mode))64 else 0))
           phase="graph"
           sentinelSurvives(repaired.circuit,mode,true)
           // Exercise the candidate on the injected low graph. No intentional
@@ -374,7 +430,7 @@ object BoundarySplitStructuralFixture {
           val oldResult=outcome(oldPrepared);require(oldResult=="CYCLE")
           val result=outcome(newPrepared)
           if(localCycle)require(result=="CYCLE","prepared local cycle cannot be bypassed")
-          require((result=="CYCLE")==Set("true_cycle","self_loop","boundary_cycle")(mode),"no true cycle bypass")
+          require((result=="CYCLE")==Set("true_cycle","self_loop","boundary_cycle","mux_boundary_cycle")(mode),"no true cycle bypass")
           "BOUNDARY_GRAPH_CASE_V1 id="+mode+" lowOriginal="+lowOld+" lowTransformed="+lowNew+
             " original="+oldResult+" transformed="+result+" bitEquationPhases=2 bitEquationVectors="+vectors
         }
@@ -397,7 +453,8 @@ object BoundarySplitStructuralFixture {
       muted.close()
     }
     rows.foreach(out.println)
-    out.println("BOUNDARY_GRAPH_RUN_V1 label="+label+" pass="+ok+" numericalPass=false fullHostAccepted=false")
+    val coverage=if(ok)" cases=12 negativeGuards=19"else ""
+    out.println("BOUNDARY_GRAPH_RUN_V1 label="+label+" pass="+ok+coverage+" numericalPass=false fullHostAccepted=false")
     if(!ok)System.exit(2)
   }
 }

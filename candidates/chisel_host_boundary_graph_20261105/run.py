@@ -1,10 +1,10 @@
 """One source-only structural job. No engine/native, weights, references or IR export."""
 import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request,zipfile
 P=pathlib.Path;D=P(__file__).resolve().parent;REPO=D.parent.parent
-REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_guard_diagnostic_once.json'
+REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_unsigned_mux_once.json'
 CAT='candidates/gdn32_first_model_execution_20261104/GDN32_FULL_SOURCE_PINS.json'
 CAT_SHA='ad2d4dcaddb213c85fd15adc65f7da5bd74a0d7c3e6c5922c725aa41bdc967cb'
-BASE='2a00022808592fc6f653018cb22e2b9ef1b498e1';BASE_TREE='bb1db5267b63c4ddf3ea37a091608c8bd40754fa';TREE=12_081_306_272;RESERVE=8<<30
+BASE='31c8012f3b398a86da61c69ab917ea0c6f9235eb';BASE_TREE='909ad872a615826e9c18bbecf9a6781244282c43';TREE=12_081_306_272;RESERVE=8<<30
 from witness_record import parse_record as parse_witness_record
 graph_identity={}
 differential_identity={};boundary_identity={}
@@ -161,7 +161,7 @@ def main():
  need(len(own['files'])==len(expected_files) and {row['path']for row in own['files']}==expected_files)
  pins=pins_for(own['files'],REPO);pins[str(D/'SOURCE_PINS.json')]=sha(D/'SOURCE_PINS.json')
  changed=set(git('diff','--name-only',BASE,source).splitlines())
- expected_delta={'.github/workflows/chisel-host-boundary-graph-once.yml',REL+'/run.py',REL+'/scala/OriginalHostStructuralGraph.scala',REL+'/SOURCE_PINS.json'}
+ expected_delta={'.github/workflows/chisel-host-boundary-graph-once.yml',REL+'/run.py',REL+'/scala/IdmaPackedBoundarySplit.scala',REL+'/scala/BoundarySplitStructuralFixture.scala',REL+'/compare_boundary_results.py',REL+'/SOURCE_PINS.json'}
  need(len(own['publication_delta'])==len(expected_delta) and changed==set(own['publication_delta'])==expected_delta)
  catalog=regular(REPO/CAT);need(sha(catalog)==CAT_SHA);doc=load(catalog);need(doc['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1'and len(doc['files'])==1211);pins.update(pins_for(doc['files'],REPO));pins[str(catalog)]=CAT_SHA
  phase='admission';remote_exclusive(launch);admission();work=P(os.environ['RUNNER_TEMP'])/'chisel-host-boundary-graph';need(work.is_absolute()and not work.exists()and all(not p.is_symlink()for p in(work,*work.parents)));work.mkdir()
@@ -250,8 +250,8 @@ def main():
  need(wt==expected and wr.get('status')=='PASS_PROCESS_ONLY' and wr.get('native_exit')==0 and not wr.get('errors'),'WITNESS_FIXTURE_FAILED')
  differential_identity.update(witness_fixture_status='PASS_19_SMALL_CASES_ONLY',witness_source_sha256=sha(witness_source),witness_fixture_source_sha256=sha(witness_fixture))
  boundary_fixture_source=regular(D/'scala/BoundarySplitStructuralFixture.scala')
- need(sha(boundary_fixture_source)=='0edf80dea567ac4166cbfb64bcbc6aa6bb0439e23bf6cd6ac3141e969b1e051f','QUALIFIED_FIXTURE_SOURCE_CHANGED')
- need(sha(D/'scala/IdmaPackedBoundarySplit.scala')=='936f991319ea6cf12599d0b943bb1fbc93f45e901961f3e1c3fbd0c3caeb5e28','QUALIFIED_TRANSFORM_SOURCE_CHANGED')
+ need(sha(boundary_fixture_source)=='224d3007b08d11e32a6daa06045f101b9fb88fa97f62573b91f580f705927d94','CANDIDATE_FIXTURE_SOURCE_CHANGED')
+ need(sha(D/'scala/IdmaPackedBoundarySplit.scala')=='0256cbcaba924bde84fc30c2cf6b602db1a238c035e02cde7263b7d363f20ee5','CANDIDATE_TRANSFORM_SOURCE_CHANGED')
  helpers=[str(regular(D/'scala'/n))for n in ('IdmaSplitLayout.scala','IdmaFieldSplitTransform.scala','IdmaPackedBoundarySplit.scala','BoundarySplitStructuralFixture.scala')]
  boundaryclasses=stage('compile_boundary_fixture',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',cp,'-d','.',*helpers]),180,3)
  for p in boundaryclasses.rglob('*.class'):pins[str(p)]=sha(p)
@@ -268,8 +268,9 @@ def main():
   process={'exit':receipt.get('native_exit'),'errors':receipt.get('errors'),'cleanup_complete':(receipt.get('cleanup_proof')or{}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP','log_finalized':(receipt.get('log_capture')or{}).get('gzip_finalized')is True}
   results.append((text,process))
  boundary_result=boundary_comparator.compare(results[0][0],results[1][0],official_pins,cached_pins,results[0][1],results[1][1])
- boundary_identity.update(boundary_status=boundary_result['status'])
  need(boundary_result['status']=='PASS_ISOLATED_BOUNDARY_FIXTURE_ONLY','BOUNDARY_PREFLIGHT_FAILED')
+ need(boundary_result['cases']==12 and boundary_result['negative_guard_cases']==19 and boundary_result['bit_equation_phases']==2 and boundary_result['vectors_per_phase']=={'default':3730,'boundary_registered':3731,'unequal_mux':3794,'mux_boundary_registered':3795},'BOUNDARY_EXTENDED_COVERAGE_REQUIRED')
+ boundary_identity.update(boundary_status=boundary_result['status'],boundary_cases=boundary_result['cases'],boundary_negative_guard_cases=boundary_result['negative_guard_cases'],boundary_transform_qualification='CURRENT_RUN_PAIRED_FIXTURE_ONLY')
  gatepath=REPO/'candidates/gdn32_first_model162_producer_20261104/candidate_generation_gate.py';spec=importlib.util.spec_from_file_location('reviewed_graph_inputs',gatepath);gate=importlib.util.module_from_spec(spec);spec.loader.exec_module(gate)
  selection=gate.selected_inputs(REPO,gate.MODEL162_SOURCE);sources=gate.checked_paths(REPO,selection['overlay'],m,selection['contract']);need(len(sources)==162)
  # The live 2400-second gate remains authoritative before every later stage.

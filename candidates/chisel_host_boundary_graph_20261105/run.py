@@ -1,10 +1,10 @@
 """One source-only structural job. No engine/native, weights, references or IR export."""
 import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request,zipfile
 P=pathlib.Path;D=P(__file__).resolve().parent;REPO=D.parent.parent
-REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_validif_projection_once.json'
+REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_prepared_pass_diagnostic_once.json'
 CAT='candidates/gdn32_first_model_execution_20261104/GDN32_FULL_SOURCE_PINS.json'
 CAT_SHA='ad2d4dcaddb213c85fd15adc65f7da5bd74a0d7c3e6c5922c725aa41bdc967cb'
-BASE='b2250f93f7f618cd74daed7c0a3efb43655e6b0b';BASE_TREE='ae0ff520a45904aedd40b56558253c53f3de60ef';TREE=12_081_306_272;RESERVE=8<<30
+BASE='5155edceae9d697d6dd31b3b86ac7f68ec0298a4';BASE_TREE='8dc5e75940aec4cd2e7c49a1d93e5de670198d6c';TREE=12_081_306_272;RESERVE=8<<30
 from witness_record import parse_record as parse_witness_record
 graph_identity={}
 differential_identity={};boundary_identity={}
@@ -56,7 +56,31 @@ METRIC_RE=re.compile(r'GRAPH_PHASE_V1 seq=([0-9]+) kind=(BEGIN|END|SAMPLE|CYCLE_
 PASS_RE=re.compile(r'PASS_DECLARED_CONE_TOPOLOGY_ONLY highSha=([0-9a-f]{64}) annotationsSha=([0-9a-f]{64}) preparedSha=([0-9a-f]{64}) symbols=([0-9]+) leafBindings=17 boundaryInstances=1 boundaryInputFields=26 boundaryAddedPorts=90 nativeInstances=0 evaluatedEdges=0 schedulingQualified=false fullHostAccepted=false suppressedDiagnosticBytes=([0-9]+) cycleSeen=([01])')
 BOUNDARY_GUARD_CODES={'TOPOLOGY': frozenset({'TOPOLOGY_LEAF_ABI', 'TOPOLOGY_MODEL_BINDING', 'TOPOLOGY_IDMA_PATH_COUNT', 'TOPOLOGY_STATEMENT_BOUND', 'TOPOLOGY_WRAPPER_IDENTITY', 'TOPOLOGY_INSTANCE_SEGMENT', 'TOPOLOGY_PATH_BOUNDS', 'TOPOLOGY_BINDING_COUNT'}), 'TRANSFORM': frozenset({'MUX_WIDTHS', 'CYCLIC_EXPRESSION_OBJECT', 'ALIAS_CYCLE', 'PRIVATE_FIELD_NAMESPACE', 'CALLER_EXPANSION_BOUND', 'CALLER_STATEMENT_BOUND', 'ALIAS_SINGLE_DRIVER', 'UNCONDITIONAL_LOW_REQUIRED', 'PROJECTION_RANGE', 'SPLIT_LEAF_ABI', 'TRANSPARENT_WRAPPER', 'MODULE_UNIQUENESS', 'WRAPPER_OUTPUT_PACKING', 'ALIAS_PROJECTION_BOUND', 'LAYOUT_BIT_COVERAGE', 'CALLER_POSTORDER', 'WRAPPER_UNIQUE_DRIVERS', 'CALLER_DEPTH_BOUND', 'ALIAS_IMPLICIT_COERCION', 'PACKED_INPUT_SINGLE_DRIVER', 'CALLER_IDENTITY_BOUND', 'WRAPPER_INPUT_SLICE', 'WRAPPER_MODEL_BINDING', 'CALLER_INSTANCE_NAMES', 'PROJECTED_VALID_IF', 'VALIDIF_WIDTHS', 'PROJECTED_SUB_ACCESS', 'PROJECTED_INFO_EXPR', 'PROJECTED_OTHER', 'PROJECTED_V_RANDOM', 'EXPRESSION_RECURSION_BOUND', 'PACKED_INPUT_WIDTH', 'CALLER_OCCURRENCE_BOUND', 'CALLER_CHILDREN_BOUND', 'EXPRESSION_IDENTITY_BOUND', 'PACKED_WRAPPER_ABI', 'UNSIGNED_WIDTH_REQUIRED', 'BOUNDARY_INSTANCE_FIELD_COUNT', 'CONTROL_PASSTHROUGH', 'EXPANDED_EXPRESSION_BOUND', 'UNRESOLVED_PACKED_BOUNDARY', 'WRAPPER_DRIVER_MISSING', 'TOTAL_FIELD_EXPANSION_BOUND'}), 'NONE': frozenset()}
 BOUNDARY_GUARD_RE='(?:'+'|'.join(sorted({'UNKNOWN'}|set().union(*BOUNDARY_GUARD_CODES.values())))+')'
-FAIL_RE=re.compile(r'FAIL_STRUCTURAL_GRAPH_ONLY stage=('+PHASE_RE+r') exceptionClassSha=([0-9a-f]{64})(?: boundaryStep=(NONE|TOPOLOGY|TRANSFORM) boundaryGuard=('+BOUNDARY_GUARD_RE+r'))? nativeInstances=0 evaluatedEdges=0 schedulingQualified=false fullHostAccepted=false suppressedDiagnosticBytes=([0-9]+) cycleSeen=([01])')
+FAIL_RE=re.compile(r'FAIL_STRUCTURAL_GRAPH_ONLY stage=('+PHASE_RE+r') exceptionClassSha=([0-9a-f]{64})(?: boundaryStep=(NONE|TOPOLOGY|TRANSFORM) boundaryGuard=('+BOUNDARY_GUARD_RE+r'))?(?: preparedStep=(?P<prepared_step>NONE|STATE|ANNOTATIONS|TYPES|FLOWS|CLOCK|BINDINGS) passAggregate=(?P<pass_aggregate>true|false) passErrorsScanned=(?P<pass_scanned>[0-9]+) passErrorsTruncated=(?P<pass_truncated>true|false) passErrorClasses=(?P<pass_hist>[A-Z0-9_:,]+))? nativeInstances=0 evaluatedEdges=0 schedulingQualified=false fullHostAccepted=false suppressedDiagnosticBytes=(?P<suppressed>[0-9]+) cycleSeen=(?P<cycle>[01])')
+PASS_CLASS_HASHES={'T01': '55798a44db78c6aab80261a6a885857f14cfc1ce0073b2b53a9c50f484239751', 'T02': '15f6403ab5b64e42939421b7d3e5d647382eb774981aa4ea920cce93a092561a', 'T03': '61d66402120511aa0eb6ac9b33914e64227ef4c7b937745e747010c5e1e2dfd1', 'T04': '0899f63f4b40d5954568c2db8486c5d252b9d39e3a0f16dabb113957de582411', 'T05': '2748016f6c2552ee805ca4ade2390ec7f05ea28002cf708262dbcba1aed7d564', 'T06': '51fb68974012ffee11a320ac5a9a5de2a01c4efb13951c4e71b5a2047d8f8247', 'T07': '29fc2ca21b85d1225a140f8a003e24d7bda21052691bd7ccc64506f7eabfced1', 'T08': '685fdad6d916225e74101edd084b55ff182ff96b7460a4f46824d82906882b5f', 'T09': 'fa0c112d1da506e0adb11888aca4523d65109b2c277903b4ee6d5e9101e3b8fe', 'T10': '42eb85d8a8723e4f12762f7d092d1a8d8067fa0ae862c56b72d49f64da477e41', 'T11': 'bbc3305f91e129d639b3f2f3e3667e5eca7c41b0c7816fbb27736f2cf475cbac', 'T12': 'ce0827d944715c55300f78749ad55fc536fea76a3f9896b7af4030da5d040318', 'T13': '07368567288e40b02a197c590b238890667ab44e1d813855643b4e4394ff00c2', 'T14': 'b5e1a4edf0b5ea250dfb2ba00d7de9ad84559c1759bc393bc53cb39482f6693f', 'T15': 'f47d7a4f20ff9e197a4c8e44c846c7131b087c924515958218d8be8d12b30a74', 'T16': 'a1892eba49bc551e116f902030c086fcecc2741dec7b5322f443675c7eb19c5b', 'T17': 'e4734c4ebaeb93b393e15948e4a7ea8f69d0c5a68f5b34c2f6e2fbfbdca65893', 'T18': '65e3c1be23f19c99b634667adad7c0da5f00b52b0845c36ad1db4a71212387e4', 'T19': '39195152365eac58862e3a2a390f3be21da5cfc413ec66cc7a2a8fc42458c3a2', 'T20': 'f4f1ec9064e3c1a2b5eed16b171a33f47775377f4f1290426aafc3696e655190', 'T21': '114a5475039b5aa8a979e51aa92939892510436837a279c3514881381fa278be', 'T22': '8a9763a3d26172107b89a6d18d9d1374d3666cdabdeb7df31761fa7604a9b454', 'T23': 'b68761016d4b4546442ede6190810ef493132e6dbbee8402a65bb847b0d808e4', 'T24': 'a8273bf2151fe993f8d53ccd6b8fbd4ffd341d676f6b9ab92feb2825dd6bb379', 'T25': '4e00d9b0cbeb1c10e0d8f086c00cab32c137f8926094df4ff4a0463aa9fbce2f', 'T26': '7a862431e6e9e3087c6a6637c308d82aa090f1f7fbfec68ebafa8f70a6269004', 'T27': '52c60070de0ff1c935357e010e05d1cae4dc8c9e2786c570e00db6560d0254d1', 'T28': 'c9821f372d269ee65250bc54e68ea688e77d494f55562bc8df8cd929bc340264', 'T29': 'f0e83d70271e196ca1197b721f5010d73ab8fda7351c4c2afee5033d5041c641', 'T30': '075594a22ac08cf8449767b50bdc0b460a554813e1b87e5d5dd629de69722bee', 'T31': '1dcd43a78721eb97e90196a26b601e9ddf0ac7e7b6acb5854e751a731e8c041f', 'T32': 'bbb30c18243be20c3f8ab8f172ef70070d33d2a48fa83f837cbfea44a8727f2f', 'F01': '99914bc48af9a0e2d34462f18f8216a168b17a9a1581c5a780ec921fadf0764f', 'BASE_PASS': '892667cf8140b49c85712f16499c40a82f3a47111c56b40c55cfb0f3c0763d7d'}
+PASS_AGGREGATE_HASH='f212da272dce0cd568b09ab66e94cd2954cb40108e3641df8f9cea821cf8dccc'
+def parse_prepared_evidence(step,aggregate,scanned,truncated,histogram,exception_sha):
+ need(step in ('NONE','STATE','ANNOTATIONS','TYPES','FLOWS','CLOCK','BINDINGS'),'PREPARED_STEP_SCHEMA')
+ need(aggregate in ('true','false') and truncated in ('true','false'),'PREPARED_PASS_SCHEMA')
+ need(type(scanned)is str and re.fullmatch(r'0|[1-9][0-9]{0,3}',scanned),'PREPARED_PASS_COUNT')
+ n=int(scanned);need(n<=1024 and (truncated=='false' or n==1024),'PREPARED_PASS_COUNT')
+ need(type(histogram)is str and len(histogram)<=512,'PREPARED_PASS_HISTOGRAM')
+ counts={}
+ if histogram!='NONE':
+  pairs=histogram.split(',');need(len(pairs)<=35,'PREPARED_PASS_HISTOGRAM')
+  previous=''
+  for pair in pairs:
+   found=re.fullmatch(r'(T[0-9]{2}|F01|BASE_PASS|OTHER):([1-9][0-9]{0,3})',pair);need(found is not None,'PREPARED_PASS_HISTOGRAM')
+   code=found[1];count=int(found[2]);need(code in set(PASS_CLASS_HASHES)|{'OTHER'} and code>previous and count<=1024,'PREPARED_PASS_HISTOGRAM')
+   counts[code]=count;previous=code
+ need(sum(counts.values())==n and (histogram=='NONE')==(n==0),'PREPARED_PASS_COUNT')
+ if aggregate=='true':need(exception_sha==PASS_AGGREGATE_HASH,'PREPARED_PASS_EXCEPTION')
+ else:
+  need(n==1 and truncated=='false' and len(counts)==1,'PREPARED_PASS_SINGLE')
+  code=next(iter(counts))
+  if code=='OTHER':need(exception_sha not in set(PASS_CLASS_HASHES.values())|{PASS_AGGREGATE_HASH},'PREPARED_PASS_EXCEPTION')
+  else:need(exception_sha==PASS_CLASS_HASHES[code],'PREPARED_PASS_EXCEPTION')
+ return dict(prepared_step=step,pass_aggregate=aggregate=='true',pass_errors_scanned=n,pass_errors_truncated=truncated=='true',pass_error_classes=counts)
 def parse_graph_text(text,receipt,high_sha,annotations_sha):
  need(type(text)is str and len(text.encode('ascii'))<=32768,'GRAPH_LOG_LIMIT')
  need(not text or text.endswith('\n'),'GRAPH_LOG_TRUNCATED_LINE')
@@ -97,13 +121,16 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha):
    final=dict(kind='success',prepared_sha256=a[3],symbol_count=int(a[4]))
   else:
    need(b[1]==(last_phase or 'admission'),'GRAPH_FAILURE_PHASE_MISMATCH')
-   need(int(b[5])<=8<<20 and int(b[6])>=(last[6]if last else 0),'GRAPH_FINAL_RANGE')
+   need(int(b['suppressed'])<=8<<20 and int(b['cycle'])>=(last[6]if last else 0),'GRAPH_FINAL_RANGE')
    if b[1]=='boundary_split':
     need(b[3]in BOUNDARY_GUARD_CODES and (b[4]=='UNKNOWN' or b[4]in BOUNDARY_GUARD_CODES[b[3]]),'BOUNDARY_DIAGNOSTIC_SCHEMA')
     need(b[4]=='UNKNOWN' or b[2]=='6757b394f9b99b54cc59cd8f05528b770054c25bc6643d413f1a7337f96614d0','BOUNDARY_DIAGNOSTIC_EXCEPTION')
    else:need(b[3]is None and b[4]is None,'BOUNDARY_DIAGNOSTIC_WRONG_PHASE')
-   final=dict(kind='failure',phase=b[1],exception_class_sha256=b[2],cycle_seen=b[6]=='1')
+   final=dict(kind='failure',phase=b[1],exception_class_sha256=b[2],cycle_seen=b['cycle']=='1')
    if b[1]=='boundary_split':final.update(boundary_step=b[3],boundary_guard=b[4])
+   if b[1]=='prepared_checks':
+    final.update(parse_prepared_evidence(b['prepared_step'],b['pass_aggregate'],b['pass_scanned'],b['pass_truncated'],b['pass_hist'],b[2]))
+   else:need(all(b[k]is None for k in ('prepared_step','pass_aggregate','pass_scanned','pass_truncated','pass_hist')),'PREPARED_DIAGNOSTIC_WRONG_PHASE')
  clean=receipt.get('status')=='PASS_PROCESS_ONLY' and receipt.get('native_exit')==0 and receipt.get('errors')==[] and receipt.get('worker_started')is True
  if final and final['kind']=='success':need(clean,'GRAPH_FALSE_SUCCESS_RECEIPT')
  # Keep at most last sample/marker per phase in exported JSON, not the full log.
@@ -112,6 +139,7 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha):
  if final and final['kind']=='success':out.update(status='STRUCTURAL_GRAPH_ONLY_DECLARED_DEPENDENCIES',prepared_sha256=final['prepared_sha256'],symbol_count=final['symbol_count'],leaf_bindings=17,boundary_instances=1,boundary_input_fields=26,boundary_added_ports=90)
  elif final:out.update(status='FAILED_STRUCTURAL_GRAPH_ONLY',phase=final['phase'],exception_class_sha256=final['exception_class_sha256'],cycle_seen=final['cycle_seen'])
  if final and final['kind']=='failure' and final['phase']=='boundary_split':out.update(boundary_step=final['boundary_step'],boundary_guard=final['boundary_guard'])
+ if final and final['kind']=='failure' and final['phase']=='prepared_checks':out.update({k:final[k]for k in ('prepared_step','pass_aggregate','pass_errors_scanned','pass_errors_truncated','pass_error_classes')})
  if witness is not None:
   need(final is not None and final['kind']=='failure' and final['cycle_seen'],'GRAPH_WITNESS_WITHOUT_CYCLE_FAILURE')
   out['cycle_witness']=witness
@@ -161,7 +189,7 @@ def main():
  need(len(own['files'])==len(expected_files) and {row['path']for row in own['files']}==expected_files)
  pins=pins_for(own['files'],REPO);pins[str(D/'SOURCE_PINS.json')]=sha(D/'SOURCE_PINS.json')
  changed=set(git('diff','--name-only',BASE,source).splitlines())
- expected_delta={'candidates/chisel_host_boundary_graph_20261105/scala/OriginalHostStructuralGraph.scala', 'candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json', 'candidates/chisel_host_boundary_graph_20261105/compare_boundary_results.py', '.github/workflows/chisel-host-boundary-graph-once.yml', 'candidates/chisel_host_boundary_graph_20261105/scala/IdmaPackedBoundarySplit.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/BoundarySplitStructuralFixture.scala', 'candidates/chisel_host_boundary_graph_20261105/run.py'}
+ expected_delta={'candidates/chisel_host_boundary_graph_20261105/scala/OriginalHostStructuralGraph.scala', 'candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json', '.github/workflows/chisel-host-boundary-graph-once.yml', 'candidates/chisel_host_boundary_graph_20261105/run.py'}
  need(len(own['publication_delta'])==len(expected_delta) and changed==set(own['publication_delta'])==expected_delta)
  catalog=regular(REPO/CAT);need(sha(catalog)==CAT_SHA);doc=load(catalog);need(doc['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1'and len(doc['files'])==1211);pins.update(pins_for(doc['files'],REPO));pins[str(catalog)]=CAT_SHA
  phase='admission';remote_exclusive(launch);admission();work=P(os.environ['RUNNER_TEMP'])/'chisel-host-boundary-graph';need(work.is_absolute()and not work.exists()and all(not p.is_symlink()for p in(work,*work.parents)));work.mkdir()

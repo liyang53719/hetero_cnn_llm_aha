@@ -3,8 +3,8 @@
   "files": [
     {
       "path": ".github/workflows/chisel-host-boundary-graph-once.yml",
-      "bytes": 2024,
-      "sha256": "6d3b01df792accdb9831c207560647e201173f763ee3e08b097e010da0eeeb6b"
+      "bytes": 2030,
+      "sha256": "329818db43dffb2f918a75c9db2a191d9fcce4f1433b5bae9fd1cbdccf86f38b"
     },
     {
       "path": "candidates/chisel_host_boundary_graph_20261105/compare_boundary_results.py",
@@ -43,8 +43,8 @@
     },
     {
       "path": "candidates/chisel_host_boundary_graph_20261105/run.py",
-      "bytes": 33385,
-      "sha256": "0ae59c600a5deb89ab9b6af616458b7fec8302f177eb836fa08811d798cd31f1"
+      "bytes": 38296,
+      "sha256": "70b78cdc2065c76d432377a1e4163b27c233216fe508c187ade85a4552bd59d3"
     },
     {
       "path": "candidates/chisel_host_boundary_graph_20261105/scala/BoundaryIntegrationGuards.scala",
@@ -78,8 +78,8 @@
     },
     {
       "path": "candidates/chisel_host_boundary_graph_20261105/scala/OriginalHostStructuralGraph.scala",
-      "bytes": 19331,
-      "sha256": "13242111d3c851f4d6635e109a873686dc0706970ba1ae4834a00648d8c5ae09"
+      "bytes": 22911,
+      "sha256": "41317a6469e4b6e9262b4844c0b3cd911a9298699a9a8eeacd02f42f857e3194"
     },
     {
       "path": "candidates/chisel_host_boundary_graph_20261105/scala/StructuralMetadataFactory.scala",
@@ -95,10 +95,7 @@
   "publication_delta": [
     ".github/workflows/chisel-host-boundary-graph-once.yml",
     "candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json",
-    "candidates/chisel_host_boundary_graph_20261105/compare_boundary_results.py",
     "candidates/chisel_host_boundary_graph_20261105/run.py",
-    "candidates/chisel_host_boundary_graph_20261105/scala/BoundarySplitStructuralFixture.scala",
-    "candidates/chisel_host_boundary_graph_20261105/scala/IdmaPackedBoundarySplit.scala",
     "candidates/chisel_host_boundary_graph_20261105/scala/OriginalHostStructuralGraph.scala"
   ]
 }

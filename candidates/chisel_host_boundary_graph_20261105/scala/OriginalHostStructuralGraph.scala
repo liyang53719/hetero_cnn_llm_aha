@@ -89,6 +89,60 @@ object OriginalHostStructuralGraph {
     val codes=step match {case "TOPOLOGY"=>topologyGuardCodes;case "TRANSFORM"=>transformGuardCodes;case _=>Map.empty[String,String]}
     codes.getOrElse(message,"UNKNOWN")
   }
+  // Failure-only class histogram. Never inspect exception messages or AST.
+  private val passClassCodes=Map(
+    "firrtl2.passes.CheckTypes$SubfieldNotInBundle" -> "T01",
+    "firrtl2.passes.CheckTypes$SubfieldOnNonBundle" -> "T02",
+    "firrtl2.passes.CheckTypes$IndexTooLarge" -> "T03",
+    "firrtl2.passes.CheckTypes$IndexOnNonVector" -> "T04",
+    "firrtl2.passes.CheckTypes$AccessIndexNotUInt" -> "T05",
+    "firrtl2.passes.CheckTypes$IndexNotUInt" -> "T06",
+    "firrtl2.passes.CheckTypes$EnableNotUInt" -> "T07",
+    "firrtl2.passes.CheckTypes$InvalidConnect" -> "T08",
+    "firrtl2.passes.CheckTypes$InvalidRegInit" -> "T09",
+    "firrtl2.passes.CheckTypes$PrintfArgNotGround" -> "T10",
+    "firrtl2.passes.CheckTypes$ReqClk" -> "T11",
+    "firrtl2.passes.CheckTypes$RegReqClk" -> "T12",
+    "firrtl2.passes.CheckTypes$EnNotUInt" -> "T13",
+    "firrtl2.passes.CheckTypes$PredNotUInt" -> "T14",
+    "firrtl2.passes.CheckTypes$OpNotGround" -> "T15",
+    "firrtl2.passes.CheckTypes$OpNotUInt" -> "T16",
+    "firrtl2.passes.CheckTypes$OpNotAllUInt" -> "T17",
+    "firrtl2.passes.CheckTypes$OpNotAllSameType" -> "T18",
+    "firrtl2.passes.CheckTypes$OpNoMixFix" -> "T19",
+    "firrtl2.passes.CheckTypes$OpNotCorrectType" -> "T20",
+    "firrtl2.passes.CheckTypes$OpNotAnalog" -> "T21",
+    "firrtl2.passes.CheckTypes$NodePassiveType" -> "T22",
+    "firrtl2.passes.CheckTypes$MuxSameType" -> "T23",
+    "firrtl2.passes.CheckTypes$MuxPassiveTypes" -> "T24",
+    "firrtl2.passes.CheckTypes$MuxCondUInt" -> "T25",
+    "firrtl2.passes.CheckTypes$MuxClock" -> "T26",
+    "firrtl2.passes.CheckTypes$ValidIfPassiveTypes" -> "T27",
+    "firrtl2.passes.CheckTypes$ValidIfCondUInt" -> "T28",
+    "firrtl2.passes.CheckTypes$IllegalAnalogDeclaration" -> "T29",
+    "firrtl2.passes.CheckTypes$IllegalAttachExp" -> "T30",
+    "firrtl2.passes.CheckTypes$IllegalResetType" -> "T31",
+    "firrtl2.passes.CheckTypes$IllegalUnknownType" -> "T32",
+    "firrtl2.passes.CheckFlows$WrongFlow" -> "F01",
+    "firrtl2.passes.PassException" -> "BASE_PASS"
+  )
+  private def preparedPassEvidence(error:Throwable):String={
+    val counts=scala.collection.mutable.Map.empty[String,Int]
+    val aggregate=error.isInstanceOf[firrtl2.passes.PassExceptions]
+    val errors=error match {
+      case p:firrtl2.passes.PassExceptions=>p.exceptions.iterator
+      case e=>Iterator.single(e)
+    }
+    var scanned=0
+    while(scanned<1024 && errors.hasNext){
+      val entry=errors.next()
+      val code=if(entry==null)"OTHER"else passClassCodes.getOrElse(entry.getClass.getName,"OTHER")
+      counts(code)=counts.getOrElse(code,0)+1;scanned+=1
+    }
+    val truncated=errors.hasNext
+    val histogram=if(counts.isEmpty)"NONE"else counts.toVector.sortBy(_._1).map{case(code,n)=>code+":"+n}.mkString(",")
+    " passAggregate="+aggregate+" passErrorsScanned="+scanned+" passErrorsTruncated="+truncated+" passErrorClasses="+histogram
+  }
   private def loaded(c:Class[_],location:String):String={
     require(Paths.get(c.getProtectionDomain.getCodeSource.getLocation.toURI).toRealPath()==Paths.get(location).toRealPath(),"actual graph class code location")
     val in=c.getResourceAsStream("/"+c.getName.replace('.','/')+".class")
@@ -192,9 +246,11 @@ object OriginalHostStructuralGraph {
     val savedOut=System.out;val savedErr=System.err
     val sink=new DiagnosticSink;val muted=new PrintStream(sink,true,"UTF-8")
     var stage="admission";var result="FAIL_STRUCTURAL_GRAPH_ONLY stage=admission";var failed=true
-    var boundaryStep="NONE"
+    var boundaryStep="NONE";var preparedStep="NONE"
     def boundaryFailure(error:Throwable):String=
       if(stage=="boundary_split")" boundaryStep="+boundaryStep+" boundaryGuard="+boundaryGuardCode(boundaryStep,error)else ""
+    def preparedFailure(error:Throwable):String=
+      if(stage=="prepared_checks")" preparedStep="+preparedStep+preparedPassEvidence(error)else ""
     var telemetry:PhaseTelemetry=null
     def timed[T](name:String)(body: => T):T={
       stage=name;telemetry.begin(name);val value=body;telemetry.end();value
@@ -258,11 +314,19 @@ object OriginalHostStructuralGraph {
         val withInfo=timed("set_implicit_output_info") {SetImplicitOutputInfo.transform(obtained)}
         val prepared=timed("prepare_ast") {(new PrepareAst).transform(withInfo)}
         val (state,factory)=timed("prepared_checks") {
+          preparedStep="STATE"
           val states=prepared.collect{case TreadleCircuitStateAnnotation(s)=>s}
           require(states.size==1,"one actual prepared AST")
+          preparedStep="ANNOTATIONS"
           require(!states.head.annotations.exists(_.isInstanceOf[UnsupportedAnnotation]),"unsupported prepared annotation")
-          BoundaryIntegrationGuards.checkTypesAndFlows(states.head.circuit)
+          // Same read-only passes and identity postconditions, in the same order.
+          preparedStep="TYPES"
+          require(firrtl2.passes.CheckTypes.run(states.head.circuit) eq states.head.circuit,"CheckTypes returned another circuit")
+          preparedStep="FLOWS"
+          require(firrtl2.passes.CheckFlows.run(states.head.circuit) eq states.head.circuit,"CheckFlows returned another circuit")
+          preparedStep="CLOCK"
           require(TopmoduleInfo(states.head.circuit).clocks==Seq("clock"),"unchanged prepared original clock")
+          preparedStep="BINDINGS"
           val f=new StructuralMetadataFactory(states.head.circuit,seed=true)
           require(f.bindings==originalBindings,"same prepared leaf inventory")
           (states.head,f)
@@ -285,11 +349,11 @@ object OriginalHostStructuralGraph {
         failed=false
       }}
     }catch{case error:Throwable=>
-      result="FAIL_STRUCTURAL_GRAPH_ONLY stage="+stage+" exceptionClassSha="+hash(error.getClass.getName)+boundaryFailure(error)+
+      result="FAIL_STRUCTURAL_GRAPH_ONLY stage="+stage+" exceptionClassSha="+hash(error.getClass.getName)+boundaryFailure(error)+preparedFailure(error)+
         " nativeInstances=0 evaluatedEdges=0 schedulingQualified=false fullHostAccepted=false"
     }finally{
       try {if(telemetry!=null){telemetry.stop();require(!telemetry.failed,"sampler metrics failed")}}catch{case error:Throwable=>
-        failed=true;result="FAIL_STRUCTURAL_GRAPH_ONLY stage="+stage+" exceptionClassSha="+hash(error.getClass.getName)+boundaryFailure(error)+
+        failed=true;result="FAIL_STRUCTURAL_GRAPH_ONLY stage="+stage+" exceptionClassSha="+hash(error.getClass.getName)+boundaryFailure(error)+preparedFailure(error)+
           " nativeInstances=0 evaluatedEdges=0 schedulingQualified=false fullHostAccepted=false"
       }
       System.setOut(savedOut);System.setErr(savedErr)

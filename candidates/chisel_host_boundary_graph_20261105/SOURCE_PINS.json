@@ -1,0 +1,116 @@
+{
+  "schema": "HOST_BOUNDARY_GRAPH_SOURCE_PINS_V1",
+  "files": [
+    {
+      "path": ".github/workflows/chisel-host-boundary-graph-once.yml",
+      "bytes": 2005,
+      "sha256": "a22ceda2b8e9702c945a41284a80e72aca3477c97f0a7754b265af96b5bb660a"
+    },
+    {
+      "path": "candidates/chisel_host_boundary_graph_20261105/compare_boundary_results.py",
+      "bytes": 3860,
+      "sha256": "e78c44c18ba2117b88bea1fca547e6b18331b61ba8d2c39c85bc0561b8c44291"
+    },
+    {
+      "path": "candidates/chisel_host_boundary_graph_20261105/compare_fixture_results.py",
+      "bytes": 2253,
+      "sha256": "96ab243e13df82590e9087aeb514f53e24496403b56ffca8330fd66d3d911ce9"
+    },
+    {
+      "path": "candidates/chisel_host_boundary_graph_20261105/modulecache/BoundedCycleWitness.scala",
+      "bytes": 7345,
+      "sha256": "260ca713834adb4015ba89c563646e1f0c8fdc31c5403ed1e1f75945275a0e34"
+    },
+    {
+      "path": "candidates/chisel_host_boundary_graph_20261105/modulecache/CycleWitnessFixture.scala",
+      "bytes": 5831,
+      "sha256": "24cefc4ade7828fa2aa11a4b84340f529185a2a063888f2cf80105b85b69494d"
+    },
+    {
+      "path": "candidates/chisel_host_boundary_graph_20261105/modulecache/StructuralDifferential.scala",
+      "bytes": 10888,
+      "sha256": "857768f97022db573ca2a6e5c5ce68412b6ad8b091731b88f54bb42de3527c33"
+    },
+    {
+      "path": "candidates/chisel_host_boundary_graph_20261105/modulecache/SymbolTable.scala",
+      "bytes": 28640,
+      "sha256": "363cfcbc9df17d340580b2308551a83877ab91637c42bda3a6351e2b9fd22fc3"
+    },
+    {
+      "path": "candidates/chisel_host_boundary_graph_20261105/prepare_jars.py",
+      "bytes": 1125,
+      "sha256": "f042ac2485a3e76e428e5cae8400b55288e40976656885320368a423b175763f"
+    },
+    {
+      "path": "candidates/chisel_host_boundary_graph_20261105/run.py",
+      "bytes": 30050,
+      "sha256": "c9fddc4fc0a072039443ae79ac94228e92ca05f66f08aa6da52b2463c9bb5536"
+    },
+    {
+      "path": "candidates/chisel_host_boundary_graph_20261105/scala/BoundaryIntegrationGuards.scala",
+      "bytes": 8156,
+      "sha256": "0e90b9fe361d5645f7a1ad72fb55ca12a8d2ae089df260a959bca54e7be01fa7"
+    },
+    {
+      "path": "candidates/chisel_host_boundary_graph_20261105/scala/BoundarySplitStructuralFixture.scala",
+      "bytes": 25662,
+      "sha256": "0edf80dea567ac4166cbfb64bcbc6aa6bb0439e23bf6cd6ac3141e969b1e051f"
+    },
+    {
+      "path": "candidates/chisel_host_boundary_graph_20261105/scala/CycleWitnessRoles.scala",
+      "bytes": 2023,
+      "sha256": "39e68805f2c748cd79b707d83583b70db77a43e46c273045bc0dfc0a32f78e7a"
+    },
+    {
+      "path": "candidates/chisel_host_boundary_graph_20261105/scala/IdmaFieldSplitTransform.scala",
+      "bytes": 3047,
+      "sha256": "e1dd694cc1b53acc1772c759a84598768179ac6818b1135b01713936bdbb977a"
+    },
+    {
+      "path": "candidates/chisel_host_boundary_graph_20261105/scala/IdmaPackedBoundarySplit.scala",
+      "bytes": 15461,
+      "sha256": "936f991319ea6cf12599d0b943bb1fbc93f45e901961f3e1c3fbd0c3caeb5e28"
+    },
+    {
+      "path": "candidates/chisel_host_boundary_graph_20261105/scala/IdmaSplitLayout.scala",
+      "bytes": 7227,
+      "sha256": "f844675530032ee20271c364c78338d1307f7e34c66437abe77e93154dbbc75b"
+    },
+    {
+      "path": "candidates/chisel_host_boundary_graph_20261105/scala/OriginalHostStructuralGraph.scala",
+      "bytes": 14087,
+      "sha256": "b73b046fa0fe3b3f63a8926b9cd7549fa1d09eacfcdac53773c0e925fa8f6f42"
+    },
+    {
+      "path": "candidates/chisel_host_boundary_graph_20261105/scala/StructuralMetadataFactory.scala",
+      "bytes": 6851,
+      "sha256": "ab1ea07061f9a319c22008ea3b0f5ccabceccea9879b832958821fa56eb0b2ff"
+    },
+    {
+      "path": "candidates/chisel_host_boundary_graph_20261105/witness_record.py",
+      "bytes": 2263,
+      "sha256": "3eccee187c33a79a7c1886ed395da6d5505caf30d91a7bfe496b13283b7bf1cc"
+    }
+  ],
+  "publication_delta": [
+    ".github/workflows/chisel-host-boundary-graph-once.yml",
+    "candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json",
+    "candidates/chisel_host_boundary_graph_20261105/compare_boundary_results.py",
+    "candidates/chisel_host_boundary_graph_20261105/compare_fixture_results.py",
+    "candidates/chisel_host_boundary_graph_20261105/modulecache/BoundedCycleWitness.scala",
+    "candidates/chisel_host_boundary_graph_20261105/modulecache/CycleWitnessFixture.scala",
+    "candidates/chisel_host_boundary_graph_20261105/modulecache/StructuralDifferential.scala",
+    "candidates/chisel_host_boundary_graph_20261105/modulecache/SymbolTable.scala",
+    "candidates/chisel_host_boundary_graph_20261105/prepare_jars.py",
+    "candidates/chisel_host_boundary_graph_20261105/run.py",
+    "candidates/chisel_host_boundary_graph_20261105/scala/BoundaryIntegrationGuards.scala",
+    "candidates/chisel_host_boundary_graph_20261105/scala/BoundarySplitStructuralFixture.scala",
+    "candidates/chisel_host_boundary_graph_20261105/scala/CycleWitnessRoles.scala",
+    "candidates/chisel_host_boundary_graph_20261105/scala/IdmaFieldSplitTransform.scala",
+    "candidates/chisel_host_boundary_graph_20261105/scala/IdmaPackedBoundarySplit.scala",
+    "candidates/chisel_host_boundary_graph_20261105/scala/IdmaSplitLayout.scala",
+    "candidates/chisel_host_boundary_graph_20261105/scala/OriginalHostStructuralGraph.scala",
+    "candidates/chisel_host_boundary_graph_20261105/scala/StructuralMetadataFactory.scala",
+    "candidates/chisel_host_boundary_graph_20261105/witness_record.py"
+  ]
+}

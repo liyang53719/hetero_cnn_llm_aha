@@ -253,7 +253,12 @@ object ClockInitRepresentationRepair {
           if(!replacements.containsKey(s)){
             var changed=false
             s.foreachStmt{x=>if(replacements.containsKey(x))changed=true}
-            if(changed)replacements.put(s,s.mapStmt{x=>Option(replacements.get(x)).getOrElse(x)})
+            if(changed)s match {
+              // Block.mapStmt flattens nested Blocks and drops EmptyStmt. Preserve
+              // the exact immediate children instead; no other ancestor may change.
+              case block:Block=>replacements.put(s,block.copy(stmts=block.stmts.map{x=>Option(replacements.get(x)).getOrElse(x)}))
+              case _=>fail("NONINTERFERENCE")
+            }
           }
         }
         if(replacements.containsKey(m.body))m.copy(body=replacements.get(m.body))else m

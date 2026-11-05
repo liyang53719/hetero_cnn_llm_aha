@@ -178,10 +178,20 @@ object ClockInitStructuralFixture {
           val fixed=ClockInitRepresentationRepair(low,state.circuit,state.annotations,n)
           require(fixed.corrected==n);unchanged(state.circuit,fixed.circuit,n)
           phase="VALIDATE";check(fixed.circuit)
+          // Force nested/empty structure regardless of official pass flattening.
+          val nested=state.circuit.copy(modules=state.circuit.modules.map{
+            case m:Module=>m.copy(body=Block(Seq(EmptyStmt,Block(Seq(m.body,EmptyStmt)),EmptyStmt)))
+            case x=>x
+          })
+          phase="REPAIR"
+          val nestedFixed=ClockInitRepresentationRepair(low,nested,state.annotations,n)
+          phase="VALIDATE"
+          require(nestedFixed.corrected==n);unchanged(nested,nestedFixed.circuit,n);check(nestedFixed.circuit)
           phase="NEGATIVE";val guards=if(mode=="both")negative(low,state.circuit,state.annotations)else 0
           phase="GRAPH"
           val oldTable=SymbolTable(state.circuit,Seq.empty,allowCycles=false);val newTable=SymbolTable(fixed.circuit,Seq.empty,allowCycles=false)
           val digest=digestTable(oldTable);require(digest==digestTable(newTable))
+          require(digest==digestTable(SymbolTable(nestedFixed.circuit,Seq.empty,allowCycles=false)))
           if(mode=="both"){
             val cyc=cycle(state.circuit)
             val fixedCycle=ClockInitRepresentationRepair(low,cyc,state.annotations,2).circuit
@@ -191,15 +201,15 @@ object ClockInitStructuralFixture {
             }
           }
           phase="EQUATIONS";val vectors=equations()
-          "CLOCK_INIT_CASE_V1 id="+mode+" corrected="+n+" negativeGuards="+guards+" equations="+vectors+" graphDigest="+digest
+          "CLOCK_INIT_CASE_V1 id="+mode+" corrected="+n+" negativeGuards="+guards+" equations="+vectors+" shapeChecks=1 graphDigest="+digest
         }
         ok=true
       }}
-    }catch{case e:Throwable=>rows=Vector("CLOCK_INIT_FAILURE_V1 phase="+phase+" exceptionClassSha="+hash(e.getClass.getName))}
+    }catch{case e:Throwable=>rows=Vector("CLOCK_INIT_FAILURE_V1 phase="+phase+" guard="+(if(phase=="REPAIR")ClockInitRepresentationRepair.guardCode(e)else "NONE")+" exceptionClassSha="+hash(e.getClass.getName))}
     finally{
       System.setOut(out);System.setErr(err)
       try{target.foreach{dir=>val stream=Files.walk(dir);val xs=try{val it=stream.iterator();val b=Vector.newBuilder[Path];var n=0;while(it.hasNext && n<257){b+=it.next();n+=1};require(n<=256 && !it.hasNext);b.result()}finally{stream.close()};xs.sortBy(p=> -p.getNameCount).foreach(Files.delete(_))}}
-      catch{case e:Throwable=>ok=false;rows=Vector("CLOCK_INIT_FAILURE_V1 phase=CLEANUP exceptionClassSha="+hash(e.getClass.getName))}
+      catch{case e:Throwable=>ok=false;rows=Vector("CLOCK_INIT_FAILURE_V1 phase=CLEANUP guard=NONE exceptionClassSha="+hash(e.getClass.getName))}
       muted.close()
     }
     rows.foreach(out.println)

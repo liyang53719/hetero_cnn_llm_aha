@@ -28,9 +28,11 @@ final class ObservedPrepareAst(expected:Int=394) extends Phase {
   private var budgetResult="NONE";private var sizingResult="NONE"
   def budgetEvidence:String=budgetResult
   def sizingEvidence:String=sizingResult
+  private var consumerResult="NONE"
+  def consumerEvidence:String=consumerResult
   override def transform(annotationSeq:AnnotationSeq):AnnotationSeq={
     result="UNAVAILABLE:CENSUS:NOT_RUN:0:0:0:0:0:0:0:0:0"
-    budgetResult="NONE";sizingResult="NONE"
+    budgetResult="NONE";sizingResult="NONE";consumerResult="NONE"
     var circuits=0
     annotationSeq.flatMap {
       case FirrtlCircuitAnnotation(circuit)=>
@@ -53,8 +55,8 @@ final class ObservedPrepareAst(expected:Int=394) extends Phase {
           }
           if(observation!=null)observation.afterSuffix(54,newState)
           result=if(circuits>1)"UNAVAILABLE:DONE:MULTIPLE_CIRCUITS:0:0:0:0:0:0:0:0:0" else if(observation==null)"UNAVAILABLE:CENSUS:UNEXPECTED:0:0:0:0:0:0:0:0:0" else observation.evidence
-          if(circuits==1 && observation!=null){budgetResult=observation.budgetEvidence;sizingResult=observation.sizingEvidence}
-          else {budgetResult="NONE";sizingResult="NONE"}
+          if(circuits==1 && observation!=null){budgetResult=observation.budgetEvidence;sizingResult=observation.sizingEvidence;consumerResult=observation.consumerEvidence}
+          else {budgetResult="NONE";sizingResult="NONE";consumerResult="NONE"}
           Some(TreadleCircuitStateAnnotation(newState))
         } finally if(observation!=null)observation.release()
       case other=>Some(other)
@@ -63,7 +65,88 @@ final class ObservedPrepareAst(expected:Int=394) extends Phase {
 }
 
 object ObservedPrepareAst {
-  private final class Abort(val reason:String,val bounded:Boolean=false) extends RuntimeException(null,null,false,false)
+  private final class Abort(val reason:String,val bounded:Boolean=false) extends RuntimeException(null,null,false,false) {
+    var consumerCode:String="NONE"
+  }
+  // BEGIN FIRST CONSUMER FAILURE DIAGNOSTIC
+  private def consumerSlot(out:java.lang.StringBuilder,s:Statement,root:Expression,direct:Boolean):Unit={
+    need(s!=null&&root!=null,"CONSUMER")
+    val sc=s.getClass
+    var role="OTHER";var mask=0;var op="NA";var message="NA"
+    if(sc==classOf[Connect]){val x=s.asInstanceOf[Connect];role="CONNECT"
+      if(root eq x.loc)mask|=1;if(root eq x.expr)mask|=2}
+    else if(sc==classOf[Print]){val x=s.asInstanceOf[Print];role="PRINT"
+      if(root eq x.clk)mask|=1;if(root eq x.en)mask|=2}
+    else if(sc==classOf[Stop]){val x=s.asInstanceOf[Stop];role="STOP"
+      if(root eq x.clk)mask|=1;if(root eq x.en)mask|=2}
+    else if(sc==classOf[Verification]){val x=s.asInstanceOf[Verification];role="VERIFICATION"
+      if(root eq x.clk)mask|=1;if(root eq x.pred)mask|=2;if(root eq x.en)mask|=4
+      op=if(x.op eq Formal.Assert)"ASSERT"else if(x.op eq Formal.Assume)"ASSUME"else if(x.op eq Formal.Cover)"COVER"else"OTHER"
+      need(x.msg!=null&&x.msg.getClass==classOf[StringLit],"CONSUMER")
+      message=if(x.msg.string.length==0)"EMPTY"else"NONEMPTY"
+    }
+    var typ="NA";var kind="NA";var flow="NA"
+    if(root.getClass==classOf[Reference]){val r=root.asInstanceOf[Reference]
+      typ=if(r.tpe eq ClockType)"CLOCK"else if(r.tpe!=null&&r.tpe.getClass==classOf[UIntType])"UINT"else"OTHER"
+      val k=r.kind
+      kind=if(k eq NodeKind)"NODE"else if(k eq PortKind)"PORT"else if(k eq firrtl2.RegKind)"REG"
+        else if(k eq firrtl2.WireKind)"WIRE"else if(k eq firrtl2.InstanceKind)"INSTANCE"
+        else if(k eq firrtl2.MemKind)"MEM"else if(k eq firrtl2.ExpKind)"EXP"
+        else if(k eq firrtl2.UnknownKind)"UNKNOWN"else if(k eq firrtl2.PoisonKind)"POISON"
+        else if(k eq firrtl2.RandomKind)"RANDOM"else"OTHER"
+      val f=r.flow
+      flow=if(f eq SourceFlow)"SOURCE"else if(f eq SinkFlow)"SINK"else if(f eq firrtl2.DuplexFlow)"DUPLEX"
+        else if(f eq firrtl2.UnknownFlow)"UNKNOWN"else"OTHER"
+    }
+    out.append(':').append(role).append(':').append(mask).append(':').append(if(direct)"TRUE"else"FALSE")
+      .append(':').append(typ).append(':').append(kind).append(':').append(flow).append(':').append(op).append(':').append(message)
+  }
+  private def consumerToken(s:String,start:Int,end:Int,t:String):Boolean=
+    end-start==t.length&&s.regionMatches(start,t,0,t.length)
+  private def validConsumerCode(s:String):Boolean={
+    if(s==null||s.length==0||s.length>512)return false
+    var i=0;var start=0;var field=0;var role=0;var referenceNA=false
+    while(i<=s.length){
+      if(i==s.length||s.charAt(i)==':'){
+        val end=i
+        def is(t:String):Boolean=consumerToken(s,start,end,t)
+        val valid=if(field==0)is("DUPLICATE")||is("MISSING")||is("FINAL_KIND") else ((field-1)%8)match{
+          case 0=>role=if(is("VERIFICATION"))4 else if(is("CONNECT"))1 else if(is("PRINT"))2 else if(is("STOP"))3 else if(is("OTHER"))0 else -1;role>=0
+          case 1=>end-start==1&&s.charAt(start)>='0'&&s.charAt(start)<=(if(role==4)'7'else if(role==0)'0'else'3')
+          case 2=>is("TRUE")||is("FALSE")
+          case 3=>referenceNA=is("NA");referenceNA||is("CLOCK")||is("UINT")||is("OTHER")
+          case 4=>if(referenceNA)is("NA")else is("NODE")||is("PORT")||is("REG")||is("WIRE")||is("INSTANCE")||is("MEM")||is("EXP")||is("UNKNOWN")||is("POISON")||is("RANDOM")||is("OTHER")
+          case 5=>if(referenceNA)is("NA")else is("SOURCE")||is("SINK")||is("DUPLEX")||is("UNKNOWN")||is("OTHER")
+          case 6=>if(role==4)is("ASSERT")||is("ASSUME")||is("COVER")||is("OTHER")else is("NA")
+          case 7=>if(role==4)is("EMPTY")||is("NONEMPTY")else is("NA")
+        }
+        if(!valid)return false
+        field+=1;if(field>17)return false;start=i+1
+      }else {val c=s.charAt(i);if(!((c>='A'&&c<='Z')||(c>='0'&&c<='9')||c=='_'))return false}
+      i+=1
+    };field==17
+  }
+  private def consumerCode(error:Abort):String=try{
+    val code=error.consumerCode
+    if(validConsumerCode(code))code else "UNAVAILABLE"
+  }catch{case _:Throwable=>"UNAVAILABLE"}
+  private def consumerAbort(site:String,s0:Statement,r0:Expression,d0:Boolean,s1:Statement,r1:Expression,d1:Boolean):Abort={
+    // Primary rejection exists before formatting. Only bounded scalar strings
+    // can escape.160 ASCII capacity exceeds the maximum130-character record;
+    // builder/result/header/primary objects fit the fixed2KiB failure reserve.
+    val primary=new Abort("CONSUMER")
+    primary.consumerCode="UNAVAILABLE"
+    try{
+      need(site=="DUPLICATE"||site=="MISSING"||site=="FINAL_KIND","CONSUMER")
+      val out=new java.lang.StringBuilder(160);out.append(site)
+      consumerSlot(out,s0,r0,d0);consumerSlot(out,s1,r1,d1)
+      val code=out.toString
+      if(validConsumerCode(code))primary.consumerCode=code
+    }catch{case _:Throwable=>()}
+    primary
+  }
+  // END FIRST CONSUMER FAILURE DIAGNOSTIC
+
   private def fail(code:String):Nothing=throw new Abort(code)
   private def need(value:Boolean,code:String):Unit=if(!value)fail(code)
   // All allocations belong either to the explicit fixed inventory or to Temp.
@@ -342,6 +425,11 @@ object ObservedPrepareAst {
     def port(mid:Int,p:Port):Unit={var id=records.firstClock(mid,p.name)
       while(id>=0){b.charge(C.Probe);need(p.direction==Input&&(p.tpe eq ClockType),"CLOCK")
         need(!portSeen(id),"DUPLICATE");portSeen(id)=true;id=records.clockNext(id)}}
+    private def consumerFailure(site:String,id:Int):Nothing={
+      if(finalStage)fail("CONSUMER")
+      val k=id*2
+      throw consumerAbort(site,statements(k),roots(k),direct(k),statements(k+1),roots(k+1),direct(k+1))
+    }
     def finish():Unit={var i=0
       while(i<records.count){need(portSeen(i),"CLOCK");need(counts(i)==2,"REFERENCES")
         var driver:Connect=null;var consumer:Statement=null;var j=0
@@ -350,18 +438,18 @@ object ObservedPrepareAst {
             case x:Connect if (roots(k) eq x.loc)&&delayed(x.loc,records.names(i),true,finalStage,b)=>
               need(driver==null,"DRIVER");driver=x
             case x:Print if (roots(k) eq x.clk)&&delayed(x.clk,records.names(i),false,finalStage,b)=>
-              need(consumer==null,"CONSUMER");consumer=x
+              if(consumer!=null)consumerFailure("DUPLICATE",i);consumer=x
             case x:Stop if (roots(k) eq x.clk)&&delayed(x.clk,records.names(i),false,finalStage,b)=>
-              need(consumer==null,"CONSUMER");consumer=x
+              if(consumer!=null)consumerFailure("DUPLICATE",i);consumer=x
             case _=>()
           };j+=1
         }
-        need(driver!=null,"DRIVER");need(consumer!=null,"CONSUMER")
+        need(driver!=null,"DRIVER");if(consumer==null)consumerFailure("MISSING",i)
         val reg=records.get(i);val c=clock(reg,b);val rhs=exactReference(driver.expr)
         need(b.equal(rhs.name,c.name)&&(rhs.tpe eq c.tpe)&&(rhs.kind eq c.kind)&&(rhs.flow eq c.flow),"DRIVER")
         need(checked.same(reg.info,driver.info),"INFO")
         consumer match{case p:Print=>printText(p,b);need(checked.same(reg.info,p.info),"INFO")
-          case p:Stop=>need(checked.same(reg.info,p.info),"INFO");case _=>fail("CONSUMER")}
+          case p:Stop=>need(checked.same(reg.info,p.info),"INFO");case _=>consumerFailure("FINAL_KIND",i)}
         consumers(i)=consumer;i+=1
       }
     }
@@ -409,6 +497,8 @@ object ObservedPrepareAst {
     private var budgetResult="NONE";private var sizingResult="NONE"
     def budgetEvidence:String=budgetResult
     def sizingEvidence:String=sizingResult
+    private var consumerResult="NONE"
+    def consumerEvidence:String=consumerResult
     // Only invoked from this object's bounded sizingSelfChecks; not a public hook.
     def sizingFixtureFailure(where:String,mode:Int):Unit={
       step=where
@@ -416,6 +506,7 @@ object ObservedPrepareAst {
       else if(mode==1)guard{b.bound(false)}
       else{if(mode==3)b.failedDimension=99;b.used(C.Expr)=1L<<25;b.prefix(4)=1L<<25;guard{b.charge(C.Expr)}}
     }
+    def consumerFixtureFailure(where:String,error:Abort):Unit={step=where;guard{throw error}}
     def sizingPendingForTest:Boolean=pendingSizing
     def sizePending(state:CircuitState):Unit=if(pendingSizing){
       pendingSizing=false
@@ -428,6 +519,7 @@ object ObservedPrepareAst {
         // Preserve the primary failure and release AST-owning pools before any
         // failure-only string formatting. A catch-body failure needs its own catch.
         status=if(e.bounded)"TRUNCATED"else"UNAVAILABLE";reason=e.reason;active=false;release()
+        if(step=="INITIAL_USES" && e.reason=="CONSUMER")consumerResult=consumerCode(e)
         if(eligible)try{
           val record=b.failureEvidence
           if(record!="NONE" && record.length<=512){budgetResult=record;pendingSizing=true}
@@ -990,6 +1082,72 @@ object ObservedPrepareAst {
       check(b.used(C.Expr)==(1L<<25)&&b.prefix(2)==C.ScanExpr&&b.prefix(3)==C.ScanExpr&&
         rejected{b.charge(C.Expr)}&&b.failureEvidence.startsWith("GLOBAL_EXPR:33554432:0:1:33554432:"))}
     check(C.ScanExpr==(1L<<24)&&C.limits.toList==List[Long](1L<<24,1L<<25,1L<<22,1L<<29,1L<<30,1L<<26,1L<<22,1L<<24))
+    checks
+  }
+
+  /** Same private descriptor/Uses helpers; no formal consumer is accepted. */
+  def consumerSelfChecks():Int={
+    var checks=0
+    def check(ok:Boolean):Unit={require(ok,"CONSUMER_SELFCHECK");checks+=1}
+    val info=FileInfo("private-info-never-exported:99")
+    val clock=Reference("private-clock-never-exported",ClockType,PortKind,SourceFlow)
+    val ref=Reference("private-register-never-exported",ClockType,NodeKind,SourceFlow)
+    val reg=DefRegister(info,ref.name,ClockType,clock,UIntLiteral(0),UIntLiteral(0))
+    val driver=Connect(info,ref,clock)
+    val print=Print(info,StringLit("private-format"),Nil,ref,UIntLiteral(1),"private-print")
+    val stop=Stop(info,0,ref,UIntLiteral(1),"private-stop")
+    val formal=Verification(Formal.Assert,info,ref,UIntLiteral(1),UIntLiteral(1),StringLit(""),"private-formal")
+    def finish(a:Statement,z:Statement,finalStage:Boolean=false):Abort={
+      val b=new Budget;val records=new Records(b);records.add(0,"private-module",reg,clock)
+      val uses=new Uses(b,records,new Checked(b),finalStage)
+      uses.port(0,Port(NoInfo,clock.name,Input,ClockType));uses.scan(a,0);uses.scan(z,0)
+      try{uses.finish();new Abort("UNEXPECTED")}catch{case e:Abort=>e}
+    }
+    val missing=finish(driver,formal)
+    check(missing.reason=="CONSUMER"&&consumerCode(missing)==
+      "MISSING:CONNECT:1:TRUE:CLOCK:NODE:SOURCE:NA:NA:VERIFICATION:1:TRUE:CLOCK:NODE:SOURCE:ASSERT:EMPTY")
+    val duplicate=finish(print,stop)
+    check(duplicate.reason=="CONSUMER"&&consumerCode(duplicate).startsWith("DUPLICATE:PRINT:1:TRUE:CLOCK:NODE:SOURCE:NA:NA:STOP:1:"))
+    check(finish(formal,formal.copy(name="other-formal")).reason=="DRIVER")
+    val nested=DoPrim(firrtl2.PrimOps.AsClock,ref::Nil,Nil,ClockType)
+    check(consumerCode(finish(driver,print.copy(clk=nested)))==
+      "MISSING:CONNECT:1:TRUE:CLOCK:NODE:SOURCE:NA:NA:PRINT:1:FALSE:NA:NA:NA:NA:NA")
+    val alias=print.copy(en=ref)
+    check(consumerCode(consumerAbort("DUPLICATE",alias,ref,true,alias,ref,true)).contains("PRINT:3:TRUE:"))
+    val allFields=formal.copy(pred=ref,en=ref)
+    check(consumerCode(consumerAbort("MISSING",driver,ref,true,allFields,ref,true)).contains("VERIFICATION:7:TRUE:"))
+    val printArg=print.copy(args=ref::Nil,clk=clock)
+    check(consumerCode(consumerAbort("MISSING",driver,ref,true,printArg,ref,true)).contains("PRINT:0:TRUE:"))
+    check(consumerCode(consumerAbort("FINAL_KIND",driver,ref,true,formal,ref,true)).startsWith("FINAL_KIND:"))
+    check(consumerCode(consumerAbort("MISSING",driver,ref,true,formal.copy(op=Formal.Assume,msg=StringLit("secret-message")),ref,true)).endsWith(":ASSUME:NONEMPTY"))
+    check(consumerCode(consumerAbort("MISSING",driver,ref,true,formal.copy(op=Formal.Cover),ref,true)).endsWith(":COVER:EMPTY"))
+    val uint=ref.copy(tpe=UIntType(IntWidth(1)),kind=firrtl2.RegKind,flow=SinkFlow)
+    check(consumerCode(consumerAbort("MISSING",driver,uint,false,formal,uint,false)).contains(":UINT:REG:SINK:"))
+    val other=ref.copy(tpe=ResetType,kind=firrtl2.UnknownKind,flow=firrtl2.UnknownFlow)
+    check(consumerCode(consumerAbort("MISSING",driver,other,false,formal,other,false)).contains(":OTHER:UNKNOWN:UNKNOWN:"))
+    val malformed=consumerAbort("MISSING",null,ref,true,formal,ref,true)
+    check(malformed.reason=="CONSUMER"&&consumerCode(malformed)=="UNAVAILABLE")
+    val badMessage=formal.copy(msg=new StringLit("private-subclass"){})
+    check(consumerAbort("MISSING",driver,ref,true,badMessage,ref,true).consumerCode=="UNAVAILABLE")
+    val invalid=new Abort("CONSUMER");invalid.consumerCode="MISSING:"+"PRIVATE"*100
+    check(consumerCode(invalid)=="UNAVAILABLE")
+    invalid.consumerCode=consumerCode(missing).replace("ASSERT","secret-token")
+    check(consumerCode(invalid)=="UNAVAILABLE")
+    invalid.consumerCode=consumerCode(missing)+":EXTRA"
+    check(consumerCode(invalid)=="UNAVAILABLE")
+    invalid.consumerCode=consumerCode(missing).replace(":CONNECT:1:",":CONNECT:7:")
+    check(consumerCode(invalid)=="UNAVAILABLE")
+    val code=consumerCode(missing)
+    check(code.length<=512&&code.forall(c=>c<=127) && !code.contains("private") && !code.contains("99") && !code.contains("secret"))
+    check(finish(driver.copy(loc=ref.copy(flow=SinkFlow)),formal,true).consumerCode=="NONE")
+    locally {val o=new Observation(1);o.consumerFixtureFailure("INITIAL_USES",missing)
+      check(o.evidence.startsWith("UNAVAILABLE:INITIAL_USES:CONSUMER:0:0:0:0:0:0:0:")&&o.consumerEvidence==code&&o.cleaned)}
+    locally {val o=new Observation(1);o.consumerFixtureFailure("P54",missing)
+      check(o.evidence.startsWith("UNAVAILABLE:P54:CONSUMER:")&&o.consumerEvidence=="NONE")}
+    locally {val o=new Observation(1);o.consumerFixtureFailure("INITIAL_USES",malformed)
+      check(o.evidence.startsWith("UNAVAILABLE:INITIAL_USES:CONSUMER:")&&o.consumerEvidence=="UNAVAILABLE"&&o.cleaned)}
+    invalid.consumerCode=consumerCode(missing).replace(":CLOCK:NODE:SOURCE:",":NA:NODE:SOURCE:")
+    check(consumerCode(invalid)=="UNAVAILABLE")
     checks
   }
 

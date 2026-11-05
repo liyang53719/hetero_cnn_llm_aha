@@ -2,7 +2,7 @@ name: observed-prepare-provenance-only
 on:
   push:
     branches: [main]
-    paths: [ci_launch/chisel_host_boundary_graph_20261105_observed_prepare_measured_scan_quota_once.json]
+    paths: [ci_launch/chisel_host_boundary_graph_20261105_observed_prepare_consumer_diagnostic_once.json]
 permissions:
   contents: read
   actions: read

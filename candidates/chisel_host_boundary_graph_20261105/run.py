@@ -1,12 +1,12 @@
 """One source-only structural job. No engine/native, weights, references or IR export."""
 import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request,urllib.error,zipfile
 P=pathlib.Path;D=P(__file__).resolve().parent;REPO=D.parent.parent
-REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_observed_prepare_measured_scan_quota_once.json'
+REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_observed_prepare_consumer_diagnostic_once.json'
 CAT='candidates/gdn32_first_model_execution_20261104/GDN32_FULL_SOURCE_PINS.json'
 CAT_SHA='ad2d4dcaddb213c85fd15adc65f7da5bd74a0d7c3e6c5922c725aa41bdc967cb'
-BASE='b0a31279bfd834d33188feb99550abc3f179fdec';BASE_TREE='5f6964896d8a4ae8511b0de48b6044e6ed843f17';TREE=12_081_306_272;RESERVE=8<<30
+BASE='df64fdaa024abad7518dae09e4feaba6fbbd737c';BASE_TREE='094f4d153ff52ebfda2983f1a1eb83ab1260e3e3';TREE=12_081_306_272;RESERVE=8<<30
 from witness_record import parse_record as parse_witness_record
-from compare_observed_prepare import evidence as parse_observed_evidence, budget_for_provenance as parse_observed_budget, sizing_pair as parse_observed_sizing_pair
+from compare_observed_prepare import evidence as parse_observed_evidence, budget_for_provenance as parse_observed_budget, sizing_pair as parse_observed_sizing_pair, consumer_for_provenance as parse_observed_consumer
 from compare_clock_init_results import auxiliary_evidence as parse_auxiliary_evidence, preexisting_evidence as parse_preexisting_evidence
 graph_identity={}
 differential_identity={};boundary_identity={}
@@ -224,13 +224,14 @@ def parse_register_census(line):
  need(bool(histograms['regUses'])==bool(histograms['regUseInfo']),'REGISTER_CENSUS_USE_INFO')
  return dict(status='OK',registers_scanned=scanned,mismatches=total,sampled=sampled,truncated=total>1024,histograms=histograms)
 
-def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=False,sizing_diagnostics=False):
+def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=False,sizing_diagnostics=False,consumer_diagnostics=False):
+ need(type(consumer_diagnostics)is bool and (not consumer_diagnostics or sizing_diagnostics),'GRAPH_CONSUMER_MODE')
  need(type(sizing_diagnostics)is bool and (not sizing_diagnostics or observation_only),'GRAPH_SIZING_MODE')
  need(type(observation_only)is bool,'GRAPH_OBSERVATION_MODE')
  need(type(text)is str and len(text.encode('ascii'))<=32768,'GRAPH_LOG_LIMIT')
  need('\r'not in text and (not text or text.endswith('\n')),'GRAPH_LOG_TRUNCATED_LINE')
  lines=text.splitlines();need(len(lines)<=98,'GRAPH_RECORD_LIMIT')
- rows=[];final=None;active=None;next_phase=0;last=None;last_phase=None;cycle_event_seen=False;witness=None;census=None;provenance=None;observer_budget_raw=None;observer_sizing_raw=None;observer_budget=None;observer_sizing=None
+ rows=[];final=None;active=None;next_phase=0;last=None;last_phase=None;cycle_event_seen=False;witness=None;census=None;provenance=None;observer_budget_raw=None;observer_sizing_raw=None;observer_budget=None;observer_sizing=None;observer_consumer_raw=None;observer_consumer=None
  for line in lines:
   need(final is None,'GRAPH_LOG_TRAILING_OR_LONG')
   if line.startswith('PREPARE_PROVENANCE_V1 '):
@@ -254,6 +255,14 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=Fals
    need(len(json.dumps(pair,separators=(',',':')))<=2048,'OBSERVER_SIZING_OUTPUT_CAP')
    observer_sizing=pair['sizing']
    continue
+  if line.startswith('PREPARE_CONSUMER_V1 '):
+   need(consumer_diagnostics and provenance is not None and observer_sizing_raw is not None and observer_consumer_raw is None and active is None and last_phase=='prepare_ast','OBSERVER_CONSUMER_PHASE')
+   need(len(line)<=512,'OBSERVER_CONSUMER_LIMIT')
+   observer_consumer_raw=line[len('PREPARE_CONSUMER_V1 '):]
+   try:observer_consumer=parse_observed_consumer(provenance,observer_consumer_raw)
+   except (ValueError,TypeError):raise Stop('OBSERVER_CONSUMER_SCHEMA')
+   need(len(json.dumps(observer_consumer,separators=(',',':')))<=2048,'OBSERVER_CONSUMER_OUTPUT_CAP')
+   continue
   if line.startswith('REG_INIT_CENSUS_V1 '):
    need(census is None and active=='prepared_checks','REGISTER_CENSUS_PHASE')
    census=parse_register_census(line);continue
@@ -275,6 +284,7 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=Fals
    if kind=='BEGIN':
     if observation_only and phase=='prepared_checks':need(provenance is not None,'OBSERVER_RECORD_MISSING')
     if sizing_diagnostics and phase=='prepared_checks':need(observer_sizing_raw is not None,'OBSERVER_SIZING_MISSING')
+    if consumer_diagnostics and phase=='prepared_checks':need(observer_consumer_raw is not None,'OBSERVER_CONSUMER_MISSING')
     need(active is None and next_phase<len(PHASES) and phase==PHASES[next_phase],'GRAPH_PHASE_ORDER');active=phase
    else:
     need(active==phase,'GRAPH_PHASE_ORDER')
@@ -343,6 +353,7 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=Fals
  if provenance is not None:out['prepare_provenance']=provenance
  if observer_budget_raw is not None:out['prepare_budget']=observer_budget
  if observer_sizing_raw is not None:out['prepare_uses_sizing']=observer_sizing
+ if observer_consumer_raw is not None:out['prepare_consumer']=observer_consumer
  if witness is not None:
   need(final is not None and final['kind']=='failure' and final['cycle_seen'],'GRAPH_WITNESS_WITHOUT_CYCLE_FAILURE')
   out['cycle_witness']=witness
@@ -485,7 +496,7 @@ def observed_compiler_failure(path,receipt,pins):
  except BaseException:return {'schema':'COMPILER_DIAGNOSTIC_V1','status':'UNAVAILABLE','reason':'CLOSED_LOG_OR_SOURCE_IDENTITY_OR_SCHEMA'}
 
 def read_graph_diagnostics(path,receipt,high_sha,annotations_sha):
- return parse_graph_text(read_closed_log(path,receipt),receipt,high_sha,annotations_sha,observation_only=True,sizing_diagnostics=True)
+ return parse_graph_text(read_closed_log(path,receipt),receipt,high_sha,annotations_sha,observation_only=True,sizing_diagnostics=True,consumer_diagnostics=True)
 
 def reject_fixture_failure(text,label,comparator):
  # Caller must first obtain text through read_closed_log. This path always
@@ -516,7 +527,7 @@ def main():
  need(len(own['files'])==len(expected_files) and {row['path']for row in own['files']}==expected_files)
  pins=pins_for(own['files'],REPO);pins[str(D/'SOURCE_PINS.json')]=sha(D/'SOURCE_PINS.json')
  changed=set(git('diff','--name-only',BASE,source).splitlines())
- expected_delta={'.github/workflows/chisel-host-boundary-graph-once.yml', 'candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json', 'candidates/chisel_host_boundary_graph_20261105/compare_observed_prepare.py', 'candidates/chisel_host_boundary_graph_20261105/run.py', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedPrepareAst.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedPrepareStructuralFixture.scala'}
+ expected_delta={'.github/workflows/chisel-host-boundary-graph-once.yml', 'candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json', 'candidates/chisel_host_boundary_graph_20261105/compare_observed_prepare.py', 'candidates/chisel_host_boundary_graph_20261105/run.py', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedPrepareAst.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedPrepareStructuralFixture.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/OriginalHostStructuralGraph.scala'}
  need(len(own['publication_delta'])==len(expected_delta) and changed==set(own['publication_delta'])==expected_delta)
  catalog=regular(REPO/CAT);need(sha(catalog)==CAT_SHA);doc=load(catalog);need(doc['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1'and len(doc['files'])==1211);pins.update(pins_for(doc['files'],REPO));pins[str(catalog)]=CAT_SHA
  phase='admission';remote_exclusive(launch);admission();work=P(os.environ['RUNNER_TEMP'])/'chisel-host-boundary-graph';need(work.is_absolute()and not work.exists()and all(not p.is_symlink()for p in(work,*work.parents)));work.mkdir()
@@ -687,7 +698,7 @@ def main():
   observed_results.append((text,process))
  try:observed_result=observed_comparator.compare(observed_results[0][0],observed_results[1][0],observed_results[0][1],observed_results[1][1])
  except (ValueError,TypeError,KeyError):raise Stop('OBSERVER_COMPARATOR_REJECTED')
- need(observed_result=={'status':'PASS_OBSERVED_PREPARE_FIXTURE_ONLY','cases':9,'parity_cases':9,'suffix_checks':12,'graph_checks':12,'observer_checks':69,'parity_checks':11,'failure_parity_cases':3,'sizing_checks':56,'quota_checks':6,'state_fields':3,'form_absent_in_pinned_api':True,'renames_none':True,'diagnostic_only':True,'interpreter_executed':False,'full_host_accepted':False},'OBSERVER_COVERAGE_REQUIRED')
+ need(observed_result=={'status':'PASS_OBSERVED_PREPARE_FIXTURE_ONLY','cases':9,'parity_cases':9,'suffix_checks':12,'graph_checks':12,'observer_checks':69,'parity_checks':11,'failure_parity_cases':3,'sizing_checks':56,'quota_checks':6,'consumer_checks':24,'consumer_parity_checks':1,'state_fields':3,'form_absent_in_pinned_api':True,'renames_none':True,'diagnostic_only':True,'interpreter_executed':False,'full_host_accepted':False},'OBSERVER_COVERAGE_REQUIRED')
  boundary_identity['observed_prepare_qualification']=observed_result
  gatepath=REPO/'candidates/gdn32_first_model162_producer_20261104/candidate_generation_gate.py';spec=importlib.util.spec_from_file_location('reviewed_graph_inputs',gatepath);gate=importlib.util.module_from_spec(spec);spec.loader.exec_module(gate)
  selection=gate.selected_inputs(REPO,gate.MODEL162_SOURCE);sources=gate.checked_paths(REPO,selection['overlay'],m,selection['contract']);need(len(sources)==162)

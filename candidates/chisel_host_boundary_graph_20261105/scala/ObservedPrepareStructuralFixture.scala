@@ -149,6 +149,35 @@ object ObservedPrepareStructuralFixture {
   }
   private def body(c:Circuit,f:Statement=>Statement):Circuit=c.copy(modules=c.modules.map{
     case m:Module=>m.copy(body=f(m.body));case x=>x})
+  // One real official Augment witness. This qualifies rejection and unchanged
+  // output, never expands the accepted consumer grammar to Verification.
+  private def consumerParityCheck(targetName:String):Int={
+    val low=Compiler.toLowFirrtl(CircuitState(Parser.parse(source("print")),Seq(TargetDirAnnotation(targetName)))).circuit
+    val clock=Reference("clock",ClockType,firrtl2.PortKind,firrtl2.SourceFlow)
+    val enabled=Reference("en",UIntType(IntWidth(1)),firrtl2.PortKind,firrtl2.SourceFlow)
+    val verification=Verification(Formal.Assert,FileInfo("consumer_witness 1:1"),clock,enabled,enabled,StringLit(""),"consumer_witness")
+    val input=body(low,s=>Block(Seq(s,verification)))
+    val augmented=(new AugmentPrintf).runTransform(CircuitState(input,Seq.empty))
+    val selected=registers(augmented.circuit);require(selected.size==2)
+    var witnesses=0
+    visit(augmented.circuit){
+      case v:Verification=>
+        require(v.clk.getClass==classOf[Reference])
+        val ref=v.clk.asInstanceOf[Reference]
+        require((ref.tpe eq ClockType) && (ref.kind eq firrtl2.NodeKind) && (ref.flow eq firrtl2.SourceFlow))
+        require(selected.count(r=>r.name==ref.name)==1);witnesses+=1
+      case _=>()
+    }
+    require(witnesses==1)
+    val annotations=Seq(FirrtlCircuitAnnotation(input),TargetDirAnnotation(targetName))
+    val official=(new PrepareAst).transform(annotations)
+    val observer=new ObservedPrepareAst(2);val observed=observer.transform(annotations)
+    new Parity().apply(official,observed)
+    require(observer.evidence.startsWith("UNAVAILABLE:INITIAL_USES:CONSUMER:0:0:0:0:0:0:0:"))
+    require(observer.consumerEvidence=="MISSING:CONNECT:1:TRUE:CLOCK:NODE:SOURCE:NA:NA:VERIFICATION:1:TRUE:CLOCK:NODE:SOURCE:ASSERT:EMPTY")
+    require(observer.budgetEvidence=="NONE" && observer.sizingEvidence=="NONE")
+    1
+  }
   private def suffix(c:Circuit,n:Int):Int={
     val original=CircuitState(c,Seq.empty)
     val first=(new AugmentPrintf).runTransform(original)
@@ -219,6 +248,8 @@ object ObservedPrepareStructuralFixture {
         val parityChecks=paritySelfChecks();require(parityChecks==11)
         val sizingChecks=ObservedPrepareAst.sizingSelfChecks();require(sizingChecks==56)
         val quotaChecks=ObservedPrepareAst.quotaSelfChecks();require(quotaChecks==6)
+        val consumerChecks=ObservedPrepareAst.consumerSelfChecks();require(consumerChecks==24)
+        phase="OBSERVED_FAILURE";val consumerParityChecks=consumerParityCheck(targetName);require(consumerParityChecks==1)
         rows=Vector("print","stop","both").flatMap{mode=>
           phase="LOWER"
           val low=Compiler.toLowFirrtl(CircuitState(Parser.parse(source(mode)),Seq(TargetDirAnnotation(targetName)))).circuit
@@ -235,6 +266,7 @@ object ObservedPrepareStructuralFixture {
             phase="PARITY";new Parity().apply(official,observed)
             val expected="COMPLETE:DONE:NONE:"+Vector.fill(7)(n.toString).mkString(":")+":"
             require(observer.evidence.startsWith(expected))
+            require(observer.consumerEvidence=="NONE")
             require(observer.budgetEvidence=="NONE" && observer.sizingEvidence=="NONE")
             if(kind=="recycled")require(registers(state(observed).circuit).exists(_.name==firstName))
             val failureParity=if(kind=="base"){
@@ -242,11 +274,12 @@ object ObservedPrepareStructuralFixture {
               val unchangedOutput=rejected.transform(as)
               phase="PARITY";new Parity().apply(official,unchangedOutput)
               require(rejected.evidence.startsWith("UNAVAILABLE:DISCOVERY:COUNT:0:0:0:0:0:0:0:"))
+              require(rejected.consumerEvidence=="NONE")
               require(rejected.budgetEvidence=="NONE" && rejected.sizingEvidence=="NONE");1
             }else 0
             phase="SUFFIX";val relations=if(kind=="base")suffix(low,n)else 0
             phase="GRAPH";val graphs=if(kind=="base")graphChecks(state(observed).circuit)else 0
-            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" sizingChecks="+sizingChecks+" quotaChecks="+quotaChecks+" stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
+            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" sizingChecks="+sizingChecks+" quotaChecks="+quotaChecks+" consumerChecks="+consumerChecks+" consumerParityChecks="+consumerParityChecks+" stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
           }
         }
         ok=true

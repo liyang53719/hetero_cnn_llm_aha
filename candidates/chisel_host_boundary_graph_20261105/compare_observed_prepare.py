@@ -27,7 +27,9 @@ OBSERVER_CHECKS=69
 PARITY_CHECKS=11
 SIZING_CHECKS=56
 QUOTA_CHECKS=6
-CASE=re.compile(r'OBSERVED_PREPARE_CASE_V1 mode=(print|stop|both) kind=(base|nested|recycled) parity=true records=([12]) suffixChecks=([036]) graphChecks=([04]) observerChecks=([0-9]+) parityChecks=11 failureParityChecks=([01]) sizingChecks=56 quotaChecks=6 stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence=([^ ]+)')
+CONSUMER_CHECKS=24
+CONSUMER_PARITY_CHECKS=1
+CASE=re.compile(r'OBSERVED_PREPARE_CASE_V1 mode=(print|stop|both) kind=(base|nested|recycled) parity=true records=([12]) suffixChecks=([036]) graphChecks=([04]) observerChecks=([0-9]+) parityChecks=11 failureParityChecks=([01]) sizingChecks=56 quotaChecks=6 consumerChecks=24 consumerParityChecks=1 stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence=([^ ]+)')
 FINAL=re.compile(r'OBSERVED_PREPARE_RUN_V1 label=(official|cached) pass=true cases=9 diagnosticOnly=true interpreterExecuted=false fullHostAccepted=false')
 FAILURE=re.compile(r'OBSERVED_PREPARE_FAILURE_V1 phase=(IDENTITY|SELFTEST|LOWER|OFFICIAL|OBSERVED|OBSERVED_FAILURE|PARITY|SUFFIX|GRAPH|CLEANUP) code=REJECTED')
 def process_ok(value):
@@ -54,7 +56,7 @@ def compare(official,cached,official_process,cached_process):
  # Counters and exact prepared-state observations must also match across key implementations.
  need(a==b)
  return dict(status='PASS_OBSERVED_PREPARE_FIXTURE_ONLY',cases=9,parity_cases=9,suffix_checks=12,graph_checks=12,
-  observer_checks=OBSERVER_CHECKS,parity_checks=11,failure_parity_cases=3,sizing_checks=SIZING_CHECKS,quota_checks=QUOTA_CHECKS,state_fields=3,form_absent_in_pinned_api=True,
+  observer_checks=OBSERVER_CHECKS,parity_checks=11,failure_parity_cases=3,sizing_checks=SIZING_CHECKS,quota_checks=QUOTA_CHECKS,consumer_checks=CONSUMER_CHECKS,consumer_parity_checks=CONSUMER_PARITY_CHECKS,state_fields=3,form_absent_in_pinned_api=True,
   renames_none=True,diagnostic_only=True,interpreter_executed=False,full_host_accepted=False)
 def failure(text,label):
  need(type(label)is str and label in ('official','cached'))
@@ -119,3 +121,44 @@ def sizing_pair(provenance,budget,sizing):
  need((s is not None)==(b is not None))
  if b is not None and b.get('status')=='UNAVAILABLE':need(s==dict(status='ERROR',reason='UNEXPECTED',**dict.fromkeys(SIZING_KEYS,0)))
  return dict(budget=b,sizing=s)
+
+# First INITIAL_USES CONSUMER failure only. Masks describe object identity,
+# never operand traversal origin; neither names nor AST text are accepted.
+CONSUMER_SITES=frozenset(('DUPLICATE','MISSING','FINAL_KIND'))
+CONSUMER_MASK_MAX={'CONNECT':3,'PRINT':3,'STOP':3,'VERIFICATION':7,'OTHER':0}
+CONSUMER_KINDS=frozenset(('NODE','PORT','REG','WIRE','INSTANCE','MEM','EXP','UNKNOWN','POISON','RANDOM','OTHER'))
+CONSUMER_FLOWS=frozenset(('SOURCE','SINK','DUPLEX','UNKNOWN','OTHER'))
+def consumer_evidence(text):
+ need(type(text)is str and 0<len(text)<=512 and text.isascii())
+ if text=='NONE':return None
+ if text=='UNAVAILABLE':return {'status':'UNAVAILABLE'}
+ fields=text.split(':');need(len(fields)==17 and fields[0]in CONSUMER_SITES)
+ slots=[]
+ for offset in (1,9):
+  role,mask,direct,typ,kind,flow,op,message=fields[offset:offset+8]
+  need(role in CONSUMER_MASK_MAX and re.fullmatch(r'[0-7]',mask)is not None and int(mask)<=CONSUMER_MASK_MAX[role])
+  need(direct in ('TRUE','FALSE') and (direct=='TRUE')==(typ!='NA'))
+  if typ=='NA':need(kind=='NA'and flow=='NA')
+  else:need(typ in ('CLOCK','UINT','OTHER')and kind in CONSUMER_KINDS and flow in CONSUMER_FLOWS)
+  if role=='VERIFICATION':need(op in ('ASSERT','ASSUME','COVER','OTHER')and message in ('EMPTY','NONEMPTY'))
+  else:need(op=='NA'and message=='NA')
+  slots.append(dict(role=role,operand_mask=int(mask),direct=direct=='TRUE',reference_type=typ,
+   reference_kind=kind,reference_flow=flow,formal_op=op,message=message))
+ return dict(status='AVAILABLE',site=fields[0],slots=slots)
+def consumer_for_provenance(provenance,text):
+ value=consumer_evidence(text)
+ target=provenance['status']=='UNAVAILABLE'and provenance['step']=='INITIAL_USES'and provenance['reason']=='CONSUMER'
+ need((value is not None)==target)
+ if target and value.get('status')=='AVAILABLE':
+  slots=value['slots']
+  def matching(slot,roles):
+   return slot['role']in roles and slot['operand_mask']&1 and slot['direct'] and (slot['reference_type'],slot['reference_kind'],slot['reference_flow'])==('CLOCK','NODE','SOURCE')
+  consumers=sum(bool(matching(slot,('PRINT','STOP')))for slot in slots)
+  drivers=sum(bool(matching(slot,('CONNECT',)))for slot in slots)
+  if value['site']=='MISSING':need(drivers==1 and consumers==0)
+  elif value['site']=='DUPLICATE':need(consumers==2)
+  else:
+   # Defensive FINAL_KIND is unreachable in the current exact-class flow.
+   # Retain its prior prerequisites, without claiming it occurred at runtime.
+   need(drivers==1 and consumers==1)
+ return value

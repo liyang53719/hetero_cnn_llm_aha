@@ -29,7 +29,9 @@ SIZING_CHECKS=56
 QUOTA_CHECKS=6
 CONSUMER_CHECKS=24
 CONSUMER_PARITY_CHECKS=1
-CASE=re.compile(r'OBSERVED_PREPARE_CASE_V1 mode=(print|stop|both) kind=(base|nested|recycled) parity=true records=([12]) suffixChecks=([036]) graphChecks=([04]) observerChecks=([0-9]+) parityChecks=11 failureParityChecks=([01]) sizingChecks=56 quotaChecks=6 consumerChecks=24 consumerParityChecks=1 stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence=([^ ]+)')
+FORMAL_CHECKS=58
+FORMAL_PARITY_CHECKS=2
+CASE=re.compile(r'OBSERVED_PREPARE_CASE_V1 mode=(print|stop|both) kind=(base|nested|recycled) parity=true records=([12]) suffixChecks=([036]) graphChecks=([04]) observerChecks=([0-9]+) parityChecks=11 failureParityChecks=([01]) sizingChecks=56 quotaChecks=6 consumerChecks=24 consumerParityChecks=1 formalChecks=58 formalParityChecks=2 stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence=([^ ]+)')
 FINAL=re.compile(r'OBSERVED_PREPARE_RUN_V1 label=(official|cached) pass=true cases=9 diagnosticOnly=true interpreterExecuted=false fullHostAccepted=false')
 FAILURE=re.compile(r'OBSERVED_PREPARE_FAILURE_V1 phase=(IDENTITY|SELFTEST|LOWER|OFFICIAL|OBSERVED|OBSERVED_FAILURE|PARITY|SUFFIX|GRAPH|CLEANUP) code=REJECTED')
 def process_ok(value):
@@ -56,7 +58,7 @@ def compare(official,cached,official_process,cached_process):
  # Counters and exact prepared-state observations must also match across key implementations.
  need(a==b)
  return dict(status='PASS_OBSERVED_PREPARE_FIXTURE_ONLY',cases=9,parity_cases=9,suffix_checks=12,graph_checks=12,
-  observer_checks=OBSERVER_CHECKS,parity_checks=11,failure_parity_cases=3,sizing_checks=SIZING_CHECKS,quota_checks=QUOTA_CHECKS,consumer_checks=CONSUMER_CHECKS,consumer_parity_checks=CONSUMER_PARITY_CHECKS,state_fields=3,form_absent_in_pinned_api=True,
+  observer_checks=OBSERVER_CHECKS,parity_checks=11,failure_parity_cases=3,sizing_checks=SIZING_CHECKS,quota_checks=QUOTA_CHECKS,consumer_checks=CONSUMER_CHECKS,consumer_parity_checks=CONSUMER_PARITY_CHECKS,formal_checks=FORMAL_CHECKS,formal_parity_checks=FORMAL_PARITY_CHECKS,state_fields=3,form_absent_in_pinned_api=True,
   renames_none=True,diagnostic_only=True,interpreter_executed=False,full_host_accepted=False)
 def failure(text,label):
  need(type(label)is str and label in ('official','cached'))
@@ -153,7 +155,8 @@ def consumer_for_provenance(provenance,text):
   slots=value['slots']
   def matching(slot,roles):
    return slot['role']in roles and slot['operand_mask']&1 and slot['direct'] and (slot['reference_type'],slot['reference_kind'],slot['reference_flow'])==('CLOCK','NODE','SOURCE')
-  consumers=sum(bool(matching(slot,('PRINT','STOP')))for slot in slots)
+  consumers=sum(bool(matching(slot,('PRINT','STOP')) or
+   (matching(slot,('VERIFICATION',)) and slot['formal_op']=='ASSERT' and slot['message']=='EMPTY'))for slot in slots)
   drivers=sum(bool(matching(slot,('CONNECT',)))for slot in slots)
   if value['site']=='MISSING':need(drivers==1 and consumers==0)
   elif value['site']=='DUPLICATE':need(consumers==2)
@@ -161,4 +164,19 @@ def consumer_for_provenance(provenance,text):
    # Defensive FINAL_KIND is unreachable in the current exact-class flow.
    # Retain its prior prerequisites, without claiming it occurred at runtime.
    need(drivers==1 and consumers==1)
+ return value
+
+
+# Clock-terminal transition counts only, never assertion-data equivalence.
+def formal_evidence(text):
+ need(type(text)is str and 0<len(text)<=256 and text.isascii())
+ fields=text.split(':');need(len(fields)==5 and fields[0]in ('COMPLETE','UNAVAILABLE'))
+ values=numbers(fields[1:],[1024]*4)
+ if fields[0]=='COMPLETE':need(all(value==values[0]for value in values))
+ else:need(values==[0]*4)
+ return dict(status=fields[0],**dict(zip(('formal_count','p52','p53','p54'),values)))
+def formal_for_provenance(provenance,text):
+ value=formal_evidence(text)
+ need((value['status']=='COMPLETE')==(provenance['status']=='COMPLETE'))
+ if value['status']=='COMPLETE':need(value['formal_count']<=provenance['records'])
  return value

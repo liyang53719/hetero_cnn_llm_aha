@@ -30,9 +30,11 @@ final class ObservedPrepareAst(expected:Int=394) extends Phase {
   def sizingEvidence:String=sizingResult
   private var consumerResult="NONE"
   def consumerEvidence:String=consumerResult
+  private var formalResult="UNAVAILABLE:0:0:0:0"
+  def formalEvidence:String=formalResult
   override def transform(annotationSeq:AnnotationSeq):AnnotationSeq={
     result="UNAVAILABLE:CENSUS:NOT_RUN:0:0:0:0:0:0:0:0:0"
-    budgetResult="NONE";sizingResult="NONE";consumerResult="NONE"
+    budgetResult="NONE";sizingResult="NONE";consumerResult="NONE";formalResult="UNAVAILABLE:0:0:0:0"
     var circuits=0
     annotationSeq.flatMap {
       case FirrtlCircuitAnnotation(circuit)=>
@@ -55,8 +57,8 @@ final class ObservedPrepareAst(expected:Int=394) extends Phase {
           }
           if(observation!=null)observation.afterSuffix(54,newState)
           result=if(circuits>1)"UNAVAILABLE:DONE:MULTIPLE_CIRCUITS:0:0:0:0:0:0:0:0:0" else if(observation==null)"UNAVAILABLE:CENSUS:UNEXPECTED:0:0:0:0:0:0:0:0:0" else observation.evidence
-          if(circuits==1 && observation!=null){budgetResult=observation.budgetEvidence;sizingResult=observation.sizingEvidence;consumerResult=observation.consumerEvidence}
-          else {budgetResult="NONE";sizingResult="NONE";consumerResult="NONE"}
+          if(circuits==1 && observation!=null){budgetResult=observation.budgetEvidence;sizingResult=observation.sizingEvidence;consumerResult=observation.consumerEvidence;formalResult=observation.formalEvidence}
+          else {budgetResult="NONE";sizingResult="NONE";consumerResult="NONE";formalResult="UNAVAILABLE:0:0:0:0"}
           Some(TreadleCircuitStateAnnotation(newState))
         } finally if(observation!=null)observation.release()
       case other=>Some(other)
@@ -326,7 +328,145 @@ object ObservedPrepareAst {
     }
     def same(x:Info,y:Info):Boolean={val a=infoPresent(x);val z=infoPresent(y);a&&z&&eqInfo(x,y,0)}
   }
+  // BEGIN EMPTY ASSERT CLOCK TERMINAL LINEAGE
+  private def emptyAssert(s:Statement,b:Budget):Boolean={
+    b.charge(C.Probe,4)
+    if(s.getClass!=classOf[Verification])return false
+    val v=s.asInstanceOf[Verification]
+    (v.op eq Formal.Assert)&&v.msg!=null&&v.msg.getClass==classOf[StringLit]&&v.msg.string.length==0
+  }
+  private final class CompactFormal(val clock:Reference,val pred:Reference,val en:Reference)
+  private def formalRef(e:Expression,isClock:Boolean,b:Budget):Reference={
+    b.charge(C.Probe,8);b.charge(C.Expr)
+    need(e!=null&&e.getClass==classOf[Reference],"SHAPE");val r=e.asInstanceOf[Reference];b.name(r.name)
+    need((r.kind eq NodeKind)&&(r.flow eq SourceFlow),"SHAPE")
+    if(isClock)need(r.tpe eq ClockType,"SHAPE")
+    else {need(r.tpe!=null&&r.tpe.getClass==classOf[UIntType],"SHAPE")
+      val w=r.tpe.asInstanceOf[UIntType].width
+      need(w!=null&&w.getClass==classOf[IntWidth],"SHAPE")
+      // Reject subclass backing before numeric equality can dispatch through it.
+      // Numeric equality alone can also hide inconsistent backing/cache fields.
+      b.charge(C.Temp,2);b.charge(C.Probe,4)
+      val value=w.asInstanceOf[IntWidth].width
+      need(value!=null&&value.getClass==classOf[scala.math.BigInt],"SHAPE")
+      val backing=value.bigInteger
+      need(backing!=null&&backing.getClass==classOf[java.math.BigInteger]&&java.math.BigInteger.ONE.equals(backing),"SHAPE")
+      need(value==1,"SHAPE")}
+    r
+  }
+  private def formalFields(s:Statement,assertStage:Boolean,b:Budget):CompactFormal={
+    b.charge(C.Probe,8)
+    var clk:Expression=null;var pred:Expression=null;var en:Expression=null
+    if(assertStage){need(emptyAssert(s,b),"SHAPE");val v=s.asInstanceOf[Verification]
+      clk=v.clk;pred=v.pred;en=v.en
+    }else {
+      need(s.getClass==classOf[Stop],"RELATION");val stop=s.asInstanceOf[Stop]
+      need(stop.ret==65,"RELATION");clk=stop.clk
+      need(stop.en.getClass==classOf[DoPrim],"RELATION");val and=stop.en.asInstanceOf[DoPrim]
+      need(and.op eq firrtl2.PrimOps.And,"RELATION")
+      need(b.size(and.args,2)==2&&b.size(and.consts,0)==0,"RELATION")
+      val ai=b.iter(and.args);val n=ai.next();en=ai.next()
+      need(n.getClass==classOf[DoPrim],"RELATION");val not=n.asInstanceOf[DoPrim]
+      need(not.op eq firrtl2.PrimOps.Not,"RELATION")
+      need(b.size(not.args,1)==1&&b.size(not.consts,0)==0,"RELATION")
+      val ni=b.iter(not.args);pred=ni.next()
+      // Read stored type only after exact Reference admission below.
+      val pr=formalRef(pred,false,b)
+      need((and.tpe eq pr.tpe)&&(not.tpe eq pr.tpe),"RELATION")
+    }
+    val c=formalRef(clk,true,b);val p=formalRef(pred,false,b);val e=formalRef(en,false,b)
+    b.charge(C.Temp);new CompactFormal(c,p,e)
+  }
+  private def formalLeafRelation(old:Reference,fresh:Reference,index:Int,b:Budget):Unit={
+    b.charge(C.Probe,5)
+    if(index==52||index==53)need(old eq fresh,"RELATION")
+    else {need(index==54,"RELATION")
+      need((old.name eq fresh.name)&&(old.tpe eq fresh.tpe)&&(old.kind eq fresh.kind)&&(fresh.flow eq SourceFlow),"RELATION")}
+  }
+  private final class FormalRecords(b:Budget,owner:Records,capacity:Int=1024,nameLimit:Long=1L<<19) {
+    need(capacity>=0&&capacity<=1024&&nameLimit>=0&&nameLimit<=(1L<<19),"BOUND")
+    // Eight arrays,53KiB payload; fixed12MiB slice is reserved before Records.
+    // All allocations also consume the unchanged shared transient quota.
+    b.charge(C.Temp,256)
+    // Reserve all bounded lifecycle cleanup before retaining anything. Normal
+    // production calls clearSnapshot at most5 times plus2048 terminal/name clears;
+    // failure paths call fewer.32768 covers these writes, so finally never charges.
+    b.charge(C.Clear,32768)
+    private val names=new Array[String](1024)
+    private val weak=new Array[WeakReference[Statement]](1024)
+    private val stage=new Array[Int](1024);private val seen=new Array[Boolean](1024)
+    private val clocks=new Array[Reference](1024);private val predicates=new Array[Reference](1024);private val enables=new Array[Reference](1024)
+    private val keys=Array.fill(2048)(-1)
+    private var persistentChars=0L
+    var count=0;var p52=0;var p53=0;var p54=0
+    private def slot(mid:Int,name:String):Int={var p=(b.hash(name)^mid*0x9e3779b9)&2047
+      while(true){b.charge(C.Probe);val id=keys(p)
+        if(id<0||owner.moduleIds(id)==mid&&b.equal(names(id),name))return p
+        p=(p+1)&2047}; -1}
+    def contains(id:Int):Boolean={b.charge(C.Probe);names(id)!=null}
+    private def terminal(id:Int):Statement={b.charge(C.Probe);val s=weak(id).get;need(s!=null,"RECLAIMED");s}
+    private def named(s:Statement):String=s match{case v:Verification=>v.name;case x:Stop=>x.name;case _=>fail("RELATION")}
+    private def info(s:Statement):Info=s match{case v:Verification=>v.info;case x:Stop=>x.info;case _=>fail("RELATION")}
+    def add(id:Int,v:Verification):Unit={
+      b.charge(C.Probe,4);b.charge(C.Names)
+      need(names(id)==null,"DUPLICATE");b.bound(count<capacity);b.name(v.name)
+      val fields=formalFields(v,true,b)
+      need(v.info eq owner.get(id).info,"INFO")
+      b.bound(v.name.length<=nameLimit-persistentChars)
+      val p=slot(owner.moduleIds(id),v.name);need(keys(p)<0,"DUPLICATE")
+      b.charge(C.Temp);val w=new WeakReference[Statement](v)
+      names(id)=v.name;weak(id)=w;stage(id)=51;keys(p)=id;persistentChars+=v.name.length;count+=1
+    }
+    def anchor(v:Verification,mid:Int,anchors:Array[Int]):Unit={
+      if(!emptyAssert(v,b))return
+      val id=keys(slot(mid,v.name))
+      if(id>=0){b.charge(C.Probe,6);val reg=owner.get(id)
+        need((v.name eq names(id))&&(v.info eq reg.info),"ANCHOR")
+        need(v.clk eq reg.clock,"ANCHOR")
+        need(anchors(id)==0,"ANCHOR");anchors(id)=1
+      }
+    }
+    def capture():Unit={var chars=persistentChars;var id=0
+      while(id<owner.count){b.charge(C.Probe)
+        if(names(id)!=null){
+          val t=terminal(id);val f=formalFields(t,stage(id)==51,b)
+          need((named(t) eq names(id))&&(info(t) eq owner.snapshot(id).info),"RELATION")
+          val n=f.clock.name.length.toLong+f.pred.name.length+f.en.name.length
+          b.bound(n<=nameLimit-chars);chars+=n
+          clocks(id)=f.clock;predicates(id)=f.pred;enables(id)=f.en;seen(id)=false
+        };id+=1
+      }
+    }
+    def inspect(s:Statement,mid:Int,index:Int):Unit={
+      b.charge(C.Probe)
+      s match{case d:IsDeclaration if d.name.nonEmpty=>
+        val id=keys(slot(mid,d.name))
+        if(id>=0){b.charge(C.Probe,8);need(!seen(id),"DUPLICATE")
+          need(s.getClass==classOf[Stop],"RELATION");val stop=s.asInstanceOf[Stop]
+          need(stage(id)==index-1&&(stop.name eq names(id))&&(stop.info eq owner.snapshot(id).info),"RELATION")
+          val f=formalFields(stop,false,b)
+          formalLeafRelation(clocks(id),f.clock,index,b)
+          formalLeafRelation(predicates(id),f.pred,index,b)
+          formalLeafRelation(enables(id),f.en,index,b)
+          b.charge(C.Temp);weak(id)=new WeakReference[Statement](stop);stage(id)=index;seen(id)=true
+        }
+        case _=>()}
+    }
+    def finish(index:Int):Unit={var id=0;var done=0
+      while(id<owner.count){b.charge(C.Probe);if(names(id)!=null){need(seen(id)&&stage(id)==index,"COUNT");done+=1};id+=1}
+      need(done==count,"COUNT")
+      if(index==52)p52=done else if(index==53)p53=done else p54=done
+    }
+    def sameFinal(id:Int,s:Statement):Boolean={b.charge(C.Probe);stage(id)==54&&(terminal(id) eq s)}
+    def clearSnapshot():Unit={var id=0;while(id<1024){clocks(id)=null;predicates(id)=null;enables(id)=null;id+=1}}
+    def clear():Unit={clearSnapshot();var id=0;while(id<1024){names(id)=null;weak(id)=null;id+=1}}
+    def clearWeakForTest(id:Int):Unit=weak(id).clear()
+    def snapshotsEmpty:Boolean={var id=0;while(id<1024){if(clocks(id)!=null||predicates(id)!=null||enables(id)!=null)return false;id+=1};true}
+  }
+  // END EMPTY ASSERT CLOCK TERMINAL LINEAGE
+
   private final class Records(b:Budget) {
+    val formals=new FormalRecords(b,this)
     val refs=new Array[WeakReference[DefRegister]](1024)
     val moduleNames=new Array[String](1024);val moduleIds=new Array[Int](1024)
     val names=new Array[String](1024);val clockNames=new Array[String](1024)
@@ -350,8 +490,8 @@ object ObservedPrepareAst {
       while(i<count){b.charge(C.Probe);val r=get(i);val c=clock(r,b)
         val n=moduleNames(i).length.toLong+r.name.length+c.name.length
         b.bound(n<=(1L<<20)-chars);chars+=n;need(checked.infoPresent(r.info),"INFO")
-        snapshot(i)=r;seen(i)=false;i+=1};checked.snapshot=false}
-    def clearSnapshot():Unit={java.util.Arrays.fill(snapshot.asInstanceOf[Array[AnyRef]],null)}
+        snapshot(i)=r;seen(i)=false;i+=1};checked.snapshot=false;formals.capture()}
+    def clearSnapshot():Unit={java.util.Arrays.fill(snapshot.asInstanceOf[Array[AnyRef]],null);formals.clearSnapshot()}
     def update(i:Int,r:DefRegister):Unit={b.charge(C.Temp);refs(i)=new WeakReference(r)}
   }
   private final class Modules(b:Budget) {
@@ -441,6 +581,8 @@ object ObservedPrepareAst {
               if(consumer!=null)consumerFailure("DUPLICATE",i);consumer=x
             case x:Stop if (roots(k) eq x.clk)&&delayed(x.clk,records.names(i),false,finalStage,b)=>
               if(consumer!=null)consumerFailure("DUPLICATE",i);consumer=x
+            case x:Verification if !finalStage && emptyAssert(x,b) && (roots(k) eq x.clk)&&delayed(x.clk,records.names(i),false,false,b)=>
+              if(consumer!=null)consumerFailure("DUPLICATE",i);consumer=x
             case _=>()
           };j+=1
         }
@@ -449,11 +591,15 @@ object ObservedPrepareAst {
         need(b.equal(rhs.name,c.name)&&(rhs.tpe eq c.tpe)&&(rhs.kind eq c.kind)&&(rhs.flow eq c.flow),"DRIVER")
         need(checked.same(reg.info,driver.info),"INFO")
         consumer match{case p:Print=>printText(p,b);need(checked.same(reg.info,p.info),"INFO")
-          case p:Stop=>need(checked.same(reg.info,p.info),"INFO");case _=>consumerFailure("FINAL_KIND",i)}
+          case p:Stop=>need(checked.same(reg.info,p.info),"INFO")
+          case v:Verification if !finalStage=>need(v.info eq reg.info,"INFO");records.formals.add(i,v)
+          case _=>consumerFailure("FINAL_KIND",i)}
+        if(finalStage&&records.formals.contains(i))need(records.formals.sameFinal(i,consumer),"RELATION")
         consumers(i)=consumer;i+=1
       }
     }
     def anchor(s:Statement,moduleId:Int):Unit={
+      if(s.getClass==classOf[Verification])records.formals.anchor(s.asInstanceOf[Verification],moduleId,anchors)
       var c:Reference=null;var info:Info=null;var format:String=null;var ret=0;var print=false
       s match {
         case p:Print=>printText(p,b)
@@ -486,7 +632,7 @@ object ObservedPrepareAst {
     // and <=550 active standard iterators fit the separate2MiB fixed allowance.
     //20MiB names +2MiB pools +4MiB text +64MiB Info +.5MiB childpayload
     // +8MiB official comparison scratch +2MiB weak/temporary admission =100.5MiB.
-    need(105381888L<=128L*1024*1024,"BOUND")
+    need(105381888L+12L*1024*1024<=128L*1024*1024,"BOUND")
     private val b=new Budget
     private var step="CENSUS";private var status="UNAVAILABLE";private var reason="NOT_RUN"
     private var active=true;private var complete=false;private var records:Records=null
@@ -499,6 +645,8 @@ object ObservedPrepareAst {
     def sizingEvidence:String=sizingResult
     private var consumerResult="NONE"
     def consumerEvidence:String=consumerResult
+    private var formalResult="UNAVAILABLE:0:0:0:0"
+    def formalEvidence:String=if(complete)formalResult else "UNAVAILABLE:0:0:0:0"
     // Only invoked from this object's bounded sizingSelfChecks; not a public hook.
     def sizingFixtureFailure(where:String,mode:Int):Unit={
       step=where
@@ -618,9 +766,11 @@ object ObservedPrepareAst {
             if(mismatch){need(id>=0,"COUNT");clock(r,b);need(checked.infoPresent(r.info),"INFO")}
             else need(id<0,"SHAPE")}
           case _=>()}
+        records.formals.inspect(s,mid,index)
         if(finalStage)uses.scan(s,mid)
       },noModule,noModule)
       var i=0;while(i<records.count){need(records.seen(i),"COUNT");i+=1}
+      records.formals.finish(index)
       if(finalStage)uses.finish()
       if(index==52)p52=records.count else if(index==53)p53=records.count else p54=records.count
     }
@@ -640,6 +790,9 @@ object ObservedPrepareAst {
           if(index==54){count=records.count;var i=0
             while(i<count){if(records.lost(i))lost+=1;if(records.clockChanged(i))changed+=1;i+=1}
             need(lost==expected&&changed==expected,"RELATION")
+            val f=records.formals
+            need(f.count<=count&&f.p52==f.count&&f.p53==f.count&&f.p54==f.count,"COUNT")
+            formalResult=s"COMPLETE:${f.count}:${f.p52}:${f.p53}:${f.p54}"
             complete=true;status="COMPLETE";step="DONE";reason="NONE"
           }
         }
@@ -654,7 +807,7 @@ object ObservedPrepareAst {
       s"$status:$step:$reason:$semantic:${b.used(C.Visit)}:${b.used(C.Expr)}"
     }
     def cleaned:Boolean=records==null&&walk==null&&checked==null
-    def release():Unit={if(records!=null)records.clearSnapshot();records=null
+    def release():Unit={if(records!=null){records.clearSnapshot();records.formals.clear()};records=null
       if(walk!=null)walk.clear();walk=null;checked=null}
   }
   // BEGIN INDEPENDENT INITIAL USES SIZING
@@ -1096,7 +1249,7 @@ object ObservedPrepareAst {
     val driver=Connect(info,ref,clock)
     val print=Print(info,StringLit("private-format"),Nil,ref,UIntLiteral(1),"private-print")
     val stop=Stop(info,0,ref,UIntLiteral(1),"private-stop")
-    val formal=Verification(Formal.Assert,info,ref,UIntLiteral(1),UIntLiteral(1),StringLit(""),"private-formal")
+    val formal=Verification(Formal.Assert,info,ref,UIntLiteral(1),UIntLiteral(1),StringLit("nonempty-negative"),"private-formal")
     def finish(a:Statement,z:Statement,finalStage:Boolean=false):Abort={
       val b=new Budget;val records=new Records(b);records.add(0,"private-module",reg,clock)
       val uses=new Uses(b,records,new Checked(b),finalStage)
@@ -1105,7 +1258,7 @@ object ObservedPrepareAst {
     }
     val missing=finish(driver,formal)
     check(missing.reason=="CONSUMER"&&consumerCode(missing)==
-      "MISSING:CONNECT:1:TRUE:CLOCK:NODE:SOURCE:NA:NA:VERIFICATION:1:TRUE:CLOCK:NODE:SOURCE:ASSERT:EMPTY")
+      "MISSING:CONNECT:1:TRUE:CLOCK:NODE:SOURCE:NA:NA:VERIFICATION:1:TRUE:CLOCK:NODE:SOURCE:ASSERT:NONEMPTY")
     val duplicate=finish(print,stop)
     check(duplicate.reason=="CONSUMER"&&consumerCode(duplicate).startsWith("DUPLICATE:PRINT:1:TRUE:CLOCK:NODE:SOURCE:NA:NA:STOP:1:"))
     check(finish(formal,formal.copy(name="other-formal")).reason=="DRIVER")
@@ -1120,7 +1273,7 @@ object ObservedPrepareAst {
     check(consumerCode(consumerAbort("MISSING",driver,ref,true,printArg,ref,true)).contains("PRINT:0:TRUE:"))
     check(consumerCode(consumerAbort("FINAL_KIND",driver,ref,true,formal,ref,true)).startsWith("FINAL_KIND:"))
     check(consumerCode(consumerAbort("MISSING",driver,ref,true,formal.copy(op=Formal.Assume,msg=StringLit("secret-message")),ref,true)).endsWith(":ASSUME:NONEMPTY"))
-    check(consumerCode(consumerAbort("MISSING",driver,ref,true,formal.copy(op=Formal.Cover),ref,true)).endsWith(":COVER:EMPTY"))
+    check(consumerCode(consumerAbort("MISSING",driver,ref,true,formal.copy(op=Formal.Cover,msg=StringLit("")),ref,true)).endsWith(":COVER:EMPTY"))
     val uint=ref.copy(tpe=UIntType(IntWidth(1)),kind=firrtl2.RegKind,flow=SinkFlow)
     check(consumerCode(consumerAbort("MISSING",driver,uint,false,formal,uint,false)).contains(":UINT:REG:SINK:"))
     val other=ref.copy(tpe=ResetType,kind=firrtl2.UnknownKind,flow=firrtl2.UnknownFlow)
@@ -1148,6 +1301,134 @@ object ObservedPrepareAst {
       check(o.evidence.startsWith("UNAVAILABLE:INITIAL_USES:CONSUMER:")&&o.consumerEvidence=="UNAVAILABLE"&&o.cleaned)}
     invalid.consumerCode=consumerCode(missing).replace(":CLOCK:NODE:SOURCE:",":NA:NODE:SOURCE:")
     check(consumerCode(invalid)=="UNAVAILABLE")
+    checks
+  }
+
+  /** Narrow empty-Assert source/transition checks using the production helpers. */
+  def formalSelfChecks():Int={
+    var checks=0
+    def check(ok:Boolean):Unit={require(ok,"FORMAL_SELFCHECK");checks+=1}
+    def rejected(body: =>Unit):Boolean=try{body;false}catch{case _:Abort=>true}
+    val info=FileInfo("formal:1");val source=Reference("clock",ClockType,PortKind,SourceFlow)
+    val delayedClock=Reference("sample",ClockType,NodeKind,SourceFlow)
+    val pred=Reference("predicate",UIntType(IntWidth(1)),NodeKind,SourceFlow)
+    val en=Reference("enable",UIntType(IntWidth(1)),NodeKind,SourceFlow)
+    val reg=DefRegister(info,delayedClock.name,ClockType,source,UIntLiteral(0),UIntLiteral(0))
+    val v=Verification(Formal.Assert,info,delayedClock,pred,en,StringLit(""),"assertion")
+    val original=v.copy(clk=source,pred=UIntLiteral(1),en=UIntLiteral(1))
+    def stop(c:Expression=delayedClock,p:Expression=pred,e:Expression=en):Stop={
+      val not=DoPrim(firrtl2.PrimOps.Not,p::Nil,Nil,p.tpe)
+      Stop(info,65,c,DoPrim(firrtl2.PrimOps.And,List(not,e),Nil,p.tpe),v.name)
+    }
+    final case class Fixture(b:Budget,r:Records,f:FormalRecords)
+    def fixture(cap:Int=1024,limit:Long=1L<<19):Fixture={
+      val b=new Budget;val r=new Records(b);r.add(0,"Top",reg,source)
+      val f=if(cap==1024&&limit==(1L<<19))r.formals else new FormalRecords(b,r,cap,limit)
+      Fixture(b,r,f)
+    }
+    def capture(x:Fixture):Unit={x.r.capture(new Checked(x.b));if(!(x.f eq x.r.formals))x.f.capture()}
+    def admitted(value:Verification):Boolean={val x=fixture();!rejected{x.f.add(0,value)}}
+    check(admitted(v))
+    check(!admitted(v.copy(msg=StringLit("nonempty"))))
+    check(!admitted(v.copy(op=Formal.Assume)))
+    check(!admitted(v.copy(op=Formal.Cover)))
+    check(!admitted(new Verification(v.op,v.info,v.clk,v.pred,v.en,v.msg,v.name){}))
+    check(!admitted(v.copy(msg=new StringLit(""){})))
+    check(!admitted(v.copy(pred=UIntLiteral(1))))
+    check(!admitted(v.copy(pred=pred.copy(tpe=UIntType(IntWidth(2))))))
+    check(!admitted(v.copy(pred=pred.copy(kind=firrtl2.RegKind))))
+    check(!admitted(v.copy(en=en.copy(flow=SinkFlow))))
+    check(!admitted(v.copy(clk=source)))
+    check(!admitted(v.copy(info=FileInfo("formal:1"))))
+    locally {val x=fixture();x.f.add(0,v);val anchors=new Array[Int](1024);x.f.anchor(original,0,anchors)
+      check(anchors(0)==1)
+      check(rejected{x.f.anchor(original,0,anchors)})}
+    locally {val x=fixture();x.f.add(0,v);val anchors=new Array[Int](1024)
+      check(rejected{x.f.anchor(original.copy(name=new String(v.name)),0,anchors)})
+      check(rejected{x.f.anchor(original.copy(info=FileInfo("formal:1")),0,anchors)})
+      check(rejected{x.f.anchor(original.copy(clk=source.copy()),0,anchors)})
+      x.f.anchor(original.copy(msg=StringLit("nonempty")),0,anchors);check(anchors(0)==0)
+      x.f.anchor(original,1,anchors);check(anchors(0)==0)}
+    locally {val x=fixture();x.f.add(0,v);capture(x);val s52=stop()
+      x.f.inspect(s52,0,52);x.f.finish(52);x.f.clearSnapshot();check(x.f.p52==1&&x.f.snapshotsEmpty)
+      capture(x);val s53=stop();x.f.inspect(s53,0,53);x.f.finish(53);x.f.clearSnapshot()
+      check(x.f.p53==1&&x.f.snapshotsEmpty)
+      capture(x);val s54=stop(delayedClock.copy(),pred.copy(),en.copy())
+      x.f.inspect(s54,0,54);x.f.finish(54)
+      check(x.f.p54==1&&x.f.sameFinal(0,s54) && !x.f.sameFinal(0,s54.copy()))
+      x.f.clear();check(x.f.snapshotsEmpty);java.lang.ref.Reference.reachabilityFence(s52);java.lang.ref.Reference.reachabilityFence(s53);java.lang.ref.Reference.reachabilityFence(s54)}
+    def rejects52(s:Statement):Boolean={val x=fixture();x.f.add(0,v);capture(x);rejected{x.f.inspect(s,0,52)}}
+    check(rejects52(stop().copy(ret=66)))
+    check(rejects52(stop().copy(name=new String(v.name))))
+    check(rejects52(stop().copy(info=FileInfo("formal:1"))))
+    check(rejects52(stop(c=delayedClock.copy())))
+    check(rejects52(stop(p=pred.copy())))
+    check(rejects52(stop(e=en.copy())))
+    check(rejects52(stop(p=en,e=pred)))
+    check(rejects52(stop().copy(en=DoPrim(firrtl2.PrimOps.Or,List(pred,en),Nil,pred.tpe))))
+    check(rejects52(stop().copy(en=DoPrim(firrtl2.PrimOps.And,List(pred,en),Nil,pred.tpe))))
+    val good=stop().en.asInstanceOf[DoPrim]
+    check(rejects52(stop().copy(en=good.copy(args=good.args :+ en))))
+    check(rejects52(stop().copy(en=good.copy(consts=BigInt(0)::Nil))))
+    check(rejects52(stop().copy(en=good.copy(tpe=UIntType(IntWidth(1))))))
+    check(rejects52(stop().copy(en=good.copy(args=scala.collection.immutable.LazyList(good.args.head,en)))))
+    locally {val x=fixture();x.f.add(0,v);capture(x);val s=stop();x.f.inspect(s,0,52)
+      check(rejected{x.f.inspect(s,0,52)})}
+    locally {val x=fixture();x.f.add(0,v);capture(x);check(rejected{x.f.finish(52)})}
+    locally {val x=fixture();x.f.add(0,v);x.f.clearWeakForTest(0);check(rejected{capture(x)})}
+    locally {val x=fixture(cap=1);x.f.add(0,v)
+      x.r.add(0,"Top",reg.copy(name="second"),source)
+      check(rejected{x.f.add(1,v.copy(name="second-assert",clk=delayedClock.copy(name="second")))})}
+    val live=v.name.length.toLong+delayedClock.name.length+pred.name.length+en.name.length
+    locally {val x=fixture(limit=live);x.f.add(0,v);capture(x);check(!x.f.snapshotsEmpty);x.f.clear()}
+    locally {val x=fixture(limit=live-1);x.f.add(0,v);check(rejected{capture(x)});x.f.clear();check(x.f.snapshotsEmpty)}
+    locally {val x=fixture();x.b.used(C.Temp)=C.limits(C.Temp)
+      check(rejected{x.f.add(0,v)}&&x.f.count==0)}
+    locally {val x=fixture();x.f.add(0,v);capture(x);val keep52=stop();x.f.inspect(keep52,0,52);x.f.finish(52);x.f.clearSnapshot();capture(x)
+      check(rejected{x.f.inspect(stop(p=pred.copy()),0,53)});java.lang.ref.Reference.reachabilityFence(keep52)}
+    locally {val x=fixture();x.f.add(0,v);capture(x);val keep52=stop();x.f.inspect(keep52,0,52);x.f.finish(52);x.f.clearSnapshot();capture(x)
+      val keep53=stop();x.f.inspect(keep53,0,53);x.f.finish(53);x.f.clearSnapshot();capture(x)
+      check(rejected{x.f.inspect(stop(p=pred.copy(name=new String(pred.name))),0,54)});java.lang.ref.Reference.reachabilityFence(keep52);java.lang.ref.Reference.reachabilityFence(keep53)}
+    locally {val x=fixture();x.f.add(0,v);capture(x);val keep52=stop();x.f.inspect(keep52,0,52);x.f.finish(52);x.f.clearSnapshot();capture(x)
+      val keep53=stop();x.f.inspect(keep53,0,53);x.f.finish(53);x.f.clearSnapshot();capture(x)
+      check(rejected{x.f.inspect(stop(e=en.copy(flow=SinkFlow)),0,54)});java.lang.ref.Reference.reachabilityFence(keep52);java.lang.ref.Reference.reachabilityFence(keep53)}
+    // Full private observation path including original anchor and final same-object
+    // Uses agreement. Actual official pass parity is a separately counted fixture.
+    def state(s:Statement):CircuitState=CircuitState(Circuit(NoInfo,Module(NoInfo,"Top",
+      Port(NoInfo,source.name,Input,ClockType)::Nil,s)::Nil,"Top"),Seq.empty)
+    def post(r:DefRegister,t:Statement,finalStage:Boolean):CircuitState={
+      val loc=delayedClock.copy(flow=if(finalStage)SinkFlow else SourceFlow)
+      state(Block(List(r,Connect(info,loc,source),t)))
+    }
+    locally {val o=new Observation(1);val before=state(original);val s51=post(reg,v,false)
+      o.before(51,before);o.afterAugment(before,s51)
+      o.before(52,s51);val s52=post(reg,stop(),false);o.afterSuffix(52,s52)
+      val r53=reg.copy();o.before(53,s52);val s53=post(r53,stop(),false);o.afterSuffix(53,s53)
+      o.before(54,s53);val s54=post(r53.copy(clock=source.copy()),stop(delayedClock.copy(),pred.copy(),en.copy()),true)
+      o.afterSuffix(54,s54)
+      check(o.evidence.startsWith("COMPLETE:DONE:NONE:1:1:1:1:1:1:1:")&&o.formalEvidence=="COMPLETE:1:1:1:1"&&o.cleaned)}
+    locally {val o=new Observation(1);val before=state(original.copy(name="missing-anchor"));val s51=post(reg,v,false)
+      o.before(51,before);o.afterAugment(before,s51)
+      check(o.evidence.startsWith("UNAVAILABLE:ORIGINAL:ANCHOR:")&&o.formalEvidence=="UNAVAILABLE:0:0:0:0"&&o.cleaned)}
+    val not=good.args.head.asInstanceOf[DoPrim]
+    check(rejects52(stop().copy(en=good.copy(args=List(not.copy(op=firrtl2.PrimOps.And),en)))))
+    check(rejects52(stop().copy(en=good.copy(args=List(not.copy(args=List(pred,pred)),en)))))
+    check(rejects52(stop().copy(en=good.copy(args=List(not.copy(consts=BigInt(0)::Nil),en)))))
+    check(rejects52(stop().copy(en=good.copy(args=List(not.copy(tpe=UIntType(IntWidth(1))),en)))))
+    locally {val x=fixture();x.b.used(C.Clear)=C.limits(C.Clear)
+      check(rejected{new FormalRecords(x.b,x.r)})}
+    locally {val x=fixture();x.f.add(0,v);capture(x);x.b.used(C.Clear)=C.limits(C.Clear)
+      x.f.clear();check(x.f.snapshotsEmpty)}
+    val honestWidth=new scala.math.BigInt(new java.math.BigInteger("1"))
+    check(admitted(v.copy(pred=pred.copy(tpe=UIntType(new IntWidth(honestWidth))))))
+    val hugeWidth=new scala.math.BigInt(java.math.BigInteger.ONE.shiftLeft(512))
+    check(!admitted(v.copy(pred=pred.copy(tpe=UIntType(new IntWidth(hugeWidth))))))
+    val deceptiveBacking=new java.math.BigInteger("123456789012345678901234567890"){
+      override def bitLength():Int=1
+      override def longValue():Long=1L
+    }
+    val deceptiveWidth=new scala.math.BigInt(deceptiveBacking)
+    check(!admitted(v.copy(pred=pred.copy(tpe=UIntType(new IntWidth(deceptiveWidth))))))
     checks
   }
 

@@ -321,17 +321,18 @@ object OriginalHostStructuralGraph {
         val ann=FirrtlCircuitAnnotation(boundaryLow.circuit)+:boundaryLow.annotations
         val obtained=timed("get_firrtl_ast") {GetFirrtlAst.transform(ann)}
         val withInfo=timed("set_implicit_output_info") {SetImplicitOutputInfo.transform(obtained)}
-        val (prepared,provenance,observerBudget,observerSizing,observerConsumer)=timed("prepare_ast") {
+        val (prepared,provenance,observerBudget,observerSizing,observerConsumer,observerFormal)=timed("prepare_ast") {
           val observed=new ObservedPrepareAst(394)
           val value=observed.transform(withInfo)
-          (value,observed.evidence,observed.budgetEvidence,observed.sizingEvidence,observed.consumerEvidence)
+          (value,observed.evidence,observed.budgetEvidence,observed.sizingEvidence,observed.consumerEvidence,observed.formalEvidence)
         }
         require(provenance.length<=256,"bounded observer evidence")
-        require(observerBudget.length<=512 && observerSizing.length<=512 && observerConsumer.length<=512,"bounded observer sizing evidence")
+        require(observerBudget.length<=512 && observerSizing.length<=512 && observerConsumer.length<=512 && observerFormal.length<=256,"bounded observer sizing evidence")
         savedOut.println("PREPARE_PROVENANCE_V1 "+provenance)
         savedOut.println("PREPARE_BUDGET_V1 "+observerBudget)
         savedOut.println("PREPARE_USES_SIZING_V1 "+observerSizing)
-        savedOut.println("PREPARE_CONSUMER_V1 "+observerConsumer);savedOut.flush()
+        savedOut.println("PREPARE_CONSUMER_V1 "+observerConsumer)
+        savedOut.println("PREPARE_EMPTY_ASSERT_V1 "+observerFormal);savedOut.flush()
         require(!savedOut.checkError(),"observer evidence output failed")
         val (state,factory)=timed("prepared_checks") {
           preparedStep="STATE"

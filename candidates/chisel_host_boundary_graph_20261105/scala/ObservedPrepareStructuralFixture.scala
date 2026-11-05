@@ -155,7 +155,7 @@ object ObservedPrepareStructuralFixture {
     val low=Compiler.toLowFirrtl(CircuitState(Parser.parse(source("print")),Seq(TargetDirAnnotation(targetName)))).circuit
     val clock=Reference("clock",ClockType,firrtl2.PortKind,firrtl2.SourceFlow)
     val enabled=Reference("en",UIntType(IntWidth(1)),firrtl2.PortKind,firrtl2.SourceFlow)
-    val verification=Verification(Formal.Assert,FileInfo("consumer_witness 1:1"),clock,enabled,enabled,StringLit(""),"consumer_witness")
+    val verification=Verification(Formal.Assert,FileInfo("consumer_witness 1:1"),clock,enabled,enabled,StringLit("nonempty"),"consumer_witness")
     val input=body(low,s=>Block(Seq(s,verification)))
     val augmented=(new AugmentPrintf).runTransform(CircuitState(input,Seq.empty))
     val selected=registers(augmented.circuit);require(selected.size==2)
@@ -174,9 +174,68 @@ object ObservedPrepareStructuralFixture {
     val observer=new ObservedPrepareAst(2);val observed=observer.transform(annotations)
     new Parity().apply(official,observed)
     require(observer.evidence.startsWith("UNAVAILABLE:INITIAL_USES:CONSUMER:0:0:0:0:0:0:0:"))
-    require(observer.consumerEvidence=="MISSING:CONNECT:1:TRUE:CLOCK:NODE:SOURCE:NA:NA:VERIFICATION:1:TRUE:CLOCK:NODE:SOURCE:ASSERT:EMPTY")
+    require(observer.formalEvidence=="UNAVAILABLE:0:0:0:0")
+    require(observer.consumerEvidence=="MISSING:CONNECT:1:TRUE:CLOCK:NODE:SOURCE:NA:NA:VERIFICATION:1:TRUE:CLOCK:NODE:SOURCE:ASSERT:NONEMPTY")
     require(observer.budgetEvidence=="NONE" && observer.sizingEvidence=="NONE")
     1
+  }
+  // Separate positive empty-Assert qualification. Each of the two cases checks
+  // full official output parity, actual suffix fields, and four graph controls.
+  private def formalParityChecks(targetName:String):Int={
+    var count=0
+    Vector(false,true).foreach{mixed=>
+      val text=if(mixed)source("print")else source("print").linesIterator.filterNot(_.trim.startsWith("printf(")).mkString("\n")+"\n"
+      val low=Compiler.toLowFirrtl(CircuitState(Parser.parse(text),Seq(TargetDirAnnotation(targetName)))).circuit
+      val clk=Reference("clock",ClockType,firrtl2.PortKind,firrtl2.SourceFlow)
+      val en=Reference("en",UIntType(IntWidth(1)),firrtl2.PortKind,firrtl2.SourceFlow)
+      val original=Verification(Formal.Assert,FileInfo("formal_witness 1:1"),clk,en,en,StringLit(""),"formal_witness")
+      val input=body(low,s=>Block(Seq(s,original)));val n=if(mixed)2 else 1
+      val first=(new AugmentPrintf).runTransform(CircuitState(input,Seq.empty))
+      var terminal:Verification=null;var found=0
+      visit(first.circuit){case v:Verification=>found+=1;terminal=v;case _=>()}
+      require(found==1 && terminal.getClass==classOf[Verification] && (terminal.op eq Formal.Assert))
+      require((terminal.name eq original.name) && (terminal.info eq original.info) && terminal.msg.getClass==classOf[StringLit] && terminal.msg.string.isEmpty)
+      def reference(e:Expression,clock:Boolean):Reference={
+        require(e.getClass==classOf[Reference]);val r=e.asInstanceOf[Reference]
+        require(r.name.nonEmpty && r.name.length<=4096 && (r.kind eq firrtl2.NodeKind) && (r.flow eq firrtl2.SourceFlow))
+        if(clock)require(r.tpe eq ClockType)else{
+          require(r.tpe.getClass==classOf[UIntType]);val t=r.tpe.asInstanceOf[UIntType]
+          require(t.width.getClass==classOf[IntWidth] && t.width.asInstanceOf[IntWidth].width==1)
+        };r
+      }
+      val clock=reference(terminal.clk,true);val pred=reference(terminal.pred,false);val enabled=reference(terminal.en,false)
+      require(registers(first.circuit).count(_.name==clock.name)==1)
+      def stop(c:Circuit):Stop={var result:Stop=null;var matches=0
+        visit(c){case x:Stop if x.name==terminal.name=>matches+=1;result=x;case _=>()}
+        require(matches==1 && result.getClass==classOf[Stop] && result.ret==65 &&
+          (result.name eq terminal.name) && (result.info eq terminal.info));result
+      }
+      def trigger(s:Stop):(Reference,Reference)={
+        require(s.en.getClass==classOf[DoPrim]);val and=s.en.asInstanceOf[DoPrim]
+        family(and.args);family(and.consts);require((and.op eq firrtl2.PrimOps.And) && and.args.size==2 && and.consts.isEmpty && (and.tpe eq pred.tpe))
+        require(and.args.head.getClass==classOf[DoPrim]);val not=and.args.head.asInstanceOf[DoPrim]
+        family(not.args);family(not.consts);require((not.op eq firrtl2.PrimOps.Not) && not.args.size==1 && not.consts.isEmpty && (not.tpe eq pred.tpe))
+        (reference(not.args.head,false),reference(and.args(1),false))
+      }
+      val second=(new HandleFormalStatements).runTransform(first);val s2=stop(second.circuit);val p2=trigger(s2)
+      require((s2.clk eq clock) && (p2._1 eq pred) && (p2._2 eq enabled))
+      val third=firrtl2.passes.memlib.VerilogMemDelays.runTransform(second);val s3=stop(third.circuit);val p3=trigger(s3)
+      require((s3.clk eq clock) && (p3._1 eq pred) && (p3._2 eq enabled))
+      val fourth=firrtl2.passes.ResolveFlows.runTransform(third);val s4=stop(fourth.circuit);val p4=trigger(s4)
+      def copied(a:Reference,b:Reference):Unit=require(!(a eq b) && (a.name eq b.name) && (a.tpe eq b.tpe) && (a.kind eq b.kind) && (b.flow eq firrtl2.SourceFlow))
+      copied(clock,reference(s4.clk,true));copied(pred,p4._1);copied(enabled,p4._2)
+      require(suffix(input,n)==n*3)
+      val annotations=Seq(FirrtlCircuitAnnotation(input),TargetDirAnnotation(targetName))
+      val official=(new PrepareAst).transform(annotations)
+      val observer=new ObservedPrepareAst(n);val observed=observer.transform(annotations)
+      new Parity().apply(official,observed)
+      require(observer.evidence.startsWith("COMPLETE:DONE:NONE:"+Vector.fill(7)(n.toString).mkString(":")+":"))
+      require(observer.formalEvidence=="COMPLETE:1:1:1:1")
+      require(observer.budgetEvidence=="NONE" && observer.sizingEvidence=="NONE" && observer.consumerEvidence=="NONE")
+      require(graphChecks(state(observed).circuit)==4)
+      count+=1
+    }
+    require(count==2);count
   }
   private def suffix(c:Circuit,n:Int):Int={
     val original=CircuitState(c,Seq.empty)
@@ -249,7 +308,9 @@ object ObservedPrepareStructuralFixture {
         val sizingChecks=ObservedPrepareAst.sizingSelfChecks();require(sizingChecks==56)
         val quotaChecks=ObservedPrepareAst.quotaSelfChecks();require(quotaChecks==6)
         val consumerChecks=ObservedPrepareAst.consumerSelfChecks();require(consumerChecks==24)
+        val formalChecks=ObservedPrepareAst.formalSelfChecks();require(formalChecks==58)
         phase="OBSERVED_FAILURE";val consumerParityChecks=consumerParityCheck(targetName);require(consumerParityChecks==1)
+        val formalParity= formalParityChecks(targetName);require(formalParity==2)
         rows=Vector("print","stop","both").flatMap{mode=>
           phase="LOWER"
           val low=Compiler.toLowFirrtl(CircuitState(Parser.parse(source(mode)),Seq(TargetDirAnnotation(targetName)))).circuit
@@ -266,6 +327,7 @@ object ObservedPrepareStructuralFixture {
             phase="PARITY";new Parity().apply(official,observed)
             val expected="COMPLETE:DONE:NONE:"+Vector.fill(7)(n.toString).mkString(":")+":"
             require(observer.evidence.startsWith(expected))
+            require(observer.formalEvidence=="COMPLETE:0:0:0:0")
             require(observer.consumerEvidence=="NONE")
             require(observer.budgetEvidence=="NONE" && observer.sizingEvidence=="NONE")
             if(kind=="recycled")require(registers(state(observed).circuit).exists(_.name==firstName))
@@ -274,12 +336,13 @@ object ObservedPrepareStructuralFixture {
               val unchangedOutput=rejected.transform(as)
               phase="PARITY";new Parity().apply(official,unchangedOutput)
               require(rejected.evidence.startsWith("UNAVAILABLE:DISCOVERY:COUNT:0:0:0:0:0:0:0:"))
+              require(rejected.formalEvidence=="UNAVAILABLE:0:0:0:0")
               require(rejected.consumerEvidence=="NONE")
               require(rejected.budgetEvidence=="NONE" && rejected.sizingEvidence=="NONE");1
             }else 0
             phase="SUFFIX";val relations=if(kind=="base")suffix(low,n)else 0
             phase="GRAPH";val graphs=if(kind=="base")graphChecks(state(observed).circuit)else 0
-            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" sizingChecks="+sizingChecks+" quotaChecks="+quotaChecks+" consumerChecks="+consumerChecks+" consumerParityChecks="+consumerParityChecks+" stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
+            "OBSERVED_PREPARE_CASE_V1 mode="+mode+" kind="+kind+" parity=true records="+n+" suffixChecks="+relations+" graphChecks="+graphs+" observerChecks="+selfChecks+" parityChecks="+parityChecks+" failureParityChecks="+failureParity+" sizingChecks="+sizingChecks+" quotaChecks="+quotaChecks+" consumerChecks="+consumerChecks+" consumerParityChecks="+consumerParityChecks+" formalChecks="+formalChecks+" formalParityChecks="+formalParity+" stateFields=3 form=ABSENT_IN_PINNED_API renames=NONE evidence="+observer.evidence
           }
         }
         ok=true

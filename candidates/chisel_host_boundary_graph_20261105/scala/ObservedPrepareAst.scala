@@ -112,7 +112,7 @@ object ObservedPrepareAst {
     val c=s.getClass
     need(c==classOf[Block]||c==classOf[Conditionally]||c==classOf[DefWire]||c==classOf[DefRegister]||
       c==classOf[DefInstance]||c==classOf[DefMemory]||c==classOf[DefNode]||c==classOf[Connect]||
-      c==classOf[PartialConnect]||c==classOf[IsInvalid]||c==classOf[Attach]||c==classOf[Print]||
+      c==classOf[IsInvalid]||c==classOf[Attach]||c==classOf[Print]||
       c==classOf[Stop]||c==classOf[Verification]||c==classOf[firrtl2.WDefInstanceConnector]||
       c==classOf[firrtl2.CDefMemory]||c==classOf[firrtl2.CDefMPort]||
       c==classOf[firrtl2.backends.experimental.smt.random.DefRandom]||(s eq EmptyStmt),"STRUCTURE")

@@ -1,13 +1,14 @@
 """One source-only structural job. No engine/native, weights, references or IR export."""
-import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request,zipfile
+import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request,urllib.error,zipfile
 P=pathlib.Path;D=P(__file__).resolve().parent;REPO=D.parent.parent
-REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_clock_init_index_census_once.json'
+REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_stage_preflight_diagnostic_once.json'
 CAT='candidates/gdn32_first_model_execution_20261104/GDN32_FULL_SOURCE_PINS.json'
 CAT_SHA='ad2d4dcaddb213c85fd15adc65f7da5bd74a0d7c3e6c5922c725aa41bdc967cb'
-BASE='c67bf598cf59ae5d16baaf719e893f9db02e3ffe';BASE_TREE='ee2bd5964e7e060203d81b3d01a9e2f4004a2e40';TREE=12_081_306_272;RESERVE=8<<30
+BASE='357051d7c7ac33d7af956ffb8e4e3e7cf9e2f2ad';BASE_TREE='b37af85b4426e7f4e6d39e976d15b47d7249dfa5';TREE=12_081_306_272;RESERVE=8<<30
 from witness_record import parse_record as parse_witness_record
 graph_identity={}
 differential_identity={};boundary_identity={}
+stage_step="NONE";exclusivity_endpoint="NONE";stage_receipt=None
 class Stop(Exception):
  def __init__(self,code='GUARD_REJECTED'):self.code=code;super().__init__(code)
 def need(x,code='GUARD_REJECTED'):
@@ -31,24 +32,66 @@ def admission():
  mem=int(next(x.split()[1]for x in P('/proc/meminfo').read_text().splitlines()if x.startswith('MemAvailable:')))*1024
  need(mem>=13<<30 and shutil.disk_usage(REPO).free>=TREE+RESERVE)
 def remote_exclusive(launch,wait_seconds=90):
+ global exclusivity_endpoint
  token=os.environ.get('GITHUB_TOKEN');need(bool(token))
  base='https://api.github.com/repos/liyang53719/hetero_cnn_llm_aha'
- def get(path):
+ def get(path,label):
+  global exclusivity_endpoint
+  exclusivity_endpoint=label
   req=urllib.request.Request(base+path,headers={'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'})
   with urllib.request.urlopen(req,timeout=20)as f:data=f.read(1_048_577)
   need(len(data)<=1_048_576);return json.loads(data)
  deadline=time.monotonic()+wait_seconds
  while True:
-  need(get('/git/ref/heads/main')['object']['sha']==launch)
+  need(get('/git/ref/heads/main','HEAD')['object']['sha']==launch)
   busy=False
   for status in ('in_progress','queued','waiting','pending','requested'):
-   x=get('/actions/runs?status='+status+'&per_page=100');need(x['total_count']<=100)
+   x=get('/actions/runs?status='+status+'&per_page=100','RUNS_'+status.upper());need(x['total_count']<=100)
    busy=busy or any(str(r['id'])!=os.environ['GITHUB_RUN_ID'] for r in x['workflow_runs'])
-  if not busy:return
+  if not busy:
+   exclusivity_endpoint="NONE";return
   need(time.monotonic()<deadline);time.sleep(3)
 
 def project(stage,r):
- return {'stage':stage,'status':'COMPLETE' if r.get('status')=='PASS_PROCESS_ONLY' else 'INCOMPLETE','elapsed_seconds':r.get('elapsed_seconds'),'peak_rss':r.get('observed_peak_rss'),'cpu_seconds':r.get('observed_cpu_seconds'),'cleanup_complete':r.get('cleanup_proof',{}).get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP'}
+ return {'stage':stage,'status':'COMPLETE' if r.get('status')=='PASS_PROCESS_ONLY' else 'INCOMPLETE','elapsed_seconds':r.get('elapsed_seconds'),'peak_rss':r.get('observed_peak_rss'),'cpu_seconds':r.get('observed_cpu_seconds'),'cleanup_complete':type(r.get('cleanup_proof'))is dict and r['cleanup_proof'].get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP'}
+# Failure-only finite driver evidence. Never export supervisor messages or paths.
+STAGE_STEPS=frozenset({'NONE','ENTER','REMOTE_EXCLUSIVE','DEADLINE','CAPS','SUPERVISOR','RECEIPT','PROJECT','EMIT','POSTCHECK','RETURN'})
+EXCLUSIVE_ENDPOINTS=frozenset({'NONE','HEAD','RUNS_IN_PROGRESS','RUNS_QUEUED','RUNS_WAITING','RUNS_PENDING','RUNS_REQUESTED'})
+SUPERVISOR_ERROR_CODES={
+ 'ValueError: locked memory gate':'MEMORY_GATE',
+ 'ValueError: locked disk gate':'DISK_GATE',
+ 'ValueError: prelaunch supervisor peak RSS cap':'SUPERVISOR_RSS',
+ 'ValueError: prelaunch work deadline':'PRELAUNCH_DEADLINE',
+ 'ValueError: preexisting alarm':'PREEXISTING_ALARM',
+ 'ValueError: preexec requires no existing reader/background threads':'THREADS',
+ 'ValueError: sampled observed aggregate RSS cap':'RSS_CAP',
+ 'ValueError: sampled observed aggregate CPU cap':'CPU_CAP',
+ 'ValueError: sampled child plus supervisor CPU cap':'COMBINED_CPU_CAP',
+ 'ValueError: sampled memory reserve':'MEMORY_RESERVE',
+ 'ValueError: wall cap':'WALL_CAP'}
+def supervisor_failure_summary(r):
+ try:
+  if type(r)is not dict:return {'status':'UNAVAILABLE'}
+  errors=r.get('errors');need(type(errors)is list)
+  codes=set()
+  for error in errors[:16]:
+   codes.add(SUPERVISOR_ERROR_CODES.get(error,'OTHER') if type(error)is str and len(error)<=256 else 'OTHER')
+  value=r.get('native_exit');exit_code=value if type(value)is int and -255<=value<=255 else None
+  started=r.get('worker_started');started=started if type(started)is bool else None
+  cleanup=r.get('cleanup_proof');closed=r.get('log_capture')
+  return {'status':r.get('status') if r.get('status')in ('PASS_PROCESS_ONLY','FAIL_OR_INCOMPLETE','IN_PROGRESS')else 'OTHER',
+   'worker_started':started,'native_exit':exit_code,'cleanup_complete':type(cleanup)is dict and cleanup.get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP',
+   'log_finalized':type(closed)is dict and closed.get('gzip_finalized')is True,
+   'error_count':min(len(errors),65535),'errors_truncated':len(errors)>16,'error_codes':sorted(codes)}
+ except BaseException:return {'status':'UNAVAILABLE'}
+def stage_failure_diagnostic(error):
+ try:
+  http=error.code if type(error)is urllib.error.HTTPError and type(error.code)is int and 100<=error.code<=599 else None
+  return {'schema':'STAGE_FAILURE_DIAGNOSTIC_V1','step':stage_step if stage_step in STAGE_STEPS else 'NONE',
+   'endpoint':exclusivity_endpoint if exclusivity_endpoint in EXCLUSIVE_ENDPOINTS else 'NONE',
+   'exception_class_sha256':hashlib.sha256((type(error).__module__+'.'+type(error).__qualname__).encode()).hexdigest(),
+   'http_status':http,'supervisor':stage_receipt if type(stage_receipt)is dict else {'status':'UNAVAILABLE'}}
+ except BaseException:return {'schema':'STAGE_FAILURE_DIAGNOSTIC_V1','status':'UNAVAILABLE'}
 # Proposal only: fixed-schema diagnostics, never an alternate success oracle.
 PHASES=('admission','read','parse','roundtrip','split','official_lower','lower_checks','boundary_split','boundary_checks','get_firrtl_ast','set_implicit_output_info','prepare_ast','prepared_checks','symbol_table','summary_hash')
 PHASE_RE='(?:'+'|'.join(PHASES)+')'
@@ -284,8 +327,9 @@ def stage_cpu_budget(name,seconds):
  return min(seconds,600)
 
 def main():
- global phase,graph_identity,differential_identity,boundary_identity
+ global phase,graph_identity,differential_identity,boundary_identity,stage_step,exclusivity_endpoint,stage_receipt
  graph_identity={};differential_identity={};boundary_identity={}
+ stage_step="NONE";exclusivity_endpoint="NONE";stage_receipt=None
  phase='identity';need(os.environ.get('GITHUB_REPOSITORY')=='liyang53719/hetero_cnn_llm_aha' and os.environ.get('GITHUB_REF')=='refs/heads/main' and os.environ.get('GITHUB_EVENT_NAME')=='push' and os.environ.get('GITHUB_RUN_ATTEMPT')=='1')
  launch=git('rev-parse','HEAD');need(launch==os.environ.get('GITHUB_SHA'));source=git('rev-parse','HEAD^');need(git('rev-parse',BASE+'^{tree}')==BASE_TREE and git('rev-parse',source+'^')==BASE)
  need(git('diff','--name-only','HEAD^','HEAD')==NONCE and not git('status','--porcelain'))
@@ -296,7 +340,7 @@ def main():
  need(len(own['files'])==len(expected_files) and {row['path']for row in own['files']}==expected_files)
  pins=pins_for(own['files'],REPO);pins[str(D/'SOURCE_PINS.json')]=sha(D/'SOURCE_PINS.json')
  changed=set(git('diff','--name-only',BASE,source).splitlines())
- expected_delta={'.github/workflows/chisel-host-boundary-graph-once.yml', 'candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json', 'candidates/chisel_host_boundary_graph_20261105/compare_clock_init_results.py', 'candidates/chisel_host_boundary_graph_20261105/run.py', 'candidates/chisel_host_boundary_graph_20261105/scala/ClockInitRepresentationRepair.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/ClockInitStructuralFixture.scala', 'candidates/chisel_host_boundary_graph_20261105/scala/OriginalHostStructuralGraph.scala'}
+ expected_delta={'.github/workflows/chisel-host-boundary-graph-once.yml', 'candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json', 'candidates/chisel_host_boundary_graph_20261105/run.py'}
  need(len(own['publication_delta'])==len(expected_delta) and changed==set(own['publication_delta'])==expected_delta)
  catalog=regular(REPO/CAT);need(sha(catalog)==CAT_SHA);doc=load(catalog);need(doc['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1'and len(doc['files'])==1211);pins.update(pins_for(doc['files'],REPO));pins[str(catalog)]=CAT_SHA
  phase='admission';remote_exclusive(launch);admission();work=P(os.environ['RUNNER_TEMP'])/'chisel-host-boundary-graph';need(work.is_absolute()and not work.exists()and all(not p.is_symlink()for p in(work,*work.parents)));work.mkdir()
@@ -308,19 +352,26 @@ def main():
  env={'PATH':'/usr/bin:/bin','LANG':'C.UTF-8','LC_ALL':'C.UTF-8','PYTHONDONTWRITEBYTECODE':'1','GITHUB_RUN_ID':os.environ['GITHUB_RUN_ID'],'GITHUB_SHA':launch,'GITHUB_RUN_ATTEMPT':'1','ImageVersion':os.environ.get('ImageVersion',''),'ImageOS':os.environ.get('ImageOS','')}
  py=str(P('/usr/bin/python3').resolve());pins[py]=sha(py)
  def stage(name,args,seconds,rss):
-  global phase
-  phase=name
+  global phase,stage_step,exclusivity_endpoint,stage_receipt
+  phase=name;stage_step="ENTER";exclusivity_endpoint="NONE";stage_receipt=None
   if args and args[0].endswith('/bin/java'):args=[args[0],'-Djava.io.tmpdir='+str(work/name/'tmp'),*args[1:]]
-  remote_exclusive(launch);need(time.monotonic()-started+seconds+90<2400)
+  stage_step="REMOTE_EXCLUSIVE";remote_exclusive(launch)
+  stage_step="DEADLINE";need(time.monotonic()-started+seconds+90<2400)
+  stage_step="CAPS"
   cap=dict(wall_seconds=seconds,cleanup_seconds=30,cpu_seconds=stage_cpu_budget(name,seconds),per_process_cpu_seconds=stage_cpu_budget(name,seconds),rss_bytes=rss<<30,per_process_as_bytes=15<<30,file_bytes=536870912,tree_bytes=3<<30,watch_tree_bytes=TREE,max_entries=150000,log_bytes=16<<20,raw_log_bytes=32<<20,min_free_disk_bytes=RESERVE,extra_watch_roots=[str(REPO),str(work)],jdk_aliases=aliases)
   stage_env=dict(env)
   if name=='jdk_inventory':stage_env['JAVA_TOOL_OPTIONS']='-Djava.io.tmpdir='+str(work/name/'tmp')+' -XX:-UsePerfData -XX:-HeapDumpOnOutOfMemoryError -XX:ErrorFile=/dev/null'
+  stage_step="SUPERVISOR"
   with open(os.devnull,'w')as muted,contextlib.redirect_stdout(muted),contextlib.redirect_stderr(muted):
    r=supervisor.execute(args,str(work/name),str(work/'owner.lock'),cap,stage_env,dict(pins),resource_gate={'min_available_memory':13<<30,'min_disk_free':TREE+RESERVE})
-  reports.append(project(name,r));print(json.dumps({'schema':'STRUCTURAL_GRAPH_PROGRESS_V1',**reports[-1],'numerical_pass':False}),flush=True)
-  if name in ('graph','diff_official','diff_cached','witness_fixture','boundary_official','boundary_cached','register_census_fixture','clock_init_official','clock_init_cached'):return work/name,r # Parse only after independent cleanup/log-finalization gates.
+  stage_step="RECEIPT";stage_receipt=supervisor_failure_summary(r)
+  stage_step="PROJECT";reports.append(project(name,r))
+  stage_step="EMIT";print(json.dumps({'schema':'STRUCTURAL_GRAPH_PROGRESS_V1',**reports[-1],'numerical_pass':False}),flush=True)
+  stage_step="POSTCHECK"
+  if name in ('graph','diff_official','diff_cached','witness_fixture','boundary_official','boundary_cached','register_census_fixture','clock_init_official','clock_init_cached'):
+   stage_step="RETURN";return work/name,r # Parse only after independent cleanup/log-finalization gates.
   need(r.get('native_exit')in ((0,1)if name=='jdk_inventory'else(0,)) and not r.get('errors') and reports[-1]['cleanup_complete'])
-  return work/name
+  stage_step="RETURN";return work/name
  phase='jdk_location'
  need(bool(os.environ.get('JAVA_HOME_21_X64')),'JDK_ENVIRONMENT_MISSING')
  rawhome=P(os.environ['JAVA_HOME_21_X64']);need(rawhome.is_absolute(),'JDK_HOME_NOT_ABSOLUTE');need(rawhome.is_dir(),'JDK_HOME_MISSING');home=rawhome.resolve(strict=True);need(jdk_location_allowed(home),'JDK_HOME_LOCATION_REJECTED')
@@ -467,6 +518,6 @@ def main():
 if __name__=='__main__':
  phase='startup';ok=False
  try:result=main();ok=result['status']=='STRUCTURAL_GRAPH_ONLY_DECLARED_DEPENDENCIES'
- except BaseException as error:result={'schema':'STRUCTURAL_GRAPH_ONLY_V1',**graph_identity,**differential_identity,**boundary_identity,'full_host_accepted':False,'status':'FAIL_OR_INCOMPLETE','stage':phase,'reason':error.code if isinstance(error,Stop)else'UNCLASSIFIED_FAILURE','dut_provider_native_loaded':False,'dut_evaluated':False,'weights_read':False,'numerical_pass':False}
+ except BaseException as error:result={'schema':'STRUCTURAL_GRAPH_ONLY_V1',**graph_identity,**differential_identity,**boundary_identity,'full_host_accepted':False,'status':'FAIL_OR_INCOMPLETE','stage':phase,'reason':error.code if isinstance(error,Stop)else'UNCLASSIFIED_FAILURE','stage_diagnostic':stage_failure_diagnostic(error),'dut_provider_native_loaded':False,'dut_evaluated':False,'weights_read':False,'numerical_pass':False}
  encoded=json.dumps(result,separators=(',',':'));need(len(encoded)<=16384);print(encoded,flush=True)
  sys.exit(0 if ok else 2)

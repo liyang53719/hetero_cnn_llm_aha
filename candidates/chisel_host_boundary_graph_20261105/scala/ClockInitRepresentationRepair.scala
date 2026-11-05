@@ -59,7 +59,7 @@ object ClockInitRepresentationRepair {
   }
   private def fail(code:String):Nothing=throw new IllegalArgumentException(code)
   private def need(p:Boolean,code:String):Unit=if(!p)fail(code)
-  private final class BoundEvidence(val code:String) extends RuntimeException(null,null,false,false)
+  private final class BoundEvidence(val code:String,val uses:String="NONE") extends RuntimeException(null,null,false,false)
   def boundEvidence(error:Throwable):String={
     if(error==null || guardCode(error)!="BOUND")"NONE"
     else {
@@ -67,13 +67,82 @@ object ClockInitRepresentationRepair {
       if(entries.length!=1)"UNAVAILABLE"else entries.head match{case e:BoundEvidence=>e.code;case _=>"UNAVAILABLE"}
     }
   }
-  private final class Budget {
-    private var n=0
+  // BEGIN USES WORK DIAGNOSTIC
+  // No AST references, names, collections or callbacks are retained. Counters
+  // describe occurrences, not identities. Production uses the fixed 5M cap.
+  private final class UsesWork(val entry:Int) {
+    var selectedNodes=0;var otherNodes=0;var selectedEdges=0;var otherEdges=0
+    var selectedRoots=0;var otherRoots=0;var selectedStatements=0;var otherStatements=0
+    var entered=0;var completed=0;var hasSelected=false;var category="NONE"
+    def enter(selected:Boolean):Unit={hasSelected=selected;entered+=1}
+    def statement():Unit={if(hasSelected)selectedStatements+=1 else otherStatements+=1}
+    def node(root:Boolean):Unit={
+      if(hasSelected){selectedNodes+=1;if(root)selectedRoots+=1}
+      else {otherNodes+=1;if(root)otherRoots+=1}
+    }
+    def edge():Unit={if(hasSelected)selectedEdges+=1 else otherEdges+=1}
+    def snapshot:String="PREFIX:"+entry+":"+selectedNodes+":"+otherNodes+":"+
+      selectedEdges+":"+otherEdges+":"+selectedRoots+":"+otherRoots+":"+
+      selectedStatements+":"+otherStatements+":"+entered+":"+completed+":"+
+      (if(hasSelected)"TRUE"else"FALSE")+":"+category
+  }
+  private def validUsesWork(s:String):Boolean={
+    if(s==null || s.length>160)return false
+    // Reject excess separators before split can allocate one String per field.
+    var separators=0;var scan=0
+    while(scan<s.length){if(s.charAt(scan)==':'){separators+=1;if(separators>13)return false};scan+=1}
+    if(separators!=13)return false
+    val fields=s.split(":",-1)
+    if(fields.length!=14 || fields(0)!="PREFIX" ||
+      (fields(12)!="TRUE" && fields(12)!="FALSE") ||
+      (fields(13)!="NODE" && fields(13)!="EDGE"))return false
+    var i=1;val n=new Array[Int](11)
+    while(i<=11){val f=fields(i)
+      if(f.isEmpty || f.length>7 || (f.length>1 && f.charAt(0)=='0'))return false
+      var j=0;var value=0
+      while(j<f.length){val c=f.charAt(j);if(c<'0'||c>'9')return false;value=value*10+c-'0';j+=1}
+      if(value>5000000)return false;n(i-1)=value;i+=1
+    }
+    val selectedDeficit=n(1)-n(3)-n(5);val otherDeficit=n(2)-n(4)-n(6)
+    val currentSelected=fields(12)=="TRUE"
+    val deficit=if(currentSelected)selectedDeficit else otherDeficit
+    n(0).toLong+n(1)+n(2)+n(3)+n(4)==5000000L &&
+      n(5)<=n(1) && n(6)<=n(2) && n(9)>0 && n(9)<=4096 && n(10)==n(9)-1 &&
+      n(7).toLong+n(8)<=4194304L && n(9)<=n(7).toLong+n(8) &&
+      (n(1)==0 || n(7)>0) && (n(2)==0 || n(8)>0) &&
+      (if(currentSelected)n(7)>0 else n(8)>0) &&
+      (if(currentSelected)otherDeficit==0 else selectedDeficit==0) &&
+      (deficit==0 || (fields(13)=="NODE" && deficit== -1))
+  }
+  def usesWorkEvidence(error:Throwable):String={
+    if(error==null || guardCode(error)!="BOUND")return "NONE"
+    try{val entries=error.getSuppressed;var relevant=false;var i=0
+      while(i<entries.length && i<2){entries(i) match {
+        case e:BoundEvidence if e.code=="GLOBAL_WORK:USES:5000001"=>relevant=true
+        case _=>()
+      };i+=1}
+      if(!relevant)"NONE"
+      else if(entries.length!=1)"UNAVAILABLE"
+      else {val s=entries(0).asInstanceOf[BoundEvidence].uses;if(validUsesWork(s))s else "UNAVAILABLE"}
+    }catch{case _:Throwable=>"UNAVAILABLE"}
+  }
+  // END USES WORK DIAGNOSTIC
+  private final class Budget(private val testInitialWork:Int=0) {
+    require(testInitialWork>=0 && testInitialWork<=5000000)
+    private var n=testInitialWork
+    var uses:UsesWork=null
     def work:Int=n
     var phase="INDEX_BEFORE"
     def bound(p:Boolean,reason:String):Unit=if(!p){
       val error=new IllegalArgumentException("BOUND")
-      error.addSuppressed(new BoundEvidence(reason+":"+phase+":"+n));throw error
+      // Primary exists before optional formatting; diagnostic failure cannot
+      // replace it or attach a second suppressed exception.
+      var diagnostic="NONE"
+      if(reason=="GLOBAL_WORK" && phase=="USES"){
+        diagnostic="UNAVAILABLE"
+        try{if(uses!=null)diagnostic=uses.snapshot}catch{case _:Throwable=>()}
+      }
+      error.addSuppressed(new BoundEvidence(reason+":"+phase+":"+n,diagnostic));throw error
     }
     def tick():Unit={n+=1;bound(n<=5000000,"GLOBAL_WORK")}
     def name(s:String):Unit=bound(s!=null && s.nonEmpty && s.length<=4096,"NAME")
@@ -846,7 +915,7 @@ object ClockInitRepresentationRepair {
     // Pinned DefRandom has only Option(clock) and scalar en, no Seq.
     case _=>()
   }
-  private final class Expressions(a:Aux,b:Budget,selected:Selected) {
+  private final class Expressions(a:Aux,b:Budget,selected:Selected,census:UsesWork=null) {
     private val its=new Array[Iterator[Expression]](258)
     private val first=new Array[Expression](258);private val second=new Array[Expression](258)
     private val third=new Array[Expression](258);private val pos=new Array[Int](258)
@@ -865,16 +934,17 @@ object ClockInitRepresentationRepair {
     }
     private def child(d:Int):Expression={
       val it=its(d)
-      if(it!=null){if(it.hasNext){b.tick();it.next()}else null}
+      if(it!=null){if(it.hasNext){if(census!=null)census.category="EDGE";b.tick();if(census!=null)census.edge();it.next()}else null}
       else {val x=pos(d) match {case 0=>first(d);case 1=>second(d);case 2=>third(d);case _=>null}
-        if(x!=null){b.tick();pos(d)+=1};x}
+        if(x!=null){if(census!=null)census.category="EDGE";b.tick();if(census!=null)census.edge();pos(d)+=1};x}
     }
     var statement:Statement=null;var moduleId=0;var hasSelected=false
     val root:Expression=>Unit=r=>{
       a.transient(2) // Pinned foreachExpr callback/tuple churn, before traversal.
       var depth=0;var e=r;var active=true
       while(active){
-        b.tick();b.bound(depth<=256,"EXPRESSION_DEPTH")
+        if(census!=null)census.category="NODE"
+        b.tick();if(census!=null)census.node(depth==0);b.bound(depth<=256,"EXPRESSION_DEPTH")
         e match {case ref:Reference=>b.name(ref.name)
           if(hasSelected){val id=selected.find(moduleId,ref.name);if(id>=0)selected.addUse(id,statement,r,depth==0)}
           case _=>()}
@@ -1156,16 +1226,25 @@ object ClockInitRepresentationRepair {
     a.phase="USES";b.phase="ANNOTATIONS"
     checkStreamingAnnotations(annotations,selected,fresh,prepared.main,b,a,claim!=null)
     b.phase="USES"
-    val expressions=new Expressions(a,b,selected);val modules=a.iter(prepared.modules);var mid=0
+    // Partition the already precharged 64 KiB fixed reserve: original <64
+    // scalar/closure objects *256 <=16 KiB, 38 array headers *256 =9.5 KiB,
+    // plus8 KiB dedicated diagnostic scratch totals <=33.5 KiB. Diagnostic
+    // scratch covers census (<128 payload bytes), extended evidence, <=105
+    // character snapshot/builder/backing and accessor's <=14 short fields,
+    // field array and 11-Int validation array. It replaces no live AST reserve.
+    // No production array or cap/reservation is added; accessor runs on failure.
+    val census=new UsesWork(b.work);b.uses=census
+    val expressions=new Expressions(a,b,selected,census);val modules=a.iter(prepared.modules);var mid=0
     while(modules.hasNext){modules.next() match {
       case m:Module=>
-        expressions.hasSelected=selected.moduleSelected(mid)
+        expressions.hasSelected=selected.moduleSelected(mid);census.enter(expressions.hasSelected)
         walker.start(m.body);var st=walker.next(AX.Uses)
-        while(st!=null){expressions.statement=st;expressions.moduleId=mid;rootSequenceFamilies(st,a);a.transient(2);st.foreachExpr(expressions.root)
+        while(st!=null){census.statement();expressions.statement=st;expressions.moduleId=mid;rootSequenceFamilies(st,a);a.transient(2);st.foreachExpr(expressions.root)
           walker.descend(st);st=walker.next(AX.Uses)}
+        census.completed+=1
       case _=>()
     };mid+=1}
-    b.phase="MATCHING";matchUses(selected,a,b,checked,claim)
+    b.uses=null;b.phase="MATCHING";matchUses(selected,a,b,checked,claim)
     a.phase="ANCHORS";b.phase="ANCHORS"
     val originalModules=a.iter(before.modules)
     while(originalModules.hasNext){originalModules.next() match {
@@ -2242,5 +2321,117 @@ object ClockInitRepresentationRepair {
     checks
   }
   // END ANNOTATION OTHER OWNER SELFCHECKS
+
+  // BEGIN USES WORK DIAGNOSTIC SELFCHECKS
+  /** Same traversal/tick code, tiny graphs, seeded private budget; no cap change. */
+  def usesWorkDiagnosticSelfChecks():Int={
+    var checks=0
+    def check(ok:Boolean):Unit={require(ok,"USES_WORK_SELFCHECK");checks+=1}
+    def caught(body: => Unit):Throwable=try{body;null}catch{case e:IllegalArgumentException=>e}
+    def evidence(code:String,value:String):Throwable={val e=new IllegalArgumentException("BOUND")
+      e.addSuppressed(new BoundEvidence(code,value));e}
+    val code="GLOBAL_WORK:USES:5000001"
+    val zero=UIntLiteral(0,IntWidth(1))
+    // Repeated identical child objects must still be counted at each occurrence.
+    val shared=DoPrim(firrtl2.PrimOps.Add,List(zero,zero),Nil,UIntType(IntWidth(1)))
+    def fixture(initial:Int,chosen:Boolean,admitStatement:Boolean=true):(Aux,Budget,UsesWork,Expressions)={
+      val a=new Aux;val b=new Budget(initial);b.phase="USES"
+      val c=new UsesWork(b.work);b.uses=c;c.enter(chosen)
+      if(admitStatement){a.charge(AX.Uses);c.statement()}
+      val x=new Expressions(a,b,new Selected(a),c);x.hasSelected=chosen
+      x.statement=DefNode(NoInfo,"private-holder",shared);(a,b,c,x)
+    }
+    // Every possible failed tick in the five-tick shared graph. Failed ticks
+    // never enter successful totals, nor advance into the next occurrence.
+    for(remaining<-0 to 4){
+      val (_,b,c,x)=fixture(5000000-remaining,remaining%2==0)
+      val e=caught(x.root(shared))
+      check(e!=null && boundEvidence(e)==code && e.getSuppressed.length==1 && b.work==5000001)
+      check(c.selectedNodes+c.otherNodes+c.selectedEdges+c.otherEdges==remaining)
+      check(c.category==(if(remaining==1 || remaining==3)"EDGE"else"NODE"))
+      check(usesWorkEvidence(e)==c.snapshot && validUsesWork(c.snapshot))
+    }
+    val (_,exactBudget,exactCensus,exact)=fixture(4999995,true)
+    check(caught(exact.root(shared))==null && exactBudget.work==5000000)
+    check(exactCensus.selectedNodes==3 && exactCensus.selectedEdges==2 && exactCensus.selectedRoots==1 &&
+      exactCensus.otherNodes==0 && exactCensus.otherEdges==0 && exactCensus.otherRoots==0)
+    val frozen=caught(exact.root(zero));val snapshot=usesWorkEvidence(frozen)
+    check(snapshot=="PREFIX:4999995:3:0:2:0:1:0:1:0:1:0:TRUE:NODE")
+    exactCensus.selectedNodes=0;exactCensus.hasSelected=false
+    check(usesWorkEvidence(frozen)==snapshot) // Evidence is an immutable snapshot.
+    var callback=0
+    val unread=new Reference("private-never-read",ClockType,PortKind,SourceFlow){
+      override def foreachExpr(f:Expression=>Unit):Unit={callback+=1;throw new AssertionError("USES_LATE_CALLBACK")}
+    }
+    val (_,_,_,first)=fixture(5000000,false)
+    check(boundEvidence(caught(first.root(unread)))==code && callback==0)
+    // Fixed-child and iterator-child edge sites use the same successful accounting.
+    val (_,fixedBudget,fixedCensus,fixed)=fixture(4999997,false)
+    check(caught(fixed.root(SubField(zero,"f")))==null && fixedBudget.work==5000000 &&
+      fixedCensus.otherNodes==2 && fixedCensus.otherEdges==1 && fixedCensus.otherRoots==1)
+    val (_,_,_,fixedFail)=fixture(4999999,false)
+    check(usesWorkEvidence(caught(fixedFail.root(SubField(unread,"f")))).endsWith(":FALSE:EDGE") && callback==0)
+    // Statement admission and module completion are exercised with production
+    // Walk/Expressions, including a zero-expression statement and two modules.
+    val (a,mixedBudget,mixedCensus,mixed)=fixture(4999994,true,false)
+    val walker=new Walk(a,mixedBudget)
+    def visit(body:Statement):Unit={
+      walker.start(body);var st=walker.next(AX.Uses)
+      while(st!=null){mixedCensus.statement();mixed.statement=st
+        rootSequenceFamilies(st,a);a.transient(2);st.foreachExpr(mixed.root)
+        walker.descend(st);st=walker.next(AX.Uses)}
+    }
+    visit(Block(List(EmptyStmt,DefNode(NoInfo,"private-a",shared))))
+    mixedCensus.completed+=1;mixedCensus.enter(false);mixed.hasSelected=false
+    val mixedError=caught(visit(Block(List(DefNode(NoInfo,"private-b",zero),DefNode(NoInfo,"private-c",unread)))))
+    check(boundEvidence(mixedError)==code && callback==0)
+    check(usesWorkEvidence(mixedError)=="PREFIX:4999994:3:1:2:0:1:1:3:3:2:1:FALSE:NODE")
+    check(a.value(AX.Uses)==6 && mixedBudget.work==5000001)
+    check(!usesWorkEvidence(mixedError).contains("private"))
+    // Omitted census preserves fixture/legacy behavior and original bound code.
+    val plainBudget=new Budget(5000000);plainBudget.phase="USES"
+    val plain=new Expressions(new Aux,plainBudget,new Selected(new Aux))
+    val plainError=caught(plain.root(unread))
+    check(boundEvidence(plainError)==code && usesWorkEvidence(plainError)=="UNAVAILABLE" && callback==0)
+    check(usesWorkEvidence(null)=="NONE")
+    check(usesWorkEvidence(new IllegalArgumentException("BOUND"))=="NONE")
+    check(usesWorkEvidence(new IllegalArgumentException("DRIVER"))=="NONE")
+    val subclass=new IllegalArgumentException("BOUND"){};subclass.addSuppressed(new BoundEvidence(code,snapshot))
+    check(usesWorkEvidence(subclass)=="NONE")
+    for(other<-List("GLOBAL_WORK:ANNOTATIONS:5000001","GLOBAL_WORK:MATCHING:5000001",
+      "EXPRESSION_DEPTH:USES:5000001","GLOBAL_WORK:USES:5000000")){
+      check(usesWorkEvidence(evidence(other,snapshot))=="NONE")
+    }
+    for(invalid<-List(null,"NONE","UNAVAILABLE","",snapshot+":0",snapshot.replace("PREFIX","SECRET"),
+      snapshot.replace("4999995","4999994"),snapshot.replace("4999995","04999995"),
+      snapshot.replace("4999995","-1"),snapshot.replace("TRUE","private"),
+      snapshot.replace("NODE","private"),"x"*161,
+      "PREFIX:4999995:3:0:2:0:4:0:0:0:1:0:TRUE:NODE",
+      "PREFIX:4999995:3:0:2:0:1:0:0:0:1:1:TRUE:NODE",
+      "PREFIX:4999995:3:0:2:0:1:0:0:0:4097:0:TRUE:NODE",
+      "PREFIX:4999995:3:0:2:0:1:0:4194305:0:1:0:TRUE:NODE",
+      "PREFIX:4999995:3:0:2:0:1:0:1:0:3:0:TRUE:NODE",
+      "PREFIX:4999995:2:1:2:0:1:1:1:1:2:1:FALSE:NODE",
+      "PREFIX:4999998:1:0:1:0:1:0:1:0:1:0:TRUE:EDGE",
+      "PREFIX:4999995:3:0:2:0:1:0:0:0:1:0:TRUE:NODE",
+      ":"*150,
+      "PREFIX:4999995:3:0:2:0:1:0:1:0:3:2:TRUE:NODE",
+      "PREFIX:4999995:3:0:2:0:1:0:0:1:1:0:FALSE:NODE")){
+      check(usesWorkEvidence(evidence(code,invalid))=="UNAVAILABLE")
+    }
+    val duplicate=evidence(code,snapshot);duplicate.addSuppressed(new BoundEvidence(code,snapshot))
+    check(boundEvidence(duplicate)=="UNAVAILABLE" && usesWorkEvidence(duplicate)=="UNAVAILABLE")
+    val foreign=evidence(code,snapshot);foreign.addSuppressed(new RuntimeException("private"))
+    check(usesWorkEvidence(foreign)=="UNAVAILABLE")
+    val unrelated=evidence("NAME:USES:7",snapshot);unrelated.addSuppressed(new RuntimeException("private"))
+    check(usesWorkEvidence(unrelated)=="NONE")
+    val earlierBudget=new Budget;earlierBudget.phase="USES"
+    val earlierCensus=new UsesWork(0);earlierBudget.uses=earlierCensus;earlierCensus.enter(false)
+    val earlier=new Expressions(new Aux,earlierBudget,new Selected(new Aux),earlierCensus)
+    val nameFailure=caught(earlier.root(Reference("")))
+    check(boundEvidence(nameFailure)=="NAME:USES:1" && usesWorkEvidence(nameFailure)=="NONE")
+    require(checks==67);checks
+  }
+  // END USES WORK DIAGNOSTIC SELFCHECKS
 
 }

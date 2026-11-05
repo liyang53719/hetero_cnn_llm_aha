@@ -1,0 +1,46 @@
+name: idma-isolated-boundary-fixture-only
+on:
+  push:
+    branches: [main]
+    paths: [ci_launch/idma_boundary_fixture_20261105_once.json]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: hetero-exclusive-numeric-bootstrap
+  cancel-in-progress: false
+jobs:
+  boundary_fixture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Admit fresh owned source job before checkout
+        timeout-minutes: 1
+        run: |
+          /usr/bin/python3 -B - <<'PYCODE'
+          import json,os,pathlib,shutil,sys
+          m=int(next(x.split()[1] for x in pathlib.Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:')))*1024
+          disk=shutil.disk_usage(os.environ['RUNNER_TEMP']).free
+          memory_required=13*1024**3;disk_required=12081306272+8*1024**3
+          memory_pass=m>=memory_required;disk_pass=disk>=disk_required
+          ok=memory_pass and disk_pass
+          print(json.dumps({'schema':'SOURCE_JOB_RESOURCE_ADMISSION_V1','memory_available_bytes':m,'memory_required_bytes':memory_required,'memory_pass':memory_pass,'disk_free_bytes':disk,'disk_required_bytes':disk_required,'disk_pass':disk_pass,'pass':ok},separators=(',',':')),flush=True)
+          sys.exit(0 if ok else 2)
+          PYCODE
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        timeout-minutes: 2
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 4
+      - name: One isolated boundary fixture; no Host, DUT or artifact transfer
+        timeout-minutes: 42
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          ulimit -c 0
+          /usr/bin/python3 -B candidates/idma_boundary_fixture_20261105/run.py
+# No upload action, no runtime/reference/weight acquisition, no native/DUT run.
+# Only one nonce may trigger this job; first attempt and exact ancestry enforced.

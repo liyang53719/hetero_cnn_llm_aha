@@ -1,10 +1,10 @@
 """One source-only structural job. No engine/native, weights, references or IR export."""
 import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request,zipfile
 P=pathlib.Path;D=P(__file__).resolve().parent;REPO=D.parent.parent
-REL='candidates/chisel_structural_graph_20261104';NONCE='ci_launch/chisel_structural_graph_20261105_cycle_witness_fresh_once.json'
+REL='candidates/chisel_structural_graph_20261104';NONCE='ci_launch/chisel_structural_graph_20261105_cycle_parent_witness_once.json'
 CAT='candidates/gdn32_first_model_execution_20261104/GDN32_FULL_SOURCE_PINS.json'
 CAT_SHA='ad2d4dcaddb213c85fd15adc65f7da5bd74a0d7c3e6c5922c725aa41bdc967cb'
-BASE='364f38c8a6300595281b9cc15202ff4276a0e936';TREE=12_081_306_272;RESERVE=8<<30
+BASE='12883662ead90bd03b43d768a210875b19ca71c2';TREE=12_081_306_272;RESERVE=8<<30
 from witness_record import parse_record as parse_witness_record
 graph_identity={}
 differential_identity={}
@@ -139,7 +139,7 @@ def main():
  need(git('diff','--name-only','HEAD^','HEAD')==NONCE and not git('status','--porcelain'))
  nonce=load(REPO/NONCE,4096);need(nonce=={'schema':'ONE_STRUCTURAL_GRAPH_ONLY_V1','source_commit':source,'base_commit':BASE,'attempts':1,'numerical_execution':False,'native_execution':False,'artifact_upload':False})
  own=load(D/'SOURCE_PINS.json');pins=pins_for(own['files'],REPO);pins[str(D/'SOURCE_PINS.json')]=sha(D/'SOURCE_PINS.json')
- changed=set(git('diff','--name-only',BASE,source).splitlines());need(changed==set(own['publication_delta']) and changed=={'candidates/chisel_structural_graph_20261104/SOURCE_PINS.json', 'candidates/chisel_structural_graph_20261104/run.py', '.github/workflows/chisel-structural-graph-once.yml'})
+ changed=set(git('diff','--name-only',BASE,source).splitlines());need(changed==set(own['publication_delta']) and changed=={'.github/workflows/chisel-structural-graph-once.yml', 'candidates/chisel_structural_graph_20261104/SOURCE_PINS.json', 'candidates/chisel_structural_graph_20261104/run.py', 'candidates/chisel_structural_graph_20261104/modulecache/CycleWitnessFixture.scala', 'candidates/chisel_structural_graph_20261104/witness_record.py', 'candidates/chisel_structural_graph_20261104/modulecache/BoundedCycleWitness.scala'})
  catalog=regular(REPO/CAT);need(sha(catalog)==CAT_SHA);doc=load(catalog);need(doc['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1'and len(doc['files'])==1211);pins.update(pins_for(doc['files'],REPO));pins[str(catalog)]=CAT_SHA
  phase='admission';remote_exclusive(launch);admission();work=P(os.environ['RUNNER_TEMP'])/'chisel-structural-graph';need(work.is_absolute()and not work.exists()and all(not p.is_symlink()for p in(work,*work.parents)));work.mkdir()
  contract={'schema':'BOUNDED_FRESH_HOST_V1','run_id':int(os.environ['GITHUB_RUN_ID']),'source_commit':source,'launch_commit':launch};contractPath=work/'fresh-host.json';contractPath.write_text(json.dumps(contract));pins[str(contractPath)]=sha(contractPath)
@@ -224,10 +224,10 @@ def main():
  for p in witnessclasses.rglob('*.class'):pins[str(p)]=sha(p)
  wf,wr=stage('witness_fixture',jvm('1g',str(patchclasses)+':'+str(witnessclasses)+':'+cp,'treadle2.executable.CycleWitnessFixture'),45,2)
  wt=read_closed_log(wf/'frontend.log.gz',wr)
- cases=('self_loop','multi_loop','acyclic','reachable_other_cycle','node_cap','edge_cap','output_cap','time_cap','reverse_edge','invalid_role','name_cap','lazy_edges','callback_error','malformed_record','record_disclosure','exception_noninterference')
- expected=''.join('CYCLE_FIXTURE_V1 case='+c+' outcome=PASS\n'for c in cases)+'CYCLE_FIXTURE_FINAL_V1 cases=16 status=PASS\n'
+ cases=('self_loop','multi_loop','acyclic','reachable_other_cycle','node_cap','edge_cap','output_cap','time_cap','reverse_edge','invalid_role','name_cap','lazy_edges','callback_error','malformed_record','record_disclosure','reverse_asymmetric','reverse_direction_mismatch','forward_fanout_reverse_cycle','exception_noninterference')
+ expected=''.join('CYCLE_FIXTURE_V1 case='+c+' outcome=PASS\n'for c in cases)+'CYCLE_FIXTURE_FINAL_V1 cases=19 status=PASS\n'
  need(wt==expected and wr.get('status')=='PASS_PROCESS_ONLY' and wr.get('native_exit')==0 and not wr.get('errors'),'WITNESS_FIXTURE_FAILED')
- differential_identity.update(witness_fixture_status='PASS_16_SMALL_CASES_ONLY',witness_source_sha256=sha(witness_source),witness_fixture_source_sha256=sha(witness_fixture))
+ differential_identity.update(witness_fixture_status='PASS_19_SMALL_CASES_ONLY',witness_source_sha256=sha(witness_source),witness_fixture_source_sha256=sha(witness_fixture))
  # The live 2400-second gate remains authoritative before every later stage.
  classes=stage('compile_original',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',cp,'-Xplugin:'+plugin,'-language:reflectiveCalls','-d','.',*sources]),300,3)
  for p in classes.rglob('*.class'):pins[str(p)]=sha(p)

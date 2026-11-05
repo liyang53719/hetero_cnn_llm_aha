@@ -35,6 +35,27 @@ object CycleWitnessFixture {
         var rejected=false;try{Result("CLOSED_WITNESS","NONE",Vector("invalid"),Vector("OTHER"),1,1)}catch{case _:IllegalArgumentException=>rejected=true};require(rejected)
       }
       check("record_disclosure"){val r=run(Map(a->Vector(a)));require(!r.json.contains("raw-private") && r.nodeHashes.head.length==64 && r.json.forall(_<128))}
+      check("reverse_asymmetric"){
+        val forward=Map(a->Vector(b),b->Vector(c),c->Vector(a))
+        val parents=Map(a->Vector(c),b->Vector(a),c->Vector(b))
+        val rs=Map(a->"OTHER",b->"IDMA_SPLIT_R_LAST",c->"IDMA_SPLIT_R_READY")
+        val f=find[N](a,n=>forward(n).iterator,(child,parent)=>forward(parent).exists(_ eq child),_.name,n=>rs(n))
+        val r=findParents[N](a,n=>parents(n).iterator,(p,c)=>forward(p).exists(_ eq c),_.name,n=>rs(n))
+        require(r.complete && r.nodeHashes==f.nodeHashes && r.nodeRoles==f.nodeRoles && r.digest==f.digest)
+      }
+      check("reverse_direction_mismatch"){
+        val parents=Map(a->Vector(c),b->Vector(a),c->Vector(b))
+        val r=findParents[N](a,n=>parents(n).iterator,(_,_)=>false,_.name,_=>"OTHER")
+        require(r.reason=="REVERSE_EDGE_MISSING" && r.startHash!="UNAVAILABLE")
+      }
+      check("forward_fanout_reverse_cycle"){
+        val leaves=Vector.tabulate(4096)(i=>new N("leaf"+i))
+        val forward=Map(a->(leaves:+b),b->Vector(c),c->Vector(a))
+        val parents=Map(a->Vector(c),b->Vector(a),c->Vector(b))
+        val f=run(forward);require(f.reason=="NODE_CAP" && f.startHash!="UNAVAILABLE" && f.nodeHashes.isEmpty)
+        val r=findParents[N](a,n=>parents.getOrElse(n,Vector.empty).iterator,(p,c)=>forward.getOrElse(p,Vector.empty).exists(_ eq c),_.name,_=>"OTHER")
+        require(r.complete && r.visited==3 && r.inspected==3 && r.startHash==f.startHash)
+      }
       check("exception_noninterference"){
         val u=UIntType(IntWidth(1));val m=Module(NoInfo,"Loop",Seq.empty,Block(Seq(DefWire(NoInfo,"x",u),DefWire(NoInfo,"y",u),Connect(NoInfo,Reference("x",u),Reference("y",u)),Connect(NoInfo,Reference("y",u),Reference("x",u)))))
         val circuit=Circuit(NoInfo,Seq(m),"Loop");val before=circuit.serialize;var seen=0;var thrown=false
@@ -47,6 +68,6 @@ object CycleWitnessFixture {
       }
     }}}finally{System.setOut(out);System.setErr(err)}
     out.println("CYCLE_FIXTURE_FINAL_V1 cases="+passed+" status="+(if(failed)"FAIL" else "PASS"));out.flush()
-    if(failed || passed!=16 || out.checkError())System.exit(2)
+    if(failed || passed!=19 || out.checkError())System.exit(2)
   }
 }

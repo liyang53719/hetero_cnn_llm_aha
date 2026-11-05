@@ -16,6 +16,47 @@ object ClockInitRepresentationRepair {
     if(error==null || error.getClass!=classOf[IllegalArgumentException])"UNKNOWN"
     else {val message=error.getMessage;if(message!=null && message.length<=64 && GuardCodes(message))message else "UNKNOWN"}
   }
+  // Failure-only finite evidence attached to the original exception, never AST.
+  private final class DriverEvidence(val code:String) extends RuntimeException(null,null,false,false)
+  def driverEvidence(error:Throwable):String={
+    if(error==null || guardCode(error)!="DRIVER")"NONE"
+    else {
+      val entries=error.getSuppressed
+      if(entries.length!=1)"UNAVAILABLE"else entries.head match{case e:DriverEvidence=>e.code;case _=>"UNAVAILABLE"}
+    }
+  }
+  private def driverFail(step:String,found:Vector[Use],clock:Reference):Nothing={
+    val error=new IllegalArgumentException("DRIVER")
+    val evidence=try{
+      def count(n:Int):String=if(n==0)"ZERO"else if(n==1)"ONE"else "MANY"
+      def kind(r:Reference):String=r.kind match {
+        case firrtl2.NodeKind=>"NODE";case firrtl2.RegKind=>"REG";case firrtl2.PortKind=>"PORT";case _=>"OTHER"
+      }
+      def flow(r:Reference):String=r.flow match {
+        case firrtl2.SourceFlow=>"SOURCE";case firrtl2.SinkFlow=>"SINK";case firrtl2.DuplexFlow=>"DUPLEX"
+        case firrtl2.UnknownFlow=>"UNKNOWN";case _=>"OTHER"
+      }
+      def metadata(e:Option[Expression]):Vector[String]=e match {
+        case Some(r:Reference)=>Vector(if(r.tpe==ClockType)"CLOCK"else "OTHER",kind(r),flow(r))
+        case _=>Vector("NA","NA","NA")
+      }
+      def bool(v:Boolean):String=if(v)"TRUE"else "FALSE"
+      val raw=found.collect{case Use(x:Connect,root,true) if root eq x.loc=>x}
+      val sink=if(raw.size==1)Some(raw.head.loc)else None
+      val rhs=if(raw.size==1)Some(raw.head.expr)else None
+      val equals=rhs match {
+        case Some(r:Reference)=>Vector(bool(r.name==clock.name),bool(r.tpe==clock.tpe),bool(r.kind==clock.kind),bool(r.flow==clock.flow))
+        case _=>Vector.fill(4)("NA")
+      }
+      val consumers=found.collect{
+        case Use(x:Print,root,true) if root eq x.clk=>x.clk
+        case Use(x:Stop,root,true) if root eq x.clk=>x.clk
+      }
+      val consumer=if(consumers.size==1)Some(consumers.head)else None
+      (Vector(step,count(raw.size))++metadata(sink)++equals++Vector(count(consumers.size))++metadata(consumer)).mkString(":")
+    }catch{case _:Throwable=>"UNAVAILABLE"}
+    error.addSuppressed(new DriverEvidence(evidence));throw error
+  }
   private def fail(code:String):Nothing=throw new IllegalArgumentException(code)
   private def need(p:Boolean,code:String):Unit=if(!p)fail(code)
   private final class Budget {
@@ -222,9 +263,9 @@ object ClockInitRepresentationRepair {
       val found=uses((c.module,c.reg.name))
       need(found.size==2,"REFERENCES")
       val drivers=found.collect{case Use(x:Connect,root,true) if (root eq x.loc) && delayedRef(x.loc,c.reg.name)=>x}
-      need(drivers.size==1,"DRIVER")
+      if(drivers.size!=1)driverFail("SELECT",found,c.clock)
       val driver=drivers.head
-      need(driver.expr==c.clock,"DRIVER")
+      if(driver.expr!=c.clock)driverFail("RHS",found,c.clock)
       need(sameInfo(c.reg.info,driver.info,b),"INFO")
       val consumers=found.collect{
         case Use(x:Print,root,true) if (root eq x.clk) && delayedRef(x.clk,c.reg.name)=>x:Statement

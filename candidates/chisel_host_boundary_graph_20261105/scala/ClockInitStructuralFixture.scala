@@ -148,6 +148,54 @@ object ClockInitStructuralFixture {
     }
     mutations.size
   }
+  private def driverDiagnostics():Int={
+    // Hand-authored metadata shapes test the formatter before the real fixture
+    // can reject; these never replace or normalize the actual prepared circuit.
+    val inf=FileInfo("driver_diagnostic_synthetic")
+    val clock=Reference("clock",ClockType,firrtl2.PortKind,firrtl2.SourceFlow)
+    val zero=UIntLiteral(0,IntWidth(1))
+    val r=DefRegister(inf,"delay",ClockType,clock,zero,zero)
+    val delayed=Reference(r.name,ClockType,firrtl2.NodeKind,firrtl2.SourceFlow)
+    val print=Print(inf,StringLit("synthetic"),Seq.empty,clock,zero)
+    val ports=Seq(Port(NoInfo,"clock",Input,ClockType))
+    def circuit(body:Statement)=Circuit(NoInfo,Seq(Module(NoInfo,"Diagnostic",ports,body)),"Diagnostic")
+    val before=circuit(print)
+    val prepared=circuit(Block(Seq(r,Connect(inf,delayed,clock),print.copy(clk=delayed))))
+    val annotations=Seq.empty[firrtl2.annotations.Annotation];val n=1
+    require(ClockInitRepresentationRepair(before,prepared,annotations,n).corrected==1)
+    val name=r.name
+    def sinkChange(c:Connect):Connect=c.loc match {
+      case x:Reference if x.name==name=>c.copy(loc=x.copy(flow=firrtl2.SinkFlow))
+      case _=>c
+    }
+    val sink=replace(prepared,{case c:Connect=>sinkChange(c);case x=>x})
+    val rhs=replace(prepared,{
+      case c:Connect if c.loc.isInstanceOf[Reference] && c.loc.asInstanceOf[Reference].name==name=>
+        c.expr match{case x:Reference=>c.copy(expr=x.copy(flow=firrtl2.UnknownFlow));case _=>throw new IllegalArgumentException("synthetic clock reference")}
+      case x=>x
+    })
+    val consumer=replace(sink,{
+      case p:Print if p.clk.isInstanceOf[Reference] && p.clk.asInstanceOf[Reference].name==name=>p.copy(clk=p.clk.asInstanceOf[Reference].copy(kind=firrtl2.RegKind))
+      case p:Stop if p.clk.isInstanceOf[Reference] && p.clk.asInstanceOf[Reference].name==name=>p.copy(clk=p.clk.asInstanceOf[Reference].copy(kind=firrtl2.RegKind))
+      case x=>x
+    })
+    val cases=Vector(
+      sink->"SELECT:ONE:CLOCK:NODE:SINK:TRUE:TRUE:TRUE:TRUE:ONE:CLOCK:NODE:SOURCE",
+      rhs->"RHS:ONE:CLOCK:NODE:SOURCE:TRUE:TRUE:TRUE:FALSE:ONE:CLOCK:NODE:SOURCE",
+      consumer->"SELECT:ONE:CLOCK:NODE:SINK:TRUE:TRUE:TRUE:TRUE:ONE:CLOCK:REG:SOURCE")
+    cases.foreach{case(c,expected)=>
+      var error:Option[IllegalArgumentException]=None
+      try{ClockInitRepresentationRepair(before,c,annotations,n)}catch{case e:IllegalArgumentException=>error=Some(e)}
+      require(error.nonEmpty && error.get.getClass==classOf[IllegalArgumentException])
+      require(ClockInitRepresentationRepair.guardCode(error.get)=="DRIVER")
+      require(ClockInitRepresentationRepair.driverEvidence(error.get)==expected)
+      error.get.addSuppressed(new IllegalArgumentException("synthetic duplicate"))
+      require(ClockInitRepresentationRepair.driverEvidence(error.get)=="UNAVAILABLE")
+    }
+    require(ClockInitRepresentationRepair.driverEvidence(new IllegalArgumentException("DRIVER"))=="UNAVAILABLE")
+    require(ClockInitRepresentationRepair.driverEvidence(new IllegalArgumentException("SHAPE"))=="NONE")
+    cases.size
+  }
   private def cycle(c:Circuit):Circuit={
     val u=UIntType(IntWidth(1));def ref(n:String,flow:firrtl2.Flow)=Reference(n,u,firrtl2.WireKind,flow)
     val a="fixture_cycle_a";val b="fixture_cycle_b"
@@ -174,6 +222,7 @@ object ClockInitStructuralFixture {
           val states=prepared.collect{case TreadleCircuitStateAnnotation(s)=>s};require(states.size==1)
           val state=states.head;val n=if(mode=="both")2 else 1
           phase="ORIGINAL_ERRORS";originalErrors(state.circuit,n)
+          phase="NEGATIVE";val driverChecks=driverDiagnostics();require(driverChecks==3)
           phase="REPAIR"
           val fixed=ClockInitRepresentationRepair(low,state.circuit,state.annotations,n)
           require(fixed.corrected==n);unchanged(state.circuit,fixed.circuit,n)
@@ -201,15 +250,15 @@ object ClockInitStructuralFixture {
             }
           }
           phase="EQUATIONS";val vectors=equations()
-          "CLOCK_INIT_CASE_V1 id="+mode+" corrected="+n+" negativeGuards="+guards+" equations="+vectors+" shapeChecks=1 graphDigest="+digest
+          "CLOCK_INIT_CASE_V1 id="+mode+" corrected="+n+" negativeGuards="+guards+" equations="+vectors+" shapeChecks=1 driverChecks=3 graphDigest="+digest
         }
         ok=true
       }}
-    }catch{case e:Throwable=>rows=Vector("CLOCK_INIT_FAILURE_V1 phase="+phase+" guard="+(if(phase=="REPAIR")ClockInitRepresentationRepair.guardCode(e)else "NONE")+" exceptionClassSha="+hash(e.getClass.getName))}
+    }catch{case e:Throwable=>rows=Vector("CLOCK_INIT_FAILURE_V1 phase="+phase+" guard="+(if(phase=="REPAIR")ClockInitRepresentationRepair.guardCode(e)else "NONE")+" driver="+(if(phase=="REPAIR")ClockInitRepresentationRepair.driverEvidence(e)else "NONE")+" exceptionClassSha="+hash(e.getClass.getName))}
     finally{
       System.setOut(out);System.setErr(err)
       try{target.foreach{dir=>val stream=Files.walk(dir);val xs=try{val it=stream.iterator();val b=Vector.newBuilder[Path];var n=0;while(it.hasNext && n<257){b+=it.next();n+=1};require(n<=256 && !it.hasNext);b.result()}finally{stream.close()};xs.sortBy(p=> -p.getNameCount).foreach(Files.delete(_))}}
-      catch{case e:Throwable=>ok=false;rows=Vector("CLOCK_INIT_FAILURE_V1 phase=CLEANUP guard=NONE exceptionClassSha="+hash(e.getClass.getName))}
+      catch{case e:Throwable=>ok=false;rows=Vector("CLOCK_INIT_FAILURE_V1 phase=CLEANUP guard=NONE driver=NONE exceptionClassSha="+hash(e.getClass.getName))}
       muted.close()
     }
     rows.foreach(out.println)

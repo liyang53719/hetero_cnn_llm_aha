@@ -27,6 +27,25 @@ object OriginalHostStructuralGraph {
   private def hash(s:String):String=sha(s.getBytes(UTF_8))
   // Failure-only disclosure: exact reviewed static messages map to finite codes.
   // No message, stack, source name, path, AST, or message-derived hash is emitted.
+  private val symbolRoleGuardCodes=Map[String,String](
+    "requirement failed: CYCLE_WITNESS_ROLES_MODULES" -> "MODULES",
+    "requirement failed: CYCLE_WITNESS_ROLES_LEAF_COUNT" -> "LEAF_COUNT",
+    "requirement failed: CYCLE_WITNESS_ROLES_PATH" -> "PATH",
+    "requirement failed: CYCLE_WITNESS_ROLES_INSTANCE" -> "INSTANCE",
+    "requirement failed: CYCLE_WITNESS_ROLES_LEAF_ABI" -> "LEAF_ABI",
+    "requirement failed: CYCLE_WITNESS_ROLES_PACKED_REQ" -> "PACKED_REQ",
+    "requirement failed: CYCLE_WITNESS_ROLES_PACKED_RSP" -> "PACKED_RSP",
+    "requirement failed: CYCLE_WITNESS_ROLES_SPLIT_READY" -> "SPLIT_READY",
+    "requirement failed: CYCLE_WITNESS_ROLES_SPLIT_LAST" -> "SPLIT_LAST"
+  )
+  private def symbolGuardCode(step:String,error:Throwable):String={
+    if(step!="ROLES")"NONE"
+    else if(error.getClass!=classOf[IllegalArgumentException])"UNKNOWN"
+    else {
+      val message=error.getMessage
+      if(message==null || message.length>96)"UNKNOWN"else symbolRoleGuardCodes.getOrElse(message,"UNKNOWN")
+    }
+  }
   private val topologyGuardCodes=Map[String,String](
     "requirement failed: bounded exact hierarchy path" -> "TOPOLOGY_PATH_BOUNDS",
     "requirement failed: bounded integration statements" -> "TOPOLOGY_STATEMENT_BOUND",
@@ -247,7 +266,10 @@ object OriginalHostStructuralGraph {
     val sink=new DiagnosticSink;val muted=new PrintStream(sink,true,"UTF-8")
     var stage="admission";var result="FAIL_STRUCTURAL_GRAPH_ONLY stage=admission";var failed=true
     var boundaryStep="NONE";var preparedStep="NONE"
+    var symbolStep="NONE"
     var sizingRecord="NONE";var sizingPrepared:firrtl2.ir.Circuit=null
+    def symbolFailure(error:Throwable):String=
+      if(stage=="symbol_table")" symbolStep="+symbolStep+" symbolGuard="+symbolGuardCode(symbolStep,error)else ""
     def boundaryFailure(error:Throwable):String=
       if(stage=="boundary_split")" boundaryStep="+boundaryStep+" boundaryGuard="+boundaryGuardCode(boundaryStep,error)else ""
     def preparedFailure(error:Throwable):String=
@@ -369,14 +391,24 @@ object OriginalHostStructuralGraph {
           (checkedState,f)
         }
         val table=timed("symbol_table") {
+          symbolStep="ROLES"
           val roles=CycleWitnessRoles(state.circuit,factory.bindings)
+          symbolStep="OBSERVER_SETUP"
           var witnessCount=0
           val t=BoundedCycleWitness.withDiagnostic(roles,r=>{
             require(witnessCount==0,"one witness only");witnessCount+=1
             savedOut.println("GRAPH_CYCLE_WITNESS "+r.json);savedOut.flush()
             require(!savedOut.checkError(),"witness output failed")
-          }) { SymbolTable(state.circuit,Seq(factory),allowCycles=false) }
-          factory.requireComplete();require(!sink.unsupported,"unhandled/warning library diagnostic");t
+          }) {
+            symbolStep="CONSTRUCTOR"
+            val constructed=SymbolTable(state.circuit,Seq(factory),allowCycles=false)
+            symbolStep="OBSERVER_EXIT"
+            constructed
+          }
+          symbolStep="FACTORY_COMPLETE"
+          factory.requireComplete()
+          symbolStep="SINK_CHECK"
+          require(!sink.unsupported,"unhandled/warning library diagnostic");t
         }
         val preparedSha=timed("summary_hash") {hash(state.circuit.serialize)}
         require(!telemetry.failed && !sink.cycleSeen,"telemetry failure or detected cycle")
@@ -390,12 +422,12 @@ object OriginalHostStructuralGraph {
         sizingRecord=try ClockInitRepresentationRepair.sizingEvidence(censusBefore,sizingPrepared,error) catch{case _:Throwable=>"UNAVAILABLE"}
       if(stage=="prepared_checks" && preparedStep=="TYPES")
         censusRecord=Some(try RegisterInitCensus.record(censusAfter,censusBefore) catch{case _:Throwable=>"REG_INIT_CENSUS_V1 regCensus=UNAVAILABLE"})
-      result="FAIL_STRUCTURAL_GRAPH_ONLY stage="+stage+" exceptionClassSha="+hash(error.getClass.getName)+boundaryFailure(error)+preparedFailure(error)+
+      result="FAIL_STRUCTURAL_GRAPH_ONLY stage="+stage+" exceptionClassSha="+hash(error.getClass.getName)+boundaryFailure(error)+preparedFailure(error)+symbolFailure(error)+
         " nativeInstances=0 evaluatedEdges=0 schedulingQualified=false fullHostAccepted=false"
     }finally{
       try {if(telemetry!=null){telemetry.stop();require(!telemetry.failed,"sampler metrics failed")}}catch{case error:Throwable=>
         // Preserve the primary failure and its census if cleanup also fails.
-        if(!failed){failed=true;result="FAIL_STRUCTURAL_GRAPH_ONLY stage="+stage+" exceptionClassSha="+hash(error.getClass.getName)+boundaryFailure(error)+preparedFailure(error)+
+        if(!failed){failed=true;result="FAIL_STRUCTURAL_GRAPH_ONLY stage="+stage+" exceptionClassSha="+hash(error.getClass.getName)+boundaryFailure(error)+preparedFailure(error)+symbolFailure(error)+
           " nativeInstances=0 evaluatedEdges=0 schedulingQualified=false fullHostAccepted=false"}
       }
       System.setOut(savedOut);System.setErr(savedErr)

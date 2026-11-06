@@ -1,10 +1,10 @@
 """One source-only structural job. No engine/native, weights, references or IR export."""
 import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request,urllib.error,zipfile
 P=pathlib.Path;D=P(__file__).resolve().parent;REPO=D.parent.parent
-REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_symbol_guard_diagnostic_once.json'
+REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_prepared_roles_once.json'
 CAT='candidates/gdn32_first_model_execution_20261104/GDN32_FULL_SOURCE_PINS.json'
 CAT_SHA='ad2d4dcaddb213c85fd15adc65f7da5bd74a0d7c3e6c5922c725aa41bdc967cb'
-BASE='03ea892f1892c13c24d4465fc9e0c515cb0eb26b';BASE_TREE='21bea534d597e215a9699cb1759060ebac9ca4d7';TREE=12_081_306_272;RESERVE=8<<30
+BASE='eb70c461b102a11ca3abf798d0f4be4c7f68eb05';BASE_TREE='ce3a698529fb70727ffb5e2f47351e2619bc511f';TREE=12_081_306_272;RESERVE=8<<30
 from witness_record import parse_record as parse_witness_record
 from compare_observed_prepare import evidence as parse_observed_evidence, budget_for_provenance as parse_observed_budget, sizing_pair as parse_observed_sizing_pair, consumer_for_provenance as parse_observed_consumer, formal_for_provenance as parse_observed_formal, anchor_for_provenance as parse_observed_anchor
 from compare_clock_init_results import auxiliary_evidence as parse_auxiliary_evidence, preexisting_evidence as parse_preexisting_evidence

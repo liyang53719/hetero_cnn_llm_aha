@@ -339,6 +339,8 @@ object OriginalHostStructuralGraph {
           require(revised.annotations eq low.annotations,"original initialization annotations preserved by reference")
           check(revised)
           require(TopmoduleInfo(revised.circuit).clocks==Seq("clock"),"unchanged original clock")
+          // The actual original boundary must retain all four strict roles.
+          CycleWitnessRoles(revised.circuit,originalBindings)
           revised
         }
         censusBefore=boundaryLow.circuit
@@ -392,7 +394,7 @@ object OriginalHostStructuralGraph {
         }
         val table=timed("symbol_table") {
           symbolStep="ROLES"
-          val roles=CycleWitnessRoles(state.circuit,factory.bindings)
+          val roles=CycleWitnessRoles.prepared(state.circuit,factory.bindings,topology)
           symbolStep="OBSERVER_SETUP"
           var witnessCount=0
           val t=BoundedCycleWitness.withDiagnostic(roles,r=>{

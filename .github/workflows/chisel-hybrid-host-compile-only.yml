@@ -31,6 +31,9 @@ jobs:
           python3 -I -B candidates/chisel_hybrid_host_20261106/compile_only.py --check-only
           python3 -I -B candidates/chisel_hybrid_host_20261106/test_compile_only.py
           python3 -I -B -O candidates/chisel_hybrid_host_20261106/test_compile_only.py
+          python3 -I -B candidates/chisel_hybrid_host_20261106/native/check_source_only.py
+          python3 -I -B candidates/chisel_hybrid_host_20261106/native/test_source_only.py
+          python3 -I -B -O candidates/chisel_hybrid_host_20261106/native/test_source_only.py
       - name: Compile only; no elaboration, native loading, profiles or uploads
         timeout-minutes: 25
         run: |

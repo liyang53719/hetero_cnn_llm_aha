@@ -1,0 +1,168 @@
+{
+  "base_commit": "e7727040d398a9fb2f65bd039d59865ab05640a1",
+  "external_headers": {
+    "VOriginalIdmaAdapterProbe.h": "Generated original adapter Verilator model; not distributed here",
+    "Vidma_backend_rw_axi_flat_wrap.h": "Generated original iDMA leaf Verilator model; not distributed here",
+    "Vqwen2_matrix_command_endpoint.h": "Generated original Matrix Verilator model; not distributed here",
+    "Vtc_clk_gating.h": "Generated original ICG Verilator model; not distributed here",
+    "verilated.h": "External matching Verilator C++ runtime"
+  },
+  "files": [
+    {
+      "bytes": 1450,
+      "group": "idma",
+      "path": "idma/abi_checks.cpp",
+      "quoted_includes": [
+        "Vidma_backend_rw_axi_flat_wrap.h",
+        "retained_idma_leaf.h"
+      ],
+      "sha256": "774d3f34e8cfde3e9fbda8452602dc05ec0a936fecec9e6b1b60a6ff16bc3989"
+    },
+    {
+      "bytes": 8258,
+      "group": "idma",
+      "path": "idma/adapter_abi_checks.cpp",
+      "quoted_includes": [
+        "VOriginalIdmaAdapterProbe.h",
+        "verilated.h"
+      ],
+      "sha256": "c757861e6d5bf2a1f9a3c9b064bc0adefcc94e0c7b8e212e887f937417cfa3dd"
+    },
+    {
+      "bytes": 2729,
+      "group": "idma",
+      "path": "idma/direct_trace.cpp",
+      "quoted_includes": [
+        "Vidma_backend_rw_axi_flat_wrap.h",
+        "verilated.h"
+      ],
+      "sha256": "58db61a5dca5fcb85d8ef71c3019a3a5cb0bc88ba1bf3dde72e5bee2e4430852"
+    },
+    {
+      "bytes": 11006,
+      "group": "idma",
+      "path": "idma/original_adapter_rtl_frame_endpoint.cpp",
+      "quoted_includes": [
+        "VOriginalIdmaAdapterProbe.h",
+        "verilated.h"
+      ],
+      "sha256": "5e67cf587faa1d81c5a1a0b19d40e66521c020141b369a1e67ff27cd1395620e"
+    },
+    {
+      "bytes": 3924,
+      "group": "idma",
+      "path": "idma/retained_idma_leaf.cpp",
+      "quoted_includes": [
+        "retained_idma_leaf.h",
+        "Vidma_backend_rw_axi_flat_wrap.h",
+        "verilated.h"
+      ],
+      "sha256": "93299a872abb03938a4d02ce42d1561275cfe3bf81bec84db6c28016fb4443df"
+    },
+    {
+      "bytes": 1266,
+      "group": "idma",
+      "path": "idma/retained_idma_leaf.h",
+      "quoted_includes": [],
+      "sha256": "360c439f6a65b406177e103cf59d06fa58342fff719f4d0559b070c20b85bf72"
+    },
+    {
+      "bytes": 1149,
+      "group": "matrix_icg",
+      "path": "matrix_icg/icg_cabi_trace.cpp",
+      "quoted_includes": [
+        "passive_native_mapping.h",
+        "retained_icg_leaf.h",
+        "trace_io.h"
+      ],
+      "sha256": "0031ae235749b299dc39e6f42b44ebc5f34e134c7d140a09699ce70267b7e92b"
+    },
+    {
+      "bytes": 1107,
+      "group": "matrix_icg",
+      "path": "matrix_icg/icg_direct_trace.cpp",
+      "quoted_includes": [
+        "passive_native_mapping.h",
+        "Vtc_clk_gating.h",
+        "verilated.h",
+        "trace_io.h"
+      ],
+      "sha256": "8b7464187d011fcde5c1ddb7fe96994e20abe9284849c9340a16b75985d80ceb"
+    },
+    {
+      "bytes": 1288,
+      "group": "matrix_icg",
+      "path": "matrix_icg/matrix_cabi_trace.cpp",
+      "quoted_includes": [
+        "passive_native_mapping.h",
+        "retained_matrix_leaf.h",
+        "trace_io.h"
+      ],
+      "sha256": "2aeea8381db8b9ca2311c7f833927739344033ae1e137bb02e714aa53796a1e0"
+    },
+    {
+      "bytes": 2951,
+      "group": "matrix_icg",
+      "path": "matrix_icg/matrix_direct_trace.cpp",
+      "quoted_includes": [
+        "passive_native_mapping.h",
+        "Vqwen2_matrix_command_endpoint.h",
+        "verilated.h",
+        "trace_io.h"
+      ],
+      "sha256": "58d9be8211ebb6af31ce551b2689e63899763a48e319cf581aa16f301cafbea1"
+    },
+    {
+      "bytes": 3006,
+      "group": "matrix_icg",
+      "path": "matrix_icg/passive_native_mapping.h",
+      "quoted_includes": [],
+      "sha256": "4bb5ae7975b8bcb908b879a026def11b0f2b44d88c8c9ed09d7360f87abc9d37"
+    },
+    {
+      "bytes": 2487,
+      "group": "matrix_icg",
+      "path": "matrix_icg/retained_icg_leaf.cpp",
+      "quoted_includes": [
+        "retained_icg_leaf.h",
+        "Vtc_clk_gating.h",
+        "verilated.h"
+      ],
+      "sha256": "707f298f8c2111d38373a6e521bed2432ffcc6a5a27959dec2a176727f6a7412"
+    },
+    {
+      "bytes": 639,
+      "group": "matrix_icg",
+      "path": "matrix_icg/retained_icg_leaf.h",
+      "quoted_includes": [],
+      "sha256": "f0f29f37cd5b95a0ded211ba79bf41aa0a97a917164d773051e221f5ab360adc"
+    },
+    {
+      "bytes": 6554,
+      "group": "matrix_icg",
+      "path": "matrix_icg/retained_matrix_leaf.cpp",
+      "quoted_includes": [
+        "retained_matrix_leaf.h",
+        "Vqwen2_matrix_command_endpoint.h",
+        "verilated.h"
+      ],
+      "sha256": "041d813eb8677687321aa93cb3705713b5f7f2d3f5f35c1f44941288b26356aa"
+    },
+    {
+      "bytes": 7490,
+      "group": "matrix_icg",
+      "path": "matrix_icg/retained_matrix_leaf.h",
+      "quoted_includes": [],
+      "sha256": "63301a207240a0eac68c998dd2d4c6fb8eaf5f56efdf3f7b890449be329e398a"
+    },
+    {
+      "bytes": 1402,
+      "group": "matrix_icg",
+      "path": "matrix_icg/trace_io.h",
+      "quoted_includes": [],
+      "sha256": "604fa782be18424b421dc262319d5486636ed91d66947a035e9639c691cf3e12"
+    }
+  ],
+  "schema": "TEMP_NATIVE_SOURCE_PRESERVATION_V1",
+  "status": "EXACT_PREVIOUSLY_COMPILED_SOURCE_ONLY_NOT_A_PORTABLE_NATIVE_BUILD"
+}

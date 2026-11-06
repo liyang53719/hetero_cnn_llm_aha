@@ -3,7 +3,7 @@ package chiseltest.simulator
 import firrtl2.{CircuitState,Parser}
 import firrtl2.annotations.JsonProtocol
 import firrtl2.stage.FirrtlCircuitAnnotation
-import heteronpu.continuous.model.{IdmaFieldSplitTransform,IdmaPackedBoundarySplit,BoundaryIntegrationGuards,StructuralMetadataFactory,CycleWitnessRoles}
+import heteronpu.continuous.model.{IdmaFieldSplitTransform,IdmaPackedBoundarySplit,BoundaryIntegrationGuards,StructuralMetadataFactory,StructuralLeafContract,CycleWitnessRoles}
 import java.io.{OutputStream,PrintStream}
 import java.nio.charset.StandardCharsets.UTF_8
 import java.nio.file.{Files,Paths}
@@ -263,7 +263,7 @@ object OriginalHostStructuralGraph {
       Console.withOut(muted){Console.withErr(muted){
         telemetry=new PhaseTelemetry(savedOut,sink);sink.onCycle=()=>telemetry.cycleDetected();telemetry.startSampling()
         timed("admission") {
-          require(args.length==16,"pinned high,annotations,iDMA and actual loaded class identities")
+          require(args.length==19,"pinned high,annotations,iDMA and actual loaded class identities")
           require(args.slice(5,7).forall(_.matches("[0-9a-f]{64}")) && args(8).matches("[0-9a-f]{64}"))
           require(loaded(classOf[SymbolTable],args(7))==args(5) && loaded(SymbolTable.getClass,args(7))==args(6),"qualified graph SymbolTable bytes")
           require(loaded(IdmaPackedBoundarySplit.getClass,args(9))==args(8),"same boundary transform class as paired fixture")
@@ -272,6 +272,8 @@ object OriginalHostStructuralGraph {
           require(loaded(classOf[ObservedPrepareAst],args(15))==args(12),"same observed phase class as paired fixture")
           require(loaded(ObservedPrepareAst.getClass,args(15))==args(13),"same observer companion as paired fixture")
           require(loaded(ObservedScheduleIdentity.getClass,args(15))==args(14),"same observed schedule verifier as paired fixture")
+          require(loaded(classOf[StructuralMetadataFactory],args(18))==args(16),"same metadata factory as paired fixture")
+          require(loaded(StructuralLeafContract.getClass,args(18))==args(17),"same metadata leaf contract as paired fixture")
           require(Files.getFileStore(Paths.get(args(0)).toAbsolutePath).getUsableSpace>=8L*1024*1024*1024,"unchanged8GiB reserve")
         }
         val (highText,annotationText)=timed("read") {
@@ -362,8 +364,8 @@ object OriginalHostStructuralGraph {
           require(f.bindings==originalBindings,"same prepared leaf inventory")
           savedOut.println("PREPARE_REPAIR_V1 status=COMPLETE corrected=394 types=PASS flows=PASS clock=PASS bindings=PASS symbolTableStarted=false workV2="+initRepair.workV2);savedOut.flush()
           require(!savedOut.checkError(),"proof-bound repair evidence output failed")
-          preparedStep="DIAGNOSTIC_STOP"
-          require(false,"PROVENANCE_REPAIR_DIAGNOSTIC_ONLY") // Explicit stop before actual Host SymbolTable.
+          // Continue the same validated repaired state and metadata factory into
+          // the source-only SymbolTable stage. No simulator or DUT evaluation.
           (checkedState,f)
         }
         val table=timed("symbol_table") {

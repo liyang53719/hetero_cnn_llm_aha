@@ -1,10 +1,10 @@
 """One source-only structural job. No engine/native, weights, references or IR export."""
 import contextlib,gzip,hashlib,importlib.util,json,os,pathlib,re,shutil,subprocess,sys,time,urllib.request,urllib.error,zipfile
 P=pathlib.Path;D=P(__file__).resolve().parent;REPO=D.parent.parent
-REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_repair_selected_lookup_once.json'
+REL='candidates/chisel_host_boundary_graph_20261105';NONCE='ci_launch/chisel_host_boundary_graph_20261105_repair_symbol_table_once.json'
 CAT='candidates/gdn32_first_model_execution_20261104/GDN32_FULL_SOURCE_PINS.json'
 CAT_SHA='ad2d4dcaddb213c85fd15adc65f7da5bd74a0d7c3e6c5922c725aa41bdc967cb'
-BASE='7b85c4c304e1bc9b36774e3dcfb7e64cd53d810e';BASE_TREE='0cf48776ec021736434e866bc82cc6c33b7a9943';TREE=12_081_306_272;RESERVE=8<<30
+BASE='21df6f0669d6a097391cd89b984a1cc7d2af638b';BASE_TREE='b71ae0d489340c8ac4cb5bd4e226ca5a1d545604';TREE=12_081_306_272;RESERVE=8<<30
 from witness_record import parse_record as parse_witness_record
 from compare_observed_prepare import evidence as parse_observed_evidence, budget_for_provenance as parse_observed_budget, sizing_pair as parse_observed_sizing_pair, consumer_for_provenance as parse_observed_consumer, formal_for_provenance as parse_observed_formal, anchor_for_provenance as parse_observed_anchor
 from compare_clock_init_results import auxiliary_evidence as parse_auxiliary_evidence, preexisting_evidence as parse_preexisting_evidence
@@ -292,7 +292,8 @@ def parse_p54_work(provenance,text):
  need(visits<=provenance['visits'] and expr<=provenance['expressions'],'P54_WORK_AGGREGATE')
  return dict(status='AVAILABLE',phase='P54',**dict(zip(P54_WORK_KEYS,values)),completed_scan=True)
 
-def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=False,sizing_diagnostics=False,consumer_diagnostics=False,formal_diagnostics=False,anchor_diagnostics=False,proof_repair_diagnostics=False,annotation_shape_diagnostics=False,instance_owner_diagnostics=False,annotation_other_owner_diagnostics=False,uses_work_diagnostics=False,p54_work_diagnostics=False,work_v2_diagnostics=False):
+def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=False,sizing_diagnostics=False,consumer_diagnostics=False,formal_diagnostics=False,anchor_diagnostics=False,proof_repair_diagnostics=False,annotation_shape_diagnostics=False,instance_owner_diagnostics=False,annotation_other_owner_diagnostics=False,uses_work_diagnostics=False,p54_work_diagnostics=False,work_v2_diagnostics=False,actual_symbol_table=False):
+ need(type(actual_symbol_table)is bool and (not actual_symbol_table or all(flag is True for flag in (observation_only,sizing_diagnostics,consumer_diagnostics,formal_diagnostics,anchor_diagnostics,proof_repair_diagnostics,annotation_shape_diagnostics,instance_owner_diagnostics,annotation_other_owner_diagnostics,uses_work_diagnostics,p54_work_diagnostics,work_v2_diagnostics))),'ACTUAL_SYMBOL_TABLE_MODE')
  need(type(work_v2_diagnostics)is bool and (not work_v2_diagnostics or proof_repair_diagnostics),'WORK_V2_MODE')
  need(type(p54_work_diagnostics)is bool and (not p54_work_diagnostics or anchor_diagnostics),'P54_WORK_MODE')
  need(type(anchor_diagnostics)is bool and (not anchor_diagnostics or formal_diagnostics),'GRAPH_ANCHOR_MODE')
@@ -309,6 +310,13 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=Fals
  need('\r'not in text and (not text or text.endswith('\n')),'GRAPH_LOG_TRUNCATED_LINE')
  lines=text.splitlines();need(len(lines)<=98,'GRAPH_RECORD_LIMIT')
  rows=[];final=None;active=None;next_phase=0;last=None;last_phase=None;cycle_event_seen=False;witness=None;census=None;provenance=None;observer_budget_raw=None;observer_sizing_raw=None;observer_budget=None;observer_sizing=None;observer_consumer_raw=None;observer_consumer=None;observer_formal_raw=None;observer_formal=None;observer_anchor_raw=None;observer_anchor=None;observer_p54_raw=None;observer_p54=None;proof_repair=None
+ def require_continuation_proof():
+  need(provenance is not None and provenance.get('status')=='COMPLETE' and provenance.get('step')=='DONE' and provenance.get('reason')=='NONE' and provenance.get('records')==394,'SYMBOL_TABLE_PROVENANCE_REQUIRED')
+  need(proof_repair is not None and proof_repair.get('corrected')==394,'SYMBOL_TABLE_REPAIR_REQUIRED')
+  need(observer_p54 is not None and observer_p54.get('status')=='AVAILABLE' and observer_p54.get('completed_scan')is True,'SYMBOL_TABLE_P54_REQUIRED')
+  work_v2=proof_repair.get('work_v2')
+  need(type(work_v2)is dict and work_v2.get('status')=='COMPLETE' and work_v2.get('completed_scan')is True,'SYMBOL_TABLE_WORK_V2_REQUIRED')
+  need(work_v2['node']==observer_p54['nodes'] and work_v2['edge']==observer_p54['edges'],'SYMBOL_TABLE_WORK_CROSSCHECK')
  for line in lines:
   need(final is None,'GRAPH_LOG_TRAILING_OR_LONG')
   if line.startswith('PREPARE_PROVENANCE_V1 '):
@@ -369,6 +377,7 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=Fals
    else:need(line==marker,'PROOF_REPAIR_SCHEMA')
    proof_repair=dict(status='COMPLETE_REPAIR_VALIDATION_ONLY',corrected=394,types='PASS',flows='PASS',clock='PASS',bindings='PASS',symbol_table_started=False,full_host_accepted=False)
    if work_v2_diagnostics:proof_repair['work_v2']=complete_work
+   if actual_symbol_table:require_continuation_proof()
    continue
   if line.startswith('REG_INIT_CENSUS_V1 '):
    need(census is None and active=='prepared_checks','REGISTER_CENSUS_PHASE')
@@ -383,7 +392,8 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=Fals
   m=METRIC_RE.fullmatch(line)
   if m:
    seq=int(m[1]);kind=m[2];phase=m[3];values=list(map(int,m.groups()[3:]))
-   if proof_repair is not None:need(phase=='prepared_checks' and kind=='SAMPLE','PROOF_REPAIR_NO_LATER_PHASE')
+   if proof_repair is not None and not actual_symbol_table:need(phase=='prepared_checks' and kind=='SAMPLE','PROOF_REPAIR_NO_LATER_PHASE')
+   if actual_symbol_table and ((phase=='prepared_checks' and kind=='END') or (phase=='symbol_table' and kind=='BEGIN')):require_continuation_proof()
    wall,cpu,used,maximum,gc_ms,gc_count,cycle=values
    need(seq==len(rows)+1 and seq<=96 and all(0<=v<1<<63 for v in values),'GRAPH_METRIC_RANGE')
    need(used<=maximum and 0<maximum<=15<<30 and wall<=2400000 and cpu<=2400000,'GRAPH_METRIC_RANGE')
@@ -408,7 +418,8 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=Fals
   a=PASS_RE.fullmatch(line);b=FAIL_RE.fullmatch(line)
   need(a is not None or b is not None,'GRAPH_LOG_NOT_WHITELISTED')
   if a:
-   need(not observation_only,'OBSERVER_DIAGNOSTIC_CANNOT_PASS')
+   need(not observation_only or actual_symbol_table,'OBSERVER_DIAGNOSTIC_CANNOT_PASS')
+   if actual_symbol_table:require_continuation_proof()
    need(active is None and next_phase==len(PHASES) and witness is None,'GRAPH_SUCCESS_INCOMPLETE_PHASES')
    need(a[1]==high_sha and a[2]==annotations_sha and a[6]=='0' and (not last or last[6]==0),'GRAPH_SUCCESS_IDENTITY_OR_CYCLE')
    need(int(a[4])>0 and int(a[4])<1<<63 and int(a[5])<=8<<20,'GRAPH_FINAL_RANGE')
@@ -492,9 +503,11 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=Fals
     else:need(census is None,'REGISTER_CENSUS_WRONG_STEP')
    else:need(census is None and all(b[k]is None for k in ('prepared_step','clock_init_guard','clock_init_bound','clock_init_sizing','clock_init_aux','clock_init_preexisting','pass_aggregate','pass_scanned','pass_truncated','pass_hist')),'PREPARED_DIAGNOSTIC_WRONG_PHASE')
  need(census is None or (final is not None and final['kind']=='failure'),'REGISTER_CENSUS_INCOMPLETE')
- if proof_repair is not None:need(final is not None and final['kind']=='failure' and final['phase']=='prepared_checks','PROOF_REPAIR_FINAL_REQUIRED')
+ if proof_repair is not None and not actual_symbol_table:need(final is not None and final['kind']=='failure' and final['phase']=='prepared_checks','PROOF_REPAIR_FINAL_REQUIRED')
  clean=receipt.get('status')=='PASS_PROCESS_ONLY' and receipt.get('native_exit')==0 and receipt.get('errors')==[] and receipt.get('worker_started')is True
- if final and final['kind']=='success':need(clean,'GRAPH_FALSE_SUCCESS_RECEIPT')
+ if final and final['kind']=='success':
+  need(clean,'GRAPH_FALSE_SUCCESS_RECEIPT')
+  if actual_symbol_table:require_complete_graph_process(receipt,text)
  # Keep at most last sample/marker per phase in exported JSON, not the full log.
  latest={r['phase']:r for r in rows}
  out=dict(status='INCOMPLETE_STRUCTURAL_GRAPH_ONLY',last_phase=last_phase,metric_records=len(rows),phase_metrics=list(latest.values()),cycle_seen=bool(last and last[6]))
@@ -513,6 +526,9 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=Fals
  if final and 'clock_init_annotation_other_owner'in final:out['clock_init_annotation_other_owner']=final['clock_init_annotation_other_owner']
  if final and 'clock_init_uses_work'in final:out['clock_init_uses_work']=final['clock_init_uses_work']
  if final and 'clock_init_work_v2'in final:out['clock_init_work_v2']=final['clock_init_work_v2']
+ if actual_symbol_table:
+  out['symbol_table_stage_started']=any(r['phase']=='symbol_table' and r['kind']=='BEGIN'for r in rows)
+  out['symbol_table_stage_complete']=any(r['phase']=='symbol_table' and r['kind']=='END'for r in rows)
  if proof_repair is not None:out['proof_bound_repair']=proof_repair
  if final and 'register_init_census'in final:out['register_init_census']=final['register_init_census']
  if provenance is not None:out['prepare_provenance']=provenance
@@ -523,7 +539,10 @@ def parse_graph_text(text,receipt,high_sha,annotations_sha,observation_only=Fals
  if observer_anchor_raw is not None:out['prepare_anchor']=observer_anchor
  if observer_p54_raw is not None:out['prepare_p54_work']=observer_p54
  if witness is not None:
-  need(final is not None and final['kind']=='failure' and final['cycle_seen'],'GRAPH_WITNESS_WITHOUT_CYCLE_FAILURE')
+  if actual_symbol_table and final is None:
+   need(not clean and receipt.get('status')=='FAIL_OR_INCOMPLETE' and receipt.get('worker_started')is True and type(receipt.get('native_exit'))is int and receipt['native_exit']!=0 and type(receipt.get('errors'))is list and active=='symbol_table' and last_phase=='symbol_table','GRAPH_WITNESS_PREFIX_SCOPE')
+   out['cycle_witness_prefix_only']=True
+  else:need(final is not None and final['kind']=='failure' and final['cycle_seen'],'GRAPH_WITNESS_WITHOUT_CYCLE_FAILURE')
   out['cycle_witness']=witness
  return out
 
@@ -707,8 +726,30 @@ def api_probe_result(kind,path,source_lines,text,receipt):
   need(re.fullmatch(r' *\^',caret)is not None and len(caret)<=len(excerpt)+1,'API_PROBE_CARET')
 # End fixed compiler access probes.
 
-def read_graph_diagnostics(path,receipt,high_sha,annotations_sha):
- return parse_graph_text(read_closed_log(path,receipt),receipt,high_sha,annotations_sha,observation_only=True,sizing_diagnostics=True,consumer_diagnostics=True,formal_diagnostics=True,anchor_diagnostics=True,proof_repair_diagnostics=True,annotation_shape_diagnostics=True,instance_owner_diagnostics=True,annotation_other_owner_diagnostics=True,uses_work_diagnostics=True,p54_work_diagnostics=True,work_v2_diagnostics=True)
+def require_complete_graph_process(receipt,text):
+ need(type(receipt)is dict and receipt.get('status')=='PASS_PROCESS_ONLY' and type(receipt.get('native_exit'))is int and receipt['native_exit']==0 and type(receipt.get('errors'))is list and receipt['errors']==[] and receipt.get('worker_started')is True,'GRAPH_FALSE_SUCCESS_RECEIPT')
+ cleanup=receipt.get('cleanup_proof');barrier=receipt.get('reader_join_barrier');cap=receipt.get('log_capture')
+ need(type(cleanup)is dict and cleanup.get('status')=='COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP','GRAPH_CLEANUP_UNPROVEN')
+ need(type(barrier)is dict and barrier.get('complete')is True and barrier.get('alive')is False and barrier.get('reader_finally_done')is True,'GRAPH_READER_UNCLOSED')
+ need(type(cap)is dict and cap.get('pipe_eof_observed')is True and cap.get('gzip_finalized')is True and cap.get('capture_cap_hit')is False,'GRAPH_LOG_UNFINALIZED')
+ raw=text.encode('ascii')
+ need(type(cap.get('raw_bytes'))is int and cap['raw_bytes']==len(raw) and cap.get('raw_sha256')==hashlib.sha256(raw).hexdigest(),'GRAPH_RAW_LOG_IDENTITY')
+
+def read_graph_diagnostics(path,receipt,high_sha,annotations_sha,actual_symbol_table=False):
+ return parse_graph_text(read_closed_log(path,receipt),receipt,high_sha,annotations_sha,observation_only=True,sizing_diagnostics=True,consumer_diagnostics=True,formal_diagnostics=True,anchor_diagnostics=True,proof_repair_diagnostics=True,annotation_shape_diagnostics=True,instance_owner_diagnostics=True,annotation_other_owner_diagnostics=True,uses_work_diagnostics=True,p54_work_diagnostics=True,work_v2_diagnostics=True,actual_symbol_table=actual_symbol_table)
+
+METADATA_IDENTITY_FIELDS=(('factorySourceSha','factory_source_sha256'),('factoryClassSha','factory_class_sha256'),('contractCompanionSha','contract_companion_sha256'),('boxClassSha','box_class_sha256'),('fixtureSourceSha','fixture_source_sha256'),('fixtureClassSha','fixture_class_sha256'),('fixtureCompanionSha','fixture_companion_sha256'))
+def parse_metadata_fixture(text,receipt,label,symbol_pins,metadata_pins):
+ need(type(text)is str and text.isascii() and len(text)<=4096 and label in ('official','cached'),'METADATA_FIXTURE_SCHEMA')
+ require_complete_graph_process(receipt,text)
+ prefix='STRUCTURAL_METADATA_FIXTURE_V1 status=PASS label='+label
+ fields=[('symbolSourceSha',symbol_pins['source_sha256']),('symbolClassSha',symbol_pins['class_sha256']),('symbolCompanionSha',symbol_pins['companion_sha256'])]+[(field,metadata_pins[key])for field,key in METADATA_IDENTITY_FIELDS]
+ for field,digest in fields:
+  need(type(digest)is str and re.fullmatch(r'[0-9a-f]{64}',digest)is not None,'METADATA_FIXTURE_IDENTITY')
+  prefix+=' '+field+'='+digest
+ matched=re.fullmatch(re.escape(prefix)+r' bindings=17 instances=17 symbols=([1-9][0-9]{0,3}) graphDigest=([0-9a-f]{64}) executionMethodsCalled=0 numericalPass=false fullHostAccepted=false\n',text)
+ need(matched is not None and int(matched[1])<=4096,'METADATA_FIXTURE_REJECTED')
+ return {'symbols':int(matched[1]),'graph_digest_sha256':matched[2]}
 
 def reject_fixture_failure(text,label,comparator):
  # Caller must first obtain text through read_closed_log. This path always
@@ -734,12 +775,12 @@ def main():
  need(git('diff','--name-only','HEAD^','HEAD')==NONCE and not git('status','--porcelain'))
  nonce=load(REPO/NONCE,4096);need(nonce=={'schema':'ONE_OBSERVED_PREPARE_DIAGNOSTIC_V1','source_commit':source,'base_commit':BASE,'attempts':1,'numerical_execution':False,'native_execution':False,'artifact_upload':False})
  own=load(D/'SOURCE_PINS.json')
- expected_files={'.github/workflows/chisel-host-boundary-graph-once.yml',*[REL+'/'+p for p in ('run.py', 'prepare_jars.py', 'compare_fixture_results.py', 'compare_boundary_results.py', 'witness_record.py', 'modulecache/BoundedCycleWitness.scala', 'modulecache/CycleWitnessFixture.scala', 'modulecache/StructuralDifferential.scala', 'modulecache/SymbolTable.scala', 'scala/CycleWitnessRoles.scala', 'scala/IdmaFieldSplitTransform.scala', 'scala/IdmaSplitLayout.scala', 'scala/IdmaPackedBoundarySplit.scala', 'scala/BoundarySplitStructuralFixture.scala', 'scala/OriginalHostStructuralGraph.scala', 'scala/StructuralMetadataFactory.scala', 'scala/BoundaryIntegrationGuards.scala', 'scala/RegisterInitCensus.scala', 'scala/ClockInitRepresentationRepair.scala', 'scala/ClockInitStructuralFixture.scala', 'compare_clock_init_results.py','compare_schedule_probe.py','scala/ScheduleProbe.scala','compare_observed_prepare.py','scala/ObservedScheduleIdentity.scala','scala/ObservedPrepareAst.scala','scala/ObservedPrepareStructuralFixture.scala','scala/ProvenanceApiPositive.scala','scala/ProvenanceApiNegative.scala') ]}
+ expected_files={'.github/workflows/chisel-host-boundary-graph-once.yml',*[REL+'/'+p for p in ('run.py', 'prepare_jars.py', 'compare_fixture_results.py', 'compare_boundary_results.py', 'witness_record.py', 'modulecache/BoundedCycleWitness.scala', 'modulecache/CycleWitnessFixture.scala', 'modulecache/StructuralDifferential.scala', 'modulecache/SymbolTable.scala', 'scala/CycleWitnessRoles.scala', 'scala/IdmaFieldSplitTransform.scala', 'scala/IdmaSplitLayout.scala', 'scala/IdmaPackedBoundarySplit.scala', 'scala/BoundarySplitStructuralFixture.scala', 'scala/OriginalHostStructuralGraph.scala', 'scala/StructuralMetadataFactory.scala', 'scala/StructuralMetadataFixture.scala', 'scala/BoundaryIntegrationGuards.scala', 'scala/RegisterInitCensus.scala', 'scala/ClockInitRepresentationRepair.scala', 'scala/ClockInitStructuralFixture.scala', 'compare_clock_init_results.py','compare_schedule_probe.py','scala/ScheduleProbe.scala','compare_observed_prepare.py','scala/ObservedScheduleIdentity.scala','scala/ObservedPrepareAst.scala','scala/ObservedPrepareStructuralFixture.scala','scala/ProvenanceApiPositive.scala','scala/ProvenanceApiNegative.scala') ]}
  need(set(own)=={'schema','files','publication_delta'} and own['schema']=='HOST_BOUNDARY_GRAPH_SOURCE_PINS_V1')
  need(len(own['files'])==len(expected_files) and {row['path']for row in own['files']}==expected_files)
  pins=pins_for(own['files'],REPO);pins[str(D/'SOURCE_PINS.json')]=sha(D/'SOURCE_PINS.json')
  changed=set(git('diff','--name-only',BASE,source).splitlines())
- expected_delta={'candidates/chisel_host_boundary_graph_20261105/run.py', 'candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json', 'candidates/chisel_host_boundary_graph_20261105/scala/ClockInitRepresentationRepair.scala', 'candidates/chisel_host_boundary_graph_20261105/compare_observed_prepare.py', 'candidates/chisel_host_boundary_graph_20261105/scala/ObservedPrepareStructuralFixture.scala', '.github/workflows/chisel-host-boundary-graph-once.yml'}
+ expected_delta={'candidates/chisel_host_boundary_graph_20261105/scala/OriginalHostStructuralGraph.scala', '.github/workflows/chisel-host-boundary-graph-once.yml', 'candidates/chisel_host_boundary_graph_20261105/SOURCE_PINS.json', 'candidates/chisel_host_boundary_graph_20261105/run.py', 'candidates/chisel_host_boundary_graph_20261105/scala/StructuralMetadataFixture.scala'}
  need(len(own['publication_delta'])==len(expected_delta) and changed==set(own['publication_delta'])==expected_delta)
  catalog=regular(REPO/CAT);need(sha(catalog)==CAT_SHA);doc=load(catalog);need(doc['schema']=='REVIEWED_RELATIVE_SOURCE_CLOSURE_V1'and len(doc['files'])==1211);pins.update(pins_for(doc['files'],REPO));pins[str(catalog)]=CAT_SHA
  phase='admission';remote_exclusive(launch);admission();work=P(os.environ['RUNNER_TEMP'])/'chisel-host-boundary-graph';need(work.is_absolute()and not work.exists()and all(not p.is_symlink()for p in(work,*work.parents)));work.mkdir()
@@ -773,7 +814,7 @@ def main():
   if name=='compile_boundary_fixture' and type(r.get('native_exit'))is int and r['native_exit']!=0:
    boundary_identity['boundary_compiler_failure']=boundary_compiler_failure(work/name/'frontend.log.gz',r,pins)
   # END BOUNDARY COMPILER FAILURE HOOK
-  if name in ('graph','diff_official','diff_cached','witness_fixture','boundary_official','boundary_cached','register_census_fixture','clock_init_official','clock_init_cached','observed_official','observed_cached','api_probe_positive','api_probe_negative'):
+  if name in ('graph','diff_official','diff_cached','witness_fixture','boundary_official','boundary_cached','register_census_fixture','clock_init_official','clock_init_cached','observed_official','observed_cached','metadata_official','metadata_cached','api_probe_positive','api_probe_negative'):
    stage_step="RETURN";return work/name,r # Parse only after independent cleanup/log-finalization gates.
   need(r.get('native_exit')in ((0,1)if name=='jdk_inventory'else(0,)) and not r.get('errors') and reports[-1]['cleanup_complete'])
   stage_step="RETURN";return work/name
@@ -920,16 +961,34 @@ def main():
  except (ValueError,TypeError,KeyError):raise Stop('OBSERVER_COMPARATOR_REJECTED')
  need(observed_result=={'status':'PASS_OBSERVED_PREPARE_FIXTURE_ONLY','cases':9,'parity_cases':9,'suffix_checks':12,'graph_checks':12,'observer_checks':69,'parity_checks':11,'failure_parity_cases':3,'sizing_checks':56,'quota_checks':6,'consumer_checks':24,'consumer_parity_checks':1,'formal_checks':58,'formal_parity_checks':2,'anchor_checks':31,'selection_checks':39,'selection_parity_checks':4,'input_chain_checks':6,'grant_checks':72,'grant_parity_checks':15,'grant_lifecycle_checks':8,'annotation_shape_checks':25,'annotation_owner_checks':22,'annotation_other_owner_checks':23,'combinational_path_checks':99,'combinational_path_parity_selfchecks':7,'combinational_path_parity_checks':3,'uses_work_checks':67,'work_v2_checks':66,'lookup_checks':1301,'p54_work_checks':55,'p54_work_parity_checks':20,'dedup_metadata_checks':82,'dedup_metadata_parity_checks':3,'state_fields':3,'form_absent_in_pinned_api':True,'renames_none':True,'diagnostic_only':True,'interpreter_executed':False,'full_host_accepted':False},'OBSERVER_COVERAGE_REQUIRED')
  boundary_identity['observed_prepare_qualification']=observed_result
+ # Pair the exact production metadata factory against both SymbolTables before
+ # compiling the original Host. This fixture never creates an execution engine.
+ metadata_source=regular(D/'scala/StructuralMetadataFactory.scala');metadata_fixture=regular(D/'scala/StructuralMetadataFixture.scala')
+ metadataclasses=stage('compile_metadata_fixture',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',str(patchclasses)+':'+str(boundaryclasses)+':'+cp,'-d','.',str(metadata_source),str(metadata_fixture)]),90,3)
+ metadata_files=list(metadataclasses.rglob('*.class'));need(1<=len(metadata_files)<=512,'METADATA_CLASS_COUNT')
+ for path in metadata_files:pins[str(regular(path))]=sha(path)
+ prior_classes={str(p.relative_to(folder))for folder in (patchclasses,boundaryclasses,provenanceclasses)for p in folder.rglob('*.class')}
+ need(not ({str(p.relative_to(metadataclasses))for p in metadata_files}&prior_classes),'METADATA_CLASS_SHADOWING')
+ metadata_pins={'factory_source_sha256':sha(metadata_source),'fixture_source_sha256':sha(metadata_fixture)}
+ for key,name in (('factory_class_sha256','StructuralMetadataFactory.class'),('contract_companion_sha256','StructuralLeafContract$.class'),('box_class_sha256','StructuralMetadataBox.class'),('fixture_class_sha256','StructuralMetadataFixture.class'),('fixture_companion_sha256','StructuralMetadataFixture$.class')):
+  metadata_pins[key]=sha(regular(metadataclasses/'heteronpu/continuous/model'/name))
+ metadata_results=[]
+ for label,expected,location,classpath in [('official',official_pins,official_jar,str(metadataclasses)+':'+str(boundaryclasses)+':'+cp),('cached',cached_pins,str(patchclasses),str(patchclasses)+':'+str(metadataclasses)+':'+str(boundaryclasses)+':'+cp)]:
+  folder,receipt=stage('metadata_'+label,jvm('1g',classpath,'heteronpu.continuous.model.StructuralMetadataFixture',[label,expected['source_sha256'],expected['class_sha256'],expected['companion_sha256'],location,metadata_pins['factory_source_sha256'],metadata_pins['factory_class_sha256'],metadata_pins['contract_companion_sha256'],metadata_pins['box_class_sha256'],str(metadataclasses),metadata_pins['fixture_source_sha256'],metadata_pins['fixture_class_sha256'],metadata_pins['fixture_companion_sha256']]),45,2)
+  text=read_closed_log(folder/'frontend.log.gz',receipt)
+  metadata_results.append(parse_metadata_fixture(text,receipt,label,expected,metadata_pins))
+ need(len(metadata_results)==2 and metadata_results[0]==metadata_results[1],'METADATA_PAIR_MISMATCH')
+ boundary_identity['metadata_factory_qualification']={'status':'PASS_PAIRED_STRUCTURAL_METADATA_ONLY','cases':2,'bindings':17,**metadata_results[0],**metadata_pins,'execution_methods_called':0,'numerical_pass':False,'full_host_accepted':False}
  gatepath=REPO/'candidates/gdn32_first_model162_producer_20261104/candidate_generation_gate.py';spec=importlib.util.spec_from_file_location('reviewed_graph_inputs',gatepath);gate=importlib.util.module_from_spec(spec);spec.loader.exec_module(gate)
  selection=gate.selected_inputs(REPO,gate.MODEL162_SOURCE);sources=gate.checked_paths(REPO,selection['overlay'],m,selection['contract']);need(len(sources)==162)
  # The live 2400-second gate remains authoritative before every later stage.
  classes=stage('compile_original',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',cp,'-Xplugin:'+plugin,'-language:reflectiveCalls','-d','.',*sources]),300,3)
  for p in classes.rglob('*.class'):pins[str(p)]=sha(p)
  basecp=str(classes)+':'+cp
- helpers=[str(regular(D/'scala'/n))for n in ('OriginalHostStructuralGraph.scala','StructuralMetadataFactory.scala','CycleWitnessRoles.scala','BoundaryIntegrationGuards.scala')]
- hclasses=stage('compile_graph',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',str(patchclasses)+':'+str(provenanceclasses)+':'+str(boundaryclasses)+':'+basecp,'-d','.',*helpers]),300,3)
+ helpers=[str(regular(D/'scala'/n))for n in ('OriginalHostStructuralGraph.scala','CycleWitnessRoles.scala','BoundaryIntegrationGuards.scala')]
+ hclasses=stage('compile_graph',jvm('2g',cp,'scala.tools.nsc.Main',['-classpath',str(patchclasses)+':'+str(metadataclasses)+':'+str(provenanceclasses)+':'+str(boundaryclasses)+':'+basecp,'-d','.',*helpers]),300,3)
  for p in hclasses.rglob('*.class'):pins[str(p)]=sha(p)
- need(not ({str(p.relative_to(hclasses))for p in hclasses.rglob('*.class')}&({str(p.relative_to(boundaryclasses))for p in boundaryclasses.rglob('*.class')}|{str(p.relative_to(provenanceclasses))for p in provenanceclasses.rglob('*.class')})),'QUALIFIED_CLASS_SHADOWING')
+ need(not ({str(p.relative_to(hclasses))for p in hclasses.rglob('*.class')}&({str(p.relative_to(boundaryclasses))for p in boundaryclasses.rglob('*.class')}|{str(p.relative_to(provenanceclasses))for p in provenanceclasses.rglob('*.class')}|{str(p.relative_to(metadataclasses))for p in metadata_files})),'QUALIFIED_CLASS_SHADOWING')
  boundary_companion_sha=sha(regular(boundaryclasses/'heteronpu/continuous/model/IdmaPackedBoundarySplit$.class'))
  highdir=stage('original_high',jvm('4g',basecp,'chiseltest.simulator.DiagnoseOriginalHostMoePhaseV5'),600,6)/'host-diagnostic'
  high=regular(highdir/'original-high.fir');ann=regular(highdir/'high-annotations.json');ext=regular(highdir/'high-extmodules.fir')
@@ -944,19 +1003,26 @@ def main():
  need(high.stat().st_size==117714131 and ann.stat().st_size==1379743,'ORIGINAL_HOST_INPUT_SIZE')
  identity={'high_sha256':highsha,'high_bytes':high.stat().st_size,'annotations_sha256':annsha,'annotations_bytes':ann.stat().st_size}
  graph_identity=dict(identity)
- graphdir,graphreceipt=stage('graph',jvm('4g',str(patchclasses)+':'+str(hclasses)+':'+str(provenanceclasses)+':'+str(boundaryclasses)+':'+basecp,'chiseltest.simulator.OriginalHostStructuralGraph',[str(high),highsha,str(ann),annsha,extsha,cached_pins['class_sha256'],cached_pins['companion_sha256'],str(patchclasses),boundary_companion_sha,str(boundaryclasses),census_companion_sha,repair_companion_sha,observer_class_sha,observer_companion_sha,observed_identity_sha,str(boundaryclasses)]),1500,6)
+ graphdir,graphreceipt=stage('graph',jvm('4g',str(patchclasses)+':'+str(hclasses)+':'+str(metadataclasses)+':'+str(provenanceclasses)+':'+str(boundaryclasses)+':'+basecp,'chiseltest.simulator.OriginalHostStructuralGraph',[str(high),highsha,str(ann),annsha,extsha,cached_pins['class_sha256'],cached_pins['companion_sha256'],str(patchclasses),boundary_companion_sha,str(boundaryclasses),census_companion_sha,repair_companion_sha,observer_class_sha,observer_companion_sha,observed_identity_sha,str(boundaryclasses),metadata_pins['factory_class_sha256'],metadata_pins['contract_companion_sha256'],str(metadataclasses)]),1500,6)
  # Budget failures may yield useful diagnostics ONLY after closed/finalized log
- # and complete process cleanup. Never promote markers to numerical/graph PASS.
- try:diagnostics=read_graph_diagnostics(graphdir/'frontend.log.gz',graphreceipt,highsha,annsha)
+ # and complete process cleanup. Only the full structural sequence may pass;
+ # repair markers alone never qualify, and no path grants numerical acceptance.
+ try:diagnostics=read_graph_diagnostics(graphdir/'frontend.log.gz',graphreceipt,highsha,annsha,actual_symbol_table=True)
  except BaseException as error:
   diagnostics={'status':'FAIL_OR_INCOMPLETE','reason':error.code if isinstance(error,Stop)else'GRAPH_DIAGNOSTIC_REJECTED'}
  need(shutil.disk_usage(work).free>=RESERVE)
- need(diagnostics['status']!='STRUCTURAL_GRAPH_ONLY_DECLARED_DEPENDENCIES','OBSERVER_DIAGNOSTIC_CANNOT_PASS')
+ if diagnostics['status']=='STRUCTURAL_GRAPH_ONLY_DECLARED_DEPENDENCIES':
+  need(boundary_identity.get('provenance_api_qualification')=={'status':'PASS_PRIVATE_API_TYPECHECK_ONLY','positive_controls':1,'denied_constructor_checks':2,'absent_api_checks':2,'generated_code_executed':False},'STRUCTURAL_GRAPH_API_QUALIFICATION')
+  need(sum(r['stage']=='api_probe_negative'for r in reports)==1 and all(r['cleanup_complete']is True and r['status']==('INCOMPLETE'if r['stage']=='api_probe_negative'else'COMPLETE')for r in reports),'STRUCTURAL_GRAPH_STAGES_INCOMPLETE')
  for path,digest in pins.items():need(sha(path)==digest)
  return {'schema':'STRUCTURAL_GRAPH_ONLY_V1',**diagnostics,**identity,**differential_identity,**boundary_identity,'full_host_accepted':False,'final_reserve_preserved':True,'owned_process_cleanup_complete':all(r['cleanup_complete']for r in reports),'private_job_files_exported':False,'source_commit':source,'launch_commit':launch,'catalog_sha256':CAT_SHA,'jdk_inventory_sha256':sha(work/'jdk_inventory.json'),'helper_manifest_sha256':sha(D/'SOURCE_PINS.json'),'expected_leaf_bindings':17,'dut_provider_native_loaded':False,'dut_evaluated':False,'weights_read':False,'numerical_pass':False,'stages':reports}
 if __name__=='__main__':
  phase='startup';ok=False
- try:result=main();ok=False # Observation-only candidate never declares graph acceptance.
+ try:
+  result=main()
+  ok=(result.get('schema')=='STRUCTURAL_GRAPH_ONLY_V1' and result.get('status')=='STRUCTURAL_GRAPH_ONLY_DECLARED_DEPENDENCIES'
+   and all(result.get(k)is True for k in ('symbol_table_stage_started','symbol_table_stage_complete','final_reserve_preserved','owned_process_cleanup_complete'))
+   and all(result.get(k)is False for k in ('full_host_accepted','dut_provider_native_loaded','dut_evaluated','weights_read','numerical_pass','private_job_files_exported'))) # Structural declared dependencies only.
  except BaseException as error:result={'schema':'STRUCTURAL_GRAPH_ONLY_V1',**graph_identity,**differential_identity,**boundary_identity,'full_host_accepted':False,'status':'FAIL_OR_INCOMPLETE','stage':phase,'reason':error.code if isinstance(error,Stop)else'UNCLASSIFIED_FAILURE','stage_diagnostic':stage_failure_diagnostic(error),'dut_provider_native_loaded':False,'dut_evaluated':False,'weights_read':False,'numerical_pass':False}
  encoded=json.dumps(result,separators=(',',':'));need(len(encoded)<=16384);print(encoded,flush=True)
  sys.exit(0 if ok else 2)

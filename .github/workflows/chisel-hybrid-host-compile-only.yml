@@ -34,6 +34,9 @@ jobs:
           python3 -I -B candidates/chisel_hybrid_host_20261106/native/check_source_only.py
           python3 -I -B candidates/chisel_hybrid_host_20261106/native/test_source_only.py
           python3 -I -B -O candidates/chisel_hybrid_host_20261106/native/test_source_only.py
+          python3 -I -B candidates/chisel_hybrid_host_20261106/native/build_recipe/recipe.py --check-repository
+          python3 -I -B candidates/chisel_hybrid_host_20261106/native/build_recipe/test_recipe.py
+          python3 -I -B -O candidates/chisel_hybrid_host_20261106/native/build_recipe/test_recipe.py
       - name: Compile only; no elaboration, native loading, profiles or uploads
         timeout-minutes: 25
         run: |

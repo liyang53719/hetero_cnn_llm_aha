@@ -1,0 +1,38 @@
+{
+  "fragments": [
+    {
+      "component": "matrix_icg",
+      "module": {
+        "bytes": 67934,
+        "path": "matrix_icg.py",
+        "sha256": "aa8eead8de24727edc8faef5618417754467555dc50e0fdf92b50e168f0336b3"
+      },
+      "module_name": "matrix_icg",
+      "tests": {
+        "bytes": 8952,
+        "path": "test_matrix_icg.py",
+        "sha256": "80f470a170414d077636b9f6b59b47f2c9b63224638e111f96504dd0c52f854f"
+      }
+    },
+    {
+      "catalog": {
+        "bytes": 147049,
+        "path": "idma_source_contract.json",
+        "sha256": "6e42a0cc0b03d0010d40b8dcea4fb1f48597fb8e297ee2aae1e6571e3eda2d36"
+      },
+      "component": "idma",
+      "module": {
+        "bytes": 19133,
+        "path": "idma_recipe.py",
+        "sha256": "5dfc44d3a4ad8d16601fa4cabccc0699b55e7a0cd462517beb12e826ed6c6d0d"
+      },
+      "module_name": "idma_recipe",
+      "tests": {
+        "bytes": 9245,
+        "path": "test_idma_recipe.py",
+        "sha256": "be140678aa6182df779c0ceaba3485c1415d7b1f3d68a5e6c42e022e266a1c0e"
+      }
+    }
+  ],
+  "schema": "UNRUN_NATIVE_RECIPE_SOURCES_V1"
+}

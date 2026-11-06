@@ -47,7 +47,11 @@ semantics, validate a new ABI binary, execute a trace or load a native library.
 The existing CI also recompiles its unchanged Scala selection. That result is
 Scala compilation only, not a fresh native build.
 
-## Portable native build recipe: pending
+## Portable native build: qualification pending
+
+An [unrun command/data description](build_recipe/README.md) now records the
+conditional native build stages and their unresolved prerequisites. Its checks
+render and validate source contracts only; they do not execute a native build.
 
 The following headers are intentionally absent:
 

@@ -1,0 +1,1241 @@
+{
+  "hardware_source_count": 162,
+  "matrix_macs": 4096,
+  "phases": {
+    "graph": 10,
+    "helpers": 30,
+    "modulecache": 2,
+    "original162": 162
+  },
+  "schema": "TEMP_HYBRID_SOURCE_ONLY_SELECTION_V1",
+  "source_count": 204,
+  "source_repository_basis": "f56175fe987e0eeef4bebf0ef01a03b91956252b",
+  "sources": [
+    {
+      "bytes": 8776,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/AddRecFN.scala",
+      "phase": "original162",
+      "sha256": "2746fea3b3291a8db97999a45303878fdeabc0a0c8acb318f4da4f52dda54a85"
+    },
+    {
+      "bytes": 20617,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/Bf16CausalGqaOwner.scala",
+      "phase": "original162",
+      "sha256": "d4c1047d275fa0b38d9498fdf6c22018f52138b21a49e55866661a4d4e635cd9"
+    },
+    {
+      "bytes": 33486,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/Bf16CausalGqaRuntimeOwnerV14.scala",
+      "phase": "original162",
+      "sha256": "d146952bc2dfe3f5d7978662e2c0dca14fdfde3f3f4234a1d54b745bf7aa969f"
+    },
+    {
+      "bytes": 7844,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/Bf16KvAppendOwner.scala",
+      "phase": "original162",
+      "sha256": "bab2160771bf09755dc072d87bf72940bc62b41f8d5edf70cfe10da90caa5264"
+    },
+    {
+      "bytes": 11021,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/Bf16KvAppendRuntimeOwnerV13.scala",
+      "phase": "original162",
+      "sha256": "a6d436464c65d290a0a803ca4b821b6d6b089ef5fb5ed49a7fac38d9b9a90ca0"
+    },
+    {
+      "bytes": 4004,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/BlockAxiAdapter.scala",
+      "phase": "original162",
+      "sha256": "52e8b5281f0517c3b08ceefff06c14bf85942a7d913c997548f54e7e804d3421"
+    },
+    {
+      "bytes": 8313,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/BlockFloat.scala",
+      "phase": "original162",
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5"
+    },
+    {
+      "bytes": 10944,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/BlockScalarFloatPolicyV2.scala",
+      "phase": "original162",
+      "sha256": "25b61c42cd0a1b46a7dc68f3ede15a349e4ff2e629ab2dbef34fb4e3c83f8c03"
+    },
+    {
+      "bytes": 2436,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/BlockWritebackFence.scala",
+      "phase": "original162",
+      "sha256": "70e0303640904dd4044d6f5f61231b9766816da68cc71dbd58aa464a00a11054"
+    },
+    {
+      "bytes": 3789,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/BurstProtocol.scala",
+      "phase": "original162",
+      "sha256": "c08502a0d194d6b69ad6911fce4258cfc24423af020d6c4232a120ea18273d91"
+    },
+    {
+      "bytes": 3476,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/CompareRecFN.scala",
+      "phase": "original162",
+      "sha256": "b319e37c7e6c455a0bf39490a250e8b5ad8dbe54e22fa434f4f9ada134fe063d"
+    },
+    {
+      "bytes": 11773,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/DenseBlockReductionCoordinator.scala",
+      "phase": "original162",
+      "sha256": "2391e522acc2c40f97c75cbed25f7133bf4e8e4dcc9d5ee50840f19f3521bb01"
+    },
+    {
+      "bytes": 4717,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/DenseOwnerIO.scala",
+      "phase": "original162",
+      "sha256": "d806eb973206b9901fffb65d0cab4a9e7a215bac73920737ac3cfe6d9eecf2d1"
+    },
+    {
+      "bytes": 3017,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/DenseReadPlanner.scala",
+      "phase": "original162",
+      "sha256": "0f4c981b32170344c316e0b8dfe6296f2f497d4901365e05e0b9d730d1fd1886"
+    },
+    {
+      "bytes": 6362,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/DenseTileSumBridge.scala",
+      "phase": "original162",
+      "sha256": "2551ab7858fbb583f24e3709110a1180f3156b7861f9a775211ec88773ba516d"
+    },
+    {
+      "bytes": 4428,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/DivSqrtRecF64.scala",
+      "phase": "original162",
+      "sha256": "ce3c19d7433fef9a73044d80b4fbcd79466110fc527f6e40d91d83de2ad1dbd0"
+    },
+    {
+      "bytes": 33929,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/DivSqrtRecF64_mulAddZ31.scala",
+      "phase": "original162",
+      "sha256": "9ea19322eafb96006feb9cdee0da451dff59347459c5f4ac6813ea23f2fad776"
+    },
+    {
+      "bytes": 20235,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/DivSqrtRecFN_small.scala",
+      "phase": "original162",
+      "sha256": "905b3c0b4b47286d56b7f7d37a2886add7fd662336f5864df454680021e92da9"
+    },
+    {
+      "bytes": 10972,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/ElementwiseMemoryEngine.scala",
+      "phase": "original162",
+      "sha256": "5e5b32a95ba59947330d7e0469a3643925f0f7bd3bd44c101ae3730c9ac51773"
+    },
+    {
+      "bytes": 6408,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/ElementwiseRegisterLoan.scala",
+      "phase": "original162",
+      "sha256": "e7a9d577cceb2746a2a7beb0d7fc948b29d6c504a32de0ddfaad2c83b3c9b815"
+    },
+    {
+      "bytes": 3572,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/EmitHeteroBF16Fma.scala",
+      "phase": "original162",
+      "sha256": "9df0c5c2b499783dbf471cdf9bed3f1373a34c6713626a1c93d059e70e7a460f"
+    },
+    {
+      "bytes": 1130,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/EmitHeteroFP32Alu.scala",
+      "phase": "original162",
+      "sha256": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1"
+    },
+    {
+      "bytes": 9520,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnChunkAddressPlan.scala",
+      "phase": "original162",
+      "sha256": "f8534849bad082b77de88cf2cef43558a91f045122694640e9f33391f101b943"
+    },
+    {
+      "bytes": 3420,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnChunkProtocol.scala",
+      "phase": "original162",
+      "sha256": "877bca2b7816b2bff9566edd2dbf9ad55302b8fa6c8bd3ad7447412d9436b85c"
+    },
+    {
+      "bytes": 10591,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnChunkStateTransferOwner.scala",
+      "phase": "original162",
+      "sha256": "8cdcf2d6a88306844f9a66ab828743e5948ee7b8b739b0933304d84eb85e6b85"
+    },
+    {
+      "bytes": 10423,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnConv4Owner.scala",
+      "phase": "original162",
+      "sha256": "99b7e4a4cbf2df234fc831cd1a85d44b032f981221f57fde504f3f5aebe6a28a"
+    },
+    {
+      "bytes": 9614,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnElementwiseOwner.scala",
+      "phase": "original162",
+      "sha256": "01b394526f75b9732c3e605652c64f3968851aca97258a3a640bc056de1f2fe3"
+    },
+    {
+      "bytes": 10791,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnGatedNormOwner.scala",
+      "phase": "original162",
+      "sha256": "00b47be5e72aa580ce9049c2036a23268da859ae7f1728bfea1d348f70a4f2db"
+    },
+    {
+      "bytes": 13048,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnInputPrepOwner.scala",
+      "phase": "original162",
+      "sha256": "86fa350cd87bc140b762db2deb5650c25e3b30bae4fb12cef7fe407e6b4faffe"
+    },
+    {
+      "bytes": 1854,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnOwnerProtocol.scala",
+      "phase": "original162",
+      "sha256": "bb1f8379ec4f8ff05f5b7752c693984ba56324274e9d729cd4527a9b82249e90"
+    },
+    {
+      "bytes": 13275,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnRecurrentOwner.scala",
+      "phase": "original162",
+      "sha256": "42286b5f9757d7c3b1c349f632bc7d3f7047080bd12e665c8980d9aaec7b4250"
+    },
+    {
+      "bytes": 1760,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnRecurrentProtocol.scala",
+      "phase": "original162",
+      "sha256": "39ec02e1377472c6532da0ee36e7d2f1eb8c92f9836251b9ee9efcf3431804f0"
+    },
+    {
+      "bytes": 29993,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnRmsNormFixedBankOwner.scala",
+      "phase": "original162",
+      "sha256": "46d7622f7c20416bc86cd7786cfd27ab8fe809911aeda1b3f097fb4c9a8ac915"
+    },
+    {
+      "bytes": 9456,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnRmsNormOwner.scala",
+      "phase": "original162",
+      "sha256": "77beb04c0646eee8f53b8c44190f641f4efc900f552523ab6b0cc4f7aed8a065"
+    },
+    {
+      "bytes": 20779,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeChunkDerivedAndPairV2Owner.scala",
+      "phase": "original162",
+      "sha256": "684ef64617cd7303905e3efbdcced47ba556812ca6e5882a243c6eacb76796a9"
+    },
+    {
+      "bytes": 16324,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeChunkExecuteOwner.scala",
+      "phase": "original162",
+      "sha256": "77943e63fe0b580192e71be5020f712d4d7234521bd13cce0177fb151b0cfd8c"
+    },
+    {
+      "bytes": 16928,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeChunkExecuteOwnerV8.scala",
+      "phase": "original162",
+      "sha256": "b4bc9397b88bc4542b72213fa14aad5b4df5e428881e96e2fd3893a49af3c15e"
+    },
+    {
+      "bytes": 1290,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeChunkLayout.scala",
+      "phase": "original162",
+      "sha256": "54451d4cf504ca76ed387c23790875828eb966ce1603aa08a2200406023ad346"
+    },
+    {
+      "bytes": 14575,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeChunkLoadPrepOwner.scala",
+      "phase": "original162",
+      "sha256": "c9805d6ad4f6e5a6c280185d889956b5b92f7e180ec267b8dd89436db68b655b"
+    },
+    {
+      "bytes": 17265,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeChunkLoadPrepV2Owner.scala",
+      "phase": "original162",
+      "sha256": "bb74af67d6863ce179a34b1cc33bad7693389ae91c628481657995671ee0002e"
+    },
+    {
+      "bytes": 639,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeChunkNumericPolicy.scala",
+      "phase": "original162",
+      "sha256": "44b5cc96048f92f712c2164f680a43da061dbf8d376982c69d9bdd71f9d675fc"
+    },
+    {
+      "bytes": 12462,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeChunkTransposeV2Owner.scala",
+      "phase": "original162",
+      "sha256": "839de9dba4d3a39670d8e33744dc9beb56399f9e39c3f7ab9f32d1cbca99a38a"
+    },
+    {
+      "bytes": 15708,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeConv4OwnerRecoveredV7.scala",
+      "phase": "original162",
+      "sha256": "b80c596ac832ef8140288a0c8a49e01007bff750af4a2eb9a6594e8649d7abf1"
+    },
+    {
+      "bytes": 14301,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeElementwiseOwnerV15.scala",
+      "phase": "original162",
+      "sha256": "bbdc76ac5c2b32f4dc111c3031cccbda2e0c7801c00f46342a63230460b5bad9"
+    },
+    {
+      "bytes": 12750,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeGatedNormOwnerV10.scala",
+      "phase": "original162",
+      "sha256": "266352199366b7a9497e1db6cbe4cb832d94bfb3e2bfc21d01a7eddd10594341"
+    },
+    {
+      "bytes": 1720,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeGatedNormProtocolV10.scala",
+      "phase": "original162",
+      "sha256": "b694be32a8480d791650bb4d6a50cc386792d61f44a4b8dcc1e41b6f5ad304b8"
+    },
+    {
+      "bytes": 21735,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeRawPrepOwnerV7.scala",
+      "phase": "original162",
+      "sha256": "efc06d4f991e2427186b88e18d987fe7341596d2301e4f3c3e7a00fab12cf6fc"
+    },
+    {
+      "bytes": 2688,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeRawPrepProtocolV7.scala",
+      "phase": "original162",
+      "sha256": "e9d035d1c2a60351c4acb2035164b8e8a386d36d9c8c0e9aba746fa719b19903"
+    },
+    {
+      "bytes": 1330,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeRawPrepReceiptV8.scala",
+      "phase": "original162",
+      "sha256": "882897d0c8e8e265eb33ccdad7b4d5dc8d29e502bda909816df8b258e77d9a6f"
+    },
+    {
+      "bytes": 18685,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeRmsNormOwnerV3.scala",
+      "phase": "original162",
+      "sha256": "e8ad079d7145efaa5adc9647ce5208cce2cb5073137f4b9d7bba7ed208d73c77"
+    },
+    {
+      "bytes": 912,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/HeldDecoupledOffer.scala",
+      "phase": "original162",
+      "sha256": "9654e329f918981a89108b08606e8f284a4c2aac503245ab2ea7d51994467a19"
+    },
+    {
+      "bytes": 7073,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/HeteroOperatorPrimitiveProtocol.scala",
+      "phase": "original162",
+      "sha256": "1190511d8ce0f178f10c6509f320e1cedd105b11687b666d6128400597e2cf9d"
+    },
+    {
+      "bytes": 6806,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/HeteroRuntimeMoeMerge.scala",
+      "phase": "original162",
+      "sha256": "7d94ef0fd596c15d46afe661da03b48bfffbc2e72cd97803472c3f199d073489"
+    },
+    {
+      "bytes": 33917,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/HeteroSelectionMemoryPrimitives.scala",
+      "phase": "original162",
+      "sha256": "9f3744f2a7cc750cabc4ffbc1ba27edac0b38aa6cd91173e51f70acb4d94d05b"
+    },
+    {
+      "bytes": 106105,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/HostBlockCommands.scala",
+      "phase": "original162",
+      "sha256": "94e6198a060044ae58a90328394ec8d11fe3311647fef62c1a1b975f2504ff4a"
+    },
+    {
+      "bytes": 7157,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/HostMoeArithmeticLeaseWiringV5.scala",
+      "phase": "original162",
+      "sha256": "a90b65e5f2a73478a635062262932371b7e2e877365890fcac49f9d3e3a79dec"
+    },
+    {
+      "bytes": 3789,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/HostMoeDenseRoutingV5.scala",
+      "phase": "original162",
+      "sha256": "9b2d734137572364a326b44db855eea7751a282093941bed0288658fc7b1db2f"
+    },
+    {
+      "bytes": 3227,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/HostMoePhaseContextV4.scala",
+      "phase": "original162",
+      "sha256": "e2a93d777dd1b28c80527ec91dd66c34d0b46ddfddbc8039c06f1a649643c0d4"
+    },
+    {
+      "bytes": 1950,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/HostMoePhaseControlV5.scala",
+      "phase": "original162",
+      "sha256": "cbd5c6457f5e32ba4202b06c30f3cf53356085e021f4369f97c9509e2c0f040a"
+    },
+    {
+      "bytes": 13952,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/HostMoePhaseLifetimeWiringV5.scala",
+      "phase": "original162",
+      "sha256": "574aba5b0321e49ecba87e5cbd4958410f1728d38b39bfd377740f55de9d01d8"
+    },
+    {
+      "bytes": 4230,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/HostMoeRuntimePhaseProtocolV5.scala",
+      "phase": "original162",
+      "sha256": "4096f77846567ba71fa85b3edff76a3af5c9664000718f5ef199e0f645e38f49"
+    },
+    {
+      "bytes": 4657,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/HostMoeSelectionServiceV5.scala",
+      "phase": "original162",
+      "sha256": "c52656763eeb2c1649f99cb7ee4b6bcaf2652dfc0260d07e2dbdd8b50e1b4507"
+    },
+    {
+      "bytes": 5897,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/HostMoeSharedGatePlanV5.scala",
+      "phase": "original162",
+      "sha256": "d2bae8a00aa1edcdc366d63122fa2d8cf110ef6a957d2e7ab5b643be7fff09d6"
+    },
+    {
+      "bytes": 10521,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/HostMoeWeightScanV4.scala",
+      "phase": "original162",
+      "sha256": "f5766b089e833be07013a57471dc01a1d29aeb0276446cbbfe07527eec8245a5"
+    },
+    {
+      "bytes": 7735,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/HostOrderedRms32WiringV1.scala",
+      "phase": "original162",
+      "sha256": "b2f070af946db02b683757ecdfcaecab04117f65f08d27a9572a94878390ec5a"
+    },
+    {
+      "bytes": 10393,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/HostResidualCommands.scala",
+      "phase": "original162",
+      "sha256": "e3a87c3b425a46d876ff58ee2db8a04370ccd74139667b00c415eb515d328a7c"
+    },
+    {
+      "bytes": 553,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/HostRuntimeGatedDependencyV10.scala",
+      "phase": "original162",
+      "sha256": "7942dce9ba553e836a47a0cac760e059b5ba224a25c8d8e7a2bb2e8f777987e4"
+    },
+    {
+      "bytes": 2317,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/HostRuntimeLaunchV4.scala",
+      "phase": "original162",
+      "sha256": "4c8762f26f6849aba40a7f06555c275047ea0e23439daf9cb2b5fe38f8fcd6dd"
+    },
+    {
+      "bytes": 12974,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/HostRuntimeMoePhaseAllocatorV5.scala",
+      "phase": "original162",
+      "sha256": "c8c5012b3463e64cc0ecd0066d3e0e9ff4df773c2ee40e144d03f0274dbf69c6"
+    },
+    {
+      "bytes": 10809,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/HostRuntimeOwnerGuardV5.scala",
+      "phase": "original162",
+      "sha256": "4680762977b005951751f77b4d3b9fc3ef2dd24143374ee20c7e47c241361e53"
+    },
+    {
+      "bytes": 81242,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/HostRuntimePrefixLeaseWiringV8.scala",
+      "phase": "original162",
+      "sha256": "b5589d803df8944c1d5d5cf108ef8ff4f3a4cc5a07f8e138a38bfb38508ff37b"
+    },
+    {
+      "bytes": 3417,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/INToRecFN.scala",
+      "phase": "original162",
+      "sha256": "92090ded1e774a75811931ea4bd7e23fcb671ffbb5a55d9b2826a04d5c6d83eb"
+    },
+    {
+      "bytes": 21460,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/IdmaWeightBurst.scala",
+      "phase": "original162",
+      "sha256": "935365723aba8d79675c84a1e23ce531741707d736d88e40ff2355eeda431ba4"
+    },
+    {
+      "bytes": 583,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/LocalSramConfig.scala",
+      "phase": "original162",
+      "sha256": "6d8167530ae045ca038f644a93238731d6f2b645a01cf856d1ab111387de0464"
+    },
+    {
+      "bytes": 7538,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/MatrixAccumulatorSeedController.scala",
+      "phase": "original162",
+      "sha256": "c1bae7fdb444a828b69e7b3b5a8a0b49d93f87fc4173f2a6c3695d6c6793b9c3"
+    },
+    {
+      "bytes": 1851,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/MatrixAccumulatorSeedProtocol.scala",
+      "phase": "original162",
+      "sha256": "b34d04705f6990298fa78bb15879e76007df1c57ee3a768425c61d4555a9d13e"
+    },
+    {
+      "bytes": 19528,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/MatrixPipeline.scala",
+      "phase": "original162",
+      "sha256": "d6bd82725d6b20788080b5bd17ab672a419c84212cfa50d21d175bae0d8c56d8"
+    },
+    {
+      "bytes": 7231,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/MoeBf16ScalarConsumer.scala",
+      "phase": "original162",
+      "sha256": "281f8a8c0d288ae835de263b484f9aee59f45a0d93a9c40c0b8e78e9e666f9e5"
+    },
+    {
+      "bytes": 6500,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/MoeBf16VectorConsumerV2.scala",
+      "phase": "original162",
+      "sha256": "10d0fcd89cc9a859878377f81702e83a64d437832c2681e84d368f64302e861e"
+    },
+    {
+      "bytes": 15353,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/MulAddRecFN.scala",
+      "phase": "original162",
+      "sha256": "3f2ad5acd54ca0b514737779656b98ffb7f829d867c6b245716e2a1d186d630b"
+    },
+    {
+      "bytes": 5706,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/MulRecFN.scala",
+      "phase": "original162",
+      "sha256": "cf42850379c249a97a073ac436ff6b4c564b56177e868c3e912be2f246243e1d"
+    },
+    {
+      "bytes": 5473,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/OrderedRms1536Reduction32.scala",
+      "phase": "original162",
+      "sha256": "ee2d3efe37dd619f29eb1963e8ec85a27cd3094d31f476800e20d6c84074c693"
+    },
+    {
+      "bytes": 1657,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/OrderedRmsSramReadBridge32.scala",
+      "phase": "original162",
+      "sha256": "85b21ce1bc711e6c1dbc1997f05d97370c7163998bdd5a155777d49eb316102b"
+    },
+    {
+      "bytes": 6485,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/OverlappedSilu.scala",
+      "phase": "original162",
+      "sha256": "63e3c41a4459a898db7d19a692bfd60c08c5a1b94b4596c0b45ada10378108f1"
+    },
+    {
+      "bytes": 5469,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/PackedAttentionStreamClient.scala",
+      "phase": "original162",
+      "sha256": "58fb22a6f78a224241b9b0368e3108e5c403a9ea7106527061b140ff5d83b8c0"
+    },
+    {
+      "bytes": 10567,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/PartialRope64Owner.scala",
+      "phase": "original162",
+      "sha256": "7a3f5bffe06772671f30ac1484065afae9abc895063a2e4769999bf76487c322"
+    },
+    {
+      "bytes": 14605,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/PartialRopeRuntimeOwnerV12.scala",
+      "phase": "original162",
+      "sha256": "d7ba248ab794e409791532b6b4921f3b1d82d2f108130314326e15383b784fbd"
+    },
+    {
+      "bytes": 3123,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/Protocol.scala",
+      "phase": "original162",
+      "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783"
+    },
+    {
+      "bytes": 9110,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/Public21QkvReductionRouter.scala",
+      "phase": "original162",
+      "sha256": "bb0f829330f3ce824ffdb73180a09bb90e43826c1aa15f0d10a2187e65b72ae3"
+    },
+    {
+      "bytes": 16520,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/QkNorm256Owner.scala",
+      "phase": "original162",
+      "sha256": "c12183ddb29ab3ce66dc59083524c204f55554757218ced438c8f8ae4c7d60b6"
+    },
+    {
+      "bytes": 26319,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/QkNorm256RuntimeOwnerV11.scala",
+      "phase": "original162",
+      "sha256": "0458e7aac6e9abf64e719b197ae9935d8fef3c5a9425160da1c66cd0ec84988d"
+    },
+    {
+      "bytes": 66724,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/Qwen2Block.scala",
+      "phase": "original162",
+      "sha256": "5372bcf0efcd7f5a78c848c5de859e41d914dc9b0ac95e3a0b13314391ae4465"
+    },
+    {
+      "bytes": 6827,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/RecFNToIN.scala",
+      "phase": "original162",
+      "sha256": "e56257592e88614f6be34877a3a9f412fdc09b1c4210ee3dfeaa6c67fdc670f3"
+    },
+    {
+      "bytes": 3958,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/RecFNToRecFN.scala",
+      "phase": "original162",
+      "sha256": "97042141693cd2e8aaa90f88ee39d2c3c4177fc76c48f9ad46aaea71fee34f09"
+    },
+    {
+      "bytes": 4229,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/Record128Reader.scala",
+      "phase": "original162",
+      "sha256": "4b7f33a150dcf3abf15e4ba54b2d1fbdc846d49f966dd7b3bb810ec05f1a9afb"
+    },
+    {
+      "bytes": 9977,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/RetainedIdma.scala",
+      "phase": "original162",
+      "sha256": "5d8873911046d0c4202e3f92ccfdc03c2ede3d8db06502473960ae3ed644f91e"
+    },
+    {
+      "bytes": 11938,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/RetainedMatrix.scala",
+      "phase": "original162",
+      "sha256": "8c475372817104f7eee349a96f589d97dba94b6e7a17b5b88cfb2538f40bf7e9"
+    },
+    {
+      "bytes": 3053,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/Rms32PortRefsV1.scala",
+      "phase": "original162",
+      "sha256": "44d63192e76baaf839a46b44503b76e392d3b1e21093b67817a8da12d32f7cc4"
+    },
+    {
+      "bytes": 13901,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/RoundAnyRawFNToRecFN.scala",
+      "phase": "original162",
+      "sha256": "31cdb3be147471d52e721f14914031c19b915bd7aaffe5c0e333393a0c7fb67d"
+    },
+    {
+      "bytes": 4816,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/SharedL2Fabric.scala",
+      "phase": "original162",
+      "sha256": "10372482417b8802fcf494e10af6a8d202e1dc5bb39d1a637d27da259efa30c5"
+    },
+    {
+      "bytes": 20011,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/StreamingDense.scala",
+      "phase": "original162",
+      "sha256": "010fbea5d12e952e2083fa1f3f57cb1219f9756946b79dc01482e924c0c21bc5"
+    },
+    {
+      "bytes": 6094,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/TensorProgram.scala",
+      "phase": "original162",
+      "sha256": "b0d926444002c993a238616c15a0611c17d7aacf4561ee8cac1614d2988b2de7"
+    },
+    {
+      "bytes": 19261,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/TransposedDenseBanks.scala",
+      "phase": "original162",
+      "sha256": "9fb0df82d82084ed7b6f68150c6117276eefd3d045f8d3b527a14486f2d9028d"
+    },
+    {
+      "bytes": 100246,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/TransposedDenseOwner.scala",
+      "phase": "original162",
+      "sha256": "961f4e650b499fc1f15918d2e0f6aa51b4905431ba35ba681a609c98b42c5d14"
+    },
+    {
+      "bytes": 4968,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/TypedTensorReader.scala",
+      "phase": "original162",
+      "sha256": "a0641c72360e608238879f3c12f5882a8999ccac3c46d510beff6b0ffb0a1c3c"
+    },
+    {
+      "bytes": 9172,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeActivationGatherV2.scala",
+      "phase": "original162",
+      "sha256": "259e4a09dd4658ab71f940dddacdf6516f5080094b5e10ed672eba624b0576ce"
+    },
+    {
+      "bytes": 10797,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeActivationGroupOwnerV3.scala",
+      "phase": "original162",
+      "sha256": "ca59cee0fcd8f9e2d4c86f58011faed6faa90c1d46a3ab3bb8a1550b8e3acf6b"
+    },
+    {
+      "bytes": 6015,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeDenseWritebackV2.scala",
+      "phase": "original162",
+      "sha256": "cd8606b3769c38e9286557a56a5d0a2db6e31bbdfc2929eead2be65e41177b52"
+    },
+    {
+      "bytes": 1751,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeDownDescriptorV4.scala",
+      "phase": "original162",
+      "sha256": "6e364485bc7f0b87369253beb696715a0b4fc8aacb6b1d662479f0272f273624"
+    },
+    {
+      "bytes": 8836,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeDownTileReaderV5.scala",
+      "phase": "original162",
+      "sha256": "20072b6e44f5890e570d1fa8df3da8e567d99558cbd8b28e77ab4c2325999f82"
+    },
+    {
+      "bytes": 12125,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeFfnGroupSequencerV3.scala",
+      "phase": "original162",
+      "sha256": "60654e12ae008dbf96515da3dbddaa88b882f588acef916308e3f13118e4a8eb"
+    },
+    {
+      "bytes": 3230,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeGatherFfnPlanV3.scala",
+      "phase": "original162",
+      "sha256": "c1a9095b85ce37343c83ce2411ab7699cc4bb03bc932e6a4defb7857eae872ff"
+    },
+    {
+      "bytes": 7398,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeLogical32SigmoidConsumerV5.scala",
+      "phase": "original162",
+      "sha256": "a0c2dd0f5dfc43ae90911b568737901ca2d7de9f24672c5933d188ad4d954387"
+    },
+    {
+      "bytes": 7540,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeLogical32SwiGluConsumerV3.scala",
+      "phase": "original162",
+      "sha256": "8dae337ad4ce62d1b5031c4ec87e33dcf6f32e7315ac4dc34b1c992a2fb40ac4"
+    },
+    {
+      "bytes": 13995,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoePhaseMergeOwnerV5.scala",
+      "phase": "original162",
+      "sha256": "a92404dab262fbb825a14d8fe769f19b50093374d49b11d7071ccf4cef8d2eeb"
+    },
+    {
+      "bytes": 11003,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoePhaseResidualOwnerV5.scala",
+      "phase": "original162",
+      "sha256": "53faa826ef155850b424b2a111f30d40417970ebfc3bb1d389f843be608af9cf"
+    },
+    {
+      "bytes": 10667,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoePhaseTileMergePortsV5.scala",
+      "phase": "original162",
+      "sha256": "1bb1591268ad185a5de73aef99f7a59d192dc496283f27073d0975c6e929592d"
+    },
+    {
+      "bytes": 7598,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeProducerBindingV5.scala",
+      "phase": "original162",
+      "sha256": "ee3474e4139400f1db5b216cfca5b643b8739e1ce8cec40ffdfa231627a7992e"
+    },
+    {
+      "bytes": 11676,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouteGroupV2.scala",
+      "phase": "original162",
+      "sha256": "e90d5437119274638aedd862885570e9f0f20e1e30e0ad6bbcebad25553199f1"
+    },
+    {
+      "bytes": 11377,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRoutedSelectionReaderV5.scala",
+      "phase": "original162",
+      "sha256": "06f53cb697518983bcab8cc5ee22b24b850176845bb5b71273e1bd9e515a7689"
+    },
+    {
+      "bytes": 5361,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouterDenseV2.scala",
+      "phase": "original162",
+      "sha256": "22d1db98ec1d888c35ba0b13d82c338752ddc03fdf3a839721e3d2365bc05081"
+    },
+    {
+      "bytes": 4675,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouterLogitReaderV2.scala",
+      "phase": "original162",
+      "sha256": "88b8e9dcc9795ba5b75dcedfd18e855028b55e6c95b4add151d9a9ef0272c50b"
+    },
+    {
+      "bytes": 1568,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeRouterSelectionClientV2.scala",
+      "phase": "original162",
+      "sha256": "45e1cd72b4f07b436bf469d27d9585c75e463e1f7ee547badf896c43bf211966"
+    },
+    {
+      "bytes": 4333,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeSharedFfnPlanV5.scala",
+      "phase": "original162",
+      "sha256": "ff45d2870939befe9a11c780b364a498201479a0aaedb8702c93c61466e0186b"
+    },
+    {
+      "bytes": 12252,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedMoeSharedGateSigmoidOwnerV5.scala",
+      "phase": "original162",
+      "sha256": "9f6e18e36f278b0f063dbd5662ac56205347893791e67316e82bfe38d4070474"
+    },
+    {
+      "bytes": 1822,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedOverlapProtocolV2.scala",
+      "phase": "original162",
+      "sha256": "55f3deac3fc4c72cd3cab922cda8f32c7f120f24e420663443993574ac76887f"
+    },
+    {
+      "bytes": 4003,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedRuntimeProfile.scala",
+      "phase": "original162",
+      "sha256": "c6b31a4802beccee3ddce20d45a8b1ce3ef37123879b55f8177ad409dd786963"
+    },
+    {
+      "bytes": 858,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedScalarPolicyV2.scala",
+      "phase": "original162",
+      "sha256": "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7"
+    },
+    {
+      "bytes": 405,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedSharedFormatProtocolV3.scala",
+      "phase": "original162",
+      "sha256": "d9dcf8bfc5ae93aa87c029d91bbed303cf6b1896830a0b12a0a214250825385b"
+    },
+    {
+      "bytes": 4285,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedSharedOperationProtocolV3.scala",
+      "phase": "original162",
+      "sha256": "e3dd3442eb6465cf35216ceac966580edb27ab6894d128cbc43a18a4de86b063"
+    },
+    {
+      "bytes": 4361,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedVectorElement32BankV4.scala",
+      "phase": "original162",
+      "sha256": "5f2c7a375262104d9f5e081127a8de94421e80f631a96aa1fe5cceefe94d4d28"
+    },
+    {
+      "bytes": 1682,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/UnifiedVectorElement32ProtocolV4.scala",
+      "phase": "original162",
+      "sha256": "c8ed3fffbce8417c164cf1dd20999f2186842508953d1b617fda1a4ed6f3db9d"
+    },
+    {
+      "bytes": 11873,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/VectorSilu.scala",
+      "phase": "original162",
+      "sha256": "26fc929be7d68fe0bb3e8396ddcdd79114279745fc18ad14643b6b662f708c26"
+    },
+    {
+      "bytes": 5838,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/WideMatrix.scala",
+      "phase": "original162",
+      "sha256": "54f4b52aa6cdfb09cad8481bcfff2d395357d980c8cb1d3afabcb97c5fefcb3c"
+    },
+    {
+      "bytes": 2880,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/classifyRecFN.scala",
+      "phase": "original162",
+      "sha256": "787aa923a8b5f7bc13550183339fc5e38b8d3ca505dcdd3bec032dc8bb19bf16"
+    },
+    {
+      "bytes": 3925,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/common.scala",
+      "phase": "original162",
+      "sha256": "ea83cdfac50db84f372d624ce4e0d45188207164a6a1eae5d42d8174241925cb"
+    },
+    {
+      "bytes": 2853,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/fNFromRecFN.scala",
+      "phase": "original162",
+      "sha256": "7a114540c32ef9e43152e37d1610dd5bbb68dba6b3bbd1aa5600fa3bc411fa6d"
+    },
+    {
+      "bytes": 5105,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/primitives.scala",
+      "phase": "original162",
+      "sha256": "134cfae67052244a836aebbae3f9252b0e9bf4800ab5cbcba4b92eb1c56e7c31"
+    },
+    {
+      "bytes": 3037,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/rawFloatFromFN.scala",
+      "phase": "original162",
+      "sha256": "39fb14ae28318821906f68ad63803ca24eecb1115bf24aa4f3df497392357dce"
+    },
+    {
+      "bytes": 2885,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/rawFloatFromIN.scala",
+      "phase": "original162",
+      "sha256": "d82c1285d20523fe0bcf7a32e2a2307ea76c3c2581ec0c329f8914004555c1e8"
+    },
+    {
+      "bytes": 2877,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/rawFloatFromRecFN.scala",
+      "phase": "original162",
+      "sha256": "bf7e4b0e453569c91f6a9d8c414feb3a5fed6dc7354ba31cdc8c7c0f1ffd8317"
+    },
+    {
+      "bytes": 2352,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/recFNFromFN.scala",
+      "phase": "original162",
+      "sha256": "90060c571a38718330f8781ecc4f555096ac45a0c75abb3fe5219e06dacdbd2d"
+    },
+    {
+      "bytes": 3237,
+      "path": "candidates/fresh_original_top_recovery_20261028/source/resizeRawFloat.scala",
+      "phase": "original162",
+      "sha256": "702084355b5b1d825ed0885ee2e014091d76ba08f07b071cb77bcb4cb392d561"
+    },
+    {
+      "bytes": 741,
+      "path": "candidates/gdn_chunk32_actual_v2_20261104/source/CancellableHeldDecoupledOfferV1.scala",
+      "phase": "original162",
+      "sha256": "e93a7e8d29dc2ed59b9a4efa370070a496a40aa7be343fa029771a98ddbb8031"
+    },
+    {
+      "bytes": 7455,
+      "path": "candidates/gdn_chunk32_actual_v2_20261104/source/DiagnoseOriginalHostMoePhaseV5.scala",
+      "phase": "original162",
+      "sha256": "dfbd578537881dcd815c7c8530a083e0e9e89d3f99e2b6f0ff45a1a4bd017d9e"
+    },
+    {
+      "bytes": 19266,
+      "path": "candidates/gdn_chunk32_actual_v2_20261104/source/GdnRuntimeChunkCoordinator.scala",
+      "phase": "original162",
+      "sha256": "c2a30ddcac128f34ab373b12303d2b6229ec8705071d7ede12dcc103c72e6929"
+    },
+    {
+      "bytes": 18829,
+      "path": "candidates/gdn_chunk32_actual_v2_20261104/source/GdnRuntimeChunkExecuteOwner32V1.scala",
+      "phase": "original162",
+      "sha256": "1a8c82194c349379aac78c5675e75b7d3327575e11c872c6f79428bff53e0ebf"
+    },
+    {
+      "bytes": 9932,
+      "path": "candidates/gdn_chunk32_actual_v2_20261104/source/GdnRuntimeChunkLeafCollection.scala",
+      "phase": "original162",
+      "sha256": "dd136138178ead6e794067342c740d5b097ded4812dca6744675d0bbcfbac923"
+    },
+    {
+      "bytes": 2037,
+      "path": "candidates/gdn_chunk32_actual_v2_20261104/source/GdnRuntimeChunkSelectedExecuteV1.scala",
+      "phase": "original162",
+      "sha256": "c784f828d7a74de02baf45a129fb4969a47883bb44d8f8d3ffd167323ecafbcf"
+    },
+    {
+      "bytes": 27986,
+      "path": "candidates/gdn_chunk32_actual_v2_20261104/source/HostBlockTopV4.scala",
+      "phase": "original162",
+      "sha256": "885924901cb253077dc76022904ac37b90900dafac9b2a7d0fef8b50a344dc80"
+    },
+    {
+      "bytes": 3086,
+      "path": "candidates/gdn_chunk32_actual_v2_20261104/source/HostRuntimeChunkProtocolV9.scala",
+      "phase": "original162",
+      "sha256": "d6bafa9f26e00ebb928742265a54b808d54d7ad5031af57ebb1a2fb4dc87d032"
+    },
+    {
+      "bytes": 21809,
+      "path": "candidates/gdn_chunk32_actual_v2_20261104/source/HostRuntimeChunkWiringV9.scala",
+      "phase": "original162",
+      "sha256": "3945492278920fdc065f32f4e68e5426ff89da4017f9efee13142214de327542"
+    },
+    {
+      "bytes": 93533,
+      "path": "candidates/gdn_chunk32_actual_v2_20261104/source/QwenOwnerProtocol.scala",
+      "phase": "original162",
+      "sha256": "b21a6aa7f88d8c95d1c43dffe0346446b2c081501a6affea7089d0b414315999"
+    },
+    {
+      "bytes": 4993,
+      "path": "candidates/gdn_chunk32_actual_v2_20261104/source/SharedMemoryArbiter.scala",
+      "phase": "original162",
+      "sha256": "140e0e5515a4920b0d00599a94306b633abe324b54a0ee39df84a027427e3adb"
+    },
+    {
+      "bytes": 28044,
+      "path": "candidates/gdn_chunk32_actual_v2_20261104/source/UnifiedMoeSharedArithmeticAdapterV5.scala",
+      "phase": "original162",
+      "sha256": "70881c56af8fd87ef6e0fc0012e755926d1ce55f6cc046cae1717012a7550f8f"
+    },
+    {
+      "bytes": 8221,
+      "path": "candidates/gdn_chunk32_actual_v2_20261104/source/UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "phase": "original162",
+      "sha256": "7a95f2c53f06d53acf44acf6ce1ec72351e862e2d1cf791534fe2d81f45df0a4"
+    },
+    {
+      "bytes": 14732,
+      "path": "candidates/moe_router_score_observation_20261030/source/UnifiedMoeRouterNumericalOwnerV2.scala",
+      "phase": "original162",
+      "sha256": "7c4358e766fca3101657e1702c8fdb2ee579a589eea768fcf1f2eed20412334f"
+    },
+    {
+      "bytes": 11097,
+      "path": "candidates/moe_router_score_observation_20261030/source/UnifiedMoeRouterPipelineBindingV2.scala",
+      "phase": "original162",
+      "sha256": "0233df02cef3e1d81031f865838714a130bd7990d0dae4776a251f9498c6f3c2"
+    },
+    {
+      "bytes": 26605,
+      "path": "candidates/moe_router_score_observation_20261030/source/UnifiedMoeRuntimeExpertLoopV4.scala",
+      "phase": "original162",
+      "sha256": "1e0587156ff83ff1125abc4445cd9740f8377b2fe310c9dd0b85f238c7e0e605"
+    },
+    {
+      "bytes": 8452,
+      "path": "candidates/p0_resident_observation_20261030/source/FfnResidentCoordinator.scala",
+      "phase": "original162",
+      "sha256": "65d786a0a0f92a8aea2c8db945b3448162d8b3c814356218fc98f588f201d8ee"
+    },
+    {
+      "bytes": 6164,
+      "path": "candidates/p0_resident_observation_20261030/source/FfnTileSiluBridge.scala",
+      "phase": "original162",
+      "sha256": "27ee34a131aa508bb246b7e2e9196eaed3e8c4d9127ea9ca835ac5333fb4e868"
+    },
+    {
+      "bytes": 190813,
+      "path": "candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala",
+      "phase": "original162",
+      "sha256": "79a721ddb498a5d5863085535c2aaedea14e5503e0f3a41abe2af29995fb813b"
+    },
+    {
+      "bytes": 7345,
+      "path": "candidates/chisel_host_boundary_graph_20261105/modulecache/BoundedCycleWitness.scala",
+      "phase": "modulecache",
+      "sha256": "260ca713834adb4015ba89c563646e1f0c8fdc31c5403ed1e1f75945275a0e34"
+    },
+    {
+      "bytes": 28640,
+      "path": "candidates/chisel_host_boundary_graph_20261105/modulecache/SymbolTable.scala",
+      "phase": "modulecache",
+      "sha256": "363cfcbc9df17d340580b2308551a83877ab91637c42bda3a6351e2b9fd22fc3"
+    },
+    {
+      "bytes": 8156,
+      "path": "candidates/chisel_host_boundary_graph_20261105/scala/BoundaryIntegrationGuards.scala",
+      "phase": "graph",
+      "sha256": "0e90b9fe361d5645f7a1ad72fb55ca12a8d2ae089df260a959bca54e7be01fa7"
+    },
+    {
+      "bytes": 162640,
+      "path": "candidates/chisel_host_boundary_graph_20261105/scala/ClockInitRepresentationRepair.scala",
+      "phase": "graph",
+      "sha256": "b3c670fef9bf20abc667af8bbc3e16e6299024df07b72322ed26386191a26246"
+    },
+    {
+      "bytes": 4751,
+      "path": "candidates/chisel_host_boundary_graph_20261105/scala/CycleWitnessRoles.scala",
+      "phase": "graph",
+      "sha256": "3fc2402ff95ddec7793c45ad32b3c0ff30b46a546fb7c412cd99611e6ddfffcb"
+    },
+    {
+      "bytes": 3047,
+      "path": "candidates/chisel_host_boundary_graph_20261105/scala/IdmaFieldSplitTransform.scala",
+      "phase": "graph",
+      "sha256": "e1dd694cc1b53acc1772c759a84598768179ac6818b1135b01713936bdbb977a"
+    },
+    {
+      "bytes": 16544,
+      "path": "candidates/chisel_host_boundary_graph_20261105/scala/IdmaPackedBoundarySplit.scala",
+      "phase": "graph",
+      "sha256": "27bf9a87064eb66342f2d18b7b268249f7f4c20795f3ea8a31a33f299909e3ee"
+    },
+    {
+      "bytes": 7227,
+      "path": "candidates/chisel_host_boundary_graph_20261105/scala/IdmaSplitLayout.scala",
+      "phase": "graph",
+      "sha256": "f844675530032ee20271c364c78338d1307f7e34c66437abe77e93154dbbc75b"
+    },
+    {
+      "bytes": 139736,
+      "path": "candidates/chisel_host_boundary_graph_20261105/scala/ObservedPrepareAst.scala",
+      "phase": "graph",
+      "sha256": "cd01ec25df275179af054f6169ca8004fc6a6c8bb89a28e0e138e5c93b988bfa"
+    },
+    {
+      "bytes": 14576,
+      "path": "candidates/chisel_host_boundary_graph_20261105/scala/ObservedScheduleIdentity.scala",
+      "phase": "graph",
+      "sha256": "5333d2a26919e3a723fc72cdfcc7f22716dc47c7f5b7c537e1f9d3c07ca5be83"
+    },
+    {
+      "bytes": 12598,
+      "path": "candidates/chisel_host_boundary_graph_20261105/scala/RegisterInitCensus.scala",
+      "phase": "graph",
+      "sha256": "3c963c8c1e09d14e192572fc109398bc59d8c654dd644a5235af18463f4625b1"
+    },
+    {
+      "bytes": 6851,
+      "path": "candidates/chisel_host_boundary_graph_20261105/scala/StructuralMetadataFactory.scala",
+      "phase": "graph",
+      "sha256": "ab1ea07061f9a319c22008ea3b0f5ccabceccea9879b832958821fa56eb0b2ff"
+    },
+    {
+      "bytes": 4088,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/ActualJvmProcessObservation.scala",
+      "phase": "helpers",
+      "sha256": "55d2ceadf088d6c2e896ce2c0d3d08e379e1dfe2962af358db394e3c15976de3"
+    },
+    {
+      "bytes": 7190,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/AllNativeRetainedModelFactory.scala",
+      "phase": "helpers",
+      "sha256": "a2ba61a78bfada0ecbfc3388c7c0664639c162009782c8a2ab00ca08c2505c50"
+    },
+    {
+      "bytes": 5041,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/CheckedIdmaFieldSplitBlackBox.scala",
+      "phase": "helpers",
+      "sha256": "96406c005300dbbf0b27b86240d65a06db318f3c2433595c572415836b87f721"
+    },
+    {
+      "bytes": 4798,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/CheckedRetainedIdmaNativeLeaf.scala",
+      "phase": "helpers",
+      "sha256": "2ba2eb9ac11bd4f140c4f509f51127f3db3eba198986ddf37c1b85c23641cb51"
+    },
+    {
+      "bytes": 10684,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/ExactHighSourceInfoRebinding.scala",
+      "phase": "helpers",
+      "sha256": "107a5b39eb7b94af3ddfcf3e8f0895eb4c67046d98e51c0b8f56e29f7d9cdf78"
+    },
+    {
+      "bytes": 7284,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/HybridExecutionGate.scala",
+      "phase": "helpers",
+      "sha256": "66b276c2283a32fc871e8a566451220984a9fab345b9eff995d4846ce5069a3d"
+    },
+    {
+      "bytes": 2385,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/IcgClockCallbackContractProbe.scala",
+      "phase": "helpers",
+      "sha256": "2be8df4436811fe1391da9f7756d07639db3963760432fd618d5767c76f5fd5e"
+    },
+    {
+      "bytes": 657,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/IcgJnaTrace.scala",
+      "phase": "helpers",
+      "sha256": "f251deacdfb4f5e5d1d52c51f111b1f0bff2b58549b13d76a201fac1acd0b262"
+    },
+    {
+      "bytes": 3126,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/IcgNativeBlackBox.scala",
+      "phase": "helpers",
+      "sha256": "2f0619fa84fcf70f462b4ae66e0d725b727d4d2164fb82b69d4b39da00244fc3"
+    },
+    {
+      "bytes": 1440,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/IdmaEdgeSnapshot.scala",
+      "phase": "helpers",
+      "sha256": "6ccabbef8b29f969e5fb6c27cb5b1cdc887f209b247a5b00e1b2e248361c442d"
+    },
+    {
+      "bytes": 4415,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/MatrixNativeBlackBox.scala",
+      "phase": "helpers",
+      "sha256": "e7f9d91de1c7b0b9e86dff02e49919c52e2d8ff0405a8930b1d5972f3863a3e4"
+    },
+    {
+      "bytes": 2965,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/MatrixNativeLayout.scala",
+      "phase": "helpers",
+      "sha256": "6da45fa2313db8a88836914e3425ee7ee97437cb28833c32bf53d01616211f32"
+    },
+    {
+      "bytes": 1127,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/NativeEdgeSnapshot.scala",
+      "phase": "helpers",
+      "sha256": "b26b8ee749a71bbc519433459297d036b9aba4c7da51e1d001f5c02c2cf98e36"
+    },
+    {
+      "bytes": 4540,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/NativeLeafTrace.scala",
+      "phase": "helpers",
+      "sha256": "08f18caec046ff153292b91d40f82c2dad219e9e572f8811ae079c394dbae880"
+    },
+    {
+      "bytes": 1406,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/NativeLibraryPin.scala",
+      "phase": "helpers",
+      "sha256": "9dd52d2b19d5ad2a721f4d7986ed2ed11c868212f94079184a50cb5301757f6a"
+    },
+    {
+      "bytes": 8462,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/NativeMatrixSchedulingDifferential.scala",
+      "phase": "helpers",
+      "sha256": "ff62fddfdbc591873fcfffe5573cb93f74ced826cb2bf6b8d550dc75a609af34"
+    },
+    {
+      "bytes": 4683,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/OfficialLowFirrtlFinalWriterOmission.scala",
+      "phase": "helpers",
+      "sha256": "133eda822b67781a80b7693bec68adce51f0e5841509b1e3fca3c61a3902f013"
+    },
+    {
+      "bytes": 13834,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/OfficialLoweringDifferential.scala",
+      "phase": "helpers",
+      "sha256": "0fd82bb96f02b05d049bd3e644525d16836eaabc3021fc6524932b31bae106e8"
+    },
+    {
+      "bytes": 12887,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/OriginalHostConstructionFeasibility.scala",
+      "phase": "helpers",
+      "sha256": "702fb2121e12bd8e76888093e4f532706d925a519ceada3873a89e88f0c2bbe7"
+    },
+    {
+      "bytes": 5017,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/OriginalHostFrameTransport.scala",
+      "phase": "helpers",
+      "sha256": "ea87df4a24dc043538631b8b5d49f2b709fb1c1f3ea77e1d4119b97dc01a5fb9"
+    },
+    {
+      "bytes": 14006,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/OriginalHostObservedConstructionFeasibility.scala",
+      "phase": "helpers",
+      "sha256": "5b628aebefa1260dffa4e3ba3ad59082354e505e24b841193c898a91718ec765"
+    },
+    {
+      "bytes": 5425,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/OriginalHostPinDriver.scala",
+      "phase": "helpers",
+      "sha256": "3592752cc3ce004df090e2145a527858db462351330090fb6a029d90d4f4474f"
+    },
+    {
+      "bytes": 7005,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/OriginalHostPorts.scala",
+      "phase": "helpers",
+      "sha256": "cabcb1e61de8b314450d693914a6fdfc5b0a161d90e5ddc94ceb756bb8b84114"
+    },
+    {
+      "bytes": 17270,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/OriginalHostProfileProducer.scala",
+      "phase": "helpers",
+      "sha256": "94d9a0e2bdf73ad3c2ed9eafcb9b65c673a39f58c73cf3fffb66d60fda4b96e9"
+    },
+    {
+      "bytes": 9397,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/OriginalHostStartupAudit.scala",
+      "phase": "helpers",
+      "sha256": "facef0d698a491f27625c6d48dfd6aa09dc389fa24c1c7f568a57bc8396872f2"
+    },
+    {
+      "bytes": 17758,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/OriginalHostTreadleBinding.scala",
+      "phase": "helpers",
+      "sha256": "bc58379f43db6a639fcc050b882b5541a520d3f597731aea70990dc9b859d86b"
+    },
+    {
+      "bytes": 17240,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/OriginalMatrixStartupProbe.scala",
+      "phase": "helpers",
+      "sha256": "17b9fa345b9e2d3594d95989ad75930417610baf43abb9ae5f8407f1300864da"
+    },
+    {
+      "bytes": 1905,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/RetainedIcgNativeLeaf.scala",
+      "phase": "helpers",
+      "sha256": "cbe96f239b3bd7d68a05cd3754dfa5a369ac9dd47f9ed9944044d66a219ae2ee"
+    },
+    {
+      "bytes": 2146,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/RetainedMatrixNativeLeaf.scala",
+      "phase": "helpers",
+      "sha256": "4b16234e2307710afe401cfc388d13ebdf81493fa851ed6cb5f6ba1ca5f0e03e"
+    },
+    {
+      "bytes": 11579,
+      "path": "candidates/chisel_hybrid_host_20261106/scala/SourceInfoRebindingDifferential.scala",
+      "phase": "helpers",
+      "sha256": "e6ccbb07cba32efc4f1f4e5119260eea93f347ccf7affa4737573307a8607668"
+    }
+  ],
+  "status": "TEMP_COMPILE_ONLY_NOT_HOST_OR_NUMERICAL_ACCEPTANCE",
+  "vector_lanes": 32
+}

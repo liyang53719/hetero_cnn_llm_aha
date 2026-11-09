@@ -1,5 +1,7 @@
 # Original Chisel load/prep phase-1 numerical check
 
+Later evidence: [guarded runtime32 single-chunk checks](../original_chunk_guarded32_numeric_20261109/README.md) completed both chunks under independent finite limits. That separate executed harness does not retroactively turn this archived four-case run into a pass. [Original exponential primitive checks](../original_chunk_exp_numeric_20261109/README.md) advance the next arithmetic stage; whole-block acceptance remains 0/5.
+
 ## Executed result
 
 The byte-pinned original GdnRuntimeChunkLoadPrepV2Owner and original HeteroFP32Alu (HardFloat AddRecFN, FP32 RNE, after-rounding tininess) compiled and executed with ChiselTest 6 / Treadle. The wrapper registers one actual hardware ALU response; it does not calculate the additions in software.

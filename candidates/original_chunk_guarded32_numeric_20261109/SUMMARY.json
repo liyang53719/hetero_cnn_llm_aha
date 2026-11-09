@@ -1,0 +1,168 @@
+{
+  "status": "PASS_TWO_GUARDED_RUNTIME32_PHASE1_CASES",
+  "cases": [
+    {
+      "policy": 1,
+      "value_heads": 32,
+      "chunk": 0,
+      "read_beats": 1600,
+      "write_beats": 1600,
+      "bit_checked_words": 25600,
+      "cycles": 8064,
+      "phase": "0",
+      "exit": 0,
+      "wall_seconds": 90.47618699400118,
+      "cpu_seconds": 94.531891,
+      "max_rss_kib": 185576,
+      "scalar_add_requests": 832,
+      "scalar_add_results": 832,
+      "head": 0,
+      "tokens": 128,
+      "stage_complete": true,
+      "status": 0,
+      "drained": true,
+      "progress": [
+        {
+          "cycles": 1024,
+          "write_beats": 200,
+          "read_beats": 201,
+          "seconds": 11.64671648
+        },
+        {
+          "cycles": 2048,
+          "write_beats": 401,
+          "read_beats": 402,
+          "seconds": 22.945388073
+        },
+        {
+          "cycles": 3072,
+          "write_beats": 605,
+          "read_beats": 606,
+          "seconds": 34.144817324
+        },
+        {
+          "cycles": 4096,
+          "write_beats": 809,
+          "read_beats": 810,
+          "seconds": 45.019593145
+        },
+        {
+          "cycles": 5120,
+          "write_beats": 1013,
+          "read_beats": 1014,
+          "seconds": 55.982273421
+        },
+        {
+          "cycles": 6144,
+          "write_beats": 1217,
+          "read_beats": 1218,
+          "seconds": 67.117249351
+        },
+        {
+          "cycles": 7168,
+          "write_beats": 1421,
+          "read_beats": 1422,
+          "seconds": 78.285242993
+        }
+      ],
+      "observed_steady_cycles_per_second": 92.19891737554272
+    },
+    {
+      "policy": 1,
+      "value_heads": 32,
+      "chunk": 1,
+      "read_beats": 1600,
+      "write_beats": 1600,
+      "bit_checked_words": 25600,
+      "cycles": 8064,
+      "phase": "1",
+      "exit": 0,
+      "wall_seconds": 89.67215901999953,
+      "cpu_seconds": 93.99068100000001,
+      "max_rss_kib": 184012,
+      "scalar_add_requests": 832,
+      "scalar_add_results": 832,
+      "head": 0,
+      "tokens": 128,
+      "stage_complete": true,
+      "status": 0,
+      "drained": true,
+      "progress": [
+        {
+          "cycles": 1024,
+          "write_beats": 200,
+          "read_beats": 201,
+          "seconds": 11.275278444
+        },
+        {
+          "cycles": 2048,
+          "write_beats": 401,
+          "read_beats": 402,
+          "seconds": 22.446088977
+        },
+        {
+          "cycles": 3072,
+          "write_beats": 605,
+          "read_beats": 606,
+          "seconds": 33.503244194
+        },
+        {
+          "cycles": 4096,
+          "write_beats": 809,
+          "read_beats": 810,
+          "seconds": 44.42253716
+        },
+        {
+          "cycles": 5120,
+          "write_beats": 1013,
+          "read_beats": 1014,
+          "seconds": 55.295798792
+        },
+        {
+          "cycles": 6144,
+          "write_beats": 1217,
+          "read_beats": 1218,
+          "seconds": 66.146671688
+        },
+        {
+          "cycles": 7168,
+          "write_beats": 1421,
+          "read_beats": 1422,
+          "seconds": 77.355712334
+        }
+      ],
+      "observed_steady_cycles_per_second": 92.97759772926938
+    }
+  ],
+  "compile": {
+    "phase": "compile",
+    "exit": 0,
+    "wall_seconds": 14.916654512000605,
+    "cpu_seconds": 34.770353,
+    "max_rss_kib": 394276
+  },
+  "total_cpu_seconds": 223.29292500000003,
+  "full_original_blocks_passed": 0,
+  "required_full_original_blocks": 5,
+  "limits_per_process": {
+    "cpu_soft_seconds": 120,
+    "cpu_hard_seconds": 125,
+    "wall_seconds": 150,
+    "java_heap_mb": 1200
+  },
+  "historical_result": "Prior legacy runtime16 chunks0/1 completed; not rerun here. Prior four-case run hit cumulative CPU cap before guarded completion.",
+  "historical_guarded_evidence": "No prior guarded pass inherited.",
+  "transport": "always-ready request sink, one outstanding transaction, registered original ALU return",
+  "untested": [
+    "other heads",
+    "full prepared producer",
+    "shared scalar arbitration",
+    "memory stalls/errors",
+    "exp/derived/matrix/solve/state phases",
+    "RTL backend",
+    "full block",
+    "4096 MAC implementation/QoR",
+    "Host/root publication"
+  ],
+  "diagnosis": "The prior terminal cause was SIGXCPU at the shared160 CPU-second cap. Both new guarded runtime32 chunks progressed steadily and completed independently in about94 CPU seconds each, supporting budget insufficiency rather than an intrinsic guarded deadlock. Earlier runtime16 guarded cases were not rerun; their success and exclusion of all prior stalls are not established."
+}

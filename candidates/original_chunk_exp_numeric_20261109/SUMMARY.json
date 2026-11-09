@@ -1,0 +1,147 @@
+{
+  "status": "PASS",
+  "scope": "Actual original BlockScalarFloatPolicyV2 primitive with HardFloat, Treadle; not whole phase2 owner or M128",
+  "synthetic_fixture_calls": 64,
+  "boundary_calls": 24,
+  "checked": 88,
+  "policies": [
+    0,
+    1
+  ],
+  "counts_by_policy_chunk_role": [
+    {
+      "policy": 0,
+      "chunk": 0,
+      "role": "cumulative",
+      "calls": 5
+    },
+    {
+      "policy": 0,
+      "chunk": 0,
+      "role": "decay",
+      "calls": 1
+    },
+    {
+      "policy": 0,
+      "chunk": 0,
+      "role": "pair",
+      "calls": 5
+    },
+    {
+      "policy": 0,
+      "chunk": 0,
+      "role": "remain",
+      "calls": 5
+    },
+    {
+      "policy": 0,
+      "chunk": 1,
+      "role": "cumulative",
+      "calls": 5
+    },
+    {
+      "policy": 0,
+      "chunk": 1,
+      "role": "decay",
+      "calls": 1
+    },
+    {
+      "policy": 0,
+      "chunk": 1,
+      "role": "pair",
+      "calls": 5
+    },
+    {
+      "policy": 0,
+      "chunk": 1,
+      "role": "remain",
+      "calls": 5
+    },
+    {
+      "policy": 1,
+      "chunk": 0,
+      "role": "cumulative",
+      "calls": 5
+    },
+    {
+      "policy": 1,
+      "chunk": 0,
+      "role": "decay",
+      "calls": 1
+    },
+    {
+      "policy": 1,
+      "chunk": 0,
+      "role": "pair",
+      "calls": 5
+    },
+    {
+      "policy": 1,
+      "chunk": 0,
+      "role": "remain",
+      "calls": 5
+    },
+    {
+      "policy": 1,
+      "chunk": 1,
+      "role": "cumulative",
+      "calls": 5
+    },
+    {
+      "policy": 1,
+      "chunk": 1,
+      "role": "decay",
+      "calls": 1
+    },
+    {
+      "policy": 1,
+      "chunk": 1,
+      "role": "pair",
+      "calls": 5
+    },
+    {
+      "policy": 1,
+      "chunk": 1,
+      "role": "remain",
+      "calls": 5
+    }
+  ],
+  "boundary_categories": [
+    "signed zero",
+    "tiny negative",
+    "legacy saturation",
+    "normal/subnormal transition",
+    "underflow-to-zero",
+    "extreme finite negative"
+  ],
+  "raw_fp32_mismatches": 0,
+  "wait_cycles_total": 1585,
+  "wait_cycles_max": 23,
+  "held_result_cycles_per_call": 3,
+  "source_order_candidate_pool_per_policy": 4418,
+  "compile": {
+    "stage": "compile",
+    "exit": 0,
+    "seconds": 12.477007251000032
+  },
+  "simulation": {
+    "stage": "simulation",
+    "exit": 0,
+    "seconds": 32.51482144200054
+  },
+  "verified_runtime_jars": 32,
+  "unavailable_optional_jars": [
+    "antlr4-runtime-4.9.3.jar",
+    "scala-xml_2.13-2.1.0.jar",
+    "scalatest-core_2.13-3.2.19.jar",
+    "scalactic_2.13-3.2.19.jar",
+    "scalatest-compatible-3.2.19.jar"
+  ],
+  "executed_fixture_sha256": "bebd7f42125ae9994598bcaf7ad0b15522deb80cbd3b3b75a0b06271f2060beb",
+  "simulation_log_sha256": "62213210be11dced281f96d390b7db000a6055d54dbe473d04a40625e3f765b1",
+  "full_original_chisel_m128_blocks_passed": 0,
+  "full_original_chisel_m128_blocks_required": 5,
+  "architecture": "4096 MAC / 8x512 / Vector32 unchanged",
+  "remote_main_source_verification_reference": "round_20261109T2334/REMOTE_PIN_RECHECK.json",
+  "limits": "No whole phase2, phase3/4, full model, Torch exactness, synthesis, timing or physical QoR claim"
+}

@@ -1,0 +1,35 @@
+{
+  "status": "PARTIAL_NUMERICAL_PASS_CPU_BOUND",
+  "completed_cases": [
+    {
+      "cumsum_policy": 0,
+      "valueHeads": 16,
+      "head": 0,
+      "tokens": 128,
+      "chunk": 0,
+      "read_beats": 1600,
+      "write_beats": 1600,
+      "bit_checked_words": 25600,
+      "cycles": 6528
+    },
+    {
+      "cumsum_policy": 0,
+      "valueHeads": 16,
+      "head": 0,
+      "tokens": 128,
+      "chunk": 1,
+      "read_beats": 1600,
+      "write_beats": 1600,
+      "bit_checked_words": 25600,
+      "cycles": 6528
+    }
+  ],
+  "guarded_runtime16": "NO_COMPLETED_CASE",
+  "guarded_runtime32": "COMPILE_ONLY_NOT_SIMULATED",
+  "full_original_blocks_passed": 0,
+  "required_full_original_blocks": 5,
+  "simulation_exit": -24,
+  "original_source_count": 30,
+  "actual_local_jar_count": 32,
+  "source_identity_preserved": true
+}

@@ -1,0 +1,277 @@
+{
+  "used": [
+    {
+      "name": "chisel_2.13-6.7.0.jar",
+      "bytes": 5128708,
+      "maven_path": "org/chipsalliance/chisel_2.13/6.7.0/chisel_2.13-6.7.0.jar",
+      "role": "classpath",
+      "sha256": "ad3163d1b88094806cfec95fec58b4ebeeaa6af6ec6b2766a9c02becdbe42778",
+      "url": "https://repo.maven.apache.org/maven2/org/chipsalliance/chisel_2.13/6.7.0/chisel_2.13-6.7.0.jar",
+      "path": "/workspace/scratch/f28987e955ed/host93_class_compile_attempt_v1_20261018/dependencies/org/chipsalliance/chisel_2.13/6.7.0/chisel_2.13-6.7.0.jar"
+    },
+    {
+      "name": "chisel-plugin_2.13.16-6.7.0.jar",
+      "bytes": 79111,
+      "maven_path": "org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar",
+      "role": "plugin",
+      "sha256": "3260acf1b41b399974d21ba7ef970124ff35df6e5b0a164e65d5038e3b803bfb",
+      "url": "https://repo.maven.apache.org/maven2/org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar",
+      "path": "/workspace/scratch/f28987e955ed/host93_class_compile_attempt_v1_20261018/dependencies/org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar"
+    },
+    {
+      "name": "scopt_2.13-4.1.0.jar",
+      "bytes": 127408,
+      "maven_path": "com/github/scopt/scopt_2.13/4.1.0/scopt_2.13-4.1.0.jar",
+      "role": "classpath",
+      "sha256": "2e5037bda974630b046794274e344273919abf4727acfcd86352617dce68f82b",
+      "url": "https://repo.maven.apache.org/maven2/com/github/scopt/scopt_2.13/4.1.0/scopt_2.13-4.1.0.jar",
+      "path": "/workspace/scratch/f28987e955ed/host93_class_compile_attempt_v1_20261018/dependencies/com/github/scopt/scopt_2.13/4.1.0/scopt_2.13-4.1.0.jar"
+    },
+    {
+      "name": "commons-text-1.10.0.jar",
+      "bytes": 238400,
+      "maven_path": "org/apache/commons/commons-text/1.10.0/commons-text-1.10.0.jar",
+      "role": "classpath",
+      "sha256": "770cd903fa7b604d1f7ef7ba17f84108667294b2b478be8ed1af3bffb4ae0018",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.10.0/commons-text-1.10.0.jar",
+      "path": "/workspace/scratch/f28987e955ed/host93_class_compile_attempt_v1_20261018/dependencies/org/apache/commons/commons-text/1.10.0/commons-text-1.10.0.jar"
+    },
+    {
+      "name": "commons-lang3-3.12.0.jar",
+      "bytes": 587402,
+      "maven_path": "org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar",
+      "role": "classpath",
+      "sha256": "d919d904486c037f8d193412da0c92e22a9fa24230b9d67a57855c5c31c7e94e",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar",
+      "path": "/workspace/scratch/f28987e955ed/host93_class_compile_attempt_v1_20261018/dependencies/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar"
+    },
+    {
+      "name": "os-lib_2.13-0.9.2.jar",
+      "bytes": 367336,
+      "maven_path": "com/lihaoyi/os-lib_2.13/0.9.2/os-lib_2.13-0.9.2.jar",
+      "role": "classpath",
+      "sha256": "814edf957545fd952e97a772d850643516acc18000119ad566c03368c43c60f2",
+      "url": "https://repo.maven.apache.org/maven2/com/lihaoyi/os-lib_2.13/0.9.2/os-lib_2.13-0.9.2.jar",
+      "path": "/workspace/scratch/f28987e955ed/host93_class_compile_attempt_v1_20261018/dependencies/com/lihaoyi/os-lib_2.13/0.9.2/os-lib_2.13-0.9.2.jar"
+    },
+    {
+      "name": "geny_2.13-1.0.0.jar",
+      "bytes": 85362,
+      "maven_path": "com/lihaoyi/geny_2.13/1.0.0/geny_2.13-1.0.0.jar",
+      "role": "classpath",
+      "sha256": "078af5bf405bbf41d6eca6441b2bcd282551d054c47acf4f949b6c983063b117",
+      "url": "https://repo.maven.apache.org/maven2/com/lihaoyi/geny_2.13/1.0.0/geny_2.13-1.0.0.jar",
+      "path": "/workspace/scratch/f28987e955ed/host93_class_compile_attempt_v1_20261018/dependencies/com/lihaoyi/geny_2.13/1.0.0/geny_2.13-1.0.0.jar"
+    },
+    {
+      "name": "scala-parallel-collections_2.13-1.0.4.jar",
+      "bytes": 1127123,
+      "maven_path": "org/scala-lang/modules/scala-parallel-collections_2.13/1.0.4/scala-parallel-collections_2.13-1.0.4.jar",
+      "role": "classpath",
+      "sha256": "68f266c4fa37cb20a76e905ad940e241190ce288b7e4a9877f1dd1261cd1a9a7",
+      "url": "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-parallel-collections_2.13/1.0.4/scala-parallel-collections_2.13-1.0.4.jar",
+      "path": "/workspace/scratch/f28987e955ed/host93_class_compile_attempt_v1_20261018/dependencies/org/scala-lang/modules/scala-parallel-collections_2.13/1.0.4/scala-parallel-collections_2.13-1.0.4.jar"
+    },
+    {
+      "name": "sourcecode_2.13-0.3.1.jar",
+      "bytes": 119360,
+      "maven_path": "com/lihaoyi/sourcecode_2.13/0.3.1/sourcecode_2.13-0.3.1.jar",
+      "role": "classpath",
+      "sha256": "0e663be9a6c81e9515bdd07c04831397e38ea648a211e85ad005300fe840a03d",
+      "url": "https://repo.maven.apache.org/maven2/com/lihaoyi/sourcecode_2.13/0.3.1/sourcecode_2.13-0.3.1.jar",
+      "path": "/workspace/scratch/f28987e955ed/host93_class_compile_attempt_v1_20261018/dependencies/com/lihaoyi/sourcecode_2.13/0.3.1/sourcecode_2.13-0.3.1.jar"
+    },
+    {
+      "name": "upickle_2.13-3.1.0.jar",
+      "bytes": 114894,
+      "maven_path": "com/lihaoyi/upickle_2.13/3.1.0/upickle_2.13-3.1.0.jar",
+      "role": "classpath",
+      "sha256": "9c00332462f16ccaf2f49fcd31af2040b28f0329200d02c7817e8c0841d28ebc",
+      "url": "https://repo.maven.apache.org/maven2/com/lihaoyi/upickle_2.13/3.1.0/upickle_2.13-3.1.0.jar",
+      "path": "/workspace/scratch/f28987e955ed/host93_class_compile_attempt_v1_20261018/dependencies/com/lihaoyi/upickle_2.13/3.1.0/upickle_2.13-3.1.0.jar"
+    },
+    {
+      "name": "upickle-core_2.13-3.1.0.jar",
+      "bytes": 205712,
+      "maven_path": "com/lihaoyi/upickle-core_2.13/3.1.0/upickle-core_2.13-3.1.0.jar",
+      "role": "classpath",
+      "sha256": "39c52652da329751ed4bb05c62053ff91b1d86c3b06c9488b7f6bfd0d2e05feb",
+      "url": "https://repo.maven.apache.org/maven2/com/lihaoyi/upickle-core_2.13/3.1.0/upickle-core_2.13-3.1.0.jar",
+      "path": "/workspace/scratch/f28987e955ed/host93_class_compile_attempt_v1_20261018/dependencies/com/lihaoyi/upickle-core_2.13/3.1.0/upickle-core_2.13-3.1.0.jar"
+    },
+    {
+      "name": "upickle-implicits_2.13-3.1.0.jar",
+      "bytes": 245064,
+      "maven_path": "com/lihaoyi/upickle-implicits_2.13/3.1.0/upickle-implicits_2.13-3.1.0.jar",
+      "role": "classpath",
+      "sha256": "b504db94ec69487b1460e3e97cc7cfdab7960d219d5724bb62d31c044f29d5df",
+      "url": "https://repo.maven.apache.org/maven2/com/lihaoyi/upickle-implicits_2.13/3.1.0/upickle-implicits_2.13-3.1.0.jar",
+      "path": "/workspace/scratch/f28987e955ed/host93_class_compile_attempt_v1_20261018/dependencies/com/lihaoyi/upickle-implicits_2.13/3.1.0/upickle-implicits_2.13-3.1.0.jar"
+    },
+    {
+      "name": "ujson_2.13-3.1.0.jar",
+      "bytes": 240608,
+      "maven_path": "com/lihaoyi/ujson_2.13/3.1.0/ujson_2.13-3.1.0.jar",
+      "role": "classpath",
+      "sha256": "dd34c47a41d005d0e0ca947e208a20fbc136ea02357333392ba9ba6a96beb1c7",
+      "url": "https://repo.maven.apache.org/maven2/com/lihaoyi/ujson_2.13/3.1.0/ujson_2.13-3.1.0.jar",
+      "path": "/workspace/scratch/f28987e955ed/host93_class_compile_attempt_v1_20261018/dependencies/com/lihaoyi/ujson_2.13/3.1.0/ujson_2.13-3.1.0.jar"
+    },
+    {
+      "name": "upack_2.13-3.1.0.jar",
+      "bytes": 110570,
+      "maven_path": "com/lihaoyi/upack_2.13/3.1.0/upack_2.13-3.1.0.jar",
+      "role": "classpath",
+      "sha256": "95d22fef52254a6ea3ddabec144dd01ed6d9046b02cf5b124b89cf3627e8869a",
+      "url": "https://repo.maven.apache.org/maven2/com/lihaoyi/upack_2.13/3.1.0/upack_2.13-3.1.0.jar",
+      "path": "/workspace/scratch/f28987e955ed/host93_class_compile_attempt_v1_20261018/dependencies/com/lihaoyi/upack_2.13/3.1.0/upack_2.13-3.1.0.jar"
+    },
+    {
+      "name": "firtool-resolver_2.13-1.3.0.jar",
+      "bytes": 23881,
+      "maven_path": "org/chipsalliance/firtool-resolver_2.13/1.3.0/firtool-resolver_2.13-1.3.0.jar",
+      "role": "classpath",
+      "sha256": "c6cf214fb53b83fff73e082b6752eab53dc67c987bbece87461600e9c0e8ad38",
+      "url": "https://repo.maven.apache.org/maven2/org/chipsalliance/firtool-resolver_2.13/1.3.0/firtool-resolver_2.13-1.3.0.jar",
+      "path": "/workspace/scratch/f28987e955ed/host93_class_compile_attempt_v1_20261018/dependencies/org/chipsalliance/firtool-resolver_2.13/1.3.0/firtool-resolver_2.13-1.3.0.jar"
+    },
+    {
+      "name": "data-class_2.13-0.2.6.jar",
+      "bytes": 58017,
+      "maven_path": "io/github/alexarchambault/data-class_2.13/0.2.6/data-class_2.13-0.2.6.jar",
+      "role": "classpath",
+      "sha256": "2ed5882d03653438b52bee6a145bca84a95fe363f49afd06b9b92b5e7117afb5",
+      "url": "https://repo.maven.apache.org/maven2/io/github/alexarchambault/data-class_2.13/0.2.6/data-class_2.13-0.2.6.jar",
+      "path": "/workspace/scratch/f28987e955ed/host93_class_compile_attempt_v1_20261018/dependencies/io/github/alexarchambault/data-class_2.13/0.2.6/data-class_2.13-0.2.6.jar"
+    },
+    {
+      "name": "moultingyaml_2.13-0.4.2.jar",
+      "bytes": 314048,
+      "maven_path": "net/jcazevedo/moultingyaml_2.13/0.4.2/moultingyaml_2.13-0.4.2.jar",
+      "role": "classpath",
+      "sha256": "a304da2389f760f1a36513d8b10ba546d50243cf0b94415ea2a76906114d7197",
+      "url": "https://repo.maven.apache.org/maven2/net/jcazevedo/moultingyaml_2.13/0.4.2/moultingyaml_2.13-0.4.2.jar",
+      "path": "/workspace/scratch/f28987e955ed/host93_class_compile_attempt_v1_20261018/dependencies/net/jcazevedo/moultingyaml_2.13/0.4.2/moultingyaml_2.13-0.4.2.jar"
+    },
+    {
+      "name": "snakeyaml-1.26.jar",
+      "bytes": 309001,
+      "maven_path": "org/yaml/snakeyaml/1.26/snakeyaml-1.26.jar",
+      "role": "classpath",
+      "sha256": "d87d607e500885356c03c1cae61e8c2e05d697df8787d5aba13484c2eb76a844",
+      "url": "https://repo.maven.apache.org/maven2/org/yaml/snakeyaml/1.26/snakeyaml-1.26.jar",
+      "path": "/workspace/scratch/f28987e955ed/host93_class_compile_attempt_v1_20261018/dependencies/org/yaml/snakeyaml/1.26/snakeyaml-1.26.jar"
+    },
+    {
+      "name": "joda-time-2.10.1.jar",
+      "bytes": 640724,
+      "maven_path": "joda-time/joda-time/2.10.1/joda-time-2.10.1.jar",
+      "role": "classpath",
+      "sha256": "d269671656767e05a58dd634cbafc36ed70d417220b058d11c0d88dfd281616d",
+      "url": "https://repo.maven.apache.org/maven2/joda-time/joda-time/2.10.1/joda-time-2.10.1.jar",
+      "path": "/workspace/scratch/f28987e955ed/host93_class_compile_attempt_v1_20261018/dependencies/joda-time/joda-time/2.10.1/joda-time-2.10.1.jar"
+    },
+    {
+      "name": "joda-convert-2.2.0.jar",
+      "bytes": 145596,
+      "maven_path": "org/joda/joda-convert/2.2.0/joda-convert-2.2.0.jar",
+      "role": "classpath",
+      "sha256": "6d9c8050943dce3e6e6cfb028a7cbd5fd46555c7edf89bf0d829061ff5d2ade6",
+      "url": "https://repo.maven.apache.org/maven2/org/joda/joda-convert/2.2.0/joda-convert-2.2.0.jar",
+      "path": "/workspace/scratch/f28987e955ed/host93_class_compile_attempt_v1_20261018/dependencies/org/joda/joda-convert/2.2.0/joda-convert-2.2.0.jar"
+    },
+    {
+      "name": "nscala-time_2.13-2.22.0.jar",
+      "bytes": 200745,
+      "maven_path": "com/github/nscala-time/nscala-time_2.13/2.22.0/nscala-time_2.13-2.22.0.jar",
+      "role": "classpath",
+      "sha256": "7fcdf69482982f0dd3f48b7dac27f091e3f1e3cb80eae4c7ac73890d51095c9c",
+      "url": "https://repo.maven.apache.org/maven2/com/github/nscala-time/nscala-time_2.13/2.22.0/nscala-time_2.13-2.22.0.jar",
+      "path": "/workspace/scratch/f28987e955ed/host93_class_compile_attempt_v1_20261018/dependencies/com/github/nscala-time/nscala-time_2.13/2.22.0/nscala-time_2.13-2.22.0.jar"
+    },
+    {
+      "name": "paranamer-2.8.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/thoughtworks/paranamer/paranamer/2.8/paranamer-2.8.jar",
+      "sha256": "688cb118a6021d819138e855208c956031688be4b47a24bb615becc63acedf07",
+      "path": "/workspace/scratch/f28987e955ed/tail_identity_1934/runtime/paranamer-2.8.jar",
+      "bytes": 34654
+    },
+    {
+      "name": "scala-compiler-2.13.16.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-compiler/2.13.16/scala-compiler-2.13.16.jar",
+      "sha256": "f59982714591e321ba9c087af2c8666e2f5fb92b11a0cef72c2c5e9b342152d3",
+      "path": "/workspace/scratch/f28987e955ed/tail_identity_1934/runtime/scala-compiler-2.13.16.jar",
+      "bytes": 12308669
+    },
+    {
+      "name": "chiseltest_2.13-6.0.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/edu/berkeley/cs/chiseltest_2.13/6.0.0/chiseltest_2.13-6.0.0.jar",
+      "sha256": "3d442dab6f28e74980f598dd4bd28c886f4e081d0e5433102dfc02aab1c57dc5",
+      "path": "/workspace/scratch/f28987e955ed/tail_identity_1934/runtime/chiseltest_2.13-6.0.0.jar",
+      "bytes": 2707568
+    },
+    {
+      "name": "scala-library-2.13.16.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.13.16/scala-library-2.13.16.jar",
+      "sha256": "1ebb2b6f9e4eb4022497c19b1e1e825019c08514f962aaac197145f88ed730f1",
+      "path": "/workspace/scratch/f28987e955ed/tail_identity_1934/runtime/scala-library-2.13.16.jar",
+      "bytes": 5926340
+    },
+    {
+      "name": "firrtl2_2.13-6.0.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/edu/berkeley/cs/firrtl2_2.13/6.0.0/firrtl2_2.13-6.0.0.jar",
+      "sha256": "80fae7cd4516e6fe33469c2e135479f2c94bf9e5be4d00437de2df68ba40b47b",
+      "path": "/workspace/scratch/f28987e955ed/tail_identity_1934/runtime/firrtl2_2.13-6.0.0.jar",
+      "bytes": 4510129
+    },
+    {
+      "name": "json4s-native_2.13-4.1.0-M4.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/json4s/json4s-native_2.13/4.1.0-M4/json4s-native_2.13-4.1.0-M4.jar",
+      "sha256": "a36d3e807bfe872972d55b6f80c883418b1d715f738f329c84d3678205398c7b",
+      "path": "/workspace/scratch/f28987e955ed/tail_identity_1934/runtime/json4s-native_2.13-4.1.0-M4.jar",
+      "bytes": 10223
+    },
+    {
+      "name": "json4s-core_2.13-4.1.0-M4.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/json4s/json4s-core_2.13/4.1.0-M4/json4s-core_2.13-4.1.0-M4.jar",
+      "sha256": "63d7610f4aa092cdc9401a338aada587792df6f1512e7b93bf365b7c07ffeb9f",
+      "path": "/workspace/scratch/f28987e955ed/tail_identity_1934/runtime/json4s-core_2.13-4.1.0-M4.jar",
+      "bytes": 318845
+    },
+    {
+      "name": "json4s-ast_2.13-4.1.0-M4.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/json4s/json4s-ast_2.13/4.1.0-M4/json4s-ast_2.13-4.1.0-M4.jar",
+      "sha256": "2b84fb7bf25f2e4b51bd8cca802fb0bc0ec4c528c88c35cdeb8087349bb154b5",
+      "path": "/workspace/scratch/f28987e955ed/tail_identity_1934/runtime/json4s-ast_2.13-4.1.0-M4.jar",
+      "bytes": 594388
+    },
+    {
+      "name": "json4s-scalap_2.13-4.1.0-M4.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/json4s/json4s-scalap_2.13/4.1.0-M4/json4s-scalap_2.13-4.1.0-M4.jar",
+      "sha256": "496ff9d3f423ac96e47d7a08136d1f7dbafa2ccbc228af553e7d1d90a2bc8224",
+      "path": "/workspace/scratch/f28987e955ed/tail_identity_1934/runtime/json4s-scalap_2.13-4.1.0-M4.jar",
+      "bytes": 356326
+    },
+    {
+      "name": "json4s-native-core_2.13-4.1.0-M4.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/json4s/json4s-native-core_2.13/4.1.0-M4/json4s-native-core_2.13-4.1.0-M4.jar",
+      "sha256": "7f7b8396cd29455e0a3653ae831e3c73b344ac6e1f37ba20d159ec13e7e2d6d3",
+      "path": "/workspace/scratch/f28987e955ed/tail_identity_1934/runtime/json4s-native-core_2.13-4.1.0-M4.jar",
+      "bytes": 84495
+    },
+    {
+      "name": "scala-reflect-2.13.16.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.13.16/scala-reflect-2.13.16.jar",
+      "sha256": "fb49ccd9cac7464486ab993cda20a3c1569d8ef26f052e897577ad2a4970fb1d",
+      "path": "/workspace/scratch/f28987e955ed/tail_identity_1934/runtime/scala-reflect-2.13.16.jar",
+      "bytes": 3801119
+    }
+  ],
+  "absent_not_required_for_completed_cases": [
+    "antlr4-runtime-4.9.3.jar",
+    "scala-xml_2.13-2.1.0.jar",
+    "scalatest-core_2.13-3.2.19.jar",
+    "scalactic_2.13-3.2.19.jar",
+    "scalatest-compatible-3.2.19.jar"
+  ]
+}

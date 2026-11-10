@@ -1,0 +1,277 @@
+[
+  {
+    "path": "README.md",
+    "sha256": "d15b742c88fd2f9d68a236559b155422eb4838087005b219981a46edca798bdd",
+    "bytes": 4366
+  },
+  {
+    "path": "SUMMARY.json",
+    "sha256": "a8b45c0a98f939d4a9536c28639e87d47b99e004dd410381d134c2dfb62f504b",
+    "bytes": 4059
+  },
+  {
+    "path": "FIXTURE_SUMMARY.json",
+    "sha256": "6c3ca3b91f4928543c79e66a547c797c55eb78597edb51cb7f1b327c2df598f8",
+    "bytes": 667
+  },
+  {
+    "path": "DEPENDENCIES.json",
+    "sha256": "577dda35e98830fe641a1f340b0a4d4200ea1d208f7d84a6cc10a975b02d4269",
+    "bytes": 12887
+  },
+  {
+    "path": "SOURCE_PINS.json",
+    "sha256": "6a1d84382946a08e28f84d2b8a16f39d0160b7a36794df6f531f42e10f6e8a10",
+    "bytes": 9537
+  },
+  {
+    "path": "ORACLE_PINS.json",
+    "sha256": "ebf5bbe03ebea773961e1758987897e2816226beb14560998b2e215142c973e9",
+    "bytes": 91
+  },
+  {
+    "path": "run.py",
+    "sha256": "066b478b13711ff13805625024b1928c8cdaa921be7dcf41478b8d7656581c11",
+    "bytes": 3646
+  },
+  {
+    "path": "generate_fixture.py",
+    "sha256": "738e59d1c77146ea76001cee8dfadf09978468cbab60dfe9ea6cc4f9eacfac84",
+    "bytes": 2281
+  },
+  {
+    "path": "DerivedCheck.scala",
+    "sha256": "549e816b14d9aee2c8c1aacda03ac43aaad2a42bff1f339add25834ce523d808",
+    "bytes": 7588
+  },
+  {
+    "path": "scalar_core.py",
+    "sha256": "56be99eb0eb50fad77d4b786282755b43a6bf39d5d9b3af927416e4838cf9a87",
+    "bytes": 8790
+  },
+  {
+    "path": "results/EXECUTED_SOURCE_HASHES.json",
+    "sha256": "174b1a955c362288bed82307e0d795fe25a4e84a56ed84f03c7f0664e574e5e5",
+    "bytes": 4311
+  },
+  {
+    "path": "calibration/DerivedCheck.scala",
+    "sha256": "209d21df5ca087f0d3f182b0e91005b2b67cf8e55a3ccb7d471cb43684ce7401",
+    "bytes": 6647
+  },
+  {
+    "path": "calibration/run.py",
+    "sha256": "9907c04f05194fea92c01b947af589214497dcd75912f0e00e505dd1a4eb904f",
+    "bytes": 3074
+  },
+  {
+    "path": "calibration/results/EXECUTED_SOURCE_HASHES.json",
+    "sha256": "fd85a4ae810bff19db2e97d8527234b406a9fcca8f2c71e77983c4d3cd3daf29",
+    "bytes": 4050
+  },
+  {
+    "path": "native_attempt1/run.py",
+    "sha256": "fee0757131236e6ce8263211f2da1dc0fd2b88d6a30e0ba7bd411c042313ef6e",
+    "bytes": 3378
+  },
+  {
+    "path": "native_attempt1/results/EXECUTED_SOURCE_HASHES.json",
+    "sha256": "432d9377ea9aea9a437e53d8302810ce52689d5921f2822fde6e6d73ada79727",
+    "bytes": 4311
+  },
+  {
+    "path": "upstream/AddRecFN.scala",
+    "sha256": "2746fea3b3291a8db97999a45303878fdeabc0a0c8acb318f4da4f52dda54a85",
+    "bytes": 8776
+  },
+  {
+    "path": "upstream/BlockFloat.scala",
+    "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "bytes": 8313
+  },
+  {
+    "path": "upstream/BlockScalarFloatPolicyV2.scala",
+    "sha256": "25b61c42cd0a1b46a7dc68f3ede15a349e4ff2e629ab2dbef34fb4e3c83f8c03",
+    "bytes": 10944
+  },
+  {
+    "path": "upstream/CompareRecFN.scala",
+    "sha256": "b319e37c7e6c455a0bf39490a250e8b5ad8dbe54e22fa434f4f9ada134fe063d",
+    "bytes": 3476
+  },
+  {
+    "path": "upstream/DivSqrtRecF64.scala",
+    "sha256": "ce3c19d7433fef9a73044d80b4fbcd79466110fc527f6e40d91d83de2ad1dbd0",
+    "bytes": 4428
+  },
+  {
+    "path": "upstream/DivSqrtRecF64_mulAddZ31.scala",
+    "sha256": "9ea19322eafb96006feb9cdee0da451dff59347459c5f4ac6813ea23f2fad776",
+    "bytes": 33929
+  },
+  {
+    "path": "upstream/DivSqrtRecFN_small.scala",
+    "sha256": "905b3c0b4b47286d56b7f7d37a2886add7fd662336f5864df454680021e92da9",
+    "bytes": 20235
+  },
+  {
+    "path": "upstream/EmitHeteroFP32Alu.scala",
+    "sha256": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+    "bytes": 1130
+  },
+  {
+    "path": "upstream/GdnChunkAddressPlan.scala",
+    "sha256": "f8534849bad082b77de88cf2cef43558a91f045122694640e9f33391f101b943",
+    "bytes": 9520
+  },
+  {
+    "path": "upstream/GdnChunkProtocol.scala",
+    "sha256": "877bca2b7816b2bff9566edd2dbf9ad55302b8fa6c8bd3ad7447412d9436b85c",
+    "bytes": 3420
+  },
+  {
+    "path": "upstream/GdnRuntimeChunkDerivedAndPairV2Owner.scala",
+    "sha256": "684ef64617cd7303905e3efbdcced47ba556812ca6e5882a243c6eacb76796a9",
+    "bytes": 20779
+  },
+  {
+    "path": "upstream/GdnRuntimeChunkLayout.scala",
+    "sha256": "54451d4cf504ca76ed387c23790875828eb966ce1603aa08a2200406023ad346",
+    "bytes": 1290
+  },
+  {
+    "path": "upstream/GdnRuntimeChunkLoadPrepV2Owner.scala",
+    "sha256": "bb74af67d6863ce179a34b1cc33bad7693389ae91c628481657995671ee0002e",
+    "bytes": 17265
+  },
+  {
+    "path": "upstream/GdnRuntimeChunkNumericPolicy.scala",
+    "sha256": "44b5cc96048f92f712c2164f680a43da061dbf8d376982c69d9bdd71f9d675fc",
+    "bytes": 639
+  },
+  {
+    "path": "upstream/INToRecFN.scala",
+    "sha256": "92090ded1e774a75811931ea4bd7e23fcb671ffbb5a55d9b2826a04d5c6d83eb",
+    "bytes": 3417
+  },
+  {
+    "path": "upstream/MulAddRecFN.scala",
+    "sha256": "3f2ad5acd54ca0b514737779656b98ffb7f829d867c6b245716e2a1d186d630b",
+    "bytes": 15353
+  },
+  {
+    "path": "upstream/MulRecFN.scala",
+    "sha256": "cf42850379c249a97a073ac436ff6b4c564b56177e868c3e912be2f246243e1d",
+    "bytes": 5706
+  },
+  {
+    "path": "upstream/PreparedReceiptExactExcerpt.scala",
+    "sha256": "2e14efb854a65016e75f47401defcda9b1cc74c7d6a88ccce2100e9d6bba32fa",
+    "bytes": 719
+  },
+  {
+    "path": "upstream/Protocol.scala",
+    "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+    "bytes": 3123
+  },
+  {
+    "path": "upstream/RecFNToIN.scala",
+    "sha256": "e56257592e88614f6be34877a3a9f412fdc09b1c4210ee3dfeaa6c67fdc670f3",
+    "bytes": 6827
+  },
+  {
+    "path": "upstream/RecFNToRecFN.scala",
+    "sha256": "97042141693cd2e8aaa90f88ee39d2c3c4177fc76c48f9ad46aaea71fee34f09",
+    "bytes": 3958
+  },
+  {
+    "path": "upstream/RoundAnyRawFNToRecFN.scala",
+    "sha256": "31cdb3be147471d52e721f14914031c19b915bd7aaffe5c0e333393a0c7fb67d",
+    "bytes": 13901
+  },
+  {
+    "path": "upstream/UnifiedMoeSharedArithmeticProtocolV5.scala",
+    "sha256": "34352a90a3f90b704eae69b3f556acace47f91de067ddd8c8a57af4894349a76",
+    "bytes": 8015
+  },
+  {
+    "path": "upstream/UnifiedOverlapProtocolV2.scala",
+    "sha256": "55f3deac3fc4c72cd3cab922cda8f32c7f120f24e420663443993574ac76887f",
+    "bytes": 1822
+  },
+  {
+    "path": "upstream/UnifiedScalarPolicyV2.scala",
+    "sha256": "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7",
+    "bytes": 858
+  },
+  {
+    "path": "upstream/UnifiedSharedOperationProtocolV3.scala",
+    "sha256": "e3dd3442eb6465cf35216ceac966580edb27ab6894d128cbc43a18a4de86b063",
+    "bytes": 4285
+  },
+  {
+    "path": "upstream/UnifiedVectorElement32BankV4.scala",
+    "sha256": "5f2c7a375262104d9f5e081127a8de94421e80f631a96aa1fe5cceefe94d4d28",
+    "bytes": 4361
+  },
+  {
+    "path": "upstream/UnifiedVectorElement32ProtocolV4.scala",
+    "sha256": "c8ed3fffbce8417c164cf1dd20999f2186842508953d1b617fda1a4ed6f3db9d",
+    "bytes": 1682
+  },
+  {
+    "path": "upstream/classifyRecFN.scala",
+    "sha256": "787aa923a8b5f7bc13550183339fc5e38b8d3ca505dcdd3bec032dc8bb19bf16",
+    "bytes": 2880
+  },
+  {
+    "path": "upstream/common.scala",
+    "sha256": "ea83cdfac50db84f372d624ce4e0d45188207164a6a1eae5d42d8174241925cb",
+    "bytes": 3925
+  },
+  {
+    "path": "upstream/fNFromRecFN.scala",
+    "sha256": "7a114540c32ef9e43152e37d1610dd5bbb68dba6b3bbd1aa5600fa3bc411fa6d",
+    "bytes": 2853
+  },
+  {
+    "path": "upstream/primitives.scala",
+    "sha256": "134cfae67052244a836aebbae3f9252b0e9bf4800ab5cbcba4b92eb1c56e7c31",
+    "bytes": 5105
+  },
+  {
+    "path": "upstream/rawFloatFromFN.scala",
+    "sha256": "39fb14ae28318821906f68ad63803ca24eecb1115bf24aa4f3df497392357dce",
+    "bytes": 3037
+  },
+  {
+    "path": "upstream/rawFloatFromIN.scala",
+    "sha256": "d82c1285d20523fe0bcf7a32e2a2307ea76c3c2581ec0c329f8914004555c1e8",
+    "bytes": 2885
+  },
+  {
+    "path": "upstream/rawFloatFromRecFN.scala",
+    "sha256": "bf7e4b0e453569c91f6a9d8c414feb3a5fed6dc7354ba31cdc8c7c0f1ffd8317",
+    "bytes": 2877
+  },
+  {
+    "path": "upstream/recFNFromFN.scala",
+    "sha256": "90060c571a38718330f8781ecc4f555096ac45a0c75abb3fe5219e06dacdbd2d",
+    "bytes": 2352
+  },
+  {
+    "path": "upstream/resizeRawFloat.scala",
+    "sha256": "702084355b5b1d825ed0885ee2e014091d76ba08f07b071cb77bcb4cb392d561",
+    "bytes": 3237
+  },
+  {
+    "path": "SCRIPT_PINS.json",
+    "sha256": "104047d51eb8ceddab2ab5b97c8b5b9375cc33ee5c3ad2fea743645c338d701c",
+    "bytes": 648
+  },
+  {
+    "path": "NATIVE_PINS.json",
+    "sha256": "1d1c70a8aa91acc69d393b793bae7e110eb669a263b002ce341522e3d45d2431",
+    "bytes": 1183
+  }
+]

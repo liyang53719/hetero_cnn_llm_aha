@@ -1,0 +1,35 @@
+{
+  "g++": {
+    "path": "/usr/bin/x86_64-linux-gnu-g++-14",
+    "sha256": "6b3696e4dcb85e1c949c732a02befa50e3983ecf94ce7e8e58d9d503b954b79d",
+    "bytes": 1166360
+  },
+  "make": {
+    "path": "/usr/bin/make",
+    "sha256": "8a229baf64671988cfb5af43ba3070c6ce7214cf32bcf96155115559d1466fa7",
+    "bytes": 278448
+  },
+  "perl": {
+    "path": "/usr/bin/perl",
+    "sha256": "b85210f03baeb859ee20b1324e59497f27f319eda9e2d3d1ecd163a79d884a7d",
+    "bytes": 3935376
+  },
+  "verilator_bin": {
+    "path": "/workspace/scratch/f28987e955ed/native_phase2_probe_0033/runtime/verilator-package/usr/bin/verilator_bin",
+    "sha256": "619464a17a8c212219abceeeee23f529b72801ef594814ae32f4b9747fd38703",
+    "bytes": 13920736
+  },
+  "versions": {
+    "g++": "g++ (Debian 14.2.0-19) 14.2.0",
+    "make": "GNU Make 4.4.1",
+    "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)"
+  },
+  "verilator_ldd": "\tlinux-vdso.so.1 (0x00007f937b1a3000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f937a33c000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f937a148000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f937b1a5000)\n",
+  "verilator_package": {
+    "scope": "TOOL_BYTES_ONLY_PENDING_ACTUAL_FRONTEND",
+    "package_sha256": "238ab4ca84cddd371f113cd549f16f2d65c43e7b4962a763bea1d259158dd3b2",
+    "wrapper_sha256": "56c447aa77fc305062b138dc73be098e99df7bc183c547e75ed3c9e3d9e6e501",
+    "verified_operational_files": 115,
+    "excluded_nonoperational": "usr/share/doc and man links are distribution documentation, not executable/header closure"
+  }
+}

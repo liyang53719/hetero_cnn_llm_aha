@@ -1,0 +1,27 @@
+{
+  "status": "PASS_NATIVE_ORIGINAL_ALU_PROBE",
+  "operations": 4096,
+  "operation_types": [
+    "Add",
+    "Mul"
+  ],
+  "simulation_seconds": 0.119436038,
+  "compile": {
+    "phase": "compile",
+    "exit": 0,
+    "wall_seconds": 12.22290860800058,
+    "cpu_seconds": 28.62051,
+    "max_rss_kib": 380956
+  },
+  "native": {
+    "phase": "native",
+    "exit": 0,
+    "wall_seconds": 8.957090760999563,
+    "cpu_seconds": 11.252339,
+    "max_rss_kib": 380956
+  },
+  "native_rss_scope": "cumulative child high-water value, not isolated native peak",
+  "phase2_status": "NOT_RUN",
+  "full_original_blocks_passed": 0,
+  "required_full_original_blocks": 5
+}

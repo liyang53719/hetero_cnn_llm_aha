@@ -1,0 +1,12 @@
+{
+  "source": "candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeChunkLeafCollection.scala",
+  "sha256": "c8b494a77b32ca89ca5e9e3d7417f36e939a42793b79006574d676c5d2407275",
+  "git_blob": "467d7ee3bc2113a48705c169ecc0639c19656b23",
+  "verified_local_commit": "90b91a636a909937b96ef21745d275581e46dd81",
+  "remote_current_commit_independently_checked": false,
+  "evidence_scope": "Exact tracked source in existing original-top checkout; no newer remote selector fetch performed in this step",
+  "excerpt_start_line": 75,
+  "excerpt_end_line": 82,
+  "exact_excerpt": "class GdnRuntimeChunkLeafCollection extends Module {\n  val io=IO(new GdnRuntimeChunkLeafCollectionPort)\n  val coordinator=Module(new GdnRuntimeChunkCoordinator)\n  val state=Module(new GdnChunkStateTransferOwner)\n  val load=Module(new GdnRuntimeChunkLoadPrepV2Owner)\n  val derived=Module(new GdnRuntimeChunkDerivedAndPairV2Owner)\n  val transpose=Module(new GdnRuntimeChunkTransposeV2Owner)\n  val execute=Module(new GdnRuntimeChunkExecuteOwnerV8)\n",
+  "selection": "GdnRuntimeChunkExecuteOwnerV8; not opt-in ExecuteOwner32 and not MatrixPipeline"
+}

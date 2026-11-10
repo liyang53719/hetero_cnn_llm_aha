@@ -1,0 +1,996 @@
+{
+  "package_sha256": "238ab4ca84cddd371f113cd549f16f2d65c43e7b4962a763bea1d259158dd3b2",
+  "source": "https://deb.debian.org/debian/pool/main/v/verilator/verilator_5.032-1+b2_amd64.deb",
+  "files": [
+    {
+      "path": "usr/bin/verilator",
+      "sha256": "672a1ccf3468902f66387049f001b04f254bbcece7d5e816e3861715889bf252",
+      "bytes": 26226
+    },
+    {
+      "path": "usr/bin/verilator_bin",
+      "sha256": "619464a17a8c212219abceeeee23f529b72801ef594814ae32f4b9747fd38703",
+      "bytes": 13920736
+    },
+    {
+      "path": "usr/bin/verilator_bin_dbg",
+      "sha256": "1ff1861df7504f26d1607aea3b497710de02403fc8eb86feb193aefa554e4cf3",
+      "bytes": 14588384
+    },
+    {
+      "path": "usr/bin/verilator_coverage",
+      "sha256": "bd38c1785c26433dfc72dfa3d664ee8aed921dc5dd7d388ece09af886211d1f5",
+      "bytes": 7051
+    },
+    {
+      "path": "usr/bin/verilator_coverage_bin_dbg",
+      "sha256": "ac771b1378c9a3f3de596c17e933f8b2b12acb2d068f4228699fadf6dcefa0cb",
+      "bytes": 896032
+    },
+    {
+      "path": "usr/bin/verilator_gantt",
+      "sha256": "46fa3c32402e75f6354a91c9bf83a28a930d2170d9f9142499950473b3c0693d",
+      "bytes": 21994
+    },
+    {
+      "path": "usr/bin/verilator_profcfunc",
+      "sha256": "3cc0ba5f3ea9190c1fa78d5d33588d85f4bd80df259c33b494dc3195c6e612d4",
+      "bytes": 7504
+    },
+    {
+      "path": "usr/share/doc/verilator/changelog.Debian.amd64.gz",
+      "sha256": "47cba6e2c93459b14e9f64f63611acd1184428225d2c0813d452905705323bb8",
+      "bytes": 242
+    },
+    {
+      "path": "usr/share/doc/verilator/changelog.Debian.gz",
+      "sha256": "3cba62812158090d597a4d9d92231f97b2c6162dab8d461c24adb630a5717510",
+      "bytes": 3667
+    },
+    {
+      "path": "usr/share/doc/verilator/changelog.gz",
+      "sha256": "f687ca59089094242b0c94bf61dc01e12a6c6132453763fb35ee3740029390c9",
+      "bytes": 65470
+    },
+    {
+      "path": "usr/share/doc/verilator/copyright",
+      "sha256": "c99001e5f7806a40b17a3f555ab464e4739527e43fef9745a455b83132aab97f",
+      "bytes": 9788
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_images/fig_gantt_min.png",
+      "sha256": "8dbca3e2ce27fe16387c285390dd8cc1ce2d30b25888d575dbc24fab6184bdd6",
+      "bytes": 37959
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/basic.css",
+      "sha256": "064a10609771d71578e935c97c15a32b1b14cabb5f2b97bb9cfe71969fa3192b",
+      "bytes": 14815
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/css/badge_only.css",
+      "symlink": "../../../../../sphinx_rtd_theme/static/css/badge_only.css",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/css/theme.css",
+      "symlink": "../../../../../sphinx_rtd_theme/static/css/theme.css",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/css/vlt_sphinx.css",
+      "sha256": "da8f0143c4d8b123682dbb3950745be92582d68bd136b2df3320b2694c05f29d",
+      "bytes": 382
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/doctools.js",
+      "symlink": "../../../../javascript/sphinxdoc/1.0/doctools.js",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/documentation_options.js",
+      "sha256": "f737e8fc69f7bd63acdab8f61a68f381efe5f187824a37b7f622a3c610675a53",
+      "bytes": 329
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/file.png",
+      "sha256": "5c4bc9a16aebf38c4b950f59b8e501ca36495328cb9eb622218bce9064a35e3e",
+      "bytes": 286
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/fonts/Lato-Bold.ttf",
+      "symlink": "../../../../../sphinx_rtd_theme/static/fonts/Lato-Bold.ttf",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/fonts/Lato-Bold.woff2",
+      "symlink": "../../../../../sphinx_rtd_theme/static/fonts/Lato-Bold.woff2",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/fonts/Lato-BoldItalic.ttf",
+      "symlink": "../../../../../sphinx_rtd_theme/static/fonts/Lato-BoldItalic.ttf",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/fonts/Lato-BoldItalic.woff2",
+      "symlink": "../../../../../sphinx_rtd_theme/static/fonts/Lato-BoldItalic.woff2",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/fonts/Lato-Italic.ttf",
+      "symlink": "../../../../../sphinx_rtd_theme/static/fonts/Lato-Italic.ttf",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/fonts/Lato-Italic.woff2",
+      "symlink": "../../../../../sphinx_rtd_theme/static/fonts/Lato-Italic.woff2",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/fonts/Lato-Regular.ttf",
+      "symlink": "../../../../../sphinx_rtd_theme/static/fonts/Lato-Regular.ttf",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/fonts/Lato-Regular.woff2",
+      "symlink": "../../../../../sphinx_rtd_theme/static/fonts/Lato-Regular.woff2",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/fonts/RobotoSlab-Bold.woff2",
+      "symlink": "../../../../../sphinx_rtd_theme/static/fonts/RobotoSlab-Bold.woff2",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/fonts/RobotoSlab-Regular.woff2",
+      "symlink": "../../../../../sphinx_rtd_theme/static/fonts/RobotoSlab-Regular.woff2",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/fonts/fontawesome-webfont.eot",
+      "symlink": "../../../../../sphinx_rtd_theme/static/fonts/fontawesome-webfont.eot",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/fonts/fontawesome-webfont.svg",
+      "symlink": "../../../../../sphinx_rtd_theme/static/fonts/fontawesome-webfont.svg",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/fonts/fontawesome-webfont.ttf",
+      "symlink": "../../../../../sphinx_rtd_theme/static/fonts/fontawesome-webfont.ttf",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/fonts/fontawesome-webfont.woff",
+      "symlink": "../../../../../sphinx_rtd_theme/static/fonts/fontawesome-webfont.woff",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/fonts/fontawesome-webfont.woff2",
+      "symlink": "../../../../../sphinx_rtd_theme/static/fonts/fontawesome-webfont.woff2",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/js/theme.js",
+      "symlink": "../../../../../sphinx_rtd_theme/static/js/theme.js",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/js/versions.js",
+      "sha256": "0998cc5239113cb6009ab1730e24ede85673759810ee8fb1e2f912305282a4aa",
+      "bytes": 6978
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/language_data.js",
+      "symlink": "../../../../javascript/sphinxdoc/1.0/language_data.js",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/minus.png",
+      "sha256": "47e7fc50db3699f1ca41ce9a2ffa202c00c5d1d5180c55f62ba859b1bd6cc008",
+      "bytes": 90
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/plus.png",
+      "sha256": "54115199b96a130cba02147c47c0deb43dcc9b9f08b5162bba8642b34980ac63",
+      "bytes": 90
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/pygments.css",
+      "sha256": "1accd27ffdaa3456771214dbc2f4d841d9ebe9324da2b23ac0333d35756f25e5",
+      "bytes": 4929
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/searchtools.js",
+      "symlink": "../../../../javascript/sphinxdoc/1.0/searchtools.js",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/sphinx_highlight.js",
+      "symlink": "../../../../javascript/sphinxdoc/1.0/sphinx_highlight.js",
+      "resolves": false
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/verilator_192_150_min.png",
+      "sha256": "0d05e449966fe3858d1f5fcbf1449ce6af89ca2ea2cf56a394e43d35a8e21de6",
+      "bytes": 4729
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/verilator_32x32_min.png",
+      "sha256": "bc99970d62052bfc3d09c97b541d92b220ae1fa632bf3c15d777f9f28e33ed7f",
+      "bytes": 1619
+    },
+    {
+      "path": "usr/share/doc/verilator/html/_static/verilator_logo.png",
+      "sha256": "ec5ffb7fa08587ad4915eacf39b3e4eef045d3b10da7a4499c3685948bf55388",
+      "bytes": 10160
+    },
+    {
+      "path": "usr/share/doc/verilator/html/changes.html",
+      "sha256": "f458ba09fd29c5db9f661eeda51cd73d8245ca08d68f5d1b4f215195ef319334",
+      "bytes": 332828
+    },
+    {
+      "path": "usr/share/doc/verilator/html/connecting.html",
+      "sha256": "19e572e43e17c413a3d3e4d58bf1475ff96fd007f2758d7f5af700275ea45388",
+      "bytes": 49484
+    },
+    {
+      "path": "usr/share/doc/verilator/html/contributing.html",
+      "sha256": "9aa9d4dc182de50e512896862c1c2a5a2a254a8a0546d14c4b856d06b25f5b15",
+      "bytes": 17413
+    },
+    {
+      "path": "usr/share/doc/verilator/html/contributors.html",
+      "sha256": "2e69266a951d634b93e0c13fdb131809872ef788e0a4c02daf6cd38c64660a47",
+      "bytes": 19884
+    },
+    {
+      "path": "usr/share/doc/verilator/html/copyright.html",
+      "sha256": "1fe68ca5071f703c7001a975ec196c85443fbf736dc7abc40ee2c635874ecedc",
+      "bytes": 6820
+    },
+    {
+      "path": "usr/share/doc/verilator/html/deprecations.html",
+      "sha256": "b56ed0d90ab40c0a08025b26dbe8b0087af4a1b307426b36f6c0812cbedef568",
+      "bytes": 7295
+    },
+    {
+      "path": "usr/share/doc/verilator/html/environment.html",
+      "sha256": "a9e5f5feecd7d4efc9367f438d4e4d071038307c4dd9cb8e3470c0cc1b3801cf",
+      "bytes": 22256
+    },
+    {
+      "path": "usr/share/doc/verilator/html/example_binary.html",
+      "sha256": "a25f5b9f8f38b0ab4407f0981b236b8db8dba00c9f297326772ed32b7343b6f6",
+      "bytes": 11161
+    },
+    {
+      "path": "usr/share/doc/verilator/html/example_cc.html",
+      "sha256": "86d0feca51b141558765c8bb42bbc23717df860d82e99bdaa153073dd1fe1f97",
+      "bytes": 13383
+    },
+    {
+      "path": "usr/share/doc/verilator/html/example_common_install.html",
+      "sha256": "14a1ecd68f1d5fce8b13f8cffcc2c02bbb6ac2eef6a2680cb69d567532ee6796",
+      "bytes": 6827
+    },
+    {
+      "path": "usr/share/doc/verilator/html/example_dist.html",
+      "sha256": "6e6e9bb54173db173f3565a361a973dd45d56807d3d549cc64b13180da9fcd78",
+      "bytes": 9127
+    },
+    {
+      "path": "usr/share/doc/verilator/html/example_sc.html",
+      "sha256": "cb3493a40685eef2f94132e0ed20eb0f0baf4787a566fb4c68f28d92be36bee0",
+      "bytes": 11517
+    },
+    {
+      "path": "usr/share/doc/verilator/html/examples.html",
+      "sha256": "b021ab6007575aa219b71cfe1a80e383e97f0af4612eae19bcfe1736b09446a6",
+      "bytes": 7722
+    },
+    {
+      "path": "usr/share/doc/verilator/html/exe_sim.html",
+      "sha256": "4abfd83bc66018b6b447e48304cf1d6fdd150c636a3652b3c6f243f19fc2c8ec",
+      "bytes": 25122
+    },
+    {
+      "path": "usr/share/doc/verilator/html/exe_verilator.html",
+      "sha256": "d9b6d4103c05fa890513e9e029bb597a0ebe51deb1eb4088c1e4b6b5e803f06a",
+      "bytes": 263208
+    },
+    {
+      "path": "usr/share/doc/verilator/html/exe_verilator_coverage.html",
+      "sha256": "1fd1979ee85cb36e9ef4e1ea919b22bbaf9262b6403cc33c83bdcb5daccaae67",
+      "bytes": 24381
+    },
+    {
+      "path": "usr/share/doc/verilator/html/exe_verilator_gantt.html",
+      "sha256": "c90c556a60ec404cbc2ca4e367c4689be5f467ed941c7de33b339dfc4c3b9d28",
+      "bytes": 12703
+    },
+    {
+      "path": "usr/share/doc/verilator/html/exe_verilator_profcfunc.html",
+      "sha256": "a77b35d4b3b5c1fb186c4756c140c6d5e3b318203a377a79d165c1fd676d87ed",
+      "bytes": 9678
+    },
+    {
+      "path": "usr/share/doc/verilator/html/executables.html",
+      "sha256": "95b93b74cf5d463c5b0efb9ac9f9db8d686756f685623e0ba5664b7ab7d7e1fb",
+      "bytes": 7448
+    },
+    {
+      "path": "usr/share/doc/verilator/html/extensions.html",
+      "sha256": "af8dde58b3c2606e01cc9a333e2e644b5e64aca22bd3abb1ee4f0e16da069237",
+      "bytes": 69754
+    },
+    {
+      "path": "usr/share/doc/verilator/html/faq.html",
+      "sha256": "7ba79edb0334a51081519b627062121cd862cd3f21e8258dadd2e49f3d6dfed8",
+      "bytes": 50233
+    },
+    {
+      "path": "usr/share/doc/verilator/html/files.html",
+      "sha256": "402b3665a1760e35aa7423b49f6e158eb33c6fd0f82a8121e1432a3401bebd89",
+      "bytes": 18803
+    },
+    {
+      "path": "usr/share/doc/verilator/html/index.html",
+      "sha256": "bcd48c18a5bb31e2744f8cdc4a4ec097d70dde999e9b7ff3dc01e48918ba7f6e",
+      "bytes": 13687
+    },
+    {
+      "path": "usr/share/doc/verilator/html/install-cmake.html",
+      "sha256": "8a646b4025c5eb8690108fb348d902eab5fd69572cb83a7efbd5545f2d1e7805",
+      "bytes": 10894
+    },
+    {
+      "path": "usr/share/doc/verilator/html/install.html",
+      "sha256": "bb3b46756d849f4951191ed00e2ae3b79c4097c3b8ff4ef85df55ec12de50be4",
+      "bytes": 41917
+    },
+    {
+      "path": "usr/share/doc/verilator/html/languages.html",
+      "sha256": "6f003de1333c59dace20edaa5d3a3a66cb1693175d2e6d9d7d4f7c172e2c4510",
+      "bytes": 42274
+    },
+    {
+      "path": "usr/share/doc/verilator/html/objects.inv",
+      "sha256": "036d13387821581a9ba1b46f93138083fa2052a3a6bc08553f296d2974d49101",
+      "bytes": 6257
+    },
+    {
+      "path": "usr/share/doc/verilator/html/overview.html",
+      "sha256": "c60ed24d7b6c1b7ec79cabdb18b645d2ae9793abf7815f490659d21371dd92d8",
+      "bytes": 9702
+    },
+    {
+      "path": "usr/share/doc/verilator/html/search.html",
+      "sha256": "22625587583ed29791bb82fe48753d9e9182e1b7030bf33a7d142307944740ee",
+      "bytes": 5919
+    },
+    {
+      "path": "usr/share/doc/verilator/html/searchindex.js",
+      "sha256": "aa8fa32952cb855c3616c60c064f3ec5ae27766d41a15e8e211c4fab4baa0df4",
+      "bytes": 239579
+    },
+    {
+      "path": "usr/share/doc/verilator/html/simulating.html",
+      "sha256": "1b3aadf5787fb55f680f9a84552dfdfa776a3184953181fd7fe19bbcd37577fb",
+      "bytes": 51865
+    },
+    {
+      "path": "usr/share/doc/verilator/html/verilating.html",
+      "sha256": "e720262a4935d461602b342ed3ded70d5ca5236b7ff2190f6c5c819b05364a48",
+      "bytes": 50809
+    },
+    {
+      "path": "usr/share/doc/verilator/html/warnings.html",
+      "sha256": "2180f34509d6b11939cc8e965fe897d21955c5d83ea87c82078019ea4795ed49",
+      "bytes": 188104
+    },
+    {
+      "path": "usr/share/doc/verilator/internals.rst.gz",
+      "sha256": "739b4cd72cb7f54b4445f7df76b23a55e69c4534c42b59deefce4c371cd8088f",
+      "bytes": 31998
+    },
+    {
+      "path": "usr/share/doc/verilator/verilator.pdf",
+      "sha256": "4c3218935ada9eb653a4b44f944046823e6c96ed238dbf10edf12b22562c7868",
+      "bytes": 879174
+    },
+    {
+      "path": "usr/share/doc-base/verilator.verilator",
+      "sha256": "b0fe65f39bc1b05c8ab7227f1a7cec52106aeb1b317a8094d996f715ebda6f03",
+      "bytes": 350
+    },
+    {
+      "path": "usr/share/lintian/overrides/verilator",
+      "sha256": "ddf83225e6ad0fcf13a046d0b07e52480bc06caece17500588677d4023a68291",
+      "bytes": 1347
+    },
+    {
+      "path": "usr/share/man/man1/verilator.1.gz",
+      "sha256": "bd04bc393d57137b720ca5f1e0e3667d789ac8b00be0df9c81e159e97b9f91ba",
+      "bytes": 5975
+    },
+    {
+      "path": "usr/share/man/man1/verilator_bin.1.gz",
+      "symlink": "verilator.1.gz",
+      "resolves": true
+    },
+    {
+      "path": "usr/share/man/man1/verilator_bin_dbg.1.gz",
+      "symlink": "verilator.1.gz",
+      "resolves": true
+    },
+    {
+      "path": "usr/share/man/man1/verilator_coverage.1.gz",
+      "sha256": "85f9d77e670ba90ef8859e6eff36247214cc541a5cc75d3ab8cc6d44e226bbcd",
+      "bytes": 1777
+    },
+    {
+      "path": "usr/share/man/man1/verilator_coverage_bin_dbg.1.gz",
+      "symlink": "verilator_coverage.1.gz",
+      "resolves": true
+    },
+    {
+      "path": "usr/share/man/man1/verilator_gantt.1.gz",
+      "sha256": "62e0ecf77ca23b477aa7b79ae7d2c98f26511832d322cad6525d43710f2fc9b6",
+      "bytes": 721
+    },
+    {
+      "path": "usr/share/man/man1/verilator_profcfunc.1.gz",
+      "sha256": "8a5eb75780562d9132eb9377a3f38414007e21a6a2d73de0de31cbbf170fa39f",
+      "bytes": 686
+    },
+    {
+      "path": "usr/share/pkgconfig/verilator.pc",
+      "sha256": "4ba14a5a9358be12a9a9e430758caf48724bd5e22f781fefad716c11edf1ad07",
+      "bytes": 269
+    },
+    {
+      "path": "usr/share/verilator/bin/verilator",
+      "sha256": "837333461ec6f9886f3657b446e162fbb353043a08f6f267d72c8e68cbbc4d50",
+      "bytes": 675
+    },
+    {
+      "path": "usr/share/verilator/bin/verilator_bin",
+      "sha256": "837333461ec6f9886f3657b446e162fbb353043a08f6f267d72c8e68cbbc4d50",
+      "bytes": 675
+    },
+    {
+      "path": "usr/share/verilator/bin/verilator_bin_dbg",
+      "sha256": "837333461ec6f9886f3657b446e162fbb353043a08f6f267d72c8e68cbbc4d50",
+      "bytes": 675
+    },
+    {
+      "path": "usr/share/verilator/bin/verilator_ccache_report",
+      "sha256": "fedeb64af660d2ad23b97d961d39046c0b014c69ae71b4285598ebec57e90377",
+      "bytes": 3201
+    },
+    {
+      "path": "usr/share/verilator/bin/verilator_coverage",
+      "sha256": "837333461ec6f9886f3657b446e162fbb353043a08f6f267d72c8e68cbbc4d50",
+      "bytes": 675
+    },
+    {
+      "path": "usr/share/verilator/bin/verilator_coverage_bin_dbg",
+      "sha256": "837333461ec6f9886f3657b446e162fbb353043a08f6f267d72c8e68cbbc4d50",
+      "bytes": 675
+    },
+    {
+      "path": "usr/share/verilator/bin/verilator_gantt",
+      "sha256": "837333461ec6f9886f3657b446e162fbb353043a08f6f267d72c8e68cbbc4d50",
+      "bytes": 675
+    },
+    {
+      "path": "usr/share/verilator/bin/verilator_includer",
+      "sha256": "f70c95f16db8311f26d031103a365615a21361cd88b4f44fc6fb02665681e70d",
+      "bytes": 960
+    },
+    {
+      "path": "usr/share/verilator/bin/verilator_profcfunc",
+      "sha256": "837333461ec6f9886f3657b446e162fbb353043a08f6f267d72c8e68cbbc4d50",
+      "bytes": 675
+    },
+    {
+      "path": "usr/share/verilator/examples/cmake_hello_c/CMakeLists.txt",
+      "sha256": "68108ea0e2e0f65e1958b0dbed9de12190c51e7d11cb92e42c371f2476ee0e06",
+      "bytes": 1307
+    },
+    {
+      "path": "usr/share/verilator/examples/cmake_hello_c/Makefile",
+      "sha256": "722e98e1defbdea35a30027fc8ff35b3f5eb5024c0b9251a4faa2e1012a496d7",
+      "bytes": 2106
+    },
+    {
+      "path": "usr/share/verilator/examples/cmake_hello_sc/CMakeLists.txt",
+      "sha256": "c58c1ab3fac13e585cf5c13ba3998518bec83ac36963cc3e11fc757d0bd675c1",
+      "bytes": 1623
+    },
+    {
+      "path": "usr/share/verilator/examples/cmake_hello_sc/Makefile",
+      "sha256": "8e49925fdbceda2c3818c06f4e124c669da0def4c54a68b92797868b4b94a1f7",
+      "bytes": 3538
+    },
+    {
+      "path": "usr/share/verilator/examples/cmake_protect_lib/CMakeLists.txt",
+      "sha256": "80e8880ae830297dd6d1b9206acb4dcf90a87a8863c5cc4ebcfc889100832e51",
+      "bytes": 2547
+    },
+    {
+      "path": "usr/share/verilator/examples/cmake_protect_lib/Makefile",
+      "sha256": "8a8e95d7fd36201ea161cfad46e467a887a1e676aa31ca324527e2aeb48e60c3",
+      "bytes": 2106
+    },
+    {
+      "path": "usr/share/verilator/examples/cmake_tracing_c/CMakeLists.txt",
+      "sha256": "be0544881ff844d9426ea033ba476d66e91209f57e506a79c677bd76dfd87c52",
+      "bytes": 1418
+    },
+    {
+      "path": "usr/share/verilator/examples/cmake_tracing_c/Makefile",
+      "sha256": "bf65ffbf32b4d323b989cca456f18f75cece529b07f98f76a3bf5f4065971ff9",
+      "bytes": 2304
+    },
+    {
+      "path": "usr/share/verilator/examples/cmake_tracing_sc/CMakeLists.txt",
+      "sha256": "7f30a5a9ddc1e472578969e84e7a6f5a5b4bede79ce68357176bba8302668179",
+      "bytes": 1734
+    },
+    {
+      "path": "usr/share/verilator/examples/cmake_tracing_sc/Makefile",
+      "sha256": "8ba3eed7d71c1c38e9c2e733e8e36e8dcf1d763d073facc38293938e9ea7d840",
+      "bytes": 3575
+    },
+    {
+      "path": "usr/share/verilator/examples/json_py/Makefile",
+      "sha256": "8d1bc73546144e00e4e2291316c5aa512422fe96e955e18d1b2ca6e23bbe7a95",
+      "bytes": 1928
+    },
+    {
+      "path": "usr/share/verilator/examples/json_py/sub.v",
+      "sha256": "af422d8ca80d65f36cb0f06cc3348b691eb3c2bf8b61fdc9d6e12f405742e640",
+      "bytes": 452
+    },
+    {
+      "path": "usr/share/verilator/examples/json_py/top.v",
+      "sha256": "ba08a809f1848d92ca521b00c822cd005c023e38e8a3d7aaf87f679544dddfdb",
+      "bytes": 859
+    },
+    {
+      "path": "usr/share/verilator/examples/json_py/vl_file_copy",
+      "sha256": "f7cd08d0b79af52ff99f3efac3ea03e6fa1e77ea526d579f0eda7713ee124430",
+      "bytes": 4346
+    },
+    {
+      "path": "usr/share/verilator/examples/json_py/vl_hier_graph",
+      "sha256": "0b13dc113f4834eac47d9481d1a6c96dbb8b50490044fb46aa73b21234872800",
+      "bytes": 6016
+    },
+    {
+      "path": "usr/share/verilator/examples/make_hello_binary/Makefile",
+      "sha256": "c4ba4d98f178f28af3d9b8d170764e980b5196151f29abc5561e9037639db5b4",
+      "bytes": 1836
+    },
+    {
+      "path": "usr/share/verilator/examples/make_hello_binary/top.v",
+      "sha256": "e6729fc473706241b81bd7ac5b6c318be46fb3ad9ad6edbf06e177442356b425",
+      "bytes": 373
+    },
+    {
+      "path": "usr/share/verilator/examples/make_hello_c/Makefile",
+      "sha256": "f58aa390332ab2a169d2cb88e3dff933abe490d8b9f918f55805af0b93abf316",
+      "bytes": 1851
+    },
+    {
+      "path": "usr/share/verilator/examples/make_hello_c/sim_main.cpp",
+      "sha256": "a3a088e71cdc12f333aeb328bceffe04583600fbcc16a4f6bd7c116bebb7fee9",
+      "bytes": 1396
+    },
+    {
+      "path": "usr/share/verilator/examples/make_hello_c/top.v",
+      "sha256": "e6729fc473706241b81bd7ac5b6c318be46fb3ad9ad6edbf06e177442356b425",
+      "bytes": 373
+    },
+    {
+      "path": "usr/share/verilator/examples/make_hello_sc/Makefile",
+      "sha256": "eeee7bc230de0dd06bd9efb634a9ad04872799367839e58911eaa03c9b6945bf",
+      "bytes": 2177
+    },
+    {
+      "path": "usr/share/verilator/examples/make_hello_sc/sc_main.cpp",
+      "sha256": "fb28785a24933ce0be206d1748e596ca300c75f4c917807dc1ae3e41a9ac29e7",
+      "bytes": 1406
+    },
+    {
+      "path": "usr/share/verilator/examples/make_hello_sc/top.v",
+      "sha256": "e6729fc473706241b81bd7ac5b6c318be46fb3ad9ad6edbf06e177442356b425",
+      "bytes": 373
+    },
+    {
+      "path": "usr/share/verilator/examples/make_protect_lib/Makefile",
+      "sha256": "1ca81c730700ba115fdfca3ce600b0eb5a5269a35dd2c36ab2e407f36849986f",
+      "bytes": 3738
+    },
+    {
+      "path": "usr/share/verilator/examples/make_protect_lib/secret_impl.v",
+      "sha256": "a690fb1fce8e7b82f7ebe6d8df944ee2b2109b209cb636bf3ee62e3e05aafa82",
+      "bytes": 749
+    },
+    {
+      "path": "usr/share/verilator/examples/make_protect_lib/sim_main.cpp",
+      "sha256": "be1ba0a92feeeffa9370d5a15ae36918cff3b0fcce6339fbbe954b4d6e3b38d1",
+      "bytes": 1892
+    },
+    {
+      "path": "usr/share/verilator/examples/make_protect_lib/top.v",
+      "sha256": "df38ab8c8542c185f929e5cb9a37187cc89566c98f3b8ef39cc64649352d74af",
+      "bytes": 874
+    },
+    {
+      "path": "usr/share/verilator/examples/make_tracing_c/Makefile",
+      "sha256": "152df03f1c16d9718afc3d972271b29a4149a4a0b72084132a003fb21772ca93",
+      "bytes": 3058
+    },
+    {
+      "path": "usr/share/verilator/examples/make_tracing_c/Makefile_obj",
+      "sha256": "54d747a06542962599f46c379b09a94161c5321b90a89baeba8f619af93abad0",
+      "bytes": 1823
+    },
+    {
+      "path": "usr/share/verilator/examples/make_tracing_c/input.vc",
+      "sha256": "832175d6af472386b812948918e8928980c1e5f4568dc83493c425775d61de4b",
+      "bytes": 129
+    },
+    {
+      "path": "usr/share/verilator/examples/make_tracing_c/sim_main.cpp",
+      "sha256": "5d7a1423cb0281b997a544ebc03b6f7351a3406f39e5f88a1712c3824d11832e",
+      "bytes": 4837
+    },
+    {
+      "path": "usr/share/verilator/examples/make_tracing_c/sub.v",
+      "sha256": "6d2e49069d98911889e6aefc19351f81dd1df585734fbe0831f1602a1dd037b1",
+      "bytes": 1129
+    },
+    {
+      "path": "usr/share/verilator/examples/make_tracing_c/top.v",
+      "sha256": "3922a859e42d48a4460a0f40e968926d94e88ea8901ec1eb46055571ba13c2a4",
+      "bytes": 1487
+    },
+    {
+      "path": "usr/share/verilator/examples/make_tracing_sc/Makefile",
+      "sha256": "2ae0dbde488a204d8034558c6f06d7b07fa5008f8a40fdff7d68b3169153a2cf",
+      "bytes": 3395
+    },
+    {
+      "path": "usr/share/verilator/examples/make_tracing_sc/Makefile_obj",
+      "sha256": "5db69d2747d3fbfcb8043781720a1fffa2ec79286c724f1118852160d746c7c4",
+      "bytes": 2266
+    },
+    {
+      "path": "usr/share/verilator/examples/make_tracing_sc/input.vc",
+      "sha256": "832175d6af472386b812948918e8928980c1e5f4568dc83493c425775d61de4b",
+      "bytes": 129
+    },
+    {
+      "path": "usr/share/verilator/examples/make_tracing_sc/sc_main.cpp",
+      "sha256": "7c16fce654f97d90b4fbf84af4d6ec5d8f246603c090c25ad306aae28355eddf",
+      "bytes": 4120
+    },
+    {
+      "path": "usr/share/verilator/examples/make_tracing_sc/sub.v",
+      "sha256": "ae89e803311e43f5d8d3b54c2830fe2aebce88fcf750122fc2278b8415d85146",
+      "bytes": 1574
+    },
+    {
+      "path": "usr/share/verilator/examples/make_tracing_sc/top.v",
+      "sha256": "d280fca985f6085f3c1a2aa1252c7d676f66fee1b7fa0d9eb3e96efdb960f00c",
+      "bytes": 1381
+    },
+    {
+      "path": "usr/share/verilator/include/gtkwave/fastlz.c",
+      "sha256": "35d2b3ab8ea04615cc56dee1a7017610f459b57aef51d9de69c71c24bd9ee719",
+      "bytes": 13561
+    },
+    {
+      "path": "usr/share/verilator/include/gtkwave/fastlz.h",
+      "sha256": "4dd943f4063e0d13034a87bd66a54f689014b3ea5f92c07b9938f271ffa38a0c",
+      "bytes": 3685
+    },
+    {
+      "path": "usr/share/verilator/include/gtkwave/fst_config.h",
+      "sha256": "d8b84770187034bb7aee6c41eeb49725e84ad9dc1d3302903dfc979b03b4d6ad",
+      "bytes": 429
+    },
+    {
+      "path": "usr/share/verilator/include/gtkwave/fst_win_unistd.h",
+      "sha256": "15ec1054e9c5fa8118060ca5b5dab0bbb2d4879c43b53c9457cb416fce97b19f",
+      "bytes": 1593
+    },
+    {
+      "path": "usr/share/verilator/include/gtkwave/fstapi.c",
+      "sha256": "287306691d8e75b42c8514e5039512339d27f2ab0405d25a39b4b2177677cbe6",
+      "bytes": 257305
+    },
+    {
+      "path": "usr/share/verilator/include/gtkwave/fstapi.h",
+      "sha256": "9b401991a1d433eec862a8636e2d218e9e572df7a4e62643ebccbf88fc417377",
+      "bytes": 18479
+    },
+    {
+      "path": "usr/share/verilator/include/gtkwave/lz4.c",
+      "sha256": "af9087bb6d6155079cccaf8635acc6590b8a6f2fc98efce35e926f30f79366b8",
+      "bytes": 115587
+    },
+    {
+      "path": "usr/share/verilator/include/gtkwave/lz4.h",
+      "sha256": "46c366fa9984a5f0aeecf64bf630f23011ced936b9650a1f06531f79c29b7b15",
+      "bytes": 44985
+    },
+    {
+      "path": "usr/share/verilator/include/gtkwave/wavealloca.h",
+      "sha256": "c328c316a145aba0473ac6a5201ca832da4bbb5c97374e914cb4ac400b0bb235",
+      "bytes": 1431
+    },
+    {
+      "path": "usr/share/verilator/include/verilated.cpp",
+      "sha256": "ccb2ed63ef9e66fe27f35da19985326e237eaa65bcec4b5f6eb8d491e5a1bc08",
+      "bytes": 142456
+    },
+    {
+      "path": "usr/share/verilator/include/verilated.h",
+      "sha256": "820e0283832d923d2445a916ac247e24d743ece653c5bd8425a3adb00d02d86b",
+      "bytes": 46743
+    },
+    {
+      "path": "usr/share/verilator/include/verilated.mk",
+      "sha256": "74121398e5be12bf03721f1f0f5ce75e7c703635ec7e50920d43f9c4e31fcc0c",
+      "bytes": 12725
+    },
+    {
+      "path": "usr/share/verilator/include/verilated.v",
+      "sha256": "fdeea477d06b8029fed8c4e819a6a3fcd1140c01979c79231efaa1b4eeb0bb0d",
+      "bytes": 865
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_config.h",
+      "sha256": "da43e46346050331c1166a7e44f74521c6dd20b37ca40522cc1024f864719398",
+      "bytes": 1204
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_config.h.in",
+      "sha256": "12a46879d5c3c5253a3995ad4614d375ad88c58d831c6021f78d22c0fff0b3eb",
+      "bytes": 1230
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_cov.cpp",
+      "sha256": "384718d1f41b246fe91aa1609f9a64fdebae358edaaa2034479fc679002e60a4",
+      "bytes": 21429
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_cov.h",
+      "sha256": "8e2a01657654fb7c14bb904063ab1ad682bfc369a19356a6a786ad70d67856b7",
+      "bytes": 7675
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_cov_key.h",
+      "sha256": "4b54ee7db0d860829e213038ced13636374650fd9f450bd6570b548ab1a6e77f",
+      "bytes": 3911
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_dpi.cpp",
+      "sha256": "d1ef99d027686e76fff9d28c84845d84542183ad25b0e9a78b91fd4159bc56bc",
+      "bytes": 33336
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_dpi.h",
+      "sha256": "b792d9f654d5b34c3f7214f5a8f6d8c8c6e2845856d02153758537f4b883b37b",
+      "bytes": 3754
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_fst_c.cpp",
+      "sha256": "64c9d559dad6f8931e04bca6b2295b8e9180fe74e731ade3f476b3d913034162",
+      "bytes": 15847
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_fst_c.h",
+      "sha256": "d9a99368b41fcc6cadeb255bf0f9efb06065beaa4276cc419e8c9a64d8063ca3",
+      "bytes": 10613
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_fst_sc.cpp",
+      "sha256": "deaa26b19c7e35b0b0720abfd69d213918cd24d2768732d829adbbf34ada9eb8",
+      "bytes": 971
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_fst_sc.h",
+      "sha256": "d67162d2593e9346748b35468fb60ffe74817f413349a2628d8f127ec5f5edf0",
+      "bytes": 1993
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_funcs.h",
+      "sha256": "8a0d1fcbd257e3531b7fa0b05adc3442c75d82955b67475e6d6e55ceca3742d8",
+      "bytes": 122145
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_imp.h",
+      "sha256": "ec066eff04d6e67d925db3c0b92cf97091513db9268e8e94c4520bda349f36a4",
+      "bytes": 23453
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_intrinsics.h",
+      "sha256": "b3ade049f8535411ae15bec23a81aae8f7a03a37233af2375b1198ff23ea0440",
+      "bytes": 1559
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_probdist.cpp",
+      "sha256": "f6289a347e7a0e7698f758f09d6f216f070bd0813f81017b4379d0e2ba7a95b2",
+      "bytes": 7469
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_profiler.cpp",
+      "sha256": "71e500d0e66e1d4b36af8196cac3dcd211a1796cd90b11ce0fe50e709a84b3b1",
+      "bytes": 8756
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_profiler.h",
+      "sha256": "071e9f3504d4ca34ee63e179624d44d3350c1f7cd4619455c5ace230ad2554c1",
+      "bytes": 9938
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_random.cpp",
+      "sha256": "d35024ebba2773a4d51cb77b40a2389bbe97493d3824d0c77a587e05c01cff7b",
+      "bytes": 17164
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_random.h",
+      "sha256": "f67bfa57c18ad8b464d16ab9c2fb5daafc90c0f2dbe143c38a4196ba8a38ac13",
+      "bytes": 15995
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_save.cpp",
+      "sha256": "77db7c9c104b2caa43e47b9a4e46cef3e99970e26eaa2daf5476e56ebef89eed",
+      "bytes": 9626
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_save.h",
+      "sha256": "84a23171e1fa76d84d7b6d94c7d5057fbba32340f2459986df6b9fff2e3aedb0",
+      "bytes": 12249
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_sc.h",
+      "sha256": "8560235165692a06924c24b8ff3c2c273f194e7ee8c77e52c598ff4824daaeae",
+      "bytes": 2135
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_sc_trace.h",
+      "sha256": "143e16983be468aeba7eb153965f184042ce886641352ae3903ec0b7ce798677",
+      "bytes": 9551
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_std.sv",
+      "sha256": "c0ca0738f363220c6ede86c0b057140681e835c55cc6cb8a86d168c0e523c860",
+      "bytes": 5345
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_std_waiver.vlt",
+      "sha256": "303a6871c6872397e75b5fc92ee9a23292e4f9047ab01c3e7fb8fc1ad8f5cc68",
+      "bytes": 2787
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_sym_props.h",
+      "sha256": "3b048c51483ae2fcf8d7fa8e69c447b1d64cbe4700b06aeb014b46fecbeb3cee",
+      "bytes": 10406
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_syms.h",
+      "sha256": "997c65399d9b4e857e50419387e6a7d836ab15e835184265440b5692b067db47",
+      "bytes": 2696
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_threads.cpp",
+      "sha256": "9350dd53366540e16f2516e1391ff6b50520da189206d5d76bcb0fefc9fe761a",
+      "bytes": 3505
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_threads.h",
+      "sha256": "c4f877503808604a97642c73e2633035dd517fcdbffe89d437de3c47ae4892a1",
+      "bytes": 7846
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_timing.cpp",
+      "sha256": "e523bb2d9a3ab7bfdc7f0fa0d38b0d00464ba1c4a9bcb2fb1506462d80dd76fb",
+      "bytes": 8749
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_timing.h",
+      "sha256": "69257edb917f9fbcbd51139efc46499a11bdbeb39fc42bba563fbad8f3c5b0f5",
+      "bytes": 20032
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_trace.h",
+      "sha256": "21a8f9facaf3548778ad85f41b5ac0ff83f0c9def61fd3be684d0f252d2a56e4",
+      "bytes": 24972
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_trace_imp.h",
+      "sha256": "1041ad571092323e938c0aed4ea87fdcbf0df1af44c3d5ac536dddb5543c4c94",
+      "bytes": 36095
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_types.h",
+      "sha256": "6791c1970b5b89342422be6aa8d3df51167d22d6c872b5e4e253553fb03a9275",
+      "bytes": 75500
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_vcd_c.cpp",
+      "sha256": "37d57a7975c10333dc219581c08818c1ff555990d86765f5307c059c038e4686",
+      "bytes": 24562
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_vcd_c.h",
+      "sha256": "bea1877eb983e91a1dd63c8cf44919989978f1f632b4d553a83eefb1f1b2cba4",
+      "bytes": 14026
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_vcd_sc.cpp",
+      "sha256": "54be81e511bd3d04ca4159d208f318ea7498a5d9367e1dd5cbd5078801cd0593",
+      "bytes": 976
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_vcd_sc.h",
+      "sha256": "f9204fcce6286a789e126a8baf4a08727ac072410d84243bffb835e0d20f16cc",
+      "bytes": 2049
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_vpi.cpp",
+      "sha256": "803d2b8dfb1766ff4d14f0e89a6ab79078c569e33856fbcdf30815e7ea063a86",
+      "bytes": 123199
+    },
+    {
+      "path": "usr/share/verilator/include/verilated_vpi.h",
+      "sha256": "fea4883720889133310cf3d9c3f74aeeacbb60c7a72467e5619bc0aa88337ade",
+      "bytes": 2682
+    },
+    {
+      "path": "usr/share/verilator/include/verilatedos.h",
+      "sha256": "a741a0b58f747a0eb4db2cab692ab403395672aec2f8dac50ccbe9fb568b8c23",
+      "bytes": 26863
+    },
+    {
+      "path": "usr/share/verilator/include/verilatedos_c.h",
+      "sha256": "be68457cea3d1c326c6519052407d80fe5fc83b1e7337f357c5085bbf662b016",
+      "bytes": 4635
+    },
+    {
+      "path": "usr/share/verilator/include/vltstd/sv_vpi_user.h",
+      "sha256": "c9e43aed99b7845af2eea8642d8a06b0e35f5e6fdec9155709fa66924866ddf2",
+      "bytes": 23563
+    },
+    {
+      "path": "usr/share/verilator/include/vltstd/svdpi.h",
+      "sha256": "2528c8e529b66dd8e795c8a0fee326166cc51f7dee8fc6a0c6c930534fc780a6",
+      "bytes": 20054
+    },
+    {
+      "path": "usr/share/verilator/include/vltstd/vpi_user.h",
+      "sha256": "32a9cdd018660b47ca22c7962aa135f4170c3f2564dc7d277d626125c0e007e5",
+      "bytes": 45761
+    },
+    {
+      "path": "usr/share/verilator/verilator-config-version.cmake",
+      "sha256": "b2a3b78cdfb111e75f76697b350f7da3cbb2ac19b3847535271854f0d1002dec",
+      "bytes": 925
+    },
+    {
+      "path": "usr/share/verilator/verilator-config.cmake",
+      "sha256": "6c4b9a3178280ff9b1fe664e175e1f97bae88b7654b0be65c439554ef6f4b2cb",
+      "bytes": 18798
+    }
+  ]
+}

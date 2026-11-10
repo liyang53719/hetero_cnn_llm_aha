@@ -35,3 +35,7 @@
 这些证据新增 phase1 的 P1式 runtime16/legacy 与 P3式 runtime32/guarded 单头覆盖，以及 phase2 所需 exp 原语取样覆盖。仍未执行完整 phase2 owner 的2,209次exp/向量运算、完整phase3–17、多head、真实权重完整block、Host或最终RTL。完整五块仍 **0/5**；没有整块MAC利用率或QoR新结果。下一步沿原 derived/pair owner 与实际向量算术连接推进，先估算完整phase2成本并设置独立边界，勿反复执行已通过phase1或以协议替身冒数值通过。
 
 本批只提交测试源码、pin/hash和精简摘要。生成刺激、raw sample word数组、IR、运行依赖、权重/NPZ和原始日志继续留在本地，不发布；未知旧PID及其保留不变。
+
+## 2026-11-10 续进
+
+原 phase2 接真实 scalar/vector 已通过，并已验证原 phase1→2→transpose3/4→默认 V8 phase5 的实际 receipt 和同内存写入来源。新证据、运行限制及后续边界见 [2026-11-10 连贯数值计划](ORIGINAL_PREFILL_NUMERIC_20261110_ZH.md)。旧记录保持各轮实际范围，不能据其未执行阶段继承通过。

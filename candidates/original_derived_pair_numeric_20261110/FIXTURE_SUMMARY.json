@@ -1,0 +1,20 @@
+{
+  "synthetic": true,
+  "phase1_handoff": "oracle-generated; receipt supplied by testbench, not producer provenance",
+  "head": 0,
+  "chunk": 0,
+  "runtime_value_heads": 16,
+  "bank_lanes": 32,
+  "cumsum_policy": 0,
+  "decay_policy": 0,
+  "input_beats": 1600,
+  "expected_write_beats": 2816,
+  "expected_write_bytes": 180224,
+  "expected_read_bytes": 235584,
+  "expected_exp_calls": 2209,
+  "expected_vector_add_calls": 2144,
+  "expected_vector_mul_calls": 2560,
+  "decay_hex": "3e98626b",
+  "input_sha256": "b97bc49ca7f4d8c68e4f430d2d4a60743d6ed13e8e4cc66a05a8f9631e6dfe25",
+  "expected_sha256": "e50376da9185df960e92a6b7f7d5842b7c5ba951fb888a2d79371e39ee54dad5"
+}

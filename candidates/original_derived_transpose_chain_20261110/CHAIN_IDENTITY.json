@@ -1,0 +1,8 @@
+{
+  "phase2_wrapper_matches_baseline": true,
+  "phase2_wrapper_sha256": "45914c1fecd2c1286a356a0024bd3e7f70e340cfc2642fdf14740177e42667c6",
+  "original_transpose_source_sha256": "839de9dba4d3a39670d8e33744dc9beb56399f9e39c3f7ab9f32d1cbca99a38a",
+  "hardware_source_modified": false,
+  "scalar_and_vector_instances": "original scalar plus original32-lane bank; transpose adds no ALU",
+  "physical_allocation_proof": false
+}

@@ -1,0 +1,28 @@
+{
+  "phase1_handoff": {
+    "cycle": 6593,
+    "reads": 1600,
+    "writes": 1600,
+    "actual_scalar_add_requests": 64,
+    "actual_scalar_add_results": 64,
+    "receipt": "actual original LoadPrep.done accepted directly into Derived.job",
+    "pending_memory_response": false
+  },
+  "phase2_handoff": {
+    "cycle": 73176,
+    "cumulative_reads": 5281,
+    "cumulative_writes": 4416,
+    "receipt": "actual original Derived.done accepted directly into Transpose.job",
+    "pending_memory_response": false
+  },
+  "phase1_written_scratch_beats_required": 1600,
+  "actual_phase2_ke_write_beats_required": 512,
+  "initial_memory_contains_scratch": false,
+  "actual_memory_only_updated_on_accepted_write": true,
+  "prepared_input": "synthetic prepared Q/K/V/logdecay/beta",
+  "remaining_synthetic_prerequisites": [
+    "prepared producer/preprocessor receipt",
+    "initial-state prerequisite receipt"
+  ],
+  "testbench_routing": "single-job sequential testbench, not production scheduler/authority router"
+}

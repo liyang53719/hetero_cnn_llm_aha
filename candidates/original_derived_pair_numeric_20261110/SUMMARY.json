@@ -1,0 +1,117 @@
+{
+  "status": "FULL_PHASE2_ONE_HEAD_CHUNK_PASS",
+  "observed": {
+    "cycles": 66582,
+    "reads": 3681,
+    "writes": 2816,
+    "expRequests": 2209,
+    "expResults": 2209,
+    "addRequests": 2144,
+    "addResults": 2144,
+    "mulRequests": 2560,
+    "mulResults": 2560,
+    "done": true,
+    "seconds": 1.001867522
+  },
+  "raw_fp32_write_mismatches": 0,
+  "checked_decay_handoff": true,
+  "checked_decay_context_layout_head_chunk_numeric": true,
+  "held_done_cycles": 3,
+  "phase1_prerequisite": "Synthetic oracle-generated prepared input and receipt, no actual producer/consumer provenance claim",
+  "runtime_value_heads": 16,
+  "head": 0,
+  "chunk": 0,
+  "cumsum_policy": 0,
+  "decay_policy": 0,
+  "vector_policy": 0,
+  "bank_source_lanes": 32,
+  "bank_qualification": "Unchanged original32-lane source; low16path tested, high16+0 may be optimized, no physicalresource proof",
+  "routing": "Single-owner testbench adapter, not production authority router",
+  "compile": {
+    "stage": "compile",
+    "exit": 0,
+    "seconds": 13.253499442002067,
+    "timeout": false,
+    "terminal_returncode": 0,
+    "identity": {
+      "pid": 10,
+      "pgid": 10,
+      "boot_id": "4e77247b-66d3-42ae-803a-472b503e713a",
+      "starttime_ticks": "1854785"
+    }
+  },
+  "native_simulation": {
+    "stage": "simulation",
+    "exit": 0,
+    "seconds": 31.51432948100046,
+    "timeout": false,
+    "terminal_returncode": 0,
+    "identity": {
+      "pid": 23,
+      "pgid": 23,
+      "boot_id": "4e77247b-66d3-42ae-803a-472b503e713a",
+      "starttime_ticks": "1856110"
+    }
+  },
+  "native_elaboration_build_seconds": 30.198369952,
+  "loop_cycles_per_second": 66457.88843128104,
+  "actual_memory_beats": 4416,
+  "actual_memory_sha256": "b77acbc4009a1956e171dd6d9b7fb54e352c66c20216930611f15c0077aa4177",
+  "actual_memory_verified_equals_inputs_union_expected": true,
+  "fixture": {
+    "synthetic": true,
+    "phase1_handoff": "oracle-generated; receipt supplied by testbench, not producer provenance",
+    "head": 0,
+    "chunk": 0,
+    "runtime_value_heads": 16,
+    "bank_lanes": 32,
+    "cumsum_policy": 0,
+    "decay_policy": 0,
+    "input_beats": 1600,
+    "expected_write_beats": 2816,
+    "expected_write_bytes": 180224,
+    "expected_read_bytes": 235584,
+    "expected_exp_calls": 2209,
+    "expected_vector_add_calls": 2144,
+    "expected_vector_mul_calls": 2560,
+    "decay_hex": "3e98626b",
+    "input_sha256": "b97bc49ca7f4d8c68e4f430d2d4a60743d6ed13e8e4cc66a05a8f9631e6dfe25",
+    "expected_sha256": "e50376da9185df960e92a6b7f7d5842b7c5ba951fb888a2d79371e39ee54dad5"
+  },
+  "calibration": {
+    "status": "CPU_LIMIT_BEFORE_FIRST_100_CYCLE_CHECKPOINT",
+    "numerical_pass_claim": false,
+    "elaboration_seconds": 8.963736548,
+    "result": {
+      "stage": "simulation",
+      "exit": -24,
+      "seconds": 88.44638412999848
+    },
+    "log_sha256": "d1371e622f81f4a2c47e3507adc2d18741c2b2e3080f2f18236bb62b35f22644"
+  },
+  "native_attempt1": {
+    "status": "BUILD_FAILED_BEFORE_SIMULATION",
+    "reason": "GCC PCH include order conflict with ChiselTest forced top header",
+    "result": {
+      "stage": "simulation",
+      "exit": 1,
+      "seconds": 13.10473006599932,
+      "timeout": false,
+      "terminal_returncode": 1,
+      "identity": {
+        "pid": 25,
+        "pgid": 25,
+        "boot_id": "4e77247b-66d3-42ae-803a-472b503e713a",
+        "starttime_ticks": "1848066"
+      }
+    },
+    "log_sha256": "2499b147ac3d79bdc3429ea875528f0a3b73665d1d320dfc79a87cf68fb28fb5"
+  },
+  "native_build_fix": "MAKEFLAGS=VK_PCH_I_FAST= VK_PCH_I_SLOW=; ordinary generated headers remain included, no arithmetic changes",
+  "verified_runtime_jars": 33,
+  "simulation_log_sha256": "8d7fcb3e4a310c8bcb666d94fa75370a84e8d610c6fc587bf3d7c54c40335cea",
+  "full_original_chisel_m128_blocks_passed": 0,
+  "full_original_chisel_m128_blocks_required": 5,
+  "architecture": "4096 MAC / 8x512 / Vector32 unchanged",
+  "limits": "No otherhead/chunk/policy, full production router/phasechain, fulltop/model, trained checkpoint, synthesis, timing or physical QoR claim"
+}

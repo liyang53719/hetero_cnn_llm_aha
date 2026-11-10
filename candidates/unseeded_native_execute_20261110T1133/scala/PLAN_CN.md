@@ -18,3 +18,6 @@
 
 ## 临时文件
 本轮未清理。保留运行引用的源码、classes、原 archive、库、IR 和唯一失败日志；不把库、生成 IR、权重、NPZ 或数据数组放入源码提交。compile.py 先编 ABI/trace；compile_host.py 依赖原已 pin 源码闭包编译结果，只编当前 Host runner；run_host.py 为有预算实际执行。
+
+## 同身份终态补记
+原 session 20218 在 600.133s 预设预算终止，exit -9、timeout=true。末条为 OFFICIAL_TREADLE_AST_PREPARED；未到 ORIGINAL_HOST_CONSTRUCTED 或 reset，未执行 prefill。仅属于构造预算 INCOMPLETE，不是数值 FAIL。没有重复长构造；下一步须增加阶段计时/内存诊断并审计 engine 构造瓶颈，而非盲目增预算。b048eed 的 CI 42810991489 success 仅 payload guard。

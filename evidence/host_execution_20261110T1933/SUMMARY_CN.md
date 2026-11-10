@@ -18,3 +18,8 @@
 
 ## 发布与清理
 只发布本摘要和hash；候选代码、IR、工具、native库、日志、权重/NPZ均未上传。临时清单保留唯一失败和运行证据，无清理。所有上述编译与smoke均终态，未重复长Host/EDA。
+
+## 本轮随后真实M128尝试与性能候选
+原AXI driver逐端口193-byte输入/368-byte输出接入后，首次3帧因适配器漏首次low观测而被native clock保护拒绝，未launch；原失败完整保留，修复不放宽ABI。一次已授权120秒完整M128重试（原身份PID7/start6716702）实际launch并执行到首Norm，24731帧、pc0/jobs1/DMA98/completed0/pipelineIssues0/resetRequired0，未收到final；120.004秒预算终止，明确INCOMPLETE、无参考比较。定向小测曾错误等待driver连续high而未停，已如实将该原进程计为唯一完整重试，不重复开另一轮；随后仅4帧0.182秒验证首low/rise及主动repeat-high，无launch。所有原身份和分阶段证据均保留。
+
+独立传输候选用严格检查的little-endian memmove替代native out_acc的512字Python大整数pack，未改模型、时钟或pre快照。真实17native 400半周期每次拷贝均与旧字节结果对照通过，另11字节案例/7异常拒绝测试通过。2000次2048-byte局部拷贝基准0.478秒→0.00222秒，仅微基准，不是完整Host提速或硬件利用率。尚未将候选用于新完整M128运行，0/5不变。

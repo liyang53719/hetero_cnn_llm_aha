@@ -1,0 +1,22 @@
+[
+  {
+    "layer": 0,
+    "status": "PASS_REVALIDATED_PINNED_BYTES_ONLY",
+    "model": "Qwen/Qwen3.5-0.8B",
+    "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "bytes": 43111008,
+    "tensors": 14,
+    "source": "work/qwen35_layer0_payload",
+    "full_block_pass": false
+  },
+  {
+    "layer": 3,
+    "status": "PASS_REVALIDATED_PINNED_BYTES_ONLY",
+    "model": "Qwen/Qwen3.5-0.8B",
+    "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "bytes": 36705280,
+    "tensors": 11,
+    "source": "work/qwen35_layer3_payload",
+    "full_block_pass": false
+  }
+]

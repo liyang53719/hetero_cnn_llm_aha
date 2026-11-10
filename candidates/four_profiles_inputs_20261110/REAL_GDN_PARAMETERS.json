@@ -1,0 +1,29 @@
+{
+  "status": "PASS_PARAMETERS_BYTES_ONLY",
+  "parameters": [
+    {
+      "shape": [
+        6144,
+        4
+      ],
+      "dtype": "uint16",
+      "sha256": "130344a7183ae52ad58fc5da96539f28071b64d452bb3acf0890a7947da44188"
+    },
+    {
+      "shape": [
+        16
+      ],
+      "dtype": "float32",
+      "sha256": "ad78e0805c16a73f70c722e837d1d342df3d9714bea32d353d976e155dd73494"
+    },
+    {
+      "shape": [
+        16
+      ],
+      "dtype": "uint16",
+      "sha256": "058cec20af625f4e3971da95b131af08db8f9ab26b1301b90c6f6401c5243388"
+    }
+  ],
+  "hardware_executed": false,
+  "full_block_pass": false
+}

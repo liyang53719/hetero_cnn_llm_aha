@@ -1,0 +1,59 @@
+{
+  "status": "REFERENCE_GENERATED_NOT_HARDWARE_PASS",
+  "tokens": 128,
+  "rawprep_heads": 16,
+  "chain_heads": [
+    0
+  ],
+  "chunks": 2,
+  "raw_boundary_beats": 25474,
+  "prepared_expected_write_beats": 51200,
+  "chain_expected_write_beats": 27776,
+  "conv_expected_write_beats": 25344,
+  "total_expected_write_beats": 104320,
+  "prepared_initial_memory": false,
+  "raw_addresses": {
+    "conv": "0x6000000",
+    "ab": "0x7000000",
+    "aLog": "0x8000000",
+    "dtBias": "0x9000000"
+  },
+  "prepared_address": "0x1000000",
+  "oracle_matrix_hashes": {
+    "0": {
+      "5": "bde0e5d7992d1e8fb1f76b8d822e1025914b665c97767dd7c4921b47ad0d709a",
+      "6": "a47ddea423de8e4a8dc7caf530ffb4b6e00e46b4efd0ce066e9921722fcc13f8",
+      "7": "23f126037af71f94a26f787f536f099168561fe658afb703a143ccac81e43d55",
+      "8": "7700c8dbf2cf0092100969b2cf2467d495268c54e30124ebaf069f6c47e460f5",
+      "9": "c35020473aed1b4642cd726cad727b63fff2824ad68cedd7ffb73c7cbd890479",
+      "10": "23f126037af71f94a26f787f536f099168561fe658afb703a143ccac81e43d55",
+      "11": "c35020473aed1b4642cd726cad727b63fff2824ad68cedd7ffb73c7cbd890479",
+      "12": "e205e80b07e858908ddb4d04691241016e5ee19ee2c887dd444ecd20935a1ecc",
+      "13": "e205e80b07e858908ddb4d04691241016e5ee19ee2c887dd444ecd20935a1ecc",
+      "14": "7563e98e9b4afebb9fea284c45dad013f7e8c6e95ed12e6b3535b092ee435888",
+      "15": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31",
+      "16": "7563e98e9b4afebb9fea284c45dad013f7e8c6e95ed12e6b3535b092ee435888",
+      "17": "e8794a34e31ab99f1a6e3ba21172edf416496d638c1ea4f9d70f5899e198eed8"
+    },
+    "1": {
+      "5": "13a494cf2d3c94a2c459ebbc7f76948a128fc4a026f1e7071f0b3dc802929cf9",
+      "6": "ad7a1a2f9ee7096cfd4797a3bb33d8f5158ee4e1cfc09b65aee67e529be409f7",
+      "7": "0182caf53ecddb60a0001bb3eebe59264fbfc2762375fba15bd58bcb232d7400",
+      "8": "defe24673755efb38dad4c3e5a8571d534df29f4e4e07d87dd8f58c0a6b7c3e5",
+      "9": "2b436efcb570f95c694813fa6eb5f332c98ca53802955ae8bdcb01d92f82fa60",
+      "10": "88851a3ec07c0109984464ef534879922a1f564b2d36be91a5409c2ae93fc96c",
+      "11": "f01803851680f58b1a698d746b4050051e656b6d4da6ec9e4f21216311c22e08",
+      "12": "94e91f66c47bcc5b9a358aed6a89fa235f8e413228e44dd38493f5b6ac7d86a9",
+      "13": "1802d74d430eb9df53c674f31d9546e6e0db6a5015a50020cc742bf5c455f6cf",
+      "14": "2d9ec20f9e871841c7e318ab67023afd5bf662d2ed72f16d5d3ec478b375c37b",
+      "15": "1fdddecb8d37d1568598573b964a23d25bdbb6aa2eef95a14fd6fd2dbbda741f",
+      "16": "2d9ec20f9e871841c7e318ab67023afd5bf662d2ed72f16d5d3ec478b375c37b",
+      "17": "4f7d58764753ab2fc417332e0d20fa3d10158f0fe0657441163f9e8f6b109fc3"
+    }
+  },
+  "full_block_pass": false,
+  "scope": "synthetic Dense QKV AB; pinned trained Conv weights/A_log/dt_bias; no trained projection, no physical4096MAC proof",
+  "input_sha256": "e9e82cc5c8051c3b62d61ff6322b3a81282cf1d77f679a05d8d80feec630a278",
+  "expected_sha256": "5f57969087d738426899b5a00804a85f02c8accd2430bdf2e1484e0c136b5508",
+  "decay_sha256": "b61ac6e217d8576b3e484781cd8a47007258f5981a0bb7ee62f0420319473d94"
+}

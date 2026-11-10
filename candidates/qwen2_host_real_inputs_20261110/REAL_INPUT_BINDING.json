@@ -1,0 +1,128 @@
+{
+  "status": "PASS_INPUT_BINDING_ONLY",
+  "tokens": 128,
+  "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+  "layers": 1,
+  "weights_real": true,
+  "fp32_storage": true,
+  "shape": {
+    "H": 1536,
+    "F": 8960,
+    "HEADS": 12,
+    "KVHEADS": 2,
+    "HD": 128,
+    "MAX_TOKENS": 1024
+  },
+  "records": [
+    {
+      "name": "wq",
+      "source": "self_attn.q_proj.weight",
+      "address": 4295032896,
+      "bytes": 9437184,
+      "sha256": "b78b0cee80a89ab87148fd73c8409dfefbfd5b58b09c1f9e51680908c28a705d",
+      "transpose": true
+    },
+    {
+      "name": "wk",
+      "source": "self_attn.k_proj.weight",
+      "address": 4304470144,
+      "bytes": 1572864,
+      "sha256": "9fd620025b4fab7422d8abb079e983f07b16a3675f88a4964564bbca08853385",
+      "transpose": true
+    },
+    {
+      "name": "wv",
+      "source": "self_attn.v_proj.weight",
+      "address": 4306043072,
+      "bytes": 1572864,
+      "sha256": "e2c30701a1f4fcc304afde4f69a988c2fcedea6f994d52fb565184f5c6bf633b",
+      "transpose": true
+    },
+    {
+      "name": "wo",
+      "source": "self_attn.o_proj.weight",
+      "address": 4307616000,
+      "bytes": 9437184,
+      "sha256": "5abdef89327bf7868ca77a573e1509e515d7fb5060e704a7c3247fd2a436966a",
+      "transpose": true
+    },
+    {
+      "name": "wg",
+      "source": "mlp.gate_proj.weight",
+      "address": 4317053248,
+      "bytes": 55050240,
+      "sha256": "360fc8c4f85d9489a7e92e9643372551b09fac6d2e19dd1a66e4d9e5334f8293",
+      "transpose": true
+    },
+    {
+      "name": "wu",
+      "source": "mlp.up_proj.weight",
+      "address": 4372103552,
+      "bytes": 55050240,
+      "sha256": "a49d5b9225668829162463b1aa93b3c4a291e2a82182fc4f02aabc51def6d72e",
+      "transpose": true
+    },
+    {
+      "name": "wd",
+      "source": "mlp.down_proj.weight",
+      "address": 4427153856,
+      "bytes": 55050240,
+      "sha256": "8ef9608f63c20095cc54b828c73bf39733e96fdd1208cb9b0996094b32566eb5",
+      "transpose": true
+    },
+    {
+      "name": "gamma0",
+      "source": "input_layernorm.weight",
+      "address": 4482204160,
+      "bytes": 6144,
+      "sha256": "320e4ac88269676897cf9c3b4996f966a6100ced2bc0f684216c200bc82b7180",
+      "transpose": false
+    },
+    {
+      "name": "gamma1",
+      "source": "post_attention_layernorm.weight",
+      "address": 4482210368,
+      "bytes": 6144,
+      "sha256": "e8e9d18c28e26e06d89fbb591b749cb77617e32cc17607f2b92e4b6a1828c70a",
+      "transpose": false
+    },
+    {
+      "name": "bq",
+      "source": "self_attn.q_proj.bias",
+      "address": 4482216576,
+      "bytes": 6144,
+      "sha256": "47506ca51cfd69119a774c09466b718c0b400b84b9a392bc1e9bcb691f28b72d",
+      "transpose": false
+    },
+    {
+      "name": "bk",
+      "source": "self_attn.k_proj.bias",
+      "address": 4482222784,
+      "bytes": 1024,
+      "sha256": "c77424743b1f69c60e2de1b4780666973af58831169c3ee02d7443701bc6d03d",
+      "transpose": false
+    },
+    {
+      "name": "bv",
+      "source": "self_attn.v_proj.bias",
+      "address": 4482223872,
+      "bytes": 1024,
+      "sha256": "e0ba90f0d591f0266f0140802b6e4ccc24a9961ef26e96ee00f5b1567f8b2f70",
+      "transpose": false
+    },
+    {
+      "name": "x",
+      "source": "input.tokens_0_127",
+      "address": 4482749312,
+      "bytes": 786432,
+      "sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+      "transpose": false
+    }
+  ],
+  "packer_sha256": "3efc7bb21b66bd16f757b8aac99c779ad3efe9289115e6ea7d5628a4ff6c2154",
+  "host_commands_sha256": "618cd4db94fbc5f0e3829182a72d5e298b5a42d2a3840ec2b9f9be639cd884c4",
+  "host_descriptors_sha256": "d5ef2c75f7c8f790993a9aef04ff0af96209365af3df85b33fae9ff8d8cb3086",
+  "hardware_executed": false,
+  "python_forward_executed": false,
+  "unified_hardware_verified": false
+}

@@ -1,0 +1,59 @@
+{
+  "status": "REFERENCE_GENERATED_NOT_HARDWARE_PASS",
+  "tokens": 128,
+  "rawprep_heads": 16,
+  "chain_heads": [
+    0
+  ],
+  "chunks": 2,
+  "raw_boundary_beats": 25474,
+  "prepared_expected_write_beats": 51200,
+  "chain_expected_write_beats": 27776,
+  "conv_expected_write_beats": 25344,
+  "total_expected_write_beats": 104320,
+  "prepared_initial_memory": false,
+  "raw_addresses": {
+    "conv": "0x6000000",
+    "ab": "0x7000000",
+    "aLog": "0x8000000",
+    "dtBias": "0x9000000"
+  },
+  "prepared_address": "0x1000000",
+  "oracle_matrix_hashes": {
+    "0": {
+      "5": "ff91a738396d4f5560c98a1f367509f5571f50187689923ec4f861e2a1b15c51",
+      "6": "3bd494e21e2fbb7833682b6c93f1d9db7d0690e99e4ddfa49728a8f2621d86af",
+      "7": "329927f05af6bffe9b0b453c32abd7246af5c0e22857412e8e40f7df8ce90a89",
+      "8": "d53890cd8c0e6c9c9c376aceab57acfb04c610c3df15cb1ac9428d860c834000",
+      "9": "c35020473aed1b4642cd726cad727b63fff2824ad68cedd7ffb73c7cbd890479",
+      "10": "329927f05af6bffe9b0b453c32abd7246af5c0e22857412e8e40f7df8ce90a89",
+      "11": "c35020473aed1b4642cd726cad727b63fff2824ad68cedd7ffb73c7cbd890479",
+      "12": "3add067fecf2dc4325151e29bef26d587c67fa7dfcdd46efb95f8ea1055091d7",
+      "13": "3add067fecf2dc4325151e29bef26d587c67fa7dfcdd46efb95f8ea1055091d7",
+      "14": "c3d7c9676edefd414ebd73666655a6b662b3c0b8425d989870f2577f44975f80",
+      "15": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31",
+      "16": "c3d7c9676edefd414ebd73666655a6b662b3c0b8425d989870f2577f44975f80",
+      "17": "c1bac671906a4763a24e04427fd12c28911e2c7b0e1e7a6f51779513f397ffd4"
+    },
+    "1": {
+      "5": "29895f2f1c8db5adaf7ca568f06b8fd323ee7604922766075de86fc77fdec93a",
+      "6": "b179d547e958a37faf4ad732abbe4a2ebc85eda4d8dda26cfaa360956267a544",
+      "7": "ea581ff1f5e6cef416a3f7f2b4729dfc1b8c1ea2d04bbf09f71e2ba0ea28504a",
+      "8": "c7eca25a4d26725303271e0cb7a15e66ff001a1a1396812688ddb2f190871151",
+      "9": "68854deeb8fb7849e1451fc07a9569e7a1adc5b274a9c6c986867179d1151f73",
+      "10": "ef3f4c8b8a04b57e761de080f41b365a4af2cb8bf4abc08f4b236c34052bf97b",
+      "11": "dc360528eacd8b1b7e520517b1d237c03f7b94d1d877f8d44b9ffb04aa1c064a",
+      "12": "eca06d0692fb21cf77c18ea9e899104f3b8dad073977aa0f27bd66ec014a125b",
+      "13": "17cc65c4392f5dbcd40ccd5b9711f47ab0ea0ea5ba5510e98f7e44e2e185e548",
+      "14": "f86645aa42643b9fba388837f3600be4d5ac03ca91d97b31366bca2995e11f6f",
+      "15": "4d997b71f3c5f3da0bd23753da53bf23d81b57923eaa0b97c78f26c0d29e01c5",
+      "16": "f86645aa42643b9fba388837f3600be4d5ac03ca91d97b31366bca2995e11f6f",
+      "17": "f2fa5554224c5cedd8bacdd7a9f60902961a602b693b867a89c72fbecf11d7d3"
+    }
+  },
+  "full_block_pass": false,
+  "scope": "synthetic Dense QKV AB and Conv weights; actual Conv outputs required before RawPrep; no trained projection, no physical4096MAC proof",
+  "input_sha256": "3b2a6a01ece5615499f1a23b17012f41ec026f281e3f5a0e3d2fa2f1963638ef",
+  "expected_sha256": "50e7c5ea72e44bfc5574c398c32c3b30cc642669b2ce6a5e482f84bc0d24ac0d",
+  "decay_sha256": "ad9654021e613d4f14c8a282bcd3a2907c10c003af794a36132d8af8ef4d42e2"
+}

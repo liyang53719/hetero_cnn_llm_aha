@@ -1,0 +1,166 @@
+{
+  "status": "PASS_INPUT_BYTES_ONLY",
+  "tokens": 128,
+  "token_ids": "0..127",
+  "model": "Qwen/Qwen2-1.5B-Instruct",
+  "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+  "layer": 0,
+  "tensors": [
+    {
+      "name": "input.tokens_0_127",
+      "shape": [
+        128,
+        1536
+      ],
+      "bytes": 786432,
+      "sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+      "dtype": "FP32_LE",
+      "layout": "row_major_original_checkpoint",
+      "original_name": "embed_tokens.rows_0_255"
+    },
+    {
+      "name": "input_layernorm.weight",
+      "shape": [
+        1536
+      ],
+      "bytes": 6144,
+      "sha256": "320e4ac88269676897cf9c3b4996f966a6100ced2bc0f684216c200bc82b7180",
+      "dtype": "FP32_LE",
+      "layout": "row_major_original_checkpoint",
+      "original_name": "input_layernorm.weight"
+    },
+    {
+      "name": "mlp.down_proj.weight",
+      "shape": [
+        1536,
+        8960
+      ],
+      "bytes": 55050240,
+      "sha256": "72bf2ef91a1315496bb6af9d883f6067c8f819489e164924cf70e98e6a06386d",
+      "dtype": "FP32_LE",
+      "layout": "row_major_original_checkpoint",
+      "original_name": "mlp.down_proj.weight"
+    },
+    {
+      "name": "mlp.gate_proj.weight",
+      "shape": [
+        8960,
+        1536
+      ],
+      "bytes": 55050240,
+      "sha256": "61fcdf4e881f5ea11e453be4bbe8176f359e9d297bfb04360d8ae0df9d06fda0",
+      "dtype": "FP32_LE",
+      "layout": "row_major_original_checkpoint",
+      "original_name": "mlp.gate_proj.weight"
+    },
+    {
+      "name": "mlp.up_proj.weight",
+      "shape": [
+        8960,
+        1536
+      ],
+      "bytes": 55050240,
+      "sha256": "664e37034d4b7b40a3254c767256fc666717b7ea66916f11f40d576fe21706ea",
+      "dtype": "FP32_LE",
+      "layout": "row_major_original_checkpoint",
+      "original_name": "mlp.up_proj.weight"
+    },
+    {
+      "name": "post_attention_layernorm.weight",
+      "shape": [
+        1536
+      ],
+      "bytes": 6144,
+      "sha256": "e8e9d18c28e26e06d89fbb591b749cb77617e32cc17607f2b92e4b6a1828c70a",
+      "dtype": "FP32_LE",
+      "layout": "row_major_original_checkpoint",
+      "original_name": "post_attention_layernorm.weight"
+    },
+    {
+      "name": "self_attn.k_proj.bias",
+      "shape": [
+        256
+      ],
+      "bytes": 1024,
+      "sha256": "c77424743b1f69c60e2de1b4780666973af58831169c3ee02d7443701bc6d03d",
+      "dtype": "FP32_LE",
+      "layout": "row_major_original_checkpoint",
+      "original_name": "self_attn.k_proj.bias"
+    },
+    {
+      "name": "self_attn.k_proj.weight",
+      "shape": [
+        256,
+        1536
+      ],
+      "bytes": 1572864,
+      "sha256": "94951469c16cc953dbab460895029e37e07ce86085697151bb7a4ac4a92d0aa3",
+      "dtype": "FP32_LE",
+      "layout": "row_major_original_checkpoint",
+      "original_name": "self_attn.k_proj.weight"
+    },
+    {
+      "name": "self_attn.o_proj.weight",
+      "shape": [
+        1536,
+        1536
+      ],
+      "bytes": 9437184,
+      "sha256": "959cd894eb99d4812e18620a846e50e04d1d3aefaf172a0ee2d2a33d3f324a4f",
+      "dtype": "FP32_LE",
+      "layout": "row_major_original_checkpoint",
+      "original_name": "self_attn.o_proj.weight"
+    },
+    {
+      "name": "self_attn.q_proj.bias",
+      "shape": [
+        1536
+      ],
+      "bytes": 6144,
+      "sha256": "47506ca51cfd69119a774c09466b718c0b400b84b9a392bc1e9bcb691f28b72d",
+      "dtype": "FP32_LE",
+      "layout": "row_major_original_checkpoint",
+      "original_name": "self_attn.q_proj.bias"
+    },
+    {
+      "name": "self_attn.q_proj.weight",
+      "shape": [
+        1536,
+        1536
+      ],
+      "bytes": 9437184,
+      "sha256": "127b445939c3bfd12fb4af8fba422ae6eba748f223e0ee1387aeafb05fd04e03",
+      "dtype": "FP32_LE",
+      "layout": "row_major_original_checkpoint",
+      "original_name": "self_attn.q_proj.weight"
+    },
+    {
+      "name": "self_attn.v_proj.bias",
+      "shape": [
+        256
+      ],
+      "bytes": 1024,
+      "sha256": "e0ba90f0d591f0266f0140802b6e4ccc24a9961ef26e96ee00f5b1567f8b2f70",
+      "dtype": "FP32_LE",
+      "layout": "row_major_original_checkpoint",
+      "original_name": "self_attn.v_proj.bias"
+    },
+    {
+      "name": "self_attn.v_proj.weight",
+      "shape": [
+        256,
+        1536
+      ],
+      "bytes": 1572864,
+      "sha256": "ace7b735bd02676dc437303377367204f5e64eeea4e9f3094605189f93d3a97b",
+      "dtype": "FP32_LE",
+      "layout": "row_major_original_checkpoint",
+      "original_name": "self_attn.v_proj.weight"
+    }
+  ],
+  "full_block_pass": false,
+  "reference_forward_executed": false,
+  "chisel_executed": false,
+  "rtl_executed": false,
+  "weights_or_data_publish_allowed": false
+}

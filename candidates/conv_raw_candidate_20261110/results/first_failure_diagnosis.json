@@ -1,0 +1,10 @@
+{
+  "status": "TESTBENCH_OBSERVATION_ORDER_FIXED_NOT_NUMERICALLY_RETESTED",
+  "failed_session": 60649,
+  "cycle": 2,
+  "reads": 1,
+  "writes": 0,
+  "cause": "resetRequired observed before deasserting consumed response.valid; combinational unknown debt/tag transient before clock",
+  "fix": "drive response.valid/tag/data at loop beginning before any fault/receipt observation",
+  "dut_changed": false
+}

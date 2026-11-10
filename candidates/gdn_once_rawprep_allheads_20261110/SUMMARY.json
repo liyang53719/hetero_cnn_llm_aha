@@ -1,0 +1,26 @@
+{
+  "status": "PASS_SINGLE_RAWPREP_TWO_HEADS_ONLY",
+  "tokens": 128,
+  "rawprep_invocations": 1,
+  "rawprep_heads": 16,
+  "chain_heads": [
+    0,
+    1
+  ],
+  "chunks_per_head": 2,
+  "reset_between_heads": false,
+  "cycles": 14715605,
+  "reads": 1473157,
+  "writes": 106752,
+  "checked_32bit_words": 1708032,
+  "execute_vector_calls_per_head": 1318912,
+  "phase17_formats_per_head": 1024,
+  "execute_vector_calls_total": 2637824,
+  "phase17_formats_total": 2048,
+  "stdout_static_counter_label_erratum": "Final line legacy vector/format values are per-head; phase assertions verify each head separately.",
+  "sv_sha256": "04d2e5ca765453ccbceab995022c979a694f62585c101d4fc0264c1546d58a74",
+  "full_five_blocks_pass": 0,
+  "full_rtl_pass": false,
+  "utilization_measured": false,
+  "heads16": "INCOMPLETE ongoing separate run; not a pass"
+}

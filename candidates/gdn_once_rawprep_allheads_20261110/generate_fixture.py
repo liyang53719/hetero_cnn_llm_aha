@@ -1,0 +1,65 @@
+"""Independent composed RawPrep -> all-selected-heads phase1-17 reference, never DUT feedback.
+Only original BF16 Conv/QKV/AB boundaries are runtime inputs. Prepared rows are
+expected writes, NOT initial memory. Run this script in its source directory.
+"""
+import pathlib,hashlib,json,argparse,numpy as np
+parser=argparse.ArgumentParser();parser.add_argument("--heads",type=int,choices=range(1,17),default=16);args=parser.parse_args();heads=args.heads
+R=pathlib.Path(__file__).resolve().parent
+h=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+pins=json.loads((R/'REFERENCE_PINS.json').read_text())
+def pinned(name):
+ source=(R/name).read_bytes();assert h(R/name)==pins[name]
+ ns={'__name__':'pinned_reference'};exec(compile(source,str(R/name),'exec'),ns);return ns
+n=pinned('original_prep_reference.py')
+F=np.float32;bf16=n['bf16'];recipe=n['recipe'];pack=lambda b:int.from_bytes(b,'little')
+inputs={};expected={};prepared=[];alog=np.array([F(.25+h/32) if h%4==0 else F(-.5-h/64) for h in range(16)],dtype='<f4');bias=bf16(np.array([(h%5-2)/16 for h in range(16)],dtype='<f4'))
+inputs[0x8000000]=pack(alog.tobytes());inputs[0x9000000]=pack(bias.tobytes()+bytes(32))
+for t in range(128):
+ matrices=[bf16(np.array([[((h*7+d*3+t*5+role)%31-15)/32 for d in range(128)] for h in range(16)],dtype='<f4')) for role in range(3)]
+ av=bf16(np.array([(h%7-3+t%3)/8 for h in range(16)],dtype='<f4'));bv=bf16(np.array([(h%9-4-t%2)/4 for h in range(16)],dtype='<f4'))
+ inputs[0x7000000+t*64]=pack(av.tobytes()+bv.tobytes())
+ raw=b''.join(x.tobytes() for x in matrices)
+ for off in range(0,len(raw),64):inputs[0x6000000+t*12288+off]=pack(raw[off:off+64])
+ outputs=recipe(*matrices,av,bv,alog,bias,recurrent_mode=False)
+ prepared.append(outputs)
+ data=b''.join(x.astype('<f4').tobytes() for x in outputs)
+ assert len(data)==25600
+ for off in range(0,len(data),64):expected[0x1000000+t*25600+off]=pack(data[off:off+64])
+
+n=pinned('scalar_core.py');on=pinned('oracle_phases.py')
+bits=n['bits'];pack=lambda xs:sum(bits(x)<<(i*32) for i,x in enumerate(xs))
+shapes=[('gates',64,16),('q',64,128),('k',64,128),('v',64,128),('kb',64,128),('vb',64,128),('kbg',64,128),('qg',64,128),('ke',64,128),('kt',128,64),('ket',128,64),('pair',64,64),('ut',64,64),('intra',64,64),('solvek',64,128),('solvev',64,128),('pred',64,128),('vnew',64,128),('inter',64,128),('local',64,128),('out',64,128),('state_update',128,128),('decay_state',128,128),('next_state',128,128)]
+offsets={};offset=0
+for name,rows,cols in shapes:offsets[name]=offset;offset+=rows*cols*4
+assert offset==806912
+names={5:'ut',6:'intra',7:'solvev',8:'solvek',9:'pred',10:'vnew',11:'inter',12:'local',13:'out',14:'state_update',15:'decay_state',16:'next_state'}
+raw=inputs;decay_by_head={};hashes_by_head={}
+for head in range(heads):
+ q=[x[0][head].tolist() for x in prepared];k=[x[1][head].tolist() for x in prepared];v=[x[2][head].tolist() for x in prepared];g=[float(x[3][head,0]) for x in prepared];b=[float(x[3][head,1]) for x in prepared]
+ decays=[];phase_hashes={};initial=[[0.0]*128 for _ in range(128)]
+ for i in range(1024):expected[0x10000000+head*(65536+2*806912)+i*64]=0
+ for chunk in range(2):
+  sl=slice(chunk*64,chunk*64+64);base=0x10000000+head*(65536+2*806912)+65536+chunk*806912
+  result=on['compute'](n,q[sl],k[sl],v[sl],g[sl],b[sl],initial)
+  for row in range(64):expected[base+row*64]=pack([result['cumulative'][row],b[chunk*64+row]])
+  allmat={'q':q[sl],'k':k[sl],'v':v[sl],**result['derived']}
+  allmat.update({names[p]:m for p,m in result['phases'].items() if p!=17})
+  for name,matrix in allmat.items():
+   for row,values in enumerate(matrix):
+    for beat in range(len(values)//16):expected[base+offsets[name]+row*len(values)*4+beat*64]=pack(values[beat*16:beat*16+16])
+  for row,values in enumerate(result['phases'][17]):
+   for beat in range(4):expected[0x4000000+(chunk*64+row)*16*256+head*256+beat*64]=sum(n['bf16_bits'](x)<<(16*i) for i,x in enumerate(values[beat*32:beat*32+32]))
+  initial=result['phases'][16]
+  decays.append(f"{bits(result['decay']):08x}")
+  phase_hashes[str(chunk)]={str(p):n['matrix_sha'](m,'bf16' if p==17 else 'fp32') for p,m in result['phases'].items()}
+ for row,values in enumerate(initial):
+  for beat in range(8):expected[0x3000000+head*65536+row*512+beat*64]=pack(values[beat*16:beat*16+16])
+ decay_by_head[str(head)]=decays;hashes_by_head[str(head)]=phase_hashes
+assert len(raw)==24706 and len(expected)==51200+heads*27776 and set(raw).isdisjoint(expected)
+for name,data in [('inputs',raw),('expected',expected)]:
+ (R/f'{name}.tsv').write_text(''.join(f'{a:x}\t{v:x}\n' for a,v in sorted(data.items())))
+(R/'decay_by_head.json').write_text(json.dumps(decay_by_head,indent=2)+'\n')
+(R/'decay.txt').write_text('\n'.join(x for head in range(heads) for x in decay_by_head[str(head)])+'\n')
+summary=dict(status='REFERENCE_GENERATED_NOT_HARDWARE_PASS',tokens=128,rawprep_heads=16,chain_heads=list(range(heads)),chunks=2,raw_boundary_beats=len(raw),prepared_expected_write_beats=51200,chain_expected_write_beats=heads*27776,expected_read_beats=24833+heads*724162,total_expected_write_beats=len(expected),prepared_initial_memory=False,raw_addresses={'conv':'0x6000000','ab':'0x7000000','aLog':'0x8000000','dtBias':'0x9000000'},prepared_address='0x1000000',oracle_matrix_hashes=hashes_by_head,full_block_pass=False,scope='synthetic Conv QKV AB boundaries; no trained projection, no physical4096MAC proof',input_sha256=h(R/'inputs.tsv'),expected_sha256=h(R/'expected.tsv'),decay_sha256=h(R/'decay.txt'))
+(R/'FIXTURE_SUMMARY.json').write_text(json.dumps(summary,indent=2)+'\n')
+print(json.dumps(summary,indent=2))

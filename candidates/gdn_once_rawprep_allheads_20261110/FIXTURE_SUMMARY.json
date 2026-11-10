@@ -1,0 +1,94 @@
+{
+  "status": "REFERENCE_GENERATED_NOT_HARDWARE_PASS",
+  "tokens": 128,
+  "rawprep_heads": 16,
+  "chain_heads": [
+    0,
+    1
+  ],
+  "chunks": 2,
+  "raw_boundary_beats": 24706,
+  "prepared_expected_write_beats": 51200,
+  "chain_expected_write_beats": 55552,
+  "expected_read_beats": 1473157,
+  "total_expected_write_beats": 106752,
+  "prepared_initial_memory": false,
+  "raw_addresses": {
+    "conv": "0x6000000",
+    "ab": "0x7000000",
+    "aLog": "0x8000000",
+    "dtBias": "0x9000000"
+  },
+  "prepared_address": "0x1000000",
+  "oracle_matrix_hashes": {
+    "0": {
+      "0": {
+        "5": "dd9dbe6bf9c195b53c6f2e67f995eaacdec396de486e004ac329b9621368fbbe",
+        "6": "179b13b34b1a479272ea09cd4d1c517f08e38ec99bddb1888520de4944800f0f",
+        "7": "4c2e9ca2882a2652fd6212e8f4a766a4e6a54fd79eb479fcf961b04d41be5655",
+        "8": "64db7c498f90ec6b52a5fea8e106966edc5a66dec2fb6f1707192644a80c081b",
+        "9": "c35020473aed1b4642cd726cad727b63fff2824ad68cedd7ffb73c7cbd890479",
+        "10": "4c2e9ca2882a2652fd6212e8f4a766a4e6a54fd79eb479fcf961b04d41be5655",
+        "11": "c35020473aed1b4642cd726cad727b63fff2824ad68cedd7ffb73c7cbd890479",
+        "12": "88b0d660747d329ecb6476099c762c9be9ce68b25a06ed6e92bd3fea64284897",
+        "13": "88b0d660747d329ecb6476099c762c9be9ce68b25a06ed6e92bd3fea64284897",
+        "14": "9efa1e35e10e4c541a09af587c4f68f892812e3900caaea06df68c9fa6298422",
+        "15": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31",
+        "16": "9efa1e35e10e4c541a09af587c4f68f892812e3900caaea06df68c9fa6298422",
+        "17": "ae979d136d9c9465b0dc44891853f64d39bde7d690a0b6e3f8bf0b1e322e5e28"
+      },
+      "1": {
+        "5": "9bede8b5be24563c1cbf64b8b65ec56c9915f98feb58b5834523ac45adaed669",
+        "6": "ad465ed0296c6ad85023115d59c4a66803763a20b18d2b3f38c669feb9dffd5e",
+        "7": "c4b15d96a0f04d86fed171435a0de918d32d9af5ccfa75767eb3fceafe3d0d95",
+        "8": "b3044ac1ac51c0072248efd69b5f89f1b0e133899772c9dbb1fa30e14314c65e",
+        "9": "fe4e73b897bed5652b9d7ce5dcded6cc13636fec1912d186c2016650afdbaeaf",
+        "10": "a12c1d1252f168651ad90096f32c89696cca3cb35ba37cf6ea5dca15a980f055",
+        "11": "ada21e537c5cf484f399cefb37306edd8f9918f4a9fa6e65b2654a809d9b1841",
+        "12": "f9acdcdb274494fdcf906614c4407d40aca5d932c496c315d2db39a7ffd13893",
+        "13": "73d312859495819dd6190df6ee305d800a0886efa047c6feb14af20e35820c87",
+        "14": "d2cae7e580378d86cc89bf9430fa3870cbd5f4f274fbf325ed35f068a111cd14",
+        "15": "55cc1b17ae573928c349d4296149e33f4f71e96829d00cb5517482bb903d6074",
+        "16": "d2cae7e580378d86cc89bf9430fa3870cbd5f4f274fbf325ed35f068a111cd14",
+        "17": "b45c149182ca4e104d7b631501ffcd455975f29f0e7389457f21b1876748ac90"
+      }
+    },
+    "1": {
+      "0": {
+        "5": "6852962a49d77de8350651951d8f5f5e848011257f2b9ce305b2860ad85ae4d9",
+        "6": "e1d39687d28aa35852a42a862b0577afdf7ca2d949686117e7dda0bdaefd00a2",
+        "7": "1b69c2a90da62513e317ef560b72586721fd37567bd641cf66b7511a591aee9b",
+        "8": "4f119a0739f65f3e02eeba1ccd3056fa3c346d05f3a738c84d4810e924dd5912",
+        "9": "c35020473aed1b4642cd726cad727b63fff2824ad68cedd7ffb73c7cbd890479",
+        "10": "1b69c2a90da62513e317ef560b72586721fd37567bd641cf66b7511a591aee9b",
+        "11": "c35020473aed1b4642cd726cad727b63fff2824ad68cedd7ffb73c7cbd890479",
+        "12": "2e7a417908512dde8521b8b7386ff13f6fe1239a4dd36043e51b864736ccabe7",
+        "13": "2e7a417908512dde8521b8b7386ff13f6fe1239a4dd36043e51b864736ccabe7",
+        "14": "cfc842dfd384655209e16af58008920821408f1eb397ccd41153a4a722aed64c",
+        "15": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31",
+        "16": "cfc842dfd384655209e16af58008920821408f1eb397ccd41153a4a722aed64c",
+        "17": "e3020a22a43af4fbcf32e91c007ccca97d7320019e657216f9dd237c94e8b95d"
+      },
+      "1": {
+        "5": "5ba19f0a314cb778b0ba41c00ed7c607cbeb96e97720ca3a57a1d364250351cb",
+        "6": "a51fceb8a7554dde8dc46ffa5188e9a7eab1a6cfed150e92f964cf7048f84065",
+        "7": "2e46fe6464667772de293e3a6438d363a6998dc6f091bb518ac4a4ae8bd7286e",
+        "8": "bc735127ede3d5a15c848d6440791e647aa712ce1ca8620e19c6ff43666e40fc",
+        "9": "b74895ed517602d0b5cb77a1943761c1d4b295a0d575861d8c14be4d6266c451",
+        "10": "dae0aac3324c13a565da670c1a5b1d8f2fa85a1ba7f8c63670eb5a8ad86936c3",
+        "11": "f692fbded47ce55f4279b8ef8cc7687ab57048c1cf076d9d16d2a60d2a6fdec9",
+        "12": "353e9dd03f62bfee90f3c2916f61751c106dd8cefc1d9b3aee28b76afe65f00a",
+        "13": "1596254cd3f8ca574c95126b69455e2133122f5896ac90cc9dfeb0d07f68a258",
+        "14": "b6ca9e5d8a469ee7de2144b3d3b8c4217d3203ba123046df9e0ea5b31c2cb948",
+        "15": "8b3f7cf54f2c6db7e33b7a3deee103d60668f0f0156e0332dae050ac3faa072d",
+        "16": "b6ca9e5d8a469ee7de2144b3d3b8c4217d3203ba123046df9e0ea5b31c2cb948",
+        "17": "8e2bc6c5420690c3f4133f9a22fc5c78ebed93cabb241012c346549435d57f0d"
+      }
+    }
+  },
+  "full_block_pass": false,
+  "scope": "synthetic Conv QKV AB boundaries; no trained projection, no physical4096MAC proof",
+  "input_sha256": "105c555538bac1a743ba82f77244e212016d5b81c4a50005692bc48e1092aa76",
+  "expected_sha256": "8491383d16c4f09ef6fc536c0adea91c8119ca9e76976b128cd1eabeffabddcc",
+  "decay_sha256": "042b91fd8ed322a1204c480ce9f8c529a69fa995d5ddfb53eafe8cb61f09b9a7"
+}

@@ -1,0 +1,58 @@
+{
+  "status": "REFERENCE_GENERATED_NOT_HARDWARE_PASS",
+  "tokens": 128,
+  "rawprep_heads": 16,
+  "chain_heads": [
+    0
+  ],
+  "chunks": 2,
+  "raw_boundary_beats": 24706,
+  "prepared_expected_write_beats": 51200,
+  "chain_expected_write_beats": 27776,
+  "total_expected_write_beats": 78976,
+  "prepared_initial_memory": false,
+  "raw_addresses": {
+    "conv": "0x6000000",
+    "ab": "0x7000000",
+    "aLog": "0x8000000",
+    "dtBias": "0x9000000"
+  },
+  "prepared_address": "0x1000000",
+  "oracle_matrix_hashes": {
+    "0": {
+      "5": "dd9dbe6bf9c195b53c6f2e67f995eaacdec396de486e004ac329b9621368fbbe",
+      "6": "179b13b34b1a479272ea09cd4d1c517f08e38ec99bddb1888520de4944800f0f",
+      "7": "4c2e9ca2882a2652fd6212e8f4a766a4e6a54fd79eb479fcf961b04d41be5655",
+      "8": "64db7c498f90ec6b52a5fea8e106966edc5a66dec2fb6f1707192644a80c081b",
+      "9": "c35020473aed1b4642cd726cad727b63fff2824ad68cedd7ffb73c7cbd890479",
+      "10": "4c2e9ca2882a2652fd6212e8f4a766a4e6a54fd79eb479fcf961b04d41be5655",
+      "11": "c35020473aed1b4642cd726cad727b63fff2824ad68cedd7ffb73c7cbd890479",
+      "12": "88b0d660747d329ecb6476099c762c9be9ce68b25a06ed6e92bd3fea64284897",
+      "13": "88b0d660747d329ecb6476099c762c9be9ce68b25a06ed6e92bd3fea64284897",
+      "14": "9efa1e35e10e4c541a09af587c4f68f892812e3900caaea06df68c9fa6298422",
+      "15": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31",
+      "16": "9efa1e35e10e4c541a09af587c4f68f892812e3900caaea06df68c9fa6298422",
+      "17": "ae979d136d9c9465b0dc44891853f64d39bde7d690a0b6e3f8bf0b1e322e5e28"
+    },
+    "1": {
+      "5": "9bede8b5be24563c1cbf64b8b65ec56c9915f98feb58b5834523ac45adaed669",
+      "6": "ad465ed0296c6ad85023115d59c4a66803763a20b18d2b3f38c669feb9dffd5e",
+      "7": "c4b15d96a0f04d86fed171435a0de918d32d9af5ccfa75767eb3fceafe3d0d95",
+      "8": "b3044ac1ac51c0072248efd69b5f89f1b0e133899772c9dbb1fa30e14314c65e",
+      "9": "fe4e73b897bed5652b9d7ce5dcded6cc13636fec1912d186c2016650afdbaeaf",
+      "10": "a12c1d1252f168651ad90096f32c89696cca3cb35ba37cf6ea5dca15a980f055",
+      "11": "ada21e537c5cf484f399cefb37306edd8f9918f4a9fa6e65b2654a809d9b1841",
+      "12": "f9acdcdb274494fdcf906614c4407d40aca5d932c496c315d2db39a7ffd13893",
+      "13": "73d312859495819dd6190df6ee305d800a0886efa047c6feb14af20e35820c87",
+      "14": "d2cae7e580378d86cc89bf9430fa3870cbd5f4f274fbf325ed35f068a111cd14",
+      "15": "55cc1b17ae573928c349d4296149e33f4f71e96829d00cb5517482bb903d6074",
+      "16": "d2cae7e580378d86cc89bf9430fa3870cbd5f4f274fbf325ed35f068a111cd14",
+      "17": "b45c149182ca4e104d7b631501ffcd455975f29f0e7389457f21b1876748ac90"
+    }
+  },
+  "full_block_pass": false,
+  "scope": "synthetic Conv QKV AB boundaries; no trained projection, no physical4096MAC proof",
+  "input_sha256": "105c555538bac1a743ba82f77244e212016d5b81c4a50005692bc48e1092aa76",
+  "expected_sha256": "b1a2e73963a11563fd30cb795b65c2faba805e34366182cc840f9fbcdb9e46ab",
+  "decay_sha256": "ad9654021e613d4f14c8a282bcd3a2907c10c003af794a36132d8af8ef4d42e2"
+}

@@ -1,0 +1,26 @@
+{
+  "status": "PASS_RAW_BOUNDARY_CONNECTED_HEAD0_ONLY",
+  "source_main": "8e38f9e5de4e876125876ecf7fc354307f76dbbb",
+  "tokens": 128,
+  "rawprep_heads": 16,
+  "chain_heads": [
+    0
+  ],
+  "chunks": 2,
+  "cycles": 10466284,
+  "reads": 748995,
+  "writes": 78976,
+  "checked_32bit_words": 1263616,
+  "executed_source_pin_count": 53,
+  "test_generated_sv_sha256": "2b74d98c07efb43bc7cc8ff75b4bdc9be1fb9743714daada636dee0831d42f15",
+  "same_sv_as_timeout_attempt": true,
+  "prepared_initial_memory": false,
+  "rawprep_actual_receipt": true,
+  "arithmetic_resources": "single shared original scalar and bank; phase5-17 ExecuteV8; NOT4096matrix proof",
+  "full_block_pass": 0,
+  "full_block_total": 5,
+  "full_rtl_pass": false,
+  "utilization_measured": false,
+  "old_pid40532": "EXIT_UNKNOWN untouched",
+  "deletions": []
+}

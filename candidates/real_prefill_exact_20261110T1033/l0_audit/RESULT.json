@@ -1,0 +1,66 @@
+{
+  "status": "PASS_EXACT_CONE_REPRODUCES_CANDIDATE_FAILURE",
+  "nodes": 10711,
+  "seconds": 0.0742701479975949,
+  "results": [
+    {
+      "head": 0,
+      "row": 52,
+      "col": 28,
+      "phase": "6_intra",
+      "operand_a": "b90b2091",
+      "operand_b": "05d1243c",
+      "result": "801c6a52",
+      "tiny_after": true,
+      "inexact": true,
+      "scope": "EXACT_FROM_FROZEN_CONV_AB_BOUNDARIES",
+      "decay_rows_verified": 53,
+      "qk_full128_verified": true
+    },
+    {
+      "head": 3,
+      "row": 16,
+      "col": 25,
+      "phase": "2_derived",
+      "operand_a": "b7d2e6e8",
+      "operand_b": "062d4b57",
+      "result": "8008ec42",
+      "tiny_after": true,
+      "inexact": true,
+      "scope": "EXACT_FROM_FROZEN_CONV_AB_BOUNDARIES",
+      "decay_rows_verified": 17,
+      "qk_full128_verified": true
+    },
+    {
+      "head": 11,
+      "row": 29,
+      "col": 4,
+      "phase": "2_derived",
+      "operand_a": "393a1733",
+      "operand_b": "06a6baac",
+      "result": "007932bd",
+      "tiny_after": true,
+      "inexact": true,
+      "scope": "EXACT_FROM_FROZEN_CONV_AB_BOUNDARIES",
+      "decay_rows_verified": 30,
+      "qk_full128_verified": true
+    },
+    {
+      "head": 13,
+      "row": 43,
+      "col": 61,
+      "phase": "2_derived",
+      "operand_a": "b986bf1d",
+      "operand_b": "05fa37c6",
+      "result": "8041d9ff",
+      "tiny_after": true,
+      "inexact": true,
+      "scope": "EXACT_FROM_FROZEN_CONV_AB_BOUNDARIES",
+      "decay_rows_verified": 44,
+      "qk_full128_verified": true
+    }
+  ],
+  "full_model_pass": false,
+  "hardware_executed": false,
+  "upstream_dense_conv_flags": "NOT_QUALIFIED"
+}

@@ -1,0 +1,26 @@
+{
+  "scope": "READ_ONLY_SOURCE_AUDIT_NOT_EXECUTION",
+  "upstream_modeling_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+  "upstream_sha256": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+  "chunk_definition_lines": [
+    290,
+    297,
+    340,
+    408
+  ],
+  "dispatch_lines": [
+    615,
+    629
+  ],
+  "project_commands_sha256": "79a721ddb498a5d5863085535c2aaedea14e5503e0f3a41abe2af29995fb813b",
+  "project_matches": [
+    {
+      "line": 961,
+      "source": "      // installation admits ONLY cold M128/C128, not decode or partial windows."
+    },
+    {
+      "line": 1885,
+      "source": "          bound.gdnRecurrentMode:=true.B // explicit legacy mode; runtime Chunk is the distinct false/M16|128 path"
+    }
+  ]
+}

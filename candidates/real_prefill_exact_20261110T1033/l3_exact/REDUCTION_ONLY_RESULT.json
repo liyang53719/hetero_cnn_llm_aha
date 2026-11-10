@@ -1,0 +1,90 @@
+{
+  "status": "PASS_EXACT_RMS_QKNORM_REDUCTION_SQRT_DIV_REAL_M128",
+  "stages": [
+    {
+      "name": "input_rms",
+      "rows": 128,
+      "width": 1024,
+      "sqrt_div_pairs": 128,
+      "flags": {
+        "sqrt_1": 128,
+        "div_1": 128
+      },
+      "argument_sha256": "d48c37234ed061d474a5f657d115f40f4937f8d446be29a67e04d31f707241c8",
+      "inverse_sha256": "0cc7a97e9b44cd7ca99402dced82413af4267120f26bc0a499ea2ed3ea02c945",
+      "output_sha256": "ab1f29183a7fe678d9dcbd87cc7bc680db323bd75ec7a839ab154a2e41e7fab9",
+      "seconds": 1.592047547994298
+    },
+    {
+      "name": "q_norm",
+      "rows": 1024,
+      "width": 256,
+      "sqrt_div_pairs": 1024,
+      "flags": {
+        "sqrt_1": 1024,
+        "div_1": 1024
+      },
+      "argument_sha256": "8f13c0bd6637e94b4043777d17be1f685de05513081eb2e73bb35e90465af207",
+      "inverse_sha256": "1f633d9e0f8b18e636ea1ea79942541db7b0b1630e946f76ff8bec42ea17f000",
+      "output_sha256": "557c32a5e0226859914c22701c3fc2973f660a750538756899bd8934b07acea1",
+      "seconds": 3.7516587659993093
+    },
+    {
+      "name": "k_norm",
+      "rows": 256,
+      "width": 256,
+      "sqrt_div_pairs": 256,
+      "flags": {
+        "sqrt_1": 256,
+        "div_1": 256
+      },
+      "argument_sha256": "111b8de4bfedfa05201b3a74096a53ca7a998857afc1fa1f07e775d9d564361b",
+      "inverse_sha256": "f82b4daef3a17a978f30ec109b61fb05158d24774eb68a3e9d901543e35954be",
+      "output_sha256": "0ec0350f867874af2b2c561ea54850f21857dee32aff1bf958260fc9db2e63a5",
+      "seconds": 0.9508380539991776
+    },
+    {
+      "name": "post_rms",
+      "rows": 128,
+      "width": 1024,
+      "sqrt_div_pairs": 128,
+      "flags": {
+        "sqrt_1": 128,
+        "div_1": 128
+      },
+      "argument_sha256": "b3a96abb7024d0dd486965d431f0a7d8ee2d1d7b71ab3b56b705b294af89fc7c",
+      "inverse_sha256": "87c3b356c4302616faf61649091ec22b090f591bae053f4b1f224b693abaf806",
+      "output_sha256": "a66b48318d91bd0e52e185313649cfcc31690f95ad3bc8684800868fd645480c",
+      "seconds": 1.6741856430016924
+    }
+  ],
+  "node_counts": {
+    "mul_nodes": 591360,
+    "mul_flag_0": 591360,
+    "add_nodes": 710144,
+    "add_flag_0": 658678,
+    "add_flag_1": 51466
+  },
+  "inputs": {
+    "round_20261110T0833/l3_full_host_torch210_payload/input.bin": "5e7e52488ed8a21cf4cb98b60efc59b7aca3527e60c973b09fa37c48950ed34b",
+    "round_20261110T0833/l3_full_host_torch210_payload/input_gamma.bin": "262f20f74b30264bb8244fd620dfd1356e8282ff09e4ba1d6892900d46d0635b",
+    "round_20261110T0933/dense_real_reference/profile2_local/input_norm.bin": "ab1f29183a7fe678d9dcbd87cc7bc680db323bd75ec7a839ab154a2e41e7fab9",
+    "round_20261110T0933/dense_real_reference/profile2_local/q.bin": "ea5a74825cdf0e9ddadf48f251ed551bd9508bd0b9bf0620ac67563d32328336",
+    "round_20261110T0933/dense_real_reference/profile2_local/qn.bin": "557c32a5e0226859914c22701c3fc2973f660a750538756899bd8934b07acea1",
+    "round_20261110T0833/l3_full_host_torch210_payload/q_gamma.bin": "6fbc460e96b527aa6b54ab345195d141716dd4e34094baec92c65344f8bac298",
+    "round_20261110T0933/dense_real_reference/profile2_local/k.bin": "62c078b273afbc3cd2ee4b0b8b8b0224f0283d4073531de2f560092ad67ea000",
+    "round_20261110T0933/dense_real_reference/profile2_local/kn.bin": "0ec0350f867874af2b2c561ea54850f21857dee32aff1bf958260fc9db2e63a5",
+    "round_20261110T0833/l3_full_host_torch210_payload/k_gamma.bin": "424ead8a89f71d4e83858da7f28335665c4d61a8797b121cfaa26a56d1f5ea6a",
+    "round_20261110T0933/l3_full/local/residual1.bin": "03d74e591afbdf6b83a342d46f0c910dfc28230c6c95ee486685436217fb4b0a",
+    "round_20261110T0833/l3_full_host_torch210_payload/post_gamma.bin": "480c483e9af2962e8213512464316402dd657d0dcfa37119a58409689330c7a2",
+    "round_20261110T0933/l3_full/local/post_norm.bin": "a66b48318d91bd0e52e185313649cfcc31690f95ad3bc8684800868fd645480c"
+  },
+  "scope": "All reduction add/mul nodes and sqrt/div pairs in four real M128 norm stages; saved BF16 outputs identical after exact sqrt/div substitution",
+  "limitations": [
+    "No Chisel/RTL execution",
+    "Dense and remaining full-block arithmetic flags NOT_QUALIFIED",
+    "No full hardware acceptance"
+  ],
+  "hardware_pass": false,
+  "seconds": 7.975258310005302
+}

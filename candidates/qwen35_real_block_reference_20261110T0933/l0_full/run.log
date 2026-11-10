@@ -1,0 +1,162 @@
+[
+  {
+    "head": 0,
+    "chunk": 0,
+    "status": "FAIL_CANDIDATE_ORIGINAL_FATAL_UNDERFLOW",
+    "detail": {
+      "phase": "6_intra",
+      "operation": "mul",
+      "index": [
+        52,
+        28
+      ],
+      "a": "b90b2091",
+      "b": "05d1243c",
+      "result": "801c6a52",
+      "flag": "underflow_inexact",
+      "operations": 2222353
+    },
+    "independent_fraction_tiny_inexact_verified": true
+  },
+  {
+    "head": 1,
+    "status": "CANDIDATE_CHUNK64_TWO_CHUNKS_EXECUTED",
+    "output_sha256": "91fd354754ee7956d51894127eb5656158c89726e6691c89275292a8e2f3d199",
+    "state_sha256": "b7769aa48470be8b220e2dd5b29b0ba9a0a5352aa843befc78e6e0fb7f3703f2",
+    "operations": 21320226
+  },
+  {
+    "head": 2,
+    "status": "CANDIDATE_CHUNK64_TWO_CHUNKS_EXECUTED",
+    "output_sha256": "90ffd7c737e2d7ddf315919d2ddf6c410a3b8fd222221e8428933298ff02ff8a",
+    "state_sha256": "c122ab9d469a18ce7cf22840e45dbe0e031b811e678005d7897de88a7b7e4809",
+    "operations": 21320226
+  },
+  {
+    "head": 3,
+    "chunk": 0,
+    "status": "FAIL_CANDIDATE_ORIGINAL_FATAL_UNDERFLOW",
+    "detail": {
+      "phase": "2_derived",
+      "operation": "mul",
+      "index": [
+        16,
+        25
+      ],
+      "a": "b7d2e6e8",
+      "b": "062d4b57",
+      "result": "8008ec42",
+      "flag": "underflow_inexact",
+      "operations": 26897
+    },
+    "independent_fraction_tiny_inexact_verified": true
+  },
+  {
+    "head": 4,
+    "status": "CANDIDATE_CHUNK64_TWO_CHUNKS_EXECUTED",
+    "output_sha256": "5acc2afe3f67be0e5395fce5b0460255b912588104e1e741a28e8ac09f0475d3",
+    "state_sha256": "a212cef6038ae4c0120e19312d8b8908e2ef747ffc2b2670a5213059c5c98cf4",
+    "operations": 21320226
+  },
+  {
+    "head": 5,
+    "status": "CANDIDATE_CHUNK64_TWO_CHUNKS_EXECUTED",
+    "output_sha256": "b5992a7e678df3bee339a6af38ddff67f214616ba81f750c7113e32a8fe06996",
+    "state_sha256": "eb5bc1ce073027f69a0a04d75b83e5ccf2986032dff7ff3e1f11de80710fc3e9",
+    "operations": 21320226
+  },
+  {
+    "head": 6,
+    "status": "CANDIDATE_CHUNK64_TWO_CHUNKS_EXECUTED",
+    "output_sha256": "e314fc62f2bd6287af6b16324b3fa7a501cc519e9b231ddc5bcd2e88ece268dd",
+    "state_sha256": "a422c2b1af9add862aef8f8e612827b4fa79cc1a9de952cbbc7939fdad1efcd8",
+    "operations": 21320226
+  },
+  {
+    "head": 7,
+    "status": "CANDIDATE_CHUNK64_TWO_CHUNKS_EXECUTED",
+    "output_sha256": "6e1f65629c232a0e2d4c2602ac87e5f7a504ca33e159c98c92dd7322bff6346d",
+    "state_sha256": "508243b2ad4d1a2b445a35fe23ae573015beac5222df17adb2e8a21b4418c5f2",
+    "operations": 21320226
+  },
+  {
+    "head": 8,
+    "status": "CANDIDATE_CHUNK64_TWO_CHUNKS_EXECUTED",
+    "output_sha256": "cfbaef3a6550a571de66087587ea49234deff4b08d7273f38ddb88d5ec5e4278",
+    "state_sha256": "de6f6815876243db05a25fce61eebbdd2fcef45897600087e7eceb09da300fe0",
+    "operations": 21320226
+  },
+  {
+    "head": 9,
+    "status": "CANDIDATE_CHUNK64_TWO_CHUNKS_EXECUTED",
+    "output_sha256": "fcb39f6b4b0a46df9b08bfc22cac9b2d9419fd25ab476938789ea7e6580c2e37",
+    "state_sha256": "6802b9cf1ddb7072eb389b66cbcb01fca47944befde4929a3e73958723e6fc70",
+    "operations": 21320226
+  },
+  {
+    "head": 10,
+    "status": "CANDIDATE_CHUNK64_TWO_CHUNKS_EXECUTED",
+    "output_sha256": "8d262d75d9c44a6b4faf6283871294303c0e1dcc08273b6ee76c3bb7fe32de9a",
+    "state_sha256": "068d70f23e7d3c0515db98ec10ffaad82f42c7589007fd0452e12dba415114f8",
+    "operations": 21320226
+  },
+  {
+    "head": 11,
+    "chunk": 0,
+    "status": "FAIL_CANDIDATE_ORIGINAL_FATAL_UNDERFLOW",
+    "detail": {
+      "phase": "2_derived",
+      "operation": "mul",
+      "index": [
+        29,
+        4
+      ],
+      "a": "393a1733",
+      "b": "06a6baac",
+      "result": "007932bd",
+      "flag": "underflow_inexact",
+      "operations": 26897
+    },
+    "independent_fraction_tiny_inexact_verified": true
+  },
+  {
+    "head": 12,
+    "status": "CANDIDATE_CHUNK64_TWO_CHUNKS_EXECUTED",
+    "output_sha256": "4174f29af652773ff00bb3a8d1e455c69ac147016cbde6aa3f23358f8686e866",
+    "state_sha256": "5c5f960a73a09531d4e3410317ae5c441e039b1a4d0fd340ac9da0b6d4215dda",
+    "operations": 21320226
+  },
+  {
+    "head": 13,
+    "chunk": 0,
+    "status": "FAIL_CANDIDATE_ORIGINAL_FATAL_UNDERFLOW",
+    "detail": {
+      "phase": "2_derived",
+      "operation": "mul",
+      "index": [
+        43,
+        61
+      ],
+      "a": "b986bf1d",
+      "b": "05fa37c6",
+      "result": "8041d9ff",
+      "flag": "underflow_inexact",
+      "operations": 26897
+    },
+    "independent_fraction_tiny_inexact_verified": true
+  },
+  {
+    "head": 14,
+    "status": "CANDIDATE_CHUNK64_TWO_CHUNKS_EXECUTED",
+    "output_sha256": "cebaf76607213027e3d577e31e1e8c0d8f09d77033fe5bf51b117d08fb23cc30",
+    "state_sha256": "a3bf8a3c73a2f9cdf86801dee00e37fbcdcedf046c2fbc2d671d6ace546d9763",
+    "operations": 21320226
+  },
+  {
+    "head": 15,
+    "status": "CANDIDATE_CHUNK64_TWO_CHUNKS_EXECUTED",
+    "output_sha256": "83a842037f98824a52afb745d81f54415a9075d7a84c4739f441c7be5a13ae9a",
+    "state_sha256": "96d88f2f83bd614e3dd4f671d44d91741ea5380fc9f2948f766bd635b3c16c31",
+    "operations": 21320226
+  }
+]

@@ -1,0 +1,111 @@
+{
+  "status": "FULL_SEVEN_DENSE_VALUE_FLAGS_AUDITED_NO_HARDWARE",
+  "reports": [
+    {
+      "stage": "q",
+      "steps": 301989888,
+      "outputs": 196608,
+      "flag_counts": {
+        "0": 271972119,
+        "1": 30017769
+      },
+      "fp64_nonzero_residuals": 1,
+      "seconds": 1.6141833899964695,
+      "status": "FULL_ORDERED_DENSE_VALUE_FLAGS_AUDITED_NO_HARDWARE"
+    },
+    {
+      "stage": "k",
+      "steps": 50331648,
+      "outputs": 32768,
+      "flag_counts": {
+        "0": 46596091,
+        "1": 3735557
+      },
+      "fp64_nonzero_residuals": 0,
+      "seconds": 0.24662186799832853,
+      "status": "FULL_ORDERED_DENSE_VALUE_FLAGS_AUDITED_NO_HARDWARE"
+    },
+    {
+      "stage": "v",
+      "steps": 50331648,
+      "outputs": 32768,
+      "flag_counts": {
+        "0": 46967474,
+        "1": 3364174
+      },
+      "fp64_nonzero_residuals": 0,
+      "seconds": 0.3159263519992237,
+      "status": "FULL_ORDERED_DENSE_VALUE_FLAGS_AUDITED_NO_HARDWARE"
+    },
+    {
+      "stage": "out",
+      "steps": 301989888,
+      "outputs": 196608,
+      "flag_counts": {
+        "0": 278488180,
+        "1": 23501708
+      },
+      "fp64_nonzero_residuals": 0,
+      "seconds": 1.476847659003397,
+      "status": "FULL_ORDERED_DENSE_VALUE_FLAGS_AUDITED_NO_HARDWARE"
+    },
+    {
+      "stage": "gate",
+      "steps": 1761607680,
+      "outputs": 1146880,
+      "flag_counts": {
+        "0": 1600228407,
+        "1": 161379273
+      },
+      "fp64_nonzero_residuals": 6,
+      "seconds": 16.698456638994685,
+      "status": "FULL_ORDERED_DENSE_VALUE_FLAGS_AUDITED_NO_HARDWARE"
+    },
+    {
+      "stage": "up",
+      "steps": 1761607680,
+      "outputs": 1146880,
+      "flag_counts": {
+        "0": 1631054443,
+        "1": 130553237
+      },
+      "fp64_nonzero_residuals": 1,
+      "seconds": 15.80900784500409,
+      "status": "FULL_ORDERED_DENSE_VALUE_FLAGS_AUDITED_NO_HARDWARE"
+    },
+    {
+      "stage": "down",
+      "steps": 1761607680,
+      "outputs": 196608,
+      "flag_counts": {
+        "0": 1349794073,
+        "1": 411813607
+      },
+      "fp64_nonzero_residuals": 23,
+      "seconds": 8.830340155996964,
+      "status": "FULL_ORDERED_DENSE_VALUE_FLAGS_AUDITED_NO_HARDWARE"
+    }
+  ],
+  "verified_inputs": {
+    "round_20261110T0833/numpy_fma_candidate/norm0.local.f32": "ccf1e6c065c6bc4e90458194aeda7475149451ac73479a6781d2fd638bf631df",
+    "round_20261110T0733/qwen2_host_payload/wq.f32le": "b78b0cee80a89ab87148fd73c8409dfefbfd5b58b09c1f9e51680908c28a705d",
+    "round_20261110T0833/numpy_fma_candidate/q0.local.f32": "1e67553e3bbbd2c1118ad860a4669accbff3ead6dd403439d1cc3d0867e3e5d9",
+    "round_20261110T0733/qwen2_host_payload/wk.f32le": "9fd620025b4fab7422d8abb079e983f07b16a3675f88a4964564bbca08853385",
+    "round_20261110T0833/numpy_fma_candidate/resume_m128/k0.local.f32": "f9f70e205f1fb6926715c1388195de3727a4d8de2e33d6a0ab387fd96884f541",
+    "round_20261110T0733/qwen2_host_payload/wv.f32le": "e2c30701a1f4fcc304afde4f69a988c2fcedea6f994d52fb565184f5c6bf633b",
+    "round_20261110T0833/numpy_fma_candidate/resume_m128/v0.local.f32": "b34d8dfe45f369310cd881028c258dfa9f58189f867064b9edf9f7fb5c0e61de",
+    "round_20261110T0833/numpy_fma_candidate/full_m128/att.local.f32": "b546fe31de68553448f05b9a66fa59565eee94552574e608c0258fd68c0e5d54",
+    "round_20261110T0733/qwen2_host_payload/wo.f32le": "5abdef89327bf7868ca77a573e1509e515d7fb5060e704a7c3247fd2a436966a",
+    "round_20261110T0833/numpy_fma_candidate/full_m128/proj.local.f32": "740d6cfeddfbbc42b994be28a4332b32bec17681e62ae8df249496fd28c3b6ec",
+    "round_20261110T0833/numpy_fma_candidate/full_m128/norm1.local.f32": "1f7ac372a93eea54963f7b8cb499faa74cdaf3504bba9aa5dea9a7776435ca5d",
+    "round_20261110T0733/qwen2_host_payload/wg.f32le": "360fc8c4f85d9489a7e92e9643372551b09fac6d2e19dd1a66e4d9e5334f8293",
+    "round_20261110T0833/numpy_fma_candidate/full_m128/gate.local.f32": "288123c170c85a5b47d0d03a0f3c93ff7fdbe6c8014bdc820e910c82a870efb5",
+    "round_20261110T0733/qwen2_host_payload/wu.f32le": "a49d5b9225668829162463b1aa93b3c4a291e2a82182fc4f02aabc51def6d72e",
+    "round_20261110T0833/numpy_fma_candidate/full_m128/up.local.f32": "d82fdbb3c559db2fd477fddebacf6ed83771eb8e044be43ef39da25e7a894908",
+    "round_20261110T0833/numpy_fma_candidate/full_m128/act.local.f32": "6df9c46c3f76abcf6dc9646e234a01a0a3dd91c111070d5d8fbb7e701b08876d",
+    "round_20261110T0733/qwen2_host_payload/wd.f32le": "8ef9608f63c20095cc54b828c73bf39733e96fdd1208cb9b0996094b32566eb5",
+    "round_20261110T0833/numpy_fma_candidate/full_m128/down.local.f32": "48c8e5509f94fa9dae7dc0e13ffd2811d4aabda518e3c1a64ed4d79e415c8af1"
+  },
+  "seconds": 46.41470858700632,
+  "scope": "Only seven Dense matrices; no QK/PV or scalar flags; mathematical proof and independent exact tests, no Chisel/RTL comparison"
+}

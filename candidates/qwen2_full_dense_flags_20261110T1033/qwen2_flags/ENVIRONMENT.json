@@ -1,0 +1,12 @@
+{
+  "python": "3.12.14",
+  "numpy": "2.3.5",
+  "machine": "x86_64",
+  "libc": [
+    "glibc",
+    "2.41"
+  ],
+  "fegetround": 0,
+  "rounding_interpretation": "glibc FE_TONEAREST=0",
+  "assumption": "IEEE binary64/binary32 ufunc arithmetic with separate expressions; no fastmath/reassociation; tests include subnormals"
+}

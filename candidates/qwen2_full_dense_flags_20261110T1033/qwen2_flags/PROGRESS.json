@@ -1,0 +1,86 @@
+[
+  {
+    "stage": "q",
+    "steps": 301989888,
+    "outputs": 196608,
+    "flag_counts": {
+      "0": 271972119,
+      "1": 30017769
+    },
+    "fp64_nonzero_residuals": 1,
+    "seconds": 1.7353685060006683,
+    "status": "FULL_ORDERED_DENSE_VALUE_FLAGS_AUDITED_NO_HARDWARE"
+  },
+  {
+    "stage": "k",
+    "steps": 50331648,
+    "outputs": 32768,
+    "flag_counts": {
+      "0": 46596091,
+      "1": 3735557
+    },
+    "fp64_nonzero_residuals": 0,
+    "seconds": 0.27429426000162493,
+    "status": "FULL_ORDERED_DENSE_VALUE_FLAGS_AUDITED_NO_HARDWARE"
+  },
+  {
+    "stage": "v",
+    "steps": 50331648,
+    "outputs": 32768,
+    "flag_counts": {
+      "0": 46967474,
+      "1": 3364174
+    },
+    "fp64_nonzero_residuals": 0,
+    "seconds": 0.2757315880007809,
+    "status": "FULL_ORDERED_DENSE_VALUE_FLAGS_AUDITED_NO_HARDWARE"
+  },
+  {
+    "stage": "out",
+    "steps": 301989888,
+    "outputs": 196608,
+    "flag_counts": {
+      "0": 278488180,
+      "1": 23501708
+    },
+    "fp64_nonzero_residuals": 0,
+    "seconds": 1.6960240260013961,
+    "status": "FULL_ORDERED_DENSE_VALUE_FLAGS_AUDITED_NO_HARDWARE"
+  },
+  {
+    "stage": "gate",
+    "steps": 1761607680,
+    "outputs": 1146880,
+    "flag_counts": {
+      "0": 1600228407,
+      "1": 161379273
+    },
+    "fp64_nonzero_residuals": 6,
+    "seconds": 17.151407885998196,
+    "status": "FULL_ORDERED_DENSE_VALUE_FLAGS_AUDITED_NO_HARDWARE"
+  },
+  {
+    "stage": "up",
+    "steps": 1761607680,
+    "outputs": 1146880,
+    "flag_counts": {
+      "0": 1631054443,
+      "1": 130553237
+    },
+    "fp64_nonzero_residuals": 1,
+    "seconds": 18.02944777400262,
+    "status": "FULL_ORDERED_DENSE_VALUE_FLAGS_AUDITED_NO_HARDWARE"
+  },
+  {
+    "stage": "down",
+    "steps": 1761607680,
+    "outputs": 196608,
+    "flag_counts": {
+      "0": 1349794073,
+      "1": 411813607
+    },
+    "fp64_nonzero_residuals": 23,
+    "seconds": 10.053786452997883,
+    "status": "FULL_ORDERED_DENSE_VALUE_FLAGS_AUDITED_NO_HARDWARE"
+  }
+]

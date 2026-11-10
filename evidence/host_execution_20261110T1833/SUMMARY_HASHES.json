@@ -1,0 +1,11 @@
+{
+  "status": "INCOMPLETE",
+  "complete_model_blocks_passed": 0,
+  "full_assert_candidate_sha256": "42a871839056728633f9d3a9749240a3c50d1b53c2b3a79603d9f4b751da06b0",
+  "assertion_map_sha256": "51492dad98b222cb4c9d80f279d637f6af36e49c7dec8f4996028c5e93987364",
+  "arc_converted_sha256": "e0d4c7b43ec9b932c3ce56222c97db9cafe165ef8c26950363022212bf1b11b2",
+  "llvm_result": "FAIL_COMPILE_LOOP_SPLITTING",
+  "llvm_log_sha256": "98b7491347826cdb6be3d54b8865c2107eb3919444069f1991fa8e8a85dd86d9",
+  "native17_scope": "boundary only, not Host",
+  "l2_scope": "original local memory module only"
+}

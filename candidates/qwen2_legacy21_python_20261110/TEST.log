@@ -1,0 +1,24 @@
+test_broadcast_bias (test_reference.ReferenceTests.test_broadcast_bias) ... ok
+test_budget (test_reference.ReferenceTests.test_budget) ... ok
+test_dense_order (test_reference.ReferenceTests.test_dense_order) ... ok
+test_full_forward_closed (test_reference.ReferenceTests.test_full_forward_closed) ... ok
+test_gradual_ieee_scope (test_reference.ReferenceTests.test_gradual_ieee_scope) ... ok
+test_nonfinite_closed (test_reference.ReferenceTests.test_nonfinite_closed) ... ok
+test_rne_ties (test_reference.ReferenceTests.test_rne_ties) ... ok
+test_rope_half_split (test_reference.ReferenceTests.test_rope_half_split) ... ok
+test_signed_zeros (test_reference.ReferenceTests.test_signed_zeros) ... ok
+test_div (test_complete.Operators.test_div) ... ok
+test_exp (test_complete.Operators.test_exp) ... ok
+test_full21_nonzero (test_complete.Operators.test_full21_nonzero) ... ok
+test_full21_original_hd_gqa (test_complete.Operators.test_full21_original_hd_gqa) ... ok
+test_full21_zero_weights (test_complete.Operators.test_full21_zero_weights) ... ok
+test_qk_lane_fold (test_complete.Operators.test_qk_lane_fold) ... ok
+test_rms_terminal_bf16 (test_complete.Operators.test_rms_terminal_bf16) ... ok
+test_silu_zero (test_complete.Operators.test_silu_zero) ... ok
+test_sqrt_rounding (test_complete.Operators.test_sqrt_rounding) ... ok
+test_underflow_contract (test_complete.Operators.test_underflow_contract) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 1.439s
+
+OK

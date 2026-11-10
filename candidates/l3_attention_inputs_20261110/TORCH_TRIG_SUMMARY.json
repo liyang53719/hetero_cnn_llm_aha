@@ -1,0 +1,18 @@
+{
+  "status": "PASS_OFFICIAL_METHODS_TORCH210_DEFAULT_TRIG_CAPTURE_ONLY",
+  "torch": "2.10.0+cpu",
+  "cpu_capability": "DEFAULT",
+  "numpy": "2.3.5",
+  "source_sha256": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+  "config_sha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+  "shape": [
+    128,
+    64
+  ],
+  "bytes": 16384,
+  "sha256": "1156df1551f166fe3f816547b6a15eac1c2ff994683138d5276d2f64c68aa9bb",
+  "numpy_candidate_mismatches": 0,
+  "first_mismatch": null,
+  "scope": "three pinned default-RoPE methods; not full official model or Host execution",
+  "hardware_executed": false
+}

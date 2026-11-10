@@ -1,0 +1,77 @@
+{
+  "status": "PASS_PYTHON_SMALL_SELF_TEST_ONLY",
+  "scope": "synthetic small full21 mathematical schedule; not original model weights/shapes, Chisel, RTL or numerical cross-comparison",
+  "full_m128_hardware_pass": 0,
+  "reports": [
+    {
+      "config": {
+        "m": 2,
+        "hd": 16,
+        "heads": 1,
+        "kvheads": 1,
+        "zero": false
+      },
+      "stages": 21,
+      "seconds": 0.036868699000478955,
+      "scalar_budget_consumed": 5121,
+      "stage_sha256": {
+        "rms0": "b638277a8690e175a9137feff1e43c067f9faf4e2f600caf468fb05b0403b717",
+        "q": "58491f4e26ff73539ffbb4f833f8ae1933903e63c34963a66d5e34f2f07ffd95",
+        "qb": "58491f4e26ff73539ffbb4f833f8ae1933903e63c34963a66d5e34f2f07ffd95",
+        "qr": "58491f4e26ff73539ffbb4f833f8ae1933903e63c34963a66d5e34f2f07ffd95",
+        "k": "58491f4e26ff73539ffbb4f833f8ae1933903e63c34963a66d5e34f2f07ffd95",
+        "kb": "58491f4e26ff73539ffbb4f833f8ae1933903e63c34963a66d5e34f2f07ffd95",
+        "kr": "58491f4e26ff73539ffbb4f833f8ae1933903e63c34963a66d5e34f2f07ffd95",
+        "v": "58491f4e26ff73539ffbb4f833f8ae1933903e63c34963a66d5e34f2f07ffd95",
+        "vb": "58491f4e26ff73539ffbb4f833f8ae1933903e63c34963a66d5e34f2f07ffd95",
+        "cache": "f521dbc648eadbf6a83b90b978dbf7bddb6e5ace8ecf4a582059d1ec95c4ff1b",
+        "qk": "89b5ee3824108804349cb7869c798fdffa02a0564bff87d4e0d2ef0605d7861c",
+        "sm": "4dc22ef583ef82e54c62018d1daa50a3d2ae10687a60e682dbe3cef353a594a3",
+        "pv": "58491f4e26ff73539ffbb4f833f8ae1933903e63c34963a66d5e34f2f07ffd95",
+        "out": "c0f0ea47527caefb7d4ab0adc86f02226e7697cd73ff604b811683699c257b5d",
+        "res0": "eb9c0c5cddb5a90bcc2f7bcc87c98e947fde1c1811c8012bd91b05417a7f8991",
+        "rms1": "b638277a8690e175a9137feff1e43c067f9faf4e2f600caf468fb05b0403b717",
+        "gate": "58491f4e26ff73539ffbb4f833f8ae1933903e63c34963a66d5e34f2f07ffd95",
+        "up": "58491f4e26ff73539ffbb4f833f8ae1933903e63c34963a66d5e34f2f07ffd95",
+        "act": "1280bdf5a5c1924c5e86864eea08bfcd965bfd22cd8e3fe8411f379e16c4d011",
+        "down": "5c439b87a6a939cb7c5c27679e93956cb95f30e43ae9edf2af54bf5cf65a2a34",
+        "res1": "666202054139da5b0ddbc804fb9baef977bb933f04348464b827ca719d5274e9"
+      }
+    },
+    {
+      "config": {
+        "m": 1,
+        "hd": 128,
+        "heads": 2,
+        "kvheads": 1,
+        "zero": false
+      },
+      "stages": 21,
+      "seconds": 1.301982851997309,
+      "scalar_budget_consumed": 214068,
+      "stage_sha256": {
+        "rms0": "893a106828fbdb9521e1d868c985aab7ad2ae2f606edc55329265a5e7676006c",
+        "q": "b9216bad2029fc2443efa4cd9652e6dc358ccd944b887d92f9a9e49885f530c7",
+        "qb": "b9216bad2029fc2443efa4cd9652e6dc358ccd944b887d92f9a9e49885f530c7",
+        "qr": "b9216bad2029fc2443efa4cd9652e6dc358ccd944b887d92f9a9e49885f530c7",
+        "k": "17242aac7d83ac90b7262d13281e9ef75301c653ee5b6b77b848972a342df47c",
+        "kb": "17242aac7d83ac90b7262d13281e9ef75301c653ee5b6b77b848972a342df47c",
+        "kr": "17242aac7d83ac90b7262d13281e9ef75301c653ee5b6b77b848972a342df47c",
+        "v": "17242aac7d83ac90b7262d13281e9ef75301c653ee5b6b77b848972a342df47c",
+        "vb": "17242aac7d83ac90b7262d13281e9ef75301c653ee5b6b77b848972a342df47c",
+        "cache": "b9216bad2029fc2443efa4cd9652e6dc358ccd944b887d92f9a9e49885f530c7",
+        "qk": "c0bfaff75ad2d1d0304724ced2561d0dc01c4c058603aeb63540d979d59c6a23",
+        "sm": "80b8fd6d60fa85fd14a38b5295cb92abd80dfec5ca406c9f969609a79d36809d",
+        "pv": "b9216bad2029fc2443efa4cd9652e6dc358ccd944b887d92f9a9e49885f530c7",
+        "out": "569a35c5ee62c41992c7235680d22dfe00b29203cf9b9fb2d579e068137e641e",
+        "res0": "fb813cf98dd9b4096587f8083c674e97b3c06bd8c9285514b48d60c342e9eb46",
+        "rms1": "893a106828fbdb9521e1d868c985aab7ad2ae2f606edc55329265a5e7676006c",
+        "gate": "a56d01023869f8ef57d212126bce79cadd0a9a4ee39fbe66097d770152f53db4",
+        "up": "a56d01023869f8ef57d212126bce79cadd0a9a4ee39fbe66097d770152f53db4",
+        "act": "f4c375902807ce93cdf4a5cda1cd87d1b1ec72c7064debb773fead0fabffff6e",
+        "down": "8e6cf1b891cb5a5b23a6ce9a22636cd611687a0d356f0896b088a0bc36e6ec0a",
+        "res1": "931e1665615b48632805e309546678e0b0075db4eea798e25e67d5df73b37498"
+      }
+    }
+  ]
+}

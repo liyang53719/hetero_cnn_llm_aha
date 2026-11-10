@@ -1,0 +1,144 @@
+{
+  "status": "PASS_LAYOUT_BYTES_AND_SELECTED_REFERENCE_ONLY",
+  "runtime_profile": 2,
+  "tokens": 128,
+  "hidden": 1024,
+  "model": "Qwen/Qwen3.5-0.8B",
+  "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "records": [
+    {
+      "role": 0,
+      "name": "q",
+      "file": "q_weight_k_n.bf16le",
+      "shape": [
+        1024,
+        4096
+      ],
+      "dtype": "BF16",
+      "bytes": 8388608,
+      "sha256": "1c80b8a12d8ea9345f478cfe1fd4a5c7b6adf9a2396a14d176f2d50228c3289b",
+      "source_sha256": "b0dde4ab3eee4dc2abdf2e2fe8cd6b474d52c4559e38bb8fc9c8589c1b0a7176"
+    },
+    {
+      "role": 1,
+      "name": "k",
+      "file": "k_weight_k_n.bf16le",
+      "shape": [
+        1024,
+        512
+      ],
+      "dtype": "BF16",
+      "bytes": 1048576,
+      "sha256": "bc2df54b3f8e17d55427c0fbfac099736092c4d7451263ff738b7b1174905f4e",
+      "source_sha256": "4c8cfc4b114917fd3067510ca34886f9bb2bac638a07c537a544e0b9494237fe"
+    },
+    {
+      "role": 2,
+      "name": "v",
+      "file": "v_weight_k_n.bf16le",
+      "shape": [
+        1024,
+        512
+      ],
+      "dtype": "BF16",
+      "bytes": 1048576,
+      "sha256": "5a80d0c65c5c35c6943a6b6042e520b2d0a9e8fa1f8e5b8449b24e4e63747024",
+      "source_sha256": "459514e89bd3142fca159b73b936cc0e444e6e9cb0dff082be0ecb8462d6a1b7"
+    },
+    {
+      "name": "input_layernorm.weight",
+      "file": "input_layernorm.weight.bf16le",
+      "shape": [
+        1024
+      ],
+      "dtype": "BF16",
+      "bytes": 2048,
+      "sha256": "262f20f74b30264bb8244fd620dfd1356e8282ff09e4ba1d6892900d46d0635b"
+    },
+    {
+      "name": "self_attn.q_norm.weight",
+      "file": "self_attn.q_norm.weight.bf16le",
+      "shape": [
+        256
+      ],
+      "dtype": "BF16",
+      "bytes": 512,
+      "sha256": "6fbc460e96b527aa6b54ab345195d141716dd4e34094baec92c65344f8bac298"
+    },
+    {
+      "name": "self_attn.k_norm.weight",
+      "file": "self_attn.k_norm.weight.bf16le",
+      "shape": [
+        256
+      ],
+      "dtype": "BF16",
+      "bytes": 512,
+      "sha256": "424ead8a89f71d4e83858da7f28335665c4d61a8797b121cfaa26a56d1f5ea6a"
+    },
+    {
+      "name": "input",
+      "file": "input_m128.bf16le",
+      "shape": [
+        128,
+        1024
+      ],
+      "dtype": "BF16",
+      "bytes": 262144,
+      "sha256": "5e7e52488ed8a21cf4cb98b60efc59b7aca3527e60c973b09fa37c48950ed34b",
+      "origin": "synthetic_exact_dyadic_not_prior_layers_output"
+    }
+  ],
+  "selected_ordered_reference": [
+    {
+      "role": 0,
+      "column": 0,
+      "result_fp32_bits": "3d0c21e0"
+    },
+    {
+      "role": 0,
+      "column": 2048,
+      "result_fp32_bits": "3d93976c"
+    },
+    {
+      "role": 0,
+      "column": 4095,
+      "result_fp32_bits": "bddcf88e"
+    },
+    {
+      "role": 1,
+      "column": 0,
+      "result_fp32_bits": "3c9edeb8"
+    },
+    {
+      "role": 1,
+      "column": 256,
+      "result_fp32_bits": "3c5a0f38"
+    },
+    {
+      "role": 1,
+      "column": 511,
+      "result_fp32_bits": "3d11cf9e"
+    },
+    {
+      "role": 2,
+      "column": 0,
+      "result_fp32_bits": "bdc17019"
+    },
+    {
+      "role": 2,
+      "column": 256,
+      "result_fp32_bits": "3bf1df3c"
+    },
+    {
+      "role": 2,
+      "column": 511,
+      "result_fp32_bits": "bcde2a78"
+    }
+  ],
+  "reference_order": "ascending_k_separate_fp32_multiply_add_only_layout_check_not_asserted_DUT_order",
+  "initial_memory_contains_only": "inputs_and_weights",
+  "producer_outputs_preset": false,
+  "producer_receipts_fabricated": false,
+  "hardware_executed": false,
+  "full_block_pass": false
+}

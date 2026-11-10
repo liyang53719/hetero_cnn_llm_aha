@@ -1,0 +1,43 @@
+{
+  "status": "EXECUTED_REFERENCE_ONLY",
+  "scope": "actual M128 Legacy RMS + complete Q Dense, no bias/RoPE/rest of block, no Chisel or RTL",
+  "pins": {
+    "x": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+    "gamma0": "320e4ac88269676897cf9c3b4996f966a6100ced2bc0f684216c200bc82b7180",
+    "wq": "b78b0cee80a89ab87148fd73c8409dfefbfd5b58b09c1f9e51680908c28a705d"
+  },
+  "shape": {
+    "M": 128,
+    "K": 1536,
+    "N": 1536
+  },
+  "macs": 301989888,
+  "rms_seconds": 4.390681491997384,
+  "dense_seconds": 0.45069886799683445,
+  "rms_scalar_ops": 786944,
+  "norm_sha256": "ccf1e6c065c6bc4e90458194aeda7475149451ac73479a6781d2fd638bf631df",
+  "q_sha256": "1e67553e3bbbd2c1118ad860a4669accbff3ead6dd403439d1cc3d0867e3e5d9",
+  "fraction_full_k_checks": [
+    {
+      "row": 0,
+      "col": 0,
+      "word": 3224420823
+    },
+    {
+      "row": 0,
+      "col": 1535,
+      "word": 3187258662
+    },
+    {
+      "row": 63,
+      "col": 777,
+      "word": 1055579209
+    },
+    {
+      "row": 127,
+      "col": 1535,
+      "word": 1068503377
+    }
+  ],
+  "full_block_hardware_pass": 0
+}

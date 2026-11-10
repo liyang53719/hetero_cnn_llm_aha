@@ -1,0 +1,17 @@
+{
+  "status": "PASS_SOURCE_CONTRACT_REAL_L3_M128_CONVERSION_ONLY",
+  "seconds": 32.94914162599889,
+  "flags": {
+    "matrix_scalar_flag_1": 3853073,
+    "matrix_scalar_flag_0": 472303,
+    "rope_flag_0": 66015,
+    "rope_flag_1": 179745,
+    "norm_conversion_flag_0": 7822,
+    "norm_conversion_flag_1": 582002
+  },
+  "widen": {
+    "words": 18491904,
+    "nonfinite": 0
+  },
+  "calls": 55
+}

@@ -1,0 +1,32 @@
+{
+  "status": "PASS_MINIMAL_REFERENCE_WITNESSES",
+  "cases": [
+    {
+      "head": 0,
+      "result": "801c6a52",
+      "flags": 3,
+      "legacy_vector_error": true
+    },
+    {
+      "head": 3,
+      "result": "8008ec42",
+      "flags": 3,
+      "legacy_vector_error": true
+    },
+    {
+      "head": 11,
+      "result": "007932bd",
+      "flags": 3,
+      "legacy_vector_error": true
+    },
+    {
+      "head": 13,
+      "result": "8041d9ff",
+      "flags": 3,
+      "legacy_vector_error": true
+    }
+  ],
+  "hardware_executed": false,
+  "full_block_pass": false,
+  "first_hardware_cycle_proven": false
+}

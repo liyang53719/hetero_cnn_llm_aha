@@ -1,0 +1,11 @@
+{
+  "initial_session": 56842,
+  "initial_exit": 1,
+  "failure": "JSON int64 serialization after numerical checks",
+  "final_session": 43861,
+  "final_exit": 0,
+  "command": "OPENBLAS_NUM_THREADS=1 python -O run.py",
+  "seconds": 32.94914162599889,
+  "normal_and_optimized_small_tests": "PASS",
+  "full_replay": "final optimized PASS"
+}

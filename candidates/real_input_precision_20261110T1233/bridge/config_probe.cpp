@@ -1,0 +1,3 @@
+#define HOST_DRIVER_CONFIG_ONLY
+#include "host_axi_driver_non_dpi.cpp"
+int main(int argc,char**argv){try {need(argc==2,"manifest");Config c(argv[1]);stimulus::ReadOnly mem;std::vector<stimulus::ViewAllocation> ro;for(auto&a:c.allocations)if(a.access=="ro")ro.push_back({a.name,a.address,a.bytes});stimulus::loadViews(c.viewManifest,ro,mem);for(auto&a:ro){(void)mem.byte(a.base);(void)mem.byte(a.base+a.bytes-1);}mem.checkStable();std::cout<<"PASS_ORIGINAL_CONFIG_AND_MMAP_SHA_ONLY commands="<<c.commands<<" descriptors="<<c.descriptors<<" readonly="<<ro.size()<<" observations="<<c.outputs.size()<<"\n";return 0;}catch(std::exception&e){std::cerr<<e.what()<<"\n";return 1;}}

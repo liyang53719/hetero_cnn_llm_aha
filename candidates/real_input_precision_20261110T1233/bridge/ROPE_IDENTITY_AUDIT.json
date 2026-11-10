@@ -1,0 +1,27 @@
+{
+  "status": "INPUT_IDENTITY_AUDIT_ONLY",
+  "cpp_rope_sha256": "9c59ecfe381ffd75e939cfda67423997454145376fff21991af06d98b8d06b7e",
+  "modified_inputs": false,
+  "parts": {
+    "cos": {
+      "path": "round_20261110T0833/numpy_fma_candidate/cos.local.f32",
+      "bytes": 262144,
+      "sha256": "07176f2b45701f808aa6f225091f75db2ea751ffb28f9399a7a07956ecb77392",
+      "words": 65536,
+      "compared_words": 65536,
+      "different_words": 0,
+      "same_bytes": true,
+      "first_differences": []
+    },
+    "sin": {
+      "path": "round_20261110T0833/numpy_fma_candidate/sin.local.f32",
+      "bytes": 262144,
+      "sha256": "9cd312a7e08ea3aaef3dbf8f33df5861252a8affffcd10a209827f2e965e3cf1",
+      "words": 65536,
+      "compared_words": 65536,
+      "different_words": 0,
+      "same_bytes": true,
+      "first_differences": []
+    }
+  }
+}

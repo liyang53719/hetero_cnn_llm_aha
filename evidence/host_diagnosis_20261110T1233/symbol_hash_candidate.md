@@ -1,0 +1,1 @@
+仅独立 SymbolTable 图等价候选。基于已 pin 官方源码，仅三个 Module-key 缓存结构 hash，保留 Module.equals；IdentityHashMap 仅缓存查找。构造后重核 hash 稳定。未加入 clockBoundary 改动，未改原 Host/运行中 classes。100/2000 节点 fixture 比较392/6092符号完整父依赖图一致，Stop/Print/Cover 同定义跨实例链与不同定义隔离 require 检查通过。不是当前完整 Host/原生接口/数值/RTL 资格，不继承历史 PASS。候选尚未验证完整 Host 内存与性能。

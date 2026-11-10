@@ -1,0 +1,35 @@
+{
+  "scope": "No full Host reset/prefill/numerical PASS; all code and raw logs retained locally after publication review rejected extensive payload",
+  "original_run": {
+    "session": 65749,
+    "exit": -6,
+    "timeout": false,
+    "elapsed_s": 600.0334161319988,
+    "elaborated_s": 10.093,
+    "lowering_complete_s": 113.21,
+    "before_engine_s": 265.193,
+    "peak_rss_kib": 4467396
+  },
+  "candidate_tests": {
+    "native_lifecycle_prefixes": [
+      0,
+      1,
+      4,
+      8
+    ],
+    "native_snapshot_words": 208400,
+    "native_halfcycles": 400,
+    "symbol_graph_fixture_symbols": [
+      392,
+      6092
+    ],
+    "local_uint_slices": 1000
+  },
+  "hashes": {
+    "diagnostic/run.log": "3c81f91d7ce29643b3c9e5c9fe1734e2458d3a10eee04ed0f7acea242b4d382b",
+    "diagnostic/hs_err_pid6.log": "4491d2a1e583ebcb2603bdea1a4476d3db76438453729af08cde6543f1b0d25c",
+    "symbol_hash_candidate/SymbolTable.scala": "13ce634960cbf6cb4129c01af58c3353378846c1a2aba21831418952ab08f35a",
+    "native_cleanup/unseeded_matrix_v2.cpp": "c23513bdead29b9b2a1854a1f5d0a7f91d5e22d44ba65fe15d5cc964702e9de7",
+    "idma_field_dependency/ExactUIntSlices.scala": "7f26816f92b1fedfef60f460a79c01bf0484a6de85d1f4f13e4325e40aa1ef1a"
+  }
+}

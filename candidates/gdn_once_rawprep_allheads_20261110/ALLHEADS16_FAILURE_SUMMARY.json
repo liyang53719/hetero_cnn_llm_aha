@@ -1,0 +1,28 @@
+{
+  "status": "FAIL_ALLHEADS16_LEGACY_UNDERFLOW",
+  "covered_export_heads": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "failing_head": 4,
+  "chunk": 0,
+  "phase": 7,
+  "cycle": 23785058,
+  "receipt_status": 8,
+  "timeout": false,
+  "wall_seconds": 620.2430727590017,
+  "bank_probe": "PASS_DIAGNOSTIC_ONLY",
+  "probe_input_a": "0713e498",
+  "probe_input_b": "b8009900",
+  "result_both_policies": "80252558",
+  "flags_both_policies": 3,
+  "bank_policy0_error": true,
+  "bank_policy3_gradual_error": false,
+  "production_mapping": "HostRuntimeChunkProtocolV9: n32=>context policy1; n16=>context policy0",
+  "arithmetic_changes": false,
+  "full_block_pass": 0,
+  "full_block_total": 5,
+  "new_policy_authorized_or_promoted": false
+}

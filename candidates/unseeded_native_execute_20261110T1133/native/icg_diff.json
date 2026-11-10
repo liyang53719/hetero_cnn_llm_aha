@@ -1,0 +1,14 @@
+{
+  "stage": "icg_diff",
+  "exit": 0,
+  "timeout": false,
+  "seconds": 0.7175364099966828,
+  "identity": {
+    "pid": 7,
+    "pgid": 7,
+    "starttime_ticks": "3784656",
+    "boot_id": "9b806a8d-1ac8-4f06-bc04-7289fb37fb1e"
+  },
+  "scope": "REAL_RTL_LEAF_C_ABI_DIFFERENTIAL_NOT_FULL_HOST",
+  "scope_correction": "generic wrapper originally said interface-only; stage runs actual leaf eval, not full Host"
+}

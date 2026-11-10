@@ -1,0 +1,11 @@
+# 原真实 native 三叶子恢复与上下文修复（TEMP）
+
+复用前轮同unseeded RTL Matrix/cluster现有PIC archive，未重复elaboration/Verilation/全Top编译，5.77s链接成功。ICG从同pin真实tc_clk_gating functional=1生成并链接；iDMA从已校验官方闭包及原wrapper生成链接，16.07s完成。所有库数据本地，SOURCE/INPUT/LIBRARY pins记录身份。没有软件浮点oracle替真实Matrix；层级Verilator protectlib内部DPI是生成RTL子模块连接，非算法DPI实现。
+
+实际发现多VerilatedContext传输缺陷：原ABI eval没有选择本实例线程context，层级protectlib子模型及销毁可使用另一实例context。双模型对照完成400半周期但退出阻塞；原60s及定位10s timeout证据保留。修复仅transport每次eval/final选择自身context，销毁DUT后切默认context，三种ABI均防护，不改RTL/算术/4096结构。修后同直接generated-port驱动模型差分400半周期、208400word零差异，正200/反199沿，实际BF16 ones单step512个FP32输出均1；包含backpressure及一次completion。此为固定8实例中的单slice边沿/数值连接，不是把硬件缩512冒统一通过。八实例Scala交错测试由父协调，结果另存。
+
+首次test数值采样放在输出fire后posedge，采到了下一状态，错误日志保留；改成preedge采被接受输出。不属于DUT数值修复。双模型context修复前运行不能算完成PASS。
+
+ICG真实直接端口vs ABI256观察点一致，含低电平透明/高电平保持及test-enable切换。iDMA真实直接端口vs ABI160半周期8640word一致，覆盖命令接受、AXI背压和在途reset；没有声称完整DMA数据搬运完成。
+
+执行层级明确：上述测试确实执行真实叶子RTL eval，不是纯Python/静态接口测试；原通用runner的interface-only文字已在receipt添加scope更正。无完整Host/M128数值回归，无最终同RTL replay通过，五块仍0/5，fatal策略未动。

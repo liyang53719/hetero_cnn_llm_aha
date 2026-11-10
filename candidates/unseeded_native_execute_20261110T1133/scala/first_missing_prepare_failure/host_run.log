@@ -1,0 +1,96 @@
+PINNED_IDMA_EXT 91fb6590dd417097bb3305eed035816d2179e1d5798bc2e2db829dc839b151cd
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala 915:38: [W004] Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1).
+[warn]       val knownNorm=qkNormalizedValid(qkRole) && a.address===qkNormalized(qkRole) && (!(bf16AttentionCore.B || runtimeAttentionProfile) || sameAllocation(a,qkNormalizedTensor(qkRole))) &&
+[warn]                                      ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala 915:74: [W004] Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1).
+[warn]       val knownNorm=qkNormalizedValid(qkRole) && a.address===qkNormalized(qkRole) && (!(bf16AttentionCore.B || runtimeAttentionProfile) || sameAllocation(a,qkNormalizedTensor(qkRole))) &&
+[warn]                                                                          ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala 915:175: [W004] Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1).
+[warn]       val knownNorm=qkNormalizedValid(qkRole) && a.address===qkNormalized(qkRole) && (!(bf16AttentionCore.B || runtimeAttentionProfile) || sameAllocation(a,qkNormalizedTensor(qkRole))) &&
+[warn]                                                                                                                                                                               ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala 919:59: [W004] Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1).
+[warn]         qkProjectedValid.asUInt.andR && !qkNormalizedValid(qkRole) && Mux(qkRole===0.U,!qkNormalizedValid(1),qkNormalizedValid(0)),
+[warn]                                                           ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala 920:57: [W004] Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1).
+[warn]         qkNormalizedValid.asUInt.andR && !qkRotatedValid(qkRole) && Mux(qkRole===0.U,!qkRotatedValid(1),qkRotatedValid(0)))
+[warn]                                                         ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala 934:18: [W005] Dynamic index with width 2 is too narrow for Vec of size 12 (expected index width 4).
+[warn]     val cp=policy(attentionPolicySlot);val cx=policy(attentionContextSlot)
+[warn]                  ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala 934:53: [W005] Dynamic index with width 2 is too narrow for Vec of size 12 (expected index width 4).
+[warn]     val cp=policy(attentionPolicySlot);val cx=policy(attentionContextSlot)
+[warn]                                                     ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala 2160:28: [W004] Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1).
+[warn]           qkNormalizedValid(bound.qkRole):=true.B;qkNormalized(bound.qkRole):=tensors(2).address
+[warn]                            ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala 2160:63: [W004] Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1).
+[warn]           qkNormalizedValid(bound.qkRole):=true.B;qkNormalized(bound.qkRole):=tensors(2).address
+[warn]                                                               ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala 2161:29: [W004] Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1).
+[warn]           qkNormalizedTensor(bound.qkRole):=tensors(2);rememberSource(tensors(1),4.U+bound.qkRole)
+[warn]                             ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala 2173:56: [W004] Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1).
+[warn]           rememberSource(tensors(1),6.U);qkRotatedValid(bound.qkRole):=true.B
+[warn]                                                        ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala 2174:26: [W004] Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1).
+[warn]           qkRotatedTensor(bound.qkRole):=tensors(2);qkAbsolutePosition(bound.qkRole):=bound.qkPositionBase
+[warn]                          ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala 2174:71: [W004] Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1).
+[warn]           qkRotatedTensor(bound.qkRole):=tensors(2);qkAbsolutePosition(bound.qkRole):=bound.qkPositionBase
+[warn]                                                                       ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala 2184:39: [W005] Dynamic index with width 2 is too narrow for Vec of size 12 (expected index width 4).
+[warn]           pendingAttentionBase:=policy(attentionPolicySlot)(99,68);pendingAttentionCount:=bound.m
+[warn]                                       ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala 2205:37: [W004] Dynamic index with width 3 is too wide for Vec of size 3 (expected index width 2).
+[warn]             runtimeProjectionTensors(role):=tensors(2)
+[warn]                                     ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala 2212:29: [W004] Dynamic index with width 3 is too wide for Vec of size 3 (expected index width 2).
+[warn]             qkProjectedValid(role):=true.B;qkProjected(role):=tensors(2).address
+[warn]                             ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala 2212:55: [W004] Dynamic index with width 3 is too wide for Vec of size 3 (expected index width 2).
+[warn]             qkProjectedValid(role):=true.B;qkProjected(role):=tensors(2).address
+[warn]                                                       ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala 2213:30: [W004] Dynamic index with width 3 is too wide for Vec of size 3 (expected index width 2).
+[warn]             qkProjectedTensor(role):=tensors(2);qkRows(role):=bound.m
+[warn]                              ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala 2213:55: [W004] Dynamic index with width 3 is too wide for Vec of size 3 (expected index width 2).
+[warn]             qkProjectedTensor(role):=tensors(2);qkRows(role):=bound.m
+[warn]                                                       ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala 2214:25: [W004] Dynamic index with width 3 is too wide for Vec of size 3 (expected index width 2).
+[warn]             qkWindowBase(role):=0.U;qkWindowCount(role):=bound.m
+[warn]                         ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/p0_resident_observation_20261030/source/HostBlockCommandsV4.scala 2214:50: [W004] Dynamic index with width 3 is too wide for Vec of size 3 (expected index width 2).
+[warn]             qkWindowBase(role):=0.U;qkWindowCount(role):=bound.m
+[warn]                                                  ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/fresh_original_top_recovery_20261028/source/GdnRuntimeRmsNormOwnerV3.scala 159:64: [W005] Dynamic index with width 3 is too narrow for Vec of size 32 (expected index width 5).
+[warn]       foldResidue->foldResidueB,foldLane->(if(i==0) valueVector(lane(2,0)) else 0.U(32.W)),
+[warn]                                                                ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/fresh_original_top_recovery_20261028/source/HostRuntimePrefixLeaseWiringV8.scala 473:68: [W005] Dynamic index with width 1 is too narrow for Vec of size 3 (expected index width 2).
+[warn]       val q=g.io.job.bits;val role=q.qkRole(0);val p=projectionJobs(role);val d=projectionResults(role)
+[warn]                                                                    ^
+[warn] round_20261110T0133/recovery/sources/hetero_cloud_recovery_20261107T2134/candidates/fresh_original_top_recovery_20261028/source/HostRuntimePrefixLeaseWiringV8.scala 473:98: [W005] Dynamic index with width 1 is too narrow for Vec of size 3 (expected index width 2).
+[warn]       val q=g.io.job.bits;val role=q.qkRole(0);val p=projectionJobs(role);val d=projectionResults(role)
+[warn]                                                                                                  ^
+[warn] There were 24 warning(s) during hardware elaboration.
+ORIGINAL_HIGH_ELABORATED modules=1050
+ORIGINAL17_BINDINGS_VERIFIED
+ORIGINAL_LOW_READY modules=90
+Exception in thread "main" java.util.NoSuchElementException: None.get
+	at scala.None$.get(Option.scala:627)
+	at scala.None$.get(Option.scala:626)
+	at treadle2.executable.ExecutionEngine$.apply(ExecutionEngine.scala:565)
+	at treadle2.TreadleTester.<init>(TreadleTester.scala:38)
+	at chiseltest.simulator.RunCurrentHost$.delayedEndpoint$chiseltest$simulator$RunCurrentHost$1(RunCurrentHost.scala:30)
+	at chiseltest.simulator.RunCurrentHost$delayedInit$body.apply(RunCurrentHost.scala:12)
+	at scala.Function0.apply$mcV$sp(Function0.scala:42)
+	at scala.Function0.apply$mcV$sp$(Function0.scala:42)
+	at scala.runtime.AbstractFunction0.apply$mcV$sp(AbstractFunction0.scala:17)
+	at scala.App.$anonfun$main$1(App.scala:98)
+	at scala.App.$anonfun$main$1$adapted(App.scala:98)
+	at scala.collection.IterableOnceOps.foreach(IterableOnce.scala:619)
+	at scala.collection.IterableOnceOps.foreach$(IterableOnce.scala:617)
+	at scala.collection.AbstractIterable.foreach(Iterable.scala:935)
+	at scala.App.main(App.scala:98)
+	at scala.App.main$(App.scala:96)
+	at chiseltest.simulator.RunCurrentHost$.main(RunCurrentHost.scala:12)
+	at chiseltest.simulator.RunCurrentHost.main(RunCurrentHost.scala)

@@ -1,0 +1,30 @@
+{
+  "status": "PASS_REAL_LEAF_BUILD_AND_BOUNDED_TRANSPORT_DIFFERENTIAL_ONLY",
+  "matrix": {
+    "ticks": 400,
+    "compared_words": 208400,
+    "rises": 200,
+    "falls": 199,
+    "one_step_outputs": 512,
+    "expected_fp32": "3f800000",
+    "scope": "one physical512 slice of fixed8-instance4096 hardware; not downsized replacement"
+  },
+  "icg": {
+    "observations": 256,
+    "low_transparency_high_hold": true
+  },
+  "idma": {
+    "ticks": 160,
+    "compared_words": 8640,
+    "accepted_request": true,
+    "stalled_axi_reset": true,
+    "transfer_completion_tested": false
+  },
+  "full_host_executed": false,
+  "full_block_pass": false,
+  "libraries": {
+    "libmatrix_unseeded_v2.so": "cccd47947cedee61ccdd4d69082f3a080945f978fd95a77f88a36b841b6b3b4e",
+    "libidma.so": "3044ee41c4647bbf337008ab6e104f51dece66376c717627f0e03700e144aa78",
+    "libicg.so": "0d204232b904de19415be2a20adc43d61e10c666fadc596e2a4b6cb78d0b6a27"
+  }
+}

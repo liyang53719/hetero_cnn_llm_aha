@@ -1,0 +1,3 @@
+set -e
+g++ -std=c++17 -O1 -pthread -I/workspace/scratch/f28987e955ed/runtime_recovery_0133/verilator-runtime/verilator-package/usr/share/verilator/include -I/workspace/scratch/f28987e955ed/runtime_recovery_0133/verilator-runtime/verilator-package/usr/share/verilator/include/vltstd -I/workspace/scratch/f28987e955ed/round_20261110T1133/native/idma_obj -I/workspace/scratch/f28987e955ed/round_20261110T1133/native /workspace/scratch/f28987e955ed/round_20261110T1133/native/idma_diff.cpp -L/workspace/scratch/f28987e955ed/round_20261110T1133/native -lidma -Wl,-rpath,/workspace/scratch/f28987e955ed/round_20261110T1133/native -o /workspace/scratch/f28987e955ed/round_20261110T1133/native/idma_diff.local
+/workspace/scratch/f28987e955ed/round_20261110T1133/native/idma_diff.local

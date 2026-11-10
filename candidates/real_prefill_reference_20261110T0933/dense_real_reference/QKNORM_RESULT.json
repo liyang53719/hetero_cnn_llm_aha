@@ -1,0 +1,26 @@
+{
+  "stages": [
+    {
+      "name": "qn",
+      "status": "CANDIDATE_C2_VALUE_PATH",
+      "shape": [
+        128,
+        8,
+        256
+      ],
+      "sha256": "557c32a5e0226859914c22701c3fc2973f660a750538756899bd8934b07acea1"
+    },
+    {
+      "name": "kn",
+      "status": "CANDIDATE_C2_VALUE_PATH",
+      "shape": [
+        128,
+        2,
+        256
+      ],
+      "sha256": "0ec0350f867874af2b2c561ea54850f21857dee32aff1bf958260fc9db2e63a5"
+    }
+  ],
+  "flags": "NOT_QUALIFIED",
+  "hardware": false
+}

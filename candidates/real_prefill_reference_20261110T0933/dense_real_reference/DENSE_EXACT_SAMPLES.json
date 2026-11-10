@@ -1,0 +1,77 @@
+{
+  "scope": "8 real output coordinates, full K1024 each; bits only, no flags or exhaustive qualification",
+  "points": [
+    {
+      "profile": 1,
+      "stage": "qkv",
+      "row": 0,
+      "column": 0,
+      "K": 1024,
+      "expected_bf16": 15702,
+      "actual_bf16": 15702
+    },
+    {
+      "profile": 1,
+      "stage": "qkv",
+      "row": 127,
+      "column": 6143,
+      "K": 1024,
+      "expected_bf16": 48733,
+      "actual_bf16": 48733
+    },
+    {
+      "profile": 1,
+      "stage": "ab",
+      "row": 0,
+      "column": 0,
+      "K": 1024,
+      "expected_bf16": 49179,
+      "actual_bf16": 49179
+    },
+    {
+      "profile": 1,
+      "stage": "ab",
+      "row": 127,
+      "column": 31,
+      "K": 1024,
+      "expected_bf16": 16185,
+      "actual_bf16": 16185
+    },
+    {
+      "profile": 2,
+      "stage": "q",
+      "row": 0,
+      "column": 0,
+      "K": 1024,
+      "expected_bf16": 16029,
+      "actual_bf16": 16029
+    },
+    {
+      "profile": 2,
+      "stage": "q",
+      "row": 127,
+      "column": 4095,
+      "K": 1024,
+      "expected_bf16": 16106,
+      "actual_bf16": 16106
+    },
+    {
+      "profile": 2,
+      "stage": "k",
+      "row": 0,
+      "column": 0,
+      "K": 1024,
+      "expected_bf16": 15872,
+      "actual_bf16": 15872
+    },
+    {
+      "profile": 2,
+      "stage": "k",
+      "row": 127,
+      "column": 511,
+      "K": 1024,
+      "expected_bf16": 48503,
+      "actual_bf16": 48503
+    }
+  ]
+}

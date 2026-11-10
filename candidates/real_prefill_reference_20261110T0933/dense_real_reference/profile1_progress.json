@@ -1,0 +1,72 @@
+[
+  {
+    "name": "input_norm",
+    "shape": [
+      128,
+      1024
+    ],
+    "dtype": "uint16",
+    "sha256": "83325e03bb7c66b6fec50a16a514d59ca25075a4fe318c8ef0adff05ee94a5f3",
+    "seconds": 0.004392065999127226
+  },
+  {
+    "name": "qkv",
+    "shape": [
+      128,
+      6144
+    ],
+    "dtype": "uint16",
+    "sha256": "8dcb3dc3e71be344608e4b0ddb206e58ff174ab60a3a7efd11d5c6df8e562169",
+    "seconds": 1.5122689249983523
+  },
+  {
+    "name": "z",
+    "shape": [
+      128,
+      2048
+    ],
+    "dtype": "uint16",
+    "sha256": "3d50fd4519a8b550a4f3b3d67dbe7512123d96901c411faf836162577c09b0f7",
+    "seconds": 0.4637382079999952
+  },
+  {
+    "name": "ab",
+    "shape": [
+      128,
+      32
+    ],
+    "dtype": "uint16",
+    "sha256": "cd7f7d727c83a00966d7f710f96e6e811afe64063098394b6501f3a3dd105a5b",
+    "seconds": 0.017807560001529055
+  },
+  {
+    "name": "conv",
+    "shape": [
+      128,
+      6144
+    ],
+    "dtype": "uint16",
+    "sha256": "20acfb08bd964f2edae4003bab182fc21999f282f878c83518c14d486899ca0a",
+    "seconds": 0.044712974999129074
+  },
+  {
+    "name": "history_out",
+    "shape": [
+      6144,
+      4
+    ],
+    "dtype": "uint16",
+    "sha256": "88d1b70c6bdc7229f3eeb0df9707d803b7b50945935a532a358498ca14d27f74",
+    "seconds": 0.045096621000993764
+  },
+  {
+    "name": "prepared",
+    "shape": [
+      128,
+      6400
+    ],
+    "dtype": "float32",
+    "sha256": "9154b036019d5e897f29078c9bf8143d5d5c435ed1f506875cc924dd0fd51c2b",
+    "seconds": 0.10063588499906473
+  }
+]

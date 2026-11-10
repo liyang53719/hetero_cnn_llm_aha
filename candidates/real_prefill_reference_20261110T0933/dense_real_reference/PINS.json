@@ -1,0 +1,23 @@
+{
+  "original_rms_source": {
+    "path": "round_20261110T0133/current_original_source/GdnRuntimeRmsNormOwnerV3.scala",
+    "sha256": "e8ad079d7145efaa5adc9647ce5208cce2cb5073137f4b9d7bba7ed208d73c77"
+  },
+  "legacy_exact_reference": {
+    "path": "round_20261110T0833/legacy_python/legacy_reference.py",
+    "sha256": "ae7e644c25c0dee728fab7055527303d8bae665fa51dca0a83b103063084dd93"
+  },
+  "source_hashes": {
+    "run.py": "c103125aef8bd77d52cebe0ee46e354a551f27f3adbce23e88ac0d4bb073ae32",
+    "original_prep_reference.py": "97aa46c6ca4b70bf09e545db60d4e9109c5c6a884c52a9f9523929b10fef526a",
+    "continue_qknorm.py": "0228beef4f72a3559dcdb6d05da667260c8f6a9d24e3308aedd318710a4be6de",
+    "candidate.py": "21ebd2be15b369d68f1bb4364bbb3eb1a3cded7530311121858ad186f50ef513",
+    "check_dense_points.py": "7a398eb56b63951edce9240dd3ed64cd4ab207bb64d88cf2765600544dcdc956",
+    "test_order.py": "52e079c4820b0d14c785f8a0ba4fd6ad16aed8b41e25708cf87ef035d2f4e936",
+    "conv_reference.py": "46e433379a01c036cc6da208729d0680bfbc8ec0ab56105c46e8c6abbd8432fb"
+  },
+  "qknorm_source": {
+    "path": "round_20261110T0133/current_original_source/QkNorm256RuntimeOwnerV11.scala",
+    "sha256": "0458e7aac6e9abf64e719b197ae9935d8fef3c5a9425160da1c66cd0ec84988d"
+  }
+}

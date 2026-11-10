@@ -1,0 +1,122 @@
+{
+  "ports": [
+    {
+      "direction": "IN",
+      "name": "clk_i",
+      "width": 1
+    },
+    {
+      "direction": "IN",
+      "name": "rst_ni",
+      "width": 1
+    },
+    {
+      "direction": "IN",
+      "name": "cmd_valid_i",
+      "width": 1
+    },
+    {
+      "direction": "OUT",
+      "name": "cmd_ready_o",
+      "width": 1
+    },
+    {
+      "direction": "IN",
+      "name": "cmd_i",
+      "width": 128
+    },
+    {
+      "direction": "IN",
+      "name": "step_valid_i",
+      "width": 1
+    },
+    {
+      "direction": "OUT",
+      "name": "step_ready_o",
+      "width": 1
+    },
+    {
+      "direction": "IN",
+      "name": "step_context_i",
+      "width": 3
+    },
+    {
+      "direction": "IN",
+      "name": "step_clear_i",
+      "width": 1
+    },
+    {
+      "direction": "IN",
+      "name": "step_last_i",
+      "width": 1
+    },
+    {
+      "direction": "IN",
+      "name": "command_last_tile_i",
+      "width": 1
+    },
+    {
+      "direction": "IN",
+      "name": "step_a_i",
+      "width": 256
+    },
+    {
+      "direction": "IN",
+      "name": "step_b_i",
+      "width": 512
+    },
+    {
+      "direction": "OUT",
+      "name": "out_valid_o",
+      "width": 1
+    },
+    {
+      "direction": "IN",
+      "name": "out_ready_i",
+      "width": 1
+    },
+    {
+      "direction": "OUT",
+      "name": "out_context_o",
+      "width": 3
+    },
+    {
+      "direction": "OUT",
+      "name": "out_last_o",
+      "width": 1
+    },
+    {
+      "direction": "OUT",
+      "name": "out_acc_o",
+      "width": 16384
+    },
+    {
+      "direction": "OUT",
+      "name": "completion_valid_o",
+      "width": 1
+    },
+    {
+      "direction": "IN",
+      "name": "completion_ready_i",
+      "width": 1
+    },
+    {
+      "direction": "OUT",
+      "name": "completion_data_o",
+      "width": 56
+    },
+    {
+      "direction": "OUT",
+      "name": "protocol_error_o",
+      "width": 1
+    }
+  ],
+  "port_count": 22,
+  "contract_sha256": "2702823111f4b275fdb56465e82152b107484c4139fe0d1f953251bfd2de9e9a",
+  "abi": 131072,
+  "input_words": 37,
+  "output_words": 521,
+  "seed_request": "always error -7",
+  "numeric_oracle": false,
+  "hardware_qualification": false
+}

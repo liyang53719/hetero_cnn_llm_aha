@@ -1,0 +1,9 @@
+[
+  "make",
+  "-C",
+  "/workspace/scratch/f28987e955ed/round_20261110T0933/host/obj_hier",
+  "-f",
+  "VHostBlockTopV4.mk",
+  "-j1",
+  "libVHostBlockTopV4"
+]

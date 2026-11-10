@@ -1,0 +1,21 @@
+# 原始Chisel执行后端审计与真实模型编译（TEMP）
+
+项目build使用Chisel6.7.0/chiseltest6.0.0。现有Host/controller测试显式VerilatorBackendAnnotation；完整4096资源的RetainedMatrixEndpoint和RetainedIdma为外部SV BlackBox，不可把retainedMatrix=false的较小Chisel内置路径冒统一4096。
+
+恢复源码中确实存在OriginalHostTreadleBinding，不应泛称上游Chisel不支持模型执行：该项目混合路径连接Treadle原控制IR及AllNativeRetainedModelFactory的8 Matrix+8ICG+1iDMA真实native实例（JNA/C ABI）。它不是纯Scala软件替代算术，也不是纯Chisel无RTL后端。历史construction/finite叶子摘要不构成完整Host数值通过；旧native库和完整runtime在本轮未恢复验证，不继承历史PASS。Treadle类存在于chiseltest jar也不等于全部真实17个BlackBox已可执行。
+
+本轮实质步骤复用上轮同一Top哈希与全部真实分层生成C++，单线程make编译完整库，600s/5GiB预算，不重新elaborate或Verilate，不改4096或算术，无stub/DPI软件算术，不启动长RTL数值。准备链接现有Python只读参考bench。该产物必须明确称Verilated RTL模型，不能用成功编译替代原Chisel完整prefill数值验收或冻结RTL回放PASS。
+
+五块完整硬件数值仍0/5；原head4 fatal FAIL保留；本轮不产生利用率结论。
+
+混合路径审计细化：AllNativeRetainedModelFactory只匹配8 Matrix/8 ICG/1 iDMA，没有SFU替换项；Matrix Scala adapter只有位编码、drive/evaluate/clock/read，无FMA或查表oracle。已恢复iDMA C ABI为Vidma_backend_rw_axi_flat_wrap的VerilatedContext/eval包装。Matrix/ICG当前缺底层C ABI实现和库的完整恢复，不能仅凭Scala接口注释认定已核实真实RTL运行。JNA不是软件oracle的充分证据，也不是硬件通过的充分证据。恢复该混合后端须重新证明17叶子的来源、边沿及整条路径，不能沿用旧construction资格。
+
+## 新发现：恢复的native ABI与本轮Top不一致
+本轮生成Top `8cbe3efd...` 的SV不含seed_begin_valid_i；实际编译endpoint没有ENABLE_ACCUMULATOR_SEED参数。历史AllNativeFactory和恢复的Matrix C ABI明确强制seed=1/seed端口。这不是仅目录丢失，不能把历史native库接到当前Top、默默删端口或冒同硬件通过。rebuild_native.py现在build路径fail-closed拒绝该不兼容，plan-only保留原源码和命令用于后续选择匹配身份。要么恢复同unseeded硬件对应原factory/ABI并重新校验，或者明确统一重新生成seeded完整硬件并五profile全重测；两者都不能迁移旧PASS。
+
+## 当前unseeded v2 transport实质代码
+新建独立命名的ABI v2（131072），不覆盖历史seeded ABI；37输入word/521输出word，seed_request无条件返回-7，旧63word请求不能通过长度检查。C++仍直接drive/eval/clock/read真实Vqwen2_matrix_command_endpoint，不含算术或伪receipt；8实例各自native状态。生成匹配的Scala layout/JNA leaf/BlackBox/factory源，只有transport变化，没有改RTL。
+自动对实际cb373a03 IR的全部8个ExtModule逐name/direction/width核22ports，并与真实生成C++头交叉；额外seed/宽度/方向负例拒绝，普通与-O通过。C++对真实头语法通过；最小ABI版本/hash、seed及null拒绝测试通过（链接gc-sections仅保留这些transport函数，未构造DUT，不是时序或数值验证）。Scala新factory还未编译，不冒连通通过。
+
+原session58224全模型编译达到600s上限，exit-9/timeout；没有诊断数值FAIL，没有重启EDA，生成对象全部保留，后续可增量继续原obj。本轮未链接完整模型、未运行数值。当前107个Maven输入中88本地pin复核，19官方Maven缺项新下载SHA复核完成；无二进制提交。
+TODO：Scala新factory编译；当前unseeded native PIC真实库构建；实际ABI正反沿差分与17实例完整绑定；原Host冷启动/完整prefill同参考数值链；最后冻结同RTL回放。任何步骤不得继承旧seeded路径PASS。

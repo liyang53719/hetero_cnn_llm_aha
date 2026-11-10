@@ -1,0 +1,8 @@
+{"stage": "q", "outputs": 9, "steps": 13824, "flag_counts": {"0": 12062, "1": 1762}, "status": "SAMPLED_FULL_K_VALUE_AND_EXACT_FLAGS_ONLY"}
+{"stage": "k", "outputs": 9, "steps": 13824, "flag_counts": {"0": 12139, "1": 1685}, "status": "SAMPLED_FULL_K_VALUE_AND_EXACT_FLAGS_ONLY"}
+{"stage": "v", "outputs": 9, "steps": 13824, "flag_counts": {"0": 12900, "1": 924}, "status": "SAMPLED_FULL_K_VALUE_AND_EXACT_FLAGS_ONLY"}
+{"stage": "out", "outputs": 9, "steps": 13824, "flag_counts": {"0": 12452, "1": 1372}, "status": "SAMPLED_FULL_K_VALUE_AND_EXACT_FLAGS_ONLY"}
+{"stage": "gate", "outputs": 9, "steps": 13824, "flag_counts": {"0": 12430, "1": 1394}, "status": "SAMPLED_FULL_K_VALUE_AND_EXACT_FLAGS_ONLY"}
+{"stage": "up", "outputs": 9, "steps": 13824, "flag_counts": {"0": 12712, "1": 1112}, "status": "SAMPLED_FULL_K_VALUE_AND_EXACT_FLAGS_ONLY"}
+{"stage": "down", "outputs": 9, "steps": 80640, "flag_counts": {"0": 59159, "1": 21481}, "status": "SAMPLED_FULL_K_VALUE_AND_EXACT_FLAGS_ONLY"}
+PASS_BOUNDED_INDEPENDENT_ORACLE_AND_SAMPLED_PATHS

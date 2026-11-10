@@ -1,0 +1,153 @@
+{
+  "classification": "CANDIDATE_REFERENCE",
+  "matrix_flags": "NOT_QUALIFIED",
+  "hardware_pass": 0,
+  "records": [
+    {
+      "name": "n0",
+      "buffer": "norm0",
+      "bytes": 786432,
+      "sha256": "ccf1e6c065c6bc4e90458194aeda7475149451ac73479a6781d2fd638bf631df",
+      "fnv64": 12471709832643100146
+    },
+    {
+      "name": "qraw",
+      "buffer": "q0",
+      "bytes": 786432,
+      "sha256": "1e67553e3bbbd2c1118ad860a4669accbff3ead6dd403439d1cc3d0867e3e5d9",
+      "fnv64": 10760918499197079379
+    },
+    {
+      "name": "qr",
+      "buffer": "qb",
+      "bytes": 786432,
+      "sha256": "bd97c7b89801abddbbd88370c5d19c1cf912d572bf42121946168537c58f595b",
+      "fnv64": 12142748029386038169
+    },
+    {
+      "name": "q",
+      "buffer": "q",
+      "bytes": 786432,
+      "sha256": "8a47eb1821eed4007d2842523295e0ea3803d0d9d18cc67913a2295e00dff8d1",
+      "fnv64": 7630615344887541713
+    },
+    {
+      "name": "kraw",
+      "buffer": "k0",
+      "bytes": 131072,
+      "sha256": "f9f70e205f1fb6926715c1388195de3727a4d8de2e33d6a0ab387fd96884f541",
+      "fnv64": 8071990529195142621
+    },
+    {
+      "name": "kr",
+      "buffer": "kb",
+      "bytes": 131072,
+      "sha256": "01a3aed8255cc24d10f5d3c9e4113093d17b2e250cf47b83c9ae89fb1a731e01",
+      "fnv64": 5797790039292550038
+    },
+    {
+      "name": "k",
+      "buffer": "k",
+      "bytes": 131072,
+      "sha256": "094f5206c242499964fa5b5154c7a139911cf06474491ce4ec9b287f0f48de8e",
+      "fnv64": 2625243977752952096
+    },
+    {
+      "name": "vraw",
+      "buffer": "v0",
+      "bytes": 131072,
+      "sha256": "b34d8dfe45f369310cd881028c258dfa9f58189f867064b9edf9f7fb5c0e61de",
+      "fnv64": 2805079326015940140
+    },
+    {
+      "name": "v",
+      "buffer": "v",
+      "bytes": 131072,
+      "sha256": "ae534744400442dfae8b1ae00e6b4acbc7d2814ca309de44812f615076a22d02",
+      "fnv64": 3036947151962508065
+    },
+    {
+      "name": "cache_k",
+      "buffer": "kv.0",
+      "bytes": 131072,
+      "sha256": "094f5206c242499964fa5b5154c7a139911cf06474491ce4ec9b287f0f48de8e",
+      "fnv64": 2625243977752952096
+    },
+    {
+      "name": "cache_v",
+      "buffer": "kv.1",
+      "bytes": 131072,
+      "sha256": "ae534744400442dfae8b1ae00e6b4acbc7d2814ca309de44812f615076a22d02",
+      "fnv64": 3036947151962508065
+    },
+    {
+      "name": "att",
+      "buffer": "att",
+      "bytes": 786432,
+      "sha256": "b546fe31de68553448f05b9a66fa59565eee94552574e608c0258fd68c0e5d54",
+      "fnv64": 1552069244976653143
+    },
+    {
+      "name": "o",
+      "buffer": "proj",
+      "bytes": 786432,
+      "sha256": "740d6cfeddfbbc42b994be28a4332b32bec17681e62ae8df249496fd28c3b6ec",
+      "fnv64": 16733953329164546462
+    },
+    {
+      "name": "r",
+      "buffer": "res",
+      "bytes": 786432,
+      "sha256": "94d50ce1c08947fb4274cf312b001eb80cd07ba03d93f6d4cf01e0da02664de2",
+      "fnv64": 1333032008446001105
+    },
+    {
+      "name": "n1",
+      "buffer": "norm1",
+      "bytes": 786432,
+      "sha256": "1f7ac372a93eea54963f7b8cb499faa74cdaf3504bba9aa5dea9a7776435ca5d",
+      "fnv64": 9239469669734208862
+    },
+    {
+      "name": "gate",
+      "buffer": "gate",
+      "bytes": 4587520,
+      "sha256": "288123c170c85a5b47d0d03a0f3c93ff7fdbe6c8014bdc820e910c82a870efb5",
+      "fnv64": 4462125933082895827
+    },
+    {
+      "name": "up",
+      "buffer": "up",
+      "bytes": 4587520,
+      "sha256": "d82fdbb3c559db2fd477fddebacf6ed83771eb8e044be43ef39da25e7a894908",
+      "fnv64": 6447471720420054947
+    },
+    {
+      "name": "act",
+      "buffer": "act",
+      "bytes": 4587520,
+      "sha256": "6df9c46c3f76abcf6dc9646e234a01a0a3dd91c111070d5d8fbb7e701b08876d",
+      "fnv64": 6357054405539738252
+    },
+    {
+      "name": "down",
+      "buffer": "down",
+      "bytes": 786432,
+      "sha256": "48c8e5509f94fa9dae7dc0e13ffd2811d4aabda518e3c1a64ed4d79e415c8af1",
+      "fnv64": 8956365133947418504
+    },
+    {
+      "name": "y",
+      "buffer": "y",
+      "bytes": 786432,
+      "sha256": "cbda6ba00853708fab397dadafbf731b29a8b134f6d9f6541e6b7a5fce6f6cb5",
+      "fnv64": 10097893022648534253
+    },
+    {
+      "name": "rope",
+      "bytes": 524288,
+      "sha256": "9c59ecfe381ffd75e939cfda67423997454145376fff21991af06d98b8d06b7e",
+      "fnv64": 4591003443482414605
+    }
+  ]
+}

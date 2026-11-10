@@ -1,0 +1,35 @@
+                    /workspace/scratch/f28987e955ed/round_20261110T0833/host_real_interface/HostBlockTopV4.sv:1067467:76:      Example path: ASSIGNW
+                    /workspace/scratch/f28987e955ed/round_20261110T0833/host_real_interface/HostBlockTopV4.sv:1067467:21:      Example path: HostBlockTopV4._chunkLease_moeArithmetic_io_scalar_3_result_ready_T_6
+                    /workspace/scratch/f28987e955ed/round_20261110T0833/host_real_interface/HostBlockTopV4.sv:985036:37:      Example path: ASSIGNW
+                    /workspace/scratch/f28987e955ed/round_20261110T0833/host_real_interface/HostBlockTopV4.sv:1002414:21:      Example path: HostBlockTopV4._moeArithmetic_io_coreScalar_result_ready
+                    /workspace/scratch/f28987e955ed/round_20261110T0933/host/obj_hier/VQwen2ContinuousBlock/Qwen2ContinuousBlock.sv:14506:5:      Example path: ALWAYS
+                    /workspace/scratch/f28987e955ed/round_20261110T0933/host/obj_hier/VQwen2ContinuousBlock/Qwen2ContinuousBlock.sv:13516:11:      Example path: HostBlockTopV4.owner.core.io_result_valid_combo__V
+                    /workspace/scratch/f28987e955ed/round_20261110T0933/host/obj_hier/VQwen2ContinuousBlock/Qwen2ContinuousBlock.sv:23831:5:      Example path: ALWAYS
+                    /workspace/scratch/f28987e955ed/round_20261110T0833/host_real_interface/HostBlockTopV4.sv:790356:16:      Example path: HostBlockTopV4.owner._core_io_result_valid
+                    /workspace/scratch/f28987e955ed/round_20261110T0833/host_real_interface/HostBlockTopV4.sv:830570:24:      Example path: ASSIGNW
+                    /workspace/scratch/f28987e955ed/round_20261110T0833/host_real_interface/HostBlockTopV4.sv:1004490:21:      Example path: HostBlockTopV4._owner_io_done_valid
+                    /workspace/scratch/f28987e955ed/round_20261110T0833/host_real_interface/HostBlockTopV4.sv:1073685:39:      Example path: ASSIGNW
+                    /workspace/scratch/f28987e955ed/round_20261110T0833/host_real_interface/HostBlockTopV4.sv:1073685:21:      Example path: HostBlockTopV4._dma_io_flush_T_3
+                    /workspace/scratch/f28987e955ed/round_20261110T0833/host_real_interface/HostBlockTopV4.sv:1073702:39:      Example path: ASSIGNW
+                    /workspace/scratch/f28987e955ed/round_20261110T0833/host_real_interface/HostBlockTopV4.sv:1073702:21:      Example path: HostBlockTopV4._dma_io_flush_T_4
+                    /workspace/scratch/f28987e955ed/round_20261110T0833/host_real_interface/HostBlockTopV4.sv:1001301:27:      Example path: ASSIGNW
+                    /workspace/scratch/f28987e955ed/round_20261110T0833/host_real_interface/HostBlockTopV4.sv:1001607:21:      Example path: HostBlockTopV4._dma_io_request_ready
+                    /workspace/scratch/f28987e955ed/round_20261110T0833/host_real_interface/HostBlockTopV4.sv:1001306:33:      Example path: ASSIGNW
+                    /workspace/scratch/f28987e955ed/round_20261110T0833/host_real_interface/HostBlockTopV4.sv:1001612:21:      Example path: HostBlockTopV4._dma_io_streamRequest_ready
+                    /workspace/scratch/f28987e955ed/round_20261110T0933/host/obj_hier/VStreamingDenseOwner/StreamingDenseOwner.sv:14332:5:      Example path: ALWAYS
+                    /workspace/scratch/f28987e955ed/round_20261110T0933/host/obj_hier/VStreamingDenseOwner/StreamingDenseOwner.sv:13413:11:      Example path: HostBlockTopV4.owner.StreamingDenseOwner.io_job_ready_combo__V
+                    /workspace/scratch/f28987e955ed/round_20261110T0933/host/obj_hier/VStreamingDenseOwner/StreamingDenseOwner.sv:23565:5:      Example path: ALWAYS
+                    /workspace/scratch/f28987e955ed/round_20261110T0833/host_real_interface/HostBlockTopV4.sv:790058:16:      Example path: HostBlockTopV4.owner._StreamingDenseOwner_io_job_ready
+                    /workspace/scratch/f28987e955ed/round_20261110T0833/host_real_interface/HostBlockTopV4.sv:830569:23:      Example path: ASSIGNW
+                    /workspace/scratch/f28987e955ed/round_20261110T0833/host_real_interface/HostBlockTopV4.sv:1004489:21:      Example path: HostBlockTopV4._owner_io_job_ready
+                    /workspace/scratch/f28987e955ed/round_20261110T0833/host_real_interface/HostBlockTopV4.sv:1073687:39:      Example path: ASSIGNW
+                    /workspace/scratch/f28987e955ed/round_20261110T0833/host_real_interface/HostBlockTopV4.sv:1073687:21:      Example path: HostBlockTopV4._dma_io_flush_T_1
+                    /workspace/scratch/f28987e955ed/round_20261110T0833/host_real_interface/HostBlockTopV4.sv:1073702:39:      Example path: ASSIGNW
+- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)
+- Verilator: Built from 3504.868 MB sources in 592 modules, into 109.078 MB in 77 C++ files needing 3.730 MB
+- Verilator: Walltime 83.945 s (elab=12.973, cvt=59.328, bld=0.000); cpu 83.931 s on 1 threads; alloced 2632.949 MB
+make[1]: Leaving directory '/workspace/scratch/f28987e955ed/round_20261110T0933/host'
+make: Leaving directory '/workspace/scratch/f28987e955ed/round_20261110T0933/host/obj_hier'
+- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)
+- Verilator: Built from 1728.500 MB sources in 592 modules, into 0.000 MB in 0 C++ files needing 0.000 MB
+- Verilator: Walltime 310.278 s (elab=0.000, cvt=0.000, bld=0.000); cpu 45.469 s on 1 threads; alloced 3942.629 MB

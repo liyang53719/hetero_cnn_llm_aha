@@ -1,0 +1,21 @@
+{
+  "scope": "simulator preprocessing option propagation only",
+  "old_child_incdirs": 0,
+  "new_child_incdirs": 8,
+  "new_child_defines": 4,
+  "top_sha256": "8cbe3efdd2f51609f6e0a7dd661404674ec66c9f23c1ff8bbd88385e16fa6450",
+  "original_terminal": {
+    "stage": "verilate_hier",
+    "exit": 2,
+    "timeout": false,
+    "seconds": 38.04116799499752,
+    "identity": {
+      "pid": 6,
+      "pgid": 6,
+      "starttime_ticks": "2774301",
+      "boot_id": "9b806a8d-1ac8-4f06-bc04-7289fb37fb1e"
+    },
+    "scope": "interface generation/compilation only; no numerical simulation"
+  },
+  "new_child_args_sha256": "df06ce488e165ffd135fc3bee5a9bb041d9eca933d5299f8686bd857a1735812"
+}

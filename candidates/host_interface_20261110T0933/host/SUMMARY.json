@@ -1,0 +1,18 @@
+{
+  "status": "PASS_INTERFACE_GENERATION_AND_BENCH_SYNTAX_ONLY",
+  "verilator_exit": 0,
+  "seconds": 310.80158408199713,
+  "session": 8474,
+  "memory_limit_gib": 5,
+  "wall_limit_seconds": 600,
+  "hardware_mac": 4096,
+  "top_sv_sha256": "8cbe3efdd2f51609f6e0a7dd661404674ec66c9f23c1ff8bbd88385e16fa6450",
+  "header_sha256": "ffc1ba55ddb04e634f21c44e6b498fc0ec4843572b2cc158e52edfeba3361f80",
+  "bench_sha256": "ac0065e5f50250a041cc2c0893192b6b395d6f2f0cff0a782be3ba330ed14ba5",
+  "bench_syntax_exit": 0,
+  "first_syntax_attempt": "missing svdpi.h; supplied standard Verilator include/vltstd, unchanged source",
+  "cpp_model_compiled": false,
+  "simulation_executed": false,
+  "full_block_numerical_pass": false,
+  "original_head4_failure_preserved": true
+}

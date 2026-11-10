@@ -1,0 +1,35 @@
+{
+  "status": "PASS_FULL_REAL_M128_PARTIAL_ROPE_PRIMITIVES_MATH_ONLY",
+  "reports": [
+    {
+      "stage": "qrope",
+      "outputs": 262144,
+      "sha256": "e75b07aa6eb4bb709fc2a65184e59aaf5c35070f17232ddb1caa155908482790"
+    },
+    {
+      "stage": "krope",
+      "outputs": 65536,
+      "sha256": "f71c338972c843697b9324577b260f906f79bdb24f5e2edc05c6eb17b389e1fd"
+    }
+  ],
+  "scalar_nodes_flags": {
+    "mul_nodes": 163840,
+    "mul_flag_0": 163840,
+    "add_nodes": 81920,
+    "add_flag_0": 78084,
+    "add_flag_1": 3836
+  },
+  "verified_inputs": {
+    "round_20261110T0833/l3_full_host_torch210_payload/trig.bin": "1156df1551f166fe3f816547b6a15eac1c2ff994683138d5276d2f64c68aa9bb",
+    "round_20261110T0933/dense_real_reference/profile2_local/qn.bin": "557c32a5e0226859914c22701c3fc2973f660a750538756899bd8934b07acea1",
+    "round_20261110T0933/l3_full/local/qr.bin": "e75b07aa6eb4bb709fc2a65184e59aaf5c35070f17232ddb1caa155908482790",
+    "round_20261110T0933/dense_real_reference/profile2_local/kn.bin": "0ec0350f867874af2b2c561ea54850f21857dee32aff1bf958260fc9db2e63a5",
+    "round_20261110T0933/l3_full/local/kr.bin": "f71c338972c843697b9324577b260f906f79bdb24f5e2edc05c6eb17b389e1fd"
+  },
+  "seconds": 1.3984664820018224,
+  "limits": [
+    "No hardware",
+    "BF16 conversion exception mapping unqualified; conversion values match",
+    "Last192dimensions copied"
+  ]
+}

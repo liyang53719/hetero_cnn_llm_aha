@@ -1,0 +1,59 @@
+[
+  {
+    "stage": "input_rms",
+    "exact_stages": [
+      {
+        "name": "L0_input_rms",
+        "rows": 128,
+        "width": 1024,
+        "sqrt_div_pairs": 128,
+        "flags": {
+          "sqrt_1": 128,
+          "div_1": 128
+        },
+        "argument_sha256": "14ac8385cc99fa5352370b458e0c63261fc3f1b46982e4d567c55ea0a09d05f2",
+        "inverse_sha256": "65f194943fdb06d05bb1f0fe8a2035dd2643fa7eb16048a24c24959b21b04add",
+        "output_sha256": "83325e03bb7c66b6fec50a16a514d59ca25075a4fe318c8ef0adff05ee94a5f3",
+        "seconds": 3.1761267309993855
+      }
+    ],
+    "exact_nodes": {
+      "mul_nodes": 393344,
+      "mul_flag_0": 188068,
+      "add_nodes": 145536,
+      "add_flag_0": 145408,
+      "add_flag_1": 128,
+      "mul_flag_1": 205276
+    }
+  },
+  {
+    "stage": "qkv",
+    "ordered_fma_steps": 805306368,
+    "outputs": 786432,
+    "output_sha256": "8dcb3dc3e71be344608e4b0ddb206e58ff174ab60a3a7efd11d5c6df8e562169",
+    "seconds": 6.257297752003069
+  },
+  {
+    "stage": "z",
+    "ordered_fma_steps": 268435456,
+    "outputs": 262144,
+    "output_sha256": "3d50fd4519a8b550a4f3b3d67dbe7512123d96901c411faf836162577c09b0f7",
+    "seconds": 1.260609814999043
+  },
+  {
+    "stage": "ab",
+    "ordered_fma_steps": 4194304,
+    "outputs": 4096,
+    "output_sha256": "cd7f7d727c83a00966d7f710f96e6e811afe64063098394b6501f3a3dd105a5b",
+    "seconds": 0.03560504699999001
+  },
+  {
+    "stage": "conv4_silu",
+    "tokens": 128,
+    "channels": 6144,
+    "outputs": 786432,
+    "unique_div_inputs_per_token_total": 171488,
+    "output_sha256": "20acfb08bd964f2edae4003bab182fc21999f282f878c83518c14d486899ca0a",
+    "history_sha256": "88d1b70c6bdc7229f3eeb0df9707d803b7b50945935a532a358498ca14d27f74"
+  }
+]

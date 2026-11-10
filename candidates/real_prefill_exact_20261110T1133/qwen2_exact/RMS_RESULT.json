@@ -1,0 +1,135 @@
+{
+  "status": "PASS_BOTH_FULL_M128_QWEN2_RMS_MATH_REFERENCE_NODES",
+  "counts": {
+    "input_square": {
+      "steps": 196608,
+      "flags": {
+        "0": 196608
+      },
+      "residuals": 0
+    },
+    "input_sum": {
+      "steps": 196608,
+      "flags": {
+        "0": 94706,
+        "1": 101902
+      },
+      "residuals": 1
+    },
+    "input_mean": {
+      "steps": 128,
+      "flags": {
+        "1": 128
+      },
+      "residuals": 0
+    },
+    "input_epsilon": {
+      "steps": 128,
+      "flags": {
+        "1": 128
+      },
+      "residuals": 0
+    },
+    "input_normalize": {
+      "steps": 196608,
+      "flags": {
+        "0": 4052,
+        "1": 192556
+      },
+      "residuals": 0
+    },
+    "input_gamma": {
+      "steps": 196608,
+      "flags": {
+        "0": 6214,
+        "1": 190394
+      },
+      "residuals": 0
+    },
+    "post_square": {
+      "steps": 196608,
+      "flags": {
+        "1": 196413,
+        "0": 195
+      },
+      "residuals": 0
+    },
+    "post_sum": {
+      "steps": 196608,
+      "flags": {
+        "0": 1103,
+        "1": 195505
+      },
+      "residuals": 187
+    },
+    "post_mean": {
+      "steps": 128,
+      "flags": {
+        "1": 128
+      },
+      "residuals": 0
+    },
+    "post_epsilon": {
+      "steps": 128,
+      "flags": {
+        "1": 128
+      },
+      "residuals": 0
+    },
+    "post_normalize": {
+      "steps": 196608,
+      "flags": {
+        "1": 196608
+      },
+      "residuals": 0
+    },
+    "post_gamma": {
+      "steps": 196608,
+      "flags": {
+        "0": 5364,
+        "1": 191244
+      },
+      "residuals": 0
+    }
+  },
+  "stages": [
+    {
+      "stage": "input",
+      "rows": 128,
+      "width": 1536,
+      "sqrt_div_flags": {
+        "sqrt": {
+          "1": 128
+        },
+        "div": {
+          "1": 128
+        }
+      },
+      "output_sha256": "ccf1e6c065c6bc4e90458194aeda7475149451ac73479a6781d2fd638bf631df"
+    },
+    {
+      "stage": "post",
+      "rows": 128,
+      "width": 1536,
+      "sqrt_div_flags": {
+        "sqrt": {
+          "1": 128
+        },
+        "div": {
+          "1": 128
+        }
+      },
+      "output_sha256": "1f7ac372a93eea54963f7b8cb499faa74cdaf3504bba9aa5dea9a7776435ca5d"
+    }
+  ],
+  "verified_inputs": {
+    "x": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+    "gamma0": "320e4ac88269676897cf9c3b4996f966a6100ced2bc0f684216c200bc82b7180",
+    "norm0": "ccf1e6c065c6bc4e90458194aeda7475149451ac73479a6781d2fd638bf631df",
+    "res": "94d50ce1c08947fb4274cf312b001eb80cd07ba03d93f6d4cf01e0da02664de2",
+    "gamma1": "e8e9d18c28e26e06d89fbb591b749cb77617e32cc17607f2b92e4b6a1828c70a",
+    "norm1": "1f7ac372a93eea54963f7b8cb499faa74cdaf3504bba9aa5dea9a7776435ca5d"
+  },
+  "scope": "Ascending square/sum plus exact sqrt/div and ordered normalize/gamma; BF16 materialization values only, conversion flags excluded; no hardware/fullblock acceptance",
+  "hardware": false
+}

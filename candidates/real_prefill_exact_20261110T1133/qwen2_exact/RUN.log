@@ -1,0 +1,51 @@
+{
+  "status": "PASS_FULL_QK_PV_M128_VALUE_AND_FINITE_FMA_FLAGS_REFERENCE_ONLY",
+  "tokens": 128,
+  "heads": 12,
+  "kvheads": 2,
+  "head_dim": 128,
+  "counts": {
+    "qk_fma": {
+      "steps": 12681216,
+      "flags": {
+        "0": 11293466,
+        "1": 1387750
+      },
+      "residuals": 0
+    },
+    "qk_fold_add": {
+      "steps": 1585152,
+      "flags": {
+        "0": 731508,
+        "1": 853644
+      },
+      "residuals": 0
+    },
+    "qk_scale_mul": {
+      "steps": 99072,
+      "flags": {
+        "1": 99072
+      },
+      "residuals": 0
+    },
+    "pv_fma": {
+      "steps": 12681216,
+      "flags": {
+        "0": 10096806,
+        "1": 2584410
+      },
+      "residuals": 190976
+    }
+  },
+  "verified_inputs": {
+    "q": "8a47eb1821eed4007d2842523295e0ea3803d0d9d18cc67913a2295e00dff8d1",
+    "k": "094f5206c242499964fa5b5154c7a139911cf06474491ce4ec9b287f0f48de8e",
+    "scores": "98bfd2801af01341013f161792e92c7b0293976eae8f45f19cc684d315284a6d",
+    "prob": "c96e4cb268b143ba2c7bee194225c134cb51c9c89fa2df934d0198667d360ead",
+    "kv.1": "ae534744400442dfae8b1ae00e6b4acbc7d2814ca309de44812f615076a22d02",
+    "att": "b546fe31de68553448f05b9a66fa59565eee94552574e608c0258fd68c0e5d54"
+  },
+  "scope": "QK16-lane folding, separate scale, causal PV increasing keys; no input BF16-conversion flags, no softmax/RMS/SILU/fullblock/hardware qualification",
+  "hardware": false
+}
+seconds 0.8383877859960194

@@ -1,0 +1,89 @@
+{
+  "status": "PASS_FULL_M128_SILU_REFERENCE_SCALAR_NODE_FLAGS",
+  "counts": {
+    "compound_exp_scale": {
+      "steps": 1146880,
+      "flags": {
+        "0": 1,
+        "1": 1146879
+      },
+      "residuals": 0
+    },
+    "compound_exp_fraction": {
+      "steps": 1146880,
+      "flags": {
+        "0": 1146880
+      },
+      "residuals": 0
+    },
+    "compound_exp_horner_mul": {
+      "steps": 8028160,
+      "flags": {
+        "0": 43,
+        "1": 8028117
+      },
+      "residuals": 0
+    },
+    "compound_exp_horner_add": {
+      "steps": 8028160,
+      "flags": {
+        "0": 828086,
+        "1": 7200074
+      },
+      "residuals": 0
+    },
+    "compound_exp_pow2_mul": {
+      "steps": 1146880,
+      "flags": {
+        "0": 1146880
+      },
+      "residuals": 0
+    },
+    "silu_denominator": {
+      "steps": 1146880,
+      "flags": {
+        "0": 699256,
+        "1": 447624
+      },
+      "residuals": 0
+    },
+    "silu_div": {
+      "steps": 1146880,
+      "flags": {
+        "1": 1146880
+      },
+      "exact_distinct_denominators": 1010069
+    },
+    "silu_signed": {
+      "steps": 1146880,
+      "flags": {
+        "0": 278060,
+        "1": 868820
+      },
+      "residuals": 0
+    },
+    "silu_gate": {
+      "steps": 1146880,
+      "flags": {
+        "0": 5,
+        "1": 1146875
+      },
+      "residuals": 0
+    },
+    "silu_up": {
+      "steps": 1146880,
+      "flags": {
+        "0": 3,
+        "1": 1146877
+      },
+      "residuals": 0
+    }
+  },
+  "verified_inputs": {
+    "gate": "288123c170c85a5b47d0d03a0f3c93ff7fdbe6c8014bdc820e910c82a870efb5",
+    "up": "d82fdbb3c559db2fd477fddebacf6ed83771eb8e044be43ef39da25e7a894908",
+    "act": "6df9c46c3f76abcf6dc9646e234a01a0a3dd91c111070d5d8fbb7e701b08876d"
+  },
+  "scope": "Original six-stage FP32 order, exact rational reciprocal for every distinct actual denominator; compound exp internal flags are diagnostics only, no hardware aggregate status asserted",
+  "hardware": false
+}

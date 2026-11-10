@@ -1,0 +1,181 @@
+{
+  "status": "FAIL_OR_INCOMPLETE",
+  "error": "IndexError('tuple index out of range')",
+  "reports": [
+    {
+      "stage": "q",
+      "outputs": 524288,
+      "sha256": "ea5a74825cdf0e9ddadf48f251ed551bd9508bd0b9bf0620ac67563d32328336",
+      "fma_steps": 536870912,
+      "flag_counts": {
+        "0": 524490014,
+        "1": 12380898,
+        "3": 0,
+        "5": 0
+      },
+      "seconds": 3.515438942995388
+    },
+    {
+      "stage": "k",
+      "outputs": 65536,
+      "sha256": "62c078b273afbc3cd2ee4b0b8b8b0224f0283d4073531de2f560092ad67ea000",
+      "fma_steps": 67108864,
+      "flag_counts": {
+        "0": 65531066,
+        "1": 1577798,
+        "3": 0,
+        "5": 0
+      },
+      "seconds": 0.3279094410027028
+    },
+    {
+      "stage": "v",
+      "outputs": 65536,
+      "sha256": "f61c4da78b674677e4adc3a771a20b8fb984663c1fab82f0bec9aa0334676c94",
+      "fma_steps": 67108864,
+      "flag_counts": {
+        "0": 65439273,
+        "1": 1669591,
+        "3": 0,
+        "5": 0
+      },
+      "seconds": 0.29659541999717476
+    },
+    {
+      "stage": "qk0",
+      "outputs": 16384,
+      "sha256": "60664a917bd4397fdc5ec52464c7cf76fb21240cf4f3ed95566590de14b82ed8",
+      "fma_steps": 4194304,
+      "flag_counts": {
+        "0": 4052667,
+        "1": 141637,
+        "3": 0,
+        "5": 0
+      },
+      "seconds": 0.04884394599503139
+    },
+    {
+      "stage": "qk1",
+      "outputs": 16384,
+      "sha256": "d87fd8317b4c4a6a055f9193c5e210d1fb2278d2aad74435a9ed3a4051ba4018",
+      "fma_steps": 4194304,
+      "flag_counts": {
+        "0": 4044688,
+        "1": 149616,
+        "3": 0,
+        "5": 0
+      },
+      "seconds": 0.04099901899462566
+    },
+    {
+      "stage": "qk2",
+      "outputs": 16384,
+      "sha256": "04d18c898aa02d852fcab996dd11501ec7c7e529fe7077639ee156c5fa7bca08",
+      "fma_steps": 4194304,
+      "flag_counts": {
+        "0": 4056036,
+        "1": 138268,
+        "3": 0,
+        "5": 0
+      },
+      "seconds": 0.04081326500454452
+    },
+    {
+      "stage": "qk3",
+      "outputs": 16384,
+      "sha256": "266c3e45b37d1d0658fcbd9616cd1c52779623c195a7f699ed6075c48c6c68d5",
+      "fma_steps": 4194304,
+      "flag_counts": {
+        "0": 4038665,
+        "1": 155639,
+        "3": 0,
+        "5": 0
+      },
+      "seconds": 0.038036773999920115
+    },
+    {
+      "stage": "qk4",
+      "outputs": 16384,
+      "sha256": "eaa832641190d631593b7b05dceb60c1b7738d136f5c016b1f864913419f53ff",
+      "fma_steps": 4194304,
+      "flag_counts": {
+        "0": 4033627,
+        "1": 160677,
+        "3": 0,
+        "5": 0
+      },
+      "seconds": 0.035335205000592396
+    },
+    {
+      "stage": "qk5",
+      "outputs": 16384,
+      "sha256": "0cfac5c6d91426acbc8cb7da7a1c018ee6980640065f48bc10337e15898ebe98",
+      "fma_steps": 4194304,
+      "flag_counts": {
+        "0": 4016817,
+        "1": 177487,
+        "3": 0,
+        "5": 0
+      },
+      "seconds": 0.036841979999735486
+    },
+    {
+      "stage": "qk6",
+      "outputs": 16384,
+      "sha256": "fb878795a2b2bdef4347c80830a18cdc380180257dfb1c16a2b707eeb1e63063",
+      "fma_steps": 4194304,
+      "flag_counts": {
+        "0": 4038843,
+        "1": 155461,
+        "3": 0,
+        "5": 0
+      },
+      "seconds": 0.03430843800015282
+    },
+    {
+      "stage": "qk7",
+      "outputs": 16384,
+      "sha256": "3003f3a6e830e3aae7563aac981005648161ce8a9002bd4da2c25d76ced408c5",
+      "fma_steps": 4194304,
+      "flag_counts": {
+        "0": 3929991,
+        "1": 264313,
+        "3": 0,
+        "5": 0
+      },
+      "seconds": 0.0363000790021033
+    },
+    {
+      "stage": "mask",
+      "outputs": 131072,
+      "sha256": "574893c4b35e426b5f4b48ec27cb21a8d1d8bbf4c506ea8392d6c78f3011b98b"
+    },
+    {
+      "stage": "delta",
+      "outputs": 131072,
+      "sha256": "378c9744f056d8e645eeec458edfd3181d91c3c3903af641009e68c19dd3eb50"
+    },
+    {
+      "stage": "exp",
+      "outputs": 131072,
+      "sha256": "9bb2bf4d0069ea7b8a73aa00538fc13f6906cb3ff10c85efe7ed7f220dfb41a3"
+    },
+    {
+      "stage": "prob",
+      "outputs": 131072,
+      "sha256": "4db7dd3f2b9e27c1f57612618df4dde7e2465e98e8f502ec1a80bc378402370d"
+    }
+  ],
+  "scalar_nodes_flags": {
+    "mul_nodes": 725504,
+    "mul_flag_0": 207773,
+    "add_nodes": 921600,
+    "add_flag_0": 334879,
+    "add_flag_1": 586721,
+    "mul_flag_1": 517731,
+    "div_nodes": 131072,
+    "div_flag_0": 65037,
+    "div_flag_1": 66035
+  },
+  "seconds": 6.971785994996026
+}

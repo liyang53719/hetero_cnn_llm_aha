@@ -1,0 +1,81 @@
+{
+  "status": "PASS_FULL_M128_SOFTMAX_VALUE_AND_SCALAR_NODE_FLAGS_REFERENCE_ONLY",
+  "counts": {
+    "softmax_subtract": {
+      "steps": 99072,
+      "flags": {
+        "0": 98756,
+        "1": 316
+      },
+      "residuals": 0
+    },
+    "compound_exp_scale": {
+      "steps": 95151,
+      "flags": {
+        "0": 1537,
+        "1": 93614
+      },
+      "residuals": 0
+    },
+    "compound_exp_fraction": {
+      "steps": 95151,
+      "flags": {
+        "0": 95151
+      },
+      "residuals": 0
+    },
+    "compound_exp_horner_mul": {
+      "steps": 666057,
+      "flags": {
+        "0": 10828,
+        "1": 655229
+      },
+      "residuals": 0
+    },
+    "compound_exp_horner_add": {
+      "steps": 666057,
+      "flags": {
+        "0": 96578,
+        "1": 569479
+      },
+      "residuals": 0
+    },
+    "compound_exp_pow2_mul": {
+      "steps": 95151,
+      "flags": {
+        "0": 95151
+      },
+      "residuals": 0
+    },
+    "softmax_sum": {
+      "steps": 99072,
+      "flags": {
+        "0": 14123,
+        "1": 84949
+      },
+      "residuals": 3322
+    },
+    "softmax_div": {
+      "steps": 1536,
+      "flags": {
+        "0": 169,
+        "1": 1367
+      },
+      "method": "independent Fraction RNE per actual denominator"
+    },
+    "softmax_probability_mul": {
+      "steps": 99072,
+      "flags": {
+        "0": 11961,
+        "1": 87111
+      },
+      "residuals": 0
+    }
+  },
+  "verified_inputs": {
+    "scores": "98bfd2801af01341013f161792e92c7b0293976eae8f45f19cc684d315284a6d",
+    "prob": "c96e4cb268b143ba2c7bee194225c134cb51c9c89fa2df934d0198667d360ead"
+  },
+  "scope": "Full original polynomial and scalar order; compound_exp flags are internal node diagnostics, not invented aggregate hardware status; no input format flags/hardware/fullblock acceptance",
+  "hardware": false
+}

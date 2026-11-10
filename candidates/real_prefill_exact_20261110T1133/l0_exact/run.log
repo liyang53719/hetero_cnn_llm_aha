@@ -1,0 +1,117 @@
+{
+  "status": "PASS_REAL_M128_L0_UPSTREAM_MATH_AUDIT",
+  "reports": [
+    {
+      "stage": "input_rms",
+      "exact_stages": [
+        {
+          "name": "L0_input_rms",
+          "rows": 128,
+          "width": 1024,
+          "sqrt_div_pairs": 128,
+          "flags": {
+            "sqrt_1": 128,
+            "div_1": 128
+          },
+          "argument_sha256": "14ac8385cc99fa5352370b458e0c63261fc3f1b46982e4d567c55ea0a09d05f2",
+          "inverse_sha256": "65f194943fdb06d05bb1f0fe8a2035dd2643fa7eb16048a24c24959b21b04add",
+          "output_sha256": "83325e03bb7c66b6fec50a16a514d59ca25075a4fe318c8ef0adff05ee94a5f3",
+          "seconds": 3.2721897910014377
+        }
+      ],
+      "exact_nodes": {
+        "mul_nodes": 393344,
+        "mul_flag_0": 188068,
+        "add_nodes": 145536,
+        "add_flag_0": 145408,
+        "add_flag_1": 128,
+        "mul_flag_1": 205276
+      }
+    },
+    {
+      "stage": "qkv",
+      "ordered_fma_steps": 805306368,
+      "outputs": 786432,
+      "output_sha256": "8dcb3dc3e71be344608e4b0ddb206e58ff174ab60a3a7efd11d5c6df8e562169",
+      "seconds": 6.322227819997352
+    },
+    {
+      "stage": "z",
+      "ordered_fma_steps": 268435456,
+      "outputs": 262144,
+      "output_sha256": "3d50fd4519a8b550a4f3b3d67dbe7512123d96901c411faf836162577c09b0f7",
+      "seconds": 1.13380797499849
+    },
+    {
+      "stage": "ab",
+      "ordered_fma_steps": 4194304,
+      "outputs": 4096,
+      "output_sha256": "cd7f7d727c83a00966d7f710f96e6e811afe64063098394b6501f3a3dd105a5b",
+      "seconds": 0.033251504006329924
+    },
+    {
+      "stage": "conv4_silu",
+      "tokens": 128,
+      "channels": 6144,
+      "outputs": 786432,
+      "unique_div_inputs_per_token_total": 171488,
+      "output_sha256": "20acfb08bd964f2edae4003bab182fc21999f282f878c83518c14d486899ca0a",
+      "history_sha256": "88d1b70c6bdc7229f3eeb0df9707d803b7b50945935a532a358498ca14d27f74"
+    }
+  ],
+  "flags": {
+    "fma_qkv_0": 783070509,
+    "fma_qkv_1": 22235859,
+    "fma_qkv_3": 0,
+    "fma_qkv_5": 0,
+    "fma_z_0": 261004400,
+    "fma_z_1": 7431056,
+    "fma_z_3": 0,
+    "fma_z_5": 0,
+    "fma_ab_0": 4053379,
+    "fma_ab_1": 140925,
+    "fma_ab_3": 0,
+    "fma_ab_5": 0,
+    "conv_tap_mul_ieee_0": 3138644,
+    "conv_tap_mul_ieee_1": 0,
+    "conv_tap_mul_ieee_3": 7084,
+    "conv_tap_mul_ieee_5": 0,
+    "scalar_add_0": 4401481,
+    "scalar_add_1": 5822135,
+    "scalar_add_3": 0,
+    "scalar_add_5": 0,
+    "scalar_mul_0": 1362631,
+    "scalar_mul_1": 7288121,
+    "scalar_mul_3": 0,
+    "scalar_mul_5": 0,
+    "scalar_div_1": 784640,
+    "scalar_div_0": 1792
+  },
+  "underflow_witnesses": [
+    {
+      "stage": "conv_tap_mul_ieee",
+      "allow_underflow": true,
+      "first_output_word": "0x0",
+      "count": 14
+    }
+  ],
+  "verified_inputs": {
+    "round_20261110T0833/profile1_real_host_payload/input.bin": "0b59c2c36120837a095769cc10a19bea345137aad54cbc80a7138694fc5dac99",
+    "round_20261110T0833/profile1_real_host_payload/input_gamma.bin": "032420ad60956b0e62b5f4afbfc3a51a7148c79946f746ea4eb6b0ceb6c67e37",
+    "round_20261110T0933/dense_real_reference/profile1_local/input_norm.bin": "83325e03bb7c66b6fec50a16a514d59ca25075a4fe318c8ef0adff05ee94a5f3",
+    "round_20261110T0833/profile1_real_host_payload/qkv_weight.bin": "c35532ba4fc1d35df8f95dc6559ae4d0aeed6b049546c87ee02425c3923d5cf7",
+    "round_20261110T0933/dense_real_reference/profile1_local/qkv.bin": "8dcb3dc3e71be344608e4b0ddb206e58ff174ab60a3a7efd11d5c6df8e562169",
+    "round_20261110T0833/profile1_real_host_payload/z_weight.bin": "37935013dd3d456d1a93c6a045d268e974bc89d121ca0e646f6d9d0f608c9d59",
+    "round_20261110T0933/dense_real_reference/profile1_local/z.bin": "3d50fd4519a8b550a4f3b3d67dbe7512123d96901c411faf836162577c09b0f7",
+    "round_20261110T0833/profile1_real_host_payload/ab_weight.bin": "b5dc556e9f22a7fde59907970edf52616dc2b0d02131f4b30e639c6e739aa139",
+    "round_20261110T0933/dense_real_reference/profile1_local/ab.bin": "cd7f7d727c83a00966d7f710f96e6e811afe64063098394b6501f3a3dd105a5b",
+    "round_20261110T0833/profile1_real_host_payload/conv_weight.bin": "130344a7183ae52ad58fc5da96539f28071b64d452bb3acf0890a7947da44188",
+    "round_20261110T0933/dense_real_reference/profile1_local/conv.bin": "20acfb08bd964f2edae4003bab182fc21999f282f878c83518c14d486899ca0a",
+    "round_20261110T0933/dense_real_reference/profile1_local/history_out.bin": "88d1b70c6bdc7229f3eeb0df9707d803b7b50945935a532a358498ca14d27f74"
+  },
+  "scope": "RMS exact Fraction; QKV/Z/AB ordered FMA; Conv4 separate mul/add and original polynomial/sigmoid with exact Div; no hardware; BF16 conversion flags excluded",
+  "hardware": false,
+  "full_block_pass": false,
+  "underflow_downstream_unchanged": true,
+  "seconds": 12.522428511001635
+}

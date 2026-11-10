@@ -1,0 +1,165 @@
+{
+  "status": "PASS_FULL_M128_BIAS_ROPE_RESIDUAL_MATH_REFERENCE_NODE_FLAGS",
+  "counts": {
+    "q_bias": {
+      "steps": 196608,
+      "flags": {
+        "0": 143263,
+        "1": 53345
+      },
+      "residuals": 0
+    },
+    "k_bias": {
+      "steps": 32768,
+      "flags": {
+        "0": 17995,
+        "1": 14773
+      },
+      "residuals": 0
+    },
+    "v_bias": {
+      "steps": 32768,
+      "flags": {
+        "0": 30302,
+        "1": 2466
+      },
+      "residuals": 0
+    },
+    "q_rope_xc": {
+      "steps": 98304,
+      "flags": {
+        "0": 11533,
+        "1": 86771
+      },
+      "residuals": 0
+    },
+    "q_rope_ys": {
+      "steps": 98304,
+      "flags": {
+        "0": 768,
+        "1": 97536
+      },
+      "residuals": 0
+    },
+    "q_rope_sub": {
+      "steps": 98304,
+      "flags": {
+        "0": 18315,
+        "1": 79989
+      },
+      "residuals": 0
+    },
+    "q_rope_xs": {
+      "steps": 98304,
+      "flags": {
+        "0": 768,
+        "1": 97536
+      },
+      "residuals": 0
+    },
+    "q_rope_yc": {
+      "steps": 98304,
+      "flags": {
+        "0": 11532,
+        "1": 86772
+      },
+      "residuals": 0
+    },
+    "q_rope_add": {
+      "steps": 98304,
+      "flags": {
+        "0": 18064,
+        "1": 80240
+      },
+      "residuals": 0
+    },
+    "k_rope_xc": {
+      "steps": 16384,
+      "flags": {
+        "0": 1922,
+        "1": 14462
+      },
+      "residuals": 0
+    },
+    "k_rope_ys": {
+      "steps": 16384,
+      "flags": {
+        "0": 128,
+        "1": 16256
+      },
+      "residuals": 0
+    },
+    "k_rope_sub": {
+      "steps": 16384,
+      "flags": {
+        "0": 3089,
+        "1": 13295
+      },
+      "residuals": 0
+    },
+    "k_rope_xs": {
+      "steps": 16384,
+      "flags": {
+        "0": 128,
+        "1": 16256
+      },
+      "residuals": 0
+    },
+    "k_rope_yc": {
+      "steps": 16384,
+      "flags": {
+        "0": 1922,
+        "1": 14462
+      },
+      "residuals": 0
+    },
+    "k_rope_add": {
+      "steps": 16384,
+      "flags": {
+        "0": 2869,
+        "1": 13515
+      },
+      "residuals": 0
+    },
+    "residual0": {
+      "steps": 196608,
+      "flags": {
+        "0": 185397,
+        "1": 11211
+      },
+      "residuals": 0
+    },
+    "residual1": {
+      "steps": 196608,
+      "flags": {
+        "0": 105025,
+        "1": 91583
+      },
+      "residuals": 0
+    }
+  },
+  "verified_inputs": {
+    "round_20261110T0833/numpy_fma_candidate/q0.local.f32": "1e67553e3bbbd2c1118ad860a4669accbff3ead6dd403439d1cc3d0867e3e5d9",
+    "round_20261110T0733/qwen2_host_payload/bq.f32le": "47506ca51cfd69119a774c09466b718c0b400b84b9a392bc1e9bcb691f28b72d",
+    "round_20261110T0833/numpy_fma_candidate/resume_m128/qb.local.f32": "bd97c7b89801abddbbd88370c5d19c1cf912d572bf42121946168537c58f595b",
+    "round_20261110T0833/numpy_fma_candidate/resume_m128/k0.local.f32": "f9f70e205f1fb6926715c1388195de3727a4d8de2e33d6a0ab387fd96884f541",
+    "round_20261110T0733/qwen2_host_payload/bk.f32le": "c77424743b1f69c60e2de1b4780666973af58831169c3ee02d7443701bc6d03d",
+    "round_20261110T0833/numpy_fma_candidate/resume_m128/kb.local.f32": "01a3aed8255cc24d10f5d3c9e4113093d17b2e250cf47b83c9ae89fb1a731e01",
+    "round_20261110T0833/numpy_fma_candidate/resume_m128/v0.local.f32": "b34d8dfe45f369310cd881028c258dfa9f58189f867064b9edf9f7fb5c0e61de",
+    "round_20261110T0733/qwen2_host_payload/bv.f32le": "e0ba90f0d591f0266f0140802b6e4ccc24a9961ef26e96ee00f5b1567f8b2f70",
+    "round_20261110T0833/numpy_fma_candidate/resume_m128/v.local.f32": "ae534744400442dfae8b1ae00e6b4acbc7d2814ca309de44812f615076a22d02",
+    "cos": "07176f2b45701f808aa6f225091f75db2ea751ffb28f9399a7a07956ecb77392",
+    "sin": "9cd312a7e08ea3aaef3dbf8f33df5861252a8affffcd10a209827f2e965e3cf1",
+    "q": "8a47eb1821eed4007d2842523295e0ea3803d0d9d18cc67913a2295e00dff8d1",
+    "k": "094f5206c242499964fa5b5154c7a139911cf06474491ce4ec9b287f0f48de8e",
+    "round_20261110T0733/qwen2_host_payload/x.f32le": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+    "proj": "740d6cfeddfbbc42b994be28a4332b32bec17681e62ae8df249496fd28c3b6ec",
+    "res": "94d50ce1c08947fb4274cf312b001eb80cd07ba03d93f6d4cf01e0da02664de2",
+    "down": "48c8e5509f94fa9dae7dc0e13ffd2811d4aabda518e3c1a64ed4d79e415c8af1",
+    "y": "cbda6ba00853708fab397dadafbf731b29a8b134f6d9f6541e6b7a5fce6f6cb5",
+    "kv.0": "094f5206c242499964fa5b5154c7a139911cf06474491ce4ec9b287f0f48de8e",
+    "kv.1": "ae534744400442dfae8b1ae00e6b4acbc7d2814ca309de44812f615076a22d02"
+  },
+  "scope": "All stored FP32 bias/rope/residual words and KV copies checked; mathematical node flags not aggregate hardware status",
+  "hardware": false
+}

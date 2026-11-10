@@ -1,0 +1,51 @@
+{
+  "status": "PASS_ALL_ACTUAL_CONV_TAP_UNDERFLOWS_EXACT",
+  "count": 7084,
+  "examples": [
+    {
+      "token": 0,
+      "tap": 3,
+      "channel": 397,
+      "a": "04650000",
+      "b": "02200000",
+      "result": "00000000",
+      "flags": 3,
+      "opcode": "MulIeeeRne",
+      "original_policy": "gradual_allowed"
+    },
+    {
+      "token": 0,
+      "tap": 3,
+      "channel": 423,
+      "a": "04900000",
+      "b": "02200000",
+      "result": "00000000",
+      "flags": 3,
+      "opcode": "MulIeeeRne",
+      "original_policy": "gradual_allowed"
+    },
+    {
+      "token": 0,
+      "tap": 3,
+      "channel": 438,
+      "a": "84210000",
+      "b": "02200000",
+      "result": "80000000",
+      "flags": 3,
+      "opcode": "MulIeeeRne",
+      "original_policy": "gradual_allowed"
+    },
+    {
+      "token": 0,
+      "tap": 3,
+      "channel": 453,
+      "a": "021a0000",
+      "b": "02200000",
+      "result": "00000000",
+      "flags": 3,
+      "opcode": "MulIeeeRne",
+      "original_policy": "gradual_allowed"
+    }
+  ],
+  "scope": "Original MulIeeeRne allowed UF; not a policy change, not a hardware run"
+}

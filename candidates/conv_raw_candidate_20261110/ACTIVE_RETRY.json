@@ -1,6 +1,6 @@
 {
   "session": 10461,
-  "status": "INCOMPLETE",
+  "status": "TERMINAL_PASS_SUBCHAIN_ONLY",
   "previous_session": 60649,
   "previous_terminal_preserved": "conv_raw_candidate/fail_first/simulation.json",
   "cycle_budget": 120000000,
@@ -8,5 +8,15 @@
   "cpu_seconds": 3300,
   "hardware_changes": false,
   "driver_fix": "drive response before sampling combinational resetRequired",
-  "full_block_pass": false
+  "full_block_pass": false,
+  "identity": {
+    "pid": 28,
+    "pgid": 28,
+    "boot_id": "9b806a8d-1ac8-4f06-bc04-7289fb37fb1e",
+    "starttime_ticks": "2334879"
+  },
+  "remote_main": "3219ed184da8985fcfb6fc573081c2dc50d0e8fb",
+  "last_observation": "CANDIDATE_CONV_RAW_CHAIN_PASS tokens=128 head=0 cycles=78183169 reads=774339 writes=104320 executeVectorCalls=1318912 phase17FormatCalls=1024 seconds=1572.299257345",
+  "sv_sha256": "11a31867f1b44ebdc228b133cd2563ef441c6c3164b0417c6afcf978bf9f377c",
+  "terminal": "conv_raw_candidate/results/simulation.json"
 }

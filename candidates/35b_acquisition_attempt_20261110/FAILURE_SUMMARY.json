@@ -1,0 +1,74 @@
+{
+  "status": "FAIL_OR_INCOMPLETE",
+  "original_session": 54985,
+  "identity": {
+    "pid": 7,
+    "boot_id": "9b806a8d-1ac8-4f06-bc04-7289fb37fb1e",
+    "starttime_ticks": "2360234"
+  },
+  "terminal": {
+    "status": "FAIL_OR_INCOMPLETE",
+    "error": "URLError(RemoteDisconnected('Remote end closed connection without response'))",
+    "seconds": 110.16073072699874,
+    "identity": {
+      "pid": 7,
+      "boot_id": "9b806a8d-1ac8-4f06-bc04-7289fb37fb1e",
+      "starttime_ticks": "2360234"
+    }
+  },
+  "tool_error": "Unified exec process failed: Network access to \"https://us.aws.cdn.hf.co:443\" was blocked by policy.",
+  "profiles": {
+    "L0": {
+      "complete_tensors": 0,
+      "progress": {
+        "status": "RUNNING_NOT_PASS",
+        "bytes": 67108864,
+        "tensor": "mlp.experts.gate_up_proj",
+        "last_range": {
+          "acquired_at": "2026-11-10T07:44:57.740013+00:00",
+          "requested_url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00006-of-00014.safetensors",
+          "request_range": "bytes=58720952-67109559",
+          "status": 206,
+          "content_range": "bytes 58720952-67109559/5368709816",
+          "bytes": 8388608,
+          "sha256": "92e327fb4b0c041f5c6c772b27058af942b1e96043d8df352f236416d6508c26"
+        },
+        "seconds": 86.06732673700026
+      }
+    },
+    "L3": {
+      "complete_tensors": 0,
+      "progress": {
+        "status": "RUNNING_NOT_PASS",
+        "bytes": 67108864,
+        "tensor": "mlp.experts.gate_up_proj",
+        "last_range": {
+          "acquired_at": "2026-11-10T07:44:57.583989+00:00",
+          "requested_url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00003-of-00014.safetensors",
+          "request_range": "bytes=2206204592-2214593199",
+          "status": 206,
+          "content_range": "bytes 2206204592-2214593199/5368709808",
+          "bytes": 8388608,
+          "sha256": "9729dd41973269535a8ff2ef08eaa842a41b788d048cec11c0f4fa8b5f7ae4ac"
+        },
+        "seconds": 85.90912141800072
+      }
+    }
+  },
+  "partial_files": [
+    {
+      "path": "L0/mlp.experts.gate_up_proj.partial",
+      "bytes": 67108864,
+      "sha256_observed_partial_only": "dc97898edc02505c5c4ddb89e04ff00a1eeaebc6414b649dd5049561e8d823da"
+    },
+    {
+      "path": "L3/mlp.experts.gate_up_proj.partial",
+      "bytes": 67108864,
+      "sha256_observed_partial_only": "a5a07cc4bbed5f6aeb3fafe0691202b7ea4af3c6403c9ae7c6c61cac03ccd334"
+    }
+  ],
+  "receipt_limit": "Only latest range receipt per layer persisted before tensor completion; preceding receipts were in memory and are not claimed recovered. Partial file hash is not provider authentication.",
+  "retry_started": false,
+  "alternate_route_used": false,
+  "full_block_pass": false
+}

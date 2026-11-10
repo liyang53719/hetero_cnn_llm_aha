@@ -1,0 +1,64 @@
+{
+  "status": "TERMINAL_FAILURE",
+  "session_id": 54985,
+  "identity": {
+    "pid": 7,
+    "boot_id": "9b806a8d-1ac8-4f06-bc04-7289fb37fb1e",
+    "starttime_ticks": "2360234"
+  },
+  "source_sha256": "2dad615eb202732d493d6e2891d5c3ffc44c9ab7631c4367b4e23a00c692e2bc",
+  "progress": {
+    "L0": {
+      "status": "RUNNING_NOT_PASS",
+      "bytes": 67108864,
+      "tensor": "mlp.experts.gate_up_proj",
+      "last_range": {
+        "acquired_at": "2026-11-10T07:44:57.740013+00:00",
+        "requested_url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00006-of-00014.safetensors",
+        "request_range": "bytes=58720952-67109559",
+        "status": 206,
+        "content_range": "bytes 58720952-67109559/5368709816",
+        "bytes": 8388608,
+        "sha256": "92e327fb4b0c041f5c6c772b27058af942b1e96043d8df352f236416d6508c26"
+      },
+      "seconds": 86.06732673700026
+    },
+    "L3": {
+      "status": "RUNNING_NOT_PASS",
+      "bytes": 67108864,
+      "tensor": "mlp.experts.gate_up_proj",
+      "last_range": {
+        "acquired_at": "2026-11-10T07:44:57.583989+00:00",
+        "requested_url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00003-of-00014.safetensors",
+        "request_range": "bytes=2206204592-2214593199",
+        "status": 206,
+        "content_range": "bytes 2206204592-2214593199/5368709808",
+        "bytes": 8388608,
+        "sha256": "9729dd41973269535a8ff2ef08eaa842a41b788d048cec11c0f4fa8b5f7ae4ac"
+      },
+      "seconds": 85.90912141800072
+    }
+  },
+  "expected_bytes": 3357894336,
+  "original_agent": "/root/continue_hetero_prefill/four_profiles_inputs",
+  "do_not_duplicate": true,
+  "previous_status": "RUNNING_NOT_PASS",
+  "terminal_status": "FAIL_OR_INCOMPLETE",
+  "terminal_ref": "../35b_payload_attempt1/TERMINAL.json",
+  "final_summary_ref": "FAILURE_SUMMARY.json",
+  "terminal": {
+    "status": "FAIL_OR_INCOMPLETE",
+    "error": "URLError(RemoteDisconnected('Remote end closed connection without response'))",
+    "seconds": 110.16073072699874,
+    "identity": {
+      "pid": 7,
+      "boot_id": "9b806a8d-1ac8-4f06-bc04-7289fb37fb1e",
+      "starttime_ticks": "2360234"
+    }
+  },
+  "complete_tensors": {
+    "L0": 0,
+    "L3": 0
+  },
+  "retry_started": false
+}

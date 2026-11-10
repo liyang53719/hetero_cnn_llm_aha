@@ -1,0 +1,14 @@
+test_broadcast_bias (test_reference.ReferenceTests.test_broadcast_bias) ... ok
+test_budget (test_reference.ReferenceTests.test_budget) ... ok
+test_dense_order (test_reference.ReferenceTests.test_dense_order) ... ok
+test_full_forward_closed (test_reference.ReferenceTests.test_full_forward_closed) ... ok
+test_gradual_ieee_scope (test_reference.ReferenceTests.test_gradual_ieee_scope) ... ok
+test_nonfinite_closed (test_reference.ReferenceTests.test_nonfinite_closed) ... ok
+test_rne_ties (test_reference.ReferenceTests.test_rne_ties) ... ok
+test_rope_half_split (test_reference.ReferenceTests.test_rope_half_split) ... ok
+test_signed_zeros (test_reference.ReferenceTests.test_signed_zeros) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.001s
+
+OK

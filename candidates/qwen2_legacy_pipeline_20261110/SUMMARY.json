@@ -1,0 +1,23 @@
+{
+  "status": "TEMP",
+  "compile": {
+    "stage": "compile",
+    "exit": 0,
+    "seconds": 56.992499890002364,
+    "scope": "SOURCE_COMPILE_OR_IR_ONLY_NO_SIMULATION"
+  },
+  "emit": {
+    "stage": "emit",
+    "exit": 0,
+    "seconds": 13.405562402000214,
+    "scope": "SOURCE_COMPILE_OR_IR_ONLY_NO_SIMULATION"
+  },
+  "ir": {
+    "bytes": 142937690,
+    "sha256": "cb373a03c3d3160cb4faa41545a0f666692ad2ea236133b94c4b189f6f15ac92"
+  },
+  "scope": "original162 LegacyV0 4096-MAC HostBlockTopV4 CHIRRTL emission only; NOT SV, simulation or numerical PASS",
+  "dut_modified": false,
+  "full_m128_pass": 0,
+  "warnings": 24
+}

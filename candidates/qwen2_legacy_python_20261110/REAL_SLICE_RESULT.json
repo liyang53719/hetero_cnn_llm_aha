@@ -1,0 +1,11 @@
+{
+  "status": "EXECUTED_BOUNDED_REFERENCE_ONLY",
+  "scope": "raw embedding and trained wq slice 1x16x16, NOT RMS output/full Q projection/complete block/hardware comparison",
+  "input_hashes": {
+    "x": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+    "wq": "b78b0cee80a89ab87148fd73c8409dfefbfd5b58b09c1f9e51680908c28a705d"
+  },
+  "macs": 256,
+  "output_sha256": "c012a6b79a1fadece5b0101a0e4ea0bbc841753e6e8ba276975b5690ad9d43c3",
+  "seconds": 0.0022295029993983917
+}

@@ -1,0 +1,11 @@
+{
+  "status": "PASS_BOUNDED_FMA_PARITY",
+  "cases": 91557,
+  "mismatches": 0,
+  "seconds": 0.6363956489985867,
+  "seed": "0x20261110",
+  "case_sha256": "7054a9f2f921af93e52889de24487d5e419720336d8cf2cbe9bf8acca5875faa",
+  "output_sha256": "486bcdc4aed5c3409a693c8b1423fdca351a107a86de1acd08d35edde1ba2a52",
+  "scope": "finite BF16 operands and finite FP32 accumulator; overflow result bits included, not hardware exception acceptance",
+  "first_mismatches": []
+}

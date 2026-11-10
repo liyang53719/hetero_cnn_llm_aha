@@ -1,0 +1,21 @@
+{
+  "status": "TEMP_CURRENT_PLATFORM_HOST_INPUT_FREEZE",
+  "scope": "original Host formula frozen now, not official Torch table or recovered historical hash",
+  "source_line": "for(unsigned t=0;t<MAX_TOKENS;t++)for(unsigned i=0;i<HD/2;i++){double angle=t/std::pow(1000000.0,2.0*i/HD);put(A_ROPE,size_t(t)*HD/2+i,float(std::cos(angle)));put(A_ROPE,size_t(MAX_TOKENS)*HD/2+size_t(t)*HD/2+i,float(std::sin(angle)));}",
+  "sha256": {
+    "/workspace/scratch/f28987e955ed/round_20261110T0733/qwen2_execution/host_real_inputs.cpp": "46b126cb45e57ae6f13ef7f981ec209f1beb3354b26b39b771be7c091f301f8c",
+    "/workspace/scratch/f28987e955ed/round_20261110T0833/numpy_fma_candidate/freeze_trig.cpp": "05267c678462e17d4f37fa93efbe9ab49d84b5a388d30b27fd68f1c1a748a356",
+    "/workspace/scratch/f28987e955ed/round_20261110T0833/numpy_fma_candidate/freeze_trig.local": "52f15893c359e44490a392ac1453076ca56c9a8461995126685f859eacd71133",
+    "/workspace/scratch/f28987e955ed/round_20261110T0833/numpy_fma_candidate/cos.local.f32": "07176f2b45701f808aa6f225091f75db2ea751ffb28f9399a7a07956ecb77392",
+    "/workspace/scratch/f28987e955ed/round_20261110T0833/numpy_fma_candidate/sin.local.f32": "9cd312a7e08ea3aaef3dbf8f33df5861252a8affffcd10a209827f2e965e3cf1",
+    "/usr/bin/g++": "6b3696e4dcb85e1c949c732a02befa50e3983ecf94ce7e8e58d9d503b954b79d",
+    "/lib/x86_64-linux-gnu/libm.so.6": "6d567d53e895273ca14a1f9dc164fc6c8d39aed2f60aa46a733c2784228915f3"
+  },
+  "compiler": "g++ (Debian 14.2.0-19) 14.2.0\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "libc": "ldd (Debian GLIBC 2.41-12+deb13u4) 2.41\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\nWritten by Roland McGrath and Ulrich Drepper.\n",
+  "shape": [
+    1024,
+    64
+  ],
+  "dtype": "little-endian FP32"
+}

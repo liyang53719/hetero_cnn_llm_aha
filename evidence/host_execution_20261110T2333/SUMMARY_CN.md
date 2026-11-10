@@ -17,3 +17,9 @@
 ## 完整checkpoint实质可行性验证与缺口
 审计确认现Matrix/ICG/iDMA三类生成模型均未启用savable，原ABI无save/restore；不能memcpy含指针对象、只保存公开输出或把参考中间值灌入恢复。独立以完全相同tc_clk.sv与参数仅加官方--savable生成选项重编真实ICG，保存/恢复实际内部latch与context，3个高/低cutpoint后1435次观察与不中断模型完全一致。初始探针在线程初始化次序上失败，修复测试构造后通过，未改DUT。**PASS仅ICG保存机制可行性，不是17native或完整checkpoint**。
 已列完整实现缺口：Host全部state、8Matrix/8ICG/1iDMA全私有状态及wrapper clock/edge保护、fast适配器level/previous、driver DDR有效mask和AXI队列/计数/观察标记、transport序号/半帧屏障及所有pin必须同epoch。当前不具备完整恢复；下一步补齐且跨进程逐帧差分验证，再恢复长链，避免再丢失昂贵前缀。
+
+## 后续实质checkpoint编码结果（仍不可用于完整恢复）
+隔离driver候选已编译：版本/epoch/pin32/SHA256封装、原SparseWrites bytes+validmask/ranges、观察collector、122端口/sequence/previous/time、AXI pending/held与计数、低相ACK op3屏障及restore不reset/eval。部分validmask孔恢复仍拒读，损坏/pin/epoch/截断负测通过；原transport facade跨两个OS进程8帧协议逐帧一致（peer明确为synthetic零响应），原driver42帧watchdog回归符合预期。完整Simulation中态回归、CLI自动接入和17native双边原子事务未完成，不是DUT checkpoint PASS。
+ICG/iDMA同原RTL全新savable库与版本ABI完成：fresh对象恢复后真实中态各621半周期一致，与原非savable库各512半周期一致；wrong epoch/pin不改旧live对象，外层SHA/长度/epoch/pin守卫12项通过。早期官方restore提前close触发EOF abort的失败保留，修为前置校验及fresh对象完整恢复，不能绕损坏检查。
+Matrix原层级加savable真实生成62.47秒exit0，但发现Verilator5.032 protectlib生成代码直接保存opaque子指针，并未递归保存子model与seqnum；跨进程恢复不安全。已停在生成审计，未进行无效重编、未改生产库。需显式递归子模型保存并重建handle，或同原RTL扁平savable新后端经完整差分，不能直接使用该候选。完整17native/Host checkpoint仍INCOMPLETE。
+Host静态审计实际eval可达641函数、无indirect call及LLVM可变全局，外部为strict断言、stderr打印与内存intrinsic；诊断assert计数也应保留。该审计不是完整恢复验证。全部新代码仅本地，未启动长前缀。

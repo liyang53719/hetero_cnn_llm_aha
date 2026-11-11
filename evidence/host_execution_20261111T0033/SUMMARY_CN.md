@@ -1,0 +1,22 @@
+# hetero 00:33：安全递归Matrix与真实Host恢复候选（INCOMPLETE）
+
+基线main817341d、CI42925671594 success（仅payload guard）已核；旧长任务中断原因仍未知、无正常终态，未重启昂贵前缀。临时/资源核验，保留全部失败。
+
+## Matrix安全恢复实际修复
+递归保存真实protectlib子model与seqnum，恢复fresh重建handle而非写入旧进程指针；构建前后静态guard防make覆盖补丁或遗漏序号。真实原non-savable基线8实例/4096资源的400半周期，三个低相中态cut后由另一OS进程恢复，全部8×521输出与边沿计数逐步一致，每实例完成数值输出与completion。16身份负例/8恢复清理/3坏文件前置拒绝通过。
+早期make重生成覆盖serializer补丁导致三cut跨进程SIGSEGV，另非零context time构造触发abort，均保留。修复生成防护与fresh子模型构造时序，未eval/clock，不改原RTL/参数或算术。最终库e900d7a296d0670ab3c401fa55834020faa90f43c1b457f0c9ce995ad78ebee6。PASS仅Matrix单tile中态恢复资格，不是完整block。
+
+## Host、driver、事务实际接合
+原driver CLI保存/恢复候选已编译，包含原Simulation完整计数/AXI pending/held、DDR有效mask、观察器及transport序号，restore不reset/eval或重新launch。非空synthetic状态fixture往返payload逐字节相同，不能当DUT恢复。21组件事务manifest完整集合、长度/SHA/pin/epoch全检后才产生私有验证副本；损坏负测在native调用前拒绝。
+实际完整compiled Host使用同硬件与17真实savable native，24帧reset/idle、cut12后跨OS进程恢复，后续368B输出与整个1624112B core逐帧与不中断savable及原non-savable三路一致。coreclock不一致负测拒绝且caller state/assertcounter不变。**PASS范围是无launch的真实Host恢复，driver状态尚未合入该真运行，不称完整checkpoint可用**。
+
+## 主线及后续门槛
+五块完整M128数值仍0/5；L3首Norm既有精确PASS保留，Dense未完成。必须继续真实driver+Host中途帧屏障联合恢复差分，证明DDR/AXI/17native同epoch；只在首Norm结束保存仍不足解决Q Dense生命周期问题，不能再反复丢失Q前缀。L0原fatal underflow与全部精度契约保持，35B输入/同分契约缺口不绕过。固定4096、同硬件/接口与最终同RTL目标不变；无完整利用率新实测。
+仅允许摘要/hash发布，新源码/库/生成数据/权重及原始日志本地保留，不绕先前拒绝。临时文件无清理。
+
+## 实际M128原driver与Host联合跨进程恢复
+独立TEST_ONLY副本保持生产门禁不变，真实L3 M128输入和全部原Host/native运行。两组分别活动cycle300空pending与cycle20存在pending读时保存21组件，恢复至cycle600，共1818数据帧的input/output/完整core状态逐帧一致，19份native/core/wrapper终态文件逐byte一致。独立审查确认driver仅额外一次barrier序号，先核恰差1再仅归一化此字段，其余完整payload逐byte一致，无宽泛豁免。
+进一步真实写窗口：cycle1823时pendingWrite=1、committing待B数据1beat、DDR已提交1beat/64B、readACK108，跨进程恢复至cycle5000；15018数据帧input/output/完整1624112B core逐帧相同，native/core/wrapper终态字节同，driver全payload亦仅已核控制barrier序号差1。heldW该cut为0，未冒称覆盖。测试子进程60秒/10000周期上限，无昂贵长前缀。
+这些证明具体读/写队列中途恢复短轨迹，尚不是长Dense、多命令完整block或五块数值PASS。生产门禁仍未放宽；下一步把精确验证的低相ACK中途保存接入有界分段恢复，继续原完整数值链，避免只在首Norm存档后又丢Dense。完整五块0/5不变。
+
+写窗口独立复核也通过，但不得直接推广TEST_ONLY门禁：恢复还须补pending/aw/held地址权限与64B对齐、ID/beat范围、readIndex界限、pendingWrite与committing/WLAST/aw/writes一致性、held端口valid及稳定payload关系的语义拒绝测试。首版应限定已实测状态（无held/partialAW-W、readIndex0、单beat写），再扩展更多真实切点；尚不声称支持任意中途恢复。

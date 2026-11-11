@@ -20,3 +20,9 @@
 这些证明具体读/写队列中途恢复短轨迹，尚不是长Dense、多命令完整block或五块数值PASS。生产门禁仍未放宽；下一步把精确验证的低相ACK中途保存接入有界分段恢复，继续原完整数值链，避免只在首Norm存档后又丢Dense。完整五块0/5不变。
 
 写窗口独立复核也通过，但不得直接推广TEST_ONLY门禁：恢复还须补pending/aw/held地址权限与64B对齐、ID/beat范围、readIndex界限、pendingWrite与committing/WLAST/aw/writes一致性、held端口valid及稳定payload关系的语义拒绝测试。首版应限定已实测状态（无held/partialAW-W、readIndex0、单beat写），再扩展更多真实切点；尚不声称支持任意中途恢复。
+
+## 后续恢复语义强化与真正Dense活跃验证
+独立恢复语义负测发现未初始化RW读可被接受的缺陷，保留原FAIL；修复全跨度DDR validmask校验、地址/ID/beat/index/held/计数关系和save/restore对称门禁。47项重seal畸形状态负例（读21/写26）全部fresh拒绝且payload不变；仅限定已证singlebeat/fullstrobe/无held子集，不放宽生产门禁。
+一次真实L3首Norm运行536.93秒后计算完成并提交完整21组件checkpoint，active252194/completed1；不是仅actual结果。组全部SHA复验，首Norm262144字节仍与独立参考完全一致，未注入参考。
+从此真实状态做Dense活跃恢复，不重算首Norm。首次预定切点在多beat读中被原守卫明确拒绝，失败保留。改用同冻结driver已有实测空AXI边界：active264704、Matrix issues1914时保存（Matrix仍活跃），换进程续至264896、issues1945。38106数据帧input/output/完整1624112B core逐帧与连续路径同，17native/core/wrapper终态字节同，driver全payload仅一次额外barrier序号差1，已先严格验证。真实DDR已提交4096beat/262144B，未用参考填状态。
+真实Norm组和约3.9MB Dense末状态完整组均保留，可供后续沿真实状态继续，不重新算长前缀。该PASS仅受限切点及192周期Dense后续等价，不是Dense输出完成、任意queue恢复、整个block或最终RTL数值通过；五块完整数值仍0/5。所有本轮作业均终态，无未获验证的长跑。

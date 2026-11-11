@@ -25,3 +25,7 @@ b048包没有目标hidden生成器/BINDING/original_prep_reference.py，run.py�
 ## Qwen2剩余参考的当前状态
 复用1333前10阶段和1133真实权重，唯一原20819受900秒wall/890秒CPU/2GiB限额执行剩余11阶段，未重复前缀或启动替代作业。已新完成精确QK157.35秒、softmax11.63秒、PV131.34秒，以及输出投影、残差、第二RMS、gate/up，已完成阶段hash逐项匹配保存身份。写摘要时仍在SiLU阶段，后缀及当前完整21阶段资格INCOMPLETE，等待原身份终态，不推断成功或停止。
 独立受限BF16乘数/FP32累加器数学审计84804例通过：TwoSum残差、FMA值与flags对整数oracle/Fraction一致，RNE/gradual前提明确。这是数学样本和分情况证明，不是全输出形式证明、格式转换flags或硬件资格。4Dense flags adapter仅准备未运行，不迁移丢失的1033全矩阵审计PASS。
+
+## 原参考任务终态补充
+上述“仍在SiLU”为写入时状态，现已收到原20819明确exit0：剩余11阶段501.35秒完成，前10没有重复。最终y SHA cbda6ba00853708fab397dadafbf731b29a8b134f6d9f6541e6b7a5fce6f6cb5；新11阶段全部匹配保存pin。当前全21独立参考receipt已重新校验输入/Host trig/源码/全部阶段输出，SHA da18d3bdbb5313b6ac1367fe57eb3583aae380af5bde18c4c3ecb626e3a50f2a。
+因此当前完整21阶段独立参考候选值执行完成；不是Chisel/RTL、全部算子flags、正式硬件release通过。未执行4Dense flags大审计，只84804受限域独立测试在普通和-O模式通过，仍不迁移1033全flags资格。五块完整模型仍0/5。

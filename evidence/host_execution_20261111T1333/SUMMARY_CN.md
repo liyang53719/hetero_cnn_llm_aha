@@ -1,0 +1,16 @@
+# 13:33 执行依赖与真实前缀恢复
+
+五块完整128token原Chisel数值仍0/5；同刺激最终RTL未通过，完整block80/90%有效MAC利用率无新实测。原head4 FAIL不变，未知旧Host不重启，不迁移丢失产物的PASS。
+
+## 本轮实际工作
+- 26项缺失jar从官方Maven Central恢复，共19812656B，全部匹配允许源码包既定SHA。106项总classpath用于唯一11738完整155源typecheck/class编译（包含诊断入口，没有排除），66.11秒exit0，860classes逐hash冻结。此前缺firrtl2/chiseltest/JNA的编译依赖缺口本轮消除；这是源编译PASS，不是elaboration、运行闭包或数值PASS。COMPILE_RESULT SHA8042a8349a9ad539bf4ad432c32a9ef3dffa8d2688a04b62750d762ca10c13ae。
+- 官方Debian Verilator5.032包恢复，SHA238ab4ca84cddd371f113cd549f16f2d65c43e7b4962a763bea1d259158dd3b2匹配，解包binary/wrapper版本均确认。原iDMA artifact12099239717恢复927文件并逐项校验，manifest SHA a699b8074b8099e00859d5174c0a5fb6b5a171a28cad30bab8dd96226dc67b19匹配。仅工具和源码恢复，不继承已丢native库或17联合PASS，没有编译大Matrix或运行Host。
+- Qwen2复用1233新RMS/Q，恢复原freeze_trig.cpp和Host double pow/cos/sin表，以原完整cos/sin SHA验收。原66474 exit0/5.89秒新执行Qbias/RoPE、K/V投影及bias、K RoPE、KV cache，联合前轮两项形成当前新前10阶段值候选。各新输出hash匹配保存pin；未重复RMS/Q、未跑QK/完整21op或Host，flags资格另计，未使用Torch表替换。
+
+## 原hidden的确切阻塞
+允许源码中profile1/2的width1024/seed137691264原样生成262144B候选，其SHA ac65a7629cd12fda22f07e8945fd2f99a343fed468236bacfea9aee38285d416不匹配目标0b59c2c36120837a095769cc10a19bea345137aad54cbc80a7138694fc5dac99；旧L3 smoke输入转BF16也不匹配。未调seed碰撞或写入替代hidden，1233真实参数桥保持不变。
+需纠正证据边界：现存目标pin来自0633/l0_exact/RESULT，仅能直接证明旧L0输入，不能据此证明旧L3使用相同hidden；旧L3须恢复其BINDING再核。两个profile完整输入闭包仍INCOMPLETE。35B真实完整权重仍缺，未绕下载拒绝。
+
+## 下一步、身份与清理
+下一步复用本轮860classes与恢复工具重建同一固定4096 Host IR及原native时钟/reset/strict fatal执行绑定，避免重复编译；完成真实完整模型数值后才冻结同刺激RTL。历史107断言身份仍缺，当前源恢复不冒历史等价。32lane每周期共享向量设计未通过，资源不缩减。
+开工main24b6371b，本地checkout干净，1133/1233实体仍在，约9GiB内存/57GiB磁盘可用。所有新有界作业明确exit0，不代表旧未知任务停止。临时清单已核，无清理。依赖正常官方通道恢复，没有绕过拒绝；仅提交允许的中文摘要/hash，不上传源码、原日志、权重或生成数据。环境回退根因未解决，不承诺本地实体跨环境持久。

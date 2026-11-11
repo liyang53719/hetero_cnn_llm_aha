@@ -1,0 +1,21 @@
+# 15:33 原始模型执行闭包推进（INCOMPLETE）
+
+五块128 token完整原Chisel数值仍0/5；最终同刺激RTL未通过；固定4096完整block有效MAC80/90%未实测。原L0 head4 underflow FAIL不变，旧Qwen2/L3未知作业未重启。
+
+## DONE：当前独立参考文件消费资格
+复核1433的Qwen2全21阶段参考receipt，补输入重建/前缀入口和实际trig闭包，不重算21阶段。70条目307063373字节经现场hash复核；普通和-O各13项负测拒绝坏hash、缺/重复阶段、等字节错shape、profile、scope升级和合成损坏副本。仅ADMITTED_REFERENCE_FILES_ONLY，未接Host，非数值或硬件新增PASS。
+四profile实际重验27段真实参数/初值/trig及命令descriptor。12入口负测通过；0.8B原hidden缺失、L3原hidden身份未核及35B真实完整权重缺失继续阻断，不以参考中间值替代。拒绝512 MAC及profile硬件/容量覆盖。该入口检查不是执行。
+
+## ONGOING：strict编译IR和真实native
+使用同一1433固定4096定义的HW IR与已校验1.163工具，实际编写strict callback转换，保留105组error/fatal表达及1个同源immediate assert，按原always中的源顺序分20组。额外immediate来自HeteroRuntimeMoeMerge.scala:115，与同源error/fatal是同一assert两种lowered表达，不是新增第106条源assert；历史107身份仍未恢复。
+小型编译IR7项edge/reset/enable测试、真实fatal非零exit86和4项组内双异常顺序测试通过。有界Host Arc编译到真实Matrix/ICG组合反馈SCC后exit1；失败保存，未执行Host，不丢断言/不把ready设常量绕过。需共享handle边界与pre-edge快照调度继续贯通。
+重新发射四个原FMA stages并构建Matrix endpoint。旧端点native只能看到protocol_error，本轮additive暴露5-bit mflags，但不凭该变化新增fatal策略：原blackbox本来无flags端口，尚未判定完整Host的独立异常检查路径，不能声称整个原Host缺fatal。
+
+## TODO与约束
+完成原真实17路互连和严格异常、clock/reset、共享handle时序；在未知旧Host任务决定解决前不重启该任务。原hidden及35B真实权重仍是各自数值输入阻塞。先原模型通过再冻结同刺激RTL，不将native/IR构建或入口检查当完整prefill。
+本轮开工远端main b4502533，CI43041859727仅payload guard成功。1133–1433实体仍在；工作树干净，可用内存约9GiB/磁盘56GiB。临时清单已检查，既有数据清理0项；测试自建合成fixture临时副本正常释放。未上传权重/输出/源码/rawlog，只提交允许摘要与hash。
+
+## 本轮终态补充
+Matrix新库SHA8eb65038aeb8e12b01524ead3287ee284b8b02e7d57e216eca72cf8e95d11ff6，四原FMA stages SV58454B SHA8ac37b6cf13c520e1af5513982bc5bfbd06efc974583899cfee695a4eb2a54de；实际发射SV与Verilator构建，明确不是仅Chisel解释执行。单512切片的独立direct/CABI状态208400词+rawflags400次差分零不符，仅接口限定资格，未用它替代4096。
+另外实际同时8×512=4096 Matrix、8ICG、1iDMA共17句柄400半周期，八实例各1输出/1完成；真实ICG输出驱动Matrix时钟，raw flags正常0、invalid16、overflow/inexact5、underflow/inexact3案例吻合。12项transport边界负测通过。仅17真实native句柄边界，不是完整Host IR互连、fullblock或strict fatal通过，未修改硬件异常判定。
+Strict新回调的20组80例正负路径与4个LLVM顺序用例通过。原always组内顺序保留，不宣称并发组间全序；仅默认ASSERT_VERBOSE_COND/STOP_COND启用策略。共享handle sink/source小型容量反馈原型经真实编译IR运行20周期通过，错误post-edge发布被20/20逐周期握手差异捕获。最初仅比累计10=10不能抓错，已修正测试并保留局限。此为调度toy，不是17native集成。Host实际Arc编译exit1的SCC阻塞仍在，未反复编译或启动未知旧Host。

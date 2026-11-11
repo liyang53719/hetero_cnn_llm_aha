@@ -18,3 +18,8 @@ Qwen2与L3当前均只是已提交输出子集数值PASS；L0仅launch/服务执
 ## 计划与清理
 DONE：两路前两段真实数值、可恢复组重验、Qwen2恢复入口门禁、L0真实准入。BLOCKED_OBSERVATION：第三段原运行身份不可查询，无提交凭证。TODO：从L3 864911与Qwen2 300000保底继续，显式核receipt和closure，逐段持久并比完整阶段。
 初始全round清单43485文件约10.864GB，约9GiB可用内存/47GiB磁盘，未删除任何文件。原输入、唯一checkpoint、失败证据保留。仅发布允许中文摘要/hash，不上传候选源、原日志、checkpoint或权重。
+
+## 后续状态核查与纠正
+平台environment list仅给当前cloud connected，无旧exec supervisor终态查询。原L3虽配置外层timeout TERM600s/kill-after5s，但没有退出回执，名义超时不能当已确认终止。原runner都无共享锁；每个exec进程视图独立，当前/proc缺原PID不足以排除旧任务。L3未重启。
+Qwen2在上述误用/proc的判断下已启动独立新恢复80473；此判断依据不足，已纠正。为不损失已运行工作且不扩大重复风险，新组只完成首25k安全段，driver exit0，完整21组件验证后finalizer受控exit75、sequence exit1停止，后3段未启，新flock已实测可获取。未终止未知旧任务。
+最新可恢复Qwen2为325000/cycles325005，低相空AXI；新receipt recovery_short/segment_1_325000/RECEIPT.json SHA ec23f6213a825108bad1a27a34d732397583df122f172acca61b8aee61ec9c13。独立直接mask核41648个已写FP32 Norm值零差异，154960未写排除，无半有效字。仍不是完整Norm。旧19911状态仍未知，当前不再启动恢复；缺少旧supervisor终态/旧executor终止证明。原300000保底仍保留。

@@ -1,0 +1,11 @@
+# 06:33 实际Q投影参考、两层原输入恢复及155源类型检查
+
+复用已验RMS结果，真实Qwen2 M128×K1536×N1536顺序301989888次FMA独立值参考完成，原71313 exit0/16.49秒。q0 SHA 1e67553e3bbbd2c1118ad860a4669accbff3ead6dd403439d1cc3d0867e3e5d9。每步TwoSum残差及舍入区间证书，1次非零残差而无需边界回退，4个完整K输出原Fraction独立差分。另13定向值反例通过（10个BF16域与3个舍入保护压力输入）。只证明本次Q参考值，不含完整flags审计、bias/RoPE/全21链、Chisel或RTL。
+
+从允许的原源码包恢复两个不同合成boundary fixture，而非猜seed或真实前层activation：0.8B L0 hidden SHA 0b59c2c36120837a095769cc10a19bea345137aad54cbc80a7138694fc5dac99，L3独立原pin匹配。结合真实参数得到16/13只读段、missing_readonly为空。只读闭包不是硬件准入或数值PASS，L0 dt_bias补零仍是明确新映射。
+
+原session49693 exit0，复用7依赖、官方恢复19项10978435B并逐pin验证；原历史155源含Diagnose和原d254 Commands完整类型检查82.85秒/860classes。没有elaboration或Host执行，不等同后续+&修复或最新诊断候选资格。
+
+五块M128完整原Chisel仍0/5；最终同刺激RTL未通过，4096完整block有效MAC80/90%未测。35B真实权重缺项及先前CDN拒绝不绕过；未知旧Host仍不重启，原head4 FAIL不变，不继承丢失PASS。下一步连接已恢复输入和执行闭包，保持严格异常及同一硬件，不以参考或编译PASS冒数值通过。
+
+开工main9e8c2ca4，CI43163089888成功仅Git数据门禁。本地工作树干净，约9.1GiB可用内存/58GiB磁盘。原任务终态核实，临时清单保存，清理0；不提交源码、原始日志、权重或生成数据，仅允许摘要和hash。

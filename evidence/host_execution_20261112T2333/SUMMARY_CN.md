@@ -1,0 +1,11 @@
+# 23:33 固定4096 Host候选elaboration与真实输入恢复（完整prefill INCOMPLETE）
+
+main f5895fa已核；CI43321693660 success只为payload门禁。现场2233源码保留，已失去的1733–1933执行闭包仍缺。工作树干净，约9.2GiB可用内存、57GiB磁盘，临时清单已核，清理0；未因新executor中进程不可见推定旧Host停止，未重启旧Qwen2/L3。
+
+重验860个原classes后，仅将countPolicy +&控制候选重编为独立overlay，19.63秒exit0；复用原Top emitter生成完整4096 Host Chisel FIR，11.36秒exit0，无依赖下载或154源重编。候选源码8cea5e8863e47ca14978871d23b7f80639e43ae3192c3e6c0ccf372b1c73a20f，新FIR7879706f60a066a352cf0e793fe18774e93510ba593346161b1c353731e7db1f。新旧完整FIR全部module接口、105条assert语句及17个外部实例保持一致；去除源码位置后唯一差异是countPolicy去掉截位tail，保留3bit加法。仅elaboration，不是IR执行、RTL或完整数值通过；控制修复新身份不能继承旧冻结通过。
+
+重新完整SHA核验Qwen2的13张raw、0.8B L0的14张与L3的11张。恢复两个0.8B原metadata取指地址桥，保持原程序pin，限制table地址边界并显式标记新零尾，拒绝未映射读和写，6项测试通过。完整张量桥、Qwen2 metadata及冻结trig仍未恢复，35B两块完整权重仍缺，未重试被拒CDN。
+
+参考runner实际修复：项目算术依赖从验证前import移到完整固定源码pin集校验后，再允许执行；receipt输出要求规范stage文件名且拒绝symlink。新增4项负测通过，其中2项实际子进程入口确认被修改依赖/漏pin在import前拒绝，2项直接验证receipt拒绝链接及错stage文件；未重新运行21算子参考或任何Host。
+
+五块128完整原Chisel仍0/5；最终同刺激RTL和固定4096完整block有效MAC80/90%未测。原L0 head4 FAIL保持，精度、舍入及MoE路由契约不变。源码及必要证据只留本地，只发布允许摘要/hash，不绕先前拒绝。

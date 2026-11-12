@@ -1,0 +1,11 @@
+# 04:33 重复文件回退阻塞与Commands来源核实
+
+环境ready后实际核0233真实FP32输入/参数桥及0333算术/trig/依赖目录再次不存在。workspace/shared定向查找未找到。没有重复大下载、编译、输入恢复、RMS/Q数值或Host执行，不继承历史PASS。现存0133准入逻辑6单测重验通过，4项实际依赖返回MISSING_FILE、准入false；不存在真实桥，未盲接padding。
+
+本轮有用新证据：授权GitHub只读核不可变提交acdb64b7bbeea7196311509a960ff0c0285d3a9a的HostBlockCommandsV4.scala，与现存190729B候选Git blob均为a2020b74140fdcfb152be2001673d9d63b2d47e8，SHA256为8cea5e8863e47ca14978871d23b7f80639e43ae3192c3e6c0ccf372b1c73a20f。解决该后续候选远端来源未核问题，但它不是旧d254清单版本，也不是最新执行闭包或数值资格。
+
+五块M128完整原Chisel仍0/5，最终同刺激RTL、strict fatal及完整block4096有效MAC80/90%未测。原head4/顶层预期8的FAIL保留。未知旧Qwen2/L3完整任务不重启；0.8B hidden与35B完整payload缺口不变，不绕访问/发布拒绝。
+
+下一步需可靠保留当前执行闭包后恢复并重测；本轮避免无意义反复恢复。开工main de2b475bf29735bde8a157db7c32f39c6a03f4f1，工作树干净，约9GiB/57GiB；临时清单已核，既有数据清理0，无新运行作业。只发布允许摘要/hash，不上传源码或生成数据。
+
+补充恢复：同一不可变提交原fresh_original_top路径取回原Commands，Git blob与SHA256双核匹配d25425714cd0b123a0b5924568311f5faa8c9116a3026d53f3e5ebcfae0df108。两版唯一差异为countPolicy加法是否保留进位。原源码身份缺口已解决，未重复编译，仍非最新执行闭包或数值通过。

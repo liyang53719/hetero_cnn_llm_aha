@@ -1,0 +1,13 @@
+# 10:33 精确工具恢复及断言降级差异，数值仍INCOMPLETE
+
+环境ready后0933目录丢失、0833保留。原参考27005此前已实际确认300CPU秒TimeoutError exit1，历史完成到gate共17/21并核receipt；当前poll Unknown不是停止证据。匹配0933源码/PINS/17receipt及张量均丢失，不能从up续，未重启或继承失踪PASS。
+
+本轮63242官方CIRCT1.163完整包143163743B在15.06秒恢复，SHA2a3b8a19a8884e7adf9508555346bb9107feb6aaced9ad7fdf247dbf7048a945；版本/工具pin核验。31570以新精确工具保断言lower原FIR，exit0/28.63秒，新HWIR SHAebd1c5f7894381dbee534fda37e3ae3a48286d9ac901b3e1ceb93b6a64dbdfbb。
+
+重要更正：此前CHIRRTL212assert为子串误计，混入printf文本；实际锚定FIR操作105assert，本轮加误计负测。1.163降级为105 sv.assert immediate及sv.fwrite消息，sv.error/fatal为0，与旧1.62的fatal路径不同。禁止套用旧适配器或默认Arc丢断言路径，strict callback和真实Host执行未通过。此次不是数值PASS。
+
+新增历史underflow比较器及6边界/反例：给定历史operand0713e498×b8009900精确结果80252558、flags3，有限tiny+inexact，仍触发原binary vector严格error。当前chunk/Elementwise源码定位已pin；scalar MulIeeeRne例外不能套到vector。原raw trace缺失，不冒本轮硬件捕获，原head4 FAIL不变。
+
+17native最小依赖图与fail-closed检查，2单测通过，核源码/ABI角色/hash并拒fixture代ICG。实际Verilator/runtime、官方ICG、匹配iDMA导出、算术生成RTL/shared17/schema仍缺，未编译执行真实native。未再物化丢失桥、未重试35B受限下载。
+
+五块M128完整原Chisel仍0/5，最终同刺激RTL未过、固定4096完整block有效MAC80/90%未测。下一步按新实际断言predicate重建严格适配并补native闭包，避免重复恢复或重启未知Host。开工main1d3fb18a，CI43192578833success仅Git门禁。工作树干净，约9GiB内存/57GiB磁盘；临时清单保存，清理0。仅允许摘要/hash发布，源码/日志/IR/数据不上传。

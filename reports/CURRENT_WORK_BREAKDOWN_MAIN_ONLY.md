@@ -50,3 +50,12 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - blocked：29364缺终态，未知旧Host不重复恢复；35B真实权重缺失；L0原underflow FAIL保留。
 - todo：获得原任务终态或明确允许未知旧任务并发风险后推进真实Host；候选完整真实前序ACK路由及五块重测，之后冻结同刺激RTL回放。不得将升序称唯一官方归约顺序。
 - cleanup：核清单、工作区clean，清理0；没有完整block利用率实测。
+
+
+## 2026-11-13 21:33 当前状态（INCOMPLETE）
+- done：Qwen2原M128真实norm→完整QKV+bias独立参考，FP32存储/输出保留；不是Host数值PASS。
+- done：真实历史恢复包父链及发布负例7项/13类通过；没有新DUT周期，不推定旧进程终止。
+- done：新ascending候选Arc/llc完成，补官方ArcRuntime链接后真实17实例12周期reset-idle通过；105strict与绑定保持。未执行活跃profile、未迁移旧checkpoint。
+- ongoing：五块完整原Chisel仍0/5；Qwen2独立参考后续RoPE/attention/FFN待续；候选需真实前序ACK链与完整五块验证。
+- blocked：29364终态未知；35B真实权重缺失；L0原underflow FAIL仍在。
+- cleanup：清单已核/清理0；未测完整RTL及完整block有效MAC利用率。

@@ -9,3 +9,6 @@ L3独立双参考完成postnorm→FFN gate/up。各投影M128×K1024×N3584，46
 QK顺序根因审计：Commands对runtimeGqa独立常量1，Attention lease/router硬要求1，wrapper复用qkNormPolicy为qkOrder；并非norm数值误传。原本地GQA升序，pair候选默认false，本地20261029安装候选已固定1；未证明准确引入commit/作者意图或官方上游顺序。已在独立副本协调3源码Attention-only的1→0，保持QkNorm256 C1/C2、RoPE B1不变，冻结源不动；4项静态/提取谓词边界测试通过。明确TEMP_SOURCE_ONLY：未Chisel编译/elaboration、未重新数值验证、未生成RTL，不能迁移任何旧通过。
 
 五块M128完整原Chisel仍0/5；首RMS40行只部分证据，L0原underflow FAIL、35B缺真实权重仍在。完整RTL及有效MAC利用率未测。源码/日志/数据保留本地，远端仅允许摘要。下一步待旧任务终态或用户明确同意独立恢复，再接安全管理器继续；独立候选编译与完整参考继续。
+
+## 后续编译终态核验
+原36471已exit0：Scala23.91s、Chisel emit11.93s、匹配HWIR lower34.88s。我重新执行结构核验和discover，均exit0：全模块接口/extern与105条assert声明一致，8Matrix+8ICG+DMA共17native保持。FIR e4c6a82b745ce836dfe70cd88672431966041f3e8758408762a7b5011c20c814；HWIR12ee8ac43208709eb08ab51cd349c7a152254b3bd0c9cba7560a1a652956432c。剥离源位置后FIR差异29行。仅PASS结构/TEMP数值待验证，未运行候选Host、未生成同刺激RTL数值结果；旧40行checkpoint不能直接迁移到此新身份。

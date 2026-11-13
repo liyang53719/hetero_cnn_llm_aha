@@ -1,0 +1,11 @@
+# 23:33 新候选真实AXI pending恢复与Qwen2参考推进（INCOMPLETE）
+
+基线main fed52a9658e87181ac03455af9733046cd7330e3，CI43520189397 success，仅payload guard。工作区clean、现场保留，临时清单已核，清理0，磁盘余54GB。
+
+候选真实主线：复用2133已验Host object，只链接实际savable17、三种savable leaf及官方ArcRuntime，新库9721678aaca8e7fb3ea281d4dc223a0d45df3cc501fdc575f0f24296b8c2831f。16项依赖preflight/坏pin拒绝保持。新独立runner在cycle10真正接受AR、R响应尚待送3周期，使用明确external_read_pending=true新schema保存地址/id/len/size/burst/beat/Rvalid延迟、响应数据身份、Host/driver/control/17native等完整20块；不放宽旧drained标签，不恢复旧包。fresh-process恢复后32周期至cycle42轨迹全等，最终20块实际序列化hash全等；消费一次R，返回Unsupported状态4。10项runner/schema源码pin入包并在建句柄前校验，13种错误拒绝通过。我独立复核轨迹/20hash及3组测试。范围仅合成单beat非法命令，scratch空，非数值/完整profile或非空写回恢复。
+
+初始2次harness envelope失败（RO region/table limit对齐）由原DUT正确拒绝；只修输入，不改DUT/安全cut，失败源和证据保留。最终新身份测试43893与负测16805 exit0。原29364仍Unknown，无终态receipt，未重启。
+
+Qwen2独立数值：完整原因果softmax/PV完成，保FP32概率/attention存储；原Legacy exp>=80饱和3921有效key，不更改既定策略。PV12681216 FMA，另362 Fraction完整dot节点交叉核；attention SHA b546fe31de68553448f05b9a66fa59565eee94552574e608c0258fd68c0e5d54。继续完成O投影301989888 FMA、residual1/postnorm，postnorm SHA1f7ac372a93eea54963f7b8cb499faa74cdaf3504bba9aa5dea9a7776435ca5d。随后原session64265 exit0（283.71s），完整FFN gate/up/down各1761607680 FMA；SiLU25231360逐项Fraction节点、最终残差196608 Fraction Add。最终[128,1536]FP32输出SHA cbda6ba00853708fab397dadafbf731b29a8b134f6d9f6541e6b7a5fce6f6cb5。20阶段实体hash及input/output串联复核通过，原21命令映射已记录；KV append仅参考K/V复用，不是事务资格。是完整分阶段项目算术参考，不称全链全Fraction或官方PyTorch一致、Chisel/RTL通过。Qwen2 RMS原kindNorm为跨16lane连续scalar求和，与同ops.rms一致；0.8B GdnRmsNorm的residue归约不能混用。未重算前缀、未近似替代。
+
+五块完整原Chisel M128仍0/5。Qwen2首RMS40/128旧部分证据不迁移；0.8B L3完整分阶段双参考非硬件通过；0.8B L0原underflow FAIL保留；35B L0/L3缺真实权重。完整RTL数值及完整block有效MAC利用率未测。只有源/输入身份相同且完成全五块模型验证后才冻结同刺激RTL回放；本次候选资格不冒完整通过。源码/数据留本地，本摘要为允许公开范围。

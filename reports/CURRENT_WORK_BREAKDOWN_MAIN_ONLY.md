@@ -68,3 +68,12 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - ongoing：五块原Chisel仍0/5；候选真实完整链与savable17新身份恢复待补。
 - blocked：原29364终态未知，不重启；35B缺权重；L0原underflow FAIL保留。
 - cleanup：清单已核、清理0。完整RTL数值及完整block MAC利用率未测。
+
+
+## 2026-11-13 23:33 当前状态（INCOMPLETE）
+- done：Qwen2原21命令算术路径的分阶段M128独立参考闭合至最终FP32输出cbda6ba0…6cb5，20实体hash串联。KV append仅参考复用，不冒事务/硬件通过；L3独立双参考已完成。
+- done：新候选仅重链接savable17；cycle10真实AR已接受/R pending，新schema完整20块fresh-process恢复后32周期轨迹及20块终态hash全等，13负例通过。仅合成单beat非法命令、scratch空，不是全profile或非空写回资格。
+- ongoing：五块完整原Chisel仍0/5；同4096候选完整真实数值及五块重测待完成，独立参考不能代替DUT。
+- blocked：旧29364仍Unknown未重启；35B真实权重缺失；L0原underflow FAIL保留。
+- todo：保新候选代码/输入身份，补完整真实数值链，先模型通过再冻结同刺激RTL。不得将墙钟速度当MAC利用率。
+- cleanup：清单已核清理0，完整RTL/完整block有效MAC利用率未测。

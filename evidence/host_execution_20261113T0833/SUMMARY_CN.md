@@ -1,0 +1,11 @@
+# 08:33 源码及执行依赖重建（INCOMPLETE）
+
+实质工作：从逐hash匹配基底重建profile0/1/2严格安装能力源码，保留官方/MoE guard、固定4096及原数值通路。860基底class重新核验；原2094 overlay编译15.35s、完整Chisel FIR发射13.65s均exit0。8项真实Chisel能力负测通过。新FIR e7de1d0f8d640dc68255c650512f400fc0f83a60cc6c42631c262b2aa3242ff7。
+
+105断言、17 native及接口保持。初始断言字符串比较FAIL已保留；定位唯一变更为HeldDecoupledOffer局部SSA编号+6，完整谓词/clock/reset/printf区域alpha等价，其他104条相同。不是全电路等价或数值PASS。
+
+官方CIRCT1.163、Verilator5.032重新下载校验并执行版本命令成功；73原native源码hash重新核验，恢复3适配器安全修复候选。真实native库、iDMA导出/shared17和Host执行闭包仍待恢复验证，不继承丢失PASS。
+
+Qwen2原M128×1536首RMS独立Python参考实际重跑，786944操作，输出FP32容器SHA ccf1e6c065c6bc4e90458194aeda7475149451ac73479a6781d2fd638bf631df；仅参考非硬件。L3 trig16384B恢复到原capture SHA1156df1551f166fe3f816547b6a15eac1c2ff994683138d5276d2f64c68aa9bb，三块只读桥15测试通过，未预装RMS中间值。
+
+五块完整128原Chisel数值0/5。35B权重仍缺且未绕受限CDN；原head4 FAIL保留；完整RTL和利用率未测。临时清单已核、工作树干净、清理0，未知旧Host未重启。基线01cd7cda CI43387483050 success仅payload guard。

@@ -6,6 +6,6 @@
 
 恢复安全工程：真实已归档0156→0157包cycle465445→468445、ACK240832→245760B；新增父SHA/周期连续/no-reset/实际身份、显式receipt身份拒绝、双parentSHA一致、ACK计数及旧地址字节覆盖不退化。控制器发布前强制transition-validator。7项测试/13种拒绝通过；离线包验证与归档证据复制，不产生新DUT周期。原29364仍Unknown、无终态receipt，未重复恢复。40/128首RMS行0差异不冒完整RMS。已装Verilator文档确认save/restore非线程安全、其他process状态须同步保存；未改线程配置，也无证据据此判定现有checkpoint缺陷。
 
-候选主线：复用1933已验同4096候选HWIR，不重做emit/lower，独立适配→Arc→llc→link。17真实native绑定和105strict predicate/guard/clock保持，候选身份与旧checkpoint隔离。原39430完成Arc62.65s、llc48.96s后link因缺官方arcRuntimeIR符号失败；仅链接已pin官方libCIRCTArcRuntime.so修复，没有stub/删除断言/重跑Arc或llc。新库2939a8f8ba26ee0056855564546f280454c459b03f3a5d5b091e893bd6b396be，实际17实例reset-idle共12周期通过。端口/layout一致，105strict谓词/guard/clock一致，19组strict调用各保留一次。仅编译闭包及reset-idle资格，无活跃命令或numerical/fatal动态触发通过。
+候选主线：复用1933已验同4096候选HWIR，不重做emit/lower，独立适配→Arc→llc→link。17真实native绑定和105strict predicate/guard/clock保持，候选身份与旧checkpoint隔离。原39430完成Arc62.65s、llc48.96s后link因缺官方arcRuntimeIR符号失败；仅链接已pin官方libCIRCTArcRuntime.so修复，没有stub/删除断言/重跑Arc或llc。补绝对RUNPATH后最终新库594efe0bc78b1910fdef40893a7a72418114672611332014b3dc090370aa2737，实际17实例reset-idle共12周期通过。端口/layout一致，105strict谓词/guard/clock一致，19组strict调用各保留一次。仅编译闭包及reset-idle资格，无活跃命令或numerical/fatal动态触发通过。
 
 五块完整原Chisel M128仍0/5：Qwen2首RMS部分与QKV独立参考；0.8B L3完整分阶段双参考但未硬件通过；0.8B L0原underflow FAIL；35B L0/L3缺真实权重。完整RTL数值与完整block有效MAC利用率未测。ascending仅为项目逐位基线，不称唯一官方顺序；未切换冻结基线。源码/数据保持本地，本提交仅允许摘要。

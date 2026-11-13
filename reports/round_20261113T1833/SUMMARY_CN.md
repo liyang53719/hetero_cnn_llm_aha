@@ -1,0 +1,9 @@
+# 18:33 首RMS40行证据保留、旧运行观测不可用（INCOMPLETE）
+
+重新核最新完整包segment0157，cycle468445，SHA594c1b47f78bfe4b5727a9ae213fdb089a65a8f0b9f0ab79ea4216dba78c9c7c。实际B ACK输出245760B=61440 FP32=40/128行，独立重比固定参考全部0差异。原29364由拥有线程poll返回Unknown process id；无批终态，0158只有restore_stage/空日志。平台只显示环境connected，不能证明旧进程终止。因此未重启；不称任务停止或仍运行。
+
+本轮独立实做：下一版同文件系统执行lease采用固定inode flock、继承fd给子进程、心跳及明确父/子状态，父关闭不执行LOCK_UN。4项小型多进程测试通过，覆盖竞争、父退出子仍持锁、异常；未接真实Host，不可用新锁反推旧无锁29364终态，更不覆盖跨executor副本。
+
+L3独立双契约参考推进完整sigmoid-gate→O→residual1。保原sigmoid节点后BF16、再乘context与BF16，不改成SiLU。每条O为M128×2048×1024的268435456顺序FMA，真实权重转置与hash校验，主参考TwoSum+抽样Fraction。原顺序差异传播为gated_context98处、O394处、residual1 有193处差异，未改原基线/硬件；两份保持分离。
+
+五块M128完整原Chisel数值仍0/5；首RMS尚未完成，完整RTL与有效MAC利用率未测。L0原underflow FAIL和35B缺真实权重保持。main基线077a48af、CI43474160800 success仅payload guard。工作树clean、现场保留，清单已核清理0，保留全部唯一checkpoint/依赖。源码与完整证据本地，远端仅允许摘要。下一步需旧运行确切终态或用户明确同意在旧状态未知情况下从已验完整包独立恢复，再接lease防重复；独立参考工作不因此停止。

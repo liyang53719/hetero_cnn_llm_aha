@@ -1,0 +1,11 @@
+# 19:33 独立FFN参考与ascending一致修复候选（INCOMPLETE）
+
+原29364拥有线程再次poll仍Unknown，无终态receipt，未重启Host。最新完整0157包cycle468445/245760字节/40行再次hash与独立数值核验0差异。本轮没有新增Host执行，不能把观测检查称编码数值推进。main基线cd69e309、CI43485128973 success仅payload guard；工作树clean、清单已核，清理0。
+
+实质代码：将共享lease接入连续分段管理器，完整状态validator必须显式提供，校验parentSHA/周期/执行身份，fsync文件和目录后不可变提交，再原子发布LATEST。4项假负载多进程测试通过，覆盖连续恢复、提交中断保旧LATEST、损坏拒绝、父退出子持锁。仅管理层候选，未接真实Host，不能反推旧无锁任务终止。
+
+L3独立双参考完成postnorm→FFN gate/up。各投影M128×K1024×N3584，469762048顺序FMA，真实权重pin与原归约核验，主TwoSum精确域并抽样完整dot Fraction交叉核。旧/候选差postnorm194、gate1655、up1728处。SiLU/down/最终残差未完成，不冒完整block。
+
+QK顺序根因审计：Commands对runtimeGqa独立常量1，Attention lease/router硬要求1，wrapper复用qkNormPolicy为qkOrder；并非norm数值误传。原本地GQA升序，pair候选默认false，本地20261029安装候选已固定1；未证明准确引入commit/作者意图或官方上游顺序。已在独立副本协调3源码Attention-only的1→0，保持QkNorm256 C1/C2、RoPE B1不变，冻结源不动；4项静态/提取谓词边界测试通过。明确TEMP_SOURCE_ONLY：未Chisel编译/elaboration、未重新数值验证、未生成RTL，不能迁移任何旧通过。
+
+五块M128完整原Chisel仍0/5；首RMS40行只部分证据，L0原underflow FAIL、35B缺真实权重仍在。完整RTL及有效MAC利用率未测。源码/日志/数据保留本地，远端仅允许摘要。下一步待旧任务终态或用户明确同意独立恢复，再接安全管理器继续；独立候选编译与完整参考继续。

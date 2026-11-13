@@ -1,0 +1,13 @@
+# 04:33 真实握手、iDMA搬运与准入阻塞（完整prefill INCOMPLETE）
+
+核main6a1ec323和CI43360552916 success，仅payload门禁。Host及真实17库hash匹配、工作树干净、临时清单已核，清理0；未重启未知旧Host。
+
+真实无效version255 envelope验证通过：11周期，结果status4/completed0/epoch433保持5周期背压，消费一次；completion始终0。首测错误期待command completion导致失败，原源码证明该拒绝路径直接finish只发result，修的是测试预期，不是硬件，原失败trace保留。
+
+真实iDMA单笔64B搬运25周期通过；AR/AW/W背压13次稳定检查，R/B延迟，payload/strobe/last精确，completion保持4拍后消费一次。真实17实例另4项非法clock/phase负例永久失效，旧快照不可读。复用原库无重编，不冒fullblock通过。
+
+三块原输入审计186个TypedTensor、60命令roots匹配，129次真实只读边界检查通过，未发现现有地址/stride实际错误。修复0.8B manifest此前未与固定原emitter布局绑定的缺口，新增5项地址/shape/readonly/root漂移拒绝测试，仅Python契约级。
+
+关键主线阻塞已实测：同一当前Host对profile0..4五个合法envelope全部Unsupported4，无取指/AXI/jobs。现恢复源的commonRuntimeInstalled要求officialBf16，而emitter为LegacyV0、residentFFN/transposedDown关闭；实际Top有共享runtime服务与StreamingDense。不能把reset/idle成功说成可跑prefill。最小profile0原FP32 legacyStreamingInstalled修复已落独立候选：原7351编译24.85秒、emit16.67秒均exit0，新FIR9a00e485dad036f418e23e8c30145535c65335faee56cacd24f53701d396f919。仅Chisel elaboration；继续匹配lower/Arc/llc和有限合法取指验证，未报修复通过。official/commonRuntime不删除，1..4另行并行核完整分派/FFN/MoE条件，不未证明即放开。
+
+五块128完整原Chisel仍0/5，最终同刺激RTL、4096完整block有效MAC80/90%未测；真实numerical fatal先于外部提交仍未测。原L0 head4 FAIL、35B权重缺失和MoE契约保持。只发布允许摘要/hash，原产物源码数据留本地。

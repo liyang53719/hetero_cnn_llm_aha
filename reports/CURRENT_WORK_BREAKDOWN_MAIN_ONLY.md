@@ -59,3 +59,12 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - ongoing：五块完整原Chisel仍0/5；Qwen2独立参考后续RoPE/attention/FFN待续；候选需真实前序ACK链与完整五块验证。
 - blocked：29364终态未知；35B真实权重缺失；L0原underflow FAIL仍在。
 - cleanup：清单已核/清理0；未测完整RTL及完整block有效MAC利用率。
+
+
+## 2026-11-13 22:33 当前状态（INCOMPLETE）
+- done：Qwen2完整FP32 RoPE/因果QK独立参考，保原16lane折叠顺序；softmax/PV未执行。
+- done：候选启动前16依赖pin校验及16坏pin拒绝；真实33周期非法命令AXI拒绝/背压。19strict回调注入仅callback资格，不是算术fatal。
+- done：3个真实进程os._exit发布崩溃点保留合法完整LATEST，无新DUT周期。
+- ongoing：五块原Chisel仍0/5；候选真实完整链与savable17新身份恢复待补。
+- blocked：原29364终态未知，不重启；35B缺权重；L0原underflow FAIL保留。
+- cleanup：清单已核、清理0。完整RTL数值及完整block MAC利用率未测。

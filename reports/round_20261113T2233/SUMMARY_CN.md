@@ -1,0 +1,11 @@
+# 22:33 Qwen2 RoPE/QK参考与候选命令拒绝（INCOMPLETE）
+
+基线main ba3dc7ba24a40e5b8c288815923e133716e8b361，CI43512660493 success，仅payload guard。工作树clean，现场未回退，磁盘余54GB。临时清单已核、清理0，保留唯一证据与引用文件。
+
+Qwen2真实M128独立参考从2133完整FP32 Q/K bias继续FP32 RoPE及原因果QK，未重算QKV。按原Qwen2Block源码四Mul两Add、16lane各8次FMA及升lane折叠后scale；QK共12681216 FMA，1585152折叠Add及99072scale。另6个完整dot作768 Fraction FMA+96fold+6scale交叉核；BF16化Q/K全部有限且无subnormal。scores SHA98bfd2801af01341013f161792e92c7b0293976eae8f45f19cc684d315284a6d。未来key上三角0只存储占位，不是raw矩阵且不可纳入softmax。未softmax/PV/Host，不冒完整block。
+
+候选真实执行：不重编已通过闭包，补独立启动前closure preflight，核16项Host/native/layout、官方ArcRuntime、实际Matrix/ICG/DMA及ldd依赖后才创建native。逐项坏pin16例全部在factory前拒绝。新preflight下实际33周期launch→一笔AXI命令取数→非法opcode FF被status4拒绝，completion背压4拍稳定，无写入。这是合成非法命令负测，不是正常prefill或数值通过。19个真实链接strict回调zero-mask返回、注入bit0均exit86，仅回调资格，不能称真实硬件predicate/算术fatal触发通过。首次未扩展preflight的跑次单独留证。
+
+恢复安全：对带真实非空ACK写回的归档完整包，在stage fsync后、目录rename后、LATEST fsync后以os._exit实际终止子进程；3种结果仅为旧或新完整合法LATEST，无半发布。本测试是进程崩溃发布资格，不是掉电模拟或新DUT周期。新2133候选仍绑定非savable17；后续需独立绑定savable库与新身份恢复验证，不能直接移用旧包。原29364仍Unknown，无终态receipt，未重复恢复。
+
+五块统一4096完整原Chisel M128仍0/5：Qwen2首RMS40/128行部分证据、独立参考至QK；0.8B L3完整分阶段双参考非硬件；0.8B L0原underflow FAIL；35B L0/L3缺真实权重。完整RTL与完整block有效MAC利用率未测。ascending仅项目逐位契约，不称唯一官方顺序。源码/数据留本地，仅发布允许摘要。

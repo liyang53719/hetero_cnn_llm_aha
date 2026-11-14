@@ -213,3 +213,10 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - done：llc有界诊断定位eval X86指选；官方sroa/mem2reg/early-cse2.42s减IR，106strict/17sink/26source保留；微型副作用/异常机器码对照通过。
 - blocked：新候选76519 llc120秒仍超时、对象空，未链接运行Host，不重复同命令。
 - 五块完整128仍0/5，同4096，旧37765未知不重启；L0 strict/35B阻塞保持，RTL/利用率未测，清理0。
+
+
+## 2026-11-14 18:33 指选与驱动修复（INCOMPLETE）
+- done：两种官方指选模式微型source/strict/17宽ABI实测一致，非完整Host等价。
+- done：实际待运行驱动全部assert改显式失败检查；python -O三准入负例在native加载前拒绝。
+- blocked：11915同LLVM -fast-isel=false 150秒仍超时，对象空、Host未运行；不重复短超时循环。
+- 五块完整128仍0/5，同4096，旧37765未知不重启；strict L0/35B阻塞、RTL/利用率未测，清理0。

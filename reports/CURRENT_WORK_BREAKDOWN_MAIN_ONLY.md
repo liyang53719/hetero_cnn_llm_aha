@@ -163,3 +163,11 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - done（独立参考）：Qwen2和L3完整M128输入RMS重新Fraction计算/核hash，不是Host或全block数值。
 - TEMP：MoE源切片编译/发射与7规格测试通过，缺Verilator未做动态RTL资格。
 - blocked：37765未知、完整执行库/包缺失，未重启完整Host；五块0/5、同4096，L0 strict/35B阻塞保持。清单已核清理0。
+
+
+## 2026-11-14 11:33 执行闭包恢复（INCOMPLETE）
+- done：官方Arc1.163及Verilator5.032完整pin/version通过，恢复179源码文件；非Host执行资格。
+- done（局部RTL）：GQA源切片1280组合/hold正例及两原assert负例验证，非完整payload保持或Host等价。
+- done：L0真实loader重建，14权重/16段、544正读56拒绝及原17命令219描述符核验。
+- ongoing：wrapper生命周期最小修复、真实17/savable闭包重建；未知37765不重启、不继承50行。
+- 五块完整0/5，同4096，L0 strict/35B阻塞保持；完整RTL及利用率未测。清理0。

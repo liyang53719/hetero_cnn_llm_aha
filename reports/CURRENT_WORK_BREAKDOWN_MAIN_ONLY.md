@@ -234,3 +234,9 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - done：CodeExtractor caller栈/多liveout/alias微型通过；两实际纯段候选规模代价不佳，未长编译。原始内存段预选工具仅534段静态扫描。
 - done：官方O1 40.56s及最终verify通过，106strict/43native保持；新36001对不同O1 IR180秒可观测编译在途。
 - 五块完整128仍0/5，同4096，旧37765未知不重启；strict L0/35B阻塞、RTL/利用率未测，清理0。
+
+
+## 20:33 后续终态
+- 原36001已到180秒墙限，TERM后wait回收exit-15；CPU179.77秒、末RSS约292.7MiB，无有效对象，未链接/执行Host。
+- 结果SHA256 a59a3c22af10f39902454a076e66c3d81c76f7443c907d0e8c5778be3118f316。此前在途内容仅为当时快照。
+- 下一步不重复同编译，沿已验证原始区间提取方案实际降低大块成本。完整五块0/5、清理0不变。

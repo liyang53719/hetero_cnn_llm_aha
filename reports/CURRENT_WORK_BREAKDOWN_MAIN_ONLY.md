@@ -127,3 +127,11 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - FAIL保持：Chunk原数值策略未改变，历史head4不迁移；五块完整Chisel0/5，同4096，完整RTL/利用率未测。
 - blocked：旧29364Unknown，35B权重/原runtime与MoE数值契约缺失。
 - cleanup：清单已核清理0，仅允许摘要/计划提交。
+
+
+## 2026-11-14 06:33 当前状态（INCOMPLETE，持续在途）
+- done：真实RMS前2/128行12288B参考零差异，23515包恢复验证；随后continuation01完成30703安全包及fresh120周期/20hash差分，ACK仍两行。
+- ongoing：continuation02原23287立即接30703，不等整点，不重复旧29364；每1000周期保存、80秒收尾，沿原身份核后续。
+- done（共享Scalar子链）：原adapter→真实Core/Scalar10例实际计数/背压通过，lease仍合成，不冒完整MoE授权。首次test采样过早失败保留，真实trace证实寄存计数下一沿更新。
+- blocked：strict L0不能跳phase6故障；另立finite-gradual是新决策，未做。35B真实权重/冻结runtime及MoE契约仍缺。
+- 五块完整Chisel0/5，同4096，完整RTL/利用率未测；清单已核清理0，仅允许摘要/计划提交。

@@ -1,0 +1,13 @@
+# 00:33 真实Qwen2前缀恢复、L0候选参考与五profile准入审计（INCOMPLETE）
+
+基线main11c0ab8e4b5dd4456579e4eb7abe87c0e6ef19be，CI43528738323 success，仅payload guard。现场/工作区clean，磁盘余54GB。临时清单已核，清理0，唯一证据和运行引用保留。
+
+新统一候选真实profile0：原21命令/215描述符、真实FP32 readonly桥正常准入。新实例cycle439实际读4个输入beat后低相排空保存完整20块；fresh-process续120周期至559，轨迹和最终20块实际序列化hash全等，再读1个真实beat。原96578 exit0；4个schema拒绝案例通过，我复核120行轨迹/20hash及测试。scratch为空、首RMS未完成，不称数值PASS；旧29364仍Unknown，未重启/未迁移旧包。
+
+L0参考实做：从已pin norm重建M128 QKV[128,6144]与Z[128,2048]，分别805306368/268435456顺序FMA并各3072 Fraction dot节点抽核。QKV输出8dcb3dc3e71be344608e4b0ddb206e58ff174ab60a3a7efd11d5c6df8e562169，Z输出3d50fd4519a8b550a4f3b3d67dbe7512123d96901c411faf836162577c09b0f7。首轮新增参考断言错误地拒绝Dense末端BF16 tiny-inexact；原StreamingDense仅finite/OF检查后RNE，没有此转换UF fatal。已仅纠正多加断言，保留失败日志和8个Fraction见证，未改FMA UF策略/硬件。例t18,c438：FP32 0x001cc000→BF16 0x001d。
+
+之后完成当前逐步下溢候选Conv4+SiLU M128，输出20acfb08bd964f2edae4003bab182fc21999f282f878c83518c14d486899ca0a；7084个tap UF逐项Fraction核字/flags。严格范围：所用Conv源b80c596ac832ef8140288a0c8a49e01007bff750af4a2eb9a6594e8649d7abf1及ScalarPolicy25b61c42cd0a1b46a7dc68f3ede15a349e4ff2e629ab2dbef34fb4e3c83f8c03，tap MulIeeeRne仅该opcode允许UF。这是现有候选参考，不是历史原strict通过；最初泛称original的措辞已更正，历史head4 underflow FAIL保持。尚未RawPrep/head4，不继承丢失PASS。
+
+五profile真实准入审计：profile1–4 M128 metadata重生12个文件全部命中原pin，规模17/219、22/261、13/199、18/241命令/描述符。当前LegacyV0+StreamingDense候选实际安装0/1/2，安装判据拒3/4；这独立于缺35B权重。MoE expertLoop/selection/sharedArithmetic/merge/residual模块实际存在，不能说缺MoE模块/需整体大改。20个静态几何case表明router/gate/up/down/sharedGate尺寸适配现maxK8960及对齐，固定A/B SRAM共786432B、8×512MAC未增。但phase授权、调度、算术及完整权重闭包未证明，不等于运行通过。resident实现专限Qwen2且transposed会替换StreamingDense，盲全开或切OfficialBF16会改变准入/数值契约，故未移guard。下一步应为已有真实MoE topology建立经验证的独立能力判据。
+
+五块完整原Chisel M128仍0/5；Qwen2/L3完整独立参考不能代替DUT。35B缺真实权重且当前准入拒绝；原L0 FAIL保留。完整RTL及完整block有效MAC利用率未测。仅允许摘要/计划发布，源码和生成数据留本地。

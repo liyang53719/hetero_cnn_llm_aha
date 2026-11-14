@@ -77,3 +77,12 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - blocked：旧29364仍Unknown未重启；35B真实权重缺失；L0原underflow FAIL保留。
 - todo：保新候选代码/输入身份，补完整真实数值链，先模型通过再冻结同刺激RTL。不得将墙钟速度当MAC利用率。
 - cleanup：清单已核清理0，完整RTL/完整block有效MAC利用率未测。
+
+
+## 2026-11-14 00:33 当前状态（INCOMPLETE）
+- done：新候选真实Qwen2正常前缀cycle439/4真实beat保存20块，fresh-process续120cycle完整轨迹/20hash相等。scratch0、首RMS未完成。
+- done：L0 M128 QKV/Z独立参考恢复；Dense末BF16转换参考过严断言已按实际政策纠正，保留失败及8见证。后续Conv仅现有逐步下溢候选参考，原strict/head4 FAIL不变。
+- done：profile1–4 metadata原12pins一致；20静态MoE geometrycase满足当前物理尺寸，不代表执行资格。
+- blocked：当前判据实际拒profile3/4，尽管MoE模块存在；不能盲开resident/transposed或切OfficialBF16。真实权重仍缺。旧29364状态未知不重启。
+- ongoing：五块原Chisel完整M128仍0/5；先验证已有真实MoE topology的独立安装判据/phase/算术链，再统一重测。
+- cleanup：核清单清理0。完整RTL和完整block有效MAC利用率未测。

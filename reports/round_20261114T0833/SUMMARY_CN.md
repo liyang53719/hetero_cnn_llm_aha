@@ -1,0 +1,13 @@
+# 2026-11-14 08:33 实际进展（INCOMPLETE）
+## 原身份连续Host
+原54419串行52–59批持续，不启动未知29364。最新已核continuation57从保存状态推进cycle298932；首RMS25/128完整行153600B实际ACK全部匹配独立参考。最终整包7b6a7690ffa171c8f2406bf8112babd4f7fccf423cdc53a027a8d83123252279，fresh-process120周期与20块终态hash一致。每1000周期排空保存，80秒安全收尾，持续接续不重算前缀。
+本轮独立核11–55共45段连续cycle与整包hash，未冒称每个中间包都恢复测试。新runner对目标判定增加len(scratch)>=target短路，再保留原逐地址all终判；40等价正负例通过，新运行及fresh差分通过。窗口推进由约4500–5000提升至约7500周期是宿主Python开销改善，不是硬件利用率。
+## MoE实际接线候选
+原八路allocationValid漏赋已定位；最小候选从已有phaseOwned及非零sequence派生，显式authorityKind。完整Scala typecheck、源片段RTL40场景和4静态测试通过，不是完整授权链。
+本轮原28716完整固定Host emit/lower均exit0，隔离于运行Qwen2的库。真实FIR八路依赖已核从phaseOwned与非零sequence经注册accepted到acquire/retire，不再常false。全部模块接口/17外部native定义/105断言语句不变；仅结构和依赖资格，未生成新机器执行库、未执行完整allocator/Guard/child联合，更无MoE数值PASS。
+候选FIR49052f03c8715fc9426caaa7eb7f98145a8dc55ec61023019df064247759518f，HWIR8117b7621ab47045ba38edb93fdde9f1bada1c33ad61e61c7bb578fc2db75465。原门禁、精度、tie和异常策略不变，未替换当前运行硬件身份。
+## L3实际命令审计
+新增审计代码解码原22条命令/65tensor根；地址、形状、stride、事件及producer依赖一致，损坏root负例拒绝，未改二进制。新增runtime配对sidecar：旧manifest源字段不是当前Host身份；候选GQA fixed ascending与Q/K normalization C2不同，不能误选旧pair-high-first参考。Host启动前仍须核实际库及真实receipt，不以静态审计冒准入。
+## 五块与维护
+五块完整128原Chisel仍0/5，完整RTL无通过，全block MAC利用率未测。Qwen2只有首RMS25行；L3完整独立参考/输入加载桥尚非Host通过；L0 strict phase6 UF FAIL及历史head4 FAIL保留，未授权新策略；35B完整权重、冻结runtime和MoE资格仍缺。固定4096，没有缩MAC或按模型重elaboration。
+基线main ccd9f0d0c2643459b15e60eeb4632328f95869fd，CI43572136504 success仅payload守卫。工作树clean、RAM可用9GB/盘51GB，临时清单已核、清理0。只提交允许摘要和计划；实现、权重、IR、检查点及原日志保留本地，不绕之前拒绝。

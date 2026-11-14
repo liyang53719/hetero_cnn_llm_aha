@@ -142,3 +142,10 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - done：新增L3真实输入lazy loader，13段全字节/22命令/261描述符核验；693正读、39负读，中间tensor未初始化，未跑L3 Host。
 - ongoing：定位真实MoE lease allocationValid漏赋、8路常false，最小候选验证中，未改安装门或数值契约，不冒完整授权链通过。
 - 五块完整Chisel0/5，固定4096；L0 strict FAIL、35B缺权重/资格，旧29364未知不重启；RTL/有效MAC利用率未测。清单已核清理0。
+
+
+## 2026-11-14 08:33 当前状态（INCOMPLETE）
+- done：连续真实首RMS25/128行153600B零差异，cycle298932整包及fresh120/20状态一致；原54419持续接续，不重复29364。
+- done（候选结构）：MoE八路lease漏赋修复完整Host emit/lower成功，真实8路依赖、17native/105断言/接口核验；未替换运行库、未做完整授权或数值。
+- done：L3原22命令/65根解码审计与负例、新runtime配对sidecar，避免选错归约参考；不冒实际准入。
+- ongoing：五块完整Chisel0/5，同4096，完整RTL/MAC利用率未测；L0 strict FAIL与35B缺权重/契约保持。清单已核清理0。

@@ -185,3 +185,10 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - TEMP：真实leaf字段/clock协调对象编译，未全17链接/运行；ACK捕获器16合成协议测试通过。
 - FAIL/INCOMPLETE：官方clocked_terminate组合条件lower失败；保106条件的新clocked fatal回调微型运行通过，但完整Arc39875在150秒超时，无有效Host LLVM。
 - 下一：沿原Matrix任务收尾、分阶段诊断Arc，不重复旧37765。五块完整0/5，同4096，RTL/MAC利用率未测，清理0。
+
+
+## 2026-11-14 14:33 真实17闭包（INCOMPLETE）
+- done：150对象增量Matrix链接、八真实512实例生命周期；真实8 Matrix+8 ICG+DMA联合12周期/4错误永久失效验证通过，仅时钟接口资格。
+- done：真实地址读与B OKAY提交后写回捕获连接，28合成测试；未预装中间值、未跑Host。
+- blocked：Arc前处理/转换/优化通过，state-lowering 90秒超时，末日志为merge-ifs后CSE；无Host LLVM，不移除106严格条件。
+- 五块完整128仍0/5，同4096，旧37765未知不重启；L0 strict FAIL/35B阻塞保持，RTL及利用率未测，清理0。

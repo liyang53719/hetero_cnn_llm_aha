@@ -240,3 +240,10 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - 原36001已到180秒墙限，TERM后wait回收exit-15；CPU179.77秒、末RSS约292.7MiB，无有效对象，未链接/执行Host。
 - 结果SHA256 a59a3c22af10f39902454a076e66c3d81c76f7443c907d0e8c5778be3118f316。此前在途内容仅为当时快照。
 - 下一步不重复同编译，沿已验证原始区间提取方案实际降低大块成本。完整五块0/5、清理0不变。
+
+
+## 2026-11-14 21:33 安全区间提取（INCOMPLETE）
+- done：AXI背压/held completion及失败停驱动补齐，原回归和11检查通过；未Host运行。
+- done：2048派生指针/lifetime微测；54673完成534原区间，保106strict/43native顺序/ABI，helper零alloca。
+- blocked：8352/21139审计终态；最大BB降75%，但总指令近三倍/文本1.92GB，真实packing及匿名聚合类型重复打印，未交llc。仅改命名类型不解决指令成本。
+- 五块128完整0/5，同4096，旧37765未知不重复、L0 strict/35B阻塞保持。RTL/利用率未测，清理0。

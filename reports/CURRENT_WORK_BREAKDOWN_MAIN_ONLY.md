@@ -192,3 +192,10 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - done：真实地址读与B OKAY提交后写回捕获连接，28合成测试；未预装中间值、未跑Host。
 - blocked：Arc前处理/转换/优化通过，state-lowering 90秒超时，末日志为merge-ifs后CSE；无Host LLVM，不移除106严格条件。
 - 五块完整128仍0/5，同4096，旧37765未知不重启；L0 strict FAIL/35B阻塞保持，RTL及利用率未测，清理0。
+
+
+## 2026-11-14 15:33 数值子链与编译诊断（INCOMPLETE）
+- done：真实8×512单步FMA/背压，208896词含hold零差异，仅单步子链；17 typed符号/库pin静态核验。
+- done：从arc-opt分pass冻结21MB IR，106严格回调保持；独立CSE60秒超时。
+- FAIL：诊断略过优化CSE后RemoveI0Types/array_concat单元素类型冲突，未改正式基线，微型复现审计中，无Host LLVM。
+- 五块完整128仍0/5，固定4096，旧37765未知不重启；L0 strict/35B阻塞不变，完整RTL/利用率未测，清理0。

@@ -119,3 +119,11 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - FAIL保持：Chunk两个normal输入乘积tiny/inexact、strict策略正确拒绝；无不改契约可转PASS的参考bug修复，未改策略。
 - ongoing：五块完整Chisel0/5，同4096，完整RTL/利用率未测；旧29364Unknown，35B权重/原runtime与MoE资格缺失。
 - cleanup：清单已核清理0，只允许摘要/计划提交。
+
+
+## 2026-11-14 05:33 当前状态（INCOMPLETE）
+- done：periodic控制统一后续AR背压刺激；95163真实续至20680，9个完整包，最终包fresh-process120周期轨迹/20hash相等。ACK仍首行6144B，第二行未完成，前8包只hash核。
+- done（局部RTL）：Bank4例确认strict UF拒绝/7周期背压；adapter71例转发/身份隔离通过，但lease/Core为合成peer，不冒完整联合链。
+- FAIL保持：Chunk原数值策略未改变，历史head4不迁移；五块完整Chisel0/5，同4096，完整RTL/利用率未测。
+- blocked：旧29364Unknown，35B权重/原runtime与MoE数值契约缺失。
+- cleanup：清单已核清理0，仅允许摘要/计划提交。

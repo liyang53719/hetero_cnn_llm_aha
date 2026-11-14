@@ -227,3 +227,10 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - ongoing：唯一43670未split LLVM，600秒/6GiB边界、独占锁/10秒CPU RSS心跳；快照CPU109.7s/墙钟110.03s，尚无成功对象。
 - done：真实85端口AXI读写/原21cmd215desc/ACK首RMS接线，7合成周期与3非法AR负例通过，未运行Host。
 - 五块完整128仍0/5，同4096，旧37765未知不重启；strict L0/35B阻塞、RTL/利用率未测，清理0。
+
+
+## 2026-11-14 20:33 安全编译路径（INCOMPLETE）
+- done：43670 600秒CPU599.05s超时终态，无对象；非OOM。
+- done：CodeExtractor caller栈/多liveout/alias微型通过；两实际纯段候选规模代价不佳，未长编译。原始内存段预选工具仅534段静态扫描。
+- done：官方O1 40.56s及最终verify通过，106strict/43native保持；新36001对不同O1 IR180秒可观测编译在途。
+- 五块完整128仍0/5，同4096，旧37765未知不重启；strict L0/35B阻塞、RTL/利用率未测，清理0。

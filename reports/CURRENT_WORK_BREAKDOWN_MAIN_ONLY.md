@@ -254,3 +254,11 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - done：95943新IR机器编译40.006s exit0；精确新对象/真实shared17链接，12周期reset/idle 0.03975s通过，无launch/数值/checkpoint资格。
 - done：预算非聚合提取总指令仅+0.4%不再膨胀，未机器编译；L3 NormC2 BF16 ACK捕获16合成测试通过，未Host执行。
 - ongoing：固定新闭包活跃事务/恢复及首RMS，五块128完整0/5，同4096。旧37765未知不重复、L0 strict/35B阻塞不变；RTL/MAC利用率未测，清理0。
+
+
+## 2026-11-14 23:33 实际活跃AXI与恢复闭包（INCOMPLETE）
+- done：24835新Host真实439周期/1.347秒，15读beat含4真实x/256B；无写回/completion，不冒RMS数值。metadata误分类harness失败保留纠正。
+- done：L0 M128 NormC2参考重算相等，16捕获+6覆盖测试；RMS临时FP32 residue覆盖BF16语义核实，缺owner completion最终比较NOT_EVALUATED。
+- done（局部）：ICG freshprocess非零状态恢复8观测与6类负例通过。
+- ongoing：Matrix79805生成28.49秒成功/make在途，DMA90385构建在途；保持原身份检查孙进程，不冒完整17/Host恢复。
+- 五块128完整0/5，同4096；旧37765未知不重复，strict L0/35B阻塞不变。RTL/利用率未测，清理0。

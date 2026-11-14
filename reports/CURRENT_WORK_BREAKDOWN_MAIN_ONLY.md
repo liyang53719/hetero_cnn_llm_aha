@@ -94,3 +94,11 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - done：MoE离线契约4测试/12负例/640尺寸通过；原router exp/tie未资格，因此未开安装门，不改PyTorch基线。
 - ongoing：五块完整原Chisel仍0/5，真实完整链/RTL及全block利用率未测。
 - blocked：旧29364未知不重启，35B缺权重及router资格；清单已核清理0。
+
+
+## 2026-11-14 02:33 当前状态（INCOMPLETE）
+- done：当前候选从已保存9266续至10266/2432B再保存，fresh-process120周期至10386/2688B与参考0 mismatch；轨迹与20块hash相同，仅672个FP32字，未完成首RMS一行。
+- done：L0实际gate0独立参考2048 gates完成，复用Q/K组成M128×6400 prepared；仅逐步下溢候选Python，历史strict FAIL保留，Chunk未做。
+- done：MoE冻结源pin复核、8项独立数值边界诊断；当前Torch运行闭包缺失，未重验原kernel，不改topk契约或开准入门。
+- ongoing：五块完整原Chisel仍0/5，同4096，完整RTL/有效MAC利用率未测；旧29364未知不重启，35B权重缺失。
+- cleanup：清单核验，清理0；仅发布允许摘要/计划。

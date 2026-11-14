@@ -102,3 +102,11 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - done：MoE冻结源pin复核、8项独立数值边界诊断；当前Torch运行闭包缺失，未重验原kernel，不改topk契约或开准入门。
 - ongoing：五块完整原Chisel仍0/5，同4096，完整RTL/有效MAC利用率未测；旧29364未知不重启，35B权重缺失。
 - cleanup：清单核验，清理0；仅发布允许摘要/计划。
+
+
+## 2026-11-14 03:33 当前状态（INCOMPLETE/局部数值FAIL）
+- done：当前候选从10266续至11831，首RMS第1/128行6144B实际ACK与参考相等；新进程120周期轨迹及20状态hash相同，未完成首RMS。
+- FAIL（独立参考）：L0当前候选输入按实际strict Chunk0执行，head0 phase5完成、phase6 row52/colBeat1/lane12最终pair Mul产生UF|NX。未到phase7/head4，不是历史同刺激重现，未改策略。
+- done（诊断）：2150输入精确P7重放与现存候选同字；相对理想exp20样本不同，非Torch/硬件资格，原门禁不变。
+- ongoing：五块完整Chisel0/5，统一4096，完整RTL/利用率未测；旧29364Unknown不重启，35B权重与原runtime缺失。
+- cleanup：清单已核，清理0，仅允许摘要/计划提交。

@@ -206,3 +206,10 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - done：真实shared17门控单FMA180周期、618背压/6120快照检查通过，仅子链。
 - blocked：原59033 llc120秒超时、对象空；reset/idle驱动已写但未链接运行。省略优化CSE的新管线未冒完整等价。
 - 五块完整128仍0/5，同4096，旧37765未知不重启；strict L0/35B阻塞保持，RTL/利用率未测，清理0。
+
+
+## 2026-11-14 17:33 顺序累积与指选诊断（INCOMPLETE）
+- done：真实8×512五步累积/中途clear/门控背压，107520含hold词对Fraction零差异，仅精确可表示子链。
+- done：llc有界诊断定位eval X86指选；官方sroa/mem2reg/early-cse2.42s减IR，106strict/17sink/26source保留；微型副作用/异常机器码对照通过。
+- blocked：新候选76519 llc120秒仍超时、对象空，未链接运行Host，不重复同命令。
+- 五块完整128仍0/5，同4096，旧37765未知不重启；L0 strict/35B阻塞保持，RTL/利用率未测，清理0。

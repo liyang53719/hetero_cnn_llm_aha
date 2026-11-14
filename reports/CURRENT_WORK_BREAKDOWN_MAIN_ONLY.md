@@ -86,3 +86,11 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - blocked：当前判据实际拒profile3/4，尽管MoE模块存在；不能盲开resident/transposed或切OfficialBF16。真实权重仍缺。旧29364状态未知不重启。
 - ongoing：五块原Chisel完整M128仍0/5；先验证已有真实MoE topology的独立安装判据/phase/算术链，再统一重测。
 - cleanup：核清单清理0。完整RTL和完整block有效MAC利用率未测。
+
+
+## 2026-11-14 01:33 当前状态（INCOMPLETE）
+- done：当前候选从cycle439无reset续至9266首64B真实ACK保存，fresh-process续120周期至9386/320B与独立参考0 mismatch；轨迹及20块终态hash相等。仅80个FP32字，首RMS未完成。
+- done：L0候选完整M128 Q/K归一化独立参考，实际16-head选择ascending/gate0；不含gate，不是完整RawPrep，原strict FAIL不变。
+- done：MoE离线契约4测试/12负例/640尺寸通过；原router exp/tie未资格，因此未开安装门，不改PyTorch基线。
+- ongoing：五块完整原Chisel仍0/5，真实完整链/RTL及全block利用率未测。
+- blocked：旧29364未知不重启，35B缺权重及router资格；清单已核清理0。

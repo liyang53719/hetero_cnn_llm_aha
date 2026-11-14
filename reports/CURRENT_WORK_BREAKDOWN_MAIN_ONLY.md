@@ -178,3 +178,10 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - TEMP：17 typed桥编译/字节负例、共享mock transport测试，新Arc脚本完整preproc保留106终止条件与17/17边界；未验证真实shared17/Host运行。
 - done：三真实profile统一read接口485差分/171拒绝，未初始化中间值和35B缺输入fail closed。
 - 五块完整0/5、同4096，旧37765未知不重复，L0 strict/35B阻塞保持；完整RTL/MAC利用率未测，清理0。
+
+
+## 2026-11-14 13:33 执行闭包（INCOMPLETE/超时）
+- done：真实iDMA编译及接口负例；4FMA载体恢复，Matrix10361原make在途（8端点才4096）。
+- TEMP：真实leaf字段/clock协调对象编译，未全17链接/运行；ACK捕获器16合成协议测试通过。
+- FAIL/INCOMPLETE：官方clocked_terminate组合条件lower失败；保106条件的新clocked fatal回调微型运行通过，但完整Arc39875在150秒超时，无有效Host LLVM。
+- 下一：沿原Matrix任务收尾、分阶段诊断Arc，不重复旧37765。五块完整0/5，同4096，RTL/MAC利用率未测，清理0。

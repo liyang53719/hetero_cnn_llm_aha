@@ -171,3 +171,10 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - done：L0真实loader重建，14权重/16段、544正读56拒绝及原17命令219描述符核验。
 - ongoing：wrapper生命周期最小修复、真实17/savable闭包重建；未知37765不重启、不继承50行。
 - 五块完整0/5，同4096，L0 strict/35B阻塞保持；完整RTL及利用率未测。清理0。
+
+
+## 2026-11-14 12:33 执行闭包（INCOMPLETE）
+- done：927源逐pin、真实ICG编译及接口时序/生命周期测试；Matrix/DMA未编。
+- TEMP：17 typed桥编译/字节负例、共享mock transport测试，新Arc脚本完整preproc保留106终止条件与17/17边界；未验证真实shared17/Host运行。
+- done：三真实profile统一read接口485差分/171拒绝，未初始化中间值和35B缺输入fail closed。
+- 五块完整0/5、同4096，旧37765未知不重复，L0 strict/35B阻塞保持；完整RTL/MAC利用率未测，清理0。

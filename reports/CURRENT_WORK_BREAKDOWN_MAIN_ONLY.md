@@ -156,3 +156,10 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - done：155源重hash、Qwen2桥5测试、L3桥13段/680正读39拒绝/22命令65根独立重建重测。
 - TEMP：MoE新两行候选typecheck/4静态测试通过；Host新恢复源码在途，均非旧丢失身份PASS。
 - 五块完整0/5，同4096和数值契约；清单已核清理0，完整RTL及MAC利用率未测。
+
+
+## 2026-11-14 10:33 新恢复候选（INCOMPLETE）
+- done：新Host emit/1.62结构lower成功，接口17native及105断言数量保持；8项谓词因GQA路由依赖改变，语义等同比较未通过，不冒断言等价。
+- done（独立参考）：Qwen2和L3完整M128输入RMS重新Fraction计算/核hash，不是Host或全block数值。
+- TEMP：MoE源切片编译/发射与7规格测试通过，缺Verilator未做动态RTL资格。
+- blocked：37765未知、完整执行库/包缺失，未重启完整Host；五块0/5、同4096，L0 strict/35B阻塞保持。清单已核清理0。

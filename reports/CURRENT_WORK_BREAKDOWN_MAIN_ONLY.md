@@ -110,3 +110,12 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - done（诊断）：2150输入精确P7重放与现存候选同字；相对理想exp20样本不同，非Torch/硬件资格，原门禁不变。
 - ongoing：五块完整Chisel0/5，统一4096，完整RTL/利用率未测；旧29364Unknown不重启，35B权重与原runtime缺失。
 - cleanup：清单已核，清理0，仅允许摘要/计划提交。
+
+
+## 2026-11-14 04:33 当前状态（INCOMPLETE/有界执行FAIL）
+- FAIL：新Host第二行有界任务76291触发110秒超时，未保存新包；11831首行保底完好，未扩大预算重试。
+- TEMP：本地补每1000周期安全排空/保存及90秒提前收尾控制，只语法检查，尚无执行/恢复资格。
+- done（局部RTL）：原Scalar11事务及背压验证通过，P7无导出primitive flags；Mul和MulIeeeRne原UF错误策略区别已实测，不是完整Host/MoE资格。
+- FAIL保持：Chunk两个normal输入乘积tiny/inexact、strict策略正确拒绝；无不改契约可转PASS的参考bug修复，未改策略。
+- ongoing：五块完整Chisel0/5，同4096，完整RTL/利用率未测；旧29364Unknown，35B权重/原runtime与MoE资格缺失。
+- cleanup：清单已核清理0，只允许摘要/计划提交。

@@ -135,3 +135,10 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - done（共享Scalar子链）：原adapter→真实Core/Scalar10例实际计数/背压通过，lease仍合成，不冒完整MoE授权。首次test采样过早失败保留，真实trace证实寄存计数下一沿更新。
 - blocked：strict L0不能跳phase6故障；另立finite-gradual是新决策，未做。35B真实权重/冻结runtime及MoE契约仍缺。
 - 五块完整Chisel0/5，同4096，完整RTL/利用率未测；清单已核清理0，仅允许摘要/计划提交。
+
+
+## 2026-11-14 07:33 当前状态（INCOMPLETE）
+- done：同候选连续至88401，首RMS 7/128行43008B零差异，最终包fresh120周期/20状态hash相同；每1000周期持久保存，继续原owner串行执行。
+- done：新增L3真实输入lazy loader，13段全字节/22命令/261描述符核验；693正读、39负读，中间tensor未初始化，未跑L3 Host。
+- ongoing：定位真实MoE lease allocationValid漏赋、8路常false，最小候选验证中，未改安装门或数值契约，不冒完整授权链通过。
+- 五块完整Chisel0/5，固定4096；L0 strict FAIL、35B缺权重/资格，旧29364未知不重启；RTL/有效MAC利用率未测。清单已核清理0。

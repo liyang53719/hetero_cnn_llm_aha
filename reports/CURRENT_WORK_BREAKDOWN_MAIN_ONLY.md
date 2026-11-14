@@ -199,3 +199,10 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - done：从arc-opt分pass冻结21MB IR，106严格回调保持；独立CSE60秒超时。
 - FAIL：诊断略过优化CSE后RemoveI0Types/array_concat单元素类型冲突，未改正式基线，微型复现审计中，无Host LLVM。
 - 五块完整128仍0/5，固定4096，旧37765未知不重启；L0 strict/35B阻塞不变，完整RTL/利用率未测，清理0。
+
+
+## 2026-11-14 16:33 Host LLVM候选（INCOMPLETE）
+- done：分阶段array合法化、状态分配、LLVM lower/翻译成功；新layout1607504B/85端口，保106 strict/17sink/26source调用。
+- done：真实shared17门控单FMA180周期、618背压/6120快照检查通过，仅子链。
+- blocked：原59033 llc120秒超时、对象空；reset/idle驱动已写但未链接运行。省略优化CSE的新管线未冒完整等价。
+- 五块完整128仍0/5，同4096，旧37765未知不重启；strict L0/35B阻塞保持，RTL/利用率未测，清理0。

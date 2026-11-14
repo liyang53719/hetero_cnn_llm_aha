@@ -220,3 +220,10 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - done：实际待运行驱动全部assert改显式失败检查；python -O三准入负例在native加载前拒绝。
 - blocked：11915同LLVM -fast-isel=false 150秒仍超时，对象空、Host未运行；不重复短超时循环。
 - 五块完整128仍0/5，同4096，旧37765未知不重启；strict L0/35B阻塞、RTL/利用率未测，清理0。
+
+
+## 2026-11-14 19:33 可观测持续编译（INCOMPLETE/在途）
+- done：原20652 180秒超时终态；split微型alloca逃逸失败保留，不执行风险候选。arc-outline当前阶段no-op已核。
+- ongoing：唯一43670未split LLVM，600秒/6GiB边界、独占锁/10秒CPU RSS心跳；快照CPU109.7s/墙钟110.03s，尚无成功对象。
+- done：真实85端口AXI读写/原21cmd215desc/ACK首RMS接线，7合成周期与3非法AR负例通过，未运行Host。
+- 五块完整128仍0/5，同4096，旧37765未知不重启；strict L0/35B阻塞、RTL/利用率未测，清理0。

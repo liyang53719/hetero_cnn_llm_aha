@@ -247,3 +247,10 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - done：2048派生指针/lifetime微测；54673完成534原区间，保106strict/43native顺序/ABI，helper零alloca。
 - blocked：8352/21139审计终态；最大BB降75%，但总指令近三倍/文本1.92GB，真实packing及匿名聚合类型重复打印，未交llc。仅改命名类型不解决指令成本。
 - 五块128完整0/5，同4096，旧37765未知不重复、L0 strict/35B阻塞保持。RTL/利用率未测，清理0。
+
+
+## 2026-11-14 22:33 实际Host机器码与reset/idle（INCOMPLETE）
+- done：安全同函数切块，原Instruction保序、706新增br，微测PHI/stack/strict通过，保106strict/43native。
+- done：95943新IR机器编译40.006s exit0；精确新对象/真实shared17链接，12周期reset/idle 0.03975s通过，无launch/数值/checkpoint资格。
+- done：预算非聚合提取总指令仅+0.4%不再膨胀，未机器编译；L3 NormC2 BF16 ACK捕获16合成测试通过，未Host执行。
+- ongoing：固定新闭包活跃事务/恢复及首RMS，五块128完整0/5，同4096。旧37765未知不重复、L0 strict/35B阻塞不变；RTL/MAC利用率未测，清理0。

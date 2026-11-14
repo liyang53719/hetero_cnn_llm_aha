@@ -149,3 +149,10 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - done（候选结构）：MoE八路lease漏赋修复完整Host emit/lower成功，真实8路依赖、17native/105断言/接口核验；未替换运行库、未做完整授权或数值。
 - done：L3原22命令/65根解码审计与负例、新runtime配对sidecar，避免选错归约参考；不冒实际准入。
 - ongoing：五块完整Chisel0/5，同4096，完整RTL/MAC利用率未测；L0 strict FAIL与35B缺权重/契约保持。清单已核清理0。
+
+
+## 2026-11-14 09:33 重连恢复（INCOMPLETE）
+- blocked：环境回退丢失Nov14包及执行库，37765终态Unknown，历史50行不可继承可恢复PASS，不重复完整Host。
+- done：155源重hash、Qwen2桥5测试、L3桥13段/680正读39拒绝/22命令65根独立重建重测。
+- TEMP：MoE新两行候选typecheck/4静态测试通过；Host新恢复源码在途，均非旧丢失身份PASS。
+- 五块完整0/5，同4096和数值契约；清单已核清理0，完整RTL及MAC利用率未测。

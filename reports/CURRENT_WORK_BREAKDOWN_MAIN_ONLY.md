@@ -262,3 +262,10 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - done（局部）：ICG freshprocess非零状态恢复8观测与6类负例通过。
 - ongoing：Matrix79805生成28.49秒成功/make在途，DMA90385构建在途；保持原身份检查孙进程，不冒完整17/Host恢复。
 - 五块128完整0/5，同4096；旧37765未知不重复，strict L0/35B阻塞不变。RTL/利用率未测，清理0。
+
+
+## 2026-11-15 00:33 真实只读全状态恢复（INCOMPLETE）
+- done：原79805/90385成功产物及pins复核，不重复构建；新shared17门控/pending状态freshprocess续12周期一致、坏状态永久poison。
+- done：Host156首真实x AR接/R pending包恢复，不reset/relaunch续120周期，完整21文件hash/轨迹相同，14负例拒绝。仅空scratch只读资格，非数值或写侧。
+- done（合成）：完整Python AXI ledger-v1含pending/ACK历史，恢复轨迹/9负例通过，明确不同schema。
+- ongoing：从156保底续独立v2，验证首写/真实恢复，未冒PASS。五块完整128仍0/5，同4096；L0 strict/35B及旧未知作业边界不变，RTL/利用率未测，清理0。

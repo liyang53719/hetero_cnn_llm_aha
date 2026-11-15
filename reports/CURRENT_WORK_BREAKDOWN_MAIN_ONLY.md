@@ -274,3 +274,10 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - 4132/56257均exit0。从156完整包不重算前缀续至9386，28.75秒，5次真实B ACK/320B与独立参考零差异。首ACK9266保存全包，新进程续120周期与不中断轨迹、终态22文件hash全部相等。
 - 结果SHA308a928c14a50a48d7cb2f5b1183adb7a2806ef956979d6086886e5cbb75d56c；9386终态包manifest SHA017268cc4421dcc3645374a4bcb8262d40dee3ab36df63f8567b1e2a458756be。不是完整RMS、owner completion或任意pending-write切点资格。
 - 已安排从最新已验9386入口串行接续最多3个有界段，每段12000周期/60秒、每1000周期保存，最终新进程差分；保持identity，不退回156重算。尚未宣后续结果。
+
+
+## 2026-11-15 01:33 持续真实ACK与三profile前缀（INCOMPLETE）
+- done：沿39067串行三段到63597，首RMS5/128行30720B零差异；三fresh120/全包一致，最新入口0133/host/LATEST_VERIFIED.json，所有会话exit0。
+- done：L0/L3同机器hash各500cycle/44真实R握手，原输入逐字节相等、ACK0，仅前缀。
+- TEMP：ACK精确增量比较候选离线逐journal/覆盖/负例通过，保fullscan和历史，尚未真实Host采用；墙钟不是MAC利用率。
+- 五块128完整0/5，同4096，L0 strict/35B/旧未知边界不变，RTL/利用率未测；临时清单核实，清理0。

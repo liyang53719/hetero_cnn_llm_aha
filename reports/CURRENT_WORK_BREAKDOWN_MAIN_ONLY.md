@@ -281,3 +281,11 @@ CNN/AHA E1/E4; pinned llama.cpp parity and quant RTL/PPA; production state RTL/i
 - done：L0/L3同机器hash各500cycle/44真实R握手，原输入逐字节相等、ACK0，仅前缀。
 - TEMP：ACK精确增量比较候选离线逐journal/覆盖/负例通过，保fullscan和历史，尚未真实Host采用；墙钟不是MAC利用率。
 - 五块128完整0/5，同4096，L0 strict/35B/旧未知边界不变，RTL/利用率未测；临时清单核实，清理0。
+
+
+## 2026-11-15 02:33 连续恢复执行（INCOMPLETE）
+- done：增量比较/fullscan与ACK-delta/fullledger均先同刺激差分；保持每cycle检查/全journal及段末全scan。
+- done：4761全31段exit0安全停，461769cycle首RMS39/128行239616B零差异，31fresh120/全包一致；不是完整RMS。
+- done：L3首ACK后30512/832B，fresh120/22文件一致，未owner completion。
+- ongoing：新22738同锁从461769续≤25min，L3新31421从30512续3段，不重算前缀；L0/35B边界保持。
+- 五块128完整0/5，同4096，RTL/利用率未测；清单核实清理0。

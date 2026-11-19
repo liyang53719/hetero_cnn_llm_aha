@@ -41,3 +41,10 @@
 - **FAIL / 保留旧策略**：同一 LLVM 的 `llc -O1` 在 100 CPU 秒预算内未完成，停在 Host eval 的 x86 DAG Select 合并（SimplifySelectOps），无新对象；旧 O0 对象不变。隔离的原 RMS owner、10 个断言保留，工具 layout 的 8 个内部字段在真实 reset 后可读；活跃微测触发原 format publication 断言（site 30），不能外推成全 Host 故障，不猜布局偏移。
 - **done，独立参考（不是 DUT）**：前三块 PC5（Qwen2 分开 FP32 K bias，0.8B L0 官方 rawprep / L3 普通 KNorm）；35B L0 PC8 官方 O Linear（M128/K4096/N2048），L3 从已验 K/V 构造原 Host cache 位布局，不冒称执行官方 Cache.update。下一阶段只读映射 53 段，覆盖 PC5/5/5/8/8，SHA-256 `c69a2de36411dfa37602524c1d416439014b5a5ce5737ee75f16de518da62435`。小 L0 的 32B BF16 dt_bias 只显式填充原 AXI 64B 读的未用高半部，无 cache 或中间值预载。
 - **ongoing / todo**：先用同一 O0 对象做 CPU 绑定交叉校准并按更长预算推进实际 PC0 完整退休与首投影；观察微测失败独立诊断。沿有效开销分项改仿真，不缩硬件、跳沿或省略真实请求。整块模型 0/5，最终 RTL 未冻结/回放，完整 MAC 利用率未实测，80%/90% 目标不变。
+
+## 23:33 检查点（五路长跑已启动；整块 INCOMPLETE）
+
+- **done，仅仿真断言回调**：隔离 owner 的 site 30 原失败定位为 LLVM `i1` 无 `zeroext`，实际 true 可传 raw 255，与 C++ `bool` 假设不符。旧整顶回调检测整个低字节，可能错放非零偶数 false，但尚未发现旧 Host 的实际漏报。保留此前逐位数值证据，不将其当作断言全覆盖。新回调只取 `raw & 1`，256 个编码、4 个越界用例与 105 位点计数通过；隔离真实首笔 memory read 受理，故意非法仍报 site 30/exit 86，与独立 zeroext 方案状态逐字节一致。没有改变 Host.o、原算术、边沿或物理资源。隔离收据 SHA-256 `c6de906c97f7192f1c85a7cc3517ad9ec01a4affc1457a5cd1810a8595bf1fe4`。
+- **ongoing，五块 128 token**：同一原 4096 MAC Host.o SHA-256 `2ea9278b08a4a7f7f2b49e4ab6d482c54023049d8b51941fa87fd062cfc11d7a` 与 17 个真实原生实例。轻量验证 driver 换回调与预算；五档 8 周期冷测仅覆盖 reset/idle，然后五档并发实际 launch.fire 与首 AR/R。启动收据 SHA-256 `bac5068245e8551efa9df854e4664bd53e5995c4e0732c4cd9d85d8a88ab146f`。本轮用既定 53 段只读映射，覆盖 PC5/5/5/8/8，不是全权重。每档最多 600 万周期 / 6 小时墙时 / 5 小时 CPU 软限；按原身份续查，不重启。终止导出 B 退休数据，不是可恢复状态。
+- **done，仅独立参考**：Qwen2 PC6 的 32,768 个 K RoPE FP32；0.8B L0 PC6 官方 eager 压缩后段真实 2×64，输出 BF16 chunk 和逻辑 FP32 state，不重复 Q scale 或 L2；0.8B L3 PC6 官方 BF16 Q RoPE，非旋转维逐位不变。生成物 normal/-O 一致；扩展 55 段只读映射，覆盖 PC6/6/6/8/8，6+6 通过映射测试，但该映射没有用于已启动的 53 段运行。35B L0 PC9 官方 BF16 residual，L3 PC9 官方 BF16 QK 和独立 1/16 缩放，止于 mask/softmax/PV 前，没有独立 DUT QK 输出退休。20+20 参考边界测试通过。
+- **todo**：监测五路同一任务首 PC0 完整退休、矩阵投影和完整 block；补齐后半段真实只读输入及独立参考。五块整块数值 0/5，未冻结或回放整顶 RTL，未测完整周期有效 MAC；32-lane II1 仍候选，80%/90% 目标不变。保留当前任务及唯一证据，无删除、无上传权重。

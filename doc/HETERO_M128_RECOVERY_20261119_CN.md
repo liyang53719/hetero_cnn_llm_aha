@@ -34,3 +34,10 @@
 - **done，PC0 仅已退休前缀**：本轮同文件、同 35 段输入映射，五档并发冷启动，各运行 60,000 / 43,632 / 44,823 / 60,000 / 60,000 周期；两小档到墙钟预算，其余到周期预算。五档都有实际 AXI B 退休。Qwen2 比较 7,680 个 FP32（5 行），四个 Qwen3.5 每档比较 1,024 个 BF16，均逐位相同。35B 两档首批 1,024 元素各只半行。五档均未完成 PC0、未到首投影。运行摘要 SHA-256 `a7c7d4b396583e67792f8fdf6437e16127c90d5ca38dd0632c4ae392e62af2a6`；只读比较摘要 SHA-256 `ff2a7763f0d639fd38f362ff6741ea4128c993c5f383d9db4c40b8466bb52a90`。不是最终 RTL 或模型整块数值通过。
 - **done，独立参考/未来输入**：前三块 PC4 为 Qwen2 FP32 K 投影、0.8B L0 官方 CPU Conv+SiLU/L3 官方普通 QNorm。35B L0 PC7 为固定官方 gated RMS（FP32 direct gamma，保留两次 BF16 转换），L3 核验并复用配对 K RoPE。普通 RMS 独立按项目顺序预测，35B 两档每档 262,144 元素与固定官方参考逐位一致，仅限本输入。未来 48 段只读映射覆盖 PC4/4/4/7/7，SHA-256 `0fabc0c012a492bea5529b642af2110363503822df6184af4b50454f626adb97`；没有预载中间值。本轮仍用原 35 段。
 - **ongoing / todo**：下一步量化 Host 仿真开销，同时记录原 RMS scalar issue/return 与 token 进度；再核 PC0 完整退休和首投影。五个完整 M128 block 仍 0/5，后续 RTL 尚未冻结/回放。整块有效 MAC 利用率未实测，固定 4096 和完整周期分母；80%/90% 目标、32-lane 候选不变。
+
+## 22:33 检查点（仿真诊断 / 独立参考；整块 INCOMPLETE）
+
+- **done，仅 2,048 周期轨迹**：同 Host.o 和相同 4096-MAC 原生实例，五档只加 host 计时；原始 launch、AXI pre/consume 与周期观察逐条一致，轨迹收据 SHA-256 `462b9cd853c2a3e0241e0a1a83f16abea622ecb022404c7f955d0ab9f72037f5`。该窗口尚未到 B，不冒称新数值覆盖。Host eval 约 60–68% 仿真墙时，实际原生 settle/advance 约 24–31%。不同 vCPU 绑定与 profile 混杂，暂不归因模型；这是软件仿真开销，不是硬件瓶颈或 MAC 利用率。
+- **FAIL / 保留旧策略**：同一 LLVM 的 `llc -O1` 在 100 CPU 秒预算内未完成，停在 Host eval 的 x86 DAG Select 合并（SimplifySelectOps），无新对象；旧 O0 对象不变。隔离的原 RMS owner、10 个断言保留，工具 layout 的 8 个内部字段在真实 reset 后可读；活跃微测触发原 format publication 断言（site 30），不能外推成全 Host 故障，不猜布局偏移。
+- **done，独立参考（不是 DUT）**：前三块 PC5（Qwen2 分开 FP32 K bias，0.8B L0 官方 rawprep / L3 普通 KNorm）；35B L0 PC8 官方 O Linear（M128/K4096/N2048），L3 从已验 K/V 构造原 Host cache 位布局，不冒称执行官方 Cache.update。下一阶段只读映射 53 段，覆盖 PC5/5/5/8/8，SHA-256 `c69a2de36411dfa37602524c1d416439014b5a5ce5737ee75f16de518da62435`。小 L0 的 32B BF16 dt_bias 只显式填充原 AXI 64B 读的未用高半部，无 cache 或中间值预载。
+- **ongoing / todo**：先用同一 O0 对象做 CPU 绑定交叉校准并按更长预算推进实际 PC0 完整退休与首投影；观察微测失败独立诊断。沿有效开销分项改仿真，不缩硬件、跳沿或省略真实请求。整块模型 0/5，最终 RTL 未冻结/回放，完整 MAC 利用率未实测，80%/90% 目标不变。

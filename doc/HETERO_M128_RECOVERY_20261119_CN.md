@@ -71,3 +71,11 @@
 - **done，独立参考/输入**：Qwen2 PC13/14/15 的 O 投影、独立 FP32 残差、196608 值的精确原序 RMS，normal/-O 相同。0.8B L0/L3 PC9 残差与 pre-mask QK（融合虚拟 scratch）。35B L3 PC12 官方 BF16 sigmoid 后乘 context；PC13 仅准备真 O 权重。未来 63 段只读映射覆盖 PC15/9/9/10/13（输入覆盖，不等于数值）；两种模式各 6 项映射测试，原 launch 不变、无参考中间值预载，SHA-256 `2ac06d4bf7a2287401daa1fef77d5c322e2a9cb35f52428d763ca030be9dd365`。
 - **INCOMPLETE，35B L0 PC11**：当前构建在命令译码处拒绝 0x50，早于张量扫描；现有 legacy streaming 安装条件与完整 MoE 路径构建条件互斥，补齐权重仍不能放行。本轮列出全动态只读权重 1,618,087,936 B、扫描/租约到合并的接入依赖。未改 guard 或 tie，未注入任何专家 ID。
 - **todo**：完成真实 AXI/稀疏 RAM/账本的跨进程恢复、再资格化可保存的原 native；并准备可复建的独立云运行。整块原模型 0/5，最终统一 RTL 未冻结/回放，整块有效 MAC 未实测；80%/90% 目标和 32-lane II1 候选不变。不删除文件、不上传权重。
+
+## 11-20 03:33 检查点（iDMA / AXI 独立恢复 PASS；五块整块 INCOMPLETE）
+
+- **PASS，仅原 iDMA 分区**：原固定参数、原 RTL 与 Verilator 5.032 上新增独立 `--savable` 构建，不替换原库。真实 1 KiB 拷贝，在 cycle13 R 握手停顿、cycle56 WLAST 后 B 待握手、cycle57 B 后 completion 停顿分别跨进程恢复，150 周期/300 个 pre/post 端口观察与原库一致，1AR/16R/1AW/16W/1B/1completion、1024B 逐字节同，坏流/截断/高相位/覆写拒绝。外部 AXI/内存前缀仍重放；B 待握手不是 B 通道停顿。收据 SHA-256 `a8a35a52c58941678bbd3e2b0d86fca08a89ed0a737404677f3c0a451734e893`。
+- **PASS，仅 AXI 服务组件**：同一 StrictMemory/AxiBus/IndependentLedger 的真状态保存，在 normal/NDEBUG 合计 67 项组件验证。跨进程无前缀恢复 held R、pending B、稀疏字节和计数；覆盖重叠 B 改内存但已持有的 R 不变、重复 B、丢失/损坏/重算哈希的非法状态和发布前中断。未与真实 iDMA 拼接、未恢复 Host/LaunchAccounting。SHA-256 `8c098c42a3fb629c00dd36c0cec3859bfff1c1bee7f18ccc81342edf4c2b85bf`。
+- **done，仅独立 M128 参考**：Qwen2 原 LegacyV0 补齐 PC16–20，独立参考候选可到最终 y；FP32 存储不变、BF16 RNE 入口与递增 K。PC16/17/19 共 2,490,368 个值经独立 std::fma 完整逐位复核，PC18/20 抽样过精确有理数检查，Python normal/-O 一致。0.8B L0/L3 PC10 各 131072 值，真 post gamma 与各自 pin 的 mask/FP32 softmax→BF16。35B L3 PC13/14 的原 O 投影/残差，各 262144 BF16 值；35B L0 PC11 仍只有官方 router，未改 tie、未注入专家 ID、未下载全专家；静态定位还需审核 PC12 的语义表与最终 fence。
+- **done，仅只读输入映射**：同一 4096 与 launch 不变，67 段覆盖 PC20/10/10/10/14。只新增 Qwen2 的三份真 FFN 权重及 0.8B L0 post gamma；不预载参考中间值，不接旧任务。六项测试在 normal/-O 各通过。SHA-256 `6a7d45d3258dd06caf9a32e07e32f293a8436c18ebabd1dd47aa9437cf1214c0`。
+- **ongoing / todo**：下轮优先将 iDMA、两个 AXI 端口共享的一份稀疏 RAM 和账本、wrapper 调度在同代 checkpoint 做零前缀恢复，然后接原 Arc/Matrix/ICG；并继续 35B 的 MoE 准入及其余参考。完整原模型仍 **0/5**，未冻结或回放最终统一 RTL，80%/90% 不是完整 block MAC 实测。未重启旧长跑、未删除临时文件、未上传权重，未手动发起 CI。
